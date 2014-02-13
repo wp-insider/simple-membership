@@ -71,7 +71,7 @@ class BSettings{
 		echo "<p>General Setting are added here.</p>";
 	}	
 	public function reg_email_settings_callback(){
-		echo "<p>Email Setting(Registration Complete) are added here.</p>";
+		echo "<p>This email will be sent to your users when they complete the registration and become a member.</p>";
 	}
     public function pages_settings_callback(){
         echo '<p>URL related settings goes here.<p>';

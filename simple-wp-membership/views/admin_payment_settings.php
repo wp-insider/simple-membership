@@ -31,7 +31,7 @@ if(isset($_POST['swpm_generate_adv_code']))
 }
 ?>
 	<div class="postbox">
-	<h3><label for="title">PayPal Integration Settings</a>)</label></h3>
+	<h3><label for="title">PayPal Integration Settings</label></h3>
 	<div class="inside">
 	
 	<p><strong>Generate the "Advanced Variables" Code for your PayPal button</strong></p>

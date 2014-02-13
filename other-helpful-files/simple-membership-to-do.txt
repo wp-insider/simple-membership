@@ -1,4 +1,4 @@
 1. Order the membership level list in DESC order (to match the main eMember plugin's display).
 2. In the edit membership level view -> Put the two radio button options below one another (rather than side by side)
 3. IPN handling code (to be done by Amin).
-4. 
+4. Add a new tab in the "Membership level" menu that says "Manage Content Production". The current tab will be labeled as "Manage Levels"

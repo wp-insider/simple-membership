@@ -35,7 +35,7 @@ class BMembershipLevels extends WP_List_Table{
             return bUtils::calculate_subscription_period($item['subscription_period'],
                                                          $item['subscription_unit']);
         if($column_name == 'role') return ucfirst($item['role']);
-    	return $item[$column_name];
+    	return stripslashes($item[$column_name]);
     }
     function column_id($item){
         $actions = array(

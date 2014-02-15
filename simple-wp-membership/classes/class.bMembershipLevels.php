@@ -56,9 +56,9 @@ class BMembershipLevels extends WP_List_Table{
         global $wpdb; 
         $query  = "SELECT * FROM " .$wpdb->prefix . "wp_eMember_membership_tbl WHERE  id !=1 ";
         if(isset($_POST['s'])) $query .= " AND alias LIKE '%" . strip_tags($_POST['s']). "%' ";    
-        $orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'ASC';
-        $order = !empty($_GET["order"]) ? mysql_real_escape_string($_GET["order"]) : '';
-        if(!empty($orderby) & !empty($order)){ $query.=' ORDER BY '.$orderby.' '.$order; }
+        $orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'id';
+        $order = !empty($_GET["order"]) ? mysql_real_escape_string($_GET["order"]) : 'DESC';
+        if(!empty($orderby) && !empty($order)){ $query.=' ORDER BY '.$orderby.' '.$order; }
         $totalitems = $wpdb->query($query); //return the total number of affected rows
         $perpage = 20;
         $paged = !empty($_GET["paged"]) ? mysql_real_escape_string($_GET["paged"]) : '';
@@ -128,7 +128,12 @@ class BMembershipLevels extends WP_List_Table{
 		}
 	}
 	function show(){
-		include_once(SIMPLE_WP_MEMBERSHIP_PATH.'views/admin_membership_levels.php');
+            $selected = 1;
+            include_once(SIMPLE_WP_MEMBERSHIP_PATH.'views/admin_membership_levels.php');
 	}
+        function manage(){
+            $selected = 2;
+             include_once(SIMPLE_WP_MEMBERSHIP_PATH.'views/admin_membership_manage.php');
+        }
 }
 

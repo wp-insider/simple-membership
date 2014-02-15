@@ -19,7 +19,6 @@
         <th scope="row"><label for="subscription_unit"><?php _e('Subscription Duration'); ?> <span class="description"><?php _e('(required)'); ?></span></label>        
         </th>
         <td>
-            <fieldset>
             <div class="color-option"><input name="subscript_duration_type" id="subscript_duration_noexpire" checked="checked" type="radio" value="0" class="tog">
 	            <table class="color-palette">
 	            <tbody><tr>
@@ -27,6 +26,10 @@
 		            </tr>
 	            </tbody></table>
             </div>
+        </td>
+        <tr>
+            <th></th>
+            <td>
 	            <div class="color-option"><input name="subscript_duration_type" id="subscript_duration_expire" type="radio" value="1" class="tog">
 	            <table class="color-palette">
 	            <tbody><tr>
@@ -42,9 +45,8 @@
 		            </tr>
 	            </tbody></table>
             </div>
-	            </fieldset>
-
-        </td>
+            </td>
+        </tr>
     </tr>
 <?php //include('admin_member_form_common_part.php');?>
 </tbody>

@@ -12,32 +12,32 @@ include_once('class.bLevelForm.php');
 include_once('class.bMembershipLevels.php');
 class SimpleWpMembership{
     private $settings;
-	private $lastMessage;
+    private $lastMessage;
     public function __construct(){
-		BAuth::get_instance();
+        BAuth::get_instance();
         add_action('admin_menu',array(&$this, 'menu')); 
         add_action('admin_init',array(&$this,'admin_init'));
         add_action('init',array(&$this, 'init'));
-		add_filter('the_content', array(&$this, 'filter_content'));
-		//add_filter( 'the_content_more_link', array(&$this, 'filter_moretag'), 10, 2 );
-		add_filter('comment_text', array(&$this, 'filter_comment'));
-		add_action('save_post', array(&$this,'save_postdata')); 
-		add_shortcode("swpm_registration_form", array(&$this, 'registration_form'));
-		add_shortcode('swpm_profile_form', array(&$this, 'profile_form'));
-		add_shortcode('swpm_login_form', array(&$this, 'login'));
+        add_filter('the_content', array(&$this, 'filter_content'));
+        //add_filter( 'the_content_more_link', array(&$this, 'filter_moretag'), 10, 2 );
+        add_filter('comment_text', array(&$this, 'filter_comment'));
+        add_action('save_post', array(&$this,'save_postdata')); 
+        add_shortcode("swpm_registration_form", array(&$this, 'registration_form'));
+        add_shortcode('swpm_profile_form', array(&$this, 'profile_form'));
+        add_shortcode('swpm_login_form', array(&$this, 'login'));
         add_shortcode('swpm_reset_form', array(&$this, 'reset'));
-		add_action('admin_notices', array(&$this,'notices'));
-		add_action('wp_enqueue_scripts',array(&$this, 'front_library'));
-		add_action('load-toplevel_page_simple_wp_membership', array(&$this, 'admin_library'));
-        add_action('load-simple-wp-membership_page_simple_wp_membership_levels', array(&$this, 'admin_library'));
-		add_action('wp_ajax_swpm_validate_email',array(&$this,'validate_email_ajax'));
-		add_action('wp_ajax_swpm_nopriv_validate_email',array(&$this,'validate_email_ajax'));		
-		add_action('wp_ajax_swpm_validate_user_name',array(&$this,'validate_user_name_ajax'));
-		add_action('wp_ajax_swpm_nopriv_validate_user_name',array(&$this,'validate_user_name_ajax'));				
-		add_action('profile_update',array(&$this, 'sync_with_wp_profile'), 10,2);
-		add_action('wp_logout', array(&$this, 'wp_logout'));		
-		add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2 );
-		add_action('swpm_logout', array(&$this, 'swpm_logout'));
+        add_action('admin_notices', array(&$this,'notices'));
+        add_action('wp_enqueue_scripts',array(&$this, 'front_library'));
+        add_action('load-toplevel_page_simple_wp_membership', array(&$this, 'admin_library'));
+        add_action('load-wp-membership_page_simple_wp_membership_levels', array(&$this, 'admin_library'));
+        add_action('wp_ajax_swpm_validate_email',array(&$this,'validate_email_ajax'));
+        add_action('wp_ajax_swpm_nopriv_validate_email',array(&$this,'validate_email_ajax'));		
+        add_action('wp_ajax_swpm_validate_user_name',array(&$this,'validate_user_name_ajax'));
+        add_action('wp_ajax_swpm_nopriv_validate_user_name',array(&$this,'validate_user_name_ajax'));				
+        add_action('profile_update',array(&$this, 'sync_with_wp_profile'), 10,2);
+        add_action('wp_logout', array(&$this, 'wp_logout'));		
+        add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2 );
+        add_action('swpm_logout', array(&$this, 'swpm_logout'));
     }
 	public static function swpm_login($user, $pass, $rememberme = true){
 		if(is_user_logged_in()){
@@ -518,7 +518,7 @@ class SimpleWpMembership{
                         ,SIMPLE_WP_MEMBERSHIP_URL.'/images/logo.png');
 		add_submenu_page('simple_wp_membership', __("Members", 'swpm'), __('Members', 'swpm'), 
                         'activate_plugins','simple_wp_membership', array(&$this,"admin_members"));
-	    add_submenu_page('simple_wp_membership', __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), 
+	        add_submenu_page('simple_wp_membership', __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), 
                         'activate_plugins', 'simple_wp_membership_levels', array(&$this,"admin_membership_levels"));     
 		add_submenu_page('simple_wp_membership', __("Settings", 'swpm'), __("Settings", 'swpm'), 
                         'activate_plugins', 'simple_wp_membership_settings', array(&$this,"admin_settings"));     
@@ -530,19 +530,22 @@ class SimpleWpMembership{
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.bMembershipLevels.php');
         $levels = new BMembershipLevels();
 		
-		$action  = isset($_GET['level_action'])?$_GET['level_action']:(isset($_POST['action2'])?$_POST['action2']:"");
+        $action  = isset($_GET['level_action'])?$_GET['level_action']:(isset($_POST['action2'])?$_POST['action2']:"");
         switch($action){
-			case 'add':
-			case 'edit':            
+            case 'add':
+            case 'edit':            
             $levels->process_form_request();
-			break;
-			case 'delete':
-			case 'bulk_delete':
+            break;
+            case 'manage':
+            $levels->manage();
+            break;
+            case 'delete':
+            case 'bulk_delete':
             $levels->delete();
-			default:
+            default:
             $levels->show();
-			break;
-		}
+            break;
+        }
     }
     public function admin_members(){
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.bMembers.php');

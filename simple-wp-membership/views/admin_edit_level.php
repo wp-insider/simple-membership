@@ -8,7 +8,7 @@
     <tbody>
 	<tr>
 		<th scope="row"><label for="alias"><?php _e('Membership Level Name'); ?> <span class="description"><?php _e('(required)'); ?></span></label></th>
-		<td><input class="regular-text validate[required]" name="alias" type="text" id="alias" value="<?echo $alias;?>" aria-required="true" /></td>
+		<td><input class="regular-text validate[required]" name="alias" type="text" id="alias" value="<?php echo stripslashes($alias);?>" aria-required="true" /></td>
 	</tr>
 	<tr class="form-field form-required">
 		<th scope="row"><label for="role"><?php _e('Default WordPress Role'); ?> <span class="description"><?php _e('(required)'); ?></span></label></th>

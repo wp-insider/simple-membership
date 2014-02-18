@@ -330,6 +330,15 @@ class SimpleWpMembership{
         $this->process_password_reset();
         $this->register_member();
         $this->edit_profile();
+        $this->swpm_ipn_listener();
+    }
+    
+    public function swpm_ipn_listener()
+    {
+        if(isset($_REQUEST['swpm_process_ipn']) && $_REQUEST['swpm_process_ipn'] == '1'){
+            include_once('ipn/swpm_handle_pp_ipn.php');
+            exit;
+        }
     }
     
     public function process_password_reset(){

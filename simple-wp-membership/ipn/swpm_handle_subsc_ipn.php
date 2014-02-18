@@ -1,21 +1,20 @@
 <?php
-if (!defined('ABSPATH')){include_once('../../../../wp-load.php');}
 
-function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$eMember_id='')
+function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$swpm_id='')
 {
     global $wpdb, $emember_config;
     $emember_config = Emember_Config::getInstance();    
     $members_table_name = $wpdb->prefix . "wp_eMember_members_tbl";
 
-    if(empty($eMember_id))
+    if(empty($swpm_id))
     {
 	    $email = $ipn_data['payer_email'];
 	    $query_db = $wpdb->get_row("SELECT * FROM $members_table_name WHERE email = '$email'", OBJECT);	    
 	    if(!$query_db){//try to retrieve the member details based on the unique_ref
-			eMember_debug_log_subsc("Could not find any record using the given email address (".$email."). Attempting to query database using the unique reference: ".$unique_ref,true);
+		eMember_debug_log_subsc("Could not find any record using the given email address (".$email."). Attempting to query database using the unique reference: ".$unique_ref,true);
 	    	if(!empty($unique_ref)){			
 	    		$query_db = $wpdb->get_row("SELECT * FROM $members_table_name WHERE subscr_id = '$unique_ref'", OBJECT);
-	    		$eMember_id = $query_db->member_id;
+	    		$swpm_id = $query_db->member_id;
 	    	}
 	    	else{
 	    		eMember_debug_log_subsc("Unique reference is missing in the notification so we have to assume that this is not a payment for an existing member.",true);
@@ -23,14 +22,14 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
 	    }
 	    else
 	    {
-	    	$eMember_id = $query_db->member_id;
-	    	eMember_debug_log_subsc("Found a match in the member database. Member ID: ".$eMember_id,true);
+	    	$swpm_id = $query_db->member_id;
+	    	eMember_debug_log_subsc("Found a match in the member database. Member ID: ".$swpm_id,true);
 	    }
     }
     
-	if (!empty($eMember_id))//Update the existing member account
+	if (!empty($swpm_id))//Update the existing member account
 	{
-		eMember_debug_log_subsc("Modifying the existing membership profile... Member ID: ".$eMember_id,true);
+		eMember_debug_log_subsc("Modifying the existing membership profile... Member ID: ".$swpm_id,true);
 		// upgrade the member account
 		$account_state = 'active';
 		$membership_level = $subsc_ref;
@@ -38,9 +37,9 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
 		$subscr_id = $unique_ref;
 		
 		$resultset = "";
-		$resultset = $wpdb->get_row("SELECT * FROM $members_table_name where member_id='$eMember_id'", OBJECT);
+		$resultset = $wpdb->get_row("SELECT * FROM $members_table_name where member_id='$swpm_id'", OBJECT);
 		if(!$resultset){
-			eMember_debug_log_subsc("ERROR! Could not find a member account record for the given eMember ID: ".$eMember_id,false);
+			eMember_debug_log_subsc("ERROR! Could not find a member account record for the given eMember ID: ".$swpm_id,false);
 			return;
 		}
 		$old_membership_level = $resultset->membership_level;
@@ -67,27 +66,27 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
 				eMember_debug_log_subsc("New additional level set: ".$additional_levels,true);
 			}
 			eMember_debug_log_subsc("Updating additional levels column for username: ".$resultset->user_name." with value: ".$additional_levels,true);							
-			$updatedb = "UPDATE $members_table_name SET more_membership_levels='$additional_levels' WHERE member_id='$eMember_id'";    	    	
+			$updatedb = "UPDATE $members_table_name SET more_membership_levels='$additional_levels' WHERE member_id='$swpm_id'";    	    	
 			$results = $wpdb->query($updatedb);		
 
 			eMember_debug_log_subsc("Upgrading the primary membership level to the recently paid level. New primary membership level ID for this member is: ".$membership_level,true);
-			$updatedb = "UPDATE $members_table_name SET account_state='$account_state',membership_level='$membership_level',subscription_starts='$subscription_starts',subscr_id='$subscr_id' WHERE member_id='$eMember_id'";    	    	
+			$updatedb = "UPDATE $members_table_name SET account_state='$account_state',membership_level='$membership_level',subscription_starts='$subscription_starts',subscr_id='$subscr_id' WHERE member_id='$swpm_id'";    	    	
 			$results = $wpdb->query($updatedb);
-			do_action('emember_membership_changed',array('member_id'=>$eMember_id, 'from_level'=>$old_membership_level, 'to_level'=>$membership_level));
+			do_action('emember_membership_changed',array('member_id'=>$swpm_id, 'from_level'=>$old_membership_level, 'to_level'=>$membership_level));
 		}
 		else
 		{
 			eMember_debug_log_subsc("Not using secondary membership level feature... upgrading the current membership level.",true);
-			$current_expiry_date = emember_get_expiry_by_member_id($eMember_id);
+			$current_expiry_date = emember_get_expiry_by_member_id($swpm_id);
 			if($current_expiry_date != "noexpire"){
 				if (strtotime($current_expiry_date) > strtotime($subscription_starts)){//Expiry time is in the future
 					$subscription_starts = $current_expiry_date;//Start at the end of the previous expiry date
 					eMember_debug_log_subsc("Updating the subscription start date to the current expiry date value: ".$subscription_starts,true);
 				}
 			}
-			$updatedb = "UPDATE $members_table_name SET account_state='$account_state',membership_level='$membership_level',subscription_starts='$subscription_starts',subscr_id='$subscr_id' WHERE member_id='$eMember_id'";    	
+			$updatedb = "UPDATE $members_table_name SET account_state='$account_state',membership_level='$membership_level',subscription_starts='$subscription_starts',subscr_id='$subscr_id' WHERE member_id='$swpm_id'";    	
 	    	$results = $wpdb->query($updatedb);
-	    	do_action('emember_membership_changed', array('member_id'=>$eMember_id, 'from_level'=>$old_membership_level, 'to_level'=>$membership_level));
+	    	do_action('emember_membership_changed', array('member_id'=>$swpm_id, 'from_level'=>$old_membership_level, 'to_level'=>$membership_level));
 		}
 		
     	//If using the WP user integration then update the role on WordPress too
@@ -95,7 +94,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
     	if($emember_config->getValue('eMember_create_wp_user'))
     	{
 			eMember_debug_log_subsc("Updating WordPress user role...",true);
-			$resultset = $wpdb->get_row("SELECT * FROM $members_table_name where member_id='$eMember_id'", OBJECT);
+			$resultset = $wpdb->get_row("SELECT * FROM $members_table_name where member_id='$swpm_id'", OBJECT);
     		$membership_level = $resultset->membership_level;
     		$username = $resultset->user_name;    		
 	        $membership_level_resultset = $wpdb->get_row("SELECT * FROM $membership_level_table where id='$membership_level'", OBJECT);
@@ -226,7 +225,7 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data,$refund=false)
     }      	
 }
 
-function eMember_update_member_subscription_start_date_if_applicable($ipn_data)
+function swpm_update_member_subscription_start_date_if_applicable($ipn_data)
 {
     global $wpdb;
     $members_table_name = $wpdb->prefix . "wp_eMember_members_tbl";
@@ -238,16 +237,16 @@ function eMember_update_member_subscription_start_date_if_applicable($ipn_data)
 	//We can also query using the email address
 	$query_db = $wpdb->get_row("SELECT * FROM $members_table_name WHERE subscr_id = '$subscr_id'", OBJECT);
 	if($query_db){
-		$eMember_id = $query_db->member_id;
+		$swpm_id = $query_db->member_id;
 		$current_primary_level = $query_db->membership_level;
-		eMember_debug_log_subsc("Found a record in the member table. The eMember ID of the account to check is: ".$eMember_id." Membership Level: ".$current_primary_level,true);
+		eMember_debug_log_subsc("Found a record in the member table. The eMember ID of the account to check is: ".$swpm_id." Membership Level: ".$current_primary_level,true);
 		
 		$level_query = $wpdb->get_row("SELECT * FROM $membership_level_table where id='$current_primary_level'", OBJECT);
     	if(!empty($level_query->subscription_period) && !empty($level_query->subscription_unit)){//Duration value is used		
 			$account_state = "active";
 			$subscription_starts = (date ("Y-m-d"));
 
-			$updatedb = "UPDATE $members_table_name SET account_state='$account_state',subscription_starts='$subscription_starts' WHERE member_id='$eMember_id'";    	    	
+			$updatedb = "UPDATE $members_table_name SET account_state='$account_state',subscription_starts='$subscription_starts' WHERE member_id='$swpm_id'";    	    	
 			$results = $wpdb->query($updatedb);
 			eMember_debug_log_subsc("Updated the member profile with current date as the subscription start date.",true);
     	}else{

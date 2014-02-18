@@ -16,7 +16,7 @@ class SimpleWpMembership{
     public function __construct(){
         BAuth::get_instance();
         add_action('admin_menu',array(&$this, 'menu')); 
-        add_action('admin_init',array(&$this,'admin_init'));
+        add_action('admin_init',array(&$this,'admin_init'));//This call has been moved inside 'init' function
         add_action('init',array(&$this, 'init'));
         add_filter('the_content', array(&$this, 'filter_content'));
         //add_filter( 'the_content_more_link', array(&$this, 'filter_moretag'), 10, 2 );
@@ -148,27 +148,26 @@ class SimpleWpMembership{
 		return $succeeded;
 	}
 	public function meta_box(){
-		if( function_exists( 'add_meta_box' )) {
-			$post_types = get_post_types();
-			foreach($post_types as $post_type=>$post_type)
-			add_meta_box( 'eMember_sectionid', __( 'Simple WP Membership options', 
-						'eMember_textdomain' ), array(&$this, 'inner_custom_box'), $post_type, 'advanced' );
-		} 
-		else {//older version doesn't have custom post type so modification isn't needed.
-			add_action('dbx_post_advanced', array(&$this, 'show_old_custom_box') );
-			add_action('dbx_page_advanced', array(&$this, 'show_old_custom_box') );
-		}
+            if( function_exists( 'add_meta_box' )) {
+                $post_types = get_post_types();
+                foreach($post_types as $post_type=>$post_type)
+                add_meta_box( 'eMember_sectionid', __( 'Simple WP Membership Protection', 'eMember_textdomain' ), array(&$this, 'inner_custom_box'), $post_type, 'advanced' );
+            } 
+            else {//older version doesn't have custom post type so modification isn't needed.
+                add_action('dbx_post_advanced', array(&$this, 'show_old_custom_box') );
+                add_action('dbx_page_advanced', array(&$this, 'show_old_custom_box') );
+            }
 	}
 	public function show_old_custom_box() {
-		echo '<div class="dbx-b-ox-wrapper">' . "\n";
-		echo '<fieldset id="eMember_fieldsetid" class="dbx-box">' . "\n";
-		echo '<div class="dbx-h-andle-wrapper"><h3 class="dbx-handle">' . 
-		 	__( 'eMember Protection options', 'eMember_textdomain' ) . "</h3></div>";     
-		echo '<div class="dbx-c-ontent-wrapper"><div class="dbx-content">';
-		// output editing form
-		$this->inner_custom_box();
-	// end wrapper
-		echo "</div></div></fieldset></div>\n";
+            echo '<div class="dbx-b-ox-wrapper">' . "\n";
+            echo '<fieldset id="eMember_fieldsetid" class="dbx-box">' . "\n";
+            echo '<div class="dbx-h-andle-wrapper"><h3 class="dbx-handle">' . 
+                __( 'eMember Protection options', 'eMember_textdomain' ) . "</h3></div>";     
+            echo '<div class="dbx-c-ontent-wrapper"><div class="dbx-content">';
+            // output editing form
+            $this->inner_custom_box();
+            // end wrapper
+            echo "</div></div></fieldset></div>\n";
 	}
 	public function inner_custom_box() {
 		global $post, $wpdb;
@@ -316,18 +315,23 @@ class SimpleWpMembership{
 		}
         		
     }
+    
     public function init(){
-		if(isset($_GET['swpm-logout'])){
-			BAuth::get_instance()->logout();
-			wp_redirect(site_url());
-		}
-		else if(!is_admin())BAuth::get_instance();
-		$widget_options = array('classname' => 'swpm_widget', 'description' => __( "Display SWPM Login.") );
-		wp_register_sidebar_widget('swpm_login_widget', __('SWPM Login'),'SimpleWpMembership::login_widget' , $widget_options);
-		$this->process_password_reset();
-		$this->register_member();
-		$this->edit_profile();        
+        if(isset($_GET['swpm-logout'])){
+            BAuth::get_instance()->logout();
+            wp_redirect(site_url());
+        }
+        else if(!is_admin()){
+            BAuth::get_instance();
+        }
+        
+        $widget_options = array('classname' => 'swpm_widget', 'description' => __( "Display SWPM Login.") );
+        wp_register_sidebar_widget('swpm_login_widget', __('SWPM Login'),'SimpleWpMembership::login_widget' , $widget_options);
+        $this->process_password_reset();
+        $this->register_member();
+        $this->edit_profile();
     }
+    
     public function process_password_reset(){
         $message = "";
         if(isset($_POST['swpm-reset'])){

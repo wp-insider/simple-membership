@@ -461,83 +461,83 @@ class SimpleWpMembership{
 		if(!$succeeded)include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/add.php');
 	}
 	private function register_member(){
-		global $wpdb;
-		if(isset($_POST['swpm_registration_submit'])){
-			$member = BTransfer::$default_fields;
-			$form = new BFrontForm($member);
-			$is_free = BSettings::get_instance()->get_value('enable-free-membership');
-			if($form->is_valid()){
-				$member_info = $form->get_sanitized();
-				if(isset($_SESSION['swpm-registered-level']))
-					$member_info['membership_level'] = absint($_SESSION['swpm-registered-level']);
-				else if($is_free)
-					$member_info['membership_level'] = 2;
-				else{
-					$message = array('succeeded'=>false,'message'=>'Membership Level Couldn\'t be found.');
-					BTransfer::get_instance()->set('status', $message);								
-					return;
-				}
-				$member_info['last_accessed_from_ip'] = BTransfer::get_real_ip_addr();
-				$member_info['member_since']          = date ("Y-m-d");
-				$member_info['subscription_starts']   = date ("Y-m-d");
-				$settings = BSettings::get_instance();
-				$wpdb->insert($wpdb->prefix . "wp_eMember_members_tbl", $member_info);
-				$last_insert_id = $wpdb->insert_id;
-				$subject = $settings->get_value('reg-complete-mail-subject');			
-				$body = $settings->get_value('reg-complete-mail-body');			
-				$from_address = get_option('admin_email');
-				$login_link = $settings->get_value('login-page-url');
-				$headers = 'From: '.$from_address . "\r\n";
-				$query = "SELECT alias FROM ".$wpdb->prefix . "wp_eMember_membership_tbl WHERE id = " . $member_info['membership_level'];
-				$member_info['membership_level_name'] = $wpdb->get_var($query);
-				$values  = array_values($member_info);
-				$keys    = array_map(function($n){return "{$n}";},array_keys($member_info));
-				$body = str_replace($keys, $values, $body);
-				wp_mail(trim($_POST['email']), $subject,$body,$headers); 
-				if($settings->get_value('enable-admin-notification-after-reg')){
-					$subject = "Notification of New Member Registration";
-					$body    = "A new member has registered. The following email was sent to the member.".
-							   "\n\n-------Member Email----------\n". $body .
-							   "\n\n------End------\n";
-					wp_mail($from_address, $subject, $body, $headers);
-				}
-				/********************** register to wordpress ***********/
-				$query = "SELECT role FROM ".$wpdb->prefix . "wp_eMember_membership_tbl WHERE id = " . $member_info['membership_level'];			
-				$wp_user_info  = array();
-				$wp_user_info['user_nicename']   = implode('-', explode(' ', $member_info['user_name']));
-				$wp_user_info['display_name']    = $member_info['user_name'];
-				$wp_user_info['user_email']      = $member_info['email'];
-				$wp_user_info['nickname']        = $member_info['user_name'];
-				$wp_user_info['first_name']      = $member_info['first_name'];
-				$wp_user_info['last_name']       = $member_info['last_name'];
-				$wp_user_info['user_login']      = $member_info['user_name'];
-				$wp_user_info['password']        = $member_info['plain_password'];				
-				$wp_user_info['role']            = $wpdb->get_var($query);
-				$wp_user_info['user_registered'] = date('Y-m-d H:i:s');		
-				self::create_wp_user($wp_user_info);
-				/********************** register to wordpress ***********/
-				//@unset($_SESSION['swpm-registered-level']);
-				$message = array('succeeded'=>true,'message'=>'Registration Successful.');
-				BTransfer::get_instance()->set('status', $message);				
-				return;
-			}
-			$message = array('succeeded'=>false,'message'=>'Please correct the following', 'extra'=>$form->get_errors());
-			BTransfer::get_instance()->set('status', $message);
-		}		
-	}
+            global $wpdb;
+            if(isset($_POST['swpm_registration_submit'])){
+                $member = BTransfer::$default_fields;
+                $form = new BFrontForm($member);
+                $is_free = BSettings::get_instance()->get_value('enable-free-membership');
+                if($form->is_valid()){
+                    $member_info = $form->get_sanitized();
+                    if(isset($_SESSION['swpm-registered-level']))
+                            $member_info['membership_level'] = absint($_SESSION['swpm-registered-level']);
+                    else if($is_free)
+                            $member_info['membership_level'] = 2;
+                    else{
+                            $message = array('succeeded'=>false,'message'=>'Membership Level Couldn\'t be found.');
+                            BTransfer::get_instance()->set('status', $message);								
+                            return;
+                    }
+                    $member_info['last_accessed_from_ip'] = BTransfer::get_real_ip_addr();
+                    $member_info['member_since']          = date ("Y-m-d");
+                    $member_info['subscription_starts']   = date ("Y-m-d");
+                    $settings = BSettings::get_instance();
+                    $wpdb->insert($wpdb->prefix . "wp_eMember_members_tbl", $member_info);
+                    $last_insert_id = $wpdb->insert_id;
+                    $subject = $settings->get_value('reg-complete-mail-subject');			
+                    $body = $settings->get_value('reg-complete-mail-body');			
+                    $from_address = get_option('admin_email');
+                    $login_link = $settings->get_value('login-page-url');
+                    $headers = 'From: '.$from_address . "\r\n";
+                    $query = "SELECT alias FROM ".$wpdb->prefix . "wp_eMember_membership_tbl WHERE id = " . $member_info['membership_level'];
+                    $member_info['membership_level_name'] = $wpdb->get_var($query);
+                    $values  = array_values($member_info);
+                    $keys    = array_map(function($n){return "{$n}";},array_keys($member_info));
+                    $body = str_replace($keys, $values, $body);
+                    wp_mail(trim($_POST['email']), $subject,$body,$headers); 
+                    if($settings->get_value('enable-admin-notification-after-reg')){
+                            $subject = "Notification of New Member Registration";
+                            $body    = "A new member has registered. The following email was sent to the member.".
+                                               "\n\n-------Member Email----------\n". $body .
+                                               "\n\n------End------\n";
+                            wp_mail($from_address, $subject, $body, $headers);
+                    }
+                    /********************** register to wordpress ***********/
+                    $query = "SELECT role FROM ".$wpdb->prefix . "wp_eMember_membership_tbl WHERE id = " . $member_info['membership_level'];			
+                    $wp_user_info  = array();
+                    $wp_user_info['user_nicename']   = implode('-', explode(' ', $member_info['user_name']));
+                    $wp_user_info['display_name']    = $member_info['user_name'];
+                    $wp_user_info['user_email']      = $member_info['email'];
+                    $wp_user_info['nickname']        = $member_info['user_name'];
+                    $wp_user_info['first_name']      = $member_info['first_name'];
+                    $wp_user_info['last_name']       = $member_info['last_name'];
+                    $wp_user_info['user_login']      = $member_info['user_name'];
+                    $wp_user_info['password']        = $member_info['plain_password'];				
+                    $wp_user_info['role']            = $wpdb->get_var($query);
+                    $wp_user_info['user_registered'] = date('Y-m-d H:i:s');		
+                    self::create_wp_user($wp_user_info);
+                    /********************** register to wordpress ***********/
+                    //@unset($_SESSION['swpm-registered-level']);
+                    $message = array('succeeded'=>true,'message'=>'Registration Successful.');
+                    BTransfer::get_instance()->set('status', $message);				
+                    return;
+                }
+                $message = array('succeeded'=>false,'message'=>'Please correct the following', 'extra'=>$form->get_errors());
+                BTransfer::get_instance()->set('status', $message);
+        }		
+    }
     public function menu(){
-		add_menu_page(__("WP Membership", 'swpm'), __("WP Membership", 'swpm')
-                        ,'activate_plugins', 'simple_wp_membership', array(&$this, "admin_members")
-                        ,SIMPLE_WP_MEMBERSHIP_URL.'/images/logo.png');
-		add_submenu_page('simple_wp_membership', __("Members", 'swpm'), __('Members', 'swpm'), 
-                        'activate_plugins','simple_wp_membership', array(&$this,"admin_members"));
-	        add_submenu_page('simple_wp_membership', __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), 
-                        'activate_plugins', 'simple_wp_membership_levels', array(&$this,"admin_membership_levels"));     
-		add_submenu_page('simple_wp_membership', __("Settings", 'swpm'), __("Settings", 'swpm'), 
-                        'activate_plugins', 'simple_wp_membership_settings', array(&$this,"admin_settings"));     
+        add_menu_page(__("WP Membership", 'swpm'), __("WP Membership", 'swpm')
+                ,'activate_plugins', 'simple_wp_membership', array(&$this, "admin_members")
+                ,SIMPLE_WP_MEMBERSHIP_URL.'/images/logo.png');
+        add_submenu_page('simple_wp_membership', __("Members", 'swpm'), __('Members', 'swpm'), 
+                'activate_plugins','simple_wp_membership', array(&$this,"admin_members"));
+        add_submenu_page('simple_wp_membership', __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), 
+                'activate_plugins', 'simple_wp_membership_levels', array(&$this,"admin_membership_levels"));     
+        add_submenu_page('simple_wp_membership', __("Settings", 'swpm'), __("Settings", 'swpm'), 
+                'activate_plugins', 'simple_wp_membership_settings', array(&$this,"admin_settings"));     
         /*add_options_page( 'Simple WP Membership', 'Simple WP Membership', 
-                        'manage_options', 'simple_wp_membership_settings', array(&$this,"admin_settings") );    */
-		$this->meta_box();
+                'manage_options', 'simple_wp_membership_settings', array(&$this,"admin_settings") );    */
+        $this->meta_box();
     }
     public function admin_membership_levels(){
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.bMembershipLevels.php');
@@ -563,20 +563,20 @@ class SimpleWpMembership{
     public function admin_members(){
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.bMembers.php');
         $members = new BMembers();
-		
-		$action  = isset($_GET['member_action'])?$_GET['member_action']:(isset($_POST['action2'])?$_POST['action2']:"");
+
+        $action  = isset($_GET['member_action'])?$_GET['member_action']:(isset($_POST['action2'])?$_POST['action2']:"");
         switch($action){
-			case 'add':
-			case 'edit':
-			$members->process_form_request();
-			break;
-			case 'delete':
-			case 'bulk_delete':
-				$members->delete();
-			default:
-				$members->show();
-			break;
-		}
+            case 'add':
+            case 'edit':
+            $members->process_form_request();
+            break;
+            case 'delete':
+            case 'bulk_delete':
+                    $members->delete();
+            default:
+                    $members->show();
+            break;
+        }
     } 
     public  function admin_settings(){
         $current_tab = BSettings::get_instance()->current_tab;
@@ -590,24 +590,24 @@ class SimpleWpMembership{
         }
     }
     public static function activate(){
-	    global $wpdb;
+        global $wpdb;
         if (function_exists('is_multisite') && is_multisite()) {
-        	// check if it is a network activation - if so, run the activation function for each blog id
-        	if (isset($_GET['networkwide']) && ($_GET['networkwide'] == 1)) {
-                        $old_blog = $wpdb->blogid;
-        		// Get all blog ids
-        		$blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
-        		foreach ($blogids as $blog_id) {
-        			switch_to_blog($blog_id);
-        			SimpleWpMembership::installer();
-					SimpleWpMembership::initdb();
-        		}
-        		switch_to_blog($old_blog);
-        		return;
-        	}	
+            // check if it is a network activation - if so, run the activation function for each blog id
+            if (isset($_GET['networkwide']) && ($_GET['networkwide'] == 1)) {
+                $old_blog = $wpdb->blogid;
+                // Get all blog ids
+                $blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+                foreach ($blogids as $blog_id) {
+                        switch_to_blog($blog_id);
+                        SimpleWpMembership::installer();
+                                SimpleWpMembership::initdb();
+                }
+                switch_to_blog($old_blog);
+                return;
+            }	
         } 
         SimpleWpMembership::installer();
-		SimpleWpMembership::initdb();
+	SimpleWpMembership::initdb();
     }
     private static function installer(){
         global $wpdb;
@@ -764,143 +764,160 @@ class SimpleWpMembership{
             $wpdb->query($sql);
         }
     }
-	public static function initdb(){
-		$settings = BSettings::get_instance();
-		$installed_version = $settings->get_value('swpm-active-version', '');
-		if(empty($installed_version) ){ // fresh install
-			$login_page = array(
-				'post_type' => 'page','post_title' => 'Member Login',
-				'post_content' => '[swpm_login_form]','post_status' => 'publish'
-			);
-			$rego_page = array(
-				'post_type' => 'page','post_title' => 'Registration',
-				'post_content' => '[swpm_registration_form]','post_status' => 'publish'
-			);
-			$profile_page = array(
-				'post_type' => 'page','post_title' => 'Profile',
-				'post_content' => '[swpm_profile_form]','post_status' => 'publish'
-			);	
+    public static function initdb(){
+        $settings = BSettings::get_instance();
+        $installed_version = $settings->get_value('swpm-active-version', '');
+        if(empty($installed_version) ){ // fresh install
+            $login_page = array(
+                    'post_type' => 'page','post_title' => 'Member Login',
+                    'post_content' => '[swpm_login_form]','post_status' => 'publish'
+            );
+            $rego_page = array(
+                    'post_type' => 'page','post_title' => 'Registration',
+                    'post_content' => '[swpm_registration_form]','post_status' => 'publish'
+            );
+            $profile_page = array(
+                    'post_type' => 'page','post_title' => 'Profile',
+                    'post_content' => '[swpm_profile_form]','post_status' => 'publish'
+            );	
             $reset_page = array(
-				'post_type' => 'page','post_title' => 'Password Reset',
-				'post_content' => '[swpm_reset_form]','post_status' => 'publish'
-			);	        		
-			$reg_email_subject = "Complete your registration";
-			$reg_email_body = "Dear {first_name} {last_name}".
-						  "\n\nThank you for joining us!".
-						  "\n\nPlease complete your registration by visiting the following link:".
-						  "\n\n{reg_link}".
-						  "\n\nThank You";    
-			$reset_email_subject = get_bloginfo('name').": New Password";
-			$reset_email_body = "Dear {first_name} {last_name}".
-						  "\n\nHere is your new password".
-						  "\n\nUser name: {user_name}".
-						  "\n\nPassword: {password}".
-						  "\n\nThank You";     										
-			$settings->set_value('login-page-url',get_permalink(wp_insert_post($login_page)))
-					 ->set_value('registration-page-url',get_permalink(wp_insert_post($rego_page)))
-					 ->set_value('profile-page-url',get_permalink(wp_insert_post($profile_page)))
-                     ->set_value('reset-page-url',get_permalink(wp_insert_post($reset_page)))
-					 ->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
-					 ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))
-					 ->set_value('reset-mail-subject', stripslashes($reg_email_subject))
-					 ->set_value('reset-mail-body', stripslashes($reg_email_body))
-					 ;
-		}
-		if(version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1){ // upgrade
-			
-		}
-		
-		$settings->set_value('swpm-active-version', SIMPLE_WP_MEMBERSHIP_VER)->save(); //save everything.
-	}
+                    'post_type' => 'page','post_title' => 'Password Reset',
+                    'post_content' => '[swpm_reset_form]','post_status' => 'publish'
+            );	        		
+            $reg_email_subject = "Complete your registration";
+            $reg_email_body = "Dear {first_name} {last_name}".
+                                      "\n\nThank you for joining us!".
+                                      "\n\nPlease complete your registration by visiting the following link:".
+                                      "\n\n{reg_link}".
+                                      "\n\nThank You";                
+            $reg_prompt_email_subject = "Complete your registration";
+            $reg_prompt_email_body = "Dear {first_name} {last_name}\n\n".
+                                    "Your registration is now complete!\n\n".
+                                    "Registration details:\n".
+                                    "Username: {user_name}\n".
+                                    "Password: {password}\n\n".
+                                    "Please login to the member area at the following URL:\n\n".
+                                    "{login_link}\n\n".
+                                    "Thank You";   
+            
+            $upgrade_email_subject = "Subject for email sent after account upgrade";
+            $upgrade_email_body = "Dear {first_name} {last_name}".
+                                      "\n\nYour Account Has Been Upgraded.".
+                                      "\n\nThank You";                                        
+            $reset_email_subject = get_bloginfo('name').": New Password";
+            $reset_email_body = "Dear {first_name} {last_name}".
+                                      "\n\nHere is your new password".
+                                      "\n\nUser name: {user_name}".
+                                      "\n\nPassword: {password}".
+                                      "\n\nThank You";     										
+            $settings->set_value('login-page-url',get_permalink(wp_insert_post($login_page)))
+                ->set_value('registration-page-url',get_permalink(wp_insert_post($rego_page)))
+                ->set_value('profile-page-url',get_permalink(wp_insert_post($profile_page)))
+                ->set_value('reset-page-url',get_permalink(wp_insert_post($reset_page)))
+                ->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
+                ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))
+                ->set_value('reg-prompt-complete-mail-subject', stripslashes($reg_prompt_email_subject))
+                ->set_value('reg-prompt-complete-mail-body', stripslashes($reg_prompt_email_body))                    
+                ->set_value('upgrade-complete-mail-subject', stripslashes($upgrade_email_subject))
+                ->set_value('upgrade-complete-mail-body', stripslashes($upgrade_email_body))                                
+                ->set_value('reset-mail-subject', stripslashes($reg_email_subject))
+                ->set_value('reset-mail-body', stripslashes($reg_email_body));
+        }
+        if(version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1){ // upgrade
+
+        }
+
+        $settings->set_value('swpm-active-version', SIMPLE_WP_MEMBERSHIP_VER)->save(); //save everything.
+    }
     public function deactivate(){
     }
-	public static function is_multisite_install(){
-		if (function_exists('is_multisite') && is_multisite()){
-			return true;
-		}else{
-			return false;
-		}
-	}
+    public static function is_multisite_install(){
+        if (function_exists('is_multisite') && is_multisite()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
-	public function create_wp_user($wp_user_data){
-		if (self::multisite_install()){//MS install
-			global $blog_id;
-			if($wp_user_id = email_exists($wp_user_data['user_email'])){// if user exists then just add him to current blog.
-				add_existing_user_to_blog( array( 'user_id' => $wp_user_id, 'role' => 'subscriber' ) );
-				return $wp_user_id;
-			}
-			$wp_user_id = wpmu_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
-			$role = 'subscriber';//TODO - add user as a subscriber first. The subsequent update user role function to update the role to the correct one
-			add_user_to_blog($blog_id, $wp_user_id, $role);		
-		}
-		else{//Single site install		
-			$wp_user_id = wp_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
-		}
-		$wp_user_data['ID'] = $wp_user_id;
-		wp_update_user( $wp_user_data );                    
-		$user_info = get_userdata($wp_user_id);
-		$user_cap = is_array($user_info->wp_capabilities)?array_keys($user_info->wp_capabilities):array();
-		if(!in_array('administrator',$user_cap))                    
-			self::update_wp_user_Role($wp_user_id, $wp_user_data['role']);		
-		return $wp_user_id;
-	}
-	public static function update_wp_user_Role($wp_user_id, $role){
-		$preserve_role = 'yes';
-		if($preserve_role){
-			return;
-		}
-		if (eMember_is_multisite_install()){//MS install
-			return;//TODO - don't do this for MS install
-		}
-		$caps = get_user_meta($wp_user_id, 'wp_capabilities', true);
-		if(in_array('administrator', array_keys((array)$caps))) return;
-		do_action('set_user_role', $wp_user_id, $role);//Fire the action for other plugin(s)
-		wp_update_user(array ('ID' => $wp_user_id, 'role' => $role ));
-		$roles = new WP_Roles();
-		$level = $roles->roles[$role]['capabilities'];
-		if(isset($level['level_10']) &&$level['level_10']){
-			update_user_meta($wp_user_id,'wp_user_level', 10);
-			return;
-		}
-		if(isset($level['level_9']) &&$level['level_9']){
-			update_user_meta($wp_user_id,'wp_user_level', 9);
-			return;
-		}
-		if(isset($level['level_8']) &&$level['level_8']){
-			update_user_meta($wp_user_id,'wp_user_level', 8);
-			return;
-		}
-		if(isset($level['level_7']) &&$level['level_7']){
-			update_user_meta($wp_user_id,'wp_user_level', 7);
-			return;
-		}
-		if(isset($level['level_6']) &&$level['level_6']){
-			update_user_meta($wp_user_id,'wp_user_level', 6);
-			return;
-		}
-		if(isset($level['level_5']) &&$level['level_5']){
-			update_user_meta($wp_user_id,'wp_user_level', 5);
-			return;
-		}
-		if(isset($level['level_4']) &&$level['level_4']){         
-			update_user_meta($wp_user_id,'wp_user_level', 4);
-			return;
-		}
-		if(isset($level['level_3']) &&$level['level_3']){
-			update_user_meta($wp_user_id,'wp_user_level', 3);
-			return;
-		}                                                
-		if(isset($level['level_2']) &&$level['level_2']){
-			update_user_meta($wp_user_id,'wp_user_level', 2);
-			return;
-		}
-		if(isset($level['level_1']) &&$level['level_1']){
-			update_user_meta($wp_user_id,'wp_user_level', 1);
-			return;
-		}
-		if(isset($level['level_0']) &&$level['level_0']){
-			update_user_meta($wp_user_id,'wp_user_level', 0);
-			return;
-		}
-	}	
+    public function create_wp_user($wp_user_data){
+        if (self::multisite_install()){//MS install
+            global $blog_id;
+            if($wp_user_id = email_exists($wp_user_data['user_email'])){// if user exists then just add him to current blog.
+                    add_existing_user_to_blog( array( 'user_id' => $wp_user_id, 'role' => 'subscriber' ) );
+                    return $wp_user_id;
+            }
+            $wp_user_id = wpmu_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
+            $role = 'subscriber';//TODO - add user as a subscriber first. The subsequent update user role function to update the role to the correct one
+            add_user_to_blog($blog_id, $wp_user_id, $role);		
+        }
+        else{//Single site install		
+            $wp_user_id = wp_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
+        }
+        $wp_user_data['ID'] = $wp_user_id;
+        wp_update_user( $wp_user_data );                    
+        $user_info = get_userdata($wp_user_id);
+        $user_cap = is_array($user_info->wp_capabilities)?array_keys($user_info->wp_capabilities):array();
+        if(!in_array('administrator',$user_cap))                    
+            self::update_wp_user_Role($wp_user_id, $wp_user_data['role']);		
+        return $wp_user_id;
+    }
+    public static function update_wp_user_Role($wp_user_id, $role){
+        $preserve_role = 'yes';
+        if($preserve_role){
+            return;
+        }
+        if (eMember_is_multisite_install()){//MS install
+            return;//TODO - don't do this for MS install
+        }
+        $caps = get_user_meta($wp_user_id, 'wp_capabilities', true);
+        if(in_array('administrator', array_keys((array)$caps))) return;
+        do_action('set_user_role', $wp_user_id, $role);//Fire the action for other plugin(s)
+        wp_update_user(array ('ID' => $wp_user_id, 'role' => $role ));
+        $roles = new WP_Roles();
+        $level = $roles->roles[$role]['capabilities'];
+        if(isset($level['level_10']) &&$level['level_10']){
+            update_user_meta($wp_user_id,'wp_user_level', 10);
+            return;
+        }
+        if(isset($level['level_9']) &&$level['level_9']){
+            update_user_meta($wp_user_id,'wp_user_level', 9);
+            return;
+        }
+        if(isset($level['level_8']) &&$level['level_8']){
+            update_user_meta($wp_user_id,'wp_user_level', 8);
+            return;
+        }
+        if(isset($level['level_7']) &&$level['level_7']){
+            update_user_meta($wp_user_id,'wp_user_level', 7);
+            return;
+        }
+        if(isset($level['level_6']) &&$level['level_6']){
+            update_user_meta($wp_user_id,'wp_user_level', 6);
+            return;
+        }
+        if(isset($level['level_5']) &&$level['level_5']){
+            update_user_meta($wp_user_id,'wp_user_level', 5);
+            return;
+        }
+        if(isset($level['level_4']) &&$level['level_4']){         
+            update_user_meta($wp_user_id,'wp_user_level', 4);
+            return;
+        }
+        if(isset($level['level_3']) &&$level['level_3']){
+            update_user_meta($wp_user_id,'wp_user_level', 3);
+            return;
+        }                                                
+        if(isset($level['level_2']) &&$level['level_2']){
+            update_user_meta($wp_user_id,'wp_user_level', 2);
+            return;
+        }
+        if(isset($level['level_1']) &&$level['level_1']){
+            update_user_meta($wp_user_id,'wp_user_level', 1);
+            return;
+        }
+        if(isset($level['level_0']) &&$level['level_0']){
+            update_user_meta($wp_user_id,'wp_user_level', 0);
+            return;
+        }
+    }	
 }

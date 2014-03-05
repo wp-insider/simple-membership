@@ -4,39 +4,29 @@ class BSettings{
     private $settings;
     public $current_tab;
     private function __construct(){
-		if(is_admin()){
+        if(is_admin()){
             $this->current_tab = isset($_REQUEST['tab'])?$_REQUEST['tab']: 1;
             add_action('swpm-draw-tab', array(&$this, 'draw_tabs'));
             $method = 'tab_'.$this->current_tab;
             if(method_exists($this, $method))$this->$method();
-		}
-		$this->settings = (array) get_option( 'swpm-settings' );
+        }
+        $this->settings = (array) get_option( 'swpm-settings' );
     }
     private function tab_1(){
-			register_setting( 'swpm-settings-tab-1', 'swpm-settings' , array(&$this, 'sanitize_tab_1'));			
-			add_settings_section( 'general-settings', 'General Settings', array(&$this,'general_settings_callback'), 'simple_wp_membership_settings' );
-			add_settings_field( 'enable-free-membership', 'Enable Free Membership', array(&$this, 'checkbox_callback'), 
-								'simple_wp_membership_settings', 'general-settings' ,array('item'=>'enable-free-membership'));	
-			
-			add_settings_section( 'pages-settings', 'Pages Settings', array(&$this,'pages_settings_callback'), 'simple_wp_membership_settings' );
-			add_settings_field( 'login-page-url', 'Login URL', array(&$this,'textfield_callback'), 
-								'simple_wp_membership_settings', 'pages-settings' ,array('item'=>'login-page-url')); 
-			add_settings_field( 'registration-page-url', 'Registration URL', array(&$this,'textfield_callback'), 
-								'simple_wp_membership_settings', 'pages-settings' ,array('item'=>'registration-page-url')); 
-			add_settings_field( 'profile-page-url', 'Profile URL', array(&$this,'textfield_callback'), 
-								'simple_wp_membership_settings', 'pages-settings' ,array('item'=>'profile-page-url')); 
-			add_settings_field( 'reset-page-url', 'Password Reset URL', array(&$this,'textfield_callback'), 
-								'simple_wp_membership_settings', 'pages-settings' ,array('item'=>'reset-page-url')); 
-			
-			add_settings_section( 'reg-email-settings', 'Email Settings (Registration Complete)', array(&$this,'reg_email_settings_callback'), 'simple_wp_membership_settings' );
-			add_settings_field( 'reg-complete-mail-subject', 'Email Subject', array(&$this,'textfield_callback'), 
-								'simple_wp_membership_settings', 'reg-email-settings',array('item'=>'reg-complete-mail-subject') ); 
-			add_settings_field( 'reg-complete-mail-body', 'Email Body', array(&$this,'textarea_callback'), 
-								'simple_wp_membership_settings', 'reg-email-settings',array('item'=>'reg-complete-mail-body') );
-			add_settings_field( 'enable-admin-notification-after-reg', 'Send Notification To Admin', array(&$this,'checkbox_callback'), 
-								'simple_wp_membership_settings', 'reg-email-settings',array('item'=>'enable-admin-notification-after-reg') );
-			add_settings_field( 'enable-notification-after-manual-user-add', 'Send Email to Member When Added via Admin Dashboard', array(&$this,'checkbox_callback'), 
-								'simple_wp_membership_settings', 'reg-email-settings', array('item'=>'enable-notification-after-manual-user-add') );        
+        register_setting( 'swpm-settings-tab-1', 'swpm-settings' , array(&$this, 'sanitize_tab_1'));			
+        add_settings_section( 'general-settings', 'General Settings', array(&$this,'general_settings_callback'), 'simple_wp_membership_settings' );
+        add_settings_field( 'enable-free-membership', 'Enable Free Membership', array(&$this, 'checkbox_callback'), 
+                                                'simple_wp_membership_settings', 'general-settings' ,array('item'=>'enable-free-membership'));	
+
+        add_settings_section( 'pages-settings', 'Pages Settings', array(&$this,'pages_settings_callback'), 'simple_wp_membership_settings' );
+        add_settings_field( 'login-page-url', 'Login URL', array(&$this,'textfield_callback'), 
+                                                'simple_wp_membership_settings', 'pages-settings' ,array('item'=>'login-page-url')); 
+        add_settings_field( 'registration-page-url', 'Registration URL', array(&$this,'textfield_callback'), 
+                                                'simple_wp_membership_settings', 'pages-settings' ,array('item'=>'registration-page-url')); 
+        add_settings_field( 'profile-page-url', 'Profile URL', array(&$this,'textfield_callback'), 
+                                                'simple_wp_membership_settings', 'pages-settings' ,array('item'=>'profile-page-url')); 
+        add_settings_field( 'reset-page-url', 'Password Reset URL', array(&$this,'textfield_callback'), 
+                                                'simple_wp_membership_settings', 'pages-settings' ,array('item'=>'reset-page-url'));  
     }
 
     private function tab_2(){
@@ -45,34 +35,64 @@ class BSettings{
 		//add_settings_field( 'paypal-email', 'PayPal Email', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'paypal-settings' ,array('item'=>'paypal-email'));				
 
     }
-    
+    private function tab_3(){
+        register_setting( 'swpm-settings-tab-2', 'swpm-settings' , array(&$this, 'sanitize_tab_1'));			
+        add_settings_section( 'reg-email-settings', 'Email Settings (Registration Complete)', array(&$this,'reg_email_settings_callback'), 'simple_wp_membership_settings' );
+        add_settings_field( 'reg-complete-mail-subject', 'Email Subject', array(&$this,'textfield_callback'), 
+                                                'simple_wp_membership_settings', 'reg-email-settings',array('item'=>'reg-complete-mail-subject') ); 
+        add_settings_field( 'reg-complete-mail-body', 'Email Body', array(&$this,'textarea_callback'), 
+                                                'simple_wp_membership_settings', 'reg-email-settings',array('item'=>'reg-complete-mail-body') );
+        add_settings_field( 'enable-admin-notification-after-reg', 'Send Notification To Admin', array(&$this,'checkbox_callback'), 
+                                                'simple_wp_membership_settings', 'reg-email-settings',array('item'=>'enable-admin-notification-after-reg') );
+        add_settings_field( 'enable-notification-after-manual-user-add', 'Send Email to Member When Added via Admin Dashboard', array(&$this,'checkbox_callback'), 
+                                                'simple_wp_membership_settings', 'reg-email-settings', array('item'=>'enable-notification-after-manual-user-add') );
+        
+        add_settings_section( 'upgrade-email-settings', ' Email Settings (Account Upgrade Notification)', array(&$this,'upgrade_email_settings_callback'), 'simple_wp_membership_settings' );
+        add_settings_field( 'upgrade-complete-mail-subject', 'Email Subject', array(&$this,'textfield_callback'), 
+                                                'simple_wp_membership_settings', 'upgrade-email-settings',array('item'=>'upgrade-complete-mail-subject') ); 
+        add_settings_field( 'upgrade-complete-mail-body', 'Email Body', array(&$this,'textarea_callback'), 
+                                                'simple_wp_membership_settings', 'upgrade-email-settings',array('item'=>'upgrade-complete-mail-body') );
+        
+        add_settings_section( 'reg-prompt-email-settings', 'Email Settings (Prompt to Complete Registration )', array(&$this,'reg_prompt_email_settings_callback'), 'simple_wp_membership_settings' );
+        add_settings_field( 'reg-prompt-complete-mail-subject', 'Email Subject', array(&$this,'textfield_callback'), 
+                                                'simple_wp_membership_settings', 'reg-prompt-email-settings',array('item'=>'reg-prompt-complete-mail-subject') ); 
+        add_settings_field( 'reg-prompt-complete-mail-body', 'Email Body', array(&$this,'textarea_callback'), 
+                                                'simple_wp_membership_settings', 'reg-prompt-email-settings',array('item'=>'reg-prompt-complete-mail-body') );        
+    }
     public static function get_instance(){ 
         self::$_this = empty(self::$_this)?new BSettings(): self::$_this;
         return self::$_this;
     }
-	public function checkbox_callback($args){
-		$item = $args['item'];
-        $is = esc_attr( $this->get_value($item));
-        echo "<input type='checkbox' $is name='swpm-settings[".$item."]' value=\"checked='checked'\" />";			
-	}
-	public function textarea_callback($args){
-		$item = $args['item'];
-        $text = esc_attr( $this->get_value($item));
-        echo "<textarea name='swpm-settings[".$item."]'  rows='6' cols='60' >".$text."</textarea>";			
-		
-	}
-	public function textfield_callback($args){
-		$item = $args['item'];
-        $text = esc_attr( $this->get_value($item));
-        echo "<input type='text' name='swpm-settings[".$item."]'  size='50' value='".$text."' />";			
-	}
+    public function checkbox_callback($args){
+            $item = $args['item'];
+    $is = esc_attr( $this->get_value($item));
+    echo "<input type='checkbox' $is name='swpm-settings[".$item."]' value=\"checked='checked'\" />";			
+    }
+    public function textarea_callback($args){
+            $item = $args['item'];
+    $text = esc_attr( $this->get_value($item));
+    echo "<textarea name='swpm-settings[".$item."]'  rows='6' cols='60' >".$text."</textarea>";			
 
-	public function general_settings_callback(){ 
-		echo "<p>General Setting are added here.</p>";
-	}	
-	public function reg_email_settings_callback(){
-		echo "<p>This email will be sent to your users when they complete the registration and become a member.</p>";
-	}
+    }
+    public function textfield_callback($args){
+            $item = $args['item'];
+    $text = esc_attr( $this->get_value($item));
+    echo "<input type='text' name='swpm-settings[".$item."]'  size='50' value='".$text."' />";			
+    }
+
+    public function general_settings_callback(){ 
+            echo "<p>General Setting are added here.</p>";
+    }	
+    public function reg_email_settings_callback(){
+            echo "<p>This email will be sent to your users when they complete the registration and become a member.</p>";
+    }
+    public function upgrade_email_settings_callback(){
+            echo "<p>This email will be sent to your users after account upgrade.</p>";
+    }
+    public function reg_prompt_email_settings_callback(){
+            echo "<p>This email will be sent to prompt user to complete registration.</p>";
+    }
+       
     public function pages_settings_callback(){
         echo '<p>URL related settings goes here.<p>';
     } 	
@@ -119,6 +139,7 @@ class BSettings{
         <h3 class="nav-tab-wrapper"> 
             <a class="nav-tab <?php echo ($current == 1)? 'nav-tab-active' : '';?>" href="admin.php?page=simple_wp_membership_settings">General Settings</a>
             <a class="nav-tab <?php echo ($current == 2)? 'nav-tab-active' : '';?>" href="admin.php?page=simple_wp_membership_settings&tab=2">Payment Settings</a>
+            <a class="nav-tab <?php echo ($current == 3)? 'nav-tab-active' : '';?>" href="admin.php?page=simple_wp_membership_settings&tab=3">Email Settings</a>
         </h3>
         <?php
     }

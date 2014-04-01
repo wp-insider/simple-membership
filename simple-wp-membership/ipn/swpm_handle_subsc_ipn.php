@@ -42,8 +42,8 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
         $resultset = "";
         $resultset = $wpdb->get_row("SELECT * FROM $members_table_name where member_id='$swpm_id'", OBJECT);
         if(!$resultset){
-                swpm_debug_log_subsc("ERROR! Could not find a member account record for the given Member ID: ".$swpm_id,false);
-                return;
+            swpm_debug_log_subsc("ERROR! Could not find a member account record for the given Member ID: ".$swpm_id,false);
+            return;
         }
         $old_membership_level = $resultset->membership_level;
 
@@ -62,13 +62,13 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
 //update-role-function($username,$membership_level_resultset->role);
 //swpm_debug_log_subsc("Current WP users role updated to: ".$membership_level_resultset->role,true);
 
-        //Set Email details	for the account upgrade notification	
+        //Set Email details for the account upgrade notification	
         $email = $ipn_data['payer_email'];                          
-        $subject = "";//TODO - Get from settings// $settings->get_value('account-upgrade-mail-subject');
+        $subject = $settings->get_value('upgrade-complete-mail-subject');
         if (empty($subject)){
             $subject = "Member Account Upgraded";
-        }              
-        $body = "";//TODO - Get from settings// $settings->get_value('account-upgrade-mail-body');
+        }
+        $body = $settings->get_value('upgrade-complete-mail-body');
         if (empty($body)){
             $body = "Your account has been upgraded successfully";
         }
@@ -119,11 +119,11 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
         $reg_url = $url.$separator.'member_id='.$id.'&code='.$md5_code;
         swpm_debug_log_subsc("Member signup URL :".$reg_url,true);
 
-        $subject = "";//TODO - Get from settings// $settings->get_value('rego-complete-mail-subject');
+        $subject = $settings->get_value('reg-complete-mail-subject');
         if (empty($subject)){
             $subject = "Please complete your registration";
         }              
-        $body = "";//TODO - Get from settings// $settings->get_value('rego-complete-mail-body');
+        $body = $settings->get_value('reg-complete-mail-body');
         if (empty($body)){
             $body = "Please use the following link to complete your registration. \n {reg_link}";
         }

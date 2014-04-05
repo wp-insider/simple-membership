@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Simple WP Membership
-Version: v1.1
+Version: v1.2
 Plugin URI: http://www.tipsandtricks-hq.com/development-center
 Author: Tips and Tricks HQ
 Author URI: http://www.tipsandtricks-hq.com/
@@ -13,7 +13,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"])){
 }
 include_once('classes/class.simple-wp-membership.php');
 define('SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url());
-define('SIMPLE_WP_MEMBERSHIP_VER', '1.1');
+define('SIMPLE_WP_MEMBERSHIP_VER', '1.2');
 define('SIMPLE_WP_MEMBERSHIP_PATH', dirname(__FILE__) . '/');
 define('SIMPLE_WP_MEMBERSHIP_URL', plugins_url('',__FILE__));
 define('SIMPLE_WP_MEMBERSHIP_AUTH', 'simple_wp_membership_'. COOKIEHASH); 

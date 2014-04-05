@@ -1,6 +1,7 @@
 <?php
 
 include_once('class.bUtils.php');
+include_once('class.miscUtils.php');
 include_once('class.bSettings.php');
 include_once('class.bProtection.php');
 include_once('class.bPermission.php');
@@ -557,13 +558,11 @@ class SimpleWpMembership {
 
     public function menu() {
         add_menu_page(__("WP Membership", 'swpm'), __("WP Membership", 'swpm')
-                , 'activate_plugins', 'simple_wp_membership', array(&$this, "admin_members")
+                , 'manage_options', 'simple_wp_membership', array(&$this, "admin_members")
                 , SIMPLE_WP_MEMBERSHIP_URL . '/images/logo.png');
         add_submenu_page('simple_wp_membership', __("Members", 'swpm'), __('Members', 'swpm'), 'activate_plugins', 'simple_wp_membership', array(&$this, "admin_members"));
         add_submenu_page('simple_wp_membership', __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), 'activate_plugins', 'simple_wp_membership_levels', array(&$this, "admin_membership_levels"));
         add_submenu_page('simple_wp_membership', __("Settings", 'swpm'), __("Settings", 'swpm'), 'activate_plugins', 'simple_wp_membership_settings', array(&$this, "admin_settings"));
-        /* add_options_page( 'Simple WP Membership', 'Simple WP Membership', 
-          'manage_options', 'simple_wp_membership_settings', array(&$this,"admin_settings") ); */
         $this->meta_box();
     }
 
@@ -678,19 +677,7 @@ class SimpleWpMembership {
 			profile_image varchar(255) DEFAULT ''
           )ENGINE=MyISAM DEFAULT CHARSET=utf8;";
         dbDelta($sql);
-        /*
-          $sql = "CREATE TABLE " . $wpdb->prefix. "wp_auth_session_tbl (
-          id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-          session_id VARCHAR( 100 ) NOT NULL ,
-          user_id INT NOT NULL ,
-          login_impression TIMESTAMP NOT NULL ,
-          last_impression TIMESTAMP NOT NULL ,
-          logged_in_from_ip varchar(15) NOT NULL,
-          user_name VARCHAR( 100 ) NOT NULL ,
-          UNIQUE  (session_id)
-          )ENGINE=MyISAM DEFAULT CHARSET=utf8;";
-          dbDelta($sql);
-         */
+
         $sql = "CREATE TABLE " . $wpdb->prefix . "wp_eMember_membership_tbl (
 			id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			alias varchar(127) NOT NULL,
@@ -731,99 +718,28 @@ class SimpleWpMembership {
 			)VALUES (1 , 'Content Protection', 'administrator', '15', '0',NULL,NULL, NULL , NULL , NULL , NULL,NULL,NULL,'');";
             $wpdb->query($sql);
         }
-        $sql = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = 2";
-        $results = $wpdb->get_row($sql);
-        if (is_null($results)) {
-            $sql = "INSERT INTO  " . $wpdb->prefix . "wp_eMember_membership_tbl  (
-                id ,
-                alias ,
-                role ,
-                permissions ,
-                subscription_period ,
-                subscription_unit,
-                loginredirect_page,
-                category_list ,
-                page_list ,
-                post_list ,
-                comment_list,
-                disable_bookmark_list,
-                options,
-                campaign_name
-                )VALUES (2 , 'Free', 'subscriber', '15', '0',NULL,NULL, NULL , NULL , NULL , NULL,NULL,NULL,'');";
-            $wpdb->query($sql);
-        }
-        $sql = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = 3";
-        $results = $wpdb->get_row($sql);
-        if (is_null($results)) {
-            $sql = "INSERT INTO  " . $wpdb->prefix . "wp_eMember_membership_tbl  (
-                id ,
-                alias ,
-                role ,
-                permissions ,
-                subscription_period ,
-                subscription_unit,
-                loginredirect_page,
-                category_list ,
-                page_list ,
-                post_list ,
-                comment_list,
-                disable_bookmark_list,
-                options,
-                campaign_name
-             )VALUES (3 , 'Silver', 'editor', '15', '0',NULL,NULL, NULL , NULL , NULL , NULL,NULL,NULL,'');";
-            $wpdb->query($sql);
-        }
-        $sql = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = 4";
-        $results = $wpdb->get_row($sql);
-
-        if (is_null($results)) {
-            $sql = "INSERT INTO  " . $wpdb->prefix . "wp_eMember_membership_tbl  (
-                id ,
-                alias ,
-                role ,
-                permissions ,
-                subscription_period ,
-                subscription_unit,
-                loginredirect_page,
-                category_list ,
-                page_list ,
-                post_list ,
-                comment_list,
-                disable_bookmark_list,
-                options,
-                campaign_name
-             )VALUES (4 , 'Gold', 'administrator', '15', '0',NULL,NULL, NULL , NULL , NULL , NULL,NULL,NULL,'');";
-            $wpdb->query($sql);
-        }
     }
 
     public static function initdb() {
         $settings = BSettings::get_instance();
-        $installed_version = $settings->get_value('swpm-active-version', '');
-        $login_page = array(
-            'post_type' => 'page', 'post_title' => 'Member Login',
-            'post_content' => '[swpm_login_form]', 'post_status' => 'publish'
-        );
-        $rego_page = array(
-            'post_type' => 'page', 'post_title' => 'Registration',
-            'post_content' => '[swpm_registration_form]', 'post_status' => 'publish'
-        );
-        $profile_page = array(
-            'post_type' => 'page', 'post_title' => 'Profile',
-            'post_content' => '[swpm_profile_form]', 'post_status' => 'publish'
-        );
-        $reset_page = array(
-            'post_type' => 'page', 'post_title' => 'Password Reset',
-            'post_content' => '[swpm_reset_form]', 'post_status' => 'publish'
-        );
-        $reg_email_subject = "Complete your registration";
-        $reg_email_body = "Dear {first_name} {last_name}" .
+        //$settings->set_value('swpm-active-version','');//TODO - remove me. for testing only
+        //$settings->save();//TODO - remove me
+
+        $installed_version = $settings->get_value('swpm-active-version');
+        
+        /*** Create the mandatory pages (if they are not there) ***/
+        miscUtils::create_mandatory_wp_pages();
+        /*** End of page creation ***/     
+        
+        //Set other default settings values
+        $reg_prompt_email_subject = "Complete your registration";
+        $reg_prompt_email_body = "Dear {first_name} {last_name}" .
                 "\n\nThank you for joining us!" .
                 "\n\nPlease complete your registration by visiting the following link:" .
                 "\n\n{reg_link}" .
                 "\n\nThank You";
-        $reg_prompt_email_subject = "Complete your registration";
-        $reg_prompt_email_body = "Dear {first_name} {last_name}\n\n" .
+        $reg_email_subject = "Your registration is complete";
+        $reg_email_body = "Dear {first_name} {last_name}\n\n" .
                 "Your registration is now complete!\n\n" .
                 "Registration details:\n" .
                 "Username: {user_name}\n" .
@@ -842,12 +758,9 @@ class SimpleWpMembership {
                 "\n\nUser name: {user_name}" .
                 "\n\nPassword: {password}" .
                 "\n\nThank You";
-        if (empty($installed_version)) { // fresh install     										
-            $settings->set_value('login-page-url', get_permalink(wp_insert_post($login_page)))
-                    ->set_value('registration-page-url', get_permalink(wp_insert_post($rego_page)))
-                    ->set_value('profile-page-url', get_permalink(wp_insert_post($profile_page)))
-                    ->set_value('reset-page-url', get_permalink(wp_insert_post($reset_page)))
-                    ->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
+        if (empty($installed_version)) {
+            // fresh install     										
+            $settings->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
                     ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))
                     ->set_value('reg-prompt-complete-mail-subject', stripslashes($reg_prompt_email_subject))
                     ->set_value('reg-prompt-complete-mail-body', stripslashes($reg_prompt_email_body))
@@ -856,19 +769,8 @@ class SimpleWpMembership {
                     ->set_value('reset-mail-subject', stripslashes($reset_email_subject))
                     ->set_value('reset-mail-body', stripslashes($reset_email_body));
         }
-        $settings->set_value('login-page-url', get_permalink(wp_insert_post($login_page)))
-                ->set_value('registration-page-url', get_permalink(wp_insert_post($rego_page)))
-                ->set_value('profile-page-url', get_permalink(wp_insert_post($profile_page)))
-                ->set_value('reset-page-url', get_permalink(wp_insert_post($reset_page)))
-                ->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
-                ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))
-                ->set_value('reg-prompt-complete-mail-subject', stripslashes($reg_prompt_email_subject))
-                ->set_value('reg-prompt-complete-mail-body', stripslashes($reg_prompt_email_body))
-                ->set_value('upgrade-complete-mail-subject', stripslashes($upgrade_email_subject))
-                ->set_value('upgrade-complete-mail-body', stripslashes($upgrade_email_body))
-                ->set_value('reset-mail-subject', stripslashes($reset_email_subject))
-                ->set_value('reset-mail-body', stripslashes($reset_email_body));
-        if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) { // upgrade
+        if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) { 
+            // upgrade
         }
 
         $settings->set_value('swpm-active-version', SIMPLE_WP_MEMBERSHIP_VER)->save(); //save everything.

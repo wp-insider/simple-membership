@@ -1,0 +1,51 @@
+=== Simple WP Membership ===
+Contributors: Tips and Tricks HQ
+Donate link: http://www.tipsandtricks-hq.com/development-center
+Tags: member, members, members only, membership, WordPress membership plugin, content protection, paypal
+Requires at least: 3.0.1
+Tested up to: 3.8.1
+Stable tag: 1.2
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+Simple WordPress membership plugin to add membership functionality to your site. Protect members only content using content protection.
+
+== Description ==
+
+The simple membership plugin lets you protect your posts and pages so only your members can view the protected content.
+
+Set up unlimited membership levels (example: free, silver, gold etc) and protect your posts and pages using the membership levels you create.
+
+When you are editing a post or page in the WordPress editor, you can select to protect that post or page for your members.
+
+Non-members viewing a protected page will be prompted to login or become a member.
+
+You can configure it to have free and/or paid membership on your site. Paid membership payment is handled via PayPal. Both one time and recurring/subscription payments are supported.
+
+== Installation ==
+
+Do the following to install the membership plugin:
+
+1. Upload the 'simple-wp-membership.zip' file from the Plugins->Add New page in the WordPress administration panel.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+
+== Frequently Asked Questions ==
+
+None.
+
+== Screenshots ==
+
+None.
+
+== Changelog ==
+
+= 1.2 =
+- First commit to WP repository.
+
+== Upgrade Notice ==
+
+None
+
+== Arbitrary section ==
+
+None

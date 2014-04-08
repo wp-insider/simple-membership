@@ -18,7 +18,7 @@ class SimpleWpMembership {
     private $settings;
     private $lastMessage;
 
-    public function __construct() {
+    public function __construct() {        
         BAuth::get_instance();
         add_action('admin_menu', array(&$this, 'menu'));
         add_action('admin_init', array(&$this, 'admin_init')); //This call has been moved inside 'init' function
@@ -358,7 +358,7 @@ class SimpleWpMembership {
         $this->process_password_reset();
         $this->register_member();
         $this->edit_profile();
-        $this->swpm_ipn_listener();
+        $this->swpm_ipn_listener();       
     }
 
     public function swpm_ipn_listener() {
@@ -722,15 +722,13 @@ class SimpleWpMembership {
 
     public static function initdb() {
         $settings = BSettings::get_instance();
+        
+        //Use the following two lines to reset the version number for testing
         //$settings->set_value('swpm-active-version','');//TODO - remove me. for testing only
-        //$settings->save();//TODO - remove me
+        //$settings->save();//TODO - remove me. for testing only
 
         $installed_version = $settings->get_value('swpm-active-version');
-        
-        /*** Create the mandatory pages (if they are not there) ***/
-        miscUtils::create_mandatory_wp_pages();
-        /*** End of page creation ***/     
-        
+               
         //Set other default settings values
         $reg_prompt_email_subject = "Complete your registration";
         $reg_prompt_email_body = "Dear {first_name} {last_name}" .
@@ -759,7 +757,12 @@ class SimpleWpMembership {
                 "\n\nPassword: {password}" .
                 "\n\nThank You";
         if (empty($installed_version)) {
-            // fresh install     										
+            //Do fresh install tasks
+            
+            /*** Create the mandatory pages (if they are not there) ***/
+            miscUtils::create_mandatory_wp_pages();
+            /*** End of page creation ***/     
+        
             $settings->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
                     ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))
                     ->set_value('reg-prompt-complete-mail-subject', stripslashes($reg_prompt_email_subject))
@@ -770,7 +773,7 @@ class SimpleWpMembership {
                     ->set_value('reset-mail-body', stripslashes($reset_email_body));
         }
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) { 
-            // upgrade
+            //Do upgrade tasks
         }
 
         $settings->set_value('swpm-active-version', SIMPLE_WP_MEMBERSHIP_VER)->save(); //save everything.

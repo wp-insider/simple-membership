@@ -23,10 +23,10 @@ class BSettings {
         add_settings_field('enable-free-membership', 'Enable Free Membership', array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'enable-free-membership'));
 
         add_settings_section('pages-settings', 'Pages Settings', array(&$this, 'pages_settings_callback'), 'simple_wp_membership_settings');
-        add_settings_field('login-page-url', 'Login URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'login-page-url'));
-        add_settings_field('registration-page-url', 'Registration URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'registration-page-url'));
-        add_settings_field('profile-page-url', 'Profile URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'profile-page-url'));
-        add_settings_field('reset-page-url', 'Password Reset URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'reset-page-url'));
+        add_settings_field('login-page-url', 'Login Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'login-page-url'));
+        add_settings_field('registration-page-url', 'Registration Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'registration-page-url'));
+        add_settings_field('profile-page-url', 'Edit Profile Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'profile-page-url'));
+        add_settings_field('reset-page-url', 'Password Reset Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'reset-page-url'));
     }
 
     private function tab_2() {

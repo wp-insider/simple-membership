@@ -458,15 +458,15 @@ class SimpleWpMembership {
 
     public function registration_form() {
         $is_free = BSettings::get_instance()->get_value('enable-free-membership');
+        $free_level = absint(BSettings::get_instance()->get_value('free-membership-id'));
         $membership_level = '';
-
         if (isset($_SESSION['swpm-registered-level'])) {
             $membership_level = absint($_SESSION['swpm-registered-level']);
         } else if ($is_free) {
-            $membership_level = 2;
+            $membership_level = $free_level;
         }
         if (empty($membership_level)) {
-            echo 'Free membershp is not allowed.';
+            echo 'Free membershp is either not allowed or not defined.';
             return;
         }
 
@@ -494,12 +494,13 @@ class SimpleWpMembership {
             $member = BTransfer::$default_fields;
             $form = new BFrontForm($member);
             $is_free = BSettings::get_instance()->get_value('enable-free-membership');
+            $free_level = absint(BSettings::get_instance()->get_value('free-membership-id'));
             if ($form->is_valid()) {
                 $member_info = $form->get_sanitized();
                 if (isset($_SESSION['swpm-registered-level']))
                     $member_info['membership_level'] = absint($_SESSION['swpm-registered-level']);
-                else if ($is_free)
-                    $member_info['membership_level'] = 2;
+                else if ($is_free && !empty($free_level))
+                    $member_info['membership_level'] = $free_level;
                 else {
                     $message = array('succeeded' => false, 'message' => 'Membership Level Couldn\'t be found.');
                     BTransfer::get_instance()->set('status', $message);

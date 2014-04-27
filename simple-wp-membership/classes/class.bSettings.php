@@ -21,7 +21,7 @@ class BSettings {
         register_setting('swpm-settings-tab-1', 'swpm-settings', array(&$this, 'sanitize_tab_1'));
         add_settings_section('general-settings', 'General Settings', array(&$this, 'general_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('enable-free-membership', 'Enable Free Membership', array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'enable-free-membership'));
-
+        add_settings_field('free-membership-id', 'Free Membership Level ID', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'free-membership-id'));
         add_settings_section('pages-settings', 'Pages Settings', array(&$this, 'pages_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('login-page-url', 'Login Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'login-page-url'));
         add_settings_field('registration-page-url', 'Registration Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'registration-page-url'));
@@ -104,8 +104,8 @@ class BSettings {
         if (isset($input['enable-free-membership']))
             $output['enable-free-membership'] = esc_url($input['enable-free-membership']);
         else
-            $output['enable-free-membership'] = "";
-
+            $output['enable-free-membership'] = "";        
+        $output['free-membership-id'] = ($input['free-membership-id']!=1)?absint($input['free-membership-id']):'';
         $output['login-page-url'] = esc_url($input['login-page-url']);
         $output['registration-page-url'] = esc_url($input['registration-page-url']);
         $output['profile-page-url'] = esc_url($input['profile-page-url']);

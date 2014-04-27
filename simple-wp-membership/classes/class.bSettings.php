@@ -27,6 +27,7 @@ class BSettings {
         add_settings_field('registration-page-url', 'Registration Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'registration-page-url'));
         add_settings_field('profile-page-url', 'Edit Profile Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'profile-page-url'));
         add_settings_field('reset-page-url', 'Password Reset Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'reset-page-url'));
+        add_settings_field('join-us-page-url', 'Join Us Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'join-us-page-url'));
     }
 
     private function tab_2() {
@@ -37,11 +38,11 @@ class BSettings {
 
     private function tab_3() {
         register_setting('swpm-settings-tab-3', 'swpm-settings', array(&$this, 'sanitize_tab_3'));
-        
+
         add_settings_section('reg-prompt-email-settings', 'Email Settings (Prompt to Complete Registration )', array(&$this, 'reg_prompt_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('reg-prompt-complete-mail-subject', 'Email Subject', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-prompt-email-settings', array('item' => 'reg-prompt-complete-mail-subject'));
         add_settings_field('reg-prompt-complete-mail-body', 'Email Body', array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'reg-prompt-email-settings', array('item' => 'reg-prompt-complete-mail-body'));
-        
+
         add_settings_section('reg-email-settings', 'Email Settings (Registration Complete)', array(&$this, 'reg_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('reg-complete-mail-subject', 'Email Subject', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-subject'));
         add_settings_field('reg-complete-mail-body', 'Email Body', array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-body'));
@@ -104,24 +105,26 @@ class BSettings {
         if (isset($input['enable-free-membership']))
             $output['enable-free-membership'] = esc_url($input['enable-free-membership']);
         else
-            $output['enable-free-membership'] = "";        
-        $output['free-membership-id'] = ($input['free-membership-id']!=1)?absint($input['free-membership-id']):'';
+            $output['enable-free-membership'] = "";
+        $output['free-membership-id'] = ($input['free-membership-id'] != 1) ? absint($input['free-membership-id']) : '';
         $output['login-page-url'] = esc_url($input['login-page-url']);
         $output['registration-page-url'] = esc_url($input['registration-page-url']);
         $output['profile-page-url'] = esc_url($input['profile-page-url']);
         $output['reset-page-url'] = esc_url($input['reset-page-url']);
+        $output['join-us-page-url'] = esc_url($input['join-us-page-url']);        
         return $output;
     }
-    public function sanitize_tab_3($input) {
-	$output['reg-complete-mail-subject'] = sanitize_text_field($input['reg-complete-mail-subject']);
-        $output['reg-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-complete-mail-body']));        
 
-	$output['upgrade-complete-mail-subject'] = sanitize_text_field($input['upgrade-complete-mail-subject']);
-        $output['upgrade-complete-mail-body'] = wp_kses_data(force_balance_tags($input['upgrade-complete-mail-body']));        
-        
-	$output['reg-prompt-complete-mail-subject'] = sanitize_text_field($input['reg-prompt-complete-mail-subject']);
-        $output['reg-prompt-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-prompt-complete-mail-body']));        
-        
+    public function sanitize_tab_3($input) {
+        $output['reg-complete-mail-subject'] = sanitize_text_field($input['reg-complete-mail-subject']);
+        $output['reg-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-complete-mail-body']));
+
+        $output['upgrade-complete-mail-subject'] = sanitize_text_field($input['upgrade-complete-mail-subject']);
+        $output['upgrade-complete-mail-body'] = wp_kses_data(force_balance_tags($input['upgrade-complete-mail-body']));
+
+        $output['reg-prompt-complete-mail-subject'] = sanitize_text_field($input['reg-prompt-complete-mail-subject']);
+        $output['reg-prompt-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-prompt-complete-mail-body']));
+
         if (isset($input['enable-admin-notification-after-reg']))
             $output['enable-admin-notification-after-reg'] = esc_html($input['enable-admin-notification-after-reg']);
         else
@@ -129,9 +132,10 @@ class BSettings {
         if (isset($input['enable-notification-after-manual-user-add']))
             $output['enable-notification-after-manual-user-add'] = esc_html($input['enable-notification-after-manual-user-add']);
         else
-            $output['enable-notification-after-manual-user-add'] = "";     
+            $output['enable-notification-after-manual-user-add'] = "";
         return $output;
     }
+
     public function get_value($key, $default = "") {
         if (isset($this->settings[$key]))
             return $this->settings[$key];
@@ -156,6 +160,16 @@ class BSettings {
             <a class="nav-tab <?php echo ($current == 3) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=3">Email Settings</a>
         </h3>
         <?php
+    }
+
+    public function get_login_link() {
+        $login  = $this->get_value('login-page-url');
+        $joinus = $this->get_value('join-us-page-url');
+        if (empty ($login) || empty($joinus)){
+            return '<span style="color:red;">Simple Membership is not configured correctly.'
+            . 'Please contact <a href="mailto:' . get_option('admin_email'). '">Admin</a>';  
+        }
+        return 'Please <a href="' . $login . '">Login</a>. Not a Member? <a href="' . $joinus . '">Join Us</a>';
     }
 
 }

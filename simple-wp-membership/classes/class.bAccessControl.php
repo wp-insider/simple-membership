@@ -20,10 +20,11 @@ class BAccessControl {
 			if($auth->is_logged_in()){
 				$perms = BPermission::get_instance($auth->get('membership_level'));
 				if($perms->is_permitted($id))return true;
-				$this->lastError ="You are not allowed to view this content";
+				$this->lastError ='You are not allowed to view this content' ;
 				return false;							
 			}
-			$this->lastError ="You need to login to view this content";
+			$this->lastError ='You need to login to view this content. ' 
+                                . BSettings::get_instance()->get_login_link();
 			return false;			
 		}
 		return true;
@@ -39,7 +40,8 @@ class BAccessControl {
 				$this->lastError ="You are not allowed to view this content";
 				return false;							
 			}
-			$this->lastError ="You need to login to view this content";
+			$this->lastError ="You need to login to view this content. "
+                                . BSettings::get_instance()->get_login_link();
 			return false;			
 		}
 		return true;		

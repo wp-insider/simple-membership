@@ -251,8 +251,8 @@ class SimpleWpMembership {
 
     public function filter_content($content) {
         $acl = BAccessControl::get_instance();
-        global $post;
-        return $acl->filter_post($post->post_ID, $content);
+        global $post;        
+        return $acl->filter_post($post->ID, $content);
     }
 
     public function filter_moretag($more_link, $more_link_text = "More") {

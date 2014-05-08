@@ -21,13 +21,13 @@ class BSettings {
         register_setting('swpm-settings-tab-1', 'swpm-settings', array(&$this, 'sanitize_tab_1'));
         add_settings_section('general-settings', 'General Settings', array(&$this, 'general_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('enable-free-membership', 'Enable Free Membership', array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'enable-free-membership'));
-        add_settings_field('free-membership-id', 'Free Membership Level ID', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'free-membership-id'));
+        add_settings_field('free-membership-id', 'Free Membership Level ID', array(&$this, 'textfield_small_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'free-membership-id'));
         add_settings_section('pages-settings', 'Pages Settings', array(&$this, 'pages_settings_callback'), 'simple_wp_membership_settings');
-        add_settings_field('login-page-url', 'Login Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'login-page-url'));
-        add_settings_field('registration-page-url', 'Registration Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'registration-page-url'));
-        add_settings_field('profile-page-url', 'Edit Profile Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'profile-page-url'));
-        add_settings_field('reset-page-url', 'Password Reset Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'reset-page-url'));
-        add_settings_field('join-us-page-url', 'Join Us Page URL', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'join-us-page-url'));
+        add_settings_field('login-page-url', 'Login Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'login-page-url'));
+        add_settings_field('registration-page-url', 'Registration Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'registration-page-url'));
+        add_settings_field('join-us-page-url', 'Join Us Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'join-us-page-url'));
+        add_settings_field('profile-page-url', 'Edit Profile Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'profile-page-url'));
+        add_settings_field('reset-page-url', 'Password Reset Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'reset-page-url'));        
     }
 
     private function tab_2() {
@@ -71,11 +71,23 @@ class BSettings {
         echo "<textarea name='swpm-settings[" . $item . "]'  rows='6' cols='60' >" . $text . "</textarea>";
     }
 
+    public function textfield_small_callback($args) {
+        $item = $args['item'];
+        $text = esc_attr($this->get_value($item));
+        echo "<input type='text' name='swpm-settings[" . $item . "]'  size='5' value='" . $text . "' />";
+    }
+    
     public function textfield_callback($args) {
         $item = $args['item'];
         $text = esc_attr($this->get_value($item));
         echo "<input type='text' name='swpm-settings[" . $item . "]'  size='50' value='" . $text . "' />";
     }
+    
+    public function textfield_long_callback($args) {
+        $item = $args['item'];
+        $text = esc_attr($this->get_value($item));
+        echo "<input type='text' name='swpm-settings[" . $item . "]'  size='100' value='" . $text . "' />";
+    }    
 
     public function general_settings_callback() {
         echo "<p>General Setting are added here.</p>";

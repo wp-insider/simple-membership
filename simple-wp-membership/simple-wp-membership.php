@@ -5,7 +5,7 @@ Version: v1.2
 Plugin URI: http://www.tipsandtricks-hq.com/development-center
 Author: Tips and Tricks HQ
 Author URI: http://www.tipsandtricks-hq.com/
-Description: Simple WordPress Membership plugin to add Membership functionality to your wordpress blog.
+Description: Simple WordPress Membership plugin to add Membership functionality to your wordpress site.
 */
 //Direct access to this file is not permitted
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"])){
@@ -22,3 +22,13 @@ register_activation_hook( SIMPLE_WP_MEMBERSHIP_PATH .'simple-wp-membership.php',
 register_deactivation_hook( SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::deactivate' );	
 add_action('swpm_login','SimpleWpMembership::swpm_login', 10,3);
 add_action('plugins_loaded', function(){new SimpleWpMembership();});
+
+//Add settings link in plugins listing page
+function swpm_add_settings_link($links, $file) {
+    if ($file == plugin_basename(__FILE__)) {
+        $settings_link = '<a href="admin.php?page=simple_wp_membership_settings">Settings</a>';
+        array_unshift($links, $settings_link);
+    }
+    return $links;
+}
+add_filter('plugin_action_links', 'swpm_add_settings_link', 10, 2);

@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Simple WP Membership
+Plugin Name: Simple WordPress Membership
 Version: v1.2
 Plugin URI: http://www.tipsandtricks-hq.com/development-center
 Author: Tips and Tricks HQ

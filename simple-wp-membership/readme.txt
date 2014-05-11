@@ -1,4 +1,4 @@
-=== Simple WP Membership ===
+=== Simple WordPress Membership ===
 Contributors: Tips and Tricks HQ
 Donate link: http://www.tipsandtricks-hq.com/development-center
 Tags: member, members, members only, membership, WordPress membership plugin, content protection, paypal

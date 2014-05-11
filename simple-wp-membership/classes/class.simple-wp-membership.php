@@ -457,8 +457,10 @@ class SimpleWpMembership {
     }
 
     public function registration_form() {
+        $settings_configs = BSettings::get_instance();
         $is_free = BSettings::get_instance()->get_value('enable-free-membership');
         $free_level = absint(BSettings::get_instance()->get_value('free-membership-id'));
+        $joinuspage_url = $settings_configs->get_value('join-us-page-url');
         $membership_level = '';
         if (isset($_SESSION['swpm-registered-level'])) {
             $membership_level = absint($_SESSION['swpm-registered-level']);
@@ -466,8 +468,9 @@ class SimpleWpMembership {
             $membership_level = $free_level;
         }
         if (empty($membership_level)) {
-            echo 'Free membershp is either not allowed or not defined.';
-            return;
+            $joinuspage_link = '<a href="'.$joinuspage_url.'">Join us</a>';
+            $output = 'Free membership is disabled on this site. Please make a payment from the '.$joinuspage_link.' page to pay for a premium membership.';
+            return $output;
         }
 
         global $wpdb;
@@ -722,11 +725,7 @@ class SimpleWpMembership {
     }
 
     public static function initdb() {
-        $settings = BSettings::get_instance();
-        
-        //Use the following two lines to reset the version number for testing
-        //$settings->set_value('swpm-active-version','');//TODO - remove me. for testing only
-        //$settings->save();//TODO - remove me. for testing only
+        $settings = BSettings::get_instance();        
 
         $installed_version = $settings->get_value('swpm-active-version');
                

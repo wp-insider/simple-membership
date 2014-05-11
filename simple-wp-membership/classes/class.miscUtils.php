@@ -7,8 +7,8 @@ class miscUtils
         $settings = BSettings::get_instance();
         
         //Create join us page
-        $swpm_join_page_content = '<p style="color:red;font-weight:bold;">This page and the content has been automatically generated for you to give you a basic idea of how a Join Us page should look like. You can customize this page however you like it by editing this page from your WordPress page editor.</p>';
-        $swpm_join_page_content .= '<p style="font-weight:bold;">If you end up changing the URL of this page then make sure to update the URL value in the pages/forms settings menu of the plugin.</p>';
+        $swpm_join_page_content = '<p style="color:red;font-weight:bold;">This page and the content has been automatically generated for you to give you a basic idea of how a "Join Us" page should look like. You can customize this page however you like it by editing this page from your WordPress page editor.</p>';
+        $swpm_join_page_content .= '<p style="font-weight:bold;">If you end up changing the URL of this page then make sure to update the URL value in the settings menu of the plugin.</p>';
         $swpm_join_page_content .= '<p style="border-top:1px solid #ccc;padding-top:10px;margin-top:10px;"></p>
 			<strong>Free Membership</strong>
 			<br />

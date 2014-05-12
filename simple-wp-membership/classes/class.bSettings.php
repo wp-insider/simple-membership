@@ -27,17 +27,20 @@ class BSettings {
         add_settings_field('registration-page-url', 'Registration Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'registration-page-url'));
         add_settings_field('join-us-page-url', 'Join Us Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'join-us-page-url'));
         add_settings_field('profile-page-url', 'Edit Profile Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'profile-page-url'));
-        add_settings_field('reset-page-url', 'Password Reset Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'reset-page-url'));        
+        add_settings_field('reset-page-url', 'Password Reset Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'reset-page-url'));
     }
 
     private function tab_2() {
-        //register_setting( 'swpm-settings-tab-2', 'swpm-settings' , array(&$this, 'sanitize_tab_2'));			
+        //register_setting( 'swpm-settings-tab-2', 'swpm-settings' , array(&$this, 'sanitize_tab_2'));
         //add_settings_section('paypal-settings', 'PayPal Settings', array(&$this,'pp_payment_settings_callback'), 'simple_wp_membership_settings');
-        //add_settings_field( 'paypal-email', 'PayPal Email', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'paypal-settings' ,array('item'=>'paypal-email'));				
+        //add_settings_field( 'paypal-email', 'PayPal Email', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'paypal-settings' ,array('item'=>'paypal-email'));
     }
 
     private function tab_3() {
         register_setting('swpm-settings-tab-3', 'swpm-settings', array(&$this, 'sanitize_tab_3'));
+
+        add_settings_section('email-misc-settings', 'Email Misc. Settings', array(&$this, 'email_misc_settings_callback'), 'simple_wp_membership_settings');
+        add_settings_field('email-misc-from', 'Email From', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-misc-settings', array('item' => 'email-from'));
 
         add_settings_section('reg-prompt-email-settings', 'Email Settings (Prompt to Complete Registration )', array(&$this, 'reg_prompt_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('reg-prompt-complete-mail-subject', 'Email Subject', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-prompt-email-settings', array('item' => 'reg-prompt-complete-mail-subject'));
@@ -76,18 +79,18 @@ class BSettings {
         $text = esc_attr($this->get_value($item));
         echo "<input type='text' name='swpm-settings[" . $item . "]'  size='5' value='" . $text . "' />";
     }
-    
+
     public function textfield_callback($args) {
         $item = $args['item'];
         $text = esc_attr($this->get_value($item));
         echo "<input type='text' name='swpm-settings[" . $item . "]'  size='50' value='" . $text . "' />";
     }
-    
+
     public function textfield_long_callback($args) {
         $item = $args['item'];
         $text = esc_attr($this->get_value($item));
         echo "<input type='text' name='swpm-settings[" . $item . "]'  size='100' value='" . $text . "' />";
-    }    
+    }
 
     public function general_settings_callback() {
         echo "<p>General Setting are added here.</p>";
@@ -96,7 +99,9 @@ class BSettings {
     public function reg_email_settings_callback() {
         echo "<p>This email will be sent to your users when they complete the registration and become a member.</p>";
     }
-
+    public function email_misc_settings_callback(){
+        echo "<p>Settings in this section apply to all emails.</p>";
+    }
     public function upgrade_email_settings_callback() {
         echo "<p>This email will be sent to your users after account upgrade.</p>";
     }
@@ -113,7 +118,7 @@ class BSettings {
         if (empty($this->settings))
             $this->settings = (array) get_option('swpm-settings');
         $output = $this->settings;
-        //general settings block   
+        //general settings block
         if (isset($input['enable-free-membership']))
             $output['enable-free-membership'] = esc_url($input['enable-free-membership']);
         else
@@ -123,7 +128,7 @@ class BSettings {
         $output['registration-page-url'] = esc_url($input['registration-page-url']);
         $output['profile-page-url'] = esc_url($input['profile-page-url']);
         $output['reset-page-url'] = esc_url($input['reset-page-url']);
-        $output['join-us-page-url'] = esc_url($input['join-us-page-url']);        
+        $output['join-us-page-url'] = esc_url($input['join-us-page-url']);
         return $output;
     }
 
@@ -136,7 +141,7 @@ class BSettings {
 
         $output['reg-prompt-complete-mail-subject'] = sanitize_text_field($input['reg-prompt-complete-mail-subject']);
         $output['reg-prompt-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-prompt-complete-mail-body']));
-
+        $output['email-from'] = sanitize_email($input['email-from']);
         if (isset($input['enable-admin-notification-after-reg']))
             $output['enable-admin-notification-after-reg'] = esc_html($input['enable-admin-notification-after-reg']);
         else
@@ -166,7 +171,7 @@ class BSettings {
     public function draw_tabs() {
         $current = $this->current_tab;
         ?>
-        <h3 class="nav-tab-wrapper"> 
+        <h3 class="nav-tab-wrapper">
             <a class="nav-tab <?php echo ($current == 1) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings">General Settings</a>
             <a class="nav-tab <?php echo ($current == 2) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=2">Payment Settings</a>
             <a class="nav-tab <?php echo ($current == 3) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=3">Email Settings</a>
@@ -179,7 +184,7 @@ class BSettings {
         $joinus = $this->get_value('join-us-page-url');
         if (empty ($login) || empty($joinus)){
             return '<span style="color:red;">Simple Membership is not configured correctly.'
-            . 'Please contact <a href="mailto:' . get_option('admin_email'). '">Admin</a>';  
+            . 'Please contact <a href="mailto:' . get_option('admin_email'). '">Admin</a>';
         }
         return 'Please <a href="' . $login . '">Login</a>. Not a Member? <a href="' . $joinus . '">Join Us</a>';
     }

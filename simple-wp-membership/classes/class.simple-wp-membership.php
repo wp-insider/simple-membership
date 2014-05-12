@@ -18,7 +18,7 @@ class SimpleWpMembership {
     private $settings;
     private $lastMessage;
 
-    public function __construct() {        
+    public function __construct() {
         BAuth::get_instance();
         add_action('admin_menu', array(&$this, 'menu'));
         add_action('admin_init', array(&$this, 'admin_init')); //This call has been moved inside 'init' function
@@ -194,7 +194,7 @@ class SimpleWpMembership {
     public function inner_custom_box() {
         global $post, $wpdb;
         $id = $post->ID;
-        // Use nonce for verification	
+        // Use nonce for verification
         $is_protected = BProtection::get_instance()->is_protected($id);
         echo '<input type="hidden" name="swpm_noncename" id="swpm_noncename" value="' .
         wp_create_nonce(plugin_basename(__FILE__)) . '" />';
@@ -251,7 +251,7 @@ class SimpleWpMembership {
 
     public function filter_content($content) {
         $acl = BAccessControl::get_instance();
-        global $post;        
+        global $post;
         return $acl->filter_post($post->ID, $content);
     }
 
@@ -358,7 +358,7 @@ class SimpleWpMembership {
         $this->process_password_reset();
         $this->register_member();
         $this->edit_profile();
-        $this->swpm_ipn_listener();       
+        $this->swpm_ipn_listener();
     }
 
     public function swpm_ipn_listener() {
@@ -698,7 +698,7 @@ class SimpleWpMembership {
 			custom_post_list longtext,
 			disable_bookmark_list longtext,
 			options longtext,
-			campaign_name varchar(60) NOT NULL DEFAULT ''         
+			campaign_name varchar(60) NOT NULL DEFAULT ''
           ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
         dbDelta($sql);
         $sql = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = 1";
@@ -725,10 +725,10 @@ class SimpleWpMembership {
     }
 
     public static function initdb() {
-        $settings = BSettings::get_instance();        
+        $settings = BSettings::get_instance();
 
         $installed_version = $settings->get_value('swpm-active-version');
-               
+
         //Set other default settings values
         $reg_prompt_email_subject = "Complete your registration";
         $reg_prompt_email_body = "Dear {first_name} {last_name}" .
@@ -758,11 +758,10 @@ class SimpleWpMembership {
                 "\n\nThank You";
         if (empty($installed_version)) {
             //Do fresh install tasks
-            
+
             /*** Create the mandatory pages (if they are not there) ***/
             miscUtils::create_mandatory_wp_pages();
-            /*** End of page creation ***/     
-        
+            /*** End of page creation ***/
             $settings->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
                     ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))
                     ->set_value('reg-prompt-complete-mail-subject', stripslashes($reg_prompt_email_subject))
@@ -770,9 +769,10 @@ class SimpleWpMembership {
                     ->set_value('upgrade-complete-mail-subject', stripslashes($upgrade_email_subject))
                     ->set_value('upgrade-complete-mail-body', stripslashes($upgrade_email_body))
                     ->set_value('reset-mail-subject', stripslashes($reset_email_subject))
-                    ->set_value('reset-mail-body', stripslashes($reset_email_body));
+                    ->set_value('reset-mail-body', stripslashes($reset_email_body))
+                    ->set_value('email-from', sanitize_email(get_option('admin_email')));
         }
-        if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) { 
+        if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {
             //Do upgrade tasks
         }
 
@@ -780,7 +780,7 @@ class SimpleWpMembership {
     }
 
     public function deactivate() {
-        
+
     }
 
     public static function is_multisite_install() {
@@ -801,7 +801,7 @@ class SimpleWpMembership {
             $wp_user_id = wpmu_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
             $role = 'subscriber'; //TODO - add user as a subscriber first. The subsequent update user role function to update the role to the correct one
             add_user_to_blog($blog_id, $wp_user_id, $role);
-        } else {//Single site install		
+        } else {//Single site install
             $wp_user_id = wp_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
         }
         $wp_user_data['ID'] = $wp_user_id;

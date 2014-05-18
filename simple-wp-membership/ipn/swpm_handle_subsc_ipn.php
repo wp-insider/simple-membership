@@ -127,7 +127,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
         if (empty($body)){
             $body = "Please use the following link to complete your registration. \n {reg_link}";
         }
-        $from_address = get_option('admin_email');
+        $from_address = $settings->get_value('email-from');
         
         $tags = array("{first_name}","{last_name}","{reg_link}");
         $vals = array($first_name,$last_name,$reg_url);

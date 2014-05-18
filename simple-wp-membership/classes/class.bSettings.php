@@ -40,7 +40,7 @@ class BSettings {
         register_setting('swpm-settings-tab-3', 'swpm-settings', array(&$this, 'sanitize_tab_3'));
 
         add_settings_section('email-misc-settings', 'Email Misc. Settings', array(&$this, 'email_misc_settings_callback'), 'simple_wp_membership_settings');
-        add_settings_field('email-misc-from', 'Email From', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-misc-settings', array('item' => 'email-from'));
+        add_settings_field('email-misc-from', 'From Email Address', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-misc-settings', array('item' => 'email-from'));
 
         add_settings_section('reg-prompt-email-settings', 'Email Settings (Prompt to Complete Registration )', array(&$this, 'reg_prompt_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('reg-prompt-complete-mail-subject', 'Email Subject', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-prompt-email-settings', array('item' => 'reg-prompt-complete-mail-subject'));
@@ -141,7 +141,7 @@ class BSettings {
 
         $output['reg-prompt-complete-mail-subject'] = sanitize_text_field($input['reg-prompt-complete-mail-subject']);
         $output['reg-prompt-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-prompt-complete-mail-body']));
-        $output['email-from'] = sanitize_email($input['email-from']);
+        $output['email-from'] = trim($input['email-from']);
         if (isset($input['enable-admin-notification-after-reg']))
             $output['enable-admin-notification-after-reg'] = esc_html($input['enable-admin-notification-after-reg']);
         else

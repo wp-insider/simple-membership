@@ -1,6 +1,6 @@
 === Simple WordPress Membership ===
-Contributors: Tips and Tricks HQ
-Donate link: http://www.tipsandtricks-hq.com/development-center
+Contributors: smp7
+Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, WordPress membership plugin, content protection, paypal
 Requires at least: 3.0.1
 Tested up to: 3.8.1

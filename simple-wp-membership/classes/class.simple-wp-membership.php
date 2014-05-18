@@ -390,7 +390,7 @@ class SimpleWpMembership {
                     $search = array('{user_name}', '{first_name}', '{last_name}', '{password}');
                     $replace = array($user->user_name, $user->first_name, $user->last_name, $password);
                     $body = str_replace($search, $replace, $body);
-                    $from = get_option('admin_email');
+                    $from = $settings->get_value('email-from');
                     $headers = "From: " . $from . "\r\n";
                     wp_mail($from, $subject, $body, $headers);
                     $message = "New password has been sent to your email address.";
@@ -517,7 +517,7 @@ class SimpleWpMembership {
                 $last_insert_id = $wpdb->insert_id;
                 $subject = $settings->get_value('reg-complete-mail-subject');
                 $body = $settings->get_value('reg-complete-mail-body');
-                $from_address = get_option('admin_email');
+                $from_address = $settings->get_value('email-from');
                 $login_link = $settings->get_value('login-page-url');
                 $headers = 'From: ' . $from_address . "\r\n";
                 $query = "SELECT alias FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = " . $member_info['membership_level'];
@@ -770,7 +770,7 @@ class SimpleWpMembership {
                     ->set_value('upgrade-complete-mail-body', stripslashes($upgrade_email_body))
                     ->set_value('reset-mail-subject', stripslashes($reset_email_subject))
                     ->set_value('reset-mail-body', stripslashes($reset_email_body))
-                    ->set_value('email-from', sanitize_email(get_option('admin_email')));
+                    ->set_value('email-from', trim(get_option('admin_email')));
         }
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {
             //Do upgrade tasks

@@ -82,7 +82,7 @@ class BMembershipLevels extends WP_List_Table{
         $this->items = $wpdb->get_results($query, ARRAY_A);
     }
     function no_items() {
-      _e( 'No membership levels found, dude.' );
+      _e( 'No membership levels found.' );
     }
 	function process_form_request(){		
 		if(isset($_REQUEST['id']))

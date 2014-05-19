@@ -1,4 +1,4 @@
-=== Simple WordPress Membership ===
+=== Simple Membership ===
 Contributors: smp7
 Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, WordPress membership plugin, content protection, paypal
@@ -8,9 +8,11 @@ Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Simple WordPress membership plugin to add membership functionality to your site. Protect members only content using content protection.
+Simple membership plugin to add membership functionality to your site. Protect members only content using content protection easily.
 
 == Description ==
+
+A flexible, well-supported, and easy-to-use WordPress membership plugin for offering free and premium content from your WordPress site
 
 The simple membership plugin lets you protect your posts and pages so only your members can view the protected content.
 

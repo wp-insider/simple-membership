@@ -5,7 +5,7 @@ Version: v1.2
 Plugin URI: https://simple-membership-plugin.com/
 Author: smp7
 Author URI: https://simple-membership-plugin.com/
-Description: Simple WordPress membership plugin to add membership functionality to your wordpress site.
+Description: A flexible, well-supported, and easy-to-use WordPress membership plugin for offering free and premium content from your WordPress site.
 */
 
 //Direct access to this file is not permitted

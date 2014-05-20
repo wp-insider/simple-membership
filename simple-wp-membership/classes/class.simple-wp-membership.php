@@ -100,7 +100,7 @@ class SimpleWpMembership {
         else {
             $setting = BSettings::get_instance();
             $password_reset_url = $setting->get_value('reset-page-url');
-            $join_url = '#';
+            $join_url = $setting->get_value('join-us-page-url');
             include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/login.php');
         }
     }
@@ -535,7 +535,7 @@ class SimpleWpMembership {
                             "\n\n------End------\n";
                     wp_mail($from_address, $subject, $body, $headers);
                 }
-                /*                 * ******************** register to wordpress ********** */
+                // register to wordpress
                 $query = "SELECT role FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = " . $member_info['membership_level'];
                 $wp_user_info = array();
                 $wp_user_info['user_nicename'] = implode('-', explode(' ', $member_info['user_name']));
@@ -551,7 +551,9 @@ class SimpleWpMembership {
                 self::create_wp_user($wp_user_info);
                 /*                 * ******************** register to wordpress ********** */
                 //@unset($_SESSION['swpm-registered-level']);
-                $message = array('succeeded' => true, 'message' => 'Registration Successful.');
+                $login_page_url = $settings->get_value('login-page-url');
+                $after_rego_msg = '<p>Registration Successful. Please <a href="'.$login_page_url.'">Login</a></p>';
+                $message = array('succeeded' => true, 'message' => $after_rego_msg);
                 BTransfer::get_instance()->set('status', $message);
                 return;
             }
@@ -792,7 +794,7 @@ class SimpleWpMembership {
     }
 
     public function create_wp_user($wp_user_data) {
-        if (self::multisite_install()) {//MS install
+        if (self::is_multisite_install()) {//MS install
             global $blog_id;
             if ($wp_user_id = email_exists($wp_user_data['user_email'])) {// if user exists then just add him to current blog.
                 add_existing_user_to_blog(array('user_id' => $wp_user_id, 'role' => 'subscriber'));
@@ -818,7 +820,7 @@ class SimpleWpMembership {
         if ($preserve_role) {
             return;
         }
-        if (eMember_is_multisite_install()) {//MS install
+        if (self::is_multisite_install()) {//MS install
             return; //TODO - don't do this for MS install
         }
         $caps = get_user_meta($wp_user_id, 'wp_capabilities', true);

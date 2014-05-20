@@ -82,7 +82,7 @@ class BMembers extends WP_List_Table{
         $this->items = $wpdb->get_results($query, ARRAY_A);
     }
     function no_items() {
-      _e( 'No Member found, dude.' );
+      _e( 'No Member found.' );
     }
 	function process_form_request(){		
 		if(isset($_REQUEST['member_id']))

@@ -1,3 +1,4 @@
+<div class="swpm-registration-widget-form">
 <form id="swpm-registration-form" name="swpm-registration-form" method="post" action=""> 
 	<table>
 		<tr>
@@ -60,6 +61,7 @@
 	<input type="hidden" name="action" value="custom_posts" />
 	<?php wp_nonce_field( 'name_of_my_action','name_of_nonce_field' ); ?>
 </form>
+</div>
 <script>
 jQuery(document).ready(function($){
 	$.validationEngineLanguage.allRules['ajaxUserCall']['url']= '<?php echo admin_url('admin-ajax.php');?>';

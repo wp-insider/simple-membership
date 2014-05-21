@@ -30,4 +30,6 @@ function mgc_custom_footer( $output ) {
     return $output;
 }
 
+//Shortcode filtering on text widgets
+if (!is_admin()){add_filter('widget_text', 'do_shortcode');}
 

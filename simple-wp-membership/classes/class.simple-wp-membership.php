@@ -129,7 +129,7 @@ class SimpleWpMembership {
         $user = esc_sql(trim($_GET['fieldValue']));
         $query = $wpdb->prepare("SELECT COUNT(*) FROM $table WHERE user_name = %s", $user);
         $exists = $wpdb->get_var($query) > 0;
-        echo '[ "' . $_GET['fieldId'] . (($exists) ? '",false, "&chi;&nbsp;Aready taken"]' : '",true, "&radic;&nbsp;Available"]');
+        echo '[ "' . $_GET['fieldId'] . (($exists) ? '",false,"&chi;&nbsp;Aready taken"]' : '",true,"&radic;&nbsp;Available"]');
         exit;
     }
 
@@ -513,8 +513,11 @@ class SimpleWpMembership {
                 $member_info['member_since'] = date("Y-m-d");
                 $member_info['subscription_starts'] = date("Y-m-d");
                 $settings = BSettings::get_instance();
+                $plain_password = $member_info['plain_password'];
+                unset($member_info['plain_password']);
                 $wpdb->insert($wpdb->prefix . "wp_eMember_members_tbl", $member_info);
                 $last_insert_id = $wpdb->insert_id;
+                $member_info['plain_password'] = $plain_password;
                 $subject = $settings->get_value('reg-complete-mail-subject');
                 $body = $settings->get_value('reg-complete-mail-body');
                 $from_address = $settings->get_value('email-from');

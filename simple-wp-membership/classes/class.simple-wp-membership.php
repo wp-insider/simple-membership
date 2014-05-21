@@ -271,6 +271,8 @@ class SimpleWpMembership {
             if ($form->is_valid()) {
                 $member_info = $form->get_sanitized();
                 $member_info['account_state'] = 'active';
+                $plain_password = $member_info['plain_password'];
+                unset($member_info['plain_password']);
                 $wpdb->insert($wpdb->prefix . "swpm_members_tbl", $member_info);
                 /*                 * ******************** register to wordpress ********** */
                 $query = "SELECT role FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = " . $member_info['membership_level'];
@@ -282,7 +284,7 @@ class SimpleWpMembership {
                 $wp_user_info['first_name'] = $member_info['first_name'];
                 $wp_user_info['last_name'] = $member_info['last_name'];
                 $wp_user_info['user_login'] = $member_info['user_name'];
-                $wp_user_info['password'] = $member_info['plain_password'];
+                $wp_user_info['password'] = $plain_password;
                 $wp_user_info['role'] = $wpdb->get_var($query);
                 $wp_user_info['user_registered'] = date('Y-m-d H:i:s');
                 self::create_wp_user($wp_user_info);
@@ -422,8 +424,10 @@ class SimpleWpMembership {
                 $form = new BForm($user_data);
                 if ($form->is_valid()) {
                     global $wpdb;
+                    $member_info = $form->get_sanitized();
+                    if(isset($member_info['plain_password'])){unset($member_info['plain_password']);}
                     $wpdb->update(
-                            $wpdb->prefix . "swpm_members_tbl", $form->get_sanitized(), array('member_id' => $auth->get('member_id')));
+                            $wpdb->prefix . "swpm_members_tbl", $member_info, array('member_id' => $auth->get('member_id')));
                     $message = array('succeeded' => true, 'message' => 'Profile Updated.');
                     BTransfer::get_instance()->set('status', $message);
                 } else {

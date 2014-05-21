@@ -14,7 +14,7 @@
 				<option value="not specified">Not Specified</option>
 			</select>
 		</td>
-	</tr>		
+	</tr>
 	<tr>
 		<th scope="row"><label for="phone"><?php _e('Phone') ?> </label></th>
 		<td><input class="regular-text" name="phone" type="text" id="phone" value="<?php echo esc_attr($phone); ?>" /></td>
@@ -34,11 +34,11 @@
 	<tr>
 		<th scope="row"><label for="address_zipcode"><?php _e('Zipcode') ?> </label></th>
 		<td><input class="regular-text" name="address_zipcode" type="text" id="address_zipcode" value="<?php echo esc_attr($address_zipcode); ?>" /></td>
-	</tr>	
+	</tr>
 	<tr>
 		<th scope="row"><label for="country"><?php _e('Country') ?> </label></th>
 		<td><input class="regular-text" name="country" type="text" id="country" value="<?php echo esc_attr($country); ?>" /></td>
-	</tr>	
+	</tr>
 	<tr>
 		<th scope="row"><label for="company_name"><?php _e('Company') ?></label></th>
 		<td><input name="company_name" type="text" id="company_name" class="code regular-text" value="<?php echo esc_attr($company_name); ?>" /></td>
@@ -57,7 +57,7 @@
 		<th scope="row"><label for="membership_level"><?php _e('Membership Level'); ?></label></th>
 		<td><select class="regular-text" name="membership_level" id="membership_level">
             <?php foreach ($levels as $level):?>
-            <option<?php echo ($level['id'] == $membership_level)? "selected='selected'": "";?> value="<?php echo $level['id'];?>"> <?php echo $level['alias']?></option>
+            <option <?php echo ($level['id'] == $membership_level)? "selected='selected'": "";?> value="<?php echo $level['id'];?>"> <?php echo $level['alias']?></option>
             <?php endforeach;?>
 			</select>
 		</td>
@@ -68,10 +68,10 @@
 				<option value="active">Active</option>
 				<option value="inactive">Inactive</option>
 				<option value="pending">Pending</option>
-				<option value="expired">Expired</option>				
+				<option value="expired">Expired</option>
 			</select>
 		</td>
-	</tr>	
+	</tr>
 	<tr>
 		<th scope="row"><label for="member_since"><?php _e('Member Since') ?> </label></th>
 		<td><input class="regular-text" name="member_since" type="text" id="member_since" value="<?php echo esc_attr($member_since); ?>" /></td>
@@ -79,9 +79,9 @@
 	<tr>
 		<th scope="row"><label for="subscription_starts"><?php _e('Subscription Starts') ?> </label></th>
 		<td><input class="regular-text" name="subscription_starts" type="text" id="subscription_starts" value="<?php echo esc_attr($subscription_starts); ?>" /></td>
-	</tr>	
+	</tr>
 </tbody>
-</table> 
+</table>
 <script>
 jQuery(document).ready(function($){
 	$('#member_since').dateinput({'format':'yyyy-mm-dd',selectors: true,yearRange:[-100,100]});

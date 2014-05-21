@@ -12,7 +12,7 @@ abstract class BProtectionBase{
 	protected function init($level_id){
         global $wpdb;
         $this->owning_level_id = $level_id;
-        $query = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id =". $level_id;
+        $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id =". $level_id;
         $result = $wpdb->get_row($query);
         $this->bitmap       = isset($result->permissions)? $result->permissions:0;
         $this->posts        = isset($result->post_list)? unserialize($result->post_list): array();
@@ -21,7 +21,7 @@ abstract class BProtectionBase{
         $this->categories   = isset($result->category_list)? unserialize($result->category_list): array();
         $this->attachments  = isset($result->attachment_list)? unserialize($result->attachment_list): array();
         $this->custom_posts = isset($result->custom_post_list)? unserialize($result->custom_post_list): array();
-        $this->details = (array)$result;		
+        $this->details = (array)$result;
 	}
     protected function in_posts($id){
         return in_array($id, (array)$this->posts);
@@ -100,7 +100,7 @@ abstract class BProtectionBase{
 			else
 				$data[$key] = serialize($value);
 		}
-		$wpdb->update($wpdb->prefix. "wp_eMember_membership_tbl", $data, array('id'=>$this->owning_level_id));
+		$wpdb->update($wpdb->prefix. "swpm_membership_tbl", $data, array('id'=>$this->owning_level_id));
 	}
 	public function get($key){
 		if(isset($this->details[$key]))

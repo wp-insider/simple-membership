@@ -1,20 +1,20 @@
 <?php screen_icon( 'options-general' );?>
 <h1>Simple WP Membership::Settings</h1>
 <div class="wrap">
- 
+
 <?php do_action("swpm-draw-tab"); ?>
 
 <div id="poststuff"><div id="post-body">
-        
-<?php 
+
+<?php
 global $wpdb;
 
 if(isset($_POST['swpm_generate_adv_code']))
 {
 	$paypal_ipn_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL.'/?swpm_process_ipn=1';
     $mem_level = trim($_POST['swpm_paypal_adv_member_level']);
-    
-    $query = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id =". $mem_level;
+
+    $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id =". $mem_level;
     $membership_level_resultset = $wpdb->get_row($query);
     if($membership_level_resultset){
     	$pp_av_code = 'notify_url='.$paypal_ipn_url.'<br /> '.'custom=subsc_ref='.$mem_level;
@@ -33,15 +33,15 @@ if(isset($_POST['swpm_generate_adv_code']))
 	<div class="postbox">
 	<h3><label for="title">PayPal Integration Settings</label></h3>
 	<div class="inside">
-	
+
 	<p><strong>Generate the "Advanced Variables" Code for your PayPal button</strong></p>
-	
+
         <form action="" method="post">
         Enter the Membership Level ID
         <input type="text" value="" size="4" name="swpm_paypal_adv_member_level">
         <input type="submit" value="Generate Code" class="button-primary" name="swpm_generate_adv_code">
         </form>
-	
+
 	</div></div>
 
 </div></div><!-- end of poststuff and post-body -->

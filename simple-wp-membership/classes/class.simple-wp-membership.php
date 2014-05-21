@@ -80,7 +80,7 @@ class SimpleWpMembership {
     public function sync_with_wp_profile($wp_user_id) {
         global $wpdb;
         $wp_user_data = get_userdata($wp_user_id);
-        $query = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_members_tbl WHERE " . ' user_name=\'' . $wp_user_data->user_login . '\'';
+        $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE " . ' user_name=\'' . $wp_user_data->user_login . '\'';
         $profile = $wpdb->get_row($query, ARRAY_A);
         $profile = (array) $profile;
         if (empty($profile))
@@ -90,7 +90,7 @@ class SimpleWpMembership {
         $profile['password'] = $wp_user_data->user_pass;
         $profile['first_name'] = $wp_user_data->user_firstname;
         $profile['last_name'] = $wp_user_data->user_lastname;
-        $wpdb->update($wpdb->prefix . "wp_eMember_members_tbl", $profile, array('member_id' => $profile['member_id']));
+        $wpdb->update($wpdb->prefix . "swpm_members_tbl", $profile, array('member_id' => $profile['member_id']));
     }
 
     public function login() {
@@ -115,7 +115,7 @@ class SimpleWpMembership {
 
     public function validate_email_ajax() {
         global $wpdb;
-        $table = $wpdb->prefix . "wp_eMember_members_tbl";
+        $table = $wpdb->prefix . "swpm_members_tbl";
         $email = esc_sql(trim($_GET['fieldValue']));
         $query = $wpdb->prepare("SELECT COUNT(*) FROM $table WHERE email = %s", $email);
         $exists = $wpdb->get_var($query) > 0;
@@ -125,7 +125,7 @@ class SimpleWpMembership {
 
     public function validate_user_name_ajax() {
         global $wpdb;
-        $table = $wpdb->prefix . "wp_eMember_members_tbl";
+        $table = $wpdb->prefix . "swpm_members_tbl";
         $user = esc_sql(trim($_GET['fieldValue']));
         $query = $wpdb->prepare("SELECT COUNT(*) FROM $table WHERE user_name = %s", $user);
         $exists = $wpdb->get_var($query) > 0;
@@ -203,7 +203,7 @@ class SimpleWpMembership {
         echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="1" /> No, Do not protect this content. <br/>';
         echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="2" /> Yes, Protect this content.<br/>';
         echo '<h4>' . __("Select the membership level that can access this content:", 'eMember_textdomain') . "</h4>";
-        $query = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE  id !=1 ";
+        $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
         $levels = $wpdb->get_results($query, ARRAY_A);
         foreach ($levels as $level) {
             echo '<input type="checkbox" ' . (BPermission::get_instance($level['id'])->is_permitted($id) ? "checked='checked'" : "") . ' name="swpm_protection_level[' . $level['id'] . ']" value="' . $level['id'] . '" /> ' . $level['alias'] . "<br/>";
@@ -232,7 +232,7 @@ class SimpleWpMembership {
         $protected = BProtection::get_instance();
         if (isset($_POST['post_type'])) {
             BProtection::get_instance()->update_perms($post_id, $isprotected, $_POST['post_type'])->save();
-            $query = "SELECT id FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE  id !=1 ";
+            $query = "SELECT id FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
             $level_ids = $wpdb->get_col($query);
             foreach ($level_ids as $level)
                 BPermission::get_instance($level)->update_perms($post_id, isset($_POST['swpm_protection_level'][$level]), $_POST['post_type'])->save();
@@ -271,9 +271,9 @@ class SimpleWpMembership {
             if ($form->is_valid()) {
                 $member_info = $form->get_sanitized();
                 $member_info['account_state'] = 'active';
-                $wpdb->insert($wpdb->prefix . "wp_eMember_members_tbl", $member_info);
+                $wpdb->insert($wpdb->prefix . "swpm_members_tbl", $member_info);
                 /*                 * ******************** register to wordpress ********** */
-                $query = "SELECT role FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = " . $member_info['membership_level'];
+                $query = "SELECT role FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = " . $member_info['membership_level'];
                 $wp_user_info = array();
                 $wp_user_info['user_nicename'] = implode('-', explode(' ', $member_info['user_name']));
                 $wp_user_info['display_name'] = $member_info['user_name'];
@@ -297,7 +297,7 @@ class SimpleWpMembership {
         }
         if (isset($_POST["editswpmuser"])) {
             $id = absint($_REQUEST['member_id']);
-            $query = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_members_tbl WHERE member_id = $id";
+            $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id = $id";
             $member = $wpdb->get_row($query, ARRAY_A);
             unset($member['member_id']);
             unset($member['email']);
@@ -306,7 +306,7 @@ class SimpleWpMembership {
             if ($form->is_valid()) {
                 $member = $form->get_sanitized();
                 unset($member['plain_password']);
-                $wpdb->update($wpdb->prefix . "wp_eMember_members_tbl", $member, array('member_id' => $id));
+                $wpdb->update($wpdb->prefix . "swpm_members_tbl", $member, array('member_id' => $id));
                 $message = array('succeeded' => true, 'message' => 'Updated Successfully.');
                 BTransfer::get_instance()->set('status', $message);
                 wp_redirect('admin.php?page=simple_wp_membership');
@@ -320,7 +320,7 @@ class SimpleWpMembership {
             $form = new BLevelForm($level);
             if ($form->is_valid()) {
                 $level_info = $form->get_sanitized();
-                $wpdb->insert($wpdb->prefix . "wp_eMember_membership_tbl", $level_info);
+                $wpdb->insert($wpdb->prefix . "swpm_membership_tbl", $level_info);
                 $message = array('succeeded' => true, 'message' => 'Membership Level Creation Successful.');
                 BTransfer::get_instance()->set('status', $message);
                 wp_redirect('admin.php?page=simple_wp_membership_levels');
@@ -331,11 +331,11 @@ class SimpleWpMembership {
         }
         if (isset($_POST["editswpmlevel"])) {
             $id = absint($_REQUEST['id']);
-            $query = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = $id";
+            $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = $id";
             $level = $wpdb->get_row($query, ARRAY_A);
             $form = new BLevelForm($level);
             if ($form->is_valid()) {
-                $wpdb->update($wpdb->prefix . "wp_eMember_membership_tbl", $form->get_sanitized(), array('id' => $id));
+                $wpdb->update($wpdb->prefix . "swpm_membership_tbl", $form->get_sanitized(), array('id' => $id));
                 $message = array('succeeded' => true, 'message' => 'Updated Successfully.');
                 BTransfer::get_instance()->set('status', $message);
                 wp_redirect('admin.php?page=simple_wp_membership_levels');
@@ -376,7 +376,7 @@ class SimpleWpMembership {
             else {
                 global $wpdb;
                 $query = "SELECT member_id,user_name,first_name, last_name FROM " .
-                        $wpdb->prefix . "wp_eMember_members_tbl " .
+                        $wpdb->prefix . "swpm_members_tbl " .
                         " WHERE email = '" . $_POST['swpm_reset_email'] . "'";
                 $user = $wpdb->get_results($query);
                 if (empty($user))
@@ -386,7 +386,7 @@ class SimpleWpMembership {
                     $password = wp_generate_password();
                     $body = $settings->get_value('reset-mail-body');
                     $subject = $settings->get_value('reset-mail-subject');
-                    $wpdb->update($wpdb->prefix . "wp_eMember_members_tbl", array('password' => $password), array('member_id' => $user->member_id));
+                    $wpdb->update($wpdb->prefix . "swpm_members_tbl", array('password' => $password), array('member_id' => $user->member_id));
                     $search = array('{user_name}', '{first_name}', '{last_name}', '{password}');
                     $replace = array($user->user_name, $user->first_name, $user->last_name, $password);
                     $body = str_replace($search, $replace, $body);
@@ -423,7 +423,7 @@ class SimpleWpMembership {
                 if ($form->is_valid()) {
                     global $wpdb;
                     $wpdb->update(
-                            $wpdb->prefix . "wp_eMember_members_tbl", $form->get_sanitized(), array('member_id' => $auth->get('member_id')));
+                            $wpdb->prefix . "swpm_members_tbl", $form->get_sanitized(), array('member_id' => $auth->get('member_id')));
                     $message = array('succeeded' => true, 'message' => 'Profile Updated.');
                     BTransfer::get_instance()->set('status', $message);
                 } else {
@@ -474,7 +474,7 @@ class SimpleWpMembership {
         }
 
         global $wpdb;
-        $query = "SELECT alias FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = $membership_level";
+        $query = "SELECT alias FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = $membership_level";
         $result = $wpdb->get_row($query);
         if (empty($result)) {
             echo "Membership Level Not Found.";
@@ -515,7 +515,7 @@ class SimpleWpMembership {
                 $settings = BSettings::get_instance();
                 $plain_password = $member_info['plain_password'];
                 unset($member_info['plain_password']);
-                $wpdb->insert($wpdb->prefix . "wp_eMember_members_tbl", $member_info);
+                $wpdb->insert($wpdb->prefix . "swpm_members_tbl", $member_info);
                 $last_insert_id = $wpdb->insert_id;
                 $member_info['plain_password'] = $plain_password;
                 $subject = $settings->get_value('reg-complete-mail-subject');
@@ -523,7 +523,7 @@ class SimpleWpMembership {
                 $from_address = $settings->get_value('email-from');
                 $login_link = $settings->get_value('login-page-url');
                 $headers = 'From: ' . $from_address . "\r\n";
-                $query = "SELECT alias FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = " . $member_info['membership_level'];
+                $query = "SELECT alias FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = " . $member_info['membership_level'];
                 $member_info['membership_level_name'] = $wpdb->get_var($query);
                 $values = array_values($member_info);
                 $keys = array_map(function($n) {
@@ -539,7 +539,7 @@ class SimpleWpMembership {
                     wp_mail($from_address, $subject, $body, $headers);
                 }
                 // register to wordpress
-                $query = "SELECT role FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = " . $member_info['membership_level'];
+                $query = "SELECT role FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = " . $member_info['membership_level'];
                 $wp_user_info = array();
                 $wp_user_info['user_nicename'] = implode('-', explode(' ', $member_info['user_name']));
                 $wp_user_info['display_name'] = $member_info['user_name'];
@@ -652,7 +652,7 @@ class SimpleWpMembership {
     private static function installer() {
         global $wpdb;
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        $sql = "CREATE TABLE " . $wpdb->prefix . "wp_eMember_members_tbl (
+        $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_members_tbl (
 			member_id int(12) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			user_name varchar(32) NOT NULL,
 			first_name varchar(32) DEFAULT '',
@@ -687,7 +687,7 @@ class SimpleWpMembership {
           )ENGINE=MyISAM DEFAULT CHARSET=utf8;";
         dbDelta($sql);
 
-        $sql = "CREATE TABLE " . $wpdb->prefix . "wp_eMember_membership_tbl (
+        $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_membership_tbl (
 			id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			alias varchar(127) NOT NULL,
 			role varchar(255) NOT NULL DEFAULT 'subscriber',
@@ -706,10 +706,10 @@ class SimpleWpMembership {
 			campaign_name varchar(60) NOT NULL DEFAULT ''
           ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
         dbDelta($sql);
-        $sql = "SELECT * FROM " . $wpdb->prefix . "wp_eMember_membership_tbl WHERE id = 1";
+        $sql = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = 1";
         $results = $wpdb->get_row($sql);
         if (is_null($results)) {
-            $sql = "INSERT INTO  " . $wpdb->prefix . "wp_eMember_membership_tbl  (
+            $sql = "INSERT INTO  " . $wpdb->prefix . "swpm_membership_tbl  (
 			id ,
 			alias ,
 			role ,

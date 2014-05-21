@@ -4,17 +4,17 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
 {
     global $wpdb;
     $settings = BSettings::get_instance();
-    $members_table_name = $wpdb->prefix . "wp_eMember_members_tbl";
-    $membership_level_table = $wpdb->prefix . "wp_eMember_membership_tbl";    
+    $members_table_name = $wpdb->prefix . "swpm_members_tbl";
+    $membership_level_table = $wpdb->prefix . "swpm_membership_tbl";
 
     if(empty($swpm_id))
     {
         //Lets try to find an existing user profile for this payment
         $email = $ipn_data['payer_email'];
-        $query_db = $wpdb->get_row("SELECT * FROM $members_table_name WHERE email = '$email'", OBJECT);	    
+        $query_db = $wpdb->get_row("SELECT * FROM $members_table_name WHERE email = '$email'", OBJECT);
         if(!$query_db){//try to retrieve the member details based on the unique_ref
             swpm_debug_log_subsc("Could not find any record using the given email address (".$email."). Attempting to query database using the unique reference: ".$unique_ref,true);
-            if(!empty($unique_ref)){			
+            if(!empty($unique_ref)){
                     $query_db = $wpdb->get_row("SELECT * FROM $members_table_name WHERE subscr_id = '$unique_ref'", OBJECT);
                     $swpm_id = $query_db->member_id;
             }
@@ -28,10 +28,10 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
             swpm_debug_log_subsc("Found a match in the member database. Member ID: ".$swpm_id,true);
         }
     }
-    
+
     if (!empty($swpm_id))
     {
-        //This is payment from an existing member/user. Update the existing member account        
+        //This is payment from an existing member/user. Update the existing member account
         swpm_debug_log_subsc("Modifying the existing membership profile... Member ID: ".$swpm_id,true);
         // upgrade the member account
         $account_state = 'active';
@@ -48,7 +48,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
         $old_membership_level = $resultset->membership_level;
 
         swpm_debug_log_subsc("Not using secondary membership level feature... upgrading the current membership level.",true);
-        $updatedb = "UPDATE $members_table_name SET account_state='$account_state',membership_level='$membership_level',subscription_starts='$subscription_starts',subscr_id='$subscr_id' WHERE member_id='$swpm_id'";    	
+        $updatedb = "UPDATE $members_table_name SET account_state='$account_state',membership_level='$membership_level',subscription_starts='$subscription_starts',subscr_id='$subscr_id' WHERE member_id='$swpm_id'";
         $results = $wpdb->query($updatedb);
         do_action('swpm_membership_changed', array('member_id'=>$swpm_id, 'from_level'=>$old_membership_level, 'to_level'=>$membership_level));
 
@@ -56,14 +56,14 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
 //swpm_debug_log_subsc("Updating WordPress user role...",true);
 //$resultset = $wpdb->get_row("SELECT * FROM $members_table_name where member_id='$swpm_id'", OBJECT);
 //$membership_level = $resultset->membership_level;
-//$username = $resultset->user_name;    		
+//$username = $resultset->user_name;
 //$membership_level_resultset = $wpdb->get_row("SELECT * FROM $membership_level_table where id='$membership_level'", OBJECT);
 //swpm_debug_log_subsc("Calling WP role update function. Current users membership level is: ".$membership_level,true);
 //update-role-function($username,$membership_level_resultset->role);
 //swpm_debug_log_subsc("Current WP users role updated to: ".$membership_level_resultset->role,true);
 
-        //Set Email details for the account upgrade notification	
-        $email = $ipn_data['payer_email'];                          
+        //Set Email details for the account upgrade notification
+        $email = $ipn_data['payer_email'];
         $subject = $settings->get_value('upgrade-complete-mail-subject');
         if (empty($subject)){
             $subject = "Member Account Upgraded";
@@ -75,10 +75,10 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
         $from_address = get_option('admin_email');
         $login_link = $settings->get_value('login-page-url');
 
-        $tags1 = array("{first_name}","{last_name}","{user_name}","{login_link}");			
-        $vals1 = array($resultset->first_name,$resultset->last_name,$resultset->user_name,$login_link);			
-        $email_body = str_replace($tags1,$vals1,$body);				
-        $headers = 'From: '.$from_address . "\r\n";   	    					    	
+        $tags1 = array("{first_name}","{last_name}","{user_name}","{login_link}");
+        $vals1 = array($resultset->first_name,$resultset->last_name,$resultset->user_name,$login_link);
+        $email_body = str_replace($tags1,$vals1,$body);
+        $headers = 'From: '.$from_address . "\r\n";
     }// End of existing user account upgrade
     else
     {
@@ -115,20 +115,20 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
         $separator='?';
         $url = $settings->get_value('registration-page-url');
         if(strpos($url,'?')!==false){$separator='&';}
-        
+
         $reg_url = $url.$separator.'member_id='.$id.'&code='.$md5_code;
         swpm_debug_log_subsc("Member signup URL :".$reg_url,true);
 
         $subject = $settings->get_value('reg-complete-mail-subject');
         if (empty($subject)){
             $subject = "Please complete your registration";
-        }              
+        }
         $body = $settings->get_value('reg-complete-mail-body');
         if (empty($body)){
             $body = "Please use the following link to complete your registration. \n {reg_link}";
         }
         $from_address = $settings->get_value('email-from');
-        
+
         $tags = array("{first_name}","{last_name}","{reg_link}");
         $vals = array($first_name,$last_name,$reg_url);
         $email_body    = str_replace($tags,$vals,$body);
@@ -144,16 +144,16 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data,$refund=false)
     if($refund)
     {
         $subscr_id = $ipn_data['parent_txn_id'];
-        swpm_debug_log_subsc("Refund notification check - check if a member account needs to be deactivated... subscr ID: ".$subscr_id,true); 
+        swpm_debug_log_subsc("Refund notification check - check if a member account needs to be deactivated... subscr ID: ".$subscr_id,true);
     }
     else
     {
         $subscr_id = $ipn_data['subscr_id'];
-    }    
+    }
 
     global $wpdb;
-    $members_table_name = $wpdb->prefix . "wp_eMember_members_tbl";
-    
+    $members_table_name = $wpdb->prefix . "swpm_members_tbl";
+
     swpm_debug_log_subsc("Retrieving member account from the database...",true);
     $resultset = $wpdb->get_row("SELECT * FROM $members_table_name where subscr_id='$subscr_id'", OBJECT);
     if($resultset)
@@ -161,21 +161,21 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data,$refund=false)
         //Deactivate this account as it is a refund or cancellation
         $account_state = 'inactive';
         $updatedb = "UPDATE $members_table_name SET account_state='$account_state' WHERE subscr_id='$subscr_id'";
-        $resultset = $wpdb->query($updatedb);    		
+        $resultset = $wpdb->query($updatedb);
         swpm_debug_log_subsc("Subscription cancellation received! Member account deactivated.",true);
     }
     else
     {
     	swpm_debug_log_subsc("No member found for the given subscriber ID: ".$subscr_id,false);
     	return;
-    }      	
+    }
 }
 
 function swpm_update_member_subscription_start_date_if_applicable($ipn_data)
 {
     global $wpdb;
-    $members_table_name = $wpdb->prefix . "wp_eMember_members_tbl";
-    $membership_level_table = $wpdb->prefix . "wp_eMember_membership_tbl";    
+    $members_table_name = $wpdb->prefix . "swpm_members_tbl";
+    $membership_level_table = $wpdb->prefix . "swpm_membership_tbl";
     $email = $ipn_data['payer_email'];
     $subscr_id = $ipn_data['subscr_id'];
     swpm_debug_log_subsc("Updating subscription start date if applicable for this subscription payment. Subscriber ID: ".$subscr_id." Email: ".$email,true);
@@ -188,11 +188,11 @@ function swpm_update_member_subscription_start_date_if_applicable($ipn_data)
         swpm_debug_log_subsc("Found a record in the member table. The Member ID of the account to check is: ".$swpm_id." Membership Level: ".$current_primary_level,true);
 
         $level_query = $wpdb->get_row("SELECT * FROM $membership_level_table where id='$current_primary_level'", OBJECT);
-        if(!empty($level_query->subscription_period) && !empty($level_query->subscription_unit)){//Duration value is used		
+        if(!empty($level_query->subscription_period) && !empty($level_query->subscription_unit)){//Duration value is used
             $account_state = "active";
             $subscription_starts = (date ("Y-m-d"));
 
-            $updatedb = "UPDATE $members_table_name SET account_state='$account_state',subscription_starts='$subscription_starts' WHERE member_id='$swpm_id'";    	    	
+            $updatedb = "UPDATE $members_table_name SET account_state='$account_state',subscription_starts='$subscription_starts' WHERE member_id='$swpm_id'";
             $resultset = $wpdb->query($updatedb);
             swpm_debug_log_subsc("Updated the member profile with current date as the subscription start date.",true);
         }else{

@@ -21,10 +21,10 @@ class BAuth{
 		if(isset($_POST['swpm_user_name'])&&isset($_POST['swpm_password'])){
 			$user  = sanitize_user($_POST['swpm_user_name']);
 			$pass  = trim($_POST['swpm_password']);
-			$query = " SELECT * FROM " . $wpdb->prefix . "wp_eMember_members_tbl";
+			$query = " SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl";
 			$query.= " WHERE user_name = '" . $user . "'";
 			$userData  = $wpdb->get_row($query);
-			$this->userData = $userData;      			
+			$this->userData = $userData;
 			if(!$userData){
 				$this->isLoggedIn = false;
 				$this->userData = null;
@@ -40,7 +40,7 @@ class BAuth{
 			}
 			if($this->check_constraints()){
 				$remember = isset($_POST['rememberme'])?true:false;
-				$this->set_cookie($remember);  
+				$this->set_cookie($remember);
 				$this->isLoggedIn = true;
 				$this->lastStatusMsg ="Logged In.";
 				do_action('swpm_login', $user, $pass, $remember);
@@ -52,7 +52,7 @@ class BAuth{
     private function check_constraints(){
         if(empty($this->userData)) return false;
         $permission = BPermission::get_instance($this->userData->membership_level);
-		$valid = true; 
+		$valid = true;
         if($this->userData->account_state !='active'){
             $this->lastStatusMsg = 'Account is inactive.';
 			$valid = false;
@@ -74,19 +74,19 @@ class BAuth{
         if(empty($wp_hasher)){
             require_once( ABSPATH . 'wp-includes/class-phpass.php');
             $wp_hasher = new PasswordHash(8, TRUE);
-        }                
+        }
         return $wp_hasher->CheckPassword($password, $hash);
     }
     public function login($user,$pass, $remember = '',$secure = ''){
         if($this->isLoggedIn) return;
         if($this->authenticate($user,$pass)&&$this->validate()){
-            $this->set_cookie($remember,$secure);                                    
+            $this->set_cookie($remember,$secure);
         }
         else {
             $this->isLoggedIn = false;
             $this->userData   = null;
-        }		
-        return $this->lastStatusMsg; 
+        }
+        return $this->lastStatusMsg;
     }
     public function logout(){
         if(!$this->isLoggedIn) return;
@@ -101,8 +101,8 @@ class BAuth{
 		if($remember)
 			$expire = time() + 1209600;
 		else
-			$expire = time() + 172800;        
-        $pass_frag = substr($this->userData->password, 8, 4);	
+			$expire = time() + 172800;
+        $pass_frag = substr($this->userData->password, 8, 4);
         $scheme = 'auth';
 		if(!$secure) $secure = is_ssl();
         $key = BAuth::b_hash($this->userData->user_name . $pass_frag . '|' . $expire, $scheme);
@@ -115,10 +115,10 @@ class BAuth{
     private function validate(){
         $auth_cookie_name = is_ssl()?SIMPLE_WP_MEMBERSHIP_SEC_AUTH:SIMPLE_WP_MEMBERSHIP_AUTH;
 		if(!isset($_COOKIE[$auth_cookie_name]) ||empty($_COOKIE[$auth_cookie_name]))
-			return false;		
+			return false;
         $cookie_elements = explode('|', $_COOKIE[$auth_cookie_name]);
 	    if ( count($cookie_elements) != 3 )
-	        return false;	
+	        return false;
 	    list($username, $expiration, $hmac) = $cookie_elements;
         $expired = $expiration;
         // Allow a grace period for POST and AJAX requests
@@ -130,14 +130,14 @@ class BAuth{
 	        return false;
 	    }
 		global $wpdb;
-		$query = " SELECT * FROM " . $wpdb->prefix . "wp_eMember_members_tbl";
+		$query = " SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl";
 		$query.= " WHERE user_name = '" . $username . "'";
-		$user  = $wpdb->get_row($query);                  
+		$user  = $wpdb->get_row($query);
         if ( ! $user ) {
             $this->lastStatusMsg ="Invalid User Name";
 	        return false;
 	    }
- 
+
         $pass_frag = substr($user->password, 8, 4);
         $key = BAuth::b_hash($username . $pass_frag . '|' . $expiration);
         $hash = hash_hmac('md5', $username . '|' . $expiration, $key);
@@ -146,10 +146,10 @@ class BAuth{
 			return false;
 	    }
 
-	    if ( $expiration < time() ) $GLOBALS['login_grace_period'] = 1;		
+	    if ( $expiration < time() ) $GLOBALS['login_grace_period'] = 1;
 		$this->userData = $user;
 		return $this->check_constraints();
-    }  
+    }
     public static function b_hash($data, $scheme = 'auth'){
         $salt = wp_salt($scheme).'j4H!B3TA,J4nIn4.';
         return hash_hmac('md5',$data, $salt);

@@ -1,5 +1,5 @@
 <?php
-if( ! class_exists( 'WP_List_Table' ) ) 
+if( ! class_exists( 'WP_List_Table' ) )
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 
 class BMembershipLevels extends WP_List_Table{
@@ -41,7 +41,7 @@ class BMembershipLevels extends WP_List_Table{
         $actions = array(
             'edit'  	=> sprintf('<a href="admin.php?page=%s&level_action=edit&id=%s">Edit</a>',
 									$_REQUEST['page'],$item['id']),
-            'delete'    => sprintf('<a href="?page=%s&level_action=delete&id=%s" 
+            'delete'    => sprintf('<a href="?page=%s&level_action=delete&id=%s"
                                     onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>',
                                     $_REQUEST['page'],$item['id']),
         );
@@ -50,12 +50,12 @@ class BMembershipLevels extends WP_List_Table{
     function column_cb($item) {
         return sprintf(
             '<input type="checkbox" name="ids[]" value="%s" />', $item['id']
-        );    
+        );
     }
     function prepare_items() {
-        global $wpdb; 
-        $query  = "SELECT * FROM " .$wpdb->prefix . "wp_eMember_membership_tbl WHERE  id !=1 ";
-        if(isset($_POST['s'])) $query .= " AND alias LIKE '%" . strip_tags($_POST['s']). "%' ";    
+        global $wpdb;
+        $query  = "SELECT * FROM " .$wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
+        if(isset($_POST['s'])) $query .= " AND alias LIKE '%" . strip_tags($_POST['s']). "%' ";
         $orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'id';
         $order = !empty($_GET["order"]) ? mysql_real_escape_string($_GET["order"]) : 'DESC';
         if(!empty($orderby) && !empty($order)){ $query.=' ORDER BY '.$orderby.' '.$order; }
@@ -78,20 +78,20 @@ class BMembershipLevels extends WP_List_Table{
         $hidden = array();
         $sortable = $this->get_sortable_columns();
 
-        $this->_column_headers = array($columns, $hidden, $sortable);   
+        $this->_column_headers = array($columns, $hidden, $sortable);
         $this->items = $wpdb->get_results($query, ARRAY_A);
     }
     function no_items() {
       _e( 'No membership levels found.' );
     }
-	function process_form_request(){		
+	function process_form_request(){
 		if(isset($_REQUEST['id']))
 			return $this->edit($_REQUEST['id']);
 		return $this->add();
-		
+
 	}
 	function add(){
-		global $wpdb; 
+		global $wpdb;
 	    $member = BTransfer::$default_fields;
 		if(isset($_POST['createswpmlevel'])){
 			$member = $_POST;
@@ -102,8 +102,8 @@ class BMembershipLevels extends WP_List_Table{
 	}
 	function edit($id){
 		global $wpdb;
-		$id = absint($id); 
-		$query = "SELECT * FROM {$wpdb->prefix}wp_eMember_membership_tbl WHERE id = $id";
+		$id = absint($id);
+		$query = "SELECT * FROM {$wpdb->prefix}swpm_membership_tbl WHERE id = $id";
 		$member = $wpdb->get_row($query, ARRAY_A);
 		extract($member, EXTR_SKIP);
         $noexpire = bUtils::calculate_subscription_period($subscription_period,$subscription_unit) == 'noexpire';
@@ -113,16 +113,16 @@ class BMembershipLevels extends WP_List_Table{
 	function delete(){
 		global $wpdb;
 		if(isset($_REQUEST['id'])){
-			$id = absint($_REQUEST['id']);	
-			$query = "DELETE FROM " .$wpdb->prefix . "wp_eMember_membership_tbl WHERE id = $id";
-			$wpdb->query($query);			
+			$id = absint($_REQUEST['id']);
+			$query = "DELETE FROM " .$wpdb->prefix . "swpm_membership_tbl WHERE id = $id";
+			$wpdb->query($query);
 		}
 		else if (isset($_REQUEST['ids'])){
-			$members = $_REQUEST['ids']; 
+			$members = $_REQUEST['ids'];
 			if(!empty($members)){
 				$members = array_map('absint', $members);
 				$members = implode(',', $members);
-				$query = "DELETE FROM " .$wpdb->prefix . "wp_eMember_membership_tbl WHERE id IN (" . $members . ")";
+				$query = "DELETE FROM " .$wpdb->prefix . "swpm_membership_tbl WHERE id IN (" . $members . ")";
 				$wpdb->query($query);
 			}
 		}

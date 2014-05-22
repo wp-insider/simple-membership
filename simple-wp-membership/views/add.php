@@ -28,7 +28,7 @@
                 <tr>
 		<td><label for="gender"><?php _e('Gender'); ?></label></td>
 		<td><select name="gender" id="gender">
-				<?= miscUtils::gender_dropdown() ?>
+				<?= bUtils::gender_dropdown() ?>
 			</select>
 		</td>
                 </tr>

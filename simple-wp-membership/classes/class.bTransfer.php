@@ -9,12 +9,13 @@ class BTransfer {
 		'address_street'=>'','address_city'=>'',
 		'address_state'=>'','address_zipcode'=>'',
 		'company_name'=>'','country'=>'',
+                'gender'=>'not specified',
 		'membership_level'=>'2');
 	public static $default_level_fields = array(
 		'alias'=>'','role'=>'',
 		'subscription_period'=>'','subscription_unit'=>'days');
 
-	public static $admin_messages = array();	
+	public static $admin_messages = array();
 	private static $_this;
 	private $message;
 	private function __contruct(){
@@ -32,17 +33,17 @@ class BTransfer {
 		return $m;
 	}
 	public function set($key, $value){
-		$this->message[$key] = $value;		
+		$this->message[$key] = $value;
 		update_option('swpm-messages', $this->message);
 	}
 	public static function get_real_ip_addr(){
-		if (!empty($_SERVER['HTTP_CLIENT_IP']))   
+		if (!empty($_SERVER['HTTP_CLIENT_IP']))
 			$ip=$_SERVER['HTTP_CLIENT_IP'];
-		else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   
+		else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
 			$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
 		else
 			$ip=$_SERVER['REMOTE_ADDR'];
-			
+
 		return $ip;
-	}	
+	}
 }

@@ -138,5 +138,21 @@ class BMembers extends WP_List_Table{
 	function show(){
 		include_once(SIMPLE_WP_MEMBERSHIP_PATH.'views/admin_members.php');
 	}
+        private function delete_wp_user($swpm_id){
+            global $wpdb;
+            $query = "SELECT user_name FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = $swpm_id";
+            $user_name = $wpdb->get_var($query);
+            $wp_user_id = username_exists($user_name);
+            $ud = get_userdata($wp_user_id);
+            if (isset($ud->wp_capabilities['administrator']) || $ud->wp_user_level == 10) {
+                BTransfer::get_instance()->set('status', 'For consistency, we do not allow deleting any associated wordpress account with administrator role.<br/>'
+                        . 'Please delete from <a href="users.php">Users</a> menu.');
+                return;
+            }
+            if ($wp_user_id) {
+                include_once(ABSPATH . 'wp-admin/includes/user.php');
+                wp_delete_user($wp_user_id, 1); //assigns all related to this user to admin.
+            }
+        }
 }
 

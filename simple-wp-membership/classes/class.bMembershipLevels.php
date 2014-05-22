@@ -31,9 +31,11 @@ class BMembershipLevels extends WP_List_Table{
         return $actions;
     }
     function column_default($item, $column_name){
-        if($column_name == 'valid_for')
+        if($column_name == 'valid_for'){
+            if(empty($item['subscription_period'])) return 'No Expiry';
             return $item['subscription_period'] ." " . $item['subscription_unit']; //bUtils::calculate_subscription_period($item['subscription_period'],
                    //                                      $item['subscription_unit']);
+        }
         if($column_name == 'role') return ucfirst($item['role']);
     	return stripslashes($item[$column_name]);
     }

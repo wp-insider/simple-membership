@@ -124,14 +124,17 @@ class BMembers extends WP_List_Table{
 			$id = absint($_REQUEST['member_id']);
 			$query = "DELETE FROM " .$wpdb->prefix . "swpm_members_tbl WHERE member_id = $id";
 			$wpdb->query($query);
+                        $this->delete_wp_user($id);
 		}
 		else if (isset($_REQUEST['members'])){
 			$members = $_REQUEST['members'];
 			if(!empty($members)){
 				$members = array_map('absint', $members);
-				$members = implode(',', $members);
-				$query = "DELETE FROM " .$wpdb->prefix . "swpm_members_tbl WHERE member_id IN (" . $members . ")";
+				$query = "DELETE FROM " .$wpdb->prefix . "swpm_members_tbl WHERE member_id IN (" . implode(',', $members) . ")";
 				$wpdb->query($query);
+                                foreach($members as $swpm_id){
+                                    $this->delete_wp_user($swpm_id);
+                                }
 			}
 		}
 	}

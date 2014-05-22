@@ -32,8 +32,8 @@ class BMembershipLevels extends WP_List_Table{
     }
     function column_default($item, $column_name){
         if($column_name == 'valid_for')
-            return bUtils::calculate_subscription_period($item['subscription_period'],
-                                                         $item['subscription_unit']);
+            return $item['subscription_period'] ." " . $item['subscription_unit']; //bUtils::calculate_subscription_period($item['subscription_period'],
+                   //                                      $item['subscription_unit']);
         if($column_name == 'role') return ucfirst($item['role']);
     	return stripslashes($item[$column_name]);
     }
@@ -92,7 +92,7 @@ class BMembershipLevels extends WP_List_Table{
 	}
 	function add(){
 		global $wpdb;
-	    $member = BTransfer::$default_fields;
+                $member = BTransfer::$default_fields;
 		if(isset($_POST['createswpmlevel'])){
 			$member = $_POST;
 		}
@@ -106,7 +106,7 @@ class BMembershipLevels extends WP_List_Table{
 		$query = "SELECT * FROM {$wpdb->prefix}swpm_membership_tbl WHERE id = $id";
 		$member = $wpdb->get_row($query, ARRAY_A);
 		extract($member, EXTR_SKIP);
-        $noexpire = bUtils::calculate_subscription_period($subscription_period,$subscription_unit) == 'noexpire';
+                $noexpire = bUtils::calculate_subscription_period($subscription_period,$subscription_unit) == 'noexpire';
 		include_once(SIMPLE_WP_MEMBERSHIP_PATH.'views/admin_edit_level.php');
 		return false;
 	}

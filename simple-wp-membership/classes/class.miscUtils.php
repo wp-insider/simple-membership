@@ -5,7 +5,7 @@ class miscUtils
     public static function create_mandatory_wp_pages()
     {
         $settings = BSettings::get_instance();
-        
+
         //Create join us page
         $swpm_join_page_content = '<p style="color:red;font-weight:bold;">This page and the content has been automatically generated for you to give you a basic idea of how a "Join Us" page should look like. You can customize this page however you like it by editing this page from your WordPress page editor.</p>';
         $swpm_join_page_content .= '<p style="font-weight:bold;">If you end up changing the URL of this page then make sure to update the URL value in the settings menu of the plugin.</p>';
@@ -33,7 +33,7 @@ class miscUtils
           'comment_status' => 'closed',
           'ping_status' => 'closed'
         );
-        
+
         $join_page_obj = get_page_by_path('membership-join');
         if(!$join_page_obj) {
             $join_page_id = wp_insert_post($swpm_join_page);
@@ -41,11 +41,11 @@ class miscUtils
             $join_page_id = $join_page_obj->ID;
             if ($join_page_obj->post_status == 'trash'){ //For cases where page may be in trash, bring it out of trash
                 wp_update_post(array('ID' => $join_page_obj->ID, 'post_status' => 'publish'));
-            }          
+            }
         }
         $swpm_join_page_permalink = get_permalink($join_page_id);
         $settings->set_value('join-us-page-url',$swpm_join_page_permalink);
-        
+
         //Create registration page
         $swpm_rego_page = array(
           'post_title' => 'Registration',
@@ -64,11 +64,11 @@ class miscUtils
             $rego_page_id = $rego_page_obj->ID;
             if ($rego_page_obj->post_status == 'trash'){ //For cases where page may be in trash, bring it out of trash
                 wp_update_post(array('ID' => $rego_page_obj->ID, 'post_status' => 'publish'));
-            }          
+            }
         }
         $swpm_rego_page_permalink = get_permalink($rego_page_id);
         $settings->set_value('registration-page-url',$swpm_rego_page_permalink);
-        
+
         //Create login page
         $swpm_login_page = array(
           'post_title' => 'Member Login',
@@ -87,7 +87,7 @@ class miscUtils
             $login_page_id = $login_page_obj->ID;
             if ($login_page_obj->post_status == 'trash'){ //For cases where page may be in trash, bring it out of trash
                 wp_update_post(array('ID' => $login_page_obj->ID, 'post_status' => 'publish'));
-            }          
+            }
         }
         $swpm_login_page_permalink = get_permalink($login_page_id);
         $settings->set_value('login-page-url',$swpm_login_page_permalink);
@@ -110,11 +110,11 @@ class miscUtils
             $profile_page_id = $profile_page_obj->ID;
             if ($profile_page_obj->post_status == 'trash'){ //For cases where page may be in trash, bring it out of trash
                 wp_update_post(array('ID' => $profile_page_obj->ID, 'post_status' => 'publish'));
-            }          
+            }
         }
         $swpm_profile_page_permalink = get_permalink($profile_page_id);
         $settings->set_value('profile-page-url',$swpm_profile_page_permalink);
-        
+
         //Create reset page
         $swpm_reset_page = array(
           'post_title' => 'Password Reset',
@@ -133,11 +133,11 @@ class miscUtils
             $reset_page_id = $reset_page_obj->ID;
             if ($reset_page_obj->post_status == 'trash'){ //For cases where page may be in trash, bring it out of trash
                 wp_update_post(array('ID' => $reset_page_obj->ID, 'post_status' => 'publish'));
-            }          
+            }
         }
         $swpm_reset_page_permalink = get_permalink($reset_page_id);
         $settings->set_value('reset-page-url',$swpm_reset_page_permalink);
-        
+
         $settings->save();//Save all settings object changes
     }
 }

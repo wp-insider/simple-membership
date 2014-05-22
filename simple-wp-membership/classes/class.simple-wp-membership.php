@@ -36,9 +36,9 @@ class SimpleWpMembership {
         add_action('load-toplevel_page_simple_wp_membership', array(&$this, 'admin_library'));
         add_action('load-wp-membership_page_simple_wp_membership_levels', array(&$this, 'admin_library'));
         add_action('wp_ajax_swpm_validate_email', array(&$this, 'validate_email_ajax'));
-        add_action('wp_ajax_swpm_nopriv_validate_email', array(&$this, 'validate_email_ajax'));
+        add_action('wp_ajax_nopriv_swpm_validate_email', array(&$this, 'validate_email_ajax'));
         add_action('wp_ajax_swpm_validate_user_name', array(&$this, 'validate_user_name_ajax'));
-        add_action('wp_ajax_swpm_nopriv_validate_user_name', array(&$this, 'validate_user_name_ajax'));
+        add_action('wp_ajax_nopriv_swpm_validate_user_name', array(&$this, 'validate_user_name_ajax'));
         add_action('profile_update', array(&$this, 'sync_with_wp_profile'), 10, 2);
         add_action('wp_logout', array(&$this, 'wp_logout'));
         add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2);
@@ -516,6 +516,7 @@ class SimpleWpMembership {
                 $member_info['last_accessed_from_ip'] = BTransfer::get_real_ip_addr();
                 $member_info['member_since'] = date("Y-m-d");
                 $member_info['subscription_starts'] = date("Y-m-d");
+                $member_info['account_state'] = 'active';
                 $settings = BSettings::get_instance();
                 $plain_password = $member_info['plain_password'];
                 unset($member_info['plain_password']);

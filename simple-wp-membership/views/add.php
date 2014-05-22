@@ -1,15 +1,15 @@
 <div class="swpm-registration-widget-form">
-<form id="swpm-registration-form" name="swpm-registration-form" method="post" action=""> 
+<form id="swpm-registration-form" name="swpm-registration-form" method="post" action="">
 	<table>
 		<tr>
-			<td><label for="user_name">User Name</label></td>	
-			<td><input type="text" id="user_name" class="validate[required,custom[onlyLetterNumberUnderscore],minSize[4],ajax[ajaxUserCall]]" value="<?php echo $user_name;?>" tabindex="1" size="50" name="user_name" /></td>
+			<td><label for="user_name">User Name</label></td>
+			<td><input type="text" id="user_name" class="validate[required,custom[SWPMUserName],minSize[4],ajax[ajaxUserCall]]" value="<?php echo $user_name;?>" tabindex="1" size="50" name="user_name" /></td>
 		</tr>
 		<tr>
 			<td><label for="email">Email</label></td>
-			<td><input type="text" id="email" class="validate[required,custom[email],ajax[ajaxUserCall]]" value="<?php echo $email;?>" tabindex="2" size="50" name="email" /></td>
+			<td><input type="text" id="email" class="validate[required,custom[email],ajax[ajaxEmailCall]]" value="<?php echo $email;?>" tabindex="2" size="50" name="email" /></td>
 		</tr>
-		<tr> 
+		<tr>
 			<td><label for="password">Password</label></td>
 			<td><input type="password" id="password" value="" tabindex="3" size="50" name="password" /></td>
 		</tr>
@@ -25,6 +25,13 @@
 			<td><label for="last_name">Last Name</label></td>
 			<td><input type="text" id="last_name" value="<?php echo $last_name;?>" tabindex="6" size="50" name="last_name" /></td>
 		</tr>
+                <tr>
+		<td><label for="gender"><?php _e('Gender'); ?></label></td>
+		<td><select name="gender" id="gender">
+				<?= miscUtils::gender_dropdown() ?>
+			</select>
+		</td>
+                </tr>
 		<tr>
 			<td><label for="phone">Phone</label></td>
 			<td><input type="text" id="phone" value="<?php echo $phone;?>" tabindex="7" size="50" name="phone" /></td>
@@ -49,10 +56,14 @@
 			<td><label for="country">Country</label></td>
 			<td><input type="text" id="country" value="<?php echo $country;?>" tabindex="12" size="50" name="country" /></td>
 		</tr>
+                <tr>
+                        <td ><label for="company_name"><?php _e('Company') ?></label></td>
+                        <td><input name="company_name" type="text" id="company_name" tabindex="13" size="50"  value="<?php echo esc_attr($company_name); ?>" /></td>
+                </tr>
 		<tr>
-			<td><label for="membership_level">Membership Level</label></td> 
+			<td><label for="membership_level">Membership Level</label></td>
 			<td>
-			<?php echo $membership_level_alias;?> 
+			<?php echo $membership_level_alias;?>
 			<input type="hidden" value="<?php echo $membership_level;?>" size="50" name="membership_level" id="membership_level" />
 			</td>
 		</tr>
@@ -65,6 +76,7 @@
 <script>
 jQuery(document).ready(function($){
 	$.validationEngineLanguage.allRules['ajaxUserCall']['url']= '<?php echo admin_url('admin-ajax.php');?>';
+        $.validationEngineLanguage.allRules['ajaxEmailCall']['url']= '<?php echo admin_url('admin-ajax.php');?>';
 	$("#swpm-registration-form").validationEngine('attach');
 });
 </script>

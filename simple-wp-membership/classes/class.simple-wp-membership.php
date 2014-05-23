@@ -425,7 +425,9 @@ class SimpleWpMembership {
                 if ($form->is_valid()) {
                     global $wpdb;
                     $member_info = $form->get_sanitized();
-                    if(isset($member_info['plain_password'])){unset($member_info['plain_password']);}
+                    if (isset($member_info['plain_password'])) {
+                        unset($member_info['plain_password']);
+                    }
                     $wpdb->update(
                             $wpdb->prefix . "swpm_members_tbl", $member_info, array('member_id' => $auth->get('member_id')));
                     $message = array('succeeded' => true, 'message' => 'Profile Updated.');
@@ -472,8 +474,8 @@ class SimpleWpMembership {
             $membership_level = $free_level;
         }
         if (empty($membership_level)) {
-            $joinuspage_link = '<a href="'.$joinuspage_url.'">Join us</a>';
-            $output = 'Free membership is disabled on this site. Please make a payment from the '.$joinuspage_link.' page to pay for a premium membership.';
+            $joinuspage_link = '<a href="' . $joinuspage_url . '">Join us</a>';
+            $output = 'Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.';
             return $output;
         }
 
@@ -560,7 +562,7 @@ class SimpleWpMembership {
                 /*                 * ******************** register to wordpress ********** */
                 //@unset($_SESSION['swpm-registered-level']);
                 $login_page_url = $settings->get_value('login-page-url');
-                $after_rego_msg = '<p>Registration Successful. Please <a href="'.$login_page_url.'">Login</a></p>';
+                $after_rego_msg = '<p>Registration Successful. Please <a href="' . $login_page_url . '">Login</a></p>';
                 $message = array('succeeded' => true, 'message' => $after_rego_msg);
                 BTransfer::get_instance()->set('status', $message);
                 return;
@@ -769,9 +771,9 @@ class SimpleWpMembership {
         if (empty($installed_version)) {
             //Do fresh install tasks
 
-            /*** Create the mandatory pages (if they are not there) ***/
+            /*             * * Create the mandatory pages (if they are not there) ** */
             miscUtils::create_mandatory_wp_pages();
-            /*** End of page creation ***/
+            /*             * * End of page creation ** */
             $settings->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
                     ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))
                     ->set_value('reg-prompt-complete-mail-subject', stripslashes($reg_prompt_email_subject))

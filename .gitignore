@@ -1,2 +1,4 @@
 simple-wp-membership/nbproject/
 .project
+nbproject/private/
+.gitignore

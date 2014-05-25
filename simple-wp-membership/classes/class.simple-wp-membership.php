@@ -12,7 +12,7 @@ include_once('class.bTransfer.php');
 include_once('class.bFrontForm.php');
 include_once('class.bLevelForm.php');
 include_once('class.bMembershipLevels.php');
-include_once ('class.bLog.php');
+include_once('class.bLog.php');
 
 class SimpleWpMembership {
 
@@ -44,7 +44,6 @@ class SimpleWpMembership {
         add_action('wp_logout', array(&$this, 'wp_logout'));
         add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2);
         add_action('swpm_logout', array(&$this, 'swpm_logout'));
-        add_action('shutdown', array(&$this, 'shutdown'));
     }
     public function shutdown(){
         bLog::writeall();
@@ -369,7 +368,7 @@ class SimpleWpMembership {
 
     public function swpm_ipn_listener() {
         if (isset($_REQUEST['swpm_process_ipn']) && $_REQUEST['swpm_process_ipn'] == '1') {
-            include_once('ipn/swpm_handle_pp_ipn.php');
+            include_once(SIMPLE_WP_MEMBERSHIP_PATH.'ipn/swpm_handle_pp_ipn.php');
             exit;
         }
     }

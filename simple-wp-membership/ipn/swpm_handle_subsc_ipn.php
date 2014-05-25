@@ -117,7 +117,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
         if(strpos($url,'?')!==false){$separator='&';}
 
         $reg_url = $url.$separator.'member_id='.$id.'&code='.$md5_code;
-        swpm_debug_log_subsc("Member signup URL :".$reg_url,true);
+        swpm_debug_log_subsc("Member signup URL: ".$reg_url,true);
 
         $subject = $settings->get_value('reg-complete-mail-subject');
         if (empty($subject)){
@@ -136,7 +136,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
     }
 
     wp_mail($email,$subject,$email_body,$headers);
-    swpm_debug_log_subsc("Member signup/upgrade completion email successfully sent",true);
+    swpm_debug_log_subsc("Member signup/upgrade completion email successfully sent to: ".$email,true);
 }
 
 function swpm_handle_subsc_cancel_stand_alone($ipn_data,$refund=false)
@@ -205,13 +205,21 @@ function swpm_update_member_subscription_start_date_if_applicable($ipn_data)
 
 function swpm_debug_log_subsc($message,$success,$end=false)
 {
+    $settings = BSettings::get_instance();
+    $debug_enabled = $settings->get_value('enable-debug');
+    if (empty($debug_enabled)) {//Debug is not enabled
+        return; 
+    }
+        
+    $debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
+    
     // Timestamp
     $text = '['.date('m/d/Y g:i A').'] - '.(($success)?'SUCCESS :':'FAILURE :').$message. "\n";
     if ($end) {
     	$text .= "\n------------------------------------------------------------------\n\n";
     }
     // Write to log
-    $fp=fopen("ipn_handle_debug_swpm.log",'a');
+    $fp=fopen($debug_log_file_name,'a');
     fwrite($fp, $text );
     fclose($fp);  // close file
 }

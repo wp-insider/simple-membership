@@ -280,20 +280,9 @@ class swpm_paypal_ipn_handler {
       }
    }
 
-   function debug_log($message,$success,$end=false)
-   {
-        if (!$this->ipn_log) return;  // is logging turned off?
-        // Timestamp
-        $text = '['.date('m/d/Y g:i A').'] - '.(($success)?'SUCCESS :':'FAILURE :').$message. "\n";
-
-        if ($end) {
-        $text .= "\n------------------------------------------------------------------\n\n";
-        }
-
-        // Write to log
-        $fp=fopen($this->ipn_log_file,'a');
-        fwrite($fp, $text );
-        fclose($fp);  // close file
+    function debug_log($message,$success,$end=false)
+    {
+        bLog::log_simple_debug($message, $success, $end);
     }
 }
 
@@ -301,24 +290,27 @@ class swpm_paypal_ipn_handler {
   
 $ipn_handler_instance = new swpm_paypal_ipn_handler();
 
-//if(config->getValue('swpm_enable_debug') == 1)
-//{
-//	$debug_log = "ipn_handle_debug_swpm.log"; // Debug log file name
-//	echo 'Debug is enabled. Check the '.$debug_log.' file for debug output.';
-//	$ipn_handler_instance->ipn_log = true;
-//	$ipn_handler_instance->ipn_log_file = $debug_log;
-//	if(empty($_POST))
-//	{
-//            $ipn_handler_instance->debug_log('This debug line was generated because you entered the URL of the ipn handling script in the browser.',true,true);
-//            exit;
-//	}	
-//}
+$settings = BSettings::get_instance();
+$debug_enabled = $settings->get_value('enable-debug');
+if(!empty($debug_enabled))//debug is enabled in the system
+{
+	$debug_log = "log.txt"; // Debug log file name
+	echo 'Debug logging is enabled. Check the '.$debug_log.' file for debug output.';
+	$ipn_handler_instance->ipn_log = true;
+	$ipn_handler_instance->ipn_log_file = $debug_log;
+	if(empty($_POST))
+	{
+            $ipn_handler_instance->debug_log('This debug line was generated because you entered the URL of the ipn handling script in the browser.',true,true);
+            exit;
+	}	
+}
 
-//if(config->getValue('swpm_enable_sandbox') == 1) // Enable sandbox testing
-//{
-//    $ipn_handler_instance->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
-//    $ipn_handler_instance->sandbox_mode = true;
-//}
+$sandbox_enabled = $settings->get_value('enable-sandbox-testing');
+if(!empty($sandbox_enabled)) // Sandbox testing enabled
+{
+    $ipn_handler_instance->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+    $ipn_handler_instance->sandbox_mode = true;
+}
 
 $ipn_handler_instance->debug_log('Paypal Class Initiated by '.$_SERVER['REMOTE_ADDR'],true);
 

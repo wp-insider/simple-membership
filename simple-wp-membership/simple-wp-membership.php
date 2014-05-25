@@ -14,6 +14,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"])){
 }
 
 include_once('classes/class.simple-wp-membership.php');
+
 define('SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url());
 define('SIMPLE_WP_MEMBERSHIP_VER', '1.2');
 define('SIMPLE_WP_MEMBERSHIP_PATH', dirname(__FILE__) . '/');

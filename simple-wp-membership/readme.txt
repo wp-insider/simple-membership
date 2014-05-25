@@ -24,6 +24,8 @@ Non-members viewing a protected page will be prompted to login or become a membe
 
 You can configure it to have free and/or paid membership on your site. Paid membership payment is handled via PayPal. Both one time and recurring/subscription payments are supported.
 
+There is an option to enable debug logging so you can troubleshoot memberhsip payment related issues easily (if any).
+
 == Installation ==
 
 Do the following to install the membership plugin:

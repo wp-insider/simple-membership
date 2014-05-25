@@ -99,10 +99,10 @@ class BSettings {
     }
 
     public function general_settings_callback() {
-        echo "<p>General Settings are added here.</p>";
+        echo "<p>General Plugin Settings.</p>";
     }
     public function testndebug_settings_callback(){
-        echo "<p>Test and Debug Settings are added here.</p>";
+        echo "<p>Test and Debug Related Settings.</p>";
     }
     public function reg_email_settings_callback() {
         echo "<p>This email will be sent to your users when they complete the registration and become a member.</p>";
@@ -119,7 +119,7 @@ class BSettings {
     }
 
     public function pages_settings_callback() {
-        echo '<p>URL related settings goes here.<p>';
+        echo '<p>Page Setup and URL Related settings.<p>';
     }
 
     public function sanitize_tab_1($input) {

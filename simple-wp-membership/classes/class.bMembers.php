@@ -106,6 +106,8 @@ class BMembers extends WP_List_Table {
     function add() {
         global $wpdb;
         $member = BTransfer::$default_fields;
+        $member['member_since'] = date('Y-m-d');
+        $member['subscription_starts'] = date('Y-m-d');
         if (isset($_POST['createswpmuser'])) {
             $member = $_POST;
         }

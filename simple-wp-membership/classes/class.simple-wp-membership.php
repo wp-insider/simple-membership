@@ -12,6 +12,7 @@ include_once('class.bTransfer.php');
 include_once('class.bFrontForm.php');
 include_once('class.bLevelForm.php');
 include_once('class.bMembershipLevels.php');
+include_once ('class.bLog.php');
 
 class SimpleWpMembership {
 
@@ -43,8 +44,11 @@ class SimpleWpMembership {
         add_action('wp_logout', array(&$this, 'wp_logout'));
         add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2);
         add_action('swpm_logout', array(&$this, 'swpm_logout'));
+        add_action('shutdown', array(&$this, 'shutdown'));
     }
-
+    public function shutdown(){
+        bLog::writeall();
+    }
     public static function swpm_login($user, $pass, $rememberme = true) {
         if (is_user_logged_in()) {
             $current_user = wp_get_current_user();

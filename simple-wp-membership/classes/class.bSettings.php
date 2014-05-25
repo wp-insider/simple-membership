@@ -22,12 +22,18 @@ class BSettings {
         add_settings_section('general-settings', 'General Settings', array(&$this, 'general_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('enable-free-membership', 'Enable Free Membership', array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'enable-free-membership'));
         add_settings_field('free-membership-id', 'Free Membership Level ID', array(&$this, 'textfield_small_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'free-membership-id'));
+
         add_settings_section('pages-settings', 'Pages Settings', array(&$this, 'pages_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('login-page-url', 'Login Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'login-page-url'));
         add_settings_field('registration-page-url', 'Registration Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'registration-page-url'));
         add_settings_field('join-us-page-url', 'Join Us Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'join-us-page-url'));
         add_settings_field('profile-page-url', 'Edit Profile Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'profile-page-url'));
         add_settings_field('reset-page-url', 'Password Reset Page URL', array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'reset-page-url'));
+
+        add_settings_section('debug-settings', 'Test & Debug Settings', array(&$this, 'testndebug_settings_callback'), 'simple_wp_membership_settings');
+        add_settings_field('enable-debug', 'Enable Debug', array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings', array('item' => 'enable-debug'));
+        add_settings_field('enable-sandbox-testing', 'Enable Sandbox Testing', array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings', array('item' => 'enable-sandbox-testing'));
+
     }
 
     private function tab_2() {
@@ -93,9 +99,11 @@ class BSettings {
     }
 
     public function general_settings_callback() {
-        echo "<p>General Setting are added here.</p>";
+        echo "<p>General Settings are added here.</p>";
     }
-
+    public function testndebug_settings_callback(){
+        echo "<p>Test and Debug Settings are added here.</p>";
+    }
     public function reg_email_settings_callback() {
         echo "<p>This email will be sent to your users when they complete the registration and become a member.</p>";
     }
@@ -123,6 +131,15 @@ class BSettings {
             $output['enable-free-membership'] = esc_url($input['enable-free-membership']);
         else
             $output['enable-free-membership'] = "";
+        if (isset($input['enable-debug']))
+            $output['enable-debug'] = esc_url($input['enable-debug']);
+        else
+            $output['enable-debug'] = "";
+        if (isset($input['enable-sandbox-testing']))
+            $output['enable-sandbox-testing'] = esc_url($input['enable-sandbox-testing']);
+        else
+            $output['enable-sandbox-testing'] = "";
+        
         $output['free-membership-id'] = ($input['free-membership-id'] != 1) ? absint($input['free-membership-id']) : '';
         $output['login-page-url'] = esc_url($input['login-page-url']);
         $output['registration-page-url'] = esc_url($input['registration-page-url']);

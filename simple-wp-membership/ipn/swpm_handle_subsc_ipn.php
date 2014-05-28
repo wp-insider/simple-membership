@@ -106,7 +106,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
         $reg_code = uniqid();//rand(10, 1000);
         $md5_code = md5($reg_code);
 
-        $updatedb = "INSERT INTO $members_table_name (user_name,first_name,last_name,password,member_since,membership_level,account_state,last_accessed,last_accessed_from_ip,email,address_street,address_city,address_state,address_zipcode,country,gender,referrer,extra_info,reg_code,subscription_starts,txn_id,subscr_id) VALUES ('$user_name','$first_name','$last_name','$password', '$date','$membership_level','$account_state','$date','IP','$email','$address_street','$address_city','$address_state','$address_zipcode','$country','$gender','','','$reg_code','$date','','$subscr_id')";
+        $updatedb = "INSERT INTO $members_table_name (user_name,first_name,last_name,password,member_since,membership_level,account_state,last_accessed,last_accessed_from_ip,email,address_street,address_city,address_state,address_zipcode,country,gender,referrer,extra_info,reg_code,subscription_starts,txn_id,subscr_id) VALUES ('$user_name','$first_name','$last_name','$password', '$date','$membership_level','$account_state','$date','IP','$email','$address_street','$address_city','$address_state','$address_zipcode','$country','$gender','','','$md5_code','$date','','$subscr_id')";
         $results = $wpdb->query($updatedb);
 
         $results = $wpdb->get_row("SELECT * FROM $members_table_name where subscr_id='$subscr_id' and reg_code='$reg_code'", OBJECT);
@@ -208,11 +208,11 @@ function swpm_debug_log_subsc($message,$success,$end=false)
     $settings = BSettings::get_instance();
     $debug_enabled = $settings->get_value('enable-debug');
     if (empty($debug_enabled)) {//Debug is not enabled
-        return; 
+        return;
     }
-        
+
     $debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
-    
+
     // Timestamp
     $text = '['.date('m/d/Y g:i A').'] - '.(($success)?'SUCCESS :':'FAILURE :').$message. "\n";
     if ($end) {

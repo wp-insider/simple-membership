@@ -67,6 +67,8 @@ class BForm{
 		$saned = sanitize_email($_POST['email']);
 		$query = "SELECT count(member_id) FROM {$wpdb->prefix}swpm_members_tbl WHERE email= '" .
 				 strip_tags($saned). "'";
+                $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
+                if (!empty($member_id)) {$query .= ' AND member_id !=' . $member_id;}
 		$result = $wpdb->get_var($query);
 		if($result>0){
 			if($saned != $this->fields['email']){

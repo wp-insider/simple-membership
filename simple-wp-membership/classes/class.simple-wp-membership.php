@@ -471,7 +471,20 @@ class SimpleWpMembership {
         $free_level = absint(BSettings::get_instance()->get_value('free-membership-id'));
         $joinuspage_url = $settings_configs->get_value('join-us-page-url');
         $membership_level = '';
-        if (isset($_SESSION['swpm-registered-level'])) {
+        $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
+        $code      = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
+        $member = BTransfer::$default_fields;
+        global $wpdb;
+        if (!empty($member_id) && !empty($code)){
+            $query = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id= %d AND reg_code=%s';
+            $query = $wpdb->prepare($query, $member_id, $code);
+            $member = $wpdb->get_row($query);
+            if (empty($member)){
+                return 'Invalid Request';
+            }
+            $membership_level = $member->membership_level;
+        }
+        else if (isset($_SESSION['swpm-registered-level'])) {
             $membership_level = absint($_SESSION['swpm-registered-level']);
         } else if ($is_free) {
             $membership_level = $free_level;
@@ -482,20 +495,17 @@ class SimpleWpMembership {
             return $output;
         }
 
-        global $wpdb;
         $query = "SELECT alias FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = $membership_level";
         $result = $wpdb->get_row($query);
         if (empty($result)) {
-            echo "Membership Level Not Found.";
-            return;
+            return "Membership Level Not Found.";
         }
         $succeeded = $this->notices();
         $membership_level_alias = $result->alias;
         if (isset($_POST['swpm_registration_submit']))
             $member = $_POST;
-        else
-            $member = BTransfer::$default_fields;
-        extract($member, EXTR_SKIP);
+
+        extract((array)$member, EXTR_SKIP);
         if (!$succeeded)
             include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/add.php');
     }
@@ -507,13 +517,15 @@ class SimpleWpMembership {
             $form = new BFrontForm($member);
             $is_free = BSettings::get_instance()->get_value('enable-free-membership');
             $free_level = absint(BSettings::get_instance()->get_value('free-membership-id'));
+            $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
+            $code      = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
             if ($form->is_valid()) {
                 $member_info = $form->get_sanitized();
                 if (isset($_SESSION['swpm-registered-level']))
                     $member_info['membership_level'] = absint($_SESSION['swpm-registered-level']);
                 else if ($is_free && !empty($free_level))
                     $member_info['membership_level'] = $free_level;
-                else {
+                else if (empty($member_id)){
                     $message = array('succeeded' => false, 'message' => 'Membership Level Couldn\'t be found.');
                     BTransfer::get_instance()->set('status', $message);
                     return;
@@ -525,8 +537,19 @@ class SimpleWpMembership {
                 $settings = BSettings::get_instance();
                 $plain_password = $member_info['plain_password'];
                 unset($member_info['plain_password']);
-                $wpdb->insert($wpdb->prefix . "swpm_members_tbl", $member_info);
-                $last_insert_id = $wpdb->insert_id;
+                if(!empty($member_id) && !empty($code)){
+                    $member_info['reg_code'] = '';
+                    $wpdb->update($wpdb->prefix . "swpm_members_tbl", $member_info, array('member_id' => $member_id));
+                    $last_insert_id = $member_id;
+                }
+                else{
+                    $wpdb->insert($wpdb->prefix . "swpm_members_tbl", $member_info);
+                    $last_insert_id = $wpdb->insert_id;
+                }
+                if (!isset($member_info['membership_level'])){
+                    $query = 'SELECT membership_level FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id=' . $member_id;
+                    $member_info['membership_level'] = $wpdb->get_var( $query );
+                }
                 $member_info['plain_password'] = $plain_password;
                 $subject = $settings->get_value('reg-complete-mail-subject');
                 $body = $settings->get_value('reg-complete-mail-body');
@@ -629,6 +652,14 @@ class SimpleWpMembership {
     public function admin_settings() {
         $current_tab = BSettings::get_instance()->current_tab;
         switch ($current_tab) {
+            case 4:
+                
+                $link_for = filter_input(INPUT_POST, 'swpm_link_for',FILTER_SANITIZE_STRING);
+                $member_id = filter_input(INPUT_POST, 'member_id',FILTER_SANITIZE_NUMBER_INT);
+                $send_email = filter_input(INPUT_POST, 'swpm_reminder_email',FILTER_SANITIZE_NUMBER_INT);
+                $links = bUtils::get_registration_link($link_for, $send_email, $member_id);
+                include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_tools_settings.php');
+                break;
             case 2:
                 include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_payment_settings.php');
                 break;
@@ -822,7 +853,7 @@ class SimpleWpMembership {
         $wp_user_data['ID'] = $wp_user_id;
         wp_update_user($wp_user_data);
         $user_info = get_userdata($wp_user_id);
-        $user_cap = is_array($user_info->wp_capabilities) ? array_keys($user_info->wp_capabilities) : array();
+        $user_cap = (isset($user_info->wp_capabilities) && is_array($user_info->wp_capabilities)) ? array_keys($user_info->wp_capabilities) : array();
         if (!in_array('administrator', $user_cap))
             self::update_wp_user_Role($wp_user_id, $wp_user_data['role']);
         return $wp_user_id;

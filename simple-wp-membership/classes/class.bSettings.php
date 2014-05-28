@@ -11,8 +11,9 @@ class BSettings {
             $this->current_tab = isset($_REQUEST['tab']) ? $_REQUEST['tab'] : 1;
             add_action('swpm-draw-tab', array(&$this, 'draw_tabs'));
             $method = 'tab_' . $this->current_tab;
-            if (method_exists($this, $method))
+            if (method_exists($this, $method)){
                 $this->$method();
+            }
         }
         $this->settings = (array) get_option('swpm-settings');
     }
@@ -61,6 +62,8 @@ class BSettings {
         add_settings_section('upgrade-email-settings', ' Email Settings (Account Upgrade Notification)', array(&$this, 'upgrade_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('upgrade-complete-mail-subject', 'Email Subject', array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'upgrade-complete-mail-subject'));
         add_settings_field('upgrade-complete-mail-body', 'Email Body', array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'upgrade-complete-mail-body'));
+    }
+    private function tab_4(){
     }
 
     public static function get_instance() {
@@ -139,7 +142,7 @@ class BSettings {
             $output['enable-sandbox-testing'] = esc_url($input['enable-sandbox-testing']);
         else
             $output['enable-sandbox-testing'] = "";
-        
+
         $output['free-membership-id'] = ($input['free-membership-id'] != 1) ? absint($input['free-membership-id']) : '';
         $output['login-page-url'] = esc_url($input['login-page-url']);
         $output['registration-page-url'] = esc_url($input['registration-page-url']);
@@ -192,6 +195,7 @@ class BSettings {
             <a class="nav-tab <?php echo ($current == 1) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings">General Settings</a>
             <a class="nav-tab <?php echo ($current == 2) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=2">Payment Settings</a>
             <a class="nav-tab <?php echo ($current == 3) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=3">Email Settings</a>
+            <a class="nav-tab <?php echo ($current == 4) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=4">Tools</a>
         </h3>
         <?php
     }

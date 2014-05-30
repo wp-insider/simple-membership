@@ -472,7 +472,7 @@ class SimpleWpMembership {
         $joinuspage_url = $settings_configs->get_value('join-us-page-url');
         $membership_level = '';
         $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
-        $code      = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
+        $code = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
         $member = BTransfer::$default_fields;
         global $wpdb;
         if (!empty($member_id) && !empty($code)){
@@ -480,7 +480,7 @@ class SimpleWpMembership {
             $query = $wpdb->prepare($query, $member_id, $code);
             $member = $wpdb->get_row($query);
             if (empty($member)){
-                return 'Invalid Request';
+                return 'Error! Invalid Request. Could not find a match for the given security code and the user ID.';
             }
             $membership_level = $member->membership_level;
         }

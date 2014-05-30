@@ -14,8 +14,11 @@
         <form action="" method="post">
             <table>
                 <tr>
-                    Generate Link for <input type="radio" value="one" name="swpm_link_for" /> Member ID
-                <input type="text" name="member_id" />  <b> OR </b> <input type="radio" checked="checked" value="all" name="swpm_link_for" /> For All Pending Registrations
+                    Generate Registration Completion Link
+                    <br /><input type="radio" value="one" name="swpm_link_for" />For a Particular Member ID
+                    <input type="text" name="member_id" size="5" value="" />
+                    <br /> <strong> OR </strong>
+                    <br /><input type="radio" checked="checked" value="all" name="swpm_link_for" /> For All Pending Registrations
                 </tr>
                 <tr>
                     <td>Registration Completion Links Will Appear Below:<br/>
@@ -28,7 +31,7 @@
                     <td>Send Registration Reminder Email too <input type="checkbox" value="checked" name="swpm_reminder_email"></td>
                 </tr>
                 <tr>
-                    <td><input type="submit" name="submit" value="Submit" /></td>
+                    <td><input type="submit" name="submit" class="button-primary" value="Submit" /></td>
                 </tr>
             </table>
         </form>

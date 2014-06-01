@@ -334,7 +334,7 @@ class SimpleWpMembership {
         }
         $editswpmuser = filter_input(INPUT_POST, 'editswpmuser');
         if (!empty($editswpmuser)) {
-            $id = filter_input(INPUT_REQUEST, 'member_id', FILTER_VALIDATE_INT);
+            $id = filter_input(INPUT_GET, 'member_id', FILTER_VALIDATE_INT);
             $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id = $id";
             $member = $wpdb->get_row($query, ARRAY_A);
             unset($member['member_id']);
@@ -369,7 +369,7 @@ class SimpleWpMembership {
         }
         $editswpmlevel = filter_input(INPUT_POST, 'editswpmlevel');
         if (!empty($editswpmlevel)) {
-            $id = filter_input(INPUT_REQUEST, 'id');
+            $id = filter_input(INPUT_GET, 'id');
             $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = $id";
             $level = $wpdb->get_row($query, ARRAY_A);
             $form = new BLevelForm($level);
@@ -410,7 +410,7 @@ class SimpleWpMembership {
     }
 
     public function swpm_ipn_listener() {
-        $swpm_process_ipn = filter_input(INPUT_REQUEST, 'swpm_process_ipn');
+        $swpm_process_ipn = filter_input(INPUT_GET, 'swpm_process_ipn');
         if ($swpm_process_ipn == '1') {
             include_once(SIMPLE_WP_MEMBERSHIP_PATH.'ipn/swpm_handle_pp_ipn.php');
             exit;

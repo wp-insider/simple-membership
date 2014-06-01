@@ -14,7 +14,6 @@ include_once('class.bLevelForm.php');
 include_once('class.bMembershipLevels.php');
 include_once('class.bLog.php');
 include_once('class.bMessages.php');
-
 class SimpleWpMembership {
 
     private $settings;
@@ -52,8 +51,9 @@ class SimpleWpMembership {
     public static function swpm_login($user, $pass, $rememberme = true) {
         if (is_user_logged_in()) {
             $current_user = wp_get_current_user();
-            if ($current_user->user_login == $user)
+            if ($current_user->user_login == $user){
                 return;
+            }
         }
         wp_signon(array('user_login' => $user, 'user_password' => $pass, 'remember' => $rememberme), is_ssl() ? true : false);
         wp_redirect(site_url());
@@ -77,8 +77,9 @@ class SimpleWpMembership {
 
     public function wp_logout() {
         $auth = BAuth::get_instance();
-        if ($auth->is_logged_in())
+        if ($auth->is_logged_in()){
             $auth->logout();
+        }
     }
 
     public function sync_with_wp_profile($wp_user_id) {
@@ -99,8 +100,9 @@ class SimpleWpMembership {
 
     public function login() {
         $auth = BAuth::get_instance();
-        if ($auth->is_logged_in())
+        if ($auth->is_logged_in()){
             include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/loggedin.php');
+        }
         else {
             $setting = BSettings::get_instance();
             $password_reset_url = $setting->get_value('reset-page-url');
@@ -111,29 +113,35 @@ class SimpleWpMembership {
 
     public function reset() {
         $message = get_transient('swpm-password-reset');
-        if (empty($message))
+        if (empty($message)){
             include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/forgot_password.php');
-        else
+        }
+        else{
             echo $message;
+        }
     }
 
     public function validate_email_ajax() {
         global $wpdb;
+        $field_value = filter_input(INPUT_GET, 'fieldValue');
+        $field_id = filter_input(INPUT_GET, 'fieldId');
         $table = $wpdb->prefix . "swpm_members_tbl";
-        $email = esc_sql(trim($_GET['fieldValue']));
+        $email = esc_sql($field_value);
         $query = $wpdb->prepare("SELECT COUNT(*) FROM $table WHERE email = %s", $email);
         $exists = $wpdb->get_var($query) > 0;
-        echo '[ "' . $_GET['fieldId'] . (($exists) ? '",false, "&chi;&nbsp;Aready taken"]' : '",true, "&radic;&nbsp;Available"]');
+        echo '[ "' . $field_id . (($exists) ? '",false, "&chi;&nbsp;Aready taken"]' : '",true, "&radic;&nbsp;Available"]');
         exit;
     }
 
     public function validate_user_name_ajax() {
         global $wpdb;
+        $field_value = filter_input(INPUT_GET, 'fieldValue');
+        $field_id = filter_input(INPUT_GET, 'fieldId');
         $table = $wpdb->prefix . "swpm_members_tbl";
-        $user = esc_sql(trim($_GET['fieldValue']));
+        $user = esc_sql($field_value);
         $query = $wpdb->prepare("SELECT COUNT(*) FROM $table WHERE user_name = %s", $user);
         $exists = $wpdb->get_var($query) > 0;
-        echo '[ "' . $_GET['fieldId'] . (($exists) ? '",false,"&chi;&nbsp;Aready taken"]' : '",true,"&radic;&nbsp;Available"]');
+        echo '[ "' . $field_id . (($exists) ? '",false,"&chi;&nbsp;Aready taken"]' : '",true,"&radic;&nbsp;Available"]');
         exit;
     }
 
@@ -157,14 +165,16 @@ class SimpleWpMembership {
             if ($message['succeeded']) {
                 echo "<div id='message' class='updated'>";
                 $succeeded = true;
-            } else
+            } else{
                 echo "<div id='message' class='error'>";
+            }
             echo $message['message'];
             $extra = isset($message['extra']) ? $message['extra'] : array();
             if (!empty($extra)) {
                 echo '<ul>';
-                foreach ($extra as $key => $value)
+                foreach ($extra as $key => $value){
                     echo '<li>' . $value . '</li>';
+                }
                 echo '</ul>';
             }
             echo "</div>";
@@ -175,8 +185,11 @@ class SimpleWpMembership {
     public function meta_box() {
         if (function_exists('add_meta_box')) {
             $post_types = get_post_types();
-            foreach ($post_types as $post_type => $post_type)
-                add_meta_box('eMember_sectionid', __('Simple WP Membership Protection', 'eMember_textdomain'), array(&$this, 'inner_custom_box'), $post_type, 'advanced');
+            foreach ($post_types as $post_type => $post_type){
+                add_meta_box('swpm_sectionid',
+                        __('Simple WP Membership Protection', 'swpm_textdomain'),
+                        array(&$this, 'inner_custom_box'), $post_type, 'advanced');
+            }
         } else {//older version doesn't have custom post type so modification isn't needed.
             add_action('dbx_post_advanced', array(&$this, 'show_old_custom_box'));
             add_action('dbx_page_advanced', array(&$this, 'show_old_custom_box'));
@@ -187,7 +200,7 @@ class SimpleWpMembership {
         echo '<div class="dbx-b-ox-wrapper">' . "\n";
         echo '<fieldset id="eMember_fieldsetid" class="dbx-box">' . "\n";
         echo '<div class="dbx-h-andle-wrapper"><h3 class="dbx-handle">' .
-        __('eMember Protection options', 'eMember_textdomain') . "</h3></div>";
+        __('Simple Membership Protection options', 'swpm_textdomain') . "</h3></div>";
         echo '<div class="dbx-c-ontent-wrapper"><div class="dbx-content">';
         // output editing form
         $this->inner_custom_box();
@@ -204,46 +217,64 @@ class SimpleWpMembership {
         wp_create_nonce(plugin_basename(__FILE__)) . '" />';
         // The actual fields for data entry
         echo '<h4>' . __("Do you want to protect this content?", 'eMember_textdomain') . '</h4>';
-        echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="1" /> No, Do not protect this content. <br/>';
-        echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="2" /> Yes, Protect this content.<br/>';
+        echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") .
+                '  name="swpm_protect_post" value="1" /> No, Do not protect this content. <br/>';
+        echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") .
+                '  name="swpm_protect_post" value="2" /> Yes, Protect this content.<br/>';
         echo '<h4>' . __("Select the membership level that can access this content:", 'eMember_textdomain') . "</h4>";
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
         $levels = $wpdb->get_results($query, ARRAY_A);
         foreach ($levels as $level) {
-            echo '<input type="checkbox" ' . (BPermission::get_instance($level['id'])->is_permitted($id) ? "checked='checked'" : "") . ' name="swpm_protection_level[' . $level['id'] . ']" value="' . $level['id'] . '" /> ' . $level['alias'] . "<br/>";
+            echo '<input type="checkbox" ' . (BPermission::get_instance($level['id'])->is_permitted($id) ? "checked='checked'" : "") .
+                    ' name="swpm_protection_level[' . $level['id'] . ']" value="' . $level['id'] . '" /> ' . $level['alias'] . "<br/>";
         }
     }
 
     public function save_postdata($post_id) {
         global $wpdb;
-        if (wp_is_post_revision($post_id))
+        $post_type = filter_input(INPUT_POST,'post_type');
+        $swpm_protect_post = filter_input(INPUT_POST,'swpm_protect_post');
+        $swpm_noncename = filter_input(INPUT_POST, 'swpm_noncename');
+        if (wp_is_post_revision($post_id)){
             return;
-        if (isset($_POST['swpm_noncename']) && !wp_verify_nonce($_POST['swpm_noncename'], plugin_basename(__FILE__)))
-            return $post_id;
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
-            return $post_id;
-        if (isset($_POST['post_type']) && ('page' == $_POST['post_type'] )) {
-            if (!current_user_can('edit_page', $post_id))
-                return $post_id;
-        } else {
-            if (!current_user_can('edit_post', $post_id))
-                return $post_id;
         }
-        if (!isset($_POST['swpm_protect_post']))
+        if (!wp_verify_nonce($swpm_noncename, plugin_basename(__FILE__))){
+            return $post_id;
+        }
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE){
+            return $post_id;
+        }
+        if ('page' == $post_type ) {
+            if (!current_user_can('edit_page', $post_id)){
+                return $post_id;
+            }
+        } else {
+            if (!current_user_can('edit_post', $post_id)){
+                return $post_id;
+            }
+        }
+        if (empty($swpm_protect_post)){
             return;
+        }
         // OK, we're authenticated: we need to find and save the data
-        $isprotected = ($_POST['swpm_protect_post'] == 2);
-        $protected = BProtection::get_instance();
-        if (isset($_POST['post_type'])) {
-            BProtection::get_instance()->update_perms($post_id, $isprotected, $_POST['post_type'])->save();
+        $isprotected = ($swpm_protect_post == 2);
+        $args =  array('swpm_protection_level'=>array(
+                            'filter' => FILTER_VALIDATE_INT,
+                            'flags'  => FILTER_REQUIRE_ARRAY,
+                           ));
+        $swpm_protection_level = filter_input_array(INPUT_GET,$args);
+        if (!empty($post_type)) {
+            BProtection::get_instance()->update_perms($post_id, $isprotected, $post_type)->save();
             $query = "SELECT id FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
             $level_ids = $wpdb->get_col($query);
-            foreach ($level_ids as $level)
-                BPermission::get_instance($level)->update_perms($post_id, isset($_POST['swpm_protection_level'][$level]), $_POST['post_type'])->save();
+            foreach ($level_ids as $level){
+                BPermission::get_instance($level)->update_perms($post_id,
+                        isset($swpm_protection_level[$level]), $post_type)->save();
+            }
         }
         $enable_protection = array();
-        $enable_protection['protect'] = $_POST['swpm_protect_post'];
-        $enable_protection['level'] = isset($_POST['swpm_protection_level']) ? $_POST['swpm_protection_level'] : "";
+        $enable_protection['protect'] = $swpm_protect_post;
+        $enable_protection['level'] = $swpm_protection_level;
         return $enable_protection;
     }
 
@@ -261,7 +292,6 @@ class SimpleWpMembership {
 
     public function filter_moretag($more_link, $more_link_text = "More") {
         $acl = BAccessControl::get_instance();
-        global $post;
         //return $acl->filter_post_with_moretag($post->post_ID, $);
     }
 
@@ -269,7 +299,8 @@ class SimpleWpMembership {
         global $wpdb;
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.bSettings.php');
         BSettings::get_instance();
-        if (isset($_POST['createswpmuser'])) {
+        $createswpmuser = filter_input(INPUT_POST, 'createswpmuser');
+        if (!empty($createswpmuser)) {
             $member = BTransfer::$default_fields;
             $form = new BForm($member);
             if ($form->is_valid()) {
@@ -301,8 +332,9 @@ class SimpleWpMembership {
             $message = array('succeeded' => false, 'message' => 'Please correct the following:', 'extra' => $form->get_errors());
             BTransfer::get_instance()->set('status', $message);
         }
-        if (isset($_POST["editswpmuser"])) {
-            $id = absint($_REQUEST['member_id']);
+        $editswpmuser = filter_input(INPUT_POST, 'editswpmuser');
+        if (!empty($editswpmuser)) {
+            $id = filter_input(INPUT_REQUEST, 'member_id', FILTER_VALIDATE_INT);
             $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id = $id";
             $member = $wpdb->get_row($query, ARRAY_A);
             unset($member['member_id']);
@@ -320,8 +352,8 @@ class SimpleWpMembership {
             $message = array('succeeded' => false, 'message' => 'Please correct the following:', 'extra' => $form->get_errors());
             BTransfer::get_instance()->set('status', $message);
         }
-
-        if (isset($_POST['createswpmlevel'])) {
+        $createswpmlevel = filter_input(INPUT_POST, 'createswpmlevel');
+        if (!empty($createswpmlevel)) {
             $level = BTransfer::$default_level_fields;
             $form = new BLevelForm($level);
             if ($form->is_valid()) {
@@ -335,8 +367,9 @@ class SimpleWpMembership {
             $message = array('succeeded' => false, 'message' => 'Please correct the following:', 'extra' => $form->get_errors());
             BTransfer::get_instance()->set('status', $message);
         }
-        if (isset($_POST["editswpmlevel"])) {
-            $id = absint($_REQUEST['id']);
+        $editswpmlevel = filter_input(INPUT_POST, 'editswpmlevel');
+        if (!empty($editswpmlevel)) {
+            $id = filter_input(INPUT_REQUEST, 'id');
             $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = $id";
             $level = $wpdb->get_row($query, ARRAY_A);
             $form = new BLevelForm($level);
@@ -357,15 +390,19 @@ class SimpleWpMembership {
             $_COOKIE['swpm_session'] = $uid; // fake it for current session/
             setcookie('swpm_session', $uid, 0, '/');
         }
-        if (isset($_GET['swpm-logout'])) {
+        $swpm_logout = filter_input(INPUT_GET, 'swpm-logout');
+        if (!empty($swpm_logout)) {
             BAuth::get_instance()->logout();
             wp_redirect(site_url());
         } else if (!is_admin()) {
             BAuth::get_instance();
         }
 
-        $widget_options = array('classname' => 'swpm_widget', 'description' => __("Display SWPM Login."));
-        wp_register_sidebar_widget('swpm_login_widget', __('SWPM Login'), 'SimpleWpMembership::login_widget', $widget_options);
+        $widget_options = array('classname' => 'swpm_widget',
+            'description' => __("Display SWPM Login."));
+        wp_register_sidebar_widget('swpm_login_widget',
+                __('SWPM Login'), 'SimpleWpMembership::login_widget',
+                $widget_options);
         $this->process_password_reset();
         $this->register_member();
         $this->edit_profile();
@@ -373,7 +410,8 @@ class SimpleWpMembership {
     }
 
     public function swpm_ipn_listener() {
-        if (isset($_REQUEST['swpm_process_ipn']) && $_REQUEST['swpm_process_ipn'] == '1') {
+        $swpm_process_ipn = filter_input(INPUT_REQUEST, 'swpm_process_ipn');
+        if ($swpm_process_ipn == '1') {
             include_once(SIMPLE_WP_MEMBERSHIP_PATH.'ipn/swpm_handle_pp_ipn.php');
             exit;
         }
@@ -381,17 +419,21 @@ class SimpleWpMembership {
 
     public function process_password_reset() {
         $message = "";
-        if (isset($_POST['swpm-reset'])) {
-            if (is_email($_POST['swpm_reset_email']))
+        $swpm_reset = filter_input(INPUT_POST, 'swpm-reset');
+        $swpm_reset_email = filter_input(INPUT_POST, ' swpm_reset_email');
+        if (!empty($swpm_reset)) {
+            if (is_email($swpm_reset_email)){
                 $message = "Email Address Not Valid.";
+            }
             else {
                 global $wpdb;
-                $query = "SELECT member_id,user_name,first_name, last_name FROM " .
-                        $wpdb->prefix . "swpm_members_tbl " .
-                        " WHERE email = '" . $_POST['swpm_reset_email'] . "'";
-                $user = $wpdb->get_results($query);
-                if (empty($user))
+                $query = 'SELECT member_id,user_name,first_name, last_name FROM ' .
+                        $wpdb->prefix . 'swpm_members_tbl ' .
+                        ' WHERE email = %s';
+                $user = $wpdb->get_results($wpdb->prepare($query,$swpm_reset_email));
+                if (empty($user)){
                     $message = "User Not Found.";
+                }
                 else {
                     $settings = BSettings::get_instance();
                     $password = wp_generate_password();
@@ -417,16 +459,19 @@ class SimpleWpMembership {
         $widget_title = "User Login";
         echo $before_widget;
         echo $before_title . $widget_title . $after_title;
-        if ($auth->is_logged_in())
+        if ($auth->is_logged_in()){
             include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/login_widget_logged.php');
-        else
+        }
+        else{
             include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/login_widget.php');
+        }
         echo $after_widget;
     }
 
     private function edit_profile() {
         $auth = BAuth::get_instance();
-        if (isset($_POST['swpm_editprofile_submit'])) {
+        $swpm_editprofile_submit = filter_input(INPUT_POST, 'swpm_editprofile_submit');
+        if (!empty($swpm_editprofile_submit)) {
             if ($auth->is_logged_in()) {
                 $user_data = (array) $auth->userData;
                 unset($user_data['permitted']);
@@ -511,9 +556,10 @@ class SimpleWpMembership {
             return "Membership Level Not Found.";
         }
         $membership_level_alias = $result->alias;
-        if (isset($_POST['swpm_registration_submit']))
+        $swpm_registration_submit = filter_input(INPUT_POST, 'swpm_registration_submit');
+        if (!empty($swpm_registration_submit)){
             $member = $_POST;
-
+        }
         extract((array)$member, EXTR_SKIP);
         if (!$succeeded)
             include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/add.php');
@@ -622,8 +668,9 @@ class SimpleWpMembership {
     public function admin_membership_levels() {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.bMembershipLevels.php');
         $levels = new BMembershipLevels();
-
-        $action = isset($_GET['level_action']) ? $_GET['level_action'] : (isset($_POST['action2']) ? $_POST['action2'] : "");
+        $level_action = filter_input(INPUT_GET, 'level_action');
+        $action2 = filter_input(INPUT_GET, 'action2');
+        $action = $level_action ? : ($action2 ? : "");
         switch ($action) {
             case 'add':
             case 'edit':
@@ -644,8 +691,9 @@ class SimpleWpMembership {
     public function admin_members() {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.bMembers.php');
         $members = new BMembers();
-
-        $action = isset($_GET['member_action']) ? $_GET['member_action'] : (isset($_POST['action2']) ? $_POST['action2'] : "");
+        $level_action = filter_input(INPUT_GET, 'level_action');
+        $action2 = filter_input(INPUT_GET, 'action2');
+        $action = $level_action ? : ($action2 ? : "");
         switch ($action) {
             case 'add':
             case 'edit':
@@ -683,8 +731,9 @@ class SimpleWpMembership {
     public static function activate() {
         global $wpdb;
         if (function_exists('is_multisite') && is_multisite()) {
+            $networkwide = filter_input(INPUT_GET, 'networkwide');
             // check if it is a network activation - if so, run the activation function for each blog id
-            if (isset($_GET['networkwide']) && ($_GET['networkwide'] == 1)) {
+            if ($networkwide == 1) {
                 $old_blog = $wpdb->blogid;
                 // Get all blog ids
                 $blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
@@ -865,8 +914,9 @@ class SimpleWpMembership {
         wp_update_user($wp_user_data);
         $user_info = get_userdata($wp_user_id);
         $user_cap = (isset($user_info->wp_capabilities) && is_array($user_info->wp_capabilities)) ? array_keys($user_info->wp_capabilities) : array();
-        if (!in_array('administrator', $user_cap))
+        if (!in_array('administrator', $user_cap)){
             self::update_wp_user_Role($wp_user_id, $wp_user_data['role']);
+        }
         return $wp_user_id;
     }
 
@@ -879,8 +929,9 @@ class SimpleWpMembership {
             return; //TODO - don't do this for MS install
         }
         $caps = get_user_meta($wp_user_id, 'wp_capabilities', true);
-        if (in_array('administrator', array_keys((array) $caps)))
+        if (in_array('administrator', array_keys((array) $caps))){
             return;
+        }
         do_action('set_user_role', $wp_user_id, $role); //Fire the action for other plugin(s)
         wp_update_user(array('ID' => $wp_user_id, 'role' => $role));
         $roles = new WP_Roles();

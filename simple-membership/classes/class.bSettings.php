@@ -7,8 +7,10 @@ class BSettings {
     public $current_tab;
 
     private function __construct() {
-        if (is_admin()) {
-            $this->current_tab = isset($_REQUEST['tab']) ? $_REQUEST['tab'] : 1;
+        $page = filter_input(INPUT_GET, 'page');
+        if($page == 'simple_wp_membership_settings'){
+            $tab = filter_input(INPUT_GET, 'tab');
+            $this->current_tab = empty($tab) ? 1 : $tab;
             add_action('swpm-draw-tab', array(&$this, 'draw_tabs'));
             $method = 'tab_' . $this->current_tab;
             if (method_exists($this, $method)){
@@ -83,7 +85,7 @@ class BSettings {
         add_settings_field('email-misc-from', 'From Email Address',
                 array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-misc-settings',
                 array('item' => 'email-from',
-                      'message'=>'field specific message.'));
+                    'message'=>'field specific message.'));
 
         add_settings_section('reg-prompt-email-settings', 'Email Settings (Prompt to Complete Registration )',
                 array(&$this, 'reg_prompt_email_settings_callback'), 'simple_wp_membership_settings');

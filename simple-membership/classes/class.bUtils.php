@@ -149,5 +149,33 @@ class BUtils {
             return;
         }
     }
-
+    public static function create_wp_user($wp_user_data) {
+        if (self::is_multisite_install()) {//MS install
+            global $blog_id;
+            if ($wp_user_id = email_exists($wp_user_data['user_email'])) {// if user exists then just add him to current blog.
+                add_existing_user_to_blog(array('user_id' => $wp_user_id, 'role' => 'subscriber'));
+                return $wp_user_id;
+            }
+            $wp_user_id = wpmu_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
+            $role = 'subscriber'; //TODO - add user as a subscriber first. The subsequent update user role function to update the role to the correct one
+            add_user_to_blog($blog_id, $wp_user_id, $role);
+        } else {//Single site install
+            $wp_user_id = wp_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
+        }
+        $wp_user_data['ID'] = $wp_user_id;
+        wp_update_user($wp_user_data);
+        $user_info = get_userdata($wp_user_id);
+        $user_cap = (isset($user_info->wp_capabilities) && is_array($user_info->wp_capabilities)) ? array_keys($user_info->wp_capabilities) : array();
+        if (!in_array('administrator', $user_cap)){
+            BUtils::update_wp_user_Role($wp_user_id, $wp_user_data['role']);
+        }
+        return $wp_user_id;
+    }
+    public static function is_multisite_install() {
+        if (function_exists('is_multisite') && is_multisite()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

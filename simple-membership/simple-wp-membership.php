@@ -19,10 +19,10 @@ define('SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url());
 define('SIMPLE_WP_MEMBERSHIP_VER', '1.3');
 define('SIMPLE_WP_MEMBERSHIP_PATH', dirname(__FILE__) . '/');
 define('SIMPLE_WP_MEMBERSHIP_URL', plugins_url('',__FILE__));
-define('SIMPLE_WP_MEMBERSHIP_AUTH', 'simple_wp_membership_'. COOKIEHASH); 
-define('SIMPLE_WP_MEMBERSHIP_SEC_AUTH', 'simple_wp_membership_sec_'. COOKIEHASH); 
+define('SIMPLE_WP_MEMBERSHIP_AUTH', 'simple_wp_membership_'. COOKIEHASH);
+define('SIMPLE_WP_MEMBERSHIP_SEC_AUTH', 'simple_wp_membership_sec_'. COOKIEHASH);
 register_activation_hook( SIMPLE_WP_MEMBERSHIP_PATH .'simple-wp-membership.php', 'SimpleWpMembership::activate' );
-register_deactivation_hook( SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::deactivate' );	
+register_deactivation_hook( SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::deactivate' );
 add_action('swpm_login','SimpleWpMembership::swpm_login', 10,3);
 add_action('plugins_loaded', function(){new SimpleWpMembership();});
 

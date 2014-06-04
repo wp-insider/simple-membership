@@ -21,10 +21,6 @@ include_once('class.bAdminRegistration.php');
 include_once('class.bMembershipLevel.php');
 
 class SimpleWpMembership {
-
-    private $settings;
-    private $lastMessage;
-
     public function __construct() {
         BAuth::get_instance();
         add_action('admin_menu', array(&$this, 'menu'));
@@ -99,8 +95,9 @@ class SimpleWpMembership {
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE " . ' user_name=\'' . $wp_user_data->user_login . '\'';
         $profile = $wpdb->get_row($query, ARRAY_A);
         $profile = (array) $profile;
-        if (empty($profile))
+        if (empty($profile)){
             return;
+        }
         $profile['user_name'] = $wp_user_data->user_login;
         $profile['email'] = $wp_user_data->user_email;
         $profile['password'] = $wp_user_data->user_pass;
@@ -145,24 +142,23 @@ class SimpleWpMembership {
     public function notices() {
         $message = BTransfer::get_instance()->get('status');
         $succeeded = false;
-        if (!empty($message)) {
-            if ($message['succeeded']) {
-                echo "<div id='message' class='updated'>";
-                $succeeded = true;
-            } else{
-                echo "<div id='message' class='error'>";
-            }
-            echo $message['message'];
-            $extra = isset($message['extra']) ? $message['extra'] : array();
-            if (!empty($extra)) {
-                echo '<ul>';
-                foreach ($extra as $key => $value){
-                    echo '<li>' . $value . '</li>';
-                }
-                echo '</ul>';
-            }
-            echo "</div>";
+        if (empty($message)) { return false;}
+        if ($message['succeeded']) {
+            echo "<div id='message' class='updated'>";
+            $succeeded = true;
+        } else{
+            echo "<div id='message' class='error'>";
         }
+        echo $message['message'];
+        $extra = isset($message['extra']) ? $message['extra'] : array();
+        if (!empty($extra)) {
+            echo '<ul>';
+            foreach ($extra as $key => $value){
+                echo '<li>' . $value . '</li>';
+            }
+            echo '</ul>';
+        }
+        echo "</div>";
         return $succeeded;
     }
 

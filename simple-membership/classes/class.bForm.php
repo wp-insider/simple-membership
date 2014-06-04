@@ -50,8 +50,8 @@ class BForm {
     }
 
     protected function password() {
-        $password = filter_input(INPUT_POST, 'password',FILTER_SANITIZE_STRING);
-        $password_re = filter_input(INPUT_POST, 'password_re',FILTER_SANITIZE_STRING);
+        $password = filter_input(INPUT_POST, 'password',FILTER_UNSAFE_RAW);
+        $password_re = filter_input(INPUT_POST, 'password_re',FILTER_UNSAFE_RAW);
         if (empty($this->fields['password']) && empty($password)) {
             $this->errors['password'] = 'Password is required';
             return;
@@ -64,9 +64,8 @@ class BForm {
             }
             include_once(ABSPATH . WPINC . '/class-phpass.php');
             $wp_hasher = new PasswordHash(8, TRUE);
-            $password = $wp_hasher->HashPassword(trim($password)); //should use $saned??
             $this->sanitized['plain_password'] = $password;
-            $this->sanitized['password'] = $password;
+            $this->sanitized['password'] = $wp_hasher->HashPassword(trim($password)); //should use $saned??;
         }
     }
 
@@ -102,7 +101,7 @@ class BForm {
     }
 
     protected function phone() {
-        $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
+        $phone = filter_input(INPUT_POST, 'phone', FILTER_UNSAFE_RAW);
         if (empty($phone)) {return;}
         $saned = wp_kses($phone, array());
         $this->sanitized['phone'] = $saned;
@@ -133,7 +132,7 @@ class BForm {
     }
 
     protected function address_zipcode() {
-        $address_zipcode = filter_input(INPUT_POST, 'address_zipcode', FILTER_SANITIZE_STRING);
+        $address_zipcode = filter_input(INPUT_POST, 'address_zipcode', FILTER_UNSAFE_RAW);
         if (empty($address_zipcode)){ return;}
         $this->sanitized['address_zipcode'] = wp_kses($address_zipcode, array());
     }
@@ -150,23 +149,24 @@ class BForm {
     }
 
     protected function member_since() {
-        $member_since = filter_input(INPUT_POST, 'member_since', FILTER_SANITIZE_STRING);
+        $member_since = filter_input(INPUT_POST, 'member_since', FILTER_UNSAFE_RAW);
+        if (empty($member_since)) {return;}
         if (preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $member_since)){
-            $this->sanitized['member_since'] = $member_since;
+            $this->sanitized['member_since'] =  sanitize_text_field($member_since);
+            return;
         }
-        else{
-            $this->errors['member_since'] = 'Member since field is invalid';
-        }
+        $this->errors['member_since'] = 'Member since field is invalid';
+
     }
 
     protected function subscription_starts() {
         $subscription_starts = filter_input(INPUT_POST, 'subscription_starts', FILTER_SANITIZE_STRING);
+        if(empty($subscription_starts)) {return ;}
         if (preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $subscription_starts)){
-            $this->sanitized['subscription_starts'] = $subscription_starts;
+            $this->sanitized['subscription_starts'] =  sanitize_text_field($subscription_starts);
+            return;
         }
-        else{
-            $this->errors['subscription_starts'] = 'Subscription starts field is invalid';
-        }
+        $this->errors['subscription_starts'] = 'Subscription starts field is invalid';
     }
 
     protected function gender() {

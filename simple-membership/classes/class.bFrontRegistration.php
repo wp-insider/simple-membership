@@ -23,7 +23,7 @@ class BFrontRegistration extends BRegistration {
             $query = $wpdb->prepare($query, $member_id, $code);
             $member = $wpdb->get_row($query);
             if (empty($member)){
-                return 'Error! Invalid Request. Could not find a match for the given security code and the user ID.';
+                echo 'Error! Invalid Request. Could not find a match for the given security code and the user ID.';
             }
             $membership_level = $member->membership_level;
         }
@@ -35,7 +35,8 @@ class BFrontRegistration extends BRegistration {
         if (empty($membership_level)) {
             $joinuspage_link = '<a href="' . $joinuspage_url . '">Join us</a>';
             $output = 'Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.';
-            return $output;
+            echo  $output;
+            return;
         }
 
         $query = "SELECT alias FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = $membership_level";

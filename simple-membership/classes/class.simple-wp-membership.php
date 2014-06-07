@@ -24,7 +24,7 @@ class SimpleWpMembership {
     public function __construct() {
         BAuth::get_instance();
         add_action('admin_menu', array(&$this, 'menu'));
-        add_action('admin_init', array(&$this, 'admin_init')); //This call has been moved inside 'init' function
+        //add_action('admin_init', array(&$this, 'admin_init')); //This call has been moved inside 'init' function
         add_action('init', array(&$this, 'init'));
         add_filter('the_content', array(&$this, 'filter_content'));
         //add_filter( 'the_content_more_link', array(&$this, 'filter_moretag'), 10, 2 );

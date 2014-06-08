@@ -65,11 +65,11 @@ class BSettings {
         add_settings_field('enable-debug', 'Enable Debug',
                 array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings',
                 array('item' => 'enable-debug',
-                      'message'=>''));
+                      'message'=>'Check this option to enable debug logging. View debug log file <a href="'.SIMPLE_WP_MEMBERSHIP_URL.'/log.txt" target="_blank">here</a>.'));
         add_settings_field('enable-sandbox-testing', 'Enable Sandbox Testing',
                 array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings',
                 array('item' => 'enable-sandbox-testing',
-                      'message'=>''));
+                      'message'=>'Enable this option if you want to do sandbox payment testing.'));
 
     }
 

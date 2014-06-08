@@ -205,6 +205,8 @@ class swpm_paypal_ipn_handler {
             {
                 $this->debug_log("Referrer value is empty! No commission will be awarded for this sale",true);
             }
+            
+            do_action('swpm_paypal_ipn_processed', $this->ipn_data);
         }
         return true;
     }

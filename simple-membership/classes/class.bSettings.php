@@ -11,6 +11,7 @@ class BSettings {
 //        if($page == 'simple_wp_membership_settings'){
         if(is_admin()){ // for frontend just load settings but dont try to render settings page.
             $tab = filter_input(INPUT_GET, 'tab');
+            $tab = empty($tab)?filter_input(INPUT_POST, 'tab'):$tab;
             $this->current_tab = empty($tab) ? 1 : $tab;
             add_action('swpm-draw-tab', array(&$this, 'draw_tabs'));
             $method = 'tab_' . $this->current_tab;

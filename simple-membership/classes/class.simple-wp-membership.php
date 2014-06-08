@@ -242,14 +242,25 @@ class SimpleWpMembership {
                             'filter' => FILTER_VALIDATE_INT,
                             'flags'  => FILTER_REQUIRE_ARRAY,
                            ));
-        $swpm_protection_level = filter_input_array(INPUT_GET,$args);
+        $swpm_protection_level = filter_input_array(INPUT_POST, $args);
+        $swpm_protection_level = $swpm_protection_level['swpm_protection_level'];
         if (!empty($post_type)) {
-            BProtection::get_instance()->update_perms($post_id, $isprotected, $post_type)->save();
+            if($isprotected){
+                BProtection::get_instance()->apply(array($post_id),$post_type);
+            }
+            else{
+                BProtection::get_instance()->remove(array($post_id),$post_type);
+            }
+            BProtection::get_instance()->save();
             $query = "SELECT id FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
             $level_ids = $wpdb->get_col($query);
             foreach ($level_ids as $level){
-                BPermission::get_instance($level)->update_perms($post_id,
-                        isset($swpm_protection_level[$level]), $post_type)->save();
+                if(isset($swpm_protection_level[$level])){
+                    BPermission::get_instance($level)->apply(array($post_id), $post_type)->save();
+                }
+                else{
+                    BPermission::get_instance($level)->remove(array($post_id), $post_type)->save();
+                }
             }
         }
         $enable_protection = array();

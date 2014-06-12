@@ -19,6 +19,8 @@ include_once('class.bRegistration.php');
 include_once('class.bFrontRegistration.php');
 include_once('class.bAdminRegistration.php');
 include_once('class.bMembershipLevel.php');
+include_once('class.bMembershipLevelCustom.php');
+include_once('class.bMembershipLevelUtils.php');
 
 class SimpleWpMembership {
     public function __construct() {
@@ -64,6 +66,7 @@ class SimpleWpMembership {
             }
         }
         wp_signon(array('user_login' => $user, 'user_password' => $pass, 'remember' => $rememberme), is_ssl() ? true : false);
+        do_action('swpm_after_login');
         wp_redirect(site_url());
     }
 

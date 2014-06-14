@@ -52,7 +52,7 @@ class SimpleWpMembership {
         add_action('wp_ajax_nopriv_swpm_validate_user_name', 'BAjax::validate_user_name_ajax');
 
         //init is too early for settings api.
-        add_action('admin_init', function (){BSettings::get_instance();});
+        add_action('admin_init', function (){BSettings::get_instance()->init_config_hooks();});
 
     }
     public function shutdown(){

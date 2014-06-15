@@ -33,7 +33,7 @@ class BAuth {
         global $wpdb;
         $swpm_user_name = filter_input(INPUT_POST, 'swpm_user_name');
         $swpm_password = filter_input(INPUT_POST, 'swpm_password');
-        Blog::log_simple_debug("Authenticate:" . $swpm_user_name. ":" .$swpm_password, true);
+        Blog::log_simple_debug("Authenticate:" . $swpm_user_name, true);
         if (!empty($swpm_user_name) && !empty($swpm_password)) {
             $user = sanitize_user($swpm_user_name);
             $pass = trim($swpm_password);

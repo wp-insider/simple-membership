@@ -53,6 +53,8 @@ class BFrontRegistration extends BRegistration {
     }
     public function register() {
         if($this->create_swpm_user()&&$this->create_wp_user()&&$this->send_reg_email()){
+            do_action('swpm_front_end_registration_complete');
+            
             $login_page_url = BSettings::get_instance()->get_value('login-page-url');
             $after_rego_msg = '<p>Registration Successful. Please <a href="' . $login_page_url . '">Login</a></p>';
             $message = array('succeeded' => true, 'message' => $after_rego_msg);

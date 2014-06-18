@@ -275,7 +275,8 @@ class SimpleWpMembership {
     public function filter_comment($content) {
         $acl = BAccessControl::get_instance();
         global $comment;
-        return $acl->filter_comment($comment->comment_ID, $content);
+        return $acl->filter_post($comment->comment_post_ID, $content);
+        //return $acl->filter_comment($comment->comment_ID, $content);
     }
 
     public function filter_content($content) {

@@ -43,6 +43,7 @@ You can create a free forum user account and ask your question in the above foru
 = Miscellaneous =
 
 * Ability to protect photo galleries.
+* Comments on your protected posts will also be protected automatically.
 * There is an option to enable debug logging so you can troubleshoot membership payment related issues easily (if any).
 * Membership management side is handled by the plugin.
 * Can be translated to any language.
@@ -66,6 +67,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO - 1.5.2 =
+- Added comment protection. Comments on your protected posts will also be protected automatically.
 
 = 1.5.1 = 
 - Compatibility with the after login redirection addon:

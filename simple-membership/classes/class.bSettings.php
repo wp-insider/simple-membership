@@ -40,7 +40,7 @@ class BSettings {
         add_settings_field('hide-adminbar',  BUtils::_('Hide Adminbar'),
                 array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
                 array('item' => 'hide-adminbar',
-                      'message'=>BUtils::_('Show/hide adminbar in fronend')));
+                      'message'=>BUtils::_('WordPress shows an admin toolbar to the logged in users of the site. Check this box if you want to hide that admin toolbar in the fronend of your site.')));
 
         add_settings_section('pages-settings', BUtils::_('Pages Settings'),
                 array(&$this, 'pages_settings_callback'), 'simple_wp_membership_settings');

@@ -8,7 +8,7 @@ Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Simple membership plugin can add membership functionality to your site. Protect members only content using content protection easily.
+Simple membership plugin adds membership functionality to your site. Protect members only content using content protection easily.
 
 == Description ==
 

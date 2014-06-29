@@ -1,14 +1,14 @@
 === Simple Membership ===
 Contributors: smp7, wp.insider
 Donate link: https://simple-membership-plugin.com/
-Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content protection, paypal, restrict access, Restrict content
+Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content protection, paypal, restrict access, Restrict content, admin
 Requires at least: 3.3
 Tested up to: 3.9.1
 Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Simple membership plugin can add membership functionality to your site. Protect members only content using content protection easily.
+Simple membership plugin adds membership functionality to your site. Protect members only content using content protection easily.
 
 == Description ==
 
@@ -42,12 +42,13 @@ You can create a free forum user account and ask your question in the above foru
 
 = Miscellaneous =
 
+* Works with any WordPress theme.
 * Ability to protect photo galleries.
 * Comments on your protected posts will also be protected automatically.
 * There is an option to enable debug logging so you can troubleshoot membership payment related issues easily (if any).
 * Membership management side is handled by the plugin.
 * Can be translated to any language.
-* Works with any WordPress theme.
+* Hide the admin toolbar from the frontend of your site.
 * The login and registration widgets will be responsive if you are using a responsive theme.
 
 == Installation ==
@@ -68,8 +69,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 1.5.2 =
+= 1.6 =
 - Added comment protection. Comments on your protected posts will also be protected automatically.
+- Added a new feature to hide the admin toolbar for logged in users of the site.
+- Bug fix: password reset email not sent correctly
+- Bug fix: page rendering issue after the member updates the profile.
 
 = 1.5.1 = 
 - Compatibility with the after login redirection addon:

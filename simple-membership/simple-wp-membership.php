@@ -24,8 +24,10 @@ define('SIMPLE_WP_MEMBERSHIP_SEC_AUTH', 'simple_wp_membership_sec_'. COOKIEHASH)
 register_activation_hook( SIMPLE_WP_MEMBERSHIP_PATH .'simple-wp-membership.php', 'SimpleWpMembership::activate' );
 register_deactivation_hook( SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::deactivate' );
 add_action('swpm_login','SimpleWpMembership::swpm_login', 10,3);
-add_action('plugins_loaded', function(){new SimpleWpMembership();});
-
+add_action('plugins_loaded', "swpm_plugins_loaded");
+function swpm_plugins_loaded(){
+    new SimpleWpMembership();
+}
 //Add settings link in plugins listing page
 function swpm_add_settings_link($links, $file) {
     if ($file == plugin_basename(__FILE__)) {

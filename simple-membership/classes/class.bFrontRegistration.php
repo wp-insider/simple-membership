@@ -22,7 +22,7 @@ class BFrontRegistration extends BRegistration {
             $query = $wpdb->prepare($query, $member_id, $code);
             $member = $wpdb->get_row($query);
             if (empty($member)){
-                BUtils::e ('Error! Invalid Request. Could not find a match for the given security code and the user ID.');
+                BUtils::e('Error! Invalid Request. Could not find a match for the given security code and the user ID.');
             }
             $membership_level = $member->membership_level;
         }
@@ -33,8 +33,7 @@ class BFrontRegistration extends BRegistration {
         }
         if (empty($membership_level)) {
             $joinuspage_link = '<a href="' . $joinuspage_url . '">Join us</a>';
-            $output = BUtils::_('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.');
-            echo  $output;
+            BUtils::e('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.');
             return;
         }
 
@@ -56,7 +55,7 @@ class BFrontRegistration extends BRegistration {
             do_action('swpm_front_end_registration_complete');
 
             $login_page_url = BSettings::get_instance()->get_value('login-page-url');
-            $after_rego_msg = BUtils::_('<p>Registration Successful. Please <a href="' . $login_page_url . '">Login</a></p>');
+            $after_rego_msg = '<p>'. BUtils::_('Registration Successful.'). BUtils::_('Please').' <a href="' . $login_page_url . '">'.BUtils::_('Login').'</a></p>';
             $message = array('succeeded' => true, 'message' => $after_rego_msg);
             BTransfer::get_instance()->set('status', $message);
             return;

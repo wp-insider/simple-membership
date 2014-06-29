@@ -9,13 +9,29 @@ class BForm {
 
     public function __construct($fields) {
         $this->fields = $fields;
-        ;
+        $this->validate_wp_user_email();
         $this->sanitized = array();
-        foreach ($fields as $key => $value){
-            $this->$key();
+        if (count($this->errors) == 0){
+            foreach ($fields as $key => $value){
+                $this->$key();
+            }
         }
     }
+    protected function validate_wp_user_email(){
+        $user_name = filter_input(INPUT_POST, 'user_name',FILTER_SANITIZE_STRING);
+        $email = filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
+        if (empty($user_name)) {return;}
+        $user = get_user_by('login', $user_name);
+        if ($user && ($user->email != $email)){
+            $this->errors['wp_email'] =  BUtils::_('Wordpress account exists with given user name. But given email doesn\'t match.');
+            return;
+        }
+        $user = get_user_by('email', $email);
+        if($user && ($user_name != $user->login)){
+            $this->errors['wp_email'] =  BUtils::_('Wordpress account exists with given email. But given user name doesn\'t match.');
 
+        }
+    }
     protected function user_name() {
         global $wpdb;
         if (!empty($this->fields['user_name'])){return;}

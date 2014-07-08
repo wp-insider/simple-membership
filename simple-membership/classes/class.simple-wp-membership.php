@@ -53,8 +53,11 @@ class SimpleWpMembership {
         add_action('wp_ajax_nopriv_swpm_validate_user_name', 'BAjax::validate_user_name_ajax');
 
         //init is too early for settings api.
-        add_action('admin_init', function (){BSettings::get_instance()->init_config_hooks();});
+        add_action('admin_init', array(&$this, 'admin_init_hook'));
 
+    }
+    public function admin_init_hook(){
+        BSettings::get_instance()->init_config_hooks();
     }
     public function hide_adminbar(){
         $hide = BSettings::get_instance()->get_value('hide-adminbar');

@@ -12,6 +12,6 @@
 		<td><b><?php echo $auth->userData->permitted->get('alias');?></b></td>
 	</tr>
 	<tr>
-		<td colspan="2"><a href="?swpm-logout=true"><?= BUtils::_('Logout')?><</a></td>
+		<td colspan="2"><a href="?swpm-logout=true"><?= BUtils::_('Logout')?></a></td>
 	</tr>
 </table>

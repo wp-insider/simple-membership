@@ -320,13 +320,13 @@ class SimpleWpMembership {
     }
 
     public function init() {
-        
-        //Set up localisation. First loaded ones will override strings present in later loaded file. 
+
+        //Set up localisation. First loaded ones will override strings present in later loaded file.
         //Allows users to have a customized language in a different folder.
         $locale = apply_filters( 'plugin_locale', get_locale(), 'swpm' );
         load_textdomain( 'swpm', WP_LANG_DIR . "/swpm-$locale.mo" );
 	load_plugin_textdomain('swpm', false, dirname(plugin_basename(__FILE__ )) . '/languages/');
-        
+
         if (!isset($_COOKIE['swpm_session'])) { // give a unique ID to current session.
             $uid = md5(microtime());
             $_COOKIE['swpm_session'] = $uid; // fake it for current session/
@@ -448,7 +448,7 @@ class SimpleWpMembership {
         $levels = new BMembershipLevels();
         $level_action = filter_input(INPUT_GET, 'level_action');
         $action2 = filter_input(INPUT_GET, 'action2');
-        $action = $level_action ? : ($action2 ? : "");
+        $action = $level_action ? $level_action : ($action2 ? $action2 : "");
         switch ($action) {
             case 'add':
             case 'edit':

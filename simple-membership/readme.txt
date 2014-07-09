@@ -69,6 +69,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= 1.7.2 =
+- Fixed another PHP 5.2 code compatibility issue.
+
 = 1.7.1 =
 - Fixed another PHP 5.2 code compatibility issue.
 - Updated the plugin's language file template.

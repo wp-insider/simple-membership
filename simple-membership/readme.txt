@@ -70,6 +70,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = 1.7.2 =
+- Added a new hook after the plugin's admin menu is rendered so addons can hook into the main plugin menu.
 - Fixed another PHP 5.2 code compatibility issue.
 
 = 1.7.1 =

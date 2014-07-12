@@ -432,7 +432,7 @@ class SimpleWpMembership {
 
     public function menu() {
         $menu_parent_slug = 'simple_wp_membership';
-        
+
         add_menu_page(__("WP Membership", 'swpm'), __("WP Membership", 'swpm')
                 , 'manage_options', $menu_parent_slug, array(&$this, "admin_members")
                 , SIMPLE_WP_MEMBERSHIP_URL . '/images/logo.png');
@@ -442,9 +442,9 @@ class SimpleWpMembership {
                 'manage_options', 'simple_wp_membership_levels', array(&$this, "admin_membership_levels"));
         add_submenu_page($menu_parent_slug, __("Settings", 'swpm'), __("Settings", 'swpm'),
                 'manage_options', 'simple_wp_membership_settings', array(&$this, "admin_settings"));
-        
+
         do_action('swpm_after_main_admin_menu', $menu_parent_slug);
-        
+
         $this->meta_box();
     }
 
@@ -475,6 +475,7 @@ class SimpleWpMembership {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.bMembers.php');
         $members = new BMembers();
         $action = filter_input(INPUT_GET, 'member_action');
+        $action = empty($action)? filter_input(INPUT_POST, 'action') : $action;
         switch ($action) {
             case 'add':
             case 'edit':

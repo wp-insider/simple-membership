@@ -178,7 +178,7 @@ class SimpleWpMembership {
             $post_types = get_post_types();
             foreach ($post_types as $post_type => $post_type){
                 add_meta_box('swpm_sectionid',
-                        __('Simple WP Membership Protection', 'swpm_textdomain'),
+                        __('Simple WP Membership Protection', 'swpm'),
                         array(&$this, 'inner_custom_box'), $post_type, 'advanced');
             }
         } else {//older version doesn't have custom post type so modification isn't needed.
@@ -191,7 +191,7 @@ class SimpleWpMembership {
         echo '<div class="dbx-b-ox-wrapper">' . "\n";
         echo '<fieldset id="eMember_fieldsetid" class="dbx-box">' . "\n";
         echo '<div class="dbx-h-andle-wrapper"><h3 class="dbx-handle">' .
-        __('Simple Membership Protection options', 'swpm_textdomain') . "</h3></div>";
+        __('Simple Membership Protection options', 'swpm') . "</h3></div>";
         echo '<div class="dbx-c-ontent-wrapper"><div class="dbx-content">';
         // output editing form
         $this->inner_custom_box();
@@ -207,12 +207,12 @@ class SimpleWpMembership {
         echo '<input type="hidden" name="swpm_noncename" id="swpm_noncename" value="' .
         wp_create_nonce(plugin_basename(__FILE__)) . '" />';
         // The actual fields for data entry
-        echo '<h4>' . __("Do you want to protect this content?", 'eMember_textdomain') . '</h4>';
+        echo '<h4>' . __("Do you want to protect this content?", 'swpm') . '</h4>';
         echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") .
                 '  name="swpm_protect_post" value="1" /> No, Do not protect this content. <br/>';
         echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") .
                 '  name="swpm_protect_post" value="2" /> Yes, Protect this content.<br/>';
-        echo '<h4>' . __("Select the membership level that can access this content:", 'eMember_textdomain') . "</h4>";
+        echo '<h4>' . __("Select the membership level that can access this content:", 'swpm') . "</h4>";
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
         $levels = $wpdb->get_results($query, ARRAY_A);
         foreach ($levels as $level) {

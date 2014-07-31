@@ -1,7 +1,7 @@
 === Simple Membership ===
 Contributors: smp7, wp.insider
 Donate link: https://simple-membership-plugin.com/
-Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content protection, paypal, restrict access, Restrict content, admin
+Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content protection, paypal, restrict access, Restrict content, admin, access control, subscription
 Requires at least: 3.3
 Tested up to: 3.9.1
 Stable tag: 1.7.3
@@ -69,9 +69,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 1.7.3 =
+= 1.7.3 =
 - Added french language translation to the plugin. The translation was submitted by Zeb.
 - Fixed a few language textdomain issue.
+- Fixed an issue with the the registration and login page shortcode (On some sites the registration form wasn't visible.)
+- Added simplified Chinese language translation to the plugin. The translation was submitted by Ben.
 
 = 1.7.2 =
 - Added a new hook after the plugin's admin menu is rendered so addons can hook into the main plugin menu.

@@ -118,24 +118,30 @@ class SimpleWpMembership {
     }
 
     public function login() {
+        ob_start();
         $auth = BAuth::get_instance();
         if ($auth->is_logged_in()){
-            include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/loggedin.php');
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/loggedin.php');
         }
         else {
             $setting = BSettings::get_instance();
             $password_reset_url = $setting->get_value('reset-page-url');
             $join_url = $setting->get_value('join-us-page-url');
-            include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/login.php');
+
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/login.php');
+
         }
+        return ob_get_clean();
     }
 
     public function reset() {
         $succeeded = $this->notices();
         if($succeeded){
-            return;
+            return '';
         }
-        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/forgot_password.php');
+        ob_start();
+        include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/forgot_password.php');
+        return ob_get_clean();
     }
     public function profile_form() {
         $auth = BAuth::get_instance();
@@ -143,11 +149,12 @@ class SimpleWpMembership {
         if ($auth->is_logged_in()) {
             $user_data = (array) $auth->userData;
             $user_data['membership_level_alias'] = $auth->userData->permitted->get('alias');
+            ob_start();
             extract($user_data, EXTR_SKIP);
-            include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/edit.php');
-            return;
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/edit.php');
+            return ob_get_clean();
         }
-        BUtils::e( 'You are not logged in.');
+        return BUtils::_( 'You are not logged in.');
     }
 
     public function notices() {
@@ -358,7 +365,7 @@ class SimpleWpMembership {
     public function swpm_ipn_listener() {
         $swpm_process_ipn = filter_input(INPUT_GET, 'swpm_process_ipn');
         if ($swpm_process_ipn == '1') {
-            include_once(SIMPLE_WP_MEMBERSHIP_PATH.'ipn/swpm_handle_pp_ipn.php');
+            include(SIMPLE_WP_MEMBERSHIP_PATH.'ipn/swpm_handle_pp_ipn.php');
             exit;
         }
     }
@@ -379,10 +386,10 @@ class SimpleWpMembership {
         echo $before_widget;
         echo $before_title . $widget_title . $after_title;
         if ($auth->is_logged_in()){
-            include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/login_widget_logged.php');
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/login_widget_logged.php');
         }
         else{
-            include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/login_widget.php');
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/login_widget.php');
         }
         echo $after_widget;
     }
@@ -420,7 +427,7 @@ class SimpleWpMembership {
         if($succeeded){
             return;
         }
-        BFrontRegistration::get_instance()->regigstration_ui();
+        return BFrontRegistration::get_instance()->regigstration_ui();
     }
 
     private function register_member() {
@@ -498,13 +505,13 @@ class SimpleWpMembership {
                 $member_id = filter_input(INPUT_POST, 'member_id',FILTER_SANITIZE_NUMBER_INT);
                 $send_email = filter_input(INPUT_POST, 'swpm_reminder_email',FILTER_SANITIZE_NUMBER_INT);
                 $links = BUtils::get_registration_link($link_for, $send_email, $member_id);
-                include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_tools_settings.php');
+                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_tools_settings.php');
                 break;
             case 2:
-                include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_payment_settings.php');
+                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_payment_settings.php');
                 break;
             default:
-                include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
+                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
                 break;
         }
     }

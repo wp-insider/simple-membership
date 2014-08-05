@@ -66,6 +66,9 @@ class SimpleWpMembership {
         BSettings::get_instance()->init_config_hooks();
     }
     public function hide_adminbar(){
+        if (!is_user_logged_in()){//Never show admin bar if the user is not even logged in
+            return false;
+        }
         $hide = BSettings::get_instance()->get_value('hide-adminbar');
         return $hide? FALSE: TRUE;
     }

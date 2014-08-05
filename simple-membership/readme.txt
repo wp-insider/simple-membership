@@ -72,6 +72,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO - 1.7.6 =
+- Fixed an issue with hiding the admin-bar. It will never be shown to non-members.
+- Renamed the chinese language file.
+
 = 1.7.5 = 
 - Fixed an issue with language file loading.
 

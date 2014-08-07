@@ -74,7 +74,9 @@ https://simple-membership-plugin.com/
 
 = TODO - 1.7.6 =
 - Fixed an issue with hiding the admin-bar. It will never be shown to non-members.
-- Renamed the chinese language file.
+- Renamed the chinese language file to correct the name.
+- Added an utility function "is_user_admin" to check if the currently logged-in user has admin permission.
+
 
 = 1.7.5 = 
 - Fixed an issue with language file loading.

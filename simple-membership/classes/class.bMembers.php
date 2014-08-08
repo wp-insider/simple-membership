@@ -62,7 +62,7 @@ class BMembers extends WP_List_Table {
         $query .= " LEFT JOIN " . $wpdb->prefix . "swpm_membership_tbl";
         $query .= " ON ( membership_level = id ) ";
         if (isset($_POST['s'])){
-            $query .= " WHERE = user_name LIKE '%" . strip_tags($_POST['s']) . "%' "
+            $query .= " WHERE  user_name LIKE '%" . strip_tags($_POST['s']) . "%' "
                     . " OR first_name LIKE '%" . strip_tags($_POST['s']) . "%' "
                     . " OR last_name LIKE '%" . strip_tags($_POST['s']) . "%' ";
         }

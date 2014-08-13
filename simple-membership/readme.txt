@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content protection, paypal, restrict access, Restrict content, admin, access control, subscription
 Requires at least: 3.3
 Tested up to: 3.9.1
-Stable tag: 1.7.5
+Stable tag: 1.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,8 +75,8 @@ https://simple-membership-plugin.com/
 = TODO - 1.7.6 =
 - Fixed an issue with hiding the admin-bar. It will never be shown to non-members.
 - Renamed the chinese language file to correct the name.
-- Added an utility function "is_user_admin" to check if the currently logged-in user has admin permission.
-
+- Removed a lot of fields from the fron-end registration form. The membership registration form is a lot simpler with just a few fields.
+- Fixed a bug with the member search option in the admin dashboard.
 
 = 1.7.5 = 
 - Fixed an issue with language file loading.

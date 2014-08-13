@@ -72,11 +72,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 1.7.6 =
+= 1.7.6 =
 - Fixed an issue with hiding the admin-bar. It will never be shown to non-members.
 - Renamed the chinese language file to correct the name.
-- Removed a lot of fields from the fron-end registration form. The membership registration form is a lot simpler with just a few fields.
+- Removed a lot of fields from the front-end registration form (after user feedback). The membership registration form is now a lot simpler with just a few fields.
 - Fixed a bug with the member search option in the admin dashboard.
+- Added a few new action hooks and filters.
+- Fixed a bug with the media attachment protection.
 
 = 1.7.5 = 
 - Fixed an issue with language file loading.

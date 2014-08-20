@@ -168,6 +168,8 @@ class SimpleWpMembership {
         $auth = BAuth::get_instance();
         $this->notices();
         if ($auth->is_logged_in()) {
+            $out = apply_filters('swpm_profile_form_override', '');
+            if (!empty($out)){return $out;}
             $user_data = (array) $auth->userData;
             $user_data['membership_level_alias'] = $auth->userData->permitted->get('alias');
             ob_start();

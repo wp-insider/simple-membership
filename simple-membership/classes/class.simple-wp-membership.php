@@ -24,8 +24,6 @@ include_once('class.bMembershipLevelUtils.php');
 
 class SimpleWpMembership {
     public function __construct() {
-        BAuth::get_instance();
-
         add_action('admin_menu', array(&$this, 'menu'));
         //add_action('admin_init', array(&$this, 'admin_init')); //This call has been moved inside 'init' function
 

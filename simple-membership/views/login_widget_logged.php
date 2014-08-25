@@ -9,7 +9,7 @@
 	<li id="text-2" class="widget widget_text"><h3 class="widgettitle"><?= BUtils::_('Membership')?></h3>
 		<div class="textwidget"><b><?php echo $auth->get('alias');?></b></div>
 	</li>
-	<li id="text-2" class="widget widget_text"><h3 class="widgettitle"><?= BUtils::_('Expires On')?></h3>
+	<li id="text-2" class="widget widget_text"><h3 class="widgettitle"><?= BUtils::_('Account Expiry')?></h3>
 		<div class="textwidget"><b><?php echo $auth->get_expire_date();?></b></div>
 	</li>
 	<li id="text-2" class="widget widget_text">

@@ -12,7 +12,7 @@
 		<td><b><?php echo $auth->get('alias');?></b></td>
 	</tr>
 	<tr>
-		<td><?= BUtils::_('Expires On')?></td>
+		<td><?= BUtils::_('Account Expiry')?></td>
 		<td><b><?php echo $auth->get_expire_date();?></b></td>
 	</tr>
 	<tr>

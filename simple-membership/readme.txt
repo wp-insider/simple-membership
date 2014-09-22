@@ -34,7 +34,7 @@ You can easily add a member login widget on the sidebar of your site. Simply use
 
 = Documentation =
 
-Read the [setup documentation](https://simple-membership-plugin.com/wp-content/uploads/documentation/simple-membership/membership-basic-setup-and-configuration.pdf) after you install the plugin to get started.
+Read the [setup documentation](https://simple-membership-plugin.com/simple-membership-documentation/) after you install the plugin to get started.
 
 = Plugin Support =
 
@@ -55,6 +55,18 @@ You can create a free forum user account and ask your questions.
 * Hide the admin toolbar from the frontend of your site.
 * The login and registration widgets will be responsive if you are using a responsive theme.
 
+= Language Translations =
+
+The following language translations are already available:
+
+* English
+* Spanish
+* French
+* Chinese
+* Portuguese (Brazil)
+
+You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
+
 == Installation ==
 
 Do the following to install the membership plugin:
@@ -72,6 +84,10 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO 1.8.0 =
+- Added Portuguese (Brazil) language translation to the plugin. The translation was submitted by Rachel Oakes.
+
 
 = 1.7.9 =
 - Added Spanish language translation to the plugin. The translation was submitted by David Sanchez.

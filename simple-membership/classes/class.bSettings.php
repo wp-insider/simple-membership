@@ -33,6 +33,10 @@ class BSettings {
                 array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
                 array('item' => 'enable-free-membership',
                       'message'=> BUtils::_('Enable/disable registration for free membership level')));
+        add_settings_field('enable-moretag', BUtils::_('Enable More Tag'),
+                array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
+                array('item' => 'enable-moretag',
+                      'message'=> BUtils::_('Enable/disable teaser content with more tag')));
         add_settings_field('free-membership-id', BUtils::_('Free Membership Level ID'),
                 array(&$this, 'textfield_small_callback'), 'simple_wp_membership_settings', 'general-settings',
                 array('item' => 'free-membership-id',
@@ -237,6 +241,12 @@ class BSettings {
         }
         else{
             $output['enable-free-membership'] = "";
+        }
+        if (isset($input['enable-moretag'])){
+            $output['enable-moretag'] = esc_url($input['enable-moretag']);
+        }
+        else{
+            $output['enable-moretag'] = "";
         }
         if (isset($input['enable-debug'])){
             $output['enable-debug'] = esc_url($input['enable-debug']);

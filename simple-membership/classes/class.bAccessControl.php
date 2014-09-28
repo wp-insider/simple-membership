@@ -23,8 +23,8 @@ class BAccessControl {
                 $this->lastError = apply_filters ('swpm_restricted_post_msg', BUtils::_('You are not allowed to view this content')) ;
                 return false;
             }
-            $this->lastError = apply_filters('swpm_not_logged_in_post_msg', BUtils::_( 'You need to login to view this content. ' )
-                    . BSettings::get_instance()->get_login_link());
+            $error_msg = BUtils::_( 'You need to login to view this content. ' ) . BSettings::get_instance()->get_login_link();
+            $this->lastError = apply_filters('swpm_not_logged_in_post_msg', $error_msg);
             return false;
         }
         return true;
@@ -61,14 +61,12 @@ class BAccessControl {
 
         if (count($post_segments) >= 2){
             if (BAuth::get_instance()->is_logged_in()){
-                $this->lastError = apply_filters ('swpm_restricted_moretag_msg',
-                    '<div class ="swpm-magin-bottom-10">' . BUtils::_("You do no have permission to view rest of the  content") . '</div>'
-                        );
+                $error_msg = '<div class="swpm-margin-top-10">' . BUtils::_("You do no have permission to view rest of the content") . '</div>';
+                $this->lastError = apply_filters ('swpm_restricted_more_tag_msg', $error_msg);
             }
             else {
-                $this->lastError = apply_filters('swpm_not_logged_in_moretag_msg',
-                        '<div class ="swpm-magin-bottom-10">' . BUtils::_("You need to login to view rest of the content. ")
-                    . BSettings::get_instance()->get_login_link() . '</div>');
+                $error_msg = '<div class="swpm-margin-top-10">' . BUtils::_("You need to login to view the rest of the content. ") . BSettings::get_instance()->get_login_link() . '</div>';
+                $this->lastError = apply_filters('swpm_not_logged_in_more_tag_msg', $error_msg);
             }
 
             return do_shortcode($post_segments[0]) . $this->lastError;
@@ -85,9 +83,7 @@ class BAccessControl {
         if($this->can_i_read_post($id)) {
             return $more_link;
         }
-
-        return apply_filters('swpm_not_logged_in_moretag_msg',
-                       BUtils::_("You need to login to view rest of the content. ")
-                    . BSettings::get_instance()->get_login_link()  );
+        $msg = BUtils::_("You need to login to view the rest of the content. ") . BSettings::get_instance()->get_login_link();
+        return apply_filters('swpm_not_logged_in_more_tag_msg', $msg);
     }
 }

@@ -1,10 +1,10 @@
 === Simple Membership ===
 Contributors: smp7, wp.insider
 Donate link: https://simple-membership-plugin.com/
-Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content protection, paypal, restrict access, Restrict content, admin, access control, subscription
+Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict access, Restrict content, admin, access control, subscription, teaser, protection
 Requires at least: 3.3
 Tested up to: 4.0
-Stable tag: 1.7.9
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,7 @@ You can create a free forum user account and ask your questions.
 
 * Works with any WordPress theme.
 * Ability to protect photo galleries.
+* Show teaser content to convert visitors into members.
 * Comments on your protected posts will also be protected automatically.
 * There is an option to enable debug logging so you can troubleshoot membership payment related issues easily (if any).
 * Membership management side is handled by the plugin.
@@ -85,7 +86,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 1.8.0 =
+= 1.8.0 =
+- Added a new feature called "more tag protection" to enable teaser content. Read the [teaser content documentation](https://simple-membership-plugin.com/creating-teaser-content-membership-site/) for more info.
 - Added Portuguese (Brazil) language translation to the plugin. The translation was submitted by Rachel Oakes.
 - Added cookiehash definition check (in case it is not defined already).
 

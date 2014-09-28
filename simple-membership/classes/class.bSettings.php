@@ -33,14 +33,14 @@ class BSettings {
                 array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
                 array('item' => 'enable-free-membership',
                       'message'=> BUtils::_('Enable/disable registration for free membership level')));
-        add_settings_field('enable-moretag', BUtils::_('Enable More Tag'),
-                array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
-                array('item' => 'enable-moretag',
-                      'message'=> BUtils::_('Enable/disable teaser content with more tag')));
         add_settings_field('free-membership-id', BUtils::_('Free Membership Level ID'),
                 array(&$this, 'textfield_small_callback'), 'simple_wp_membership_settings', 'general-settings',
                 array('item' => 'free-membership-id',
                       'message'=> BUtils::_('Assign free membership level ID')));
+        add_settings_field('enable-moretag', BUtils::_('Enable More Tag Protection'),
+                array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
+                array('item' => 'enable-moretag',
+                      'message'=> BUtils::_('Enables or disables "more" tag protection in the posts and pages. Anything after the More tag is protected. Anything before the more tag is teaser content.')));        
         add_settings_field('hide-adminbar',  BUtils::_('Hide Adminbar'),
                 array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
                 array('item' => 'hide-adminbar',

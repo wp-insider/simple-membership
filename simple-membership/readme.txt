@@ -87,7 +87,7 @@ https://simple-membership-plugin.com/
 
 = TODO 1.8.0 =
 - Added Portuguese (Brazil) language translation to the plugin. The translation was submitted by Rachel Oakes.
-
+- Added cookiehash definition check (in case it is not defined already).
 
 = 1.7.9 =
 - Added Spanish language translation to the plugin. The translation was submitted by David Sanchez.

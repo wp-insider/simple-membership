@@ -86,6 +86,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO - 1.8.1 =
+- MySQL database character set and collation values are read from the system when creating the tables.
+
 = 1.8.0 =
 - Added a new feature called "more tag protection" to enable teaser content. Read the [teaser content documentation](https://simple-membership-plugin.com/creating-teaser-content-membership-site/) for more info.
 - Added Portuguese (Brazil) language translation to the plugin. The translation was submitted by Rachel Oakes.

@@ -53,7 +53,7 @@ class BUtils {
 
     public static function get_user_by_id($swpm_id) {
         global $wpdb;
-        $query = "SELECT user_name FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = $swpm_id";
+        $query = $wpdb->prepare("SELECT user_name FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = %d", $swpm_id);
         return $wpdb->get_var($query);
     }
 
@@ -65,7 +65,7 @@ class BUtils {
                 if (empty($member_id)) {
                     return array();
                 }
-                $query = "SELECT * FROM  {$wpdb->prefix}swpm_members_tbl WHERE member_id = $member_id ";
+                $query = $wpdb->prepare("SELECT * FROM  {$wpdb->prefix}swpm_members_tbl WHERE member_id =  %d", $member_id);
                 $members = $wpdb->get_results($query);
                 break;
             case 'all':

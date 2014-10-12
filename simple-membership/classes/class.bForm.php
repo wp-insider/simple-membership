@@ -213,6 +213,11 @@ class BForm {
 
     protected function membership_level() {
         $membership_level = filter_input(INPUT_POST, 'membership_level', FILTER_SANITIZE_NUMBER_INT);
+        if ($membership_level == 1){
+            $this->errors['membership_level'] = BUtils::_('Invalid membership level');
+            return;
+        }
+        
         if (empty($membership_level)) {return;}
         $this->sanitized['membership_level'] = $membership_level;
     }

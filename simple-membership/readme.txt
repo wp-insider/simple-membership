@@ -62,6 +62,7 @@ The following language translations are already available:
 
 * English
 * Spanish
+* German
 * French
 * Chinese
 * Portuguese (Brazil)

@@ -30,7 +30,7 @@
 	        <td colspan="2"><a id="register" class="register_link" href="<?= $join_url; ?>"><?= BUtils::_('Join Us')?></a></td>
 	    </tr>
 	    <tr>
-	    	<td colspan="2"><span> <?= $auth->get_message();?> </span></td>
+	    	<td colspan="2"><span class="swpm-login-widget-action-msg"><?= $auth->get_message();?></span></td>
 	    </tr>
 	</table>
 </form>

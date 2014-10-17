@@ -24,8 +24,6 @@ include_once('class.bMembershipLevelUtils.php');
 class SimpleWpMembership {
     public function __construct() {
         add_action('admin_menu', array(&$this, 'menu'));        
-        $x = new BCronJob();
-        $x->updateAccountStatus(); die();
         add_action('init', array(&$this, 'init'));
 
         add_filter('the_content', array(&$this, 'filter_content'));

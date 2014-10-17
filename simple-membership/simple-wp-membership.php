@@ -14,6 +14,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"])){
 }
 
 include_once('classes/class.simple-wp-membership.php');
+include_once('classes/class.bCronJob.php');
 
 define('SIMPLE_WP_MEMBERSHIP_VER', '1.8.1');
 define('SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url());
@@ -30,6 +31,7 @@ add_action('swpm_login','SimpleWpMembership::swpm_login', 10,3);
 add_action('plugins_loaded', "swpm_plugins_loaded");
 function swpm_plugins_loaded(){
     new SimpleWpMembership();
+    new BCronJob();
 }
 //Add settings link in plugins listing page
 function swpm_add_settings_link($links, $file) {

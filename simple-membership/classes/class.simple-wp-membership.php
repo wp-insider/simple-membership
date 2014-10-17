@@ -21,12 +21,11 @@ include_once('class.bAdminRegistration.php');
 include_once('class.bMembershipLevel.php');
 include_once('class.bMembershipLevelCustom.php');
 include_once('class.bMembershipLevelUtils.php');
-
 class SimpleWpMembership {
     public function __construct() {
-        add_action('admin_menu', array(&$this, 'menu'));
-        //add_action('admin_init', array(&$this, 'admin_init')); //This call has been moved inside 'init' function
-
+        add_action('admin_menu', array(&$this, 'menu'));        
+        $x = new BCronJob();
+        $x->updateAccountStatus(); die();
         add_action('init', array(&$this, 'init'));
 
         add_filter('the_content', array(&$this, 'filter_content'));
@@ -51,8 +50,8 @@ class SimpleWpMembership {
         add_action('profile_update', array(&$this, 'sync_with_wp_profile'), 10, 2);
         add_action('wp_logout', array(&$this, 'wp_logout'));
         add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2);
-        add_action('swpm_logout', array(&$this, 'swpm_logout'));
-
+        add_action('swpm_logout', array(&$this, 'swpm_logout'));        
+        
         //AJAX hooks
         add_action('wp_ajax_swpm_validate_email', 'BAjax::validate_email_ajax');
         add_action('wp_ajax_nopriv_swpm_validate_email', 'BAjax::validate_email_ajax');
@@ -543,6 +542,7 @@ class SimpleWpMembership {
     }
 
     public static function activate() {
+        wp_schedule_event(time(), 'daily', 'swpm_account_status_event');
         include_once('class.bInstallation.php');
         global $wpdb;
         if (BUtils::is_multisite_install()) {
@@ -552,6 +552,6 @@ class SimpleWpMembership {
         BInstallation::initdb();
     }
     public function deactivate() {
-
+        wp_clear_scheduled_hook('swpm_account_status_event');
     }
 }

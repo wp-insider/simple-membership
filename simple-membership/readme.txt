@@ -87,6 +87,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 1.8.3 =
+- There is now a cronjob in the plugin to expire the member profiles in the background.
+- Released a new addon - https://simple-membership-plugin.com/simple-membership-registration-form-shortcode-generator/
+
 = 1.8.2 =
 - Updated the members expiry check code at the time of login and made it more robust.
 

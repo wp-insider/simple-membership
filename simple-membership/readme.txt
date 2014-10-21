@@ -88,6 +88,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 1.8.3 =
+- Added Swedish language translation to the plugin. The translation was submitted by Geson Perry.
 - There is now a cronjob in the plugin to expire the member profiles in the background.
 - Released a new addon - https://simple-membership-plugin.com/simple-membership-registration-form-shortcode-generator/
 

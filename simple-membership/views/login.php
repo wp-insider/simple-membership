@@ -11,7 +11,7 @@
 	    	<td colspan="2"><label for="swpm_password" class="eMember_label"><?= BUtils::_('Password')?></label></td>
 		</tr>
 	    <tr>
-	        <td colspan="2"><input type="password" autocomplete="off" class="swpm_text_field" id="swpm_password" value="" size="30" name="swpm_password" /></td>
+	        <td colspan="2"><input type="password" class="swpm_text_field" id="swpm_password" value="" size="30" name="swpm_password" /></td>
 	    </tr>
 	    <tr>
 	        <td colspan="2"><input type="checkbox" name="rememberme" value="checked='checked'"> <?= BUtils::_('Remember Me')?></td>

@@ -58,7 +58,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
 
         $output .='<div class="swpm_addon_item_body">';
         $output .='<div class="swpm_addon_item_name">';
-        $output .= '<a href="' . $addon['page_url'] . '">' . $addon['name'] . '</a>';
+        $output .= '<a href="' . $addon['page_url'] . '" target="_blank">' . $addon['name'] . '</a>';
         $output .='</div>'; //end name
 
         $output .='<div class="swpm_addon_item_description">';

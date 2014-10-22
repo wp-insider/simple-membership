@@ -474,7 +474,9 @@ class SimpleWpMembership {
                 'manage_options', 'simple_wp_membership_levels', array(&$this, "admin_membership_levels"));
         add_submenu_page($menu_parent_slug, __("Settings", 'swpm'), __("Settings", 'swpm'),
                 'manage_options', 'simple_wp_membership_settings', array(&$this, "admin_settings"));
-
+        add_submenu_page($menu_parent_slug, __("Add-ons", 'swpm'), __("Add-ons", 'swpm'),
+                'manage_options', 'simple_wp_membership_addons', array(&$this, "add_ons_menu"));
+        
         do_action('swpm_after_main_admin_menu', $menu_parent_slug);
 
         $this->meta_box();
@@ -539,6 +541,10 @@ class SimpleWpMembership {
                 include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
                 break;
         }
+    }
+    
+    public function add_ons_menu(){
+         include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_add_ons_page.php');
     }
 
     public static function activate() {

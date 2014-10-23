@@ -63,7 +63,11 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
 
         $output .='<div class="swpm_addon_item_description">';
         $output .= $addon['description'];
-        $output .='</div>'; //end description		
+        $output .='</div>'; //end description
+
+        $output .='<div class="swpm_addon_item_details_link">';
+        $output .='<a href="'.$addon['page_url'].'" class="swpm_addon_view_details" target="_blank">View Details</a>';
+        $output .='</div>'; //end detils link      
         $output .='</div>'; //end body
 
         $output .= '</div>'; //end canvas

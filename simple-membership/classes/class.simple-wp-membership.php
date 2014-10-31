@@ -496,6 +496,9 @@ class SimpleWpMembership {
             case 'manage':
                 $levels->manage();
                 break;
+            case 'category_list':
+                $levels->manage_categroy();
+                break;
             case 'delete':
             case 'bulk_delete':
                 $levels->delete();

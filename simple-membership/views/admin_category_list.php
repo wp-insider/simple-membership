@@ -1,6 +1,15 @@
 <div class="wrap">
     <h2><?php screen_icon('users'); ?><?= BUtils::_('Simple WP Membership::Categories') ?></h2>
     <?php include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_membership_level_menu.php'); ?>
+    
+    <div style="background: none repeat scroll 0 0 #FFF6D5;border: 1px solid #D1B655;color: #3F2502;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">
+    <p>
+        <?= BUtils::_('First of all, globally protect the category on your site by selecting "General Protection" from the drop-down box below and then select the categories that should be protected from non-logged in users.'); ?>
+    </p>
+    <p>
+        <?= BUtils::_('Next, select an existing membership level from the drop-down box below and then select the categories you want to grant access to (for that particular membership level).'); ?>
+    </p>
+    </div>
     <form id="category_list_form" method="post">    
         <p class="swpm-select-box-left">
             <label for="membership_level_id">
@@ -11,11 +20,7 @@
                 <?= BUtils::membership_level_dropdown($category_list->selected_level_id); ?>
             </select>                
         </p>
-        <p class="swpm-select-box-left"><i><?= BUtils::_('Select membership you want to set category protection/permission for 
-                (page will refresh to load category details for selected membership level). 
-                Check/uncheck checkboxes for each of the categories you want to enable/disable protection/permission. Finally
-                press "Update" button to save your changes.');?></i></p>
-        <p class="swpm-select-box-left"><input type="submit" name="update_category_list" value="Update"></p>        
+        <p class="swpm-select-box-left"><input type="submit" class="button-primary" name="update_category_list" value="Update"></p>        
         <?php $category_list->prepare_items(); ?>   
         <?php $category_list->display(); ?>
     </form>

@@ -89,6 +89,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 1.8.7 =
+- Added a new tab for showing addon settings options.
+- Added a new action hook in the addon settings tab.
+- Updated the registration form validation code to not accept apostrophe character in the username field.
+
 = 1.8.6 =
 - Fixed an email validation issue with paid membership registration process.
 - Added a new free addon to customize the protected content message.

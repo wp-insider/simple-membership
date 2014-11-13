@@ -58,7 +58,10 @@ class SimpleWpMembership {
 
         //init is too early for settings api.
         add_action('admin_init', array(&$this, 'admin_init_hook'));
-
+        add_action('plugins_loaded', array(&$this, "plugins_loaded"));
+    }
+    public function plugins_loaded(){
+        
     }
     public function save_attachment_extra($post, $attachment) {
         $this->save_postdata($post['ID']);

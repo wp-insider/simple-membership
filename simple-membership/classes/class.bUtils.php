@@ -11,15 +11,15 @@ class BUtils {
         }
         
         switch (strtolower($subscript_unit)) {
-            case 'Days':
+            case 'days':
                 break;
-            case 'Weeks':
+            case 'weeks':
                 $subcript_period = $subcript_period * 7;
                 break;
-            case 'Months':
+            case 'months':
                 $subcript_period = $subcript_period * 30;
                 break;
-            case 'Years':
+            case 'years':
                 $subcript_period = $subcript_period * 365;
                 break;
         }
@@ -35,7 +35,6 @@ class BUtils {
         if ($days == 'noexpire'){
             return PHP_INT_MAX; // which is equivalent to 
         }
-        
         return strtotime($user->subscription_starts . ' ' . $days . ' days');
     }
     public static function is_subscription_expired($user){

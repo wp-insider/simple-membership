@@ -53,7 +53,7 @@ class BSettings {
                 array('item' => 'default-account-status',
                       'options'=>  BUtils::get_account_state_options(),
                       'default'=>'active',
-                      'message'=>BUtils::_('Select the default account status newly registered users will be assigned to.Default is "Active"')));
+                      'message'=>BUtils::_('Select the default account status for newly registered users. If you want to manually approve the members then you can set the status to "Pending".')));
 
         add_settings_section('pages-settings', BUtils::_('Pages Settings'),
                 array(&$this, 'pages_settings_callback'), 'simple_wp_membership_settings');

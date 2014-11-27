@@ -97,9 +97,9 @@ class BLevelForm {
         
     }
 
-    protected function show_older_posts() {
-        $checked = filter_input(INPUT_POST, 'show_older_posts');
-        $this->sanitized['show_older_posts'] = empty($checked) ? 0 : 1;
+    protected function protect_older_posts() {
+        $checked = filter_input(INPUT_POST, 'protect_older_posts');
+        $this->sanitized['protect_older_posts'] = empty($checked) ? 0 : 1;
     }
 
     public function is_valid() {

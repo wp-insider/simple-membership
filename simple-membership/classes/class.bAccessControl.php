@@ -24,8 +24,8 @@ class BAccessControl {
             return false;            
         }
         $perms = BPermission::get_instance($auth->get('membership_level'));
-        $show_older_posts = $perms->get('show_older_posts');
-        if (!empty($show_older_posts) && (strtotime($post->post_date) < strtotime($auth->get('subscription_start')))){
+        $protect_older_posts = $perms->get('protect_older_posts');
+        if (!empty($protect_older_posts) && (strtotime($post->post_date) < strtotime($auth->get('subscription_starts')))){
             $this->lastError = apply_filters ('swpm_restricted_post_msg', BUtils::_('You are not allowed to view this content')) ;
             return false;
         }

@@ -51,7 +51,7 @@
     <tr class="form-field">
         <th scope="row"><label for="role"><?= BUtils::_('Access to older posts.'); ?></span></label></th>
         <td>
-            <input type="checkbox" <?= empty($show_older_posts)? "": "checked='checked'"?>  value="1"  name="show_older_posts" id="show_older_posts" />
+            <input type="checkbox" <?= empty($protect_older_posts)? "": "checked='checked'"?>  value="1"  name="protect_older_posts" id="protect_older_posts" />
             <p class="description">Only allow access to posts published after the user's join date.</p>
         </td>
     </tr>                                

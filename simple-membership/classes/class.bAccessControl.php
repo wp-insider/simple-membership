@@ -15,9 +15,15 @@ class BAccessControl {
     public function can_i_read_post($id){
         $this->lastError = '';
         global $post;
-        $protected = BProtection::get_instance();
-        if (!$protected->is_protected($id)){ return true;}
         $auth = BAuth::get_instance();
+        $protect_everything = BSettings::get_instance()->get_value('protect-everything');
+        if(!empty($protect_everything)){ 
+            $error_msg = BUtils::_( 'You need to login to view this content. ' ) . BSettings::get_instance()->get_login_link();
+            $this->lastError = apply_filters('swpm_not_logged_in_post_msg', $error_msg);
+            return false;                       
+        }
+        $protected = BProtection::get_instance();
+        if (!$protected->is_protected($id)){ return true;}        
         if(!$auth->is_logged_in()){
             $error_msg = BUtils::_( 'You need to login to view this content. ' ) . BSettings::get_instance()->get_login_link();
             $this->lastError = apply_filters('swpm_not_logged_in_post_msg', $error_msg);
@@ -53,7 +59,7 @@ class BAccessControl {
     }
     public function filter_post($id,$content){
         if(in_array($id, $this->moretags)) {return $content; }
-        if($this->can_i_read_post($id)) {return $content; }
+        if($this->can_i_read_post($id)) {return $content; } 
         $moretag = BSettings::get_instance()->get_value('enable-moretag');
         if (empty($moretag)){
             return $this->lastError;

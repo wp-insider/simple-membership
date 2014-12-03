@@ -69,6 +69,7 @@ The following language translations are already available:
 * Chinese
 * Portuguese (Brazil)
 * Swedish
+* Macedonian
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -89,6 +90,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO 1.9.0 =
+- Added Macedonian language translation to the plugin. The translation was submitted by I. Ivanov.
 
 = 1.8.9 =
 - Added a new feature so you can set the default account status of your members. This can useful if you want to manually approve members after they signup.

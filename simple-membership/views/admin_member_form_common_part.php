@@ -51,16 +51,6 @@
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><label for="account_state"><?= BUtils::_('Account Status'); ?></label></th>
-		<td><select class="regular-text" name="account_state" id="account_state">
-				<option value="active"><?= BUtils::_('Active') ?></option>
-				<option value="inactive"><?= BUtils::_('Inactive') ?></option>
-				<option value="pending"><?= BUtils::_('Pending') ?></option>
-				<option value="expired"><?= BUtils::_('Expired') ?></option>
-			</select>
-		</td>
-	</tr>
-	<tr>
 		<th scope="row"><label for="member_since"><?= BUtils::_('Member Since') ?> </label></th>
 		<td><input class="regular-text" name="member_since" type="text" id="member_since" value="<?php echo esc_attr($member_since); ?>" /></td>
 	</tr>

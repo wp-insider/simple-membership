@@ -321,6 +321,7 @@ class SimpleWpMembership {
     }
 
     public function filter_content($content) {
+        if (is_preview()) {return $content;}
         $acl = BAccessControl::get_instance();
         global $post;
         return $acl->filter_post($post->ID, $content);

@@ -56,6 +56,7 @@ You can create a free forum user account and ask your questions.
 * Ability to import WordPress users as members.
 * Can be translated to any language.
 * Hide the admin toolbar from the frontend of your site.
+* Send quick notification email to your members.
 * The login and registration widgets will be responsive if you are using a responsive theme.
 
 = Language Translations =
@@ -93,7 +94,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 1.9.4 =
+= 1.9.4 =
 - Added a new feature to send an email notification to a member when you edit a user's record. This will be helpful to notify members when you activate their account.
 - Fixed an issue with "pending" member account getting set to active when the record is edited from admin side.
 

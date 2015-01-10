@@ -94,8 +94,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 1.9.5 =
+= 1.9.5 =
 - Added a check to show the content of a protected post/page if the admin is previewing the post or page.
+- Fixed an issue with the quick notification email feature not filtering the email shortcodes.
+- Improved the login form's HTML and CSS.
 
 = 1.9.4 =
 - Added a new feature to send an email notification to a member when you edit a user's record. This will be helpful to notify members when you activate their account.

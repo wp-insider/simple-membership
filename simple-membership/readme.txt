@@ -97,6 +97,7 @@ https://simple-membership-plugin.com/
 
 = TODO - 1.9.6 =
 - Added Russian language translation to the plugin. The translation was submitted by Vladimir Vaulin.
+- Some minor code refactoring.
 
 = 1.9.5 =
 - Added a check to show the content of a protected post/page if the admin is previewing the post or page.

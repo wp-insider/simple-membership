@@ -28,7 +28,7 @@
                     <input type="text" value="" name="subscription_period_<?= BMembershipLevel::MONTHS?>"> Months.</p>
                 <p><input type="radio"  value="<?= BMembershipLevel::YEARS?>" name="subscription_duration_type" /> Expire After 
                     <input type="text" value="" name="subscription_period_<?= BMembershipLevel::YEARS?>"> Years.</p>                
-                <p><input type="radio" value="<?= BMembershipLevel::FIXED_DATE?>" name="subscription_duration_type" /> Expire After 
+                <p><input type="radio" value="<?= BMembershipLevel::FIXED_DATE?>" name="subscription_duration_type" /> Expire On 
                     <input type="text" class="swpm-date-picker" value="<?= date('Y-m-d');?>" name="subscription_period_<?= BMembershipLevel::FIXED_DATE?>"> (A Fixed Date)</p>
             </td>        
         </tr>        

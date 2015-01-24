@@ -73,6 +73,9 @@ The following language translations are already available:
 * Macedonian
 * Polish
 * Turkish
+* Russian
+* Dutch (Netherlands)
+* Romanian
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -93,6 +96,12 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO - 1.9.6 =
+- Added Russian language translation to the plugin. The translation was submitted by Vladimir Vaulin.
+- Added Dutch language translation to the plugin. The translation was submitted by Henk Rostohar.
+- Added Romanian language translation to the plugin. The translation was submitted by Iulian Cazangiu.
+- Some minor code refactoring.
 
 = 1.9.5 =
 - Added a check to show the content of a protected post/page if the admin is previewing the post or page.

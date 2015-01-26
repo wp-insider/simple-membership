@@ -19,17 +19,17 @@
             <th scope="row"><label for="subscription_period"><?= BUtils::_('Subscription Duration'); ?> <span class="description"><?= BUtils::_('(required)'); ?></span></label>
             </th>
             <td>
-                <p><input type="radio" checked="checked" value="<?= BMembershipLevel::NO_EXPIRY?>" name="subscription_duration_type" /> No Expiry or Until Canceled.</p>                                
+                <p><input type="radio" checked="checked" value="<?= BMembershipLevel::NO_EXPIRY?>" name="subscription_duration_type" /> No Expiry (Access for this level will not expire until cancelled)</p>                                
                 <p><input type="radio" value="<?= BMembershipLevel::DAYS ?>" name="subscription_duration_type" /> Expire After 
-                    <input type="text" value="" name="subscription_period_<?= BMembershipLevel::DAYS ?>"> Days.</p>
+                    <input type="text" value="" name="subscription_period_<?= BMembershipLevel::DAYS ?>"> Days (Access expires after given number of days)</p>
                 <p><input type="radio" value="<?= BMembershipLevel::WEEKS?>" name="subscription_duration_type" /> Expire After 
-                    <input type="text" value="" name="subscription_period_<?= BMembershipLevel::DAYS ?>"> Weeks.</p>
+                    <input type="text" value="" name="subscription_period_<?= BMembershipLevel::DAYS ?>"> Weeks (Access expires after given number of weeks)</p>
                 <p><input type="radio"  value="<?= BMembershipLevel::MONTHS?>" name="subscription_duration_type" /> Expire After 
-                    <input type="text" value="" name="subscription_period_<?= BMembershipLevel::MONTHS?>"> Months.</p>
+                    <input type="text" value="" name="subscription_period_<?= BMembershipLevel::MONTHS?>"> Months (Access expires after given number of months)</p>
                 <p><input type="radio"  value="<?= BMembershipLevel::YEARS?>" name="subscription_duration_type" /> Expire After 
-                    <input type="text" value="" name="subscription_period_<?= BMembershipLevel::YEARS?>"> Years.</p>                
-                <p><input type="radio" value="<?= BMembershipLevel::FIXED_DATE?>" name="subscription_duration_type" /> Expire On 
-                    <input type="text" class="swpm-date-picker" value="<?= date('Y-m-d');?>" name="subscription_period_<?= BMembershipLevel::FIXED_DATE?>"> (A Fixed Date)</p>
+                    <input type="text" value="" name="subscription_period_<?= BMembershipLevel::YEARS?>"> Years (Access expires after given number of years)</p>                
+                <p><input type="radio" value="<?= BMembershipLevel::FIXED_DATE?>" name="subscription_duration_type" /> Fixed Date Expiry 
+                    <input type="text" class="swpm-date-picker" value="<?= date('Y-m-d');?>" name="subscription_period_<?= BMembershipLevel::FIXED_DATE?>"> (Access expires on a fixed date)</p>
             </td>        
         </tr>        
     <tr class="form-field">

@@ -16,7 +16,7 @@
             <td><select  class="regular-text" name="role"><?php wp_dropdown_roles( 'subscriber' ); ?></select></td>
 	</tr>
         <tr>
-            <th scope="row"><label for="subscription_period"><?= BUtils::_('Subscription Duration'); ?> <span class="description"><?= BUtils::_('(required)'); ?></span></label>
+            <th scope="row"><label for="subscription_period"><?= BUtils::_('Access Duration'); ?> <span class="description"><?= BUtils::_('(required)'); ?></span></label>
             </th>
             <td>
                 <p><input type="radio" checked="checked" value="<?= BMembershipLevel::NO_EXPIRY?>" name="subscription_duration_type" /> <?= BUtils::_('No Expiry (Access for this level will not expire until cancelled')?>)</p>                                

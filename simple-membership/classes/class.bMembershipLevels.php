@@ -16,7 +16,7 @@ class BMembershipLevels extends WP_List_Table{
             ,'id'=>BUtils::_('ID')
             ,'alias'=>BUtils::_('Membership Level')
             ,'role'=>BUtils::_('Role')
-            ,'valid_for'=>BUtils::_('Subscription Valid For/Until')
+            ,'valid_for'=>BUtils::_('Access Valid For/Until')
             );
     }
     function get_sortable_columns(){

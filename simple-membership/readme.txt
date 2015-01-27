@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict access, Restrict content, admin, access control, subscription, teaser, protection
 Requires at least: 3.3
 Tested up to: 4.1
-Stable tag: 1.9.5
+Stable tag: 1.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,7 +97,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 1.9.6 =
+= 1.9.6 =
+- Added a new feature to allow fixed expiry date for membership levels.
 - Added Russian language translation to the plugin. The translation was submitted by Vladimir Vaulin.
 - Added Dutch language translation to the plugin. The translation was submitted by Henk Rostohar.
 - Added Romanian language translation to the plugin. The translation was submitted by Iulian Cazangiu.

@@ -51,7 +51,7 @@ class BLevelForm {
             return;
         }
         if (!is_numeric($subscription_period)) {
-            $this->errors['subscription_period'] = BUtils::_("Subscription duration must be > 0.");
+            $this->errors['subscription_period'] = BUtils::_("Access duration must be > 0.");
             return;
         }
         $this->sanitized['subscription_period'] = sanitize_text_field($subscription_period);

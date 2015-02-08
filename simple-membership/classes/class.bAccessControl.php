@@ -33,7 +33,7 @@ class BAccessControl {
         $protect_older_posts = apply_filters('swpm_should_protect_older_post', false, $id);
         if ($protect_older_posts){
             $this->lastError = apply_filters ('swpm_restricted_post_msg_older_post', 
-                    BUtils::_('This content can only be viewed by members who subscribed on or before ' . date(get_option( 'date_format' ), strtotime($post->post_date)))) ;
+                    BUtils::_('This content can only be viewed by members who joined on or before ' . date(get_option( 'date_format' ), strtotime($post->post_date)))) ;
             return false;
         }
         $perms = BPermission::get_instance($auth->get('membership_level'));

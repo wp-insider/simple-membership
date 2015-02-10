@@ -76,6 +76,7 @@ The following language translations are already available:
 * Russian
 * Dutch (Netherlands)
 * Romanian
+* Danish
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -99,6 +100,7 @@ https://simple-membership-plugin.com/
 
 = TODO - 2.0 =
 - Improved some of the default content protection messages.
+- Added Danish language translation to the plugin. The translation was submitted by Niels Boje Lund.
 
 = 1.9.9 =
 - WP Multi-site network activation error fix.

@@ -351,7 +351,7 @@ class BSettings {
         ?>
         <h3 class="nav-tab-wrapper">
             <?php foreach ($this->tabs as $id=>$label):?>
-            <a class="nav-tab <?php echo ($current == $id) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=<?= $id?>"><?= $label?></a>
+            <a class="nav-tab <?php echo ($current == $id) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=<?php echo  $id?>"><?php echo  $label?></a>
             <?php endforeach;?>
         </h3>
         <?php

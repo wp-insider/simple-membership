@@ -34,7 +34,7 @@ class BSettings {
         add_settings_field('enable-free-membership', BUtils::_('Enable Free Membership'),
                 array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
                 array('item' => 'enable-free-membership',
-                      'message'=> BUtils::_('Enable/disable registration for free membership level. When you enable this option, <b>make sure to specify free membership level ID in the field below</b>.')));
+                      'message'=> BUtils::_('Enable/disable registration for free membership level. When you enable this option, make sure to specify a free membership level ID in the field below.')));
         add_settings_field('free-membership-id', BUtils::_('Free Membership Level ID'),
                 array(&$this, 'textfield_small_callback'), 'simple_wp_membership_settings', 'general-settings',
                 array('item' => 'free-membership-id',

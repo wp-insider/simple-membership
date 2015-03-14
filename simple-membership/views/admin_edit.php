@@ -36,6 +36,13 @@
             </td>
 	</tr>
     <?php include('admin_member_form_common_part.php');?>
+        <tr>
+		<th scope="row"><label for="subscr_id"><?php echo  BUtils::_('Subscription ID') ?> </label></th>
+		<td><input class="regular-text" name="subscr_id" type="text" id="first_name" value="<?php echo esc_attr($subscr_id); ?>" /></td>
+	</tr>        
+</tbody>
+</table>        
+    <?php include('admin_member_form_common_js.php');?>
     <?php echo  apply_filters('swpm_admin_custom_fields', '',$membership_level);?>
     <?php submit_button( BUtils::_('Edit User '), 'primary', 'editswpmuser', true, array( 'id' => 'createswpmusersub' ) ); ?>
 </form>

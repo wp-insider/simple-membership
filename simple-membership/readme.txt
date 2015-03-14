@@ -103,6 +103,7 @@ https://simple-membership-plugin.com/
 
 = 2.1.2 =
 - Updated the membership subscription payment cancellation handler and made it more robust.
+- Added an option in the settings to reset the debug log files.
 
 = 2.1.1 =
 - Enhanced the username exists function query.

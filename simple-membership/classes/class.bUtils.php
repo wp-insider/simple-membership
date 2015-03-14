@@ -287,4 +287,17 @@ class BUtils {
         }
         return null;
     }
+    
+    public static function account_delete_confirmation_ui($msg = ""){
+        ob_start();   
+        include(SIMPLE_WP_MEMBERSHIP_PATH.'views/account_delete_warning.php');
+        ob_get_flush();
+        wp_die();
+    }
+    public static function delete_account_button(){
+        $allow_account_deletion = BSettings::get_instance()->get_value('allow-account-deletion');
+        if (empty($allow_account_deletion)) return "";
+        
+        echo '<a href="?delete_account=1"><span class="swpm-account_delete-button">' . BUtils::_("Delete Account") . '</span></a>';        
+    }
 }

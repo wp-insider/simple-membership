@@ -56,7 +56,7 @@
         </tr>
     </table>
     <p align="center"><input type="submit" value="<?php echo  BUtils::_('Update')?>" tabindex="11" id="submit" name="swpm_editprofile_submit" />
-       <?php Butils::delete_account_button(); ?>
+       <?php echo Butils::delete_account_button(); ?>
     </p>
     <input type="hidden" name="action" value="custom_posts" />
     <?php wp_nonce_field('name_of_my_action', 'name_of_nonce_field'); ?>

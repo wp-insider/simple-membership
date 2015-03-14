@@ -61,13 +61,13 @@ class swpm_paypal_ipn_handler {
         if ($gross_total < 0)
         {
             // This is a refund or reversal
-            swpm_handle_subsc_cancel_stand_alone($this->ipn_data,true);
             $this->debug_log('This is a refund notification. Refund amount: '.$gross_total,true);
+            swpm_handle_subsc_cancel_stand_alone($this->ipn_data,true);            
             return true;
         }
         if (isset($this->ipn_data['reason_code']) && $this->ipn_data['reason_code'] == 'refund'){
-            swpm_handle_subsc_cancel_stand_alone($this->ipn_data,true);
             $this->debug_log('This is a refund notification. Refund amount: '.$gross_total,true);
+            swpm_handle_subsc_cancel_stand_alone($this->ipn_data,true);            
             return true;            
         }
 

@@ -101,6 +101,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 2.1.3 =
+- Added a feature to allow the member to delete their accounts.
+
 = 2.1.2 =
 - Updated the membership subscription payment cancellation handler and made it more robust.
 - Added an option in the settings to reset the debug log files.

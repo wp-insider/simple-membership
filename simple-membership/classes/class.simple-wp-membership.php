@@ -28,14 +28,14 @@ class SimpleWpMembership {
         add_action('admin_menu', array(&$this, 'menu'));        
         add_action('init', array(&$this, 'init'));
 
-        add_filter('the_content', array(&$this, 'filter_content'));
+        add_filter('the_content', array(&$this, 'filter_content'),11,1);
         add_filter('widget_text', 'do_shortcode');
         add_filter('show_admin_bar', array(&$this, 'hide_adminbar'));
         add_filter('comment_text', array(&$this, 'filter_comment'));
         add_filter('wp_get_attachment_url', array(&$this, 'filter_attachment'));
         add_filter('wp_get_attachment_metadata', array(&$this, 'filter_attachment'));
         add_filter('attachment_fields_to_save', array(&$this,'save_attachment_extra'), 10, 2);
-        add_filter( 'the_content_more_link', array(&$this, 'filter_moretag'), 10, 2 );
+        add_filter('the_content_more_link', array(&$this, 'filter_moretag'), 10, 2 );
 
         add_shortcode("swpm_registration_form", array(&$this, 'registration_form'));
         add_shortcode('swpm_profile_form', array(&$this, 'profile_form'));

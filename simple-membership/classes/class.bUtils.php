@@ -296,8 +296,9 @@ class BUtils {
     }
     public static function delete_account_button(){
         $allow_account_deletion = BSettings::get_instance()->get_value('allow-account-deletion');
-        if (empty($allow_account_deletion)) {return "";}
-        
-        return  '<div class="swpm-account-delete-button"><a href="?delete_account=1">' . BUtils::_("Delete Account") . '</a></div>';        
+        if (empty($allow_account_deletion)) {
+            return "";            
+        }
+        return '<div class="swpm-account-delete-button"><a href="?delete_account=1">' . BUtils::_("Delete Account") . '</a></div>';        
     }
 }

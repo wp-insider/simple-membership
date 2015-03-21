@@ -1,5 +1,4 @@
 <?php
-
 class BUtils {
     public static function is_ajax(){
         return defined('DOING_AJAX') && DOING_AJAX;
@@ -329,8 +328,5 @@ class BUtils {
     
     public static function get_restricted_image_url(){
         return SIMPLE_WP_MEMBERSHIP_URL. '/images/restricted_image.jpg';
-    }
-    public static function get_restricted_image_meta(){
-        
     }
 }

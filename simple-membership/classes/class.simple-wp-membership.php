@@ -86,20 +86,20 @@ class SimpleWpMembership {
         
         
         if (isset($content['file'])){
-            $content['file'] = 'restricted_image.jpg';
+            $content['file'] = 'restricted-icon.png';
         }
         
         if (isset($content['sizes'])){
             if ($content['sizes']['thumbnail']){
-                $content['sizes']['thumbnail']['file'] = 'restricted_image.jpg';
+                $content['sizes']['thumbnail']['file'] = 'restricted-icon.png';
                 $content['sizes']['thumbnail']['mime-type'] = 'image/jpeg';
             }
             if ($content['sizes']['medium']){
-                $content['sizes']['medium']['file'] = 'restricted_image.jpg';
+                $content['sizes']['medium']['file'] = 'restricted-icon.png';
                 $content['sizes']['medium']['mime-type'] = 'image/jpeg';
             }
             if ($content['sizes']['post-thumbnail']){
-                $content['sizes']['post-thumbnail']['file'] = 'restricted_image.jpg';
+                $content['sizes']['post-thumbnail']['file'] = 'restricted-icon.png';
                 $content['sizes']['post-thumbnail']['mime-type'] = 'image/jpeg';
             }
         }

@@ -327,6 +327,6 @@ class BUtils {
     }
     
     public static function get_restricted_image_url(){
-        return SIMPLE_WP_MEMBERSHIP_URL. '/images/restricted_image.jpg';
+        return SIMPLE_WP_MEMBERSHIP_URL. '/images/restricted-icon.png'; 
     }
 }

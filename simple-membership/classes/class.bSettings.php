@@ -65,6 +65,12 @@ class BSettings {
                 array('item' => 'allow-account-deletion',
                       'options'=>  BUtils::get_account_state_options(),
                       'message'=>BUtils::_('Allow users to delete their accounts.')));        
+        add_settings_field('delete-pending-account',  BUtils::_('Delete Pending Account'),
+                array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'general-settings',
+                array('item' => 'delete-pending-account',
+                      'options'=>  array(0 => 'Do not delete', 1=>'Older than 1 month', 2=> 'Older than 2 months'),
+                      'default'=>'0',
+                      'message'=>BUtils::_('Select how long you want to keep "pending" account.')));        
         /*add_settings_field('protect-everything',  BUtils::_('Protect Everything'),
                 array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', 
                 array('item' => 'protect-everything',

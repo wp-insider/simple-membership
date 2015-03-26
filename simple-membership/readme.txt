@@ -102,6 +102,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 2.1.7 =
+- Added a new feature to automatically delete pending membership accounts that are older than 1 or 2 months.
+
 = 2.1.6 =
 - Fixed a bug with new membership level creation with a number of days or weeks duration value.
 

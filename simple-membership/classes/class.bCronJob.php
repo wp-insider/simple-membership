@@ -7,8 +7,9 @@
 class BCronJob {
     public function __construct() {
         add_action('swpm_account_status_event', array(&$this, 'update_account_status'));
-        add_action ('swpm_delete_pending_account_event',array(&$this, 'delete_pending_account'));
+        add_action('swpm_delete_pending_account_event',array(&$this, 'delete_pending_account'));
     }
+    
     public function update_account_status(){
         global $wpdb;
         for($counter = 0;; $counter += 100){
@@ -39,7 +40,7 @@ class BCronJob {
             $query = $wpdb->prepare("SELECT member_id
                                      FROM 
                                         {$wpdb->prefix}swpm_members_tbl 
-                                    WHERE    account_state='pending' 
+                                    WHERE account_state='pending' 
                                          AND subscription_starts < DATE_SUB(NOW(), INTERVAL %d MONTH) LIMIT %d, 100", 
                                     $interval, $counter);
             $results = $wpdb->get_results($query);
@@ -49,6 +50,7 @@ class BCronJob {
                     $to_delete[] = $result->member_id;                           
             }
             if (count($to_delete)>0){
+                Blog::log_simple_debug("Auto deleting pending account.", true);
                 $query = "DELETE FROM {$wpdb->prefix}swpm_members_tbl 
                           WHERE member_id IN (" . implode(',', $to_delete) . ")";
                 $wpdb->query($query);

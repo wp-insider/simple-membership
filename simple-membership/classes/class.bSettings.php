@@ -324,9 +324,8 @@ class BSettings {
         $output['reg-prompt-complete-mail-subject'] = sanitize_text_field($input['reg-prompt-complete-mail-subject']);
         $output['reg-prompt-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-prompt-complete-mail-body']));
         $output['email-from'] = trim($input['email-from']);
-        
-        $output['enable-admin-notification-after-reg'] = isset($output['enable-admin-notification-after-reg'])? $output['enable-admin-notification-after-reg'] : "";
-        $output['enable-notification-after-manual-user-add'] = isset($output['enable-notification-after-manual-user-add'])? $output['enable-notification-after-manual-user-add'] : "";
+        $output['enable-admin-notification-after-reg'] = isset($input['enable-admin-notification-after-reg'])? esc_attr($input['enable-admin-notification-after-reg']) : "";
+        $output['enable-notification-after-manual-user-add'] = isset($input['enable-notification-after-manual-user-add'])? esc_attr($input['enable-notification-after-manual-user-add']) : "";
         
         return $output;
     }

@@ -104,6 +104,9 @@ https://simple-membership-plugin.com/
 
 = 2.1.8 =
 - Improved the after logout redirection so it uses the home_url() value.
+- Fixed a bug in the member table sorting functionality.
+- The members table can now be sorted using ID column.
+
 
 = 2.1.7 =
 - Added a new feature to automatically delete pending membership accounts that are older than 1 or 2 months.

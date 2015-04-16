@@ -185,7 +185,7 @@ class BFrontRegistration extends BRegistration {
         $wpdb->update($wpdb->prefix . "swpm_members_tbl", array('password' => $password_hash), array('member_id' => $user->member_id));
         
         // update wp user pass.
-        BUtils::update_wp_user($user->user_name, array('user_pass'=>$password));
+        BUtils::update_wp_user($user->user_name, array('plain_password'=>$password));
         
         $body = $settings->get_value('reset-mail-body');
         $subject = $settings->get_value('reset-mail-subject');

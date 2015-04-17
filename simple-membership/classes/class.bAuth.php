@@ -256,4 +256,12 @@ class BAuth {
         BMembers::delete_swpm_user_by_id($user_id);
         BMembers::delete_wp_user($user_name);
     }
+    
+    public function reload_user_data(){
+        if (!$this->is_logged_in()) {return ;}
+        global $wpdb;
+        $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id = %d";
+        $this->userData = $wpdb->get_row($wpdb->prepare($query, $this->userData->member_id));        
+        
+    }
 }

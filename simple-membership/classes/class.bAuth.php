@@ -90,10 +90,13 @@ class BAuth {
                     array( '%d' ) 
                 );
             }
-            $this->lastStatusMsg = BUtils::_('Account has expired.');
-            $this->isLoggedIn = false;
-            $this->userData = null;
-            return false;
+            $enable_expired_login = BSettings::get_instance()->get_value('enable-expired-account-login', '');
+            if (!empty($enable_expired_login)){
+                $this->lastStatusMsg = BUtils::_('Account has expired.');
+                $this->isLoggedIn = false;
+                $this->userData = null;
+                return false;
+            }
         }
         
         $this->permitted = BPermission::get_instance($this->userData->membership_level);        

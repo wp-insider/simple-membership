@@ -17,7 +17,7 @@ class BSettings {
             $tab = empty($tab)?filter_input(INPUT_POST, 'tab'):$tab;
             $this->current_tab = empty($tab) ? 1 : $tab;
             $this->tabs = array(1=> 'General Settings', 2=> 'Payment Settings',
-                                3=> 'Email Settings', 4=> 'Tools', 5=> 'Addons Settings');                    
+                                3=> 'Email Settings', 4=> 'Tools', 5=> 'Addons Settings',6=>'Advanced Settings');                    
             add_action('swpm-draw-tab', array(&$this, 'draw_tabs'));
             $method = 'tab_' . $this->current_tab;
             if (method_exists($this, $method)){
@@ -174,6 +174,17 @@ class BSettings {
     }
     private function tab_5(){
     }
+    private function tab_6(){
+        register_setting('swpm-settings-tab-6', 'swpm-settings', array(&$this, 'sanitize_tab_6'));
+
+        add_settings_section('advanced-settings', BUtils::_('Advanced Settings'),
+                array(&$this, 'advanced_settings_callback'), 'simple_wp_membership_settings');
+        
+        add_settings_field('enable-expired-account-login', BUtils::_('Enable Expired Account Login'),
+                array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings',
+                array('item' => 'enable-expired-account-login',
+                      'message'=>BUtils::_('Enable this option if you want to allow expired account login.')));
+    }
     public static function get_instance() {
         self::$_this = empty(self::$_this) ? new BSettings() : self::$_this;
         return self::$_this;
@@ -284,14 +295,16 @@ class BSettings {
     public function pages_settings_callback() {
         echo '<p>Page Setup and URL Related settings.<p>';
     }
-
+    public function advanced_settings_callback(){
+        echo "<p>This settings page gives you more control on the plugin..</p>";
+    }
     public function sanitize_tab_1($input) {
         if (empty($this->settings)){
             $this->settings = (array) get_option('swpm-settings');
         }
         $output = $this->settings;
         //general settings block
-        
+       
         $output['hide-adminbar']          = isset($input['hide-adminbar'])? esc_attr($input['hide-adminbar']) : "";
         $output['protect-everything']     = isset($input['protect-everything'])? esc_attr($input['protect-everything']) : "";
         $output['enable-free-membership'] = isset($input['enable-free-membership'])? esc_attr($input['enable-free-membership']) : "";
@@ -329,7 +342,16 @@ class BSettings {
         
         return $output;
     }
-
+    
+    public function sanitize_tab_6($input){
+        if (empty($this->settings)){
+            $this->settings = (array) get_option('swpm-settings');
+        }
+        $output = $this->settings;
+        $output['enable-expired-account-login'] = isset($input['enable-expired-account-login'])? esc_attr($input['enable-expired-account-login']) : "";
+        
+        return $output;
+    }
     public function get_value($key, $default = "") {
         if (isset($this->settings[$key])){
             return $this->settings[$key];

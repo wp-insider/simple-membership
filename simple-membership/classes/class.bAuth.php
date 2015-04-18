@@ -71,14 +71,28 @@ class BAuth {
         if (empty($this->userData)){
             return false;
         }
-
-        if ($this->userData->account_state != 'active') {
+        $enable_expired_login = BSettings::get_instance()->get_value('enable-expired-account-login', '');
+        
+        $can_login = true;
+        if( $this->userData->account_state == 'inactive'){
             $this->lastStatusMsg = BUtils::_('Account is inactive.');
+            $can_login = false;
+        }
+        else if( $this->userData->account_state == 'pending'){
+            $this->lastStatusMsg = BUtils::_('Account is pending.');
+            $can_login = false;
+        }        
+        else if( ($this->userData->account_state == 'expired') && empty($enable_expired_login)  ){
+            $this->lastStatusMsg = BUtils::_('Account has expired.');
+            $can_login = false;
+        }        
+
+        if(!$can_login){
             $this->isLoggedIn = false;
             $this->userData = null;
-            return false;
+            return false;            
         }
-
+        
         if (BUtils::is_subscription_expired($this->userData)){
             if ($this->userData->account_state == 'active'){
                 global $wpdb;
@@ -90,8 +104,7 @@ class BAuth {
                     array( '%d' ) 
                 );
             }
-            $enable_expired_login = BSettings::get_instance()->get_value('enable-expired-account-login', '');
-            if (!empty($enable_expired_login)){
+            if (empty($enable_expired_login)){
                 $this->lastStatusMsg = BUtils::_('Account has expired.');
                 $this->isLoggedIn = false;
                 $this->userData = null;
@@ -155,9 +168,10 @@ class BAuth {
         }
         
         $expiration_timestamp = BUtils::get_expiration_timestamp($this->userData);
-        
+        $enable_expired_login = BSettings::get_instance()->get_value('enable-expired-account-login', '');
         // make sure cookie doesn't live beyond account expiration date.
-        $expire = min ($expire,$expiration_timestamp);
+        // but if expired account login is enabled then ignore if account is expired
+        $expire = empty($enable_expired_login)? min ($expire,$expiration_timestamp) : $expire;
         $pass_frag = substr($this->userData->password, 8, 4);
         $scheme = 'auth';
         if (!$secure){

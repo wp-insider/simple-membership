@@ -281,4 +281,9 @@ class BAuth {
         $this->userData = $wpdb->get_row($wpdb->prepare($query, $this->userData->member_id));        
         
     }
+    public function is_expired_account(){
+        // should be called after logging in.        
+        if (!$this->is_logged_in()) {return null;}
+        return $this->get('account_state') === 'expired';
+    }
 }

@@ -24,12 +24,17 @@ class BAccessControl {
         }
         $protected = BProtection::get_instance();
         if (!$protected->is_protected($id)){ return true;}        
-        if(!$auth->is_logged_in()){
+        if(!$auth->is_logged_in()){            
             $error_msg = BUtils::_( 'You need to login to view this content. ' ) . BSettings::get_instance()->get_login_link();
             $this->lastError = apply_filters('swpm_not_logged_in_post_msg', $error_msg);
             return false;            
         }
-        
+
+        if ($auth->is_expired_account()){
+            $error_msg = BUtils::_( 'Your account has expired. Please contact admin to gain access to this content.'  ) ;
+            $this->lastError = apply_filters('swpm_account_expired_msg', $error_msg);
+            return false;                        
+        }
         $protect_older_posts = apply_filters('swpm_should_protect_older_post', false, $id);
         if ($protect_older_posts){
             $this->lastError = apply_filters ('swpm_restricted_post_msg_older_post', 
@@ -51,6 +56,11 @@ class BAccessControl {
                     . BSettings::get_instance()->get_login_link());
             return false;            
         }
+        if ($auth->is_expired_account()){
+            $error_msg = BUtils::_( 'Your account has expired. Please contact admin to gain access to this content.') ;
+            $this->lastError = apply_filters('swpm_account_expired_msg', $error_msg);
+            return false;                        
+        }        
         $perms = BPermission::get_instance($auth->get('membership_level'));
         if($perms->is_permitted_comment($id)) {return true; }
         $this->lastError = apply_filters ('swpm_restricted_comment_msg', BUtils::_("This content is not permitted for your membership level.") );

@@ -24,7 +24,7 @@ class BAccessControl {
         }
         $protected = BProtection::get_instance();
         if (!$protected->is_protected($id)){ return true;}        
-        if(!$auth->is_logged_in()){            
+        if(!$auth->is_logged_in()){
             $error_msg = BUtils::_( 'You need to login to view this content. ' ) . BSettings::get_instance()->get_login_link();
             $this->lastError = apply_filters('swpm_not_logged_in_post_msg', $error_msg);
             return false;            

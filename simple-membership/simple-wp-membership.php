@@ -16,7 +16,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"])){
 include_once('classes/class.simple-wp-membership.php');
 include_once('classes/class.bCronJob.php');
 
-define('SIMPLE_WP_MEMBERSHIP_VER', '2.1.9');
+define('SIMPLE_WP_MEMBERSHIP_VER', '2.2');
 define('SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url());
 define('SIMPLE_WP_MEMBERSHIP_PATH', dirname(__FILE__) . '/');
 define('SIMPLE_WP_MEMBERSHIP_URL', plugins_url('',__FILE__));

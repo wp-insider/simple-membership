@@ -105,6 +105,7 @@ https://simple-membership-plugin.com/
 = 2.2 =
 - Added a new feature to allow expired members to be able to log into the system (to allow easy account renewal).
 - The email address value of a member is now editable from the admin dashboard and in the profile edit form.
+- Added CSS classes around some of the messages for styling purpose.
 - Some translation updates.
 
 = 2.1.9 =

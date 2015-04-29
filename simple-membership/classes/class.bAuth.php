@@ -166,7 +166,7 @@ class BAuth {
         }
         else{
             $expiration = time() + 172800; // 2 days.
-            $expire = 0;
+            $expire = $expiration;//The minimum cookie expiration should be at least couple of days.
         }
         
         $expiration_timestamp = BUtils::get_expiration_timestamp($this->userData);

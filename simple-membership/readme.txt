@@ -81,6 +81,7 @@ The following language translations are already available:
 * Dutch (Netherlands)
 * Romanian
 * Danish
+* Lithuanian
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -101,6 +102,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO 2.2.2 =
+- Added Lithuanian language translation to the plugin. The translation was submitted by Daiva Pakalne.
 
 = 2.2.1 =
 - Added a new table for logging the membership payments/transactions in the future.

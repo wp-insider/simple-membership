@@ -105,6 +105,7 @@ https://simple-membership-plugin.com/
 
 = TODO 2.2.2 =
 - Added Lithuanian language translation to the plugin. The translation was submitted by Daiva Pakalne.
+- All the membership payments are now recorded in the payments table.
 
 = 2.2.1 =
 - Added a new table for logging the membership payments/transactions in the future.

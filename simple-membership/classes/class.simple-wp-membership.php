@@ -23,6 +23,8 @@ include_once('class.bMembershipLevelCustom.php');
 include_once('class.bMembershipLevelUtils.php');
 include_once('class.bPermissionCollection.php');
 include_once('class.bAuthPermissionCollection.php');
+include_once('class.bTransactions.php');
+
 class SimpleWpMembership {
     public function __construct() {
         add_action('admin_menu', array(&$this, 'menu'));        

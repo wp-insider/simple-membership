@@ -5,7 +5,7 @@
  *
  * @author nur
  */
-abstract class BMemberUtils {
+class BMemberUtils {
 
     public static function is_member_logged_in() {
         $auth = BAuth::get_instance();

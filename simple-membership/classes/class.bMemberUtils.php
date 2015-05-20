@@ -32,4 +32,12 @@ class BMemberUtils {
         return $auth->get('membership_level');
     }
 
+    public static function get_logged_in_members_level_name() {
+        $auth = BAuth::get_instance();
+        if ($auth->is_logged_in()) {
+            return $auth->get('alias');
+        }
+        return bUtils::_("User is not logged in.");
+    }
+
 }

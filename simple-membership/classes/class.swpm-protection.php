@@ -1,7 +1,9 @@
 <?php
-include_once('class.bProtectionBase.php');
 
-class BProtection extends BProtectionBase{
+include_once('class.swpm-protection-base.php');
+
+class BProtection extends BProtectionBase {
+
     private static $_this;
 
     private function __construct() {
@@ -63,4 +65,5 @@ class BProtection extends BProtectionBase{
     public function is_protected_parent_category($id) {
         return /* (($this->bitmap&1)!=1) && */ $this->in_parent_categories($id);
     }
+
 }

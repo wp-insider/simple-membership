@@ -1,8 +1,8 @@
 <?php
 
-include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/common/class-swpm-list-table.php');
+include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/common/class.swpm-list-table.php');
 
-class SWPM_Payments_List_Table extends SWPM_List_Table {
+class SWPMPaymentsListTable extends SWPM_List_Table {
 
     function __construct() {
         global $status, $page;
@@ -97,7 +97,7 @@ class SWPM_Payments_List_Table extends SWPM_List_Table {
 
     function prepare_items() {
 
-        // Lets decide how many records per page to show         
+        // Lets decide how many records per page to show
         $per_page = 50;
 
         $columns = $this->get_columns();

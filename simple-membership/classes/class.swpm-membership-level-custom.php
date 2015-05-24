@@ -4,7 +4,7 @@
  *
  * @author nur
  */
-class BMembershipLevelCustom {
+class SwpmMembershipLevelCustom {
     private static $instances = array();
     private $level_id;
     private $fields;
@@ -13,7 +13,7 @@ class BMembershipLevelCustom {
     }
     public static function get_instance_by_id($level_id){
         if (!isset(self::$instances[$level_id])){
-            self::$instances[$level_id] = new BMembershipLevelCustom();
+            self::$instances[$level_id] = new SwpmMembershipLevelCustom();
             self::$instances[$level_id]->level_id = $level_id;
             self::$instances[$level_id]->load_by_id($level_id);
         }
@@ -85,9 +85,9 @@ class BMembershipLevelCustom {
         $wpdb->query($query);
     }
     public static function get_value_by_key($level_id, $key, $default= ''){
-        return BMembershipLevelCustom::get_instance_by_id($level_id)->get($key, $default);
+        return SwpmMembershipLevelCustom::get_instance_by_id($level_id)->get($key, $default);
     }
     public static  function get_value_by_context($level_id, $context){
-        return BMembershipLevelCustom::get_instance_by_id($level_id)->get_by_context($context);
+        return SwpmMembershipLevelCustom::get_instance_by_id($level_id)->get_by_context($context);
     }
 }

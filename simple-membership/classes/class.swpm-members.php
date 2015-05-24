@@ -1,11 +1,11 @@
 <?php
 
-class BMembers extends WP_List_Table {
+class SwpmMembers extends WP_List_Table {
 
     function __construct() {
         parent::__construct(array(
-            'singular' => BUtils::_('Member'),
-            'plural' => BUtils::_('Members'),
+            'singular' => SwpmUtils::_('Member'),
+            'plural' => SwpmUtils::_('Members'),
             'ajax' => false
         ));
     }
@@ -13,14 +13,14 @@ class BMembers extends WP_List_Table {
     function get_columns() {
         return array(
             'cb' => '<input type="checkbox" />'
-            , 'member_id' => BUtils::_('ID')
-            , 'user_name' => BUtils::_('User Name')
-            , 'first_name' => BUtils::_('First Name')
-            , 'last_name' => BUtils::_('Last Name')
-            , 'email' => BUtils::_('Email')
-            , 'alias' => BUtils::_('Membership Level')
-            , 'subscription_starts' => BUtils::_('Access Starts')
-            , 'account_state' => BUtils::_('Account State')
+            , 'member_id' => SwpmUtils::_('ID')
+            , 'user_name' => SwpmUtils::_('User Name')
+            , 'first_name' => SwpmUtils::_('First Name')
+            , 'last_name' => SwpmUtils::_('Last Name')
+            , 'email' => SwpmUtils::_('Email')
+            , 'alias' => SwpmUtils::_('Membership Level')
+            , 'subscription_starts' => SwpmUtils::_('Access Starts')
+            , 'account_state' => SwpmUtils::_('Account State')
         );
     }
 
@@ -33,7 +33,7 @@ class BMembers extends WP_List_Table {
 
     function get_bulk_actions() {
         $actions = array(
-            'bulk_delete' => BUtils::_('Delete')
+            'bulk_delete' => SwpmUtils::_('Delete')
         );
         return $actions;
     }
@@ -74,8 +74,8 @@ class BMembers extends WP_List_Table {
         $order = empty($order) ? 'DESC' : $order;
         
         $sortable_columns = $this->get_sortable_columns();
-        $orderby = BUtils::sanitize_value_by_array($orderby, $sortable_columns);
-        $order = BUtils::sanitize_value_by_array($order, array('DESC' => '1', 'ASC' => '1'));
+        $orderby = SwpmUtils::sanitize_value_by_array($orderby, $sortable_columns);
+        $order = SwpmUtils::sanitize_value_by_array($order, array('DESC' => '1', 'ASC' => '1'));
 
         $query.=' ORDER BY ' . $orderby . ' ' . $order;
         $totalitems = $wpdb->query($query); //return the total number of affected rows
@@ -117,7 +117,7 @@ class BMembers extends WP_List_Table {
         $form = apply_filters('swpm_admin_registration_form_override', '');
         if (!empty($form)) {echo $form;return;}
         global $wpdb;
-        $member = BTransfer::$default_fields;
+        $member = SwpmTransfer::$default_fields;
         $member['member_since'] = date('Y-m-d');
         $member['subscription_starts'] = date('Y-m-d');
         if (isset($_POST['createswpmuser'])) {
@@ -154,8 +154,8 @@ class BMembers extends WP_List_Table {
             if (!empty($members)) {
                 $members = array_map('absint', $members);
                 foreach ($members as $swpm_id) {
-                    $user_name = BUtils::get_user_by_id(absint($swpm_id));
-                    BMembers::delete_wp_user($user_name);
+                    $user_name = SwpmUtils::get_user_by_id(absint($swpm_id));
+                    SwpmMembers::delete_wp_user($user_name);
                 }
                 $query = "DELETE FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id IN (" . implode(',', $members) . ")";
                 $wpdb->query($query);
@@ -163,13 +163,13 @@ class BMembers extends WP_List_Table {
         }
         else if (isset($_REQUEST['member_id'])) {
             $id = absint($_REQUEST['member_id']);
-            BMembers::delete_user_by_id($id);
+            SwpmMembers::delete_user_by_id($id);
         }
     }
     public static function delete_user_by_id($id){
-        $user_name = BUtils::get_user_by_id($id);
-        BMembers::delete_wp_user($user_name);
-        BMembers::delete_swpm_user_by_id($id);
+        $user_name = SwpmUtils::get_user_by_id($id);
+        SwpmMembers::delete_wp_user($user_name);
+        SwpmMembers::delete_swpm_user_by_id($id);
     }
     
     public static function delete_swpm_user_by_id($id){
@@ -185,7 +185,7 @@ class BMembers extends WP_List_Table {
         $wp_user_id = username_exists($user_name);
         $ud = get_userdata($wp_user_id);
         if (!empty($ud) && (isset($ud->wp_capabilities['administrator']) || $ud->wp_user_level == 10)) {
-            BTransfer::get_instance()->set('status', 'For consistency, we do not allow deleting any associated wordpress account with administrator role.<br/>'
+            SwpmTransfer::get_instance()->set('status', 'For consistency, we do not allow deleting any associated wordpress account with administrator role.<br/>'
                     . 'Please delete from <a href="users.php">Users</a> menu.');
             return;
         }

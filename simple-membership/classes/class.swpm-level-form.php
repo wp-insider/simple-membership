@@ -1,6 +1,6 @@
 <?php
 
-class BLevelForm {
+class SwpmLevelForm {
 
     protected $fields;
     protected $op;
@@ -35,16 +35,16 @@ class BLevelForm {
     protected function subscription_period() {
         $subscript_duration_type = filter_input(INPUT_POST, 'subscription_duration_type');
 
-        if ($subscript_duration_type == BMembershipLevel::NO_EXPIRY) {
+        if ($subscript_duration_type == SwpmMembershipLevel::NO_EXPIRY) {
             $this->sanitized['subscription_period'] = "";
             return;
         }
 
         $subscription_period = filter_input(INPUT_POST, 'subscription_period_'. $subscript_duration_type);
-        if (($subscript_duration_type == BMembershipLevel::FIXED_DATE)){
+        if (($subscript_duration_type == SwpmMembershipLevel::FIXED_DATE)){
             $dateinfo = date_parse($subscription_period);
             if ($dateinfo['warning_count']|| $dateinfo['error_count']){
-                $this->errors['subscription_period'] = BUtils::_("Date format is not valid.");
+                $this->errors['subscription_period'] = SwpmUtils::_("Date format is not valid.");
                 return;
             }
             $this->sanitized['subscription_period'] = sanitize_text_field($subscription_period);
@@ -52,7 +52,7 @@ class BLevelForm {
         }
         
         if (!is_numeric($subscription_period)) {
-            $this->errors['subscription_period'] = BUtils::_("Access duration must be > 0.");
+            $this->errors['subscription_period'] = SwpmUtils::_("Access duration must be > 0.");
             return;
         }
         $this->sanitized['subscription_period'] = sanitize_text_field($subscription_period);

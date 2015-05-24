@@ -4,6 +4,6 @@
  *
  * @author nur
  */
-class BAuthPermissionCollection extends BPermissionCollection{
+class SwpmAuthPermissionCollection extends SwpmPermissionCollection{
 //put your code here
 }

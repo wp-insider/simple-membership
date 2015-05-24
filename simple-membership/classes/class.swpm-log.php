@@ -1,6 +1,6 @@
 <?php
 
-class BLog {
+class SwpmLog {
     private $error;
     private $warn;
     private $notice;
@@ -13,7 +13,7 @@ class BLog {
     public static function get_logger($context = ''){
         $context = empty($context)? 'default': $context;
         if (!isset(self::$intance[$context])){
-            self::$intance[$context] = new BLog();
+            self::$intance[$context] = new SwpmLog();
         }
         return self::$intance[$context];
     }
@@ -54,7 +54,7 @@ class BLog {
     }
 
     public static function log_simple_debug($message, $success, $end = false) {
-        $settings = BSettings::get_instance();
+        $settings = SwpmSettings::get_instance();
         $debug_enabled = $settings->get_value('enable-debug');
         if (empty($debug_enabled)) {//Debug is not enabled
             return;

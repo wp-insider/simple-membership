@@ -1,6 +1,6 @@
 <?php
 
-class BAuth {
+class SwpmAuth {
 
     public $protected;
     public $permitted;
@@ -12,7 +12,7 @@ class BAuth {
     private function __construct() {
         $this->isLoggedIn = false;
         $this->userData = null;
-        $this->protected = BProtection::get_instance();
+        $this->protected = SwpmProtection::get_instance();
     }
     private function init(){
         $valid = $this->validate();
@@ -23,7 +23,7 @@ class BAuth {
     }
     public static function get_instance() {
         if (empty(self::$_this)){
-            self::$_this = new BAuth();
+            self::$_this = new SwpmAuth();
             self::$_this->init();
         }
         return self::$_this;
@@ -43,14 +43,14 @@ class BAuth {
             if (!$userData) {
                 $this->isLoggedIn = false;
                 $this->userData = null;
-                $this->lastStatusMsg = BUtils::_("User Not Found.");
+                $this->lastStatusMsg = SwpmUtils::_("User Not Found.");
                 return false;
             }
             $check = $this->check_password($pass, $userData->password);
             if (!$check) {
                 $this->isLoggedIn = false;
                 $this->userData = null;
-                $this->lastStatusMsg = BUtils::_("Password Empty or Invalid.");
+                $this->lastStatusMsg = SwpmUtils::_("Password Empty or Invalid.");
                 return false;
             }
             if ($this->check_constraints()) {
@@ -59,7 +59,7 @@ class BAuth {
                 $this->set_cookie($remember);
                 $this->isLoggedIn = true;
                 $this->lastStatusMsg = "Logged In.";
-                Blog::log_simple_debug("swpm_login action.", true);
+                SwpmLog::log_simple_debug("swpm_login action.", true);
                 do_action('swpm_login', $user, $pass, $remember);
                 return true;
             }
@@ -71,19 +71,19 @@ class BAuth {
         if (empty($this->userData)){
             return false;
         }
-        $enable_expired_login = BSettings::get_instance()->get_value('enable-expired-account-login', '');
+        $enable_expired_login = SwpmSettings::get_instance()->get_value('enable-expired-account-login', '');
         
         $can_login = true;
         if( $this->userData->account_state == 'inactive'){
-            $this->lastStatusMsg = BUtils::_('Account is inactive.');
+            $this->lastStatusMsg = SwpmUtils::_('Account is inactive.');
             $can_login = false;
         }
         else if( $this->userData->account_state == 'pending'){
-            $this->lastStatusMsg = BUtils::_('Account is pending.');
+            $this->lastStatusMsg = SwpmUtils::_('Account is pending.');
             $can_login = false;
         }        
         else if( ($this->userData->account_state == 'expired') && empty($enable_expired_login)  ){
-            $this->lastStatusMsg = BUtils::_('Account has expired.');
+            $this->lastStatusMsg = SwpmUtils::_('Account has expired.');
             $can_login = false;
         }        
 
@@ -93,7 +93,7 @@ class BAuth {
             return false;            
         }
         
-        if (BUtils::is_subscription_expired($this->userData)){
+        if (SwpmUtils::is_subscription_expired($this->userData)){
             if ($this->userData->account_state == 'active'){
                 global $wpdb;
                 $wpdb->update( 
@@ -105,15 +105,15 @@ class BAuth {
                 );
             }
             if (empty($enable_expired_login)){
-                $this->lastStatusMsg = BUtils::_('Account has expired.');
+                $this->lastStatusMsg = SwpmUtils::_('Account has expired.');
                 $this->isLoggedIn = false;
                 $this->userData = null;
                 return false;
             }
         }
         
-        $this->permitted = BPermission::get_instance($this->userData->membership_level);        
-        $this->lastStatusMsg = BUtils::_("You are logged in as:") . $this->userData->user_name;
+        $this->permitted = SwpmPermission::get_instance($this->userData->membership_level);        
+        $this->lastStatusMsg = SwpmUtils::_("You are logged in as:") . $this->userData->user_name;
         $this->isLoggedIn = true;
         return true;
     }
@@ -134,7 +134,7 @@ class BAuth {
         return $this->check_password($password, $this->get('password'));
     }
     public function login($user, $pass, $remember = '', $secure = '') {
-        Blog::log_simple_debug("login",true);
+        SwpmLog::log_simple_debug("login",true);
         if ($this->isLoggedIn){
             return;
         }
@@ -155,7 +155,7 @@ class BAuth {
         setcookie(SIMPLE_WP_MEMBERSHIP_SEC_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN);
         $this->userData = null;
         $this->isLoggedIn = false;
-        $this->lastStatusMsg = BUtils::_("Logged Out Successfully.");
+        $this->lastStatusMsg = SwpmUtils::_("Logged Out Successfully.");
         do_action('swpm_logout');
     }
 
@@ -169,8 +169,8 @@ class BAuth {
             $expire = $expiration;//The minimum cookie expiration should be at least couple of days.
         }
         
-        $expiration_timestamp = BUtils::get_expiration_timestamp($this->userData);
-        $enable_expired_login = BSettings::get_instance()->get_value('enable-expired-account-login', '');
+        $expiration_timestamp = SwpmUtils::get_expiration_timestamp($this->userData);
+        $enable_expired_login = SwpmSettings::get_instance()->get_value('enable-expired-account-login', '');
         // make sure cookie doesn't live beyond account expiration date.
         // but if expired account login is enabled then ignore if account is expired
         $expiration = empty($enable_expired_login)? min ($expiration,$expiration_timestamp) : $expiration;
@@ -179,7 +179,7 @@ class BAuth {
         if (!$secure){
             $secure = is_ssl();
         }
-        $key = BAuth::b_hash($this->userData->user_name . $pass_frag . '|' . $expiration, $scheme);
+        $key = SwpmAuth::b_hash($this->userData->user_name . $pass_frag . '|' . $expiration, $scheme);
         $hash = hash_hmac('md5', $this->userData->user_name . '|' . $expiration, $key);
         $auth_cookie = $this->userData->user_name . '|' . $expiration . '|' . $hash;
         $auth_cookie_name = $secure ? SIMPLE_WP_MEMBERSHIP_SEC_AUTH : SIMPLE_WP_MEMBERSHIP_AUTH;
@@ -196,7 +196,7 @@ class BAuth {
         if (count($cookie_elements) != 3){
             return false;
         }
-        Blog::log_simple_debug("validate:" . $_COOKIE[$auth_cookie_name],true);
+        SwpmLog::log_simple_debug("validate:" . $_COOKIE[$auth_cookie_name],true);
         list($username, $expiration, $hmac) = $cookie_elements;
         $expired = $expiration;
         // Allow a grace period for POST and AJAX requests
@@ -205,26 +205,26 @@ class BAuth {
         }
         // Quick check to see if an honest cookie has expired
         if ($expired < time()) {
-            $this->lastStatusMsg = BUtils::_("Session Expired."); //do_action('auth_cookie_expired', $cookie_elements);
+            $this->lastStatusMsg = SwpmUtils::_("Session Expired."); //do_action('auth_cookie_expired', $cookie_elements);
             return false;
         }
-        Blog::log_simple_debug("validate:Session Expired",true);
+        SwpmLog::log_simple_debug("validate:Session Expired",true);
         global $wpdb;
         $query = " SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE user_name = %s";
         $user = $wpdb->get_row($wpdb->prepare($query, $username));
         if (empty($user)) {
-            $this->lastStatusMsg = BUtils::_("Invalid User Name");
+            $this->lastStatusMsg = SwpmUtils::_("Invalid User Name");
             return false;
         }
-        Blog::log_simple_debug("validate:Invalid User Name:" . serialize($user),true);
+        SwpmLog::log_simple_debug("validate:Invalid User Name:" . serialize($user),true);
         $pass_frag = substr($user->password, 8, 4);
-        $key = BAuth::b_hash($username . $pass_frag . '|' . $expiration);
+        $key = SwpmAuth::b_hash($username . $pass_frag . '|' . $expiration);
         $hash = hash_hmac('md5', $username . '|' . $expiration, $key);
         if ($hmac != $hash) {
-            $this->lastStatusMsg = BUtils::_("Sorry! Something went wrong");
+            $this->lastStatusMsg = SwpmUtils::_("Sorry! Something went wrong");
             return false;
         }
-        Blog::log_simple_debug("validate:bad hash",true);
+        SwpmLog::log_simple_debug("validate:bad hash",true);
         if ($expiration < time()){
             $GLOBALS['login_grace_period'] = 1;
         }
@@ -259,7 +259,7 @@ class BAuth {
     }
     public function get_expire_date(){
         if ($this->isLoggedIn){
-            return BUtils::get_expire_date(
+            return SwpmUtils::get_expire_date(
                     $this->get('subscription_starts'),
                     $this->get('subscription_period'),
                     $this->get('subscription_duration_type'));
@@ -272,8 +272,8 @@ class BAuth {
         $user_id   = $this->get('member_id');
         wp_clear_auth_cookie();
         $this->logout();        
-        BMembers::delete_swpm_user_by_id($user_id);
-        BMembers::delete_wp_user($user_name);
+        SwpmMembers::delete_swpm_user_by_id($user_id);
+        SwpmMembers::delete_wp_user($user_name);
     }
     
     public function reload_user_data(){

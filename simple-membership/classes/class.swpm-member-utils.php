@@ -5,10 +5,10 @@
  *
  * @author nur
  */
-class BMemberUtils {
+class SwpmMemberUtils {
 
     public static function is_member_logged_in() {
-        $auth = BAuth::get_instance();
+        $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
             return true;
         } else {
@@ -17,27 +17,27 @@ class BMemberUtils {
     }
 
     public static function get_logged_in_members_id() {
-        $auth = BAuth::get_instance();
+        $auth = SwpmAuth::get_instance();
         if (!$auth->is_logged_in()) {
-            return bUtils::_("User is not logged in.");
+            return SwpmUtils::_("User is not logged in.");
         }
         return $auth->get('member_id');
     }
 
     public static function get_logged_in_members_level() {
-        $auth = BAuth::get_instance();
+        $auth = SwpmAuth::get_instance();
         if (!$auth->is_logged_in()) {
-            return bUtils::_("User is not logged in.");
+            return SwpmUtils::_("User is not logged in.");
         }
         return $auth->get('membership_level');
     }
 
     public static function get_logged_in_members_level_name() {
-        $auth = BAuth::get_instance();
+        $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
             return $auth->get('alias');
         }
-        return bUtils::_("User is not logged in.");
+        return SwpmUtils::_("User is not logged in.");
     }
 
 }

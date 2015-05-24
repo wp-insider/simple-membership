@@ -1,6 +1,6 @@
 <?php
 
-class BFrontForm extends BForm{
+class SwpmFrontForm extends SwpmForm{
 	public function membership_level(){
 		
 	}

@@ -4,9 +4,9 @@
  * Description of BAdminRegistration
  *
  */
-class BAdminRegistration extends BRegistration {
+class SwpmAdminRegistration extends SwpmRegistration {
     public static function get_instance(){
-        self::$_intance = empty(self::$_intance)? new BAdminRegistration():self::$_intance;
+        self::$_intance = empty(self::$_intance)? new SwpmAdminRegistration():self::$_intance;
         return self::$_intance;
     }
     public function show_form() {
@@ -15,11 +15,11 @@ class BAdminRegistration extends BRegistration {
 
     public function register() {
         global $wpdb;
-        $member = BTransfer::$default_fields;
-        $form = new BForm($member);
+        $member = SwpmTransfer::$default_fields;
+        $form = new SwpmForm($member);
         if ($form->is_valid()) {
             $member_info = $form->get_sanitized();
-            $account_status = BSettings::get_instance()->get_value('default-account-status', 'active');
+            $account_status = SwpmSettings::get_instance()->get_value('default-account-status', 'active');
             $member_info['account_state'] = $account_status;
             $plain_password = $member_info['plain_password'];
             unset($member_info['plain_password']);
@@ -37,21 +37,21 @@ class BAdminRegistration extends BRegistration {
             $wp_user_info['password'] = $plain_password;
             $wp_user_info['role'] = $wpdb->get_var($query);
             $wp_user_info['user_registered'] = date('Y-m-d H:i:s');
-            BUtils::create_wp_user($wp_user_info);
+            SwpmUtils::create_wp_user($wp_user_info);
             /*             * ******************** register to wordpress ********** */
-            $send_notification = BSettings::get_instance()->get_value('enable-notification-after-manual-user-add');
+            $send_notification = SwpmSettings::get_instance()->get_value('enable-notification-after-manual-user-add');
             $member_info['plain_password'] = $plain_password;
             $this->member_info = $member_info;
             if (!empty($send_notification)){
                 $this->send_reg_email();
             }
-            $message = array('succeeded' => true, 'message' => BUtils::_('Registration Successful.'));
-            BTransfer::get_instance()->set('status', $message);
+            $message = array('succeeded' => true, 'message' => SwpmUtils::_('Registration Successful.'));
+            SwpmTransfer::get_instance()->set('status', $message);
             wp_redirect('admin.php?page=simple_wp_membership'); 
             return;
         }
-        $message = array('succeeded' => false, 'message' => BUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
-        BTransfer::get_instance()->set('status', $message);
+        $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
+        SwpmTransfer::get_instance()->set('status', $message);
     }
     public function edit($id){
         global $wpdb;
@@ -61,18 +61,18 @@ class BAdminRegistration extends BRegistration {
         $user_name = $member['user_name'];
         unset($member['member_id']);
         unset($member['user_name']);
-        $form = new BForm($member);
+        $form = new SwpmForm($member);
         if ($form->is_valid()) {
             $member = $form->get_sanitized(); 
-            BUtils::update_wp_user($user_name, $member);
+            SwpmUtils::update_wp_user($user_name, $member);
             unset($member['plain_password']);
             $wpdb->update($wpdb->prefix . "swpm_members_tbl", $member, array('member_id' => $id));
             $message = array('succeeded' => true, 'message' => 'Updated Successfully.');
             do_action('swpm_admin_edit_custom_fields', $member + array('member_id'=>$id));
-            BTransfer::get_instance()->set('status', $message);
+            SwpmTransfer::get_instance()->set('status', $message);
             $send_notification = filter_input(INPUT_POST, 'account_status_change');
             if (!empty($send_notification)){
-                $settings = BSettings::get_instance();
+                $settings = SwpmSettings::get_instance();
                 $from_address = $settings->get_value('email-from');
                 $headers = 'From: ' . $from_address . "\r\n";
                 $subject = filter_input(INPUT_POST,'notificationmailhead');
@@ -86,7 +86,7 @@ class BAdminRegistration extends BRegistration {
             }
             wp_redirect('admin.php?page=simple_wp_membership');
         }               
-        $message = array('succeeded' => false, 'message' => BUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
-        BTransfer::get_instance()->set('status', $message);
+        $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
+        SwpmTransfer::get_instance()->set('status', $message);
     }
 }

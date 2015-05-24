@@ -9,32 +9,32 @@ if (!class_exists('WP_List_Table')) {
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 
-class BCategoryList extends WP_List_Table {
+class SwpmCategoryList extends WP_List_Table {
 
     public $selected_level_id = 1;
     public $category;
 
     function __construct() {
         parent::__construct(array(
-            'singular' => BUtils::_('Membership Level'),
-            'plural' => BUtils::_('Membership Levels'),
+            'singular' => SwpmUtils::_('Membership Level'),
+            'plural' => SwpmUtils::_('Membership Levels'),
             'ajax' => false
         ));
         $this->category = array();
         $selected = filter_input(INPUT_POST, 'membership_level_id');
         $this->selected_level_id = empty($selected) ? 1 : $selected;
         $this->category = ($this->selected_level_id == 1) ?
-                BProtection::get_instance() :
-                BPermission::get_instance($this->selected_level_id);
+                SwpmProtection::get_instance() :
+                SwpmPermission::get_instance($this->selected_level_id);
     }
 
     function get_columns() {
         return array(
             'cb' => '<input type="checkbox" />'
-            , 'term_id' => BUtils::_('ID')
-            , 'name' => BUtils::_('Name')
-            , 'description' => BUtils::_('Description')
-            , 'count' => BUtils::_('Count')
+            , 'term_id' => SwpmUtils::_('ID')
+            , 'name' => SwpmUtils::_('Name')
+            , 'description' => SwpmUtils::_('Description')
+            , 'count' => SwpmUtils::_('Count')
         );
     }
 
@@ -75,8 +75,8 @@ class BCategoryList extends WP_List_Table {
             $filtered = filter_input_array(INPUT_POST, $args);
             $ids_in_page = $filtered['ids_in_page'];
             $this->category->remove($ids_in_page, 'category')->apply($ids, 'category')->save();
-            $message = array('succeeded' => true, 'message' => BUtils::_('Updated! '));
-            BTransfer::get_instance()->set('status', $message);
+            $message = array('succeeded' => true, 'message' => SwpmUtils::_('Updated! '));
+            SwpmTransfer::get_instance()->set('status', $message);
         }
         $all_categories = array();
         $all_cat_ids = get_categories(array('hide_empty' => '0'));
@@ -109,7 +109,7 @@ class BCategoryList extends WP_List_Table {
     }
 
     function no_items() {
-        BUtils::e('No category found.');
+        SwpmUtils::e('No category found.');
     }
 
 }

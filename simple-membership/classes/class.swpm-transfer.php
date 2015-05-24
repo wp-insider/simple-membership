@@ -1,6 +1,6 @@
 <?php
 
-class BTransfer {
+class SwpmTransfer {
 
     public static $default_fields = array(
         'first_name' => '', 'last_name' => '',
@@ -15,7 +15,7 @@ class BTransfer {
         'membership_level' => '2');
     public static $default_level_fields = array(
         'alias' => '', 'role' => '',
-        'subscription_period' => '', 'subscription_duration_type' => BMembershipLevel::NO_EXPIRY);
+        'subscription_period' => '', 'subscription_duration_type' => SwpmMembershipLevel::NO_EXPIRY);
     public static $admin_messages = array();
     private static $_this;
     private $message;
@@ -25,7 +25,7 @@ class BTransfer {
     }
 
     public static function get_instance() {
-        self::$_this = empty(self::$_this) ? new BTransfer() : self::$_this;
+        self::$_this = empty(self::$_this) ? new SwpmTransfer() : self::$_this;
         self::$_this->message = get_option('swpm-messages');
         return self::$_this;
     }
@@ -43,7 +43,7 @@ class BTransfer {
     public function set($key, $value) {
         $sesion_key = $_COOKIE['swpm_session'];
         if (!isset($this->message[$sesion_key])){
-            $this->message[$sesion_key] = new BMessages();
+            $this->message[$sesion_key] = new SwpmMessages();
         }
         $this->message[$sesion_key]->set($key,$value);
         update_option('swpm-messages', $this->message);

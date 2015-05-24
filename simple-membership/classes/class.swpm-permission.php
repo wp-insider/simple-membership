@@ -2,7 +2,7 @@
 
 include_once('class.swpm-protection-base.php');
 
-class BPermission extends bProtectionBase {
+class SwpmPermission extends SwpmProtectionBase {
 
     private static $_this = array();
 
@@ -16,7 +16,7 @@ class BPermission extends bProtectionBase {
         }
         $key = is_numeric($level_id) ? md5($level_id) : $level_id;
         if (!isset(self::$_this[$key])) {
-            self::$_this[$key] = new BPermission($level_id);
+            self::$_this[$key] = new SwpmPermission($level_id);
         }
 
         return self::$_this[$key];

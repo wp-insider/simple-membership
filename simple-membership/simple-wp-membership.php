@@ -16,6 +16,7 @@ if (realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"])) {
 
 include_once('classes/class.simple-wp-membership.php');
 include_once('classes/class.swpm-cronjob.php');
+include_once('swpm-compat.php');
 
 define('SIMPLE_WP_MEMBERSHIP_VER', '2.2.4');
 define('SIMPLE_WP_MEMBERSHIP_DB_VER', '1.2');
@@ -34,7 +35,7 @@ register_deactivation_hook(SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php
 add_action('swpm_login', 'SimpleWpMembership::swpm_login', 10, 3);
 
 $simple_membership = new SimpleWpMembership();
-$simple_membership_cron = new BCronJob();
+$simple_membership_cron = new SwpmCronJob();
 
 //Add settings link in plugins listing page
 function swpm_add_settings_link($links, $file) {

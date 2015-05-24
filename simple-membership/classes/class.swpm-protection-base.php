@@ -1,6 +1,6 @@
 <?php
 
-abstract class BProtectionBase {
+abstract class SwpmProtectionBase {
 
     protected $bitmap;
     protected $posts;

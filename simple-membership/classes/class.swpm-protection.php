@@ -2,7 +2,7 @@
 
 include_once('class.swpm-protection-base.php');
 
-class BProtection extends BProtectionBase {
+class SwpmProtection extends SwpmProtectionBase {
 
     private static $_this;
 
@@ -12,7 +12,7 @@ class BProtection extends BProtectionBase {
     }
 
     public static function get_instance() {
-        self::$_this = empty(self::$_this) ? (new BProtection()) : self::$_this;
+        self::$_this = empty(self::$_this) ? (new SwpmProtection()) : self::$_this;
         return self::$_this;
     }
 

@@ -2,21 +2,21 @@
 if( ! class_exists( 'WP_List_Table' ) )
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 
-class BMembershipLevels extends WP_List_Table{
+class SwpmMembershipLevels extends WP_List_Table{
     function __construct(){
         parent::__construct(array(
-            'singular'=>BUtils::_('Membership Level'),
-            'plural'  => BUtils::_('Membership Levels'),
+            'singular'=>SwpmUtils::_('Membership Level'),
+            'plural'  => SwpmUtils::_('Membership Levels'),
             'ajax'    => false
         ));
     }
     function get_columns(){
         return array(
             'cb' => '<input type="checkbox" />'
-            ,'id'=>BUtils::_('ID')
-            ,'alias'=>BUtils::_('Membership Level')
-            ,'role'=>BUtils::_('Role')
-            ,'valid_for'=>BUtils::_('Access Valid For/Until')
+            ,'id'=>SwpmUtils::_('ID')
+            ,'alias'=>SwpmUtils::_('Membership Level')
+            ,'role'=>SwpmUtils::_('Role')
+            ,'valid_for'=>SwpmUtils::_('Access Valid For/Until')
             );
     }
     function get_sortable_columns(){
@@ -27,18 +27,18 @@ class BMembershipLevels extends WP_List_Table{
     }
     function get_bulk_actions() {
         $actions = array(
-            'bulk_delete'    => BUtils::_('Delete')
+            'bulk_delete'    => SwpmUtils::_('Delete')
         );
         return $actions;
     }
     function column_default($item, $column_name){
         if($column_name == 'valid_for'){
-            if($item['subscription_duration_type'] == BMembershipLevel::NO_EXPIRY) {return 'No Expiry';}
-            if($item['subscription_duration_type'] == BMembershipLevel::FIXED_DATE) {return date(get_option('date_format'), strtotime($item['subscription_period']));}
-            if($item['subscription_duration_type'] == BMembershipLevel::DAYS) {return $item['subscription_period'] ." Day(s)";}
-            if($item['subscription_duration_type'] == BMembershipLevel::WEEKS) {return $item['subscription_period'] ." Week(s)";}
-            if($item['subscription_duration_type'] == BMembershipLevel::MONTHS) {return $item['subscription_period'] ." Month(s)";}
-            if($item['subscription_duration_type'] == BMembershipLevel::YEARS) {return $item['subscription_period'] ." Year(s)";}
+            if($item['subscription_duration_type'] == SwpmMembershipLevel::NO_EXPIRY) {return 'No Expiry';}
+            if($item['subscription_duration_type'] == SwpmMembershipLevel::FIXED_DATE) {return date(get_option('date_format'), strtotime($item['subscription_period']));}
+            if($item['subscription_duration_type'] == SwpmMembershipLevel::DAYS) {return $item['subscription_period'] ." Day(s)";}
+            if($item['subscription_duration_type'] == SwpmMembershipLevel::WEEKS) {return $item['subscription_period'] ." Week(s)";}
+            if($item['subscription_duration_type'] == SwpmMembershipLevel::MONTHS) {return $item['subscription_period'] ." Month(s)";}
+            if($item['subscription_duration_type'] == SwpmMembershipLevel::YEARS) {return $item['subscription_period'] ." Year(s)";}
         }
         if($column_name == 'role') {return ucfirst($item['role']);}
     	return stripslashes($item[$column_name]);
@@ -66,8 +66,8 @@ class BMembershipLevels extends WP_List_Table{
         $order = !empty($_GET["order"]) ? mysql_real_escape_string($_GET["order"]) : 'DESC';
         
         $sortable_columns = $this->get_sortable_columns();
-        $orderby = BUtils::sanitize_value_by_array($orderby, $sortable_columns);
-        $order = BUtils::sanitize_value_by_array($order, array('DESC' => '1', 'ASC' => '1'));
+        $orderby = SwpmUtils::sanitize_value_by_array($orderby, $sortable_columns);
+        $order = SwpmUtils::sanitize_value_by_array($order, array('DESC' => '1', 'ASC' => '1'));
         
         if(!empty($orderby) && !empty($order)){ $query.=' ORDER BY '.$orderby.' '.$order; }
         
@@ -94,7 +94,7 @@ class BMembershipLevels extends WP_List_Table{
         $this->items = $wpdb->get_results($query, ARRAY_A);
     }
     function no_items() {
-        BUtils::e( 'No membership levels found.' );
+        SwpmUtils::e( 'No membership levels found.' );
     }
     function process_form_request(){
         if(isset($_REQUEST['id'])){
@@ -105,7 +105,7 @@ class BMembershipLevels extends WP_List_Table{
     }
     function add(){
         global $wpdb;
-        $member = BTransfer::$default_fields;
+        $member = SwpmTransfer::$default_fields;
         if(isset($_POST['createswpmlevel'])){
             $member = $_POST;
         }
@@ -149,7 +149,7 @@ class BMembershipLevels extends WP_List_Table{
     function manage_categroy(){
         $selected = 3;
         include_once('class.bCategoryList.php');
-        $category_list = new BCategoryList();        
+        $category_list = new SwpmCategoryList();        
         include_once(SIMPLE_WP_MEMBERSHIP_PATH.'views/admin_category_list.php');
     }    
 }

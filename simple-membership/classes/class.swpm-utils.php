@@ -5,39 +5,39 @@
  *
  * @author nur
  */
-abstract class BUtils {
+abstract class SwpmUtils {
 
     public static function is_ajax() {
         return defined('DOING_AJAX') && DOING_AJAX;
     }
 
     public static function subscription_type_dropdown($selected) {
-        return '<option ' . (($selected == BMembershipLevel::NO_EXPIRY) ? 'selected="selected"' : "") . ' value="' . BMembershipLevel::NO_EXPIRY . '">No Expiry</option>' .
-                '<option ' . (($selected == BMembershipLevel::DAYS) ? 'selected="selected"' : "") . ' value="' . BMembershipLevel::DAYS . '">Day(s)</option>' .
-                '<option ' . (($selected == BMembershipLevel::WEEKS) ? 'selected="selected"' : "") . ' value="' . BMembershipLevel::WEEKS . '">Week(s)</option>' .
-                '<option ' . (($selected == BMembershipLevel::MONTHS) ? 'selected="selected"' : "") . ' value="' . BMembershipLevel::MONTHS . '">Month(s)</option>' .
-                '<option ' . (($selected == BMembershipLevel::YEARS) ? 'selected="selected"' : "") . ' value="' . BMembershipLevel::YEARS . '">Year(s)</option>' .
-                '<option ' . (($selected == BMembershipLevel::FIXED_DATE) ? 'selected="selected"' : "") . ' value="' . BMembershipLevel::FIXED_DATE . '">Fixed Date</option>';
+        return '<option ' . (($selected == SwpmMembershipLevel::NO_EXPIRY) ? 'selected="selected"' : "") . ' value="' . SwpmMembershipLevel::NO_EXPIRY . '">No Expiry</option>' .
+                '<option ' . (($selected == SwpmMembershipLevel::DAYS) ? 'selected="selected"' : "") . ' value="' . SwpmMembershipLevel::DAYS . '">Day(s)</option>' .
+                '<option ' . (($selected == SwpmMembershipLevel::WEEKS) ? 'selected="selected"' : "") . ' value="' . SwpmMembershipLevel::WEEKS . '">Week(s)</option>' .
+                '<option ' . (($selected == SwpmMembershipLevel::MONTHS) ? 'selected="selected"' : "") . ' value="' . SwpmMembershipLevel::MONTHS . '">Month(s)</option>' .
+                '<option ' . (($selected == SwpmMembershipLevel::YEARS) ? 'selected="selected"' : "") . ' value="' . SwpmMembershipLevel::YEARS . '">Year(s)</option>' .
+                '<option ' . (($selected == SwpmMembershipLevel::FIXED_DATE) ? 'selected="selected"' : "") . ' value="' . SwpmMembershipLevel::FIXED_DATE . '">Fixed Date</option>';
     }
 
     // $subscript_period must be integer.
     public static function calculate_subscription_period_days($subcript_period, $subscription_duration_type) {
-        if ($subscription_duration_type == BMembershipLevel::NO_EXPIRY) {
+        if ($subscription_duration_type == SwpmMembershipLevel::NO_EXPIRY) {
             return 'noexpire';
         }
         if (!is_numeric($subcript_period)) {
             throw new Exception(" subcript_period parameter must be integer in BUtils::calculate_subscription_period_days method");
         }
         switch (strtolower($subscription_duration_type)) {
-            case BMembershipLevel::DAYS:
+            case SwpmMembershipLevel::DAYS:
                 break;
-            case BMembershipLevel::WEEKS:
+            case SwpmMembershipLevel::WEEKS:
                 $subcript_period = $subcript_period * 7;
                 break;
-            case BMembershipLevel::MONTHS:
+            case SwpmMembershipLevel::MONTHS:
                 $subcript_period = $subcript_period * 30;
                 break;
-            case BMembershipLevel::YEARS:
+            case SwpmMembershipLevel::YEARS:
                 $subcript_period = $subcript_period * 365;
                 break;
         }
@@ -45,8 +45,8 @@ abstract class BUtils {
     }
 
     public static function get_expiration_timestamp($user) {
-        $permission = BPermission::get_instance($user->membership_level);
-        if (BMembershipLevel::FIXED_DATE == $permission->get('subscription_duration_type')) {
+        $permission = SwpmPermission::get_instance($user->membership_level);
+        if (SwpmMembershipLevel::FIXED_DATE == $permission->get('subscription_duration_type')) {
             return strtotime($permission->get('subscription_period'));
         }
         $days = self::calculate_subscription_period_days(
@@ -58,7 +58,7 @@ abstract class BUtils {
     }
 
     public static function is_subscription_expired($user) {
-        $expiration_timestamp = BUtils::get_expiration_timestamp($user);
+        $expiration_timestamp = SwpmUtils::get_expiration_timestamp($user);
         return $expiration_timestamp < time();
     }
 
@@ -69,10 +69,10 @@ abstract class BUtils {
     }
 
     public static function get_account_state_options() {
-        return array('active' => BUtils::_('Active'),
-            'inactive' => BUtils::_('Inactive'),
-            'pending' => BUtils::_('Pending'),
-            'expired' => BUtils::_('Expired'),);
+        return array('active' => SwpmUtils::_('Active'),
+            'inactive' => SwpmUtils::_('Inactive'),
+            'pending' => SwpmUtils::_('Pending'),
+            'expired' => SwpmUtils::_('Expired'),);
     }
 
     public static function account_state_dropdown($selected = 'active') {
@@ -129,7 +129,7 @@ abstract class BUtils {
                 $members = $wpdb->get_results($query);
                 break;
         }
-        $settings = BSettings::get_instance();
+        $settings = SwpmSettings::get_instance();
         $separator = '?';
         $url = $settings->get_value('registration-page-url');
         if (strpos($url, '?') !== false) {
@@ -267,7 +267,7 @@ abstract class BUtils {
         $user_info = get_userdata($wp_user_id);
         $user_cap = (isset($user_info->wp_capabilities) && is_array($user_info->wp_capabilities)) ? array_keys($user_info->wp_capabilities) : array();
         if (!in_array('administrator', $user_cap)) {
-            BUtils::update_wp_user_Role($wp_user_id, $wp_user_data['role']);
+            SwpmUtils::update_wp_user_Role($wp_user_id, $wp_user_data['role']);
         }
         return $wp_user_id;
     }
@@ -293,12 +293,12 @@ abstract class BUtils {
     }
 
     public static function get_expire_date($start_date, $subscription_duration, $subscription_duration_type) {
-        if ($subscription_duration_type == BMembershipLevel::FIXED_DATE) { //will expire after a fixed date.
+        if ($subscription_duration_type == SwpmMembershipLevel::FIXED_DATE) { //will expire after a fixed date.
             return date(get_option('date_format'), strtotime($subscription_duration));
         }
         $expires = self::calculate_subscription_period_days($subscription_duration, $subscription_duration_type);
         if ($expires == 'noexpire') {// its set to no expiry until cancelled
-            return BUtils::_('Never');
+            return SwpmUtils::_('Never');
         }
 
         return date(get_option('date_format'), strtotime($start_date . ' ' . $expires . ' days'));
@@ -315,11 +315,11 @@ abstract class BUtils {
         $encrypted = filter_input(INPUT_POST, 'level_identifier');
         global $wpdb;
         if (!empty($encrypted)) {
-            return BPermission::get_instance($encrypted)->get('id');
+            return SwpmPermission::get_instance($encrypted)->get('id');
         }
 
-        $is_free = BSettings::get_instance()->get_value('enable-free-membership');
-        $free_level = absint(BSettings::get_instance()->get_value('free-membership-id'));
+        $is_free = SwpmSettings::get_instance()->get_value('enable-free-membership');
+        $free_level = absint(SwpmSettings::get_instance()->get_value('free-membership-id'));
 
         return ($is_free) ? $free_level : null;
     }
@@ -350,12 +350,12 @@ abstract class BUtils {
     }
 
     public static function delete_account_button() {
-        $allow_account_deletion = BSettings::get_instance()->get_value('allow-account-deletion');
+        $allow_account_deletion = SwpmSettings::get_instance()->get_value('allow-account-deletion');
         if (empty($allow_account_deletion)) {
             return "";
         }
 
-        return '<a href="/?delete_account=1"><div class="swpm-account-delete-button">' . BUtils::_("Delete Account") . '</div></a>';
+        return '<a href="/?delete_account=1"><div class="swpm-account-delete-button">' . SwpmUtils::_("Delete Account") . '</div></a>';
     }
 
     public static function encrypt_password($plain_password) {

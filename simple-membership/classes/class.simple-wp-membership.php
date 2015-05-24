@@ -57,10 +57,10 @@ class SimpleWpMembership {
         add_action('swpm_logout', array(&$this, 'swpm_logout'));
 
         //AJAX hooks
-        add_action('wp_ajax_swpm_validate_email', 'BAjax::validate_email_ajax');
-        add_action('wp_ajax_nopriv_swpm_validate_email', 'BAjax::validate_email_ajax');
-        add_action('wp_ajax_swpm_validate_user_name', 'BAjax::validate_user_name_ajax');
-        add_action('wp_ajax_nopriv_swpm_validate_user_name', 'BAjax::validate_user_name_ajax');
+        add_action('wp_ajax_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
+        add_action('wp_ajax_nopriv_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
+        add_action('wp_ajax_swpm_validate_user_name', 'SwpmAjax::validate_user_name_ajax');
+        add_action('wp_ajax_nopriv_swpm_validate_user_name', 'SwpmAjax::validate_user_name_ajax');
 
         //init is too early for settings api.
         add_action('admin_init', array(&$this, 'admin_init_hook'));
@@ -69,9 +69,9 @@ class SimpleWpMembership {
     }
 
     function wp_password_reset_hook($user, $pass) {
-        $swpm_id = BUtils::get_user_by_user_name($user->user_login);
+        $swpm_id = SwpmUtils::get_user_by_user_name($user->user_login);
         if (!empty($swpm_id)) {
-            $password_hash = BUtils::encrypt_password($pass);
+            $password_hash = SwpmUtils::encrypt_password($pass);
             global $wpdb;
             $wpdb->update($wpdb->prefix . "swpm_members_tbl", array('password' => $password_hash), array('member_id' => $swpm_id));
         }
@@ -87,7 +87,7 @@ class SimpleWpMembership {
             return $content;
         }
 
-        $acl = BAccessControl::get_instance();
+        $acl = SwpmAccessControl::get_instance();
         if (has_post_thumbnail($post_id)) {
             return $content;
         }
@@ -123,7 +123,7 @@ class SimpleWpMembership {
         if (is_admin()) {//No need to filter on the admin side
             return $content;
         }
-        $acl = BAccessControl::get_instance();
+        $acl = SwpmAccessControl::get_instance();
         if (has_post_thumbnail($post_id)) {
             return $content;
         }
@@ -132,11 +132,11 @@ class SimpleWpMembership {
             return $content;
         }
 
-        return BUtils::get_restricted_image_url();
+        return SwpmUtils::get_restricted_image_url();
     }
 
     public function admin_init_hook() {
-        BSettings::get_instance()->init_config_hooks();
+        SwpmSettings::get_instance()->init_config_hooks();
         $addon_saved = filter_input(INPUT_POST, 'swpm-addon-settings');
         if (!empty($addon_saved)) {
             do_action('swpm_addon_settings_save');
@@ -147,12 +147,12 @@ class SimpleWpMembership {
         if (!is_user_logged_in()) {//Never show admin bar if the user is not even logged in
             return false;
         }
-        $hide = BSettings::get_instance()->get_value('hide-adminbar');
+        $hide = SwpmSettings::get_instance()->get_value('hide-adminbar');
         return $hide ? FALSE : TRUE;
     }
 
     public function shutdown() {
-        BLog::writeall();
+        SwpmLog::writeall();
     }
 
     public static function swpm_login($user, $pass, $rememberme = true) {
@@ -167,7 +167,7 @@ class SimpleWpMembership {
             wp_set_current_user($user->ID, $user->user_login);
         }
         do_action('swpm_after_login');
-        if (!BUtils::is_ajax()) {
+        if (!SwpmUtils::is_ajax()) {
             wp_redirect(site_url());
         }
     }
@@ -180,7 +180,7 @@ class SimpleWpMembership {
     }
 
     public function wp_login($username, $password) {
-        $auth = BAuth::get_instance();
+        $auth = SwpmAuth::get_instance();
         if (($auth->is_logged_in() && ($auth->userData->user_name == $username))) {
             return;
         }
@@ -190,7 +190,7 @@ class SimpleWpMembership {
     }
 
     public function wp_logout() {
-        $auth = BAuth::get_instance();
+        $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
             $auth->logout();
         }
@@ -215,11 +215,11 @@ class SimpleWpMembership {
 
     public function login() {
         ob_start();
-        $auth = BAuth::get_instance();
+        $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
             include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/loggedin.php');
         } else {
-            $setting = BSettings::get_instance();
+            $setting = SwpmSettings::get_instance();
             $password_reset_url = $setting->get_value('reset-page-url');
             $join_url = $setting->get_value('join-us-page-url');
 
@@ -239,7 +239,7 @@ class SimpleWpMembership {
     }
 
     public function profile_form() {
-        $auth = BAuth::get_instance();
+        $auth = SwpmAuth::get_instance();
         $this->notices();
         if ($auth->is_logged_in()) {
             $out = apply_filters('swpm_profile_form_override', '');
@@ -253,11 +253,11 @@ class SimpleWpMembership {
             include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/edit.php');
             return ob_get_clean();
         }
-        return BUtils::_('You are not logged in.');
+        return SwpmUtils::_('You are not logged in.');
     }
 
     public function notices() {
-        $message = BTransfer::get_instance()->get('status');
+        $message = SwpmTransfer::get_instance()->get('status');
         $succeeded = false;
         if (empty($message)) {
             return false;
@@ -311,7 +311,7 @@ class SimpleWpMembership {
         global $post, $wpdb;
         $id = $post->ID;
         // Use nonce for verification
-        $is_protected = BProtection::get_instance()->is_protected($id);
+        $is_protected = SwpmProtection::get_instance()->is_protected($id);
         echo '<input type="hidden" name="swpm_noncename" id="swpm_noncename" value="' .
         wp_create_nonce(plugin_basename(__FILE__)) . '" />';
         // The actual fields for data entry
@@ -324,7 +324,7 @@ class SimpleWpMembership {
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
         $levels = $wpdb->get_results($query, ARRAY_A);
         foreach ($levels as $level) {
-            echo '<input type="checkbox" ' . (BPermission::get_instance($level['id'])->is_permitted($id) ? "checked='checked'" : "") .
+            echo '<input type="checkbox" ' . (SwpmPermission::get_instance($level['id'])->is_permitted($id) ? "checked='checked'" : "") .
             ' name="swpm_protection_level[' . $level['id'] . ']" value="' . $level['id'] . '" /> ' . $level['alias'] . "<br/>";
         }
     }
@@ -365,18 +365,18 @@ class SimpleWpMembership {
         $swpm_protection_level = $swpm_protection_level['swpm_protection_level'];
         if (!empty($post_type)) {
             if ($isprotected) {
-                BProtection::get_instance()->apply(array($post_id), $post_type);
+                SwpmProtection::get_instance()->apply(array($post_id), $post_type);
             } else {
-                BProtection::get_instance()->remove(array($post_id), $post_type);
+                SwpmProtection::get_instance()->remove(array($post_id), $post_type);
             }
-            BProtection::get_instance()->save();
+            SwpmProtection::get_instance()->save();
             $query = "SELECT id FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
             $level_ids = $wpdb->get_col($query);
             foreach ($level_ids as $level) {
                 if (isset($swpm_protection_level[$level])) {
-                    BPermission::get_instance($level)->apply(array($post_id), $post_type)->save();
+                    SwpmPermission::get_instance($level)->apply(array($post_id), $post_type)->save();
                 } else {
-                    BPermission::get_instance($level)->remove(array($post_id), $post_type)->save();
+                    SwpmPermission::get_instance($level)->remove(array($post_id), $post_type)->save();
                 }
             }
         }
@@ -387,7 +387,7 @@ class SimpleWpMembership {
     }
 
     public function filter_comment($content) {
-        $acl = BAccessControl::get_instance();
+        $acl = SwpmAccessControl::get_instance();
         global $comment;
         return $acl->filter_post($comment->comment_post_ID, $content);
     }
@@ -396,17 +396,17 @@ class SimpleWpMembership {
         if (is_preview()) {
             return $content;
         }
-        $acl = BAccessControl::get_instance();
+        $acl = SwpmAccessControl::get_instance();
         global $post;
         return $acl->filter_post($post->ID, $content);
     }
 
     public function filter_moretag($more_link, $more_link_text = "More") {
-        $moretag = BSettings::get_instance()->get_value('enable-moretag');
+        $moretag = SwpmSettings::get_instance()->get_value('enable-moretag');
         if (empty($moretag)) {
             return $more_link;
         }
-        $acl = BAccessControl::get_instance();
+        $acl = SwpmAccessControl::get_instance();
         global $post;
         return $acl->filter_post_with_moretag($post->ID, $more_link, $more_link_text);
     }
@@ -414,21 +414,21 @@ class SimpleWpMembership {
     public function admin_init() {
         $createswpmuser = filter_input(INPUT_POST, 'createswpmuser');
         if (!empty($createswpmuser)) {
-            BAdminRegistration::get_instance()->register();
+            SwpmAdminRegistration::get_instance()->register();
         }
         $editswpmuser = filter_input(INPUT_POST, 'editswpmuser');
         if (!empty($editswpmuser)) {
             $id = filter_input(INPUT_GET, 'member_id', FILTER_VALIDATE_INT);
-            BAdminRegistration::get_instance()->edit($id);
+            SwpmAdminRegistration::get_instance()->edit($id);
         }
         $createswpmlevel = filter_input(INPUT_POST, 'createswpmlevel');
         if (!empty($createswpmlevel)) {
-            BMembershipLevel::get_instance()->create();
+            SwpmMembershipLevel::get_instance()->create();
         }
         $editswpmlevel = filter_input(INPUT_POST, 'editswpmlevel');
         if (!empty($editswpmlevel)) {
             $id = filter_input(INPUT_GET, 'id');
-            BMembershipLevel::get_instance()->edit($id);
+            SwpmMembershipLevel::get_instance()->edit($id);
         }
     }
 
@@ -450,11 +450,11 @@ class SimpleWpMembership {
             $this->admin_init();
         }
         if (!is_admin()) { //frontend stuff
-            BAuth::get_instance();
+            SwpmAuth::get_instance();
             $this->verify_and_delete_account();
             $swpm_logout = filter_input(INPUT_GET, 'swpm-logout');
             if (!empty($swpm_logout)) {
-                BAuth::get_instance()->logout();
+                SwpmAuth::get_instance()->logout();
                 wp_redirect(home_url());
             }
             $this->process_password_reset();
@@ -477,14 +477,14 @@ class SimpleWpMembership {
         $swpm_reset = filter_input(INPUT_POST, 'swpm-reset');
         $swpm_reset_email = filter_input(INPUT_POST, 'swpm_reset_email', FILTER_UNSAFE_RAW);
         if (!empty($swpm_reset)) {
-            BFrontRegistration::get_instance()->reset_password($swpm_reset_email);
+            SwpmFrontRegistration::get_instance()->reset_password($swpm_reset_email);
         }
     }
 
     private function edit_profile() {
         $swpm_editprofile_submit = filter_input(INPUT_POST, 'swpm_editprofile_submit');
         if (!empty($swpm_editprofile_submit)) {
-            BFrontRegistration::get_instance()->edit();
+            SwpmFrontRegistration::get_instance()->edit();
             //todo: do a redirect
         }
     }
@@ -495,8 +495,8 @@ class SimpleWpMembership {
         wp_enqueue_script('swpm.password-meter', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-meter.js');
         wp_enqueue_style('jquery.tools.dateinput', SIMPLE_WP_MEMBERSHIP_URL . '/css/jquery.tools.dateinput.css');
         wp_enqueue_script('jquery.tools', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.tools18.min.js');
-        $settings = array('statusChangeEmailHead' => BSettings::get_instance()->get_value('account-change-email-subject'),
-            'statusChangeEmailBody' => BSettings::get_instance()->get_value('account-change-email-body'));
+        $settings = array('statusChangeEmailHead' => SwpmSettings::get_instance()->get_value('account-change-email-subject'),
+            'statusChangeEmailBody' => SwpmSettings::get_instance()->get_value('account-change-email-body'));
         wp_localize_script('swpm.password-meter', 'SwpmSettings', $settings);
     }
 
@@ -517,16 +517,16 @@ class SimpleWpMembership {
         if ($succeeded) {
             return;
         }
-        $is_free = BSettings::get_instance()->get_value('enable-free-membership');
-        $free_level = absint(BSettings::get_instance()->get_value('free-membership-id'));
+        $is_free = SwpmSettings::get_instance()->get_value('enable-free-membership');
+        $free_level = absint(SwpmSettings::get_instance()->get_value('free-membership-id'));
         $level = isset($atts['level']) ? absint($atts['level']) : ($is_free ? $free_level : null);
-        return BFrontRegistration::get_instance()->regigstration_ui($level);
+        return SwpmFrontRegistration::get_instance()->regigstration_ui($level);
     }
 
     private function register_member() {
         $registration = filter_input(INPUT_POST, 'swpm_registration_submit');
         if (!empty($registration)) {
-            BFrontRegistration::get_instance()->register();
+            SwpmFrontRegistration::get_instance()->register();
         }
     }
 
@@ -549,7 +549,7 @@ class SimpleWpMembership {
 
     public function admin_membership_levels() {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-membership-levels.php');
-        $levels = new BMembershipLevels();
+        $levels = new SwpmMembershipLevels();
         $level_action = filter_input(INPUT_GET, 'level_action');
         $action2 = filter_input(INPUT_GET, 'action2');
         $action = $level_action ? $level_action : ($action2 ? $action2 : "");
@@ -575,7 +575,7 @@ class SimpleWpMembership {
 
     public function admin_members() {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-members.php');
-        $members = new BMembers();
+        $members = new SwpmMembers();
         $action = filter_input(INPUT_GET, 'member_action');
         $action = empty($action) ? filter_input(INPUT_POST, 'action') : $action;
         switch ($action) {
@@ -593,7 +593,7 @@ class SimpleWpMembership {
     }
 
     public function admin_settings() {
-        $current_tab = BSettings::get_instance()->current_tab;
+        $current_tab = SwpmSettings::get_instance()->current_tab;
         switch ($current_tab) {
             case 6:
                 include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_addon_settings.php');
@@ -602,7 +602,7 @@ class SimpleWpMembership {
                 $link_for = filter_input(INPUT_POST, 'swpm_link_for', FILTER_SANITIZE_STRING);
                 $member_id = filter_input(INPUT_POST, 'member_id', FILTER_SANITIZE_NUMBER_INT);
                 $send_email = filter_input(INPUT_POST, 'swpm_reminder_email', FILTER_SANITIZE_NUMBER_INT);
-                $links = BUtils::get_registration_link($link_for, $send_email, $member_id);
+                $links = SwpmUtils::get_registration_link($link_for, $send_email, $member_id);
                 include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_tools_settings.php');
                 break;
             case 2:
@@ -628,7 +628,7 @@ class SimpleWpMembership {
             //Check and run DB upgrade operation (if needed)
             if (get_option('swpm_db_version') != SIMPLE_WP_MEMBERSHIP_DB_VER) {
                 include_once('class.swpm-installation.php');
-                BInstallation::run_safe_installer();
+                SwpmInstallation::run_safe_installer();
             }
         }
     }
@@ -637,7 +637,7 @@ class SimpleWpMembership {
         wp_schedule_event(time(), 'daily', 'swpm_account_status_event');
         wp_schedule_event(time(), 'daily', 'swpm_delete_pending_account_event');
         include_once('class.swpm-installation.php');
-        BInstallation::run_safe_installer();
+        SwpmInstallation::run_safe_installer();
     }
 
     public function deactivate() {
@@ -653,23 +653,23 @@ class SimpleWpMembership {
         }
         $password = filter_input(INPUT_POST, 'account_delete_confirm_pass', FILTER_UNSAFE_RAW);
 
-        $auth = BAuth::get_instance();
+        $auth = SwpmAuth::get_instance();
         if (!$auth->is_logged_in()) {
             return;
         }
         if (empty($password)) {
-            BUtils::account_delete_confirmation_ui();
+            SwpmUtils::account_delete_confirmation_ui();
         }
 
         $nonce_field = filter_input(INPUT_POST, 'account_delete_confirm_nonce');
         if (empty($nonce_field) || !wp_verify_nonce($nonce_field, 'swpm_account_delete_confirm')) {
-            BUtils::account_delete_confirmation_ui(BUtils::_("Sorry, Nonce verification failed."));
+            SwpmUtils::account_delete_confirmation_ui(SwpmUtils::_("Sorry, Nonce verification failed."));
         }
         if ($auth->match_password($password)) {
             $auth->delete();
             wp_redirect(home_url());
         } else {
-            BUtils::account_delete_confirmation_ui(BUtils::_("Sorry, Password didn't match."));
+            SwpmUtils::account_delete_confirmation_ui(SwpmUtils::_("Sorry, Password didn't match."));
         }
     }
 

@@ -5,6 +5,6 @@
  *
  * @author nur
  */
-class BMembershipLevelUtils {
+class SwpmMembershipLevelUtils {
 
 }

@@ -11,7 +11,7 @@
  *
  * @author nur
  */
-class BPermissionCollection {
+class SwpmPermissionCollection {
     protected $permissions;
     protected static $instance;
     
@@ -20,7 +20,7 @@ class BPermissionCollection {
     }
     
     public static function get_instance(){
-        self::$_this = empty(self::$_this)? new BPermissionCollection():self::$_this;
+        self::$_this = empty(self::$_this)? new SwpmPermissionCollection():self::$_this;
         return self::$_this;
     }    
     
@@ -31,7 +31,7 @@ class BPermissionCollection {
         }
         
         foreach($level_ids as $id){
-            $this->permissions[] = BPermission::get_instance($id);
+            $this->permissions[] = SwpmPermission::get_instance($id);
         }
     }
     

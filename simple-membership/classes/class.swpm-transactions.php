@@ -4,13 +4,13 @@
  * Provides some helpful functions to deal with the transactions
  */
 
-class BTransactions {
+class SwpmTransactions {
 
     static function save_txn_record($ipn_data, $items = array()) {
         global $wpdb;
         
         $current_date = date("Y-m-d");
-        $custom_var = BTransactions::parse_custom_var($ipn_data['custom']);
+        $custom_var = SwpmTransactions::parse_custom_var($ipn_data['custom']);
         
         $txn_data = array();
         $txn_data['email'] = $ipn_data['payer_email'];

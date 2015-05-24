@@ -5,7 +5,7 @@
  *
  * @author nur
  */
-class BInstallation {
+class SwpmInstallation {
 
     /*
      * This function is capable of handing both single site or multi-site install and upgrade all in one.
@@ -25,8 +25,8 @@ class BInstallation {
                 $blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
                 foreach ($blogids as $blog_id) {
                     switch_to_blog($blog_id);
-                    BInstallation::installer();
-                    BInstallation::initdb();
+                    SwpmInstallation::installer();
+                    SwpmInstallation::initdb();
                 }
                 switch_to_blog($old_blog);
                 return;
@@ -34,8 +34,8 @@ class BInstallation {
         }
         
         //Do this if single site standard install
-        BInstallation::installer();
-        BInstallation::initdb();
+        SwpmInstallation::installer();
+        SwpmInstallation::initdb();
     }
     
     public static function installer() {
@@ -177,7 +177,7 @@ class BInstallation {
     }
 
     public static function initdb() {
-        $settings = BSettings::get_instance();
+        $settings = SwpmSettings::get_instance();
 
         $installed_version = $settings->get_value('swpm-active-version');
 
@@ -220,7 +220,7 @@ class BInstallation {
             //Do fresh install tasks
 
             /*             * * Create the mandatory pages (if they are not there) ** */
-            miscUtils::create_mandatory_wp_pages();
+            SwpmMiscUtils::create_mandatory_wp_pages();
             /*             * * End of page creation ** */
             $settings->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
                     ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))

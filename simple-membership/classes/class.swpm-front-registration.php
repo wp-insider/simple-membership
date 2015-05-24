@@ -5,39 +5,39 @@
  *
  * @author nur
  */
-class BFrontRegistration extends BRegistration {
+class SwpmFrontRegistration extends SwpmRegistration {
     public static function get_instance(){
-        self::$_intance = empty(self::$_intance)? new BFrontRegistration():self::$_intance;
+        self::$_intance = empty(self::$_intance)? new SwpmFrontRegistration():self::$_intance;
         return self::$_intance;
     }
     public function regigstration_ui($level){
-        $settings_configs = BSettings::get_instance();
+        $settings_configs = SwpmSettings::get_instance();
         $joinuspage_url = $settings_configs->get_value('join-us-page-url');
         $membership_level = '';
         $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
         $code = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
         
         global $wpdb;        
-        if (BUtils::is_paid_registration()){
-            $member = $member = BUtils::get_paid_member_info();
+        if (SwpmUtils::is_paid_registration()){
+            $member = $member = SwpmUtils::get_paid_member_info();
             if (empty($member)){
-                BUtils::e('Error! Invalid Request. Could not find a match for the given security code and the user ID.');
+                SwpmUtils::e('Error! Invalid Request. Could not find a match for the given security code and the user ID.');
             }
             $membership_level = $member->membership_level;
         }
         else if (!empty($level)) {            
-            $member = BTransfer::$default_fields;
+            $member = SwpmTransfer::$default_fields;
             $membership_level = absint($level);
         }
         if (empty($membership_level)) {
             $joinuspage_link = '<a href="' . $joinuspage_url . '">Join us</a>';
-            BUtils::e('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.');
+            SwpmUtils::e('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.');
             return;
         }
         $form = apply_filters('swpm_registration_form_override', '', $membership_level);
         if (!empty($form)) {return $form;}
         
-        $mebership_info = BPermission::get_instance($membership_level);
+        $mebership_info = SwpmPermission::get_instance($membership_level);
         $membership_level = $mebership_info->get('id');
         if (empty($membership_level)) {
             return "Membership Level Not Found.";
@@ -57,36 +57,36 @@ class BFrontRegistration extends BRegistration {
         if($this->create_swpm_user()&&$this->create_wp_user()&&$this->send_reg_email()){
             do_action('swpm_front_end_registration_complete');
 
-            $login_page_url = BSettings::get_instance()->get_value('login-page-url');
-            $after_rego_msg = '<p>'. BUtils::_('Registration Successful. '). BUtils::_('Please').' <a href="' . $login_page_url . '">'.BUtils::_('Login').'</a></p>';
+            $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
+            $after_rego_msg = '<p>'. SwpmUtils::_('Registration Successful. '). SwpmUtils::_('Please').' <a href="' . $login_page_url . '">'.SwpmUtils::_('Login').'</a></p>';
             $message = array('succeeded' => true, 'message' => $after_rego_msg);
-            BTransfer::get_instance()->set('status', $message);
+            SwpmTransfer::get_instance()->set('status', $message);
             return;
         }
     }
     private function create_swpm_user(){
         global $wpdb;
-        $member = BTransfer::$default_fields;
-        $form = new BFrontForm($member);
+        $member = SwpmTransfer::$default_fields;
+        $form = new SwpmFrontForm($member);
         if (!$form->is_valid()) {
-            $message = array('succeeded' => false, 'message' => BUtils::_('Please correct the following'),
+            $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following'),
                 'extra' => $form->get_errors());
-            BTransfer::get_instance()->set('status', $message);
+            SwpmTransfer::get_instance()->set('status', $message);
             return false;
         }
         
         
         $member_info = $form->get_sanitized(); 
-        $free_level = BUtils::get_free_level();
-        $account_status = BSettings::get_instance()->get_value('default-account-status', 'active');
-        $member_info['last_accessed_from_ip'] = BTransfer::get_real_ip_addr();
+        $free_level = SwpmUtils::get_free_level();
+        $account_status = SwpmSettings::get_instance()->get_value('default-account-status', 'active');
+        $member_info['last_accessed_from_ip'] = SwpmTransfer::get_real_ip_addr();
         $member_info['member_since'] = date("Y-m-d");
         $member_info['subscription_starts'] = date("Y-m-d");
         $member_info['account_state'] = $account_status;
         $plain_password = $member_info['plain_password'];
         unset($member_info['plain_password']);
         
-        if (BUtils::is_paid_registration()){
+        if (SwpmUtils::is_paid_registration()){
             $member_info['reg_code'] = '';
             $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
             $code      = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);            
@@ -103,8 +103,8 @@ class BFrontRegistration extends BRegistration {
             $last_insert_id = $wpdb->insert_id;
         }
         else{
-            $message = array('succeeded' => false, 'message' => BUtils::_('Membership Level Couldn\'t be found.'));
-            BTransfer::get_instance()->set('status', $message);
+            $message = array('succeeded' => false, 'message' => SwpmUtils::_('Membership Level Couldn\'t be found.'));
+            SwpmTransfer::get_instance()->set('status', $message);
             return false;
         }        
         $member_info['plain_password'] = $plain_password;
@@ -126,23 +126,23 @@ class BFrontRegistration extends BRegistration {
         $wp_user_info['password'] = $member_info['plain_password'];
         $wp_user_info['role'] = $wpdb->get_var($query);
         $wp_user_info['user_registered'] = date('Y-m-d H:i:s');
-        BUtils::create_wp_user($wp_user_info);
+        SwpmUtils::create_wp_user($wp_user_info);
         return true;
     }
     public function edit() {
         global $wpdb;
-        $auth = BAuth::get_instance();
+        $auth = SwpmAuth::get_instance();
         if (!$auth->is_logged_in()) {
             return;
         }
         $user_data = (array) $auth->userData;
         unset($user_data['permitted']);
-        $form = new BForm($user_data);
+        $form = new SwpmForm($user_data);
         if ($form->is_valid()) {
             global $wpdb;
             $member_info = $form->get_sanitized();
             // update corresponding wp user.            
-            BUtils::update_wp_user($auth->get('user_name'),$member_info);
+            SwpmUtils::update_wp_user($auth->get('user_name'),$member_info);
             if (isset($member_info['plain_password'])) {
                 unset($member_info['plain_password']);
             }
@@ -151,11 +151,11 @@ class BFrontRegistration extends BRegistration {
                     $wpdb->prefix . "swpm_members_tbl", $member_info, array('member_id' => $auth->get('member_id'))); 
             $auth->reload_user_data();
             $message = array('succeeded' => true, 'message' => 'Profile Updated.');
-            BTransfer::get_instance()->set('status', $message);
+            SwpmTransfer::get_instance()->set('status', $message);
         } else {
-            $message = array('succeeded' => false, 'message' => BUtils::_('Please correct the following'),
+            $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following'),
                 'extra' => $form->get_errors());
-            BTransfer::get_instance()->set('status', $message);
+            SwpmTransfer::get_instance()->set('status', $message);
             return;
         }
     }
@@ -163,9 +163,9 @@ class BFrontRegistration extends BRegistration {
     public function reset_password($email) {
         $email = sanitize_email($email);
         if (!is_email($email)) {
-            $message = '<div class="swpm-reset-pw-error">' . BUtils::_("Email address not valid.") . '</div>';
+            $message = '<div class="swpm-reset-pw-error">' . SwpmUtils::_("Email address not valid.") . '</div>';
             $message = array('succeeded' => false, 'message' => $message);
-            BTransfer::get_instance()->set('status', $message);
+            SwpmTransfer::get_instance()->set('status', $message);
             return;
         }
         global $wpdb;
@@ -174,20 +174,20 @@ class BFrontRegistration extends BRegistration {
                 ' WHERE email = %s';
         $user = $wpdb->get_row($wpdb->prepare($query, $email));
         if (empty($user)) {
-            $message = '<div class="swpm-reset-pw-error">' . BUtils::_("No user not found with that email address.") .'</div>';
-            $message .= '<div class="swpm-reset-pw-error-email">' . BUtils::_("Email Address: ") . $email .'</div>';
+            $message = '<div class="swpm-reset-pw-error">' . SwpmUtils::_("No user not found with that email address.") .'</div>';
+            $message .= '<div class="swpm-reset-pw-error-email">' . SwpmUtils::_("Email Address: ") . $email .'</div>';
             $message = array('succeeded' => false, 'message' => $message);
-            BTransfer::get_instance()->set('status', $message);
+            SwpmTransfer::get_instance()->set('status', $message);
             return;
         }
-        $settings = BSettings::get_instance();
+        $settings = SwpmSettings::get_instance();
         $password = wp_generate_password();
 
-        $password_hash = BUtils::encrypt_password(trim($password)); //should use $saned??;
+        $password_hash = SwpmUtils::encrypt_password(trim($password)); //should use $saned??;
         $wpdb->update($wpdb->prefix . "swpm_members_tbl", array('password' => $password_hash), array('member_id' => $user->member_id));
         
         // update wp user pass.
-        BUtils::update_wp_user($user->user_name, array('plain_password'=>$password));
+        SwpmUtils::update_wp_user($user->user_name, array('plain_password'=>$password));
         
         $body = $settings->get_value('reset-mail-body');
         $subject = $settings->get_value('reset-mail-subject');
@@ -197,10 +197,10 @@ class BFrontRegistration extends BRegistration {
         $from = $settings->get_value('email-from');
         $headers = "From: " . $from . "\r\n";
         wp_mail($email, $subject, $body, $headers);
-        $message = '<div class="swpm-reset-pw-success">' . BUtils::_("New password has been sent to your email address.") .'</div>';
-        $message .= '<div class="swpm-reset-pw-success-email">' . BUtils::_("Email Address: ") . $email .'</div>';
+        $message = '<div class="swpm-reset-pw-success">' . SwpmUtils::_("New password has been sent to your email address.") .'</div>';
+        $message .= '<div class="swpm-reset-pw-success-email">' . SwpmUtils::_("Email Address: ") . $email .'</div>';
         
         $message = array('succeeded' => false, 'message' => $message);
-        BTransfer::get_instance()->set('status', $message);
+        SwpmTransfer::get_instance()->set('status', $message);
     }
 }

@@ -4,7 +4,7 @@
  *
  * @author nur
  */
-class BMessages {
+class SwpmMessages {
     private $messages;
     public function __construct() {
         $this->messages = array();

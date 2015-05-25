@@ -1,5 +1,6 @@
 <?php
 
+/*** TODO - This file exists for backwards compatibility only. Remove it at a later date. ***/
 class miscUtils extends SwpmMiscUtils {
 
 }

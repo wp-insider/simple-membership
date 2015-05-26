@@ -105,6 +105,10 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO 2.2.7 =
+- Added Japanese language translation to the plugin. The translation was submitted by Mana.
+
 = 2.2.6 =
 - Fixed an issue with the category protection menu after the class refactoring work.
 - Fixed the unique key in the DB table

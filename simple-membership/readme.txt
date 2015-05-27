@@ -108,6 +108,7 @@ https://simple-membership-plugin.com/
 
 = TODO 2.2.7 =
 - Added Japanese language translation to the plugin. The translation was submitted by Mana.
+- Added Serbian language translation to the plugin. The translation was submitted by Zoran Milijanovic.
 
 = 2.2.6 =
 - Fixed an issue with the category protection menu after the class refactoring work.

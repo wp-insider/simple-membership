@@ -60,7 +60,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
     public function register() {
         if ($this->create_swpm_user() && $this->create_wp_user() && $this->send_reg_email()) {
             do_action('swpm_front_end_registration_complete');//Keep this action hook for people who are using it (so their implementation doesn't break).
-            do_action_ref_array('swpm_front_end_registration_complete_user_data', $this->member_info);
+            do_action('swpm_front_end_registration_complete_user_data', $this->member_info);
 
             $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
             $after_rego_msg = '<p>' . SwpmUtils::_('Registration Successful. ') . SwpmUtils::_('Please') . ' <a href="' . $login_page_url . '">' . SwpmUtils::_('Login') . '</a></p>';

@@ -62,7 +62,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 
     public function edit($id) {
         global $wpdb;
-        $query = $wpdb->prepare("SELECT user_name, email FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id = %d", $id);
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id = %d", $id);
         $member = $wpdb->get_row($query, ARRAY_A);
         $email_address = $member['email'];
         $user_name = $member['user_name'];

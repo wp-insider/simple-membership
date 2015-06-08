@@ -85,6 +85,8 @@ The following language translations are already available:
 * Romanian
 * Danish
 * Lithuanian
+* Serbian
+* Japanese
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 

@@ -1,3 +1,25 @@
 .home-widgets .widget {
     text-align: left !important;
 }
+.entry-content code{
+color: #2e2f33 !important;
+}
+
+/*** eStore Plugin Related ***/
+.eStore_variation {
+width: auto !important;
+}
+.eStore-product-name{
+font-size: 18px !important;
+}
+
+/*** Nice Pre/code box ***/
+pre{
+background: #333;
+color: #ccc;
+overflow: scroll;
+padding: 0 20px;
+white-space: pre;
+font-family: monospace,serif;
+font-size: 1em;
+}

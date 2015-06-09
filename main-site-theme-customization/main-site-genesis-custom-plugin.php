@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Theme Customization Plugin (https://simple-membership-plugin.com)
-Version: v1.0
+Version: v1.1
 Plugin URI: https://simple-membership-plugin.com
 Author: Ruhul Amin
 Author URI: https://simple-membership-plugin.com
@@ -32,4 +32,3 @@ function mgc_custom_footer( $output ) {
 
 //Shortcode filtering on text widgets
 if (!is_admin()){add_filter('widget_text', 'do_shortcode');}
-

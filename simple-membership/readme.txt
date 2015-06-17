@@ -108,6 +108,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO - 2.2.8 =
+- Updated the swedish language translation file.
+
 = 2.2.7 =
 - Added Japanese language translation to the plugin. The translation was submitted by Mana.
 - Added Serbian language translation to the plugin. The translation was submitted by Zoran Milijanovic.

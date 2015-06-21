@@ -24,6 +24,9 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : '';
                 case 'create_new_button':
                     include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_create_payment_buttons.php');
                     break;
+                case 'edit_button':
+                    include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_edit_payment_buttons.php');
+                    break;                    
                 case 'all_txns':
                     include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_all_payment_transactions.php');
                     break;

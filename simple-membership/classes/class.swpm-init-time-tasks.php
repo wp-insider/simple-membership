@@ -68,7 +68,7 @@ class SwpmInitTimeTasks {
 
     public function create_post_type() {
         //The payment button data for membership levels will be stored using this CPT
-        register_post_type('swpm_payments', array(
+        register_post_type('swpm_payment_button', array(
             'public' => false,
             'publicly_queryable' => false,
             'show_ui' => false,

@@ -1,6 +1,6 @@
-<?php screen_icon('options-general'); ?>
-<h1><?php echo SwpmUtils::_('Simple WP Membership::Settings') ?></h1>
 <div class="wrap">
+
+    <h2><?php echo SwpmUtils::_('Simple WP Membership::Settings') ?></h2>
 
     <?php do_action("swpm-draw-tab"); ?>
 

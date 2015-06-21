@@ -110,6 +110,10 @@ https://simple-membership-plugin.com/
 
 = TODO - 2.2.8 =
 - Updated the swedish language translation file.
+- Code refactoring: moved all the init hook tasks to a separate class.
+- Increased the size of admin nav tab menu items so they are easy to see.
+- Made all the admin menu title size consistent accross all the menus.
+- Updated the admin menu dashicon icon to a nicer looking one.
 
 = 2.2.7 =
 - Added Japanese language translation to the plugin. The translation was submitted by Mana.

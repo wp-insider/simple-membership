@@ -527,7 +527,7 @@ class SimpleWpMembership {
                 include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_tools_settings.php');
                 break;
             case 2:
-                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_payment_settings.php');
+                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/admin_payment_settings.php');
                 break;
             default:
                 include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
@@ -536,7 +536,7 @@ class SimpleWpMembership {
     }
 
     public function payments_menu() {
-        include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_payments_page.php');
+        include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/admin_payments_page.php');
     }
 
     public function add_ons_menu() {

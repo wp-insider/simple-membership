@@ -13,14 +13,17 @@ class SwpmInitTimeTasks {
         $locale = apply_filters('plugin_locale', get_locale(), 'swpm');
         load_textdomain('swpm', WP_LANG_DIR . "/swpm-$locale.mo");
         load_plugin_textdomain('swpm', false, SIMPLE_WP_MEMBERSHIP_DIRNAME . '/languages/');
-        
+
         if (!isset($_COOKIE['swpm_session'])) { // give a unique ID to current session.
             $uid = md5(microtime());
             $_COOKIE['swpm_session'] = $uid; // fake it for current session/
             setcookie('swpm_session', $uid, 0, '/');
         }
 
-        if (current_user_can('manage_options')) { // admin stuff
+        //Crete the custom post types
+        $this->create_post_type();
+
+        if (current_user_can('manage_options')) { // Admin stuff
             $this->admin_init();
         }
 
@@ -37,7 +40,7 @@ class SwpmInitTimeTasks {
             $this->register_member();
             $this->edit_profile();
         }
-        
+
         //IPN listener
         $this->swpm_ipn_listener();
     }
@@ -61,6 +64,22 @@ class SwpmInitTimeTasks {
             $id = filter_input(INPUT_GET, 'id');
             SwpmMembershipLevel::get_instance()->edit($id);
         }
+    }
+
+    public function create_post_type() {
+        //The payment button data for membership levels will be stored using this CPT
+        register_post_type('swpm_payments', array(
+            'public' => false,
+            'publicly_queryable' => false,
+            'show_ui' => false,
+            'query_var' => false,
+            'rewrite' => false,
+            'capability_type' => 'page',
+            'has_archive' => false,
+            'hierarchical' => false,
+            'supports' => array('title', 'editor')
+        ));
+        
     }
 
     private function verify_and_delete_account() {
@@ -99,13 +118,13 @@ class SwpmInitTimeTasks {
             SwpmFrontRegistration::get_instance()->reset_password($swpm_reset_email);
         }
     }
-    
+
     private function register_member() {
         $registration = filter_input(INPUT_POST, 'swpm_registration_submit');
         if (!empty($registration)) {
             SwpmFrontRegistration::get_instance()->register();
         }
-    }    
+    }
 
     private function edit_profile() {
         $swpm_editprofile_submit = filter_input(INPUT_POST, 'swpm_editprofile_submit');
@@ -114,14 +133,15 @@ class SwpmInitTimeTasks {
             //TODO - do a redirect?
         }
     }
-    
 
     /* PayPal Payment IPN listener */
+
     public function swpm_ipn_listener() {
         $swpm_process_ipn = filter_input(INPUT_GET, 'swpm_process_ipn');
         if ($swpm_process_ipn == '1') {
             include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_pp_ipn.php');
             exit;
         }
-    }    
+    }
+
 }

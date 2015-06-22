@@ -138,7 +138,7 @@ function swpm_save_new_pp_buy_now_button_data() {
         add_post_meta($button_id, 'paypal_email', trim(strip_tags($_REQUEST['paypal_email'])));
 
         //Redirect to the edit interface of this button with $button_id        
-        $url = admin_url().'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
+        $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
         SwpmMiscUtils::redirect_to_url($url);
     }
 }
@@ -155,21 +155,18 @@ add_action('swpm_edit_payment_button_for_pp_buy_now', 'swpm_edit_pp_buy_now_butt
 
 function swpm_edit_pp_buy_now_button() {
 
-    //TODO - finish this function
-    //TODO - testing using the following link
-    //http://localhost:81/wp/wp7/wp-admin/admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=62&button_type=pp_buy_now
-    
+    //Retrieve the payment button data and present it for editing.    
+
     $button_id = strip_tags($_REQUEST['button_id']);
     $button_type = strip_tags($_REQUEST['button_type']);
-    
-    $button = get_post($button_id);//Retrieve the CPT for this button
-    
+
+    $button = get_post($button_id); //Retrieve the CPT for this button
+
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
     $payment_amount = get_post_meta($button_id, 'payment_amount', true);
     $payment_currency = get_post_meta($button_id, 'payment_currency', true);
     $return_url = get_post_meta($button_id, 'return_url', true);
     $paypal_email = get_post_meta($button_id, 'paypal_email', true);
-
     ?>
     <div class="postbox">
         <h3><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now Button Configuration'); ?></label></h3>
@@ -184,10 +181,10 @@ function swpm_edit_pp_buy_now_button() {
                         <th scope="row"><?php echo SwpmUtils::_('Button ID'); ?></th>
                         <td>
                             <input type="text" size="10" name="button_id" value="<?php echo $button_id; ?>" readonly required />
-                            <p class="description">This is the ID of this payment button.</p>
+                            <p class="description">This is the ID of this payment button. It is automatically generated for you and it cannot be changed.</p>
                         </td>
                     </tr>
-                    
+
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Button Title'); ?></th>
                         <td>
@@ -218,36 +215,36 @@ function swpm_edit_pp_buy_now_button() {
                         <th scope="row"><?php echo SwpmUtils::_('Payment Currency'); ?></th>
                         <td>                            
                             <select id="payment_currency" name="payment_currency">
-                                <option value="USD" <?php echo ($payment_currency == 'USD')? 'selected="selected"' : ''; ?>>US Dollars ($)</option>
-                                <option value="EUR" <?php echo ($payment_currency == 'EUR')? 'selected="selected"' : ''; ?>>Euros (€)</option>
-                                <option value="GBP" <?php echo ($payment_currency == 'GBP')? 'selected="selected"' : ''; ?>>Pounds Sterling (£)</option>
-                                <option value="AUD" <?php echo ($payment_currency == 'AUD')? 'selected="selected"' : ''; ?>>Australian Dollars ($)</option>
-                                <option value="BRL" <?php echo ($payment_currency == 'BRL')? 'selected="selected"' : ''; ?>>Brazilian Real (R$)</option>
-                                <option value="CAD" <?php echo ($payment_currency == 'CAD')? 'selected="selected"' : ''; ?>>Canadian Dollars ($)</option>
-                                <option value="CNY" <?php echo ($payment_currency == 'CNY')? 'selected="selected"' : ''; ?>>Chinese Yuan</option>
-                                <option value="CZK" <?php echo ($payment_currency == 'CZK')? 'selected="selected"' : ''; ?>>Czech Koruna</option>
-                                <option value="DKK" <?php echo ($payment_currency == 'DKK')? 'selected="selected"' : ''; ?>>Danish Krone</option>
-                                <option value="HKD" <?php echo ($payment_currency == 'HKD')? 'selected="selected"' : ''; ?>>Hong Kong Dollar ($)</option>
-                                <option value="HUF" <?php echo ($payment_currency == 'HUF')? 'selected="selected"' : ''; ?>>Hungarian Forint</option>
-                                <option value="INR" <?php echo ($payment_currency == 'INR')? 'selected="selected"' : ''; ?>>Indian Rupee</option>
-                                <option value="IDR" <?php echo ($payment_currency == 'IDR')? 'selected="selected"' : ''; ?>>Indonesia Rupiah</option>
-                                <option value="ILS" <?php echo ($payment_currency == 'ILS')? 'selected="selected"' : ''; ?>>Israeli Shekel</option>
-                                <option value="JPY" <?php echo ($payment_currency == 'JPY')? 'selected="selected"' : ''; ?>>Japanese Yen (¥)</option>
-                                <option value="MYR" <?php echo ($payment_currency == 'MYR')? 'selected="selected"' : ''; ?>>Malaysian Ringgits</option>
-                                <option value="MXN" <?php echo ($payment_currency == 'MXN')? 'selected="selected"' : ''; ?>>Mexican Peso ($)</option>
-                                <option value="NZD" <?php echo ($payment_currency == 'NZD')? 'selected="selected"' : ''; ?>>New Zealand Dollar ($)</option>
-                                <option value="NOK" <?php echo ($payment_currency == 'NOK')? 'selected="selected"' : ''; ?>>Norwegian Krone</option>
-                                <option value="PHP" <?php echo ($payment_currency == 'PHP')? 'selected="selected"' : ''; ?>>Philippine Pesos</option>
-                                <option value="PLN" <?php echo ($payment_currency == 'PLN')? 'selected="selected"' : ''; ?>>Polish Zloty</option>
-                                <option value="SGD" <?php echo ($payment_currency == 'SGD')? 'selected="selected"' : ''; ?>>Singapore Dollar ($)</option>
-                                <option value="ZAR" <?php echo ($payment_currency == 'ZAR')? 'selected="selected"' : ''; ?>>South African Rand (R)</option>
-                                <option value="KRW" <?php echo ($payment_currency == 'KRW')? 'selected="selected"' : ''; ?>>South Korean Won</option>
-                                <option value="SEK" <?php echo ($payment_currency == 'SEK')? 'selected="selected"' : ''; ?>>Swedish Krona</option>
-                                <option value="CHF" <?php echo ($payment_currency == 'CHF')? 'selected="selected"' : ''; ?>>Swiss Franc</option>
-                                <option value="TWD" <?php echo ($payment_currency == 'TWD')? 'selected="selected"' : ''; ?>>Taiwan New Dollars</option>
-                                <option value="THB" <?php echo ($payment_currency == 'THB')? 'selected="selected"' : ''; ?>>Thai Baht</option>
-                                <option value="TRY" <?php echo ($payment_currency == 'TRY')? 'selected="selected"' : ''; ?>>Turkish Lira</option>
-                                <option value="VND" <?php echo ($payment_currency == 'VND')? 'selected="selected"' : ''; ?>>Vietnamese Dong</option>
+                                <option value="USD" <?php echo ($payment_currency == 'USD') ? 'selected="selected"' : ''; ?>>US Dollars ($)</option>
+                                <option value="EUR" <?php echo ($payment_currency == 'EUR') ? 'selected="selected"' : ''; ?>>Euros (€)</option>
+                                <option value="GBP" <?php echo ($payment_currency == 'GBP') ? 'selected="selected"' : ''; ?>>Pounds Sterling (£)</option>
+                                <option value="AUD" <?php echo ($payment_currency == 'AUD') ? 'selected="selected"' : ''; ?>>Australian Dollars ($)</option>
+                                <option value="BRL" <?php echo ($payment_currency == 'BRL') ? 'selected="selected"' : ''; ?>>Brazilian Real (R$)</option>
+                                <option value="CAD" <?php echo ($payment_currency == 'CAD') ? 'selected="selected"' : ''; ?>>Canadian Dollars ($)</option>
+                                <option value="CNY" <?php echo ($payment_currency == 'CNY') ? 'selected="selected"' : ''; ?>>Chinese Yuan</option>
+                                <option value="CZK" <?php echo ($payment_currency == 'CZK') ? 'selected="selected"' : ''; ?>>Czech Koruna</option>
+                                <option value="DKK" <?php echo ($payment_currency == 'DKK') ? 'selected="selected"' : ''; ?>>Danish Krone</option>
+                                <option value="HKD" <?php echo ($payment_currency == 'HKD') ? 'selected="selected"' : ''; ?>>Hong Kong Dollar ($)</option>
+                                <option value="HUF" <?php echo ($payment_currency == 'HUF') ? 'selected="selected"' : ''; ?>>Hungarian Forint</option>
+                                <option value="INR" <?php echo ($payment_currency == 'INR') ? 'selected="selected"' : ''; ?>>Indian Rupee</option>
+                                <option value="IDR" <?php echo ($payment_currency == 'IDR') ? 'selected="selected"' : ''; ?>>Indonesia Rupiah</option>
+                                <option value="ILS" <?php echo ($payment_currency == 'ILS') ? 'selected="selected"' : ''; ?>>Israeli Shekel</option>
+                                <option value="JPY" <?php echo ($payment_currency == 'JPY') ? 'selected="selected"' : ''; ?>>Japanese Yen (¥)</option>
+                                <option value="MYR" <?php echo ($payment_currency == 'MYR') ? 'selected="selected"' : ''; ?>>Malaysian Ringgits</option>
+                                <option value="MXN" <?php echo ($payment_currency == 'MXN') ? 'selected="selected"' : ''; ?>>Mexican Peso ($)</option>
+                                <option value="NZD" <?php echo ($payment_currency == 'NZD') ? 'selected="selected"' : ''; ?>>New Zealand Dollar ($)</option>
+                                <option value="NOK" <?php echo ($payment_currency == 'NOK') ? 'selected="selected"' : ''; ?>>Norwegian Krone</option>
+                                <option value="PHP" <?php echo ($payment_currency == 'PHP') ? 'selected="selected"' : ''; ?>>Philippine Pesos</option>
+                                <option value="PLN" <?php echo ($payment_currency == 'PLN') ? 'selected="selected"' : ''; ?>>Polish Zloty</option>
+                                <option value="SGD" <?php echo ($payment_currency == 'SGD') ? 'selected="selected"' : ''; ?>>Singapore Dollar ($)</option>
+                                <option value="ZAR" <?php echo ($payment_currency == 'ZAR') ? 'selected="selected"' : ''; ?>>South African Rand (R)</option>
+                                <option value="KRW" <?php echo ($payment_currency == 'KRW') ? 'selected="selected"' : ''; ?>>South Korean Won</option>
+                                <option value="SEK" <?php echo ($payment_currency == 'SEK') ? 'selected="selected"' : ''; ?>>Swedish Krona</option>
+                                <option value="CHF" <?php echo ($payment_currency == 'CHF') ? 'selected="selected"' : ''; ?>>Swiss Franc</option>
+                                <option value="TWD" <?php echo ($payment_currency == 'TWD') ? 'selected="selected"' : ''; ?>>Taiwan New Dollars</option>
+                                <option value="THB" <?php echo ($payment_currency == 'THB') ? 'selected="selected"' : ''; ?>>Thai Baht</option>
+                                <option value="TRY" <?php echo ($payment_currency == 'TRY') ? 'selected="selected"' : ''; ?>>Turkish Lira</option>
+                                <option value="VND" <?php echo ($payment_currency == 'VND') ? 'selected="selected"' : ''; ?>>Vietnamese Dong</option>
                             </select>
                             <p class="description">Select the currency for this payment button.</p>
                         </td>
@@ -290,27 +287,29 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_pp_buy_now_
 function swpm_edit_pp_buy_now_button_data() {
     if (isset($_REQUEST['swpm_pp_buy_now_edit_submit'])) {
         //This is a PayPal buy now button edit event. Process the submission.
-        //TODO - Do some basic validation check??
-        //TODO - Update and Save the edited button data
-//        $button_id = wp_insert_post(
-//                array(
-//                    'post_title' => strip_tags($_REQUEST['button_name']),
-//                    'post_type' => 'swpm_payment_button',
-//                    'post_content' => '',
-//                    'post_status' => 'publish'
-//                )
-//        );
-//
-//        add_post_meta($button_id, 'button_type', strip_tags($_REQUEST['button_type']));
-//        add_post_meta($button_id, 'membership_level_id', strip_tags($_REQUEST['membership_level_id']));
-//        add_post_meta($button_id, 'payment_amount', trim(strip_tags($_REQUEST['payment_amount'])));
-//        add_post_meta($button_id, 'payment_currency', strip_tags($_REQUEST['payment_currency']));
-//        add_post_meta($button_id, 'return_url', trim(strip_tags($_REQUEST['return_url'])));
-//        add_post_meta($button_id, 'paypal_email', trim(strip_tags($_REQUEST['paypal_email'])));
-//
-//        //Redirect to the All Buttons interface after save?
-//        wp_redirect ('admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id='.$button_id);
-//        exit;
+        
+        //TODO - Do some basic validation check?
+        
+        //Update and Save the edited payment button data
+        $button_id = strip_tags($_REQUEST['button_id']);
+        $button_type = strip_tags($_REQUEST['button_type']);
+        $button_name = strip_tags($_REQUEST['button_name']);
+
+        $button_post = array(
+            'ID' => $button_id,
+            'post_title' => $button_name,
+            'post_type' => 'post_type',
+        );
+        wp_update_post($button_post);
+
+        update_post_meta($button_id, 'button_type', $button_type);
+        update_post_meta($button_id, 'membership_level_id', strip_tags($_REQUEST['membership_level_id']));
+        update_post_meta($button_id, 'payment_amount', trim(strip_tags($_REQUEST['payment_amount'])));
+        update_post_meta($button_id, 'payment_currency', strip_tags($_REQUEST['payment_currency']));
+        update_post_meta($button_id, 'return_url', trim(strip_tags($_REQUEST['return_url'])));
+        update_post_meta($button_id, 'paypal_email', trim(strip_tags($_REQUEST['paypal_email'])));
+
+        echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
     }
 }
 

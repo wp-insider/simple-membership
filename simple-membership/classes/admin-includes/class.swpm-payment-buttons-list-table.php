@@ -29,6 +29,10 @@ class SwpmPaymentButtonsListTable extends SWPM_List_Table {
             case 'membership_level':
                 return get_post_meta($item['ID'], 'membership_level_id', true);
                 break;
+            case 'button_shortcode':
+                $shortcode = '[swpm_payment_button id='.$item['ID'].']';
+                return $shortcode;
+                break;            
         }
     }
 
@@ -59,6 +63,7 @@ class SwpmPaymentButtonsListTable extends SWPM_List_Table {
             'ID' => 'Payment Button ID',
             'title' => 'Payment Button Title',
             'membership_level' => 'Membership Level ID',
+            'button_shortcode' => 'Button Shortcode',
         );
         return $columns;
     }

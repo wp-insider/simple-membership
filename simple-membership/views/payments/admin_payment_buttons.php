@@ -8,4 +8,21 @@
     </p>
 </div>
 
-TODO - complete this interface
+<?php
+include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/admin-includes/class.swpm-payment-buttons-list-table.php');
+//Create an instance of our package class...
+$payments_buttons_table = new SwpmPaymentButtonsListTable();
+
+//Fetch, prepare, sort, and filter our data...
+$payments_buttons_table->prepare_items();
+
+?>
+
+<form id="swpm-payment-buttons-filter" method="post" onSubmit="return confirm('Are you sure you want to perform this bulk operation on the selected entries?');">
+
+    <input type="hidden" name="page" value="" />
+    <!-- Now we can render the completed list table -->
+    <?php $payments_buttons_table->display(); ?>
+</form>
+
+

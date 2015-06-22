@@ -298,7 +298,7 @@ function swpm_edit_pp_buy_now_button_data() {
         $button_post = array(
             'ID' => $button_id,
             'post_title' => $button_name,
-            'post_type' => 'post_type',
+            'post_type' => 'swpm_payment_button',
         );
         wp_update_post($button_post);
 

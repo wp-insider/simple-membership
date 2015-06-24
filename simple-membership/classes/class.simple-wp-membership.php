@@ -26,6 +26,7 @@ include_once('class.swpm-membership-level-utils.php');
 include_once('class.swpm-permission-collection.php');
 include_once('class.swpm-auth-permission-collection.php');
 include_once('class.swpm-transactions.php');
+include_once('shortcode-related/class.swpm-shortcodes-handler.php');
 
 class SimpleWpMembership {
 
@@ -42,10 +43,13 @@ class SimpleWpMembership {
         add_filter('attachment_fields_to_save', array(&$this, 'save_attachment_extra'), 10, 2);
         add_filter('the_content_more_link', array(&$this, 'filter_moretag'), 10, 2);
 
+        //TODO - refactor these shortcodes into the shortcodes handler class
         add_shortcode("swpm_registration_form", array(&$this, 'registration_form'));
         add_shortcode('swpm_profile_form', array(&$this, 'profile_form'));
         add_shortcode('swpm_login_form', array(&$this, 'login'));
         add_shortcode('swpm_reset_form', array(&$this, 'reset'));
+        
+        new SwpmShortcodesHandler();//Tackle the shortcode definitions and implementation.
 
         add_action('save_post', array(&$this, 'save_postdata'));
         add_action('admin_notices', array(&$this, 'notices'));

@@ -97,6 +97,14 @@ function swpm_create_new_pp_buy_now_button() {
                         </td>
                     </tr>                    
 
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Button Image URL'); ?></th>
+                        <td>
+                            <input type="text" size="100" name="button_image_url" value="" />
+                            <p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
+                        </td>
+                    </tr> 
+                    
                 </table>
 
                 <p class="submit">
@@ -136,9 +144,13 @@ function swpm_save_new_pp_buy_now_button_data() {
         add_post_meta($button_id, 'payment_currency', strip_tags($_REQUEST['payment_currency']));
         add_post_meta($button_id, 'return_url', trim(strip_tags($_REQUEST['return_url'])));
         add_post_meta($button_id, 'paypal_email', trim(strip_tags($_REQUEST['paypal_email'])));
+        add_post_meta($button_id, 'button_image_url', trim(strip_tags($_REQUEST['button_image_url'])));
 
         //Redirect to the edit interface of this button with $button_id        
-        $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
+        //$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
+        
+        //Redirect to the manager payment buttons interface
+        $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=payment_buttons';
         SwpmMiscUtils::redirect_to_url($url);
     }
 }
@@ -167,6 +179,7 @@ function swpm_edit_pp_buy_now_button() {
     $payment_currency = get_post_meta($button_id, 'payment_currency', true);
     $return_url = get_post_meta($button_id, 'return_url', true);
     $paypal_email = get_post_meta($button_id, 'paypal_email', true);
+    $button_image_url = get_post_meta($button_id, 'button_image_url', true);
     ?>
     <div class="postbox">
         <h3><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now Button Configuration'); ?></label></h3>
@@ -265,7 +278,15 @@ function swpm_edit_pp_buy_now_button() {
                             <p class="description">Enter your PayPal email address. The payment will go to this PayPal account.</p>
                         </td>
                     </tr>                    
-
+                    
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Button Image URL'); ?></th>
+                        <td>
+                            <input type="text" size="100" name="button_image_url" value="<?php echo $button_image_url; ?>" />
+                            <p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
+                        </td>
+                    </tr> 
+                    
                 </table>
 
                 <p class="submit">
@@ -308,6 +329,7 @@ function swpm_edit_pp_buy_now_button_data() {
         update_post_meta($button_id, 'payment_currency', strip_tags($_REQUEST['payment_currency']));
         update_post_meta($button_id, 'return_url', trim(strip_tags($_REQUEST['return_url'])));
         update_post_meta($button_id, 'paypal_email', trim(strip_tags($_REQUEST['paypal_email'])));
+        update_post_meta($button_id, 'button_image_url', trim(strip_tags($_REQUEST['button_image_url'])));
 
         echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
     }

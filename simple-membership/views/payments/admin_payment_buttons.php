@@ -4,7 +4,7 @@
 
 <div style="background: #DDDDDD;border: 1px solid #CCCCCC;color: #383838;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">
     <p>
-        <?php echo SwpmUtils::_('All the membership buttons that you created in the plugin is displayed here.'); ?>
+        <?php echo SwpmUtils::_('All the membership buttons that you created in the plugin are displayed here.'); ?>
     </p>
 </div>
 
@@ -25,4 +25,6 @@ $payments_buttons_table->prepare_items();
     <?php $payments_buttons_table->display(); ?>
 </form>
 
-
+<p>
+    <a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" class="button">Create New Button</a>
+</p>

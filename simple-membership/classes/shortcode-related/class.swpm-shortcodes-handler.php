@@ -10,6 +10,7 @@ class SwpmShortcodesHandler {
     public function swpm_payment_button_sc($args) {
         extract(shortcode_atts(array(
         'id' => '',
+        'button_text' => '',
         ), $args));
         
         if(empty($id)){

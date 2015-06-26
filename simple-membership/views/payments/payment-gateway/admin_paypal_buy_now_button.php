@@ -6,6 +6,14 @@ add_action('swpm_create_new_button_for_pp_buy_now', 'swpm_create_new_pp_buy_now_
 
 function swpm_create_new_pp_buy_now_button() {
     ?>
+
+    <div style="background: none repeat scroll 0 0 #FFF6D5;border: 1px solid #D1B655;color: #3F2502;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">
+        <p>View the
+            <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-buy-now-button-inside-the-simple-membership-plugin/">documentation</a>
+            to learn how to create a PayPal Buy Now payment button and use it.
+        </p>
+    </div>
+
     <div class="postbox">
         <h3><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now Button Configuration'); ?></label></h3>
         <div class="inside">
@@ -104,7 +112,7 @@ function swpm_create_new_pp_buy_now_button() {
                             <p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
                         </td>
                     </tr> 
-                    
+
                 </table>
 
                 <p class="submit">
@@ -148,7 +156,6 @@ function swpm_save_new_pp_buy_now_button_data() {
 
         //Redirect to the edit interface of this button with $button_id        
         //$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
-        
         //Redirect to the manager payment buttons interface
         $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=payment_buttons';
         SwpmMiscUtils::redirect_to_url($url);
@@ -278,7 +285,7 @@ function swpm_edit_pp_buy_now_button() {
                             <p class="description">Enter your PayPal email address. The payment will go to this PayPal account.</p>
                         </td>
                     </tr>                    
-                    
+
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Button Image URL'); ?></th>
                         <td>
@@ -286,7 +293,7 @@ function swpm_edit_pp_buy_now_button() {
                             <p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
                         </td>
                     </tr> 
-                    
+
                 </table>
 
                 <p class="submit">
@@ -308,9 +315,7 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_pp_buy_now_
 function swpm_edit_pp_buy_now_button_data() {
     if (isset($_REQUEST['swpm_pp_buy_now_edit_submit'])) {
         //This is a PayPal buy now button edit event. Process the submission.
-        
         //TODO - Do some basic validation check?
-        
         //Update and Save the edited payment button data
         $button_id = strip_tags($_REQUEST['button_id']);
         $button_type = strip_tags($_REQUEST['button_type']);

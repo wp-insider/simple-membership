@@ -6,12 +6,16 @@
  * @author nur
  */
 abstract class SwpmRegistration {
+
     protected $member_info = array();
     protected static $_intance = null;
+
     //public abstract static function get_instance();
-    protected function send_reg_email(){
+    protected function send_reg_email() {
         global $wpdb;
-        if (empty($this->member_info)) {return false;}
+        if (empty($this->member_info)) {
+            return false;
+        }
         $member_info = $this->member_info;
         $settings = SwpmSettings::get_instance();
         $subject = $settings->get_value('reg-complete-mail-subject');
@@ -28,15 +32,19 @@ abstract class SwpmRegistration {
         $email = sanitize_email(filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW));
         wp_mail(trim($email), $subject, $body, $headers);
         if ($settings->get_value('enable-admin-notification-after-reg')) {
+            $to_email_address = $settings->get_value('admin-notification-email');
+            $headers = 'From: ' . $from_address . "\r\n";
             $subject = "Notification of New Member Registration";
             $body = "A new member has registered. The following email was sent to the member." .
                     "\n\n-------Member Email----------\n" . $body .
                     "\n\n------End------\n";
-            wp_mail($from_address, $subject, $body, $headers);
+            wp_mail(empty($to_email_address) ? $from_address : $to_email_address, $subject, $body, $headers);
         }
         return true;
     }
+
 }
-function swpm_enclose_var($n){
-    return '{'.$n .'}';
+
+function swpm_enclose_var($n) {
+    return '{' . $n . '}';
 }

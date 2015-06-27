@@ -109,6 +109,8 @@ class SwpmSettings {
             'message' => ''));
         add_settings_field('enable-admin-notification-after-reg', SwpmUtils::_('Send Notification To Admin'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'enable-admin-notification-after-reg',
             'message' => ''));
+        add_settings_field('admin-notification-email', SwpmUtils::_('Admin Email'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'admin-notification-email',
+            'message' => 'Email where email will be sent when "Send Notification To Admin" is checked.'));
         add_settings_field('enable-notification-after-manual-user-add', SwpmUtils::_('Send Email to Member When Added via Admin Dashboard'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'enable-notification-after-manual-user-add',
             'message' => ''));
 
@@ -310,6 +312,7 @@ class SwpmSettings {
         $output['reg-prompt-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-prompt-complete-mail-body']));
         $output['email-from'] = trim($input['email-from']);
         $output['enable-admin-notification-after-reg'] = isset($input['enable-admin-notification-after-reg']) ? esc_attr($input['enable-admin-notification-after-reg']) : "";
+        $output['admin-notification-email'] = sanitize_email($input['admin-notification-email']);
         $output['enable-notification-after-manual-user-add'] = isset($input['enable-notification-after-manual-user-add']) ? esc_attr($input['enable-notification-after-manual-user-add']) : "";
 
         return $output;

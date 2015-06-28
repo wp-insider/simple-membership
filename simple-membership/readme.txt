@@ -108,10 +108,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 2.2.9 =
+= 2.2.9 =
 - Added a new feature to customize the password reset email.
 - Added a new feature to customize the admin notification email address.
 - Improved the help text for a few of the email settings fields.
+- Updated the message that gets displayed after a member updates the profile.
 
 = 2.2.8 =
 - Updated the swedish language translation file.

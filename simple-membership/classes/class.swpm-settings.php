@@ -94,7 +94,7 @@ class SwpmSettings {
 
         add_settings_section('email-misc-settings', SwpmUtils::_('Email Misc. Settings'), array(&$this, 'email_misc_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('email-misc-from', SwpmUtils::_('From Email Address'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-misc-settings', array('item' => 'email-from',
-            'message' => ''));
+            'message' => 'This value will be used as the sender\'s address for the emails. Example value: Your Name &lt;sales@your-domain.com&gt;'));
 
         add_settings_section('reg-prompt-email-settings', SwpmUtils::_('Email Settings (Prompt to Complete Registration )'), array(&$this, 'reg_prompt_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('reg-prompt-complete-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-prompt-email-settings', array('item' => 'reg-prompt-complete-mail-subject',
@@ -107,10 +107,10 @@ class SwpmSettings {
             'message' => ''));
         add_settings_field('reg-complete-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-body',
             'message' => ''));
-        add_settings_field('enable-admin-notification-after-reg', SwpmUtils::_('Send Notification To Admin'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'enable-admin-notification-after-reg',
-            'message' => ''));
-        add_settings_field('admin-notification-email', SwpmUtils::_('Admin Email'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'admin-notification-email',
-            'message' => 'Email where email will be sent when "Send Notification To Admin" is checked.'));
+        add_settings_field('enable-admin-notification-after-reg', SwpmUtils::_('Send Notification to Admin'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'enable-admin-notification-after-reg',
+            'message' => 'Enable this option if you want the admin to receive a notification when a member registers.'));
+        add_settings_field('admin-notification-email', SwpmUtils::_('Admin Email Address'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'admin-notification-email',
+            'message' => 'Enter the email address where you want the admin notification email to be sent to.'));
         add_settings_field('enable-notification-after-manual-user-add', SwpmUtils::_('Send Email to Member When Added via Admin Dashboard'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'enable-notification-after-manual-user-add',
             'message' => ''));
 
@@ -249,7 +249,7 @@ class SwpmSettings {
     }
 
     public function reset_password_settings_callback() {
-        SwpmUtils::e('This email will be sent to your users when they reset password.');
+        SwpmUtils::e('This email will be sent to your users when they use the password reset functionality.');
     }
 
     public function email_misc_settings_callback() {
@@ -257,11 +257,11 @@ class SwpmSettings {
     }
 
     public function upgrade_email_settings_callback() {
-        SwpmUtils::e('This email will be sent to your users after account upgrade.');
+        SwpmUtils::e('This email will be sent to your users after account upgrade (when an existing member pays for a new membership level).');
     }
 
     public function reg_prompt_email_settings_callback() {
-        SwpmUtils::e('This email will be sent to prompt user to complete registration.');
+        SwpmUtils::e('This email will be sent to prompt users to complete registration after the payment.');
     }
 
     public function advanced_settings_callback() {

@@ -8,7 +8,10 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
     if (empty($button_id)) {
         return '<p style="color: red;">Error! swpm_render_pp_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
     }
-
+    
+    //Check new_window parameter
+    $window_target = isset($args['new_window']) ? 'target="_blank"' : '';
+    
     $settings = SwpmSettings::get_instance();
     $button_cpt = get_post($button_id); //Retrieve the CPT for this button
 
@@ -36,14 +39,14 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
         $custom_field_value .= '&swpm_id='.SwpmMemberUtils::get_logged_in_members_id();
     }
     $custom_field_value = apply_filters('swpm_custom_field_value_filter', $custom_field_value);
-
+        
     /* === PayPal Buy Now Button Form === */
     $output = '';
     $output .= '<div class="swpm-button-wrapper swpm-pp-buy-now-wrapper">';
     if ($sandbox_enabled) {
-        $output .= '<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">';
+        $output .= '<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" '.$window_target.'>';
     } else {
-        $output .= '<form action="https://www.paypal.com/cgi-bin/webscr" method="post">';
+        $output .= '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" '.$window_target.'>';
     }
 
     $output .= '<input type="hidden" name="cmd" value="_xclick" />';

@@ -110,6 +110,7 @@ https://simple-membership-plugin.com/
 
 = 3.0 =
 - Updated the swedish langauge translation
+- Added a new option to enable openning of the PayPal buy button in a new window (using the "new_window" parameter in the shortcode).
 
 = 2.2.9 =
 - Added a new feature to customize the password reset email.

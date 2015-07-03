@@ -108,6 +108,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= 3.0 =
+- Updated the swedish langauge translation
+
 = 2.2.9 =
 - Added a new feature to customize the password reset email.
 - Added a new feature to customize the admin notification email address.

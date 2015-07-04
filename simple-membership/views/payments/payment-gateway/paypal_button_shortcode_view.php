@@ -118,8 +118,10 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
 
     //Trial billing details
     $trial_billing_amount = get_post_meta($button_id, 'trial_billing_amount', true);
-    if (!is_numeric($trial_billing_amount)) {
-        return '<p style="color: red;">Error! The trial billing amount value of the button must be a numeric number. Example: 19.50 </p>';
+    if (!empty($trial_billing_amount)) {
+        if(!is_numeric($trial_billing_amount)){
+            return '<p style="color: red;">Error! The trial billing amount value of the button must be a numeric number. Example: 19.50 </p>';
+        }
     }
     $trial_billing_cycle = get_post_meta($button_id, 'trial_billing_cycle', true);
     $trial_billing_cycle_term = get_post_meta($button_id, 'trial_billing_cycle_term', true);
@@ -172,7 +174,7 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
     //Reccurring times
     if ($billing_cycle_count > 1) { //do not include srt value if billing cycle count set to 1 or a negetive number.
         $output .= '<input type="hidden" name="src" value="1" /><input type="hidden" name="srt" value="' . $billing_cycle_count . '" />';
-    } else if ($billing_cycle_count == '0') {
+    } else if (empty($billing_cycle_count)) {
         $output .= '<input type="hidden" name="src" value="1" />';
     }
 

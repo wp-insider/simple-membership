@@ -6,6 +6,14 @@ add_action('swpm_create_new_button_for_pp_subscription', 'swpm_create_new_pp_sub
 
 function swpm_create_new_pp_subscription_button() {
     ?>
+
+    <div style="background: none repeat scroll 0 0 #FFF6D5;border: 1px solid #D1B655;color: #3F2502;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">
+        <p>View the
+            <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-subscription-button-inside-the-simple-membership-plugin/">documentation</a>
+            to learn how to create a PayPal Subscription payment button and use it.
+        </p>
+    </div>
+
     <form id="pp_button_config_form" method="post">
 
         <div class="postbox">

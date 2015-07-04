@@ -108,9 +108,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= 3.0 =
+= TODO - 3.0 =
 - Updated the swedish langauge translation
-- Added a new option to enable openning of the PayPal buy button in a new window (using the "new_window" parameter in the shortcode).
+- Added a new option to enable opening of the PayPal buy button in a new window (using the "new_window" parameter in the shortcode).
+- [need to complete shortcode and documentation then link] You can now create and configure PayPal Subscription button for membership payment from the payments menu.
 
 = 2.2.9 =
 - Added a new feature to customize the password reset email.

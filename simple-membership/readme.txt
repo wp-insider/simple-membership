@@ -108,6 +108,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.0.1 =
+- Added a new CSS class to the registration complete message.
+
 = 3.0 =
 - Updated the swedish langauge translation
 - Added a new option to enable opening of the PayPal buy button in a new window (using the "new_window" parameter in the shortcode).

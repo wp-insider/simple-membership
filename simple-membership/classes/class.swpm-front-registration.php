@@ -15,13 +15,12 @@ class SwpmFrontRegistration extends SwpmRegistration {
     public function regigstration_ui($level) {
         $settings_configs = SwpmSettings::get_instance();
         $joinuspage_url = $settings_configs->get_value('join-us-page-url');
-        $membership_level = '';
-        $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
-        $code = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
-
+        $membership_level = '';        
         global $wpdb;
+                
         if (SwpmUtils::is_paid_registration()) {
-            $member = $member = SwpmUtils::get_paid_member_info();
+            //Lets check if this is a registration for paid membership
+            $member = SwpmUtils::get_paid_member_info();
             if (empty($member)) {
                 SwpmUtils::e('Error! Invalid Request. Could not find a match for the given security code and the user ID.');
             }

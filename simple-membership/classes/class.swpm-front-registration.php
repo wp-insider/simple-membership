@@ -32,7 +32,11 @@ class SwpmFrontRegistration extends SwpmRegistration {
         }
         if (empty($membership_level)) {
             $joinuspage_link = '<a href="' . $joinuspage_url . '">Join us</a>';
+            echo '<p>';
             SwpmUtils::e('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.');
+            echo '</p><p>';
+            SwpmUtils::e('You will receive a unique link via email after the payment. You will be able to use that link to complete the premium membership registration.');
+            echo '</p>';
             return;
         }
         $form = apply_filters('swpm_registration_form_override', '', $membership_level);

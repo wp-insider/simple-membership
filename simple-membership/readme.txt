@@ -76,6 +76,7 @@ The following language translations are already available:
 * French
 * Chinese
 * Portuguese (Brazil)
+* Portuguese (Portugal)
 * Swedish
 * Macedonian
 * Polish
@@ -110,6 +111,7 @@ https://simple-membership-plugin.com/
 
 = TODO 3.0.1 =
 - Added a new CSS class to the registration complete message.
+- Added Portuguese (Portugal) language translation file. The translation was submitted by Edgar Sprecher.
 
 = 3.0 =
 - Updated the swedish langauge translation

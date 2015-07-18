@@ -61,8 +61,15 @@ class SwpmFrontRegistration extends SwpmRegistration {
     }
 
     public function register() {
+        $captcha_validated = apply_filters('swpm_validate_registration_form_submission', true, $_POST);
+
+        if (!$captcha_validated) {
+            $message = array('succeeded' => false, 'message' => 'Captcha validation failed.');
+            SwpmTransfer::get_instance()->set('status', $message);
+            return;
+        }
         if ($this->create_swpm_user() && $this->create_wp_user() && $this->send_reg_email()) {
-            do_action('swpm_front_end_registration_complete');//Keep this action hook for people who are using it (so their implementation doesn't break).
+            do_action('swpm_front_end_registration_complete'); //Keep this action hook for people who are using it (so their implementation doesn't break).
             do_action('swpm_front_end_registration_complete_user_data', $this->member_info);
 
             $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
@@ -149,11 +156,11 @@ class SwpmFrontRegistration extends SwpmRegistration {
         if ($form->is_valid()) {
             global $wpdb;
             $message = array('succeeded' => true, 'message' => SwpmUtils::_('Profile updated successfully.'));
-            
-            $member_info = $form->get_sanitized();                        
+
+            $member_info = $form->get_sanitized();
             SwpmUtils::update_wp_user($auth->get('user_name'), $member_info); //Update corresponding wp user record.
-            
-            
+
+
             if (isset($member_info['plain_password'])) {
                 //Password was also changed so show the appropriate message
                 $message = array('succeeded' => true, 'message' => SwpmUtils::_('Profile updated successfully. You will need to re-login since you changed your password.'));
@@ -162,7 +169,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
             $wpdb->update($wpdb->prefix . "swpm_members_tbl", $member_info, array('member_id' => $auth->get('member_id')));
             $auth->reload_user_data();
-            
+
             SwpmTransfer::get_instance()->set('status', $message);
         } else {
             $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following'),

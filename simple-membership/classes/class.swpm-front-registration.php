@@ -61,10 +61,11 @@ class SwpmFrontRegistration extends SwpmRegistration {
     }
 
     public function register() {
-        $captcha_validated = apply_filters('swpm_validate_registration_form_submission', true, $_POST);
+        //If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
+        $captcha_validation_output = apply_filters('swpm_validate_registration_form_submission', '');
 
-        if (!$captcha_validated) {
-            $message = array('succeeded' => false, 'message' => 'Captcha validation failed.');
+        if (!empty($captcha_validation_output)) {
+            $message = array('succeeded' => false, 'message' => SwpmUtils::_('Security check: captcha validation failed.'));
             SwpmTransfer::get_instance()->set('status', $message);
             return;
         }

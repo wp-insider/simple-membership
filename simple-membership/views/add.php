@@ -32,10 +32,15 @@
                     <?php echo $membership_level_alias; ?>
                     <input type="hidden" value="<?php echo $membership_level; ?>" size="50" name="membership_level" id="membership_level" />
                 </td>
-            </tr>
-        </table>
-        <div align="center"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?>  </div>
-        <p align="center"><input type="submit" value="<?php echo SwpmUtils::_('Register') ?>" id="submit" name="swpm_registration_submit" /></p>
+            </tr>           
+        </table>        
+        
+        <div class="swpm-before-registration-submit-section" align="center"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
+        
+        <div class="swpm-registration-submit-section" align="center">
+            <input type="submit" value="<?php echo SwpmUtils::_('Register') ?>" id="submit" name="swpm_registration_submit" />
+        </div>
+        
         <input type="hidden" name="action" value="custom_posts" />
         <?php wp_nonce_field('name_of_my_action', 'name_of_nonce_field'); ?>
     </form>

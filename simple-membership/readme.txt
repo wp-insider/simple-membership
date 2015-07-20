@@ -112,6 +112,8 @@ https://simple-membership-plugin.com/
 = TODO 3.0.1 =
 - Added a new CSS class to the registration complete message.
 - Added Portuguese (Portugal) language translation file. The translation was submitted by Edgar Sprecher.
+- Replaced mysql_real_escape_string() with esc_sql()
+
 
 = 3.0 =
 - Updated the swedish langauge translation

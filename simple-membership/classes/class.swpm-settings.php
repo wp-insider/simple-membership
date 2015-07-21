@@ -57,10 +57,12 @@ class SwpmSettings {
             'options' => array(0 => 'Do not delete', 1 => 'Older than 1 month', 2 => 'Older than 2 months'),
             'default' => '0',
             'message' => SwpmUtils::_('Select how long you want to keep "pending" account.')));
-        /* add_settings_field('protect-everything',  BUtils::_('Protect Everything'),
-          array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
-          array('item' => 'protect-everything',
-          'message'=>BUtils::_('Check this box if you want to protect all posts/pages by default.'))); */
+        /* 
+        add_settings_field('protect-everything',  SwpmUtils::_('Protect Everything'),
+            array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
+            array('item' => 'protect-everything',
+            'message'=>SwpmUtils::_('Check this box if you want to protect all posts/pages by default.'))); 
+        */
 
         add_settings_section('pages-settings', SwpmUtils::_('Pages Settings'), array(&$this, 'pages_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('login-page-url', SwpmUtils::_('Login Page URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'login-page-url',

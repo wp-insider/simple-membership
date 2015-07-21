@@ -1,10 +1,5 @@
 <?php
 
-/**
- * BUtils
- *
- * @author nur
- */
 abstract class SwpmUtils {
 
     public static function is_ajax() {
@@ -26,7 +21,7 @@ abstract class SwpmUtils {
             return 'noexpire';
         }
         if (!is_numeric($subcript_period)) {
-            throw new Exception(" subcript_period parameter must be integer in BUtils::calculate_subscription_period_days method");
+            throw new Exception(" subcript_period parameter must be integer in SwpmUtils::calculate_subscription_period_days method");
         }
         switch (strtolower($subscription_duration_type)) {
             case SwpmMembershipLevel::DAYS:

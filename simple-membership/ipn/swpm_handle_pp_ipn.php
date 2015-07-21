@@ -59,7 +59,6 @@ class swpm_paypal_ipn_handler {
         $custom = $this->ipn_data['custom'];
         $delimiter = "&";
         $customvariables = array();
-
         $namevaluecombos = explode($delimiter, $custom);
         foreach ($namevaluecombos as $keyval_unparsed)
         {

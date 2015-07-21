@@ -367,7 +367,6 @@ abstract class SwpmUtils {
     /*
      * Checks if the string exists in the array key value of the provided array. If it doesn't exist, it returns the first key element from the valid values.
      */
-
     public static function sanitize_value_by_array($val_to_check, $valid_values) {
         $keys = array_keys($valid_values);
         $keys = array_map('strtolower', $keys);
@@ -375,6 +374,22 @@ abstract class SwpmUtils {
             return $val_to_check;
         }
         return reset($keys); //Return he first element from the valid values
+    }
+
+    public static function get_user_ip_address() {
+        $user_ip = '';
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $user_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $user_ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        if (strstr($user_ip, ',')) {
+            $ip_values = explode(',', $user_ip);
+            $user_ip = $ip_values['0'];
+        }
+
+        return apply_filters('swpm_get_user_ip_address', $user_ip);
     }
 
 }

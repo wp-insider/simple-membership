@@ -48,8 +48,8 @@ class SimpleWpMembership {
         add_shortcode('swpm_profile_form', array(&$this, 'profile_form'));
         add_shortcode('swpm_login_form', array(&$this, 'login'));
         add_shortcode('swpm_reset_form', array(&$this, 'reset'));
-        
-        new SwpmShortcodesHandler();//Tackle the shortcode definitions and implementation.
+
+        new SwpmShortcodesHandler(); //Tackle the shortcode definitions and implementation.
 
         add_action('save_post', array(&$this, 'save_postdata'));
         add_action('admin_notices', array(&$this, 'notices'));
@@ -141,6 +141,7 @@ class SimpleWpMembership {
     }
 
     public function admin_init_hook() {
+        $this->common_library();
         SwpmSettings::get_instance()->init_config_hooks();
         $addon_saved = filter_input(INPUT_POST, 'swpm-addon-settings');
         if (!empty($addon_saved)) {

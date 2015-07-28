@@ -221,7 +221,7 @@ class SwpmSettings {
     public function swpm_general_post_submit_check_callback() {
         //Log file reset handler
         if (isset($_REQUEST['swmp_reset_log'])) {
-            if (SwpmMiscUtils::reset_swmp_log_files()) {
+            if (SwpmLog::reset_swmp_log_files()) {
                 echo '<div id="message" class="updated fade"><p>Debug log files have been reset!</p></div>';
             } else {
                 echo '<div id="message" class="updated fade"><p>Debug log files could not be reset!</p></div>';

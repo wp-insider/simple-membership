@@ -110,6 +110,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO - 3.0.2 =
+- Added a new shortcode that can be used on your thank you page. This will allow your users to complete paid registration from the thank you page after payment.
+- The last accessed from IP address of a member is shown to the admin in the member edit screen.
+- The debug log (if enabled) for authentication request is written to the "log-auth.txt" file.
+
 = 3.0.1 =
 - Added a new CSS class to the registration complete message.
 - Added Portuguese (Portugal) language translation file. The translation was submitted by Edgar Sprecher.

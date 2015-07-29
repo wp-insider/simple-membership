@@ -489,7 +489,6 @@ class SimpleWpMembership {
                 $levels->manage_categroy();
                 break;
             case 'delete':
-            case 'bulk_delete':
                 $levels->delete();
             default:
                 $levels->show();

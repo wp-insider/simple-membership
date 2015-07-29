@@ -114,6 +114,8 @@ https://simple-membership-plugin.com/
 - Added a new shortcode that can be used on your thank you page. This will allow your users to complete paid registration from the thank you page after payment.
 - The last accessed from IP address of a member is shown to the admin in the member edit screen.
 - The debug log (if enabled) for authentication request is written to the "log-auth.txt" file.
+- Fixed a bug with the bulk member delete option from the bottom bulk action form.
+
 
 = 3.0.1 =
 - Added a new CSS class to the registration complete message.

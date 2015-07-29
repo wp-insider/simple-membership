@@ -508,7 +508,6 @@ class SimpleWpMembership {
                 $members->process_form_request();
                 break;
             case 'delete':
-            case 'bulk_delete':
                 $members->delete();
             default:
                 $members->show();

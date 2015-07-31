@@ -110,9 +110,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.0.2 =
-- TODO - Add the new addon icon in the addons menu
-- [Need a doc]Added a new shortcode that can be used on your thank you page. This will allow your users to complete paid registration from the thank you page after payment.
+= 3.0.2 =
+- Added a new shortcode that can be used on your thank you page. This will allow your users to complete paid registration from the thank you page after payment.
 - The last accessed from IP address of a member is shown to the admin in the member edit screen.
 - The debug log (if enabled) for authentication request is written to the "log-auth.txt" file.
 - Fixed a bug with the bulk member delete option from the bottom bulk action form.

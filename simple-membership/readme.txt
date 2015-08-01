@@ -110,6 +110,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.0.3 =
+- Increased the database character limit size of the user_name field.
+
 = 3.0.2 =
 - Added a new shortcode that can be used on your thank you page. This will allow your users to complete paid registration from the thank you page after payment.
 - The last accessed from IP address of a member is shown to the admin in the member edit screen.

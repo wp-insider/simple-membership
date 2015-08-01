@@ -185,7 +185,7 @@ class swpm_paypal_ipn_handler {
         SwpmTransactions::save_txn_record($this->ipn_data, $cart_items);
         $this->debug_log('Transaction data saved.', true);
         
-        do_action('swpm_paypal_ipn_processed', $this->ipn_data, $cart_items);
+        do_action('swpm_paypal_ipn_processed', $this->ipn_data);
         return true;
     }
 

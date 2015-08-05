@@ -64,7 +64,6 @@ class SwpmFrontRegistration extends SwpmRegistration {
     }
 
     public function register() {
-        echo 'hereaaaaaaaaaaaaaaa';
         //If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
         $captcha_validation_output = apply_filters('swpm_validate_registration_form_submission', '');
 

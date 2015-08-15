@@ -31,7 +31,7 @@ class SwpmMemberUtils {
         }
         return $auth->get('user_name');
     }
-    
+
     public static function get_logged_in_members_level() {
         $auth = SwpmAuth::get_instance();
         if (!$auth->is_logged_in()) {
@@ -46,6 +46,17 @@ class SwpmMemberUtils {
             return $auth->get('alias');
         }
         return SwpmUtils::_("User is not logged in.");
+    }
+
+    public static function get_member_field_by_id($id, $field, $default = '') {
+        global $wpdb;
+        $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id = %d";
+        $userData = $wpdb->get_row($wpdb->prepare($query, $id));
+        if (isset($userData->$field)) {
+            return $userData->$field;
+        }
+
+        return apply_filters('swpm_get_member_field_by_id', $default, $id, $field);
     }
 
 }

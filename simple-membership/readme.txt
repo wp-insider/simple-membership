@@ -110,6 +110,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO - 3.0.4 =
+- Added a new utility function so a member's particular info can be retrieved using this function.
+- Added extra guard to prevent the following error "Call to member function get () on a non object".
+
 = 3.0.3 =
 - Increased the database character limit size of the user_name field.
 - Refactored the 'swpm_registration_form_override' filter.

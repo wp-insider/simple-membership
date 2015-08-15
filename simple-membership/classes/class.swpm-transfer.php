@@ -33,30 +33,27 @@ class SwpmTransfer {
     public function get($key) {
         $sesion_key = $_COOKIE['swpm_session'];
         $m = '';
-        if (isset($this->message[$sesion_key])){
+        if (isset($this->message[$sesion_key]) && !empty($this->message[$sesion_key])) {
             $m = $this->message[$sesion_key]->get($key);
         }
-        update_option('swpm-messages', $this->message);
         return $m;
     }
 
     public function set($key, $value) {
         $sesion_key = $_COOKIE['swpm_session'];
-        if (!isset($this->message[$sesion_key])){
+        if (!isset($this->message[$sesion_key])) {
             $this->message[$sesion_key] = new SwpmMessages();
         }
-        $this->message[$sesion_key]->set($key,$value);
+        $this->message[$sesion_key]->set($key, $value);
         update_option('swpm-messages', $this->message);
     }
 
     public static function get_real_ip_addr() {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])){
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
-        }
-        else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+        } else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
-        else{
+        } else {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         return $ip;

@@ -110,7 +110,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 3.0.4 =
+= TODO 3.0.4 =
 - Added a new utility function so a member's particular info can be retrieved using this function.
 - Added extra guard to prevent the following error "Call to member function get () on a non object".
 - Updated the langguage POT file.

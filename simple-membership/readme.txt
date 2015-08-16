@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page,
 Requires at least: 3.3
 Tested up to: 4.3
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -110,7 +110,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.0.4 =
+= 3.0.4 =
 - Added a new utility function so a member's particular info can be retrieved using this function.
 - Added extra guard to prevent the following error "Call to member function get () on a non object".
 - Updated the langguage POT file.

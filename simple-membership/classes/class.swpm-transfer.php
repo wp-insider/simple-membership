@@ -33,7 +33,7 @@ class SwpmTransfer {
     public function get($key) {
         $sesion_key = $_COOKIE['swpm_session'];
         $m = '';
-        if (isset($this->message[$sesion_key]) && !empty($this->message[$sesion_key])) {
+        if (isset($this->message[$sesion_key]) && is_object($this->message[$sesion_key])) {
             $m = $this->message[$sesion_key]->get($key);
         }
         return $m;

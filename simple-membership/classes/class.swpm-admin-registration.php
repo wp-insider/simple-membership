@@ -95,6 +95,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
                 wp_mail($email_address, $subject, $body, $headers);
             }
             wp_redirect('admin.php?page=simple_wp_membership');
+            return;
         }
         $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
         SwpmTransfer::get_instance()->set('status', $message);

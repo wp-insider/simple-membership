@@ -3,7 +3,7 @@
 class SwpmInitTimeTasks {
 
     public function __construct() {
-        
+
     }
 
     public function do_init_tasks() {
@@ -27,7 +27,7 @@ class SwpmInitTimeTasks {
             $this->admin_init();
         }
 
-        //Do frontend-only init time taks 
+        //Do frontend-only init time taks
         if (!is_admin()) {
             SwpmAuth::get_instance();
             $this->verify_and_delete_account();
@@ -35,6 +35,7 @@ class SwpmInitTimeTasks {
             if (!empty($swpm_logout)) {
                 SwpmAuth::get_instance()->logout();
                 wp_redirect(home_url());
+                return;
             }
             $this->process_password_reset();
             $this->register_member();
@@ -79,7 +80,6 @@ class SwpmInitTimeTasks {
             'hierarchical' => false,
             'supports' => array('title', 'editor')
         ));
-        
     }
 
     private function verify_and_delete_account() {

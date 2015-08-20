@@ -264,7 +264,6 @@ class SimpleWpMembership {
     }
 
     public function notices() {
-        echo 'notices';
         $message = SwpmTransfer::get_instance()->get('status');
         $succeeded = false;
         if (empty($message)) {

@@ -110,6 +110,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.0.6 =
+- Corrected the Danish language file name.
+
 = 3.0.5 =
 - Added a fix to prevent an error from showing when a member record is edited from the admin side.
 

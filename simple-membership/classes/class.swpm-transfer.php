@@ -35,13 +35,14 @@ class SwpmTransfer {
         $m = '';
         if (isset($this->message[$sesion_key]) && is_object($this->message[$sesion_key])) {
             $m = $this->message[$sesion_key]->get($key);
+            update_option('swpm-messages', $this->message);
         }
         return $m;
     }
 
     public function set($key, $value) {
         $sesion_key = $_COOKIE['swpm_session'];
-        if (!isset($this->message[$sesion_key])) {
+        if (!isset($this->message[$sesion_key]) || !is_object($this->message[$sesion_key])) {
             $this->message[$sesion_key] = new SwpmMessages();
         }
         $this->message[$sesion_key]->set($key, $value);

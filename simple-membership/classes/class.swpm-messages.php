@@ -1,23 +1,30 @@
 <?php
+
 /**
  *
  *
  * @author nur
  */
 class SwpmMessages {
+
     private $messages;
+
     public function __construct() {
         $this->messages = array();
     }
-    public function get($key){
-        if(isset($this->messages[$key])){
+
+    public function get($key) {
+        if (isset($this->messages[$key])) {
             $m = $this->messages[$key];
-            $this->messages[$key] ='';
+            $this->messages[$key] = null;
+            unset($this->messages[$key]);
             return $m;
         }
         return '';
     }
-    public function set($key, $value){
+
+    public function set($key, $value) {
         $this->messages[$key] = $value;
     }
+
 }

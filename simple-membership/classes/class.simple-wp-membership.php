@@ -175,6 +175,7 @@ class SimpleWpMembership {
         do_action('swpm_after_login');
         if (!SwpmUtils::is_ajax()) {
             wp_redirect(site_url());
+            exit(0);
         }
     }
 
@@ -263,6 +264,7 @@ class SimpleWpMembership {
     }
 
     public function notices() {
+        echo 'notices';
         $message = SwpmTransfer::get_instance()->get('status');
         $succeeded = false;
         if (empty($message)) {

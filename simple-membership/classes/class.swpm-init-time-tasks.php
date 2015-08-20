@@ -35,7 +35,7 @@ class SwpmInitTimeTasks {
             if (!empty($swpm_logout)) {
                 SwpmAuth::get_instance()->logout();
                 wp_redirect(home_url());
-                return;
+                exit(0);
             }
             $this->process_password_reset();
             $this->register_member();
@@ -105,6 +105,7 @@ class SwpmInitTimeTasks {
         if ($auth->match_password($password)) {
             $auth->delete();
             wp_redirect(home_url());
+            exit(0);
         } else {
             SwpmUtils::account_delete_confirmation_ui(SwpmUtils::_("Sorry, Password didn't match."));
         }

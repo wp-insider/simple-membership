@@ -18,7 +18,6 @@ class SwpmTransfer {
         'subscription_period' => '', 'subscription_duration_type' => SwpmMembershipLevel::NO_EXPIRY);
     public static $admin_messages = array();
     private static $_this;
-    private $message;
 
     private function __contruct() {
         $this->message = get_option('swpm-messages');
@@ -26,27 +25,17 @@ class SwpmTransfer {
 
     public static function get_instance() {
         self::$_this = empty(self::$_this) ? new SwpmTransfer() : self::$_this;
-        self::$_this->message = get_option('swpm-messages');
         return self::$_this;
     }
 
     public function get($key) {
-        $sesion_key = $_COOKIE['swpm_session'];
-        $m = '';
-        if (isset($this->message[$sesion_key]) && is_object($this->message[$sesion_key])) {
-            $m = $this->message[$sesion_key]->get($key);
-            update_option('swpm-messages', $this->message);
-        }
-        return $m;
+        $messages = new SwpmMessages();
+        return $messages->get($key);
     }
 
     public function set($key, $value) {
-        $sesion_key = $_COOKIE['swpm_session'];
-        if (!isset($this->message[$sesion_key]) || !is_object($this->message[$sesion_key])) {
-            $this->message[$sesion_key] = new SwpmMessages();
-        }
-        $this->message[$sesion_key]->set($key, $value);
-        update_option('swpm-messages', $this->message);
+        $messages = new SwpmMessages();
+        $messages->set($key, $value);
     }
 
     public static function get_real_ip_addr() {

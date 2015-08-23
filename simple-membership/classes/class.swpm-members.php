@@ -1,6 +1,8 @@
 <?php
 
-class SwpmMembers extends WP_List_Table {
+include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/common/class.swpm-list-table.php');
+
+class SwpmMembers extends SWPM_List_Table {
 
     function __construct() {
         parent::__construct(array(
@@ -111,8 +113,9 @@ class SwpmMembers extends WP_List_Table {
     }
 
     function process_form_request() {
-        if (isset($_REQUEST['member_id']))
+        if (isset($_REQUEST['member_id'])){
             return $this->edit(absint($_REQUEST['member_id']));
+        }
         return $this->add();
     }
 
@@ -154,7 +157,9 @@ class SwpmMembers extends WP_List_Table {
     }
 
     function process_bulk_action() {
-        //Detect when a bulk action is being triggered... //print_r($_REQUEST);
+        //Detect when a bulk action is being triggered... 
+        //print_r($_REQUEST);
+
         if ('bulk_delete' === $this->current_action()) {
             $records_to_delete = $_REQUEST['members'];
             if (empty($records_to_delete)) {

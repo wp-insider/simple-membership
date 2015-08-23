@@ -35,7 +35,7 @@ class SwpmMembershipLevel {
             $id = $wpdb->insert_id;
             $custom = apply_filters('swpm_admin_add_membership_level', array());
             $this->save_custom_fields($id, $custom);
-            $message = array('succeeded' => true, 'message' => SwpmUtils::_('Membership Level Creation Successful.'));
+            $message = array('succeeded' => true, 'message' => '<p>' . SwpmUtils::_('Membership Level Creation Successful.') . '</p>');
             SwpmTransfer::get_instance()->set('status', $message);
             wp_redirect('admin.php?page=simple_wp_membership_levels');
             exit(0);
@@ -54,7 +54,7 @@ class SwpmMembershipLevel {
             //@todo meta table and collect all relevant info and pass as argument
             $custom = apply_filters('swpm_admin_edit_membership_level', array(), $id);
             $this->save_custom_fields($id, $custom);
-            $message = array('succeeded' => true, 'message' => SwpmUtils::_('Updated Successfully.'));
+            $message = array('succeeded' => true, 'message' => '<p>'. SwpmUtils::_('Updated Successfully.') . '</p>');
             SwpmTransfer::get_instance()->set('status', $message);
             wp_redirect('admin.php?page=simple_wp_membership_levels');
             exit(0);

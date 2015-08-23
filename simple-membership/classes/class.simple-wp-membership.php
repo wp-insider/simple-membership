@@ -502,16 +502,14 @@ class SimpleWpMembership {
         $members = new SwpmMembers();
         $action = filter_input(INPUT_GET, 'member_action');
         $action = empty($action) ? filter_input(INPUT_POST, 'action') : $action;
-        $output = '';
+        $output = '';       
         switch ($action) {
             case 'add':
             case 'edit':
                 $members->process_form_request();
                 break;
-            case 'delete':
-                $members->delete();
             default:
-                $output = apply_filters('swpm_admin_member_menu_details_hook', $action, '');
+                $output = apply_filters('swpm_admin_member_menu_details_hook', '', $action);
                 if (empty($output)) {
                     $output = $members->show();
                 }

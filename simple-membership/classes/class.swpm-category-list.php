@@ -20,7 +20,6 @@ class SwpmCategoryList extends WP_List_Table {
             'plural' => SwpmUtils::_('Membership Levels'),
             'ajax' => false
         ));
-        $this->category = array();
         $selected = filter_input(INPUT_POST, 'membership_level_id');
         $this->selected_level_id = empty($selected) ? 1 : $selected;
         $this->category = ($this->selected_level_id == 1) ?
@@ -59,25 +58,30 @@ class SwpmCategoryList extends WP_List_Table {
         );
     }
 
+    public static function update_category_list() {
+        $selected = filter_input(INPUT_POST, 'membership_level_id');
+        $selected_level_id = empty($selected) ? 1 : $selected;
+        $category = ($selected_level_id == 1) ?
+                SwpmProtection::get_instance() :
+                SwpmPermission::get_instance($selected_level_id);
+        $args = array('ids' => array(
+                'filter' => FILTER_VALIDATE_INT,
+                'flags' => FILTER_REQUIRE_ARRAY,
+        ));
+        $filtered = filter_input_array(INPUT_POST, $args);
+        $ids = $filtered['ids'];
+        $args = array('ids_in_page' => array(
+                'filter' => FILTER_VALIDATE_INT,
+                'flags' => FILTER_REQUIRE_ARRAY,
+        ));
+        $filtered = filter_input_array(INPUT_POST, $args);
+        $ids_in_page = $filtered['ids_in_page'];
+        $category->remove($ids_in_page, 'category')->apply($ids, 'category')->save();
+        $message = array('succeeded' => true, 'message' => SwpmUtils::_('Updated! '));
+        SwpmTransfer::get_instance()->set('status', $message);
+    }
+
     function prepare_items() {
-        $submitted = filter_input(INPUT_POST, 'update_category_list');
-        if (!empty($submitted)) {
-            $args = array('ids' => array(
-                    'filter' => FILTER_VALIDATE_INT,
-                    'flags' => FILTER_REQUIRE_ARRAY,
-            ));
-            $filtered = filter_input_array(INPUT_POST, $args);
-            $ids = $filtered['ids'];
-            $args = array('ids_in_page' => array(
-                    'filter' => FILTER_VALIDATE_INT,
-                    'flags' => FILTER_REQUIRE_ARRAY,
-            ));
-            $filtered = filter_input_array(INPUT_POST, $args);
-            $ids_in_page = $filtered['ids_in_page'];
-            $this->category->remove($ids_in_page, 'category')->apply($ids, 'category')->save();
-            $message = array('succeeded' => true, 'message' => SwpmUtils::_('Updated! '));
-            SwpmTransfer::get_instance()->set('status', $message);
-        }
         $all_categories = array();
         $all_cat_ids = get_categories(array('hide_empty' => '0'));
         $totalitems = count($all_cat_ids);

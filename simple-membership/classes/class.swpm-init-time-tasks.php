@@ -65,6 +65,11 @@ class SwpmInitTimeTasks {
             $id = filter_input(INPUT_GET, 'id');
             SwpmMembershipLevel::get_instance()->edit($id);
         }
+        $update_category_list = filter_input(INPUT_POST, 'update_category_list');
+        if (!empty($update_category_list)) {
+            include_once('class.swpm-category-list.php');
+            SwpmCategoryList::update_category_list();
+        }
     }
 
     public function create_post_type() {

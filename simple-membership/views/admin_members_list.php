@@ -11,6 +11,10 @@
 if (isset($_REQUEST['member_action']) && $_REQUEST['member_action'] == 'delete') {
     //Delete this record
     $this->delete();
+    $success_msg = '<div id="message" class="updated"><p>';
+    $success_msg .= SwpmUtils::_('The selected entry was deleted!');
+    $success_msg .= '</p></div>';
+    echo $success_msg;    
 }
 
 $this->prepare_items(); 

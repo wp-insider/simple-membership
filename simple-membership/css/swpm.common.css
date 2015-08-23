@@ -71,13 +71,13 @@
 }
 
 /* Password reset form CSS */
-.swpm-password-reset-widget-form table{
+.swpm-pw-reset-widget-form table{
     border: none;
 }
-swpm-password-reset-widget-form tr{
+.swpm-pw-reset-widget-form tr{
     border: none;
 }
-.swpm-password-reset-widget-form td{
+.swpm-pw-reset-widget-form td{
     border: none;
 }
 

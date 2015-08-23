@@ -75,8 +75,8 @@ class SwpmCategoryList extends WP_List_Table {
             $filtered = filter_input_array(INPUT_POST, $args);
             $ids_in_page = $filtered['ids_in_page'];
             $this->category->remove($ids_in_page, 'category')->apply($ids, 'category')->save();
-            $message = array('succeeded' => true, 'message' => SwpmUtils::_('Updated! '));
-            SwpmTransfer::get_instance()->set('status', $message);
+            //$message = array('succeeded' => true, 'message' => '<p>' . SwpmUtils::_('Category Protection Updated! ') . '</p>');
+            //SwpmTransfer::get_instance()->set('status', $message);
         }
         $all_categories = array();
         $all_cat_ids = get_categories(array('hide_empty' => '0'));

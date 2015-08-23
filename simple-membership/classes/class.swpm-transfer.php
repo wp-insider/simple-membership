@@ -37,16 +37,4 @@ class SwpmTransfer {
         $messages = new SwpmMessages();
         $messages->set($key, $value);
     }
-
-    public static function get_real_ip_addr() {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-        return $ip;
-    }
-
 }

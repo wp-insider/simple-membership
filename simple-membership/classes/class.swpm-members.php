@@ -154,7 +154,9 @@ class SwpmMembers extends WP_List_Table {
     }
 
     function process_bulk_action() {
-        //Detect when a bulk action is being triggered... //print_r($_REQUEST);
+        //Detect when a bulk action is being triggered... 
+        //print_r($_REQUEST);
+        
         if ('bulk_delete' === $this->current_action()) {
             $records_to_delete = $_REQUEST['members'];
             if (empty($records_to_delete)) {

@@ -110,6 +110,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.0.7 =
+- Simplified the message class interaction.
+- Fixed a typo in the password reset message.
+- Removed the get_real_ip_addr() function (using get_user_ip_address() from the "SwpmUtils" class).
+- Added class names to the registration and edit profile submit buttons.
+
 = 3.0.6 =
 - Corrected the Danish language file name.
 - Fixed an issue with the profile update success message sticking.

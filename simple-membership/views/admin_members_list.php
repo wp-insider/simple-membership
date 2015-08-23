@@ -7,8 +7,18 @@
         <input type="hidden" name="page" value="simple_wp_membership" />
     </p>
 </form>
-<?php $this->prepare_items(); ?>
-<form method="post">
+<?php 
+if (isset($_REQUEST['member_action']) && $_REQUEST['member_action'] == 'delete') {
+    //Delete this record
+    $this->delete();
+}
+
+$this->prepare_items(); 
+?>
+<form id="tables-filter" method="get" onSubmit="return confirm('Are you sure you want to perform this bulk operation on the selected entries?');">
+    <!-- For plugins, we also need to ensure that the form posts back to our current page -->
+    <input type="hidden" name="page" value="<?php echo $_REQUEST['page']; ?>" />
+    <!-- Now we can render the completed list table -->
     <?php $this->display(); ?>
 </form>
 

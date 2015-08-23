@@ -18,13 +18,13 @@
                 <span class="swpm-rember-label"> <?php echo  SwpmUtils::_('Remember Me') ?></span>
             </div>
             <div class="swpm-login-submit">
-                <input type="submit" name="swpm-login" value="<?php echo  SwpmUtils::_('Login') ?>"/>
+                <input type="submit" class="swpm-login-form-submit" name="swpm-login" value="<?php echo  SwpmUtils::_('Login') ?>"/>
             </div>
             <div class="swpm-forgot-pass-link">
-                <a id="forgot_pass" href="<?php echo  $password_reset_url; ?>"><?php echo  SwpmUtils::_('Forgot Password') ?>?</a>
+                <a id="forgot_pass" class="swpm-login-form-pw-reset-link"  href="<?php echo  $password_reset_url; ?>"><?php echo  SwpmUtils::_('Forgot Password') ?>?</a>
             </div>
             <div class="swpm-join-us-link">
-                <a id="register" class="register_link" href="<?php echo  $join_url; ?>"><?php echo  SwpmUtils::_('Join Us') ?></a>
+                <a id="register" class="swpm-login-form-register-link" href="<?php echo  $join_url; ?>"><?php echo  SwpmUtils::_('Join Us') ?></a>
             </div>
             <div class="swpm-login-action-msg">
                 <span class="swpm-login-widget-action-msg"><?php echo  $auth->get_message(); ?></span>

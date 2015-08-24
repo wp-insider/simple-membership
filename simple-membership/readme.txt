@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page,
 Requires at least: 3.3
 Tested up to: 4.3
-Stable tag: 3.0.6
+Stable tag: 3.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,7 @@ The following language translations are already available:
 * Lithuanian
 * Serbian
 * Japanese
+* Greek
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -110,13 +111,15 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.0.7 =
+= 3.0.7 =
 - Fixed a typo in the password reset message.
 - Removed the get_real_ip_addr() function (using get_user_ip_address() from the "SwpmUtils" class).
 - Simplified the message class interaction.
-- Added class names to the registration, edit profile and login submit buttons.
+- Added CSS classes to the registration, edit profile and login submit buttons.
 - Added confirmation in the member's menu bulk operation function.
 - Fixed the bulk delete and delete functionality in the members list menu.
+- Fixed the category protection confirmation message.
+- Added Greek language translation file. The translation was submitted by Christos Papafilopoulos.
 
 = 3.0.6 =
 - Corrected the Danish language file name.

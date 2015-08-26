@@ -37,4 +37,9 @@ class SwpmTransfer {
         $messages = new SwpmMessages();
         $messages->set($key, $value);
     }
+    
+    /*** Deprecated function - exists only for backwards compatibility ***/
+    public static function get_real_ip_addr() {
+        return SwpmUtils::get_user_ip_address();
+    }
 }

@@ -18,8 +18,8 @@ class SwpmSettings {
             $tab = filter_input(INPUT_GET, 'tab');
             $tab = empty($tab) ? filter_input(INPUT_POST, 'tab') : $tab;
             $this->current_tab = empty($tab) ? 1 : $tab;
-            $this->tabs = array(1 => 'General Settings', 2 => 'Payment Settings',
-                3 => 'Email Settings', 4 => 'Tools', 5 => 'Advanced Settings', 6 => 'Addons Settings');
+            $this->tabs = array(1 => SwpmUtils::_('General Settings'), 2 => SwpmUtils::_('Payment Settings'),
+                3 => SwpmUtils::_('Email Settings'), 4 => SwpmUtils::_('Tools'), 5 => SwpmUtils::_('Advanced Settings'), 6 => SwpmUtils::_('Addons Settings'));
             add_action('swpm-draw-tab', array(&$this, 'draw_tabs'));
             $method = 'tab_' . $this->current_tab;
             if (method_exists($this, $method)) {

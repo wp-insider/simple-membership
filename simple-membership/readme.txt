@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page,
 Requires at least: 3.3
 Tested up to: 4.3
-Stable tag: 3.0.7
+Stable tag: 3.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -90,6 +90,7 @@ The following language translations are already available:
 * Serbian
 * Japanese
 * Greek
+* Latvian
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -110,6 +111,11 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 3.0.8 =
+- Added Latvian language translation file. The translation was submitted by Uldis Kalnins.
+- Updated the POT file for language translation.
+- Added a placeholder get_real_ip_addr() function for backwards compatibility.
 
 = 3.0.7 =
 - Fixed a typo in the password reset message.

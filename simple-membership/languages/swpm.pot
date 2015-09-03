@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Simple Membership\n"
-"POT-Creation-Date: 2015-08-26 16:56+1000\n"
-"PO-Revision-Date: 2015-08-26 16:58+1000\n"
+"POT-Creation-Date: 2015-09-03 15:16+1000\n"
+"PO-Revision-Date: 2015-09-03 15:19+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -160,8 +160,10 @@ msgstr ""
 
 #: classes/class.swpm-category-list.php:19 classes/class.swpm-members.php:23
 #: classes/class.swpm-membership-levels.php:10
-#: classes/class.swpm-membership-levels.php:20 views/add.php:30
-#: views/admin_member_form_common_part.php:2 views/edit.php:52
+#: classes/class.swpm-membership-levels.php:20
+#: classes/admin-includes/class.swpm-payments-list-table.php:53
+#: views/add.php:30 views/admin_member_form_common_part.php:2
+#: views/edit.php:52
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:36
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:217
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:37
@@ -337,13 +339,17 @@ msgstr ""
 msgid "User Name"
 msgstr ""
 
-#: classes/class.swpm-members.php:20 views/add.php:22
-#: views/admin_member_form_common_part.php:15 views/edit.php:20
+#: classes/class.swpm-members.php:20
+#: classes/admin-includes/class.swpm-payments-list-table.php:48
+#: views/add.php:22 views/admin_member_form_common_part.php:15
+#: views/edit.php:20
 msgid "First Name"
 msgstr ""
 
-#: classes/class.swpm-members.php:21 views/add.php:26
-#: views/admin_member_form_common_part.php:19 views/edit.php:24
+#: classes/class.swpm-members.php:21
+#: classes/admin-includes/class.swpm-payments-list-table.php:49
+#: views/add.php:26 views/admin_member_form_common_part.php:19
+#: views/edit.php:24
 msgid "Last Name"
 msgstr ""
 
@@ -362,6 +368,8 @@ msgstr ""
 
 #: classes/class.swpm-members.php:38
 #: classes/class.swpm-membership-levels.php:35
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:80
+#: classes/admin-includes/class.swpm-payments-list-table.php:68
 msgid "Delete"
 msgstr ""
 
@@ -569,8 +577,20 @@ msgstr ""
 msgid "Send Notification to Admin"
 msgstr ""
 
+#: classes/class.swpm-settings.php:118
+msgid ""
+"Enable this option if you want the admin to receive a notification when a "
+"member registers."
+msgstr ""
+
 #: classes/class.swpm-settings.php:119
 msgid "Admin Email Address"
+msgstr ""
+
+#: classes/class.swpm-settings.php:120
+msgid ""
+"Enter the email address where you want the admin notification email to be "
+"sent to."
 msgstr ""
 
 #: classes/class.swpm-settings.php:121
@@ -628,10 +648,47 @@ msgstr ""
 msgid "Delete Account"
 msgstr ""
 
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:63
+msgid "Payment Button ID"
+msgstr ""
+
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:64
+msgid "Payment Button Title"
+msgstr ""
+
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:65
+msgid "Membership Level ID"
+msgstr ""
+
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:66
+msgid "Button Shortcode"
+msgstr ""
+
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:106
 #: views/admin_members_list.php:15
 #: views/payments/admin_all_payment_transactions.php:33
 msgid "The selected entry was deleted!"
+msgstr ""
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:46
+msgid "Row ID"
+msgstr ""
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:47
+#: views/forgot_password.php:5
+msgid "Email Address"
+msgstr ""
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:50
+msgid "Date"
+msgstr ""
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:51
+msgid "Transaction ID"
+msgstr ""
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:52
+msgid "Amount"
 msgstr ""
 
 #: classes/common/class.swpm-list-table.php:137
@@ -779,6 +836,10 @@ msgid ""
 "displayed here (if you have them)"
 msgstr ""
 
+#: views/admin_addon_settings.php:13
+msgid "Save Changes"
+msgstr ""
+
 #: views/admin_add_level.php:6
 msgid "Create new membership level."
 msgstr ""
@@ -912,8 +973,7 @@ msgstr ""
 msgid "Simple WP Membership::Members"
 msgstr ""
 
-#: views/admin_members.php:3 views/admin_membership_levels.php:22
-#: views/admin_members_list.php:30
+#: views/admin_members.php:3 views/admin_members_list.php:30
 msgid "Add New"
 msgstr ""
 
@@ -1014,10 +1074,6 @@ msgstr ""
 
 #: views/edit.php:58
 msgid "Update"
-msgstr ""
-
-#: views/forgot_password.php:5
-msgid "Email Address"
 msgstr ""
 
 #: views/forgot_password.php:12

@@ -43,14 +43,14 @@ class SWPMPaymentsListTable extends SWPM_List_Table {
     function get_columns() {
         $columns = array(
             'cb' => '<input type="checkbox" />', //Render a checkbox instead of text
-            'id' => 'Row ID',
-            'email' => 'Email Address',
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
-            'txn_date' => 'Date',
-            'txn_id' => 'Transaction ID',
-            'payment_amount' => 'Amount',
-            'membership_level' => 'Membership Level'
+            'id' => SwpmUtils::_('Row ID'),
+            'email' => SwpmUtils::_('Email Address'),
+            'first_name' => SwpmUtils::_('First Name'),
+            'last_name' => SwpmUtils::_('Last Name'),
+            'txn_date' => SwpmUtils::_('Date'),
+            'txn_id' => SwpmUtils::_('Transaction ID'),
+            'payment_amount' => SwpmUtils::_('Amount'),
+            'membership_level' => SwpmUtils::_('Membership Level')
         );
         return $columns;
     }
@@ -65,7 +65,7 @@ class SWPMPaymentsListTable extends SWPM_List_Table {
 
     function get_bulk_actions() {
         $actions = array(
-            'delete' => 'Delete'
+            'delete' => SwpmUtils::_('Delete')
         );
         return $actions;
     }

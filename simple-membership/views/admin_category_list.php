@@ -12,15 +12,13 @@
     </div>
     <form id="category_list_form" method="post">    
         <p class="swpm-select-box-left">
-            <label for="membership_level_id">
-                Membership Level:</label>
-            
+            <label for="membership_level_id"><?php SwpmUtils::e('Membership Level:'); ?></label>
             <select id="membership_level_id" name="membership_level_id">
                 <option <?php echo  $category_list->selected_level_id==1? "selected": "" ?> value="1">General Protection</option>
                 <?php echo  SwpmUtils::membership_level_dropdown($category_list->selected_level_id); ?>
             </select>                
         </p>
-        <p class="swpm-select-box-left"><input type="submit" class="button-primary" name="update_category_list" value="Update"></p>        
+        <p class="swpm-select-box-left"><input type="submit" class="button-primary" name="update_category_list" value="<?php SwpmUtils::e('Update'); ?>"></p>
         <?php $category_list->prepare_items(); ?>   
         <?php $category_list->display(); ?>
     </form>

@@ -60,10 +60,10 @@ class SwpmPaymentButtonsListTable extends SWPM_List_Table {
     function get_columns() {
         $columns = array(
             'cb' => '<input type="checkbox" />', //Render a checkbox instead of text
-            'ID' => 'Payment Button ID',
-            'title' => 'Payment Button Title',
-            'membership_level' => 'Membership Level ID',
-            'button_shortcode' => 'Button Shortcode',
+            'ID' => SwpmUtils::_('Payment Button ID'),
+            'title' => SwpmUtils::_('Payment Button Title'),
+            'membership_level' => SwpmUtils::_('Membership Level ID'),
+            'button_shortcode' => SwpmUtils::_('Button Shortcode'),
         );
         return $columns;
     }
@@ -77,7 +77,7 @@ class SwpmPaymentButtonsListTable extends SWPM_List_Table {
 
     function get_bulk_actions() {
         $actions = array(
-            'delete' => 'Delete'
+            'delete' => SwpmUtils::_('Delete')
         );
         return $actions;
     }

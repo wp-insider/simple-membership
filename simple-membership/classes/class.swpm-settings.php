@@ -115,9 +115,9 @@ class SwpmSettings {
         add_settings_field('reg-complete-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-body',
             'message' => ''));
         add_settings_field('enable-admin-notification-after-reg', SwpmUtils::_('Send Notification to Admin'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'enable-admin-notification-after-reg',
-            'message' => 'Enable this option if you want the admin to receive a notification when a member registers.'));
+            'message' => SwpmUtils::_('Enable this option if you want the admin to receive a notification when a member registers.')));
         add_settings_field('admin-notification-email', SwpmUtils::_('Admin Email Address'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'admin-notification-email',
-            'message' => 'Enter the email address where you want the admin notification email to be sent to.'));
+            'message' => SwpmUtils::_('Enter the email address where you want the admin notification email to be sent to.')));
         add_settings_field('enable-notification-after-manual-user-add', SwpmUtils::_('Send Email to Member When Added via Admin Dashboard'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'enable-notification-after-manual-user-add',
             'message' => ''));
 

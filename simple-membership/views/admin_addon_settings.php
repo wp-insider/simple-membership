@@ -10,6 +10,6 @@
     <form action="" method="POST">
         <input type="hidden" name="tab" value="<?php echo $current_tab; ?>" />
         <?php do_action('swpm_addon_settings_section'); ?>
-        <?php submit_button('Save Changes', 'primary', 'swpm-addon-settings'); ?>
+        <?php submit_button(SwpmUtils::_('Save Changes'), 'primary', 'swpm-addon-settings'); ?>
     </form>
 </div><!-- end of wrap -->

@@ -112,6 +112,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.0.9 =
+- Updated the POT file for language translation.
+
 = 3.0.8 =
 - Added Latvian language translation file. The translation was submitted by Uldis Kalnins.
 - Updated the POT file for language translation.

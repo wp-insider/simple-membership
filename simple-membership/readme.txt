@@ -113,6 +113,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 3.0.9 =
+- Updated the Spanish language translation file.
 - Updated the POT file for language translation.
 
 = 3.0.8 =

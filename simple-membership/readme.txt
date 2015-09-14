@@ -84,6 +84,7 @@ The following language translations are already available:
 * Turkish
 * Russian
 * Dutch (Netherlands)
+* Dutch (Belgium)
 * Romanian
 * Danish
 * Lithuanian
@@ -115,6 +116,7 @@ https://simple-membership-plugin.com/
 = TODO 3.0.9 =
 - Updated the Spanish language translation file.
 - Updated the POT file for language translation.
+- Added Dutch (Belgium) language translation file. The translation was submitted by Johan Calu.
 
 = 3.0.8 =
 - Added Latvian language translation file. The translation was submitted by Uldis Kalnins.

@@ -28,7 +28,8 @@ abstract class SwpmRegistration {
         $member_info['login_link'] = $login_link;
         $values = array_values($member_info);
         $keys = array_map('swpm_enclose_var', array_keys($member_info));
-        $body = html_entity_decode(str_replace($keys, $values, $body));
+        $body = html_entity_decode($body);
+        $body = str_replace($keys, $values, $body);
         $email = sanitize_email(filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW));
         
         wp_mail(trim($email), $subject, $body, $headers);
@@ -41,7 +42,6 @@ abstract class SwpmRegistration {
             $body = "A new member has registered. The following email was sent to the member." .
                     "\n\n-------Member Email----------\n" . $body .
                     "\n\n------End------\n";
-            $body = html_entity_decode($body);
             $admin_notification = empty($to_email_address) ? $from_address : $to_email_address;
             wp_mail(trim($admin_notification), $subject, $body, $headers);
             SwpmLog::log_simple_debug('Admin notification email sent to: '.$admin_notification, true);

@@ -216,7 +216,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $subject = $settings->get_value('reset-mail-subject');
         $search = array('{user_name}', '{first_name}', '{last_name}', '{password}');
         $replace = array($user->user_name, $user->first_name, $user->last_name, $password);
-        $body = str_replace($search, $replace, $body);
+        $body = html_entity_decode(str_replace($search, $replace, $body));
         $from = $settings->get_value('email-from');
         $headers = "From: " . $from . "\r\n";
         wp_mail($email, $subject, $body, $headers);

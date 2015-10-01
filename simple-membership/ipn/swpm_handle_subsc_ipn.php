@@ -65,7 +65,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
         if (empty($body)){
             $body = "Your account has been upgraded successfully";
         }
-        $from_address = get_option('admin_email');
+        $from_address = $settings->get_value('email-from');
         $login_link = $settings->get_value('login-page-url');
 
         $tags1 = array("{first_name}","{last_name}","{user_name}","{login_link}");
@@ -132,7 +132,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data,$subsc_ref,$unique_ref,$
 
         $tags = array("{first_name}","{last_name}","{reg_link}");
         $vals = array($data['first_name'],$data['last_name'],$reg_url);
-        $email_body = str_replace($tags,$vals,$body);
+        $email_body = html_entity_decode(str_replace($tags,$vals,$body));
         $headers = 'From: '.$from_address . "\r\n";
     }
 

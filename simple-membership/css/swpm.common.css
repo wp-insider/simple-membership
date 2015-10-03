@@ -86,6 +86,24 @@
     min-width: 100px;
 }
 
+.swpm-registration-widget-form input[type="text"], .swpm-registration-widget-form input[type="password"]{
+    width: 95%;
+}
+
+/* Edit profile form CSS */
+.swpm-account-delete-button{
+    text-align: center;
+}
+
+.swpm-edit-profile-form input[type="text"], .swpm-edit-profile-form input[type="password"]{
+    width: 95%;
+}
+
+.swpm-account-delete-button a{
+    color: red !important;
+}
+
+/* Misc CSS */
 .swpm-restricted{
     font-weight: bold;
     color:red;
@@ -93,12 +111,4 @@
 .swpm-select-box-left{
     margin: 0;
     padding-bottom: 5px;
-}
-
-/* Edit profile form CSS */
-.swpm-account-delete-button{
-    text-align: center;
-}
-.swpm-account-delete-button a{
-    color: red !important;
 }

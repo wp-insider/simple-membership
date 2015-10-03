@@ -5,13 +5,13 @@
                 <label for="swpm_user_name" class="swpm-label"><?php echo  SwpmUtils::_('Username') ?></label>
             </div>
             <div class="swpm-username-input">
-                <input type="text" class="swpm-text-field swpm-username-field" id="swpm_user_name" value="" size="30" name="swpm_user_name" />
+                <input type="text" class="swpm-text-field swpm-username-field" id="swpm_user_name" value="" size="25" name="swpm_user_name" />
             </div>
             <div class="swpm-password-label">
                 <label for="swpm_password" class="swpm-label"><?php echo  SwpmUtils::_('Password') ?></label>
             </div>
             <div class="swpm-password-input">
-                <input type="password" class="swpm-text-field swpm-password-field" id="swpm_password" value="" size="30" name="swpm_password" />
+                <input type="password" class="swpm-text-field swpm-password-field" id="swpm_password" value="" size="25" name="swpm_password" />
             </div>
             <div class="swpm-remember-me">
                 <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" value="checked='checked'"></span>

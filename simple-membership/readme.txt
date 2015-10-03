@@ -115,6 +115,7 @@ https://simple-membership-plugin.com/
 
 = TODO 3.1.2 =
 - Added more sortable columns in the members menu.
+- Adjusted the CSS for the registration and edit profile forms so they render better in small screen devices.
 
 = 3.1.1 =
 - Fix for some special characters in the email not getting decoded correctly.

@@ -28,8 +28,11 @@ class SwpmMembers extends SWPM_List_Table {
 
     function get_sortable_columns() {
         return array(
-            'member_id' => array('member_id', true),
-            'user_name' => array('user_name', true)
+            'member_id' => array('member_id', true),//True means already sorted
+            'user_name' => array('user_name', false),
+            'email' => array('email', false),
+            'alias' => array('alias', false),
+            'account_state' => array('account_state', false),
         );
     }
 

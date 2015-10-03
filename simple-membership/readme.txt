@@ -113,6 +113,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.1.2 =
+- Added more sortable columns in the members menu.
+
 = 3.1.1 =
 - Fix for some special characters in the email not getting decoded correctly.
 - Updated the membership upgrade email header to use the "from email address" value from the email settings.

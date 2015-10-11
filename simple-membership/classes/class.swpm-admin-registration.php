@@ -76,7 +76,12 @@ class SwpmAdminRegistration extends SwpmRegistration {
             unset($member['plain_password']);
             $wpdb->update($wpdb->prefix . "swpm_members_tbl", $member, array('member_id' => $id));
             $message = array('succeeded' => true, 'message' => '<p>Member profile updated successfully.</p>');
-            do_action('swpm_admin_edit_custom_fields', $member + array('member_id' => $id));
+            $error = apply_filters('swpm_admin_edit_custom_fields', array(), $member + array('member_id' => $id));
+            if (!empty($error)) {
+                $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $error);
+                SwpmTransfer::get_instance()->set('status', $message);    
+                return;
+            }
             SwpmTransfer::get_instance()->set('status', $message);
             $send_notification = filter_input(INPUT_POST, 'account_status_change');
             if (!empty($send_notification)) {

@@ -150,7 +150,9 @@ class SwpmMembers extends SWPM_List_Table {
         if (isset($_POST["editswpmuser"])) {
             $_POST['user_name'] = $member['user_name'];
             $_POST['email'] = $member['email'];
-            $member = $_POST;
+            foreach($_POST as $key=>$value){
+                $member[$key] = $value;
+            }
         }
         extract($member, EXTR_SKIP);
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";

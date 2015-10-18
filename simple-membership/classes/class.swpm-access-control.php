@@ -103,7 +103,7 @@ class SwpmAccessControl {
         if($this->can_i_read_post($id)) {
             return $more_link;
         }
-        $msg = SwpmUtils::_("You need to login to view the rest of the content. ") . SwpmSettings::get_instance()->get_login_link();
+        $msg = '<div class="swpm-margin-top-10">'.SwpmUtils::_("You need to login to view the rest of the content. ") . SwpmSettings::get_instance()->get_login_link(). '</div>';
         return apply_filters('swpm_not_logged_in_more_tag_msg', $msg);
     }
 }

@@ -86,7 +86,7 @@
                     "alertText": "* Invalid email address"
                 },
                 "SWPMUserName": {
-                "regex": /^[a-zA-Z0-9!@#$%&\'*+\/=?^_`{|}~\.-]+$/,
+                "regex": /^[a-zA-Z0-9!@#$%&\'+\/=?^_`{|}~\.-]+$/,
                 "alertText": "* Invalid User Name"
                 },
                 "integer": {

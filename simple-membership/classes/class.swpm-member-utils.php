@@ -58,5 +58,7 @@ class SwpmMemberUtils {
 
         return apply_filters('swpm_get_member_field_by_id', $default, $id, $field);
     }
-
+    public static function is_valid_user_name($user_name){
+        return preg_match("/^[a-zA-Z0-9!@#$%&+\/=?^_`{|}~\.-]+$/", $user_name)== 1;
+    }
 }

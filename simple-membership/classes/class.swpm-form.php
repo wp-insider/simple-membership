@@ -40,7 +40,7 @@ class SwpmForm {
             $this->errors['user_name'] = SwpmUtils::_('User name is required');
             return;
         }
-        if (preg_match("/^[a-zA-Z0-9!@#$%&*+\/=?^_`{|}~\.-]+$/", $user_name) === 0) {
+        if (!SwpmMemberUtils::is_valid_user_name($user_name)) {
             $this->errors['user_name'] = SwpmUtils::_('User name contains invalid character');
             return;
         }

@@ -23,9 +23,13 @@ class SwpmAjax {
     }
 
     public static function validate_user_name_ajax() {
-        global $wpdb;
+        global $wpdb;        
         $field_value = filter_input(INPUT_GET, 'fieldValue');
         $field_id = filter_input(INPUT_GET, 'fieldId');
+        if (!SwpmMemberUtils::is_valid_user_name($field_value)){
+            echo '[ "' . $field_id . '",false,"&chi;&nbsp;'. SwpmUtils::_('Name contains invalid character'). '"]';
+            exit;
+        }
         $table = $wpdb->prefix . "swpm_members_tbl";
         $query = $wpdb->prepare("SELECT COUNT(*) FROM $table WHERE user_name = %s", $field_value);
         $exists = $wpdb->get_var($query) > 0;

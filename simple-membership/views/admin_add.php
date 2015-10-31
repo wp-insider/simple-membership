@@ -8,7 +8,7 @@
 <table class="form-table">
     <tbody>
 	<tr class="form-required">
-            <th scope="row"><label for="user_name"><?php echo  SwpmUtils::_('User name'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
+            <th scope="row"><label for="user_name"><?php echo  SwpmUtils::_('Username'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
             <td><input class="regular-text validate[required,custom[noapostrophe],custom[SWPMUserName],minSize[4],ajax[ajaxUserCall]]" name="user_name" type="text" id="user_name" value="<?php echo esc_attr(stripslashes($user_name)); ?>" aria-required="true" /></td>
 	</tr>
 	<tr class="form-required">

@@ -87,7 +87,7 @@
                 },
                 "SWPMUserName": {
                 "regex": /^[a-zA-Z0-9!@#$%&\'+\/=?^_`{|}~\.-]+$/,
-                "alertText": "* Invalid User Name"
+                "alertText": "* Invalid Username"
                 },
                 "integer": {
                     "regex": /^[\-\+]?\d+$/,

@@ -3,7 +3,7 @@
         <input type ="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
         <table>
             <tr>
-                <td><label for="user_name"><?php echo SwpmUtils::_('User Name') ?></label></td>
+                <td><label for="user_name"><?php echo SwpmUtils::_('Username') ?></label></td>
                 <td><input type="text" id="user_name" class="validate[required,custom[noapostrophe],custom[SWPMUserName],minSize[4],ajax[ajaxUserCall]]" value="<?php echo $user_name; ?>" size="50" name="user_name" /></td>
             </tr>
             <tr>

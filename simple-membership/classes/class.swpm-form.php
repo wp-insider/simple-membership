@@ -23,12 +23,12 @@ class SwpmForm {
         if (empty($user_name)) {return;}
         $user = get_user_by('login', $user_name);
         if ($user && ($user->email != $email)){
-            $this->errors['wp_email'] =  SwpmUtils::_('Wordpress account exists with given user name. But given email doesn\'t match.');
+            $this->errors['wp_email'] =  SwpmUtils::_('Wordpress account exists with given username. But given email doesn\'t match.');
             return;
         }
         $user = get_user_by('email', $email);
         if($user && ($user_name != $user->login)){
-            $this->errors['wp_user'] =  SwpmUtils::_('Wordpress account exists with given email. But given user name doesn\'t match.');
+            $this->errors['wp_user'] =  SwpmUtils::_('Wordpress account exists with given email. But given username doesn\'t match.');
 
         }
     }
@@ -37,11 +37,11 @@ class SwpmForm {
         if (!empty($this->fields['user_name'])){return;}
         $user_name = filter_input(INPUT_POST, 'user_name',FILTER_SANITIZE_STRING);
         if (empty($user_name)) {
-            $this->errors['user_name'] = SwpmUtils::_('User name is required');
+            $this->errors['user_name'] = SwpmUtils::_('Username is required');
             return;
         }
         if (!SwpmMemberUtils::is_valid_user_name($user_name)) {
-            $this->errors['user_name'] = SwpmUtils::_('User name contains invalid character');
+            $this->errors['user_name'] = SwpmUtils::_('Username contains invalid character');
             return;
         }
         $saned = sanitize_text_field($user_name);
@@ -49,7 +49,7 @@ class SwpmForm {
         $result = $wpdb->get_var($wpdb->prepare($query, strip_tags($saned)));
         if ($result > 0) {
             if ($saned != $this->fields['user_name']) {
-                $this->errors['user_name'] = SwpmUtils::_('User name already exists.');
+                $this->errors['user_name'] = SwpmUtils::_('Username already exists.');
                 return;
             }
         }

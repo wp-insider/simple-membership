@@ -2,7 +2,7 @@
 <form id="swpm-editprofile-form" name="swpm-editprofile-form" method="post" action="">
     <table>
         <tr>
-            <td><label for="user_name"><?php echo  SwpmUtils::_('User Name') ?></label></td>
+            <td><label for="user_name"><?php echo  SwpmUtils::_('Username') ?></label></td>
             <td><?php echo  $user_name ?></td>
         </tr>
         <tr>

@@ -16,7 +16,7 @@ class SwpmMembers extends SWPM_List_Table {
         return array(
             'cb' => '<input type="checkbox" />'
             , 'member_id' => SwpmUtils::_('ID')
-            , 'user_name' => SwpmUtils::_('User Name')
+            , 'user_name' => SwpmUtils::_('Username')
             , 'first_name' => SwpmUtils::_('First Name')
             , 'last_name' => SwpmUtils::_('Last Name')
             , 'email' => SwpmUtils::_('Email')

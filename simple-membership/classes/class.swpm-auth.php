@@ -216,7 +216,7 @@ class SwpmAuth {
         $query = " SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE user_name = %s";
         $user = $wpdb->get_row($wpdb->prepare($query, $username));
         if (empty($user)) {
-            $this->lastStatusMsg = SwpmUtils::_("Invalid User Name");
+            $this->lastStatusMsg = SwpmUtils::_("Invalid Username");
             return false;
         }
 

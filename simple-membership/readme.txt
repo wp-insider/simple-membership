@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.3.1
-Stable tag: 3.1.1
+Stable tag: 3.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,8 +112,7 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
-
-= TODO 3.1.2 =
+= 3.1.2 =
 - Added more sortable columns in the members menu.
 - Adjusted the CSS for the registration and edit profile forms so they render better in small screen devices.
 - Changed the "User name" string to "Username"

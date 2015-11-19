@@ -137,36 +137,37 @@ class SwpmInstallation {
 
         $sql = "UPDATE  " . $wpdb->prefix . "swpm_membership_tbl SET subscription_duration_type = 4 WHERE subscription_unit='years' AND subscription_duration_type = 0";
         $wpdb->query($sql);
+
         $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_membership_meta_tbl (
-                        id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        level_id int(11) NOT NULL,
-                        meta_key varchar(255) NOT NULL,
-                        meta_label varchar(255) NULL,
-                        meta_value text,
-                        meta_type varchar(255) NOT NULL DEFAULT 'text',
-                        meta_default text,
-                        meta_context varchar(255) NOT NULL DEFAULT 'default',
-                        KEY level_id (level_id),
-                        UNIQUE KEY meta_key_id (level_id,meta_key(191))
-          )" . $charset_collate . " AUTO_INCREMENT=1 ;";
+                    id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    level_id int(11) NOT NULL,
+                    meta_key varchar(255) NOT NULL,
+                    meta_label varchar(255) NULL,
+                    meta_value text,
+                    meta_type varchar(255) NOT NULL DEFAULT 'text',
+                    meta_default text,
+                    meta_context varchar(255) NOT NULL DEFAULT 'default',
+                    KEY level_id (level_id),
+                    UNIQUE KEY meta_key_id (level_id,meta_key)
+        )" . $charset_collate . " AUTO_INCREMENT=1;";
         dbDelta($sql);
 
         $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_payments_tbl (
-                        id int(12) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                        email varchar(64) DEFAULT NULL,
-                        first_name varchar(32) DEFAULT '',
-                        last_name varchar(32) DEFAULT '',
-                        member_id varchar(16) DEFAULT '',
-                        membership_level varchar(16) DEFAULT '',
-                        txn_date date NOT NULL default '0000-00-00',
-                        txn_id varchar(128) NOT NULL default '',
-                        subscr_id varchar(128) NOT NULL default '',
-                        reference varchar(128) NOT NULL default '',
-                        payment_amount varchar(32) NOT NULL default '',
-                        gateway varchar(16) DEFAULT '',
-                        status varchar(16) DEFAULT '',
-                        ip_address varchar(64) default ''
-                        )" . $charset_collate . ";";
+                    id int(12) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                    email varchar(64) DEFAULT NULL,
+                    first_name varchar(32) DEFAULT '',
+                    last_name varchar(32) DEFAULT '',
+                    member_id varchar(16) DEFAULT '',
+                    membership_level varchar(16) DEFAULT '',
+                    txn_date date NOT NULL default '0000-00-00',
+                    txn_id varchar(128) NOT NULL default '',
+                    subscr_id varchar(128) NOT NULL default '',
+                    reference varchar(128) NOT NULL default '',
+                    payment_amount varchar(32) NOT NULL default '',
+                    gateway varchar(16) DEFAULT '',
+                    status varchar(16) DEFAULT '',
+                    ip_address varchar(64) default ''
+                    )" . $charset_collate . ";";
         dbDelta($sql);
 
         //Save the current DB version

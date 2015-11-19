@@ -116,6 +116,7 @@ https://simple-membership-plugin.com/
 
 = TODO 3.1.3 =
 - Added Indonesian language translation file. The translation was submitted by Hermanudin.
+- Removed a couple of "notice" warnings from the installer.
 
 = 3.1.2 =
 - Added more sortable columns in the members menu.

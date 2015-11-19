@@ -92,6 +92,7 @@ The following language translations are already available:
 * Japanese
 * Greek
 * Latvian
+* Indonesian
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -112,6 +113,10 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO 3.1.3 =
+- Added Indonesian language translation file. The translation was submitted by Hermanudin.
+
 = 3.1.2 =
 - Added more sortable columns in the members menu.
 - Adjusted the CSS for the registration and edit profile forms so they render better in small screen devices.

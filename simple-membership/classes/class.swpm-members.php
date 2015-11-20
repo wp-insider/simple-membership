@@ -38,7 +38,12 @@ class SwpmMembers extends SWPM_List_Table {
 
     function get_bulk_actions() {
         $actions = array(
-            'bulk_delete' => SwpmUtils::_('Delete')
+            'bulk_delete' => SwpmUtils::_('Delete'),
+            'bulk_active' => SwpmUtils::_('Set Status to Active'),
+            /*'bulk_active_notify' => SwpmUtils::_('Set Status to Active and Notify'),*/
+            'bulk_inactive' => SwpmUtils::_('Set Status to Inactive'),
+            'bulk_pending' => SwpmUtils::_('Set Status to Pending'),
+            'bulk_expired' => SwpmUtils::_('Set Status to Expired'),            
         );
         return $actions;
     }
@@ -74,7 +79,8 @@ class SwpmMembers extends SWPM_List_Table {
         if (!empty($s)) {
             $query .= " WHERE  user_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR first_name LIKE '%" . strip_tags($s) . "%' "
-                    . " OR last_name LIKE '%" . strip_tags($s) . "%' ";
+                    . " OR last_name LIKE '%" . strip_tags($s) . "%' "
+                    . " OR email LIKE '%" . strip_tags($s) . "%' ";
         }
         $orderby = filter_input(INPUT_GET, 'orderby');
         $orderby = empty($orderby) ? 'member_id' : $orderby;
@@ -163,21 +169,48 @@ class SwpmMembers extends SWPM_List_Table {
 
     function process_bulk_action() {
         //Detect when a bulk action is being triggered... 
-        //print_r($_REQUEST);
-
-        if ('bulk_delete' === $this->current_action()) {
-            $records_to_delete = $_REQUEST['members'];
-            if (empty($records_to_delete)) {
+        $members = isset($_REQUEST['members'])? $_REQUEST['members']: array();
+        $current_action = $this->current_action();
+        if ('bulk_delete' === $current_action) {            
+            if (empty($members)) {
                 echo '<div id="message" class="updated fade"><p>Error! You need to select multiple records to perform a bulk action!</p></div>';
                 return;
             }
-            foreach ($records_to_delete as $record_id) {
+            foreach ($members as $record_id) {
                 SwpmMembers::delete_user_by_id($record_id);
             }
             echo '<div id="message" class="updated fade"><p>Selected records deleted successfully!</p></div>';
         }
+        else if ('bulk_active' === $current_action){
+            $this->bulk_set_status($members, 'active');
+        }
+        else if ('bulk_active_notify' == $current_action){
+            $this->bulk_set_status($members, 'active', true);
+        }
+        else if ('bulk_inactive' == $current_action){
+            $this->bulk_set_status($members, 'inactive');
+        }
+        else if ('bulk_pending' == $current_action){
+            $this->bulk_set_status($members, 'pending');
+        }
+        else if ('bulk_expired' == $current_action){
+            $this->bulk_set_status($members, 'expired');
+        }        
     }
-
+    
+    function bulk_set_status($members, $status, $notify = false ){
+        $ids = implode(',', array_map('absint', $members));
+        if (empty($ids)) {return;}
+        global $wpdb;   
+        $query = "UPDATE " . $wpdb->prefix . "swpm_members_tbl " .
+                " SET account_state = '" . $status . "' WHERE member_id in (" . $ids . ")";
+        $wpdb->query($query);        
+        
+        if ($notify){
+            // todo: add notification
+        }
+    }
+    
     function delete() {
         if (isset($_REQUEST['member_id'])) {
             $id = absint($_REQUEST['member_id']);

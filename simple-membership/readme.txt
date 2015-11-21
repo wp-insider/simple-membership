@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.3.1
-Stable tag: 3.1.2
+Stable tag: 3.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -117,6 +117,8 @@ https://simple-membership-plugin.com/
 = TODO 3.1.3 =
 - Added Indonesian language translation file. The translation was submitted by Hermanudin.
 - Removed a couple of "notice" warnings from the installer.
+- Added option to bulk change members account status.
+- The member search feature (in the admin side) can now search the list based on email address.
 
 = 3.1.2 =
 - Added more sortable columns in the members menu.

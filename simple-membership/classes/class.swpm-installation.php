@@ -148,7 +148,7 @@ class SwpmInstallation {
                     meta_default text,
                     meta_context varchar(255) NOT NULL DEFAULT 'default',
                     KEY level_id (level_id),
-                    UNIQUE KEY meta_key_id (level_id,meta_key)
+                    UNIQUE KEY (level_id,meta_key(100))
         )" . $charset_collate . " AUTO_INCREMENT=1;";
         dbDelta($sql);
 

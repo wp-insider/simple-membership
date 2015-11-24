@@ -17,7 +17,7 @@ function swpm_create_new_pp_subscription_button() {
     <form id="pp_button_config_form" method="post">
 
         <div class="postbox">
-            <h3><label for="title"><?php echo SwpmUtils::_('PayPal Subscription Button Configuration'); ?></label></h3>
+            <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Subscription Button Configuration'); ?></label></h3>
             <div class="inside">
 
                 <input type="hidden" name="button_type" value="<?php echo strip_tags($_REQUEST['button_type']); ?>">
@@ -133,7 +133,7 @@ function swpm_create_new_pp_subscription_button() {
         </div><!-- end of main button configuration box -->
 
         <div class="postbox">
-            <h3><label for="title"><?php echo SwpmUtils::_('Trial Billing Details (Leave empty if you are not offering a trial period)'); ?></label></h3>
+            <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Trial Billing Details (Leave empty if you are not offering a trial period)'); ?></label></h3>
             <div class="inside">
 
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
@@ -164,7 +164,7 @@ function swpm_create_new_pp_subscription_button() {
         </div><!-- end of trial billing details box -->   
 
         <div class="postbox">
-            <h3><label for="title"><?php echo SwpmUtils::_('Optional Details'); ?></label></h3>
+            <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Optional Details'); ?></label></h3>
             <div class="inside">
 
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
@@ -285,7 +285,7 @@ function swpm_edit_pp_subscription_button() {
     <form id="pp_button_config_form" method="post">
 
         <div class="postbox">
-            <h3><label for="title"><?php echo SwpmUtils::_('PayPal Subscription Button Configuration'); ?></label></h3>
+            <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Subscription Button Configuration'); ?></label></h3>
             <div class="inside">
 
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
@@ -406,7 +406,7 @@ function swpm_edit_pp_subscription_button() {
         </div><!-- end of main button configuration box -->
 
         <div class="postbox">
-            <h3><label for="title"><?php echo SwpmUtils::_('Trial Billing Details (Leave empty if you are not offering a trial period)'); ?></label></h3>
+            <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Trial Billing Details (Leave empty if you are not offering a trial period)'); ?></label></h3>
             <div class="inside">
 
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
@@ -437,7 +437,7 @@ function swpm_edit_pp_subscription_button() {
         </div><!-- end of trial billing details box -->   
 
         <div class="postbox">
-            <h3><label for="title"><?php echo SwpmUtils::_('Optional Details'); ?></label></h3>
+            <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Optional Details'); ?></label></h3>
             <div class="inside">
 
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">

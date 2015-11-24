@@ -28,7 +28,7 @@
             }
             ?>
             <div class="postbox">
-                <h3><label for="title"><?php echo SwpmUtils::_('PayPal Integration Settings') ?></label></h3>
+                <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Integration Settings') ?></label></h3>
                 <div class="inside">
 
                     <p><strong><?php echo SwpmUtils::_('Generate the "Advanced Variables" Code for your PayPal button') ?></strong></p>

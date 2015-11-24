@@ -15,7 +15,7 @@ function swpm_create_new_pp_buy_now_button() {
     </div>
 
     <div class="postbox">
-        <h3><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now Button Configuration'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now Button Configuration'); ?></label></h3>
         <div class="inside">
 
             <form id="pp_button_config_form" method="post">
@@ -189,7 +189,7 @@ function swpm_edit_pp_buy_now_button() {
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
     ?>
     <div class="postbox">
-        <h3><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now Button Configuration'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now Button Configuration'); ?></label></h3>
         <div class="inside">
 
             <form id="pp_button_config_form" method="post">

@@ -9,7 +9,7 @@
 </div>
 
 <div class="postbox">
-    <h3><label for="title">Search Transaction</label></h3>
+    <h3 class="hndle"><label for="title">Search Transaction</label></h3>
     <div class="inside">
         <?php echo SwpmUtils::_('Search for a transaction by using email or name'); ?>
         <br /><br />

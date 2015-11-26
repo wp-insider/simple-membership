@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.4
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,7 @@ The following language translations are already available:
 * Greek
 * Latvian
 * Indonesian
+* Hebrew
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -113,6 +114,11 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 3.1.4 =
+- Added an option in the "Payments" menu to link a payment to the corresponding membership profile (when applicable).
+- Fixed an issue with the subscriber ID not saving with the member profile (for PayPal subscription payments).
+- Added Hebrew language translation file. The translation was submitted by Merom Harpaz.
 
 = 3.1.3 =
 - Added Indonesian language translation file. The translation was submitted by Hermanudin.

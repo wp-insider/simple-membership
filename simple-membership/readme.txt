@@ -115,6 +115,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO - 3.1.5 =
+- Added a new shortcode [swpm_show_expiry_date] to show the logged-in member's expiry details.
+
 = 3.1.4 =
 - Added an option in the "Payments" menu to link a payment to the corresponding membership profile (when applicable).
 - Fixed an issue with the subscriber ID not saving with the member profile (for PayPal subscription payments).

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Simple Membership\n"
-"POT-Creation-Date: 2015-09-03 15:16+1000\n"
-"PO-Revision-Date: 2015-09-03 15:19+1000\n"
+"Project-Id-Version: simple membership\n"
+"POT-Creation-Date: 2015-12-11 15:12+1000\n"
+"PO-Revision-Date: 2015-12-11 15:12+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -13,50 +13,50 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: classes/class.simple-wp-membership.php:263
+#: classes/class.simple-wp-membership.php:264
 msgid "You are not logged in."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:297
+#: classes/class.simple-wp-membership.php:298
 msgid "Simple WP Membership Protection"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:309
+#: classes/class.simple-wp-membership.php:310
 msgid "Simple Membership Protection options"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:325
+#: classes/class.simple-wp-membership.php:326
 msgid "Do you want to protect this content?"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:330
+#: classes/class.simple-wp-membership.php:331
 msgid "Select the membership level that can access this content:"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:463
+#: classes/class.simple-wp-membership.php:464
 msgid "WP Membership"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:464
+#: classes/class.simple-wp-membership.php:465
 #: classes/class.swpm-members.php:10 views/admin_members_menu.php:2
 msgid "Members"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:465
+#: classes/class.simple-wp-membership.php:466
 #: classes/class.swpm-category-list.php:20
 #: classes/class.swpm-membership-levels.php:11
 msgid "Membership Levels"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:466
+#: classes/class.simple-wp-membership.php:467
 msgid "Settings"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:467
+#: classes/class.simple-wp-membership.php:468
 msgid "Payments"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:468
+#: classes/class.simple-wp-membership.php:469
 msgid "Add-ons"
 msgstr ""
 
@@ -96,13 +96,14 @@ msgid "Member record added successfully."
 msgstr ""
 
 #: classes/class.swpm-admin-registration.php:59
-#: classes/class.swpm-admin-registration.php:100
+#: classes/class.swpm-admin-registration.php:81
+#: classes/class.swpm-admin-registration.php:105
 #: classes/class.swpm-membership-level.php:43
 #: classes/class.swpm-membership-level.php:62
 msgid "Please correct the following:"
 msgstr ""
 
-#: classes/class.swpm-admin-registration.php:91
+#: classes/class.swpm-admin-registration.php:96
 msgid "Your current password"
 msgstr ""
 
@@ -110,11 +111,15 @@ msgstr ""
 msgid "Invalid Email Address"
 msgstr ""
 
-#: classes/class.swpm-ajax.php:21 classes/class.swpm-ajax.php:32
+#: classes/class.swpm-ajax.php:21 classes/class.swpm-ajax.php:36
 msgid "Aready taken"
 msgstr ""
 
-#: classes/class.swpm-ajax.php:33
+#: classes/class.swpm-ajax.php:30
+msgid "Name contains invalid character"
+msgstr ""
+
+#: classes/class.swpm-ajax.php:37
 msgid "Available"
 msgstr ""
 
@@ -151,7 +156,7 @@ msgid "Session Expired."
 msgstr ""
 
 #: classes/class.swpm-auth.php:219
-msgid "Invalid User Name"
+msgid "Invalid Username"
 msgstr ""
 
 #: classes/class.swpm-auth.php:227
@@ -161,9 +166,9 @@ msgstr ""
 #: classes/class.swpm-category-list.php:19 classes/class.swpm-members.php:23
 #: classes/class.swpm-membership-levels.php:10
 #: classes/class.swpm-membership-levels.php:20
-#: classes/admin-includes/class.swpm-payments-list-table.php:53
+#: classes/admin-includes/class.swpm-payments-list-table.php:80
 #: views/add.php:30 views/admin_member_form_common_part.php:2
-#: views/edit.php:52
+#: views/edit.php:53
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:36
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:217
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:37
@@ -194,24 +199,24 @@ msgstr ""
 
 #: classes/class.swpm-form.php:26
 msgid ""
-"Wordpress account exists with given user name. But given email doesn't match."
+"Wordpress account exists with given username. But given email doesn't match."
 msgstr ""
 
 #: classes/class.swpm-form.php:31
 msgid ""
-"Wordpress account exists with given email. But given user name doesn't match."
+"Wordpress account exists with given email. But given username doesn't match."
 msgstr ""
 
 #: classes/class.swpm-form.php:40
-msgid "User name is required"
+msgid "Username is required"
 msgstr ""
 
 #: classes/class.swpm-form.php:44
-msgid "User name contains invalid character"
+msgid "Username contains invalid character"
 msgstr ""
 
 #: classes/class.swpm-form.php:52
-msgid "User name already exists."
+msgid "Username already exists."
 msgstr ""
 
 #: classes/class.swpm-form.php:75
@@ -300,11 +305,11 @@ msgid "No user found with that email address."
 msgstr ""
 
 #: classes/class.swpm-front-registration.php:201
-#: classes/class.swpm-front-registration.php:224
+#: classes/class.swpm-front-registration.php:225
 msgid "Email Address: "
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:223
+#: classes/class.swpm-front-registration.php:224
 msgid "New password has been sent to your email address."
 msgstr ""
 
@@ -335,25 +340,26 @@ msgstr ""
 msgid "Member"
 msgstr ""
 
-#: classes/class.swpm-members.php:19 views/add.php:6 views/edit.php:4
-msgid "User Name"
+#: classes/class.swpm-members.php:19 views/add.php:6 views/admin_add.php:11
+#: views/admin_edit.php:9 views/edit.php:5 views/login.php:5
+msgid "Username"
 msgstr ""
 
 #: classes/class.swpm-members.php:20
-#: classes/admin-includes/class.swpm-payments-list-table.php:48
+#: classes/admin-includes/class.swpm-payments-list-table.php:74
 #: views/add.php:22 views/admin_member_form_common_part.php:15
-#: views/edit.php:20
+#: views/edit.php:21
 msgid "First Name"
 msgstr ""
 
 #: classes/class.swpm-members.php:21
-#: classes/admin-includes/class.swpm-payments-list-table.php:49
+#: classes/admin-includes/class.swpm-payments-list-table.php:75
 #: views/add.php:26 views/admin_member_form_common_part.php:19
-#: views/edit.php:24
+#: views/edit.php:25
 msgid "Last Name"
 msgstr ""
 
-#: classes/class.swpm-members.php:22 views/add.php:10 views/edit.php:8
+#: classes/class.swpm-members.php:22 views/add.php:10 views/edit.php:9
 msgid "Email"
 msgstr ""
 
@@ -366,14 +372,30 @@ msgstr ""
 msgid "Account State"
 msgstr ""
 
-#: classes/class.swpm-members.php:38
+#: classes/class.swpm-members.php:41
 #: classes/class.swpm-membership-levels.php:35
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:80
-#: classes/admin-includes/class.swpm-payments-list-table.php:68
+#: classes/admin-includes/class.swpm-payments-list-table.php:95
 msgid "Delete"
 msgstr ""
 
-#: classes/class.swpm-members.php:112
+#: classes/class.swpm-members.php:42
+msgid "Set Status to Active"
+msgstr ""
+
+#: classes/class.swpm-members.php:44
+msgid "Set Status to Inactive"
+msgstr ""
+
+#: classes/class.swpm-members.php:45
+msgid "Set Status to Pending"
+msgstr ""
+
+#: classes/class.swpm-members.php:46
+msgid "Set Status to Expired"
+msgstr ""
+
+#: classes/class.swpm-members.php:121
 msgid "No Member found."
 msgstr ""
 
@@ -640,11 +662,11 @@ msgstr ""
 msgid "Expired"
 msgstr ""
 
-#: classes/class.swpm-utils.php:296
+#: classes/class.swpm-utils.php:297
 msgid "Never"
 msgstr ""
 
-#: classes/class.swpm-utils.php:370
+#: classes/class.swpm-utils.php:371
 msgid "Delete Account"
 msgstr ""
 
@@ -670,24 +692,32 @@ msgstr ""
 msgid "The selected entry was deleted!"
 msgstr ""
 
-#: classes/admin-includes/class.swpm-payments-list-table.php:46
+#: classes/admin-includes/class.swpm-payments-list-table.php:53
+msgid "View Profile"
+msgstr ""
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:72
 msgid "Row ID"
 msgstr ""
 
-#: classes/admin-includes/class.swpm-payments-list-table.php:47
+#: classes/admin-includes/class.swpm-payments-list-table.php:73
 #: views/forgot_password.php:5
 msgid "Email Address"
 msgstr ""
 
-#: classes/admin-includes/class.swpm-payments-list-table.php:50
+#: classes/admin-includes/class.swpm-payments-list-table.php:76
+msgid "Member Profile"
+msgstr ""
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:77
 msgid "Date"
 msgstr ""
 
-#: classes/admin-includes/class.swpm-payments-list-table.php:51
+#: classes/admin-includes/class.swpm-payments-list-table.php:78
 msgid "Transaction ID"
 msgstr ""
 
-#: classes/admin-includes/class.swpm-payments-list-table.php:52
+#: classes/admin-includes/class.swpm-payments-list-table.php:79
 msgid "Amount"
 msgstr ""
 
@@ -764,12 +794,20 @@ msgid ""
 "with the details shortly."
 msgstr ""
 
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:80
+msgid "Expiry: "
+msgstr ""
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:82
+msgid "You are not logged-in as a member"
+msgstr ""
+
 #: views/add.php:14 views/admin_add.php:19 views/admin_edit.php:17
-#: views/edit.php:12 views/login.php:11
+#: views/edit.php:13 views/login.php:11
 msgid "Password"
 msgstr ""
 
-#: views/add.php:18 views/edit.php:16
+#: views/add.php:18 views/edit.php:17
 msgid "Repeat Password"
 msgstr ""
 
@@ -783,10 +821,6 @@ msgstr ""
 
 #: views/admin_add.php:7
 msgid "Create a brand new user and add it to this site."
-msgstr ""
-
-#: views/admin_add.php:11
-msgid "User name"
 msgstr ""
 
 #: views/admin_add.php:11 views/admin_add.php:15 views/admin_add_level.php:11
@@ -925,10 +959,6 @@ msgstr ""
 msgid "Edit existing member details."
 msgstr ""
 
-#: views/admin_edit.php:9 views/login.php:5
-msgid "Username"
-msgstr ""
-
 #: views/admin_edit.php:17
 msgid "(twice, leave empty to retain old password)"
 msgstr ""
@@ -1005,27 +1035,27 @@ msgstr ""
 msgid "Gender"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:30 views/edit.php:28
+#: views/admin_member_form_common_part.php:30 views/edit.php:29
 msgid "Phone"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:34 views/edit.php:32
+#: views/admin_member_form_common_part.php:34 views/edit.php:33
 msgid "Street"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:38 views/edit.php:36
+#: views/admin_member_form_common_part.php:38 views/edit.php:37
 msgid "City"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:42 views/edit.php:40
+#: views/admin_member_form_common_part.php:42 views/edit.php:41
 msgid "State"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:46 views/edit.php:44
+#: views/admin_member_form_common_part.php:46 views/edit.php:45
 msgid "Zipcode"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:50 views/edit.php:48
+#: views/admin_member_form_common_part.php:50 views/edit.php:49
 msgid "Country"
 msgstr ""
 
@@ -1072,7 +1102,7 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: views/edit.php:58
+#: views/edit.php:59
 msgid "Update"
 msgstr ""
 

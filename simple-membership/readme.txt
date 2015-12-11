@@ -117,6 +117,7 @@ https://simple-membership-plugin.com/
 
 = TODO - 3.1.5 =
 - Added a new shortcode [swpm_show_expiry_date] to show the logged-in member's expiry details.
+- Updated the language POT file.
 
 = 3.1.4 =
 - Added an option in the "Payments" menu to link a payment to the corresponding membership profile (when applicable).

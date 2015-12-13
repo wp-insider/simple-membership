@@ -80,7 +80,11 @@ class SwpmMembers extends SWPM_List_Table {
             $query .= " WHERE  user_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR first_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR last_name LIKE '%" . strip_tags($s) . "%' "
-                    . " OR email LIKE '%" . strip_tags($s) . "%' ";
+                    . " OR email LIKE '%" . strip_tags($s) . "%' "
+                    . " OR address_city LIKE '%" . strip_tags($s) . "%' "
+                    . " OR address_state LIKE '%" . strip_tags($s) . "%' "
+                    . " OR country LIKE '%" . strip_tags($s) . "%' "
+                    . " OR company_name LIKE '%" . strip_tags($s) . "%' ";
         }
         $orderby = filter_input(INPUT_GET, 'orderby');
         $orderby = empty($orderby) ? 'member_id' : $orderby;

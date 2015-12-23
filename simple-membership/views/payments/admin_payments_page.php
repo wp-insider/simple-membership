@@ -8,20 +8,20 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : '';
 
     <h2><?php echo SwpmUtils::_('Simple Membership::Payments') ?></h2>
 
+    <h2 class="nav-tab-wrapper">
+        <a class="nav-tab <?php echo ($tab == '') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments"><?php SwpmUtils::e('Transactions'); ?></a>
+        <a class="nav-tab <?php echo ($tab == 'payment_buttons') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons"><?php SwpmUtils::e('Manage Payment Buttons'); ?></a>
+        <a class="nav-tab <?php echo ($tab == 'create_new_button') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=create_new_button"><?php SwpmUtils::e('Create New Button'); ?></a>
+
+        <?php
+        if ($tab == 'edit_button') {//Only show the "edit button" tab when a button is being edited.
+            echo '<a class="nav-tab nav-tab-active" href="#">Edit Button</a>';
+        }
+        ?>                
+    </h2>
+
     <div id="poststuff"><div id="post-body">
-
-            <h2 class="nav-tab-wrapper">
-                <a class="nav-tab <?php echo ($tab == '') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments"><?php SwpmUtils::e('Transactions'); ?></a>
-                <a class="nav-tab <?php echo ($tab == 'payment_buttons') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons"><?php SwpmUtils::e('Manage Payment Buttons'); ?></a>
-                <a class="nav-tab <?php echo ($tab == 'create_new_button') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=create_new_button"><?php SwpmUtils::e('Create New Button'); ?></a>
-                
-                <?php
-                if($tab == 'edit_button' ){//Only show the "edit button" tab when a button is being edited.
-                    echo '<a class="nav-tab nav-tab-active" href="#">Edit Button</a>';
-                }
-                ?>                
-            </h2>
-
+            
             <?php
             switch ($tab) {
                 case 'payment_buttons':
@@ -32,7 +32,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : '';
                     break;
                 case 'edit_button':
                     include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_edit_payment_buttons.php');
-                    break;                    
+                    break;
                 case 'all_txns':
                     include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_all_payment_transactions.php');
                     break;

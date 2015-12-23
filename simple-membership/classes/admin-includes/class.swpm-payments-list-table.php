@@ -76,6 +76,7 @@ class SWPMPaymentsListTable extends SWPM_List_Table {
             'member_profile' => SwpmUtils::_('Member Profile'),
             'txn_date' => SwpmUtils::_('Date'),
             'txn_id' => SwpmUtils::_('Transaction ID'),
+            'subscr_id' => SwpmUtils::_('Subscriber ID'),
             'payment_amount' => SwpmUtils::_('Amount'),
             'membership_level' => SwpmUtils::_('Membership Level')
         );

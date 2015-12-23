@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.4
-Stable tag: 3.1.4
+Stable tag: 3.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,9 +115,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 3.1.5 =
+= 3.1.5 =
 - Added a new shortcode [swpm_show_expiry_date] to show the logged-in member's expiry details.
 - The search feature in the members menu will search the company name, city, state, country fields also.
+- The subscription profile ID (if any) for subscription payment is now shown in the "payments" interface of the plugin.
+- Added new filter hook so additional fields can be added to the payment button form (example: specify country or language code).
 - Updated the language POT file.
 
 = 3.1.4 =

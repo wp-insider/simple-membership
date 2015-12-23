@@ -72,6 +72,9 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
 
     $output .= '<input type="hidden" name="custom" value="' . $custom_field_value . '" />';
 
+    //Filter to add additional payment input fields to the form (example: langauge code or country code etc).
+    $output .= apply_filters('swpm_pp_payment_form_additional_fields', '');
+    
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
     if (!empty($button_image_url)) {
         $output .= '<input type="image" src="' . $button_image_url . '" class="swpm-buy-now-button-submit" alt="' . SwpmUtils::_('Buy Now') . '"/>';
@@ -191,6 +194,9 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
     $output .= '<input type="hidden" name="cancel_return" value="' . $cancel_url . '" />';
     $output .= '<input type="hidden" name="custom" value="' . $custom_field_value . '" />';
 
+    //Filter to add additional payment input fields to the form (example: langauge code or country code etc).
+    $output .= apply_filters('swpm_pp_payment_form_additional_fields', '');
+            
     //Submit button
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
     if (!empty($button_image_url)) {

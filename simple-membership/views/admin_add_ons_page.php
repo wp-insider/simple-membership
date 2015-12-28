@@ -8,7 +8,6 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
 
     <div id="poststuff"><div id="post-body">
 
-
             <?php
             $addons_data = array();
             $addon_1 = array(
@@ -90,6 +89,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-and-wp-affiliate-platform-integration/',
             );
             array_push($addons_data, $addon_10);
+
+            $addon_11 = array(
+                'name' => 'bbPress Integration',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-bbpress-integration.png',
+                'description' => 'Adds bbPress forum integration with the simple membership plugin to offer members only forum functionality.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-bbpress-forum-integration-addon/',
+            );
+            array_push($addons_data, $addon_11);
             
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {

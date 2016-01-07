@@ -53,6 +53,16 @@
     border-width: 1px;
 }
 
+/* Membership buy buttons */
+.swpm-button-wrapper input[type="submit"]{
+    width: auto !important;
+    height: auto !important;
+}
+.swpm-button-wrapper input[type="image"]{
+    width: auto !important;
+    height: auto !important;    
+}
+
 /* Login form CSS */
 .swpm-login-widget-form input,.swpm-login-widget-form checkbox{
     width: auto;

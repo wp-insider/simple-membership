@@ -115,6 +115,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO - 3.1.6 =
+- Added CSS for membership buy buttons to force their width and height to be auto.
+
 = 3.1.5 =
 - Added a new shortcode [swpm_show_expiry_date] to show the logged-in member's expiry details.
 - The search feature in the members menu will search the company name, city, state, country fields also.

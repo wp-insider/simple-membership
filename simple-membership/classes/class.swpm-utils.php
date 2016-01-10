@@ -95,30 +95,6 @@ abstract class SwpmUtils {
         $query = "SELECT id FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id != 1";
         return $wpdb->get_col($query);
     }
-
-    public static function get_user_by_id($swpm_id) {
-        //Retrieves the SWPM user record for the given member ID
-        global $wpdb;
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = %d", $swpm_id);
-        $result = $wpdb->get_row($query);
-        return $result;
-    }
-  
-    public static function get_user_by_user_name($swpm_user_name) {
-        //Retrieves the SWPM user record for the given member username
-        global $wpdb;
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE user_name = %s", $swpm_user_name);
-        $result = $wpdb->get_row($query);
-        return $result;
-    }
-
-    public static function get_user_by_email($swpm_email) {
-        //Retrieves the SWPM user record for the given member email address
-        global $wpdb;
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE email = %d", $swpm_email);
-        $result = $wpdb->get_row($query);
-        return $result;
-    }
     
     public static function get_registration_link($for = 'all', $send_email = false, $member_id = '') {
         $members = array();

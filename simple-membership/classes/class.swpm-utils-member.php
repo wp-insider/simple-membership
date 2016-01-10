@@ -1,9 +1,8 @@
 <?php
 
 /**
- * BMemberUtils
- *
- * @author nur
+ * SwpmMemberUtils
+ * All the utility functions related to member records should be added to this class
  */
 class SwpmMemberUtils {
 
@@ -58,7 +57,34 @@ class SwpmMemberUtils {
 
         return apply_filters('swpm_get_member_field_by_id', $default, $id, $field);
     }
+    
+
+    public static function get_user_by_id($swpm_id) {
+        //Retrieves the SWPM user record for the given member ID
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = %d", $swpm_id);
+        $result = $wpdb->get_row($query);
+        return $result;
+    }
+  
+    public static function get_user_by_user_name($swpm_user_name) {
+        //Retrieves the SWPM user record for the given member username
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE user_name = %s", $swpm_user_name);
+        $result = $wpdb->get_row($query);
+        return $result;
+    }
+
+    public static function get_user_by_email($swpm_email) {
+        //Retrieves the SWPM user record for the given member email address
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE email = %d", $swpm_email);
+        $result = $wpdb->get_row($query);
+        return $result;
+    }
+    
     public static function is_valid_user_name($user_name){
         return preg_match("/^[a-zA-Z0-9!@#$%&+\/=?^_`{|}~\.-]+$/", $user_name)== 1;
     }
+    
 }

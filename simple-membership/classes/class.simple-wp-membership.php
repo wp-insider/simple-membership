@@ -151,9 +151,25 @@ class SimpleWpMembership {
     }
 
     public function hide_adminbar() {
-        if (!is_user_logged_in()) {//Never show admin bar if the user is not even logged in
+        
+        //Never show admin toolbar if the user is not even logged in
+        if (!is_user_logged_in()) {
             return false;
         }
+        
+        //Show admin toolbar to admin only feature is enabled.
+        $show_to_admin = SwpmSettings::get_instance()->get_value('show-adminbar-admin-only');
+        if($show_to_admin){
+            if (current_user_can('administrator')) {
+                //This is an admin user so show the tooldbar
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        
+        //Hide admin toolbar if the hide adminbar feature is enabled
         $hide = SwpmSettings::get_instance()->get_value('hide-adminbar');
         return $hide ? FALSE : TRUE;
     }

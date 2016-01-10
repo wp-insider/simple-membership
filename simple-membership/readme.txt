@@ -116,7 +116,9 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO - 3.1.6 =
+- Added a new feature to show the admin toolbar to admin users only.
 - Added CSS for membership buy buttons to force their width and height to be auto.
+
 
 = 3.1.5 =
 - Added a new shortcode [swpm_show_expiry_date] to show the logged-in member's expiry details.

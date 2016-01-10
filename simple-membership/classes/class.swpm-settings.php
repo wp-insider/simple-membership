@@ -44,7 +44,9 @@ class SwpmSettings {
         add_settings_field('enable-moretag', SwpmUtils::_('Enable More Tag Protection'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'enable-moretag',
             'message' => SwpmUtils::_('Enables or disables "more" tag protection in the posts and pages. Anything after the More tag is protected. Anything before the more tag is teaser content.')));
         add_settings_field('hide-adminbar', SwpmUtils::_('Hide Adminbar'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'hide-adminbar',
-            'message' => SwpmUtils::_('WordPress shows an admin toolbar to the logged in users of the site. Check this box if you want to hide that admin toolbar in the fronend of your site.')));
+            'message' => SwpmUtils::_('WordPress shows an admin toolbar to the logged in users of the site. Check this if you want to hide that admin toolbar in the frontend of your site.')));
+        add_settings_field('show-adminbar-admin-only', SwpmUtils::_('Show Adminbar to Admin'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'show-adminbar-admin-only',
+            'message' => SwpmUtils::_('Use this option if you want to show the admin toolbar to admin users only. The admin toolbar will be hidden for all other users.')));
 
         add_settings_field('default-account-status', SwpmUtils::_('Default Account Status'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'default-account-status',
             'options' => SwpmUtils::get_account_state_options(),
@@ -288,6 +290,8 @@ class SwpmSettings {
         //general settings block
 
         $output['hide-adminbar'] = isset($input['hide-adminbar']) ? esc_attr($input['hide-adminbar']) : "";
+        $output['show-adminbar-admin-only'] = isset($input['show-adminbar-admin-only']) ? esc_attr($input['show-adminbar-admin-only']) : "";
+        
         $output['protect-everything'] = isset($input['protect-everything']) ? esc_attr($input['protect-everything']) : "";
         $output['enable-free-membership'] = isset($input['enable-free-membership']) ? esc_attr($input['enable-free-membership']) : "";
         $output['enable-moretag'] = isset($input['enable-moretag']) ? esc_attr($input['enable-moretag']) : "";

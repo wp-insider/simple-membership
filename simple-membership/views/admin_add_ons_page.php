@@ -97,6 +97,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-bbpress-forum-integration-addon/',
             );
             array_push($addons_data, $addon_11);
+
+            $addon_12 = array(
+                'name' => 'Google reCAPTCHA',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/google-recaptcha-addon.png',
+                'description' => 'Allows you to add Google reCAPTCHA to your membership registration form/page.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-and-google-recaptcha-integration/',
+            );
+            array_push($addons_data, $addon_12);
             
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {

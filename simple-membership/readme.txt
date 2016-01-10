@@ -3,8 +3,8 @@ Contributors: smp7, wp.insider, amijanina
 Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
-Tested up to: 4.4
-Stable tag: 3.1.5
+Tested up to: 4.4.1
+Stable tag: 3.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,7 @@ You can create a free forum user account and ask your questions.
 * Allow your members to deleter their membership accounts.
 * Send quick notification email to your members.
 * Customize the password reset email for members.
+* Use Google reCAPTCHA on your member registration form.
 * The login and registration widgets will be responsive if you are using a responsive theme.
 * Front-end member registration page.
 * Front-end member profiles.
@@ -115,11 +116,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 3.1.6 =
+= 3.1.6 =
 - Added a new feature to show the admin toolbar to admin users only.
 - Added CSS for membership buy buttons to force their width and height to be auto.
 - Added a few utility functions to retrieve a member's record from custom PHP code (useful for developers).
-
+- Added the free Google recaptcha addon for registration forms.
 
 = 3.1.5 =
 - Added a new shortcode [swpm_show_expiry_date] to show the logged-in member's expiry details.

@@ -118,6 +118,7 @@ https://simple-membership-plugin.com/
 = TODO - 3.1.6 =
 - Added a new feature to show the admin toolbar to admin users only.
 - Added CSS for membership buy buttons to force their width and height to be auto.
+- Added a few utility functions to retrieve a member's record from custom PHP code (useful for developers).
 
 
 = 3.1.5 =

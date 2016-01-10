@@ -223,9 +223,10 @@ class SwpmMembers extends SWPM_List_Table {
     }
 
     public static function delete_user_by_id($id) {
-        $user_name = SwpmUtils::get_user_by_id($id);
-        SwpmMembers::delete_wp_user($user_name);
-        SwpmMembers::delete_swpm_user_by_id($id);
+        $swpm_user = SwpmUtils::get_user_by_id($id);
+        $user_name = $swpm_user->user_name;
+        SwpmMembers::delete_wp_user($user_name);//Deletes the WP User record
+        SwpmMembers::delete_swpm_user_by_id($id);//Deletes the SWPM record
     }
 
     public static function delete_swpm_user_by_id($id) {

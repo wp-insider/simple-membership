@@ -75,7 +75,8 @@ class SimpleWpMembership {
     }
 
     function wp_password_reset_hook($user, $pass) {
-        $swpm_id = SwpmUtils::get_user_by_user_name($user->user_login);
+        $swpm_user = SwpmUtils::get_user_by_user_name($user->user_login);
+        $swpm_id = $swpm_user->member_id;
         if (!empty($swpm_id)) {
             $password_hash = SwpmUtils::encrypt_password($pass);
             global $wpdb;

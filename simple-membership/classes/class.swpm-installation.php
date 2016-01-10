@@ -52,16 +52,16 @@ class SwpmInstallation {
         $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_members_tbl (
 			member_id int(12) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			user_name varchar(255) NOT NULL,
-			first_name varchar(32) DEFAULT '',
-			last_name varchar(32) DEFAULT '',
-			password varchar(64) NOT NULL,
+			first_name varchar(64) DEFAULT '',
+			last_name varchar(64) DEFAULT '',
+			password varchar(255) NOT NULL,
 			member_since date NOT NULL DEFAULT '0000-00-00',
 			membership_level smallint(6) NOT NULL,
 			more_membership_levels VARCHAR(100) DEFAULT NULL,
 			account_state enum('active','inactive','expired','pending','unsubscribed') DEFAULT 'pending',
 			last_accessed datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-			last_accessed_from_ip varchar(64) NOT NULL,
-			email varchar(64) DEFAULT NULL,
+			last_accessed_from_ip varchar(128) NOT NULL,
+			email varchar(255) DEFAULT NULL,
 			phone varchar(64) DEFAULT NULL,
 			address_street varchar(255) DEFAULT NULL,
 			address_city varchar(255) DEFAULT NULL,
@@ -75,9 +75,9 @@ class SwpmInstallation {
 			reg_code varchar(255) DEFAULT NULL,
 			subscription_starts date DEFAULT NULL,
 			initial_membership_level smallint(6) DEFAULT NULL,
-			txn_id varchar(64) DEFAULT '',
-			subscr_id varchar(32) DEFAULT '',
-			company_name varchar(100) DEFAULT '',
+			txn_id varchar(255) DEFAULT '',
+			subscr_id varchar(255) DEFAULT '',
+			company_name varchar(255) DEFAULT '',
 			notes text DEFAULT NULL,
 			flags int(11) DEFAULT '0',
 			profile_image varchar(255) DEFAULT ''
@@ -102,7 +102,7 @@ class SwpmInstallation {
 			disable_bookmark_list longtext,
 			options longtext,
                         protect_older_posts  tinyint(1) NOT NULL DEFAULT '0',
-			campaign_name varchar(60) NOT NULL DEFAULT ''
+			campaign_name varchar(255) NOT NULL DEFAULT ''
           )" . $charset_collate . " AUTO_INCREMENT=1 ;";
         dbDelta($sql);
         $sql = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = 1";
@@ -154,19 +154,19 @@ class SwpmInstallation {
 
         $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_payments_tbl (
                     id int(12) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                    email varchar(64) DEFAULT NULL,
-                    first_name varchar(32) DEFAULT '',
-                    last_name varchar(32) DEFAULT '',
+                    email varchar(255) DEFAULT NULL,
+                    first_name varchar(64) DEFAULT '',
+                    last_name varchar(64) DEFAULT '',
                     member_id varchar(16) DEFAULT '',
-                    membership_level varchar(16) DEFAULT '',
+                    membership_level varchar(64) DEFAULT '',
                     txn_date date NOT NULL default '0000-00-00',
-                    txn_id varchar(128) NOT NULL default '',
-                    subscr_id varchar(128) NOT NULL default '',
-                    reference varchar(128) NOT NULL default '',
+                    txn_id varchar(255) NOT NULL default '',
+                    subscr_id varchar(255) NOT NULL default '',
+                    reference varchar(255) NOT NULL default '',
                     payment_amount varchar(32) NOT NULL default '',
-                    gateway varchar(16) DEFAULT '',
+                    gateway varchar(32) DEFAULT '',
                     status varchar(16) DEFAULT '',
-                    ip_address varchar(64) default ''
+                    ip_address varchar(128) default ''
                     )" . $charset_collate . ";";
         dbDelta($sql);
 

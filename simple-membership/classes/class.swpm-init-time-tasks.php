@@ -89,7 +89,7 @@ class SwpmInitTimeTasks {
 
     private function verify_and_delete_account() {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-members.php');
-        $delete_account = filter_input(INPUT_GET, 'delete_account');
+        $delete_account = filter_input(INPUT_GET, 'swpm_delete_account');
         if (empty($delete_account)) {
             return;
         }

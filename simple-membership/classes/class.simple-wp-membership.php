@@ -1,6 +1,6 @@
 <?php
 
-include_once('class.swpm-misc-utils.php');
+include_once('class.swpm-utils-misc.php');
 include_once('class.swpm-utils.php');
 include_once('class.swpm-utils-member.php');
 include_once('class.swpm-init-time-tasks.php');

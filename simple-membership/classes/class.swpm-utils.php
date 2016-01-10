@@ -356,7 +356,8 @@ abstract class SwpmUtils {
             return "";
         }
 
-        return '<a href="/?delete_account=1"><div class="swpm-account-delete-button">' . SwpmUtils::_("Delete Account") . '</div></a>';
+        $account_delete_link = '<a href="'.SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL.'/?delete_account=1"><div class="swpm-account-delete-button">' . SwpmUtils::_("Delete Account") . '</div></a>';
+        return $account_delete_link;
     }
 
     public static function encrypt_password($plain_password) {

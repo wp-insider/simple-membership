@@ -356,7 +356,7 @@ abstract class SwpmUtils {
             return "";
         }
 
-        $account_delete_link = '<div class="swpm-profile-account-delete">';
+        $account_delete_link = '<div class="swpm-profile-account-delete-section">';
         $account_delete_link .= '<a href="'.SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL.'/?swpm_delete_account=1"><div class="swpm-account-delete-button">' . SwpmUtils::_("Delete Account") . '</div></a>';
         $account_delete_link .= '</div>';        
         return $account_delete_link;

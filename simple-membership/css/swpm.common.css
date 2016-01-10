@@ -101,15 +101,17 @@
 }
 
 /* Edit profile form CSS */
-.swpm-account-delete-button{
-    text-align: center;
-}
-
 .swpm-edit-profile-form input[type="text"], .swpm-edit-profile-form input[type="password"]{
     width: 95%;
 }
+.swpm-edit-profile-submit-section{
+    text-align: center;
+}
 
-.swpm-account-delete-button a{
+.swpm-profile-account-delete-section{
+    text-align: center;
+}
+.swpm-profile-account-delete-section a{
     color: red !important;
 }
 

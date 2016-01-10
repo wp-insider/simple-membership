@@ -56,7 +56,8 @@
             </td>
         </tr>
     </table>
-    <p align="center"><input type="submit" value="<?php echo  SwpmUtils::_('Update')?>" class="swpm-edit-profile-submit" name="swpm_editprofile_submit" />
+    <p class="swpm-edit-profile-submit-section">
+        <input type="submit" value="<?php echo SwpmUtils::_('Update')?>" class="swpm-edit-profile-submit" name="swpm_editprofile_submit" />
     </p>
     <?php echo SwpmUtils::delete_account_button(); ?>
     

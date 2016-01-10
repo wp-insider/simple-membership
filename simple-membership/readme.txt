@@ -116,6 +116,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.1.7 =
+
+
 = 3.1.6 =
 - Added a new feature to show the admin toolbar to admin users only.
 - Added CSS for membership buy buttons to force their width and height to be auto.

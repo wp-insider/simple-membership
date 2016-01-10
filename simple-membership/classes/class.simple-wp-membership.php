@@ -2,8 +2,8 @@
 
 include_once('class.swpm-misc-utils.php');
 include_once('class.swpm-utils.php');
+include_once('class.swpm-utils-member.php');
 include_once('class.swpm-init-time-tasks.php');
-include_once('class.swpm-member-utils.php');
 include_once('class.swpm-settings.php');
 include_once('class.swpm-protection.php');
 include_once('class.swpm-permission.php');

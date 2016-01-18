@@ -117,7 +117,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 3.1.7 =
-
+- The plugin will prevent WordPress's default password reset email notification from going out when a member resets the password.
+- Added debug logging for after a password is reset successfully.
 
 = 3.1.6 =
 - Added a new feature to show the admin toolbar to admin users only.

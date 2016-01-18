@@ -209,7 +209,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $password_hash = SwpmUtils::encrypt_password(trim($password)); //should use $saned??;
         $wpdb->update($wpdb->prefix . "swpm_members_tbl", array('password' => $password_hash), array('member_id' => $user->member_id));
 
-        // update wp user pass.
+        //Update wp user password
+        add_filter('send_password_change_email', array(&$this, 'dont_send_password_change_email'),1,3);//Stop wordpress from sending a reset password email to admin.
         SwpmUtils::update_wp_user($user->user_name, array('plain_password' => $password));
 
         $body = $settings->get_value('reset-mail-body');
@@ -221,6 +222,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $from = $settings->get_value('email-from');
         $headers = "From: " . $from . "\r\n";
         wp_mail($email, $subject, $body, $headers);
+        SwpmLog::log_simple_debug("Member password has been reset. Password reset email sent to: ".$email,true);
+        
         $message = '<div class="swpm-reset-pw-success">' . SwpmUtils::_("New password has been sent to your email address.") . '</div>';
         $message .= '<div class="swpm-reset-pw-success-email">' . SwpmUtils::_("Email Address: ") . $email . '</div>';
 
@@ -228,4 +231,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
         SwpmTransfer::get_instance()->set('status', $message);
     }
 
+    function dont_send_password_change_email($send=false, $user='', $userdata='')
+    {
+        //Stop the WordPress's default password change email notification to site admin  
+        //Only the simple membership plugin's password reset email will be sent.
+        return false;
+    }
 }

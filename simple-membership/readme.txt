@@ -119,6 +119,9 @@ https://simple-membership-plugin.com/
 = TODO 3.1.7 =
 - The plugin will prevent WordPress's default password reset email notification from going out when a member resets the password.
 - Added debug logging for after a password is reset successfully.
+- Added a new bulk action item. Activate account and notify members in bulk. Customize the activation email from the email settings menu of the plugin.
+- Added validation in the bulk operation function to check and make sure that multiple records were selected before trying the bulk action.
+
 
 = 3.1.6 =
 - Added a new feature to show the admin toolbar to admin users only.

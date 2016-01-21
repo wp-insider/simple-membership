@@ -124,17 +124,18 @@ class SwpmSettings {
             'message' => ''));
 
         add_settings_section('reset-password-settings', SwpmUtils::_('Email Settings (Password Reset)'), array(&$this, 'reset_password_settings_callback'), 'simple_wp_membership_settings');
-        add_settings_field('reset-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reset-password-settings', array('item' => 'reset-mail-subject',
-            'message' => ''));
-        add_settings_field('reset-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'reset-password-settings', array('item' => 'reset-mail-body',
-            'message' => ''));
+        add_settings_field('reset-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reset-password-settings', array('item' => 'reset-mail-subject', 'message' => ''));
+        add_settings_field('reset-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'reset-password-settings', array('item' => 'reset-mail-body', 'message' => ''));
 
 
         add_settings_section('upgrade-email-settings', SwpmUtils::_(' Email Settings (Account Upgrade Notification)'), array(&$this, 'upgrade_email_settings_callback'), 'simple_wp_membership_settings');
-        add_settings_field('upgrade-complete-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'upgrade-complete-mail-subject',
-            'message' => ''));
-        add_settings_field('upgrade-complete-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'upgrade-complete-mail-body',
-            'message' => ''));
+        add_settings_field('upgrade-complete-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'upgrade-complete-mail-subject', 'message' => ''));
+        add_settings_field('upgrade-complete-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'upgrade-complete-mail-body', 'message' => ''));
+
+        add_settings_section('bulk-activate-email-settings', SwpmUtils::_(' Email Settings (Bulk Account Activate Notification)'), array(&$this, 'bulk_activate_email_settings_callback'), 'simple_wp_membership_settings');
+        add_settings_field('bulk-activate-notify-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'bulk-activate-email-settings', array('item' => 'bulk-activate-notify-mail-subject', 'message' => ''));
+        add_settings_field('bulk-activate-notify-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'bulk-activate-email-settings', array('item' => 'bulk-activate-notify-mail-body', 'message' => ''));
+        
     }
 
     private function tab_4() {
@@ -274,6 +275,10 @@ class SwpmSettings {
         SwpmUtils::e('This email will be sent to your users after account upgrade (when an existing member pays for a new membership level).');
     }
 
+    public function bulk_activate_email_settings_callback() {
+        SwpmUtils::e('This email will be sent to your members when you use the bulk account activate and notify action.');
+    }
+    
     public function reg_prompt_email_settings_callback() {
         SwpmUtils::e('This email will be sent to prompt users to complete registration after the payment.');
     }
@@ -320,9 +325,11 @@ class SwpmSettings {
         $output['reset-mail-subject'] = sanitize_text_field($input['reset-mail-subject']);
         $output['reset-mail-body'] = wp_kses_data(force_balance_tags($input['reset-mail-body']));
 
-
         $output['upgrade-complete-mail-subject'] = sanitize_text_field($input['upgrade-complete-mail-subject']);
         $output['upgrade-complete-mail-body'] = wp_kses_data(force_balance_tags($input['upgrade-complete-mail-body']));
+
+        $output['bulk-activate-notify-mail-subject'] = sanitize_text_field($input['bulk-activate-notify-mail-subject']);
+        $output['bulk-activate-notify-mail-body'] = wp_kses_data(force_balance_tags($input['bulk-activate-notify-mail-body']));
 
         $output['reg-prompt-complete-mail-subject'] = sanitize_text_field($input['reg-prompt-complete-mail-subject']);
         $output['reg-prompt-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-prompt-complete-mail-body']));

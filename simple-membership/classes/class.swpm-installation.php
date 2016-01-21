@@ -210,17 +210,23 @@ class SwpmInstallation {
 
         $status_change_email_subject = "Account Updated!";
         $status_change_email_body = "Dear {first_name} {last_name}," .
-                "\n\n Your account status has been updated!" .
+                "\n\nYour account status has been updated!" .
                 " Please login to the member area at the following URL:" .
                 "\n\n {login_link}" .
                 "\n\nThank You";
 
+        $bulk_activate_email_subject = "Account Activated!";
+        $bulk_activate_email_body = "Hi," .
+                "\n\nYour account has been activated!" .
+                "\n\nYou can now login to the member area." .
+                "\n\nThank You";
+                
         if (empty($installed_version)) {
             //Do fresh install tasks
 
-            /*             * * Create the mandatory pages (if they are not there) ** */
+            //Create the mandatory pages (if they are not there)
             SwpmMiscUtils::create_mandatory_wp_pages();
-            /*             * * End of page creation ** */
+            //End of page creation
             $settings->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
                     ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))
                     ->set_value('reg-prompt-complete-mail-subject', stripslashes($reg_prompt_email_subject))
@@ -232,6 +238,9 @@ class SwpmInstallation {
                     ->set_value('account-change-email-subject', stripslashes($status_change_email_subject))
                     ->set_value('account-change-email-body', stripslashes($status_change_email_body))
                     ->set_value('email-from', trim(get_option('admin_email')));
+            
+            $settings->set_value('bulk-activate-notify-mail-subject', stripslashes($bulk_activate_email_subject));
+            $settings->set_value('bulk-activate-notify-mail-body', stripslashes($bulk_activate_email_body));
         }
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {
             //Do upgrade tasks

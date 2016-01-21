@@ -40,7 +40,7 @@ class SwpmMembers extends SWPM_List_Table {
         $actions = array(
             'bulk_delete' => SwpmUtils::_('Delete'),
             'bulk_active' => SwpmUtils::_('Set Status to Active'),
-            /*'bulk_active_notify' => SwpmUtils::_('Set Status to Active and Notify'),*/
+            'bulk_active_notify' => SwpmUtils::_('Set Status to Active and Notify'),
             'bulk_inactive' => SwpmUtils::_('Set Status to Inactive'),
             'bulk_pending' => SwpmUtils::_('Set Status to Pending'),
             'bulk_expired' => SwpmUtils::_('Set Status to Expired'),            
@@ -172,18 +172,28 @@ class SwpmMembers extends SWPM_List_Table {
     }
 
     function process_bulk_action() {
-        //Detect when a bulk action is being triggered... 
+        //Detect when a bulk action is being triggered... then perform the action.
         $members = isset($_REQUEST['members'])? $_REQUEST['members']: array();
+        
         $current_action = $this->current_action();
-        if ('bulk_delete' === $current_action) {            
+        if(!empty($current_action)){         
+            //Bulk operation action. Lets make sure multiple records were selected before going ahead.
             if (empty($members)) {
-                echo '<div id="message" class="updated fade"><p>Error! You need to select multiple records to perform a bulk action!</p></div>';
+                echo '<div id="message" class="error"><p>Error! You need to select multiple records to perform a bulk action!</p></div>';
                 return;
-            }
+            }            
+        }else{
+            //No bulk operation.
+            return;
+        }
+        
+        //perform the bulk operation according to the selection
+        if ('bulk_delete' === $current_action) {
             foreach ($members as $record_id) {
                 SwpmMembers::delete_user_by_id($record_id);
             }
             echo '<div id="message" class="updated fade"><p>Selected records deleted successfully!</p></div>';
+            return;
         }
         else if ('bulk_active' === $current_action){
             $this->bulk_set_status($members, 'active');
@@ -199,7 +209,9 @@ class SwpmMembers extends SWPM_List_Table {
         }
         else if ('bulk_expired' == $current_action){
             $this->bulk_set_status($members, 'expired');
-        }        
+        }
+        
+        echo '<div id="message" class="updated fade"><p>Bulk operation completed successfully!</p></div>';
     }
     
     function bulk_set_status($members, $status, $notify = false ){
@@ -211,7 +223,25 @@ class SwpmMembers extends SWPM_List_Table {
         $wpdb->query($query);        
         
         if ($notify){
-            // todo: add notification
+            $settings = SwpmSettings::get_instance();
+        
+            $emails = $wpdb->get_col("SELECT email FROM " . $wpdb->prefix . "swpm_members_tbl " . " WHERE member_id IN ( $ids  ) ");
+
+            $subject = $settings->get_value('bulk-activate-notify-mail-subject');
+            if (empty($subject)) {
+                $subject = "Account Activated!";
+            }
+            $body = $settings->get_value('bulk-activate-notify-mail-body');
+            if (empty($body)) {
+                $body = "Hi, Your account has been activated successfully!";
+            }
+            
+            $from_address = $settings->get_value('email-from');
+            $to_email_list = implode(',', $emails);
+            $headers = 'From: ' . $from_address . "\r\n";
+            $headers .= 'bcc: ' . $to_email_list . "\r\n";
+            wp_mail(array()/* $email_list */, $subject, $body, $headers);
+            SwpmLog::log_simple_debug("Bulk activation email notification sent. Activation email sent to the following email: " . $to_email_list, true);
         }
     }
     

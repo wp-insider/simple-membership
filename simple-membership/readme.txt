@@ -121,7 +121,7 @@ https://simple-membership-plugin.com/
 - Added debug logging for after a password is reset successfully.
 - Added a new bulk action item. Activate account and notify members in bulk. Customize the activation email from the email settings menu of the plugin.
 - Added validation in the bulk operation function to check and make sure that multiple records were selected before trying the bulk action.
-
+- Added an "Add Member" tab in the members menu.
 
 = 3.1.6 =
 - Added a new feature to show the admin toolbar to admin users only.

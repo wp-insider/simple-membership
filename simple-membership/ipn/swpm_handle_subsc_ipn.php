@@ -101,6 +101,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         $data['subscr_id'] = $subscr_id;
         $data['last_accessed_from_ip'] = isset($user_ip) ? $user_ip : ''; //Save the users IP address
 
+        $data = array_filter($data);//Remove any null values.
         $wpdb->insert($members_table_name, $data); //Create the member record
         $results = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id=%s and reg_code=%s", $subscr_id, $md5_code), OBJECT);
         $id = $results->member_id; //Alternatively use $wpdb->insert_id;

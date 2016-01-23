@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.4.1
-Stable tag: 3.1.6
+Stable tag: 3.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,9 +57,10 @@ You can create a free forum user account and ask your questions.
 * Membership management side is handled by the plugin.
 * Ability to manually approve your members.
 * Ability to import WordPress users as members.
+* Filter members list by account status.
 * Can be translated to any language.
 * Hide the admin toolbar from the frontend of your site.
-* Allow your members to deleter their membership accounts.
+* Allow your members to delete their membership accounts.
 * Send quick notification email to your members.
 * Customize the password reset email for members.
 * Use Google reCAPTCHA on your member registration form.
@@ -116,9 +117,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.1.7 =
-- The plugin will prevent WordPress's default password reset email notification from going out when a member resets the password.
+= 3.1.7 =
 - Added debug logging for after a password is reset successfully.
+- The plugin will prevent WordPress's default password reset email notification from going out when a member resets the password.
 - Added a new bulk action item. Activate account and notify members in bulk. Customize the activation email from the email settings menu of the plugin.
 - Added validation in the bulk operation function to check and make sure that multiple records were selected before trying the bulk action.
 - Updated the Portuguese (Brazil) language translation file. The translation was updated by Fernando Telles.

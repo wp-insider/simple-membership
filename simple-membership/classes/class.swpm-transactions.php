@@ -29,6 +29,7 @@ class SwpmTransactions {
         $txn_data['gateway'] = $ipn_data['gateway'];
         $txn_data['status'] = $ipn_data['status'];
         
+        $txn_data = array_filter($txn_data);//Remove any null values.
         $wpdb->insert($wpdb->prefix . "swpm_payments_tbl", $txn_data);
         
     }

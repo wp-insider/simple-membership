@@ -60,6 +60,14 @@ class SwpmMembers extends SWPM_List_Table {
         );
         return $item['member_id'] . $this->row_actions($actions);
     }
+    
+    function column_user_name($item) {
+        $user_name = $item['user_name'];
+        if(empty($user_name)){
+            $user_name = '['.SwpmUtils::_('incomplete').']';
+        }
+        return $user_name;
+    }
 
     function column_cb($item) {
         return sprintf(

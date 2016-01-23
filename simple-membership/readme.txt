@@ -122,8 +122,9 @@ https://simple-membership-plugin.com/
 - Added a new bulk action item. Activate account and notify members in bulk. Customize the activation email from the email settings menu of the plugin.
 - Added validation in the bulk operation function to check and make sure that multiple records were selected before trying the bulk action.
 - Updated the Portuguese (Brazil) language translation file. The translation was updated by Fernando Telles.
-- Added an "Add Member" tab in the members menu.
 - The members list can now be filtered by account status (from the members interface)
+- The members list now shows "incomplete" keyword in the username field for the member profiles that are incomplete.
+- Added an "Add Member" tab in the members menu.
 
 = 3.1.6 =
 - Added a new feature to show the admin toolbar to admin users only.

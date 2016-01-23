@@ -7,7 +7,24 @@
     <table class="form-table">
         <tr class="form-field form-required">
             <th scope="row"><label for="user_name"><?php echo  SwpmUtils::_('Username'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
-            <td><?php echo esc_attr($user_name); ?></td>
+            <td>
+                <?php 
+                if (empty($user_name)) {
+                    //This is a record with incomplete registration. The member need to complete the registration by clicking on the unique link sent to them
+                    ?>
+                    <div class="swpm-yellow-box" style="max-width:450px;">
+                        <p>This user account registration is not complete yet. The member needs to click on the unique registration completion link (sent to his email) and complete the registration by choosing a username and password.</p>
+                        <br />
+                        <p>You can go to the <a href="admin.php?page=simple_wp_membership_settings&tab=4" target="_blank">Tools Interface</a> and generate another unique "Registration Completion" link then send the link to the user. Alternatively, you can use that link yourself and complete the registration on behalf of the user.</p>
+                        <br />
+                        <p>If you suspect that this user has lost interest in becoming a member then you can delete this member record.</p>
+                    </div>
+                    <?php
+                } else {               
+                    echo esc_attr($user_name); 
+                }
+                ?>
+            </td>
         </tr>
         <tr class="form-required">
             <th scope="row"><label for="email"><?php echo  SwpmUtils::_('E-mail'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>

@@ -71,26 +71,42 @@ class SwpmMembers extends SWPM_List_Table {
         global $wpdb;
 
         $this->process_bulk_action();
-
+        
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl";
         $query .= " LEFT JOIN " . $wpdb->prefix . "swpm_membership_tbl";
         $query .= " ON ( membership_level = id ) ";
         $s = filter_input(INPUT_POST, 's');
+        $status = filter_input(INPUT_GET, 'status');
+        $filter1 = '';
         if (!empty($s)) {
-            $query .= " WHERE  user_name LIKE '%" . strip_tags($s) . "%' "
+            $filter1 .= "( user_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR first_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR last_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR email LIKE '%" . strip_tags($s) . "%' "
                     . " OR address_city LIKE '%" . strip_tags($s) . "%' "
                     . " OR address_state LIKE '%" . strip_tags($s) . "%' "
                     . " OR country LIKE '%" . strip_tags($s) . "%' "
-                    . " OR company_name LIKE '%" . strip_tags($s) . "%' ";
+                    . " OR company_name LIKE '%" . strip_tags($s) . "%' )";
+        }
+        
+        $filter2 = '';
+        if (!empty($status)){
+            $filter2 .= "account_state = '" . $status .  "'";
+        }
+        
+        if (!empty($filter1) && !empty($filter2)){
+            $query .= "WHERE " . $filter1 . " AND " . $filter2;
+        }
+        else if (!empty($filter1)){
+            $query .= "WHERE " . $filter1 ;
+        }
+        else if (!empty($filter2)){
+            $query .= "WHERE " . $filter2 ;
         }
         $orderby = filter_input(INPUT_GET, 'orderby');
         $orderby = empty($orderby) ? 'member_id' : $orderby;
         $order = filter_input(INPUT_GET, 'order');
-        $order = empty($order) ? 'DESC' : $order;
-
+        $order = empty($order) ? 'DESC' : $order;        
         $sortable_columns = $this->get_sortable_columns();
         $orderby = SwpmUtils::sanitize_value_by_array($orderby, $sortable_columns);
         $order = SwpmUtils::sanitize_value_by_array($order, array('DESC' => '1', 'ASC' => '1'));
@@ -120,7 +136,21 @@ class SwpmMembers extends SWPM_List_Table {
         $this->_column_headers = array($columns, $hidden, $sortable);
         $this->items = $wpdb->get_results($query, ARRAY_A);
     }
-
+    function get_user_count_by_state(){
+        global $wpdb;
+        $query = "SELECT count(member_id) AS count, account_state FROM " . $wpdb->prefix . "swpm_members_tbl GROUP BY account_state";
+        $result = $wpdb->get_results($query, ARRAY_A);
+        $count  = array();
+        
+        $all = 0;
+        foreach($result as $row){
+            $count[$row["account_state"]] = $row["count"];
+            $all  += intval($row['count']);
+        }
+        $count ["all"] = $all;
+   
+        return $count;
+    }
     function no_items() {
         _e('No Member found.');
     }
@@ -267,6 +297,7 @@ class SwpmMembers extends SWPM_List_Table {
 
     function show() {
         ob_start();
+        $status = filter_input(INPUT_GET, 'status');
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_members_list.php');
         $output = ob_get_clean();
         return $output;

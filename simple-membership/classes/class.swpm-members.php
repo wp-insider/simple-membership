@@ -95,7 +95,11 @@ class SwpmMembers extends SWPM_List_Table {
         //Add account status filtering to the query
         $filter2 = '';
         if (!empty($status)){
-            $filter2 .= "account_state = '" . $status .  "'";
+            if ($status == 'incomplete') {
+                $filter2 .= "user_name = ''";
+            } else {
+                $filter2 .= "account_state = '" . $status .  "'";
+            }
         }
         
         //Build the WHERE clause of the query string
@@ -160,6 +164,9 @@ class SwpmMembers extends SWPM_List_Table {
         }
         $count ["all"] = $all;
    
+        $count_incomplete_query = "SELECT COUNT(*) FROM " . $wpdb->prefix . "swpm_members_tbl WHERE user_name = ''";
+        $count['incomplete'] = $wpdb->get_var($count_incomplete_query);
+        
         return $count;
     }
     

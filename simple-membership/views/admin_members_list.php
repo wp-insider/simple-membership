@@ -15,7 +15,8 @@ $count = $this->get_user_count_by_account_state();
     <li class="all"><a href="admin.php?page=simple_wp_membership" <?php echo $status == ""? "class='current'": "";?> >All <span class="count">(<?php echo $count['all'];?>)</span></a> |</li>
 	<li class="active"><a href="admin.php?page=simple_wp_membership&status=active" <?php echo $status == "active"? "class='current'": "";?>>Active <span class="count">(<?php echo isset($count['active'])? $count['active']: 0 ?>)</span></a> |</li>
         <li class="active"><a href="admin.php?page=simple_wp_membership&status=inactive" <?php echo $status == "inactive"? "class='current'": "";?>>Inactive <span class="count">(<?php echo isset($count['inactive'])? $count['inactive']: 0 ?>)</span></a> |</li>
-        <li class="pending"><a href="admin.php?page=simple_wp_membership&status=pending" <?php echo $status == "pending"? "class='current'": "";?>>Pending <span class="count">(<?php echo isset($count['pending'])? $count['pending']: 0  ?>)</span></a> |</li>
+        <li class="pending"><a href="admin.php?page=simple_wp_membership&status=pending" <?php echo $status == "pending"? "class='current'": "";?>>Pending <span class="count">(<?php echo isset($count['pending'])? $count['pending']: 0 ?>)</span></a> |</li>
+        <li class="incomplete"><a href="admin.php?page=simple_wp_membership&status=incomplete" <?php echo $status == "incomplete"? "class='current'": "";?>>Incomplete <span class="count">(<?php echo isset($count['incomplete'])? $count['incomplete']: 0 ?>)</span></a> |</li>
 	<li class="expired"><a href="admin.php?page=simple_wp_membership&status=expired" <?php echo $status == "expired"? "class='current'": "";?>>Expired <span class="count">(<?php echo isset($count['expired'])? $count['expired']: 0 ?>)</span></a></li>
 </ul>
 

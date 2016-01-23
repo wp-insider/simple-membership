@@ -9,7 +9,7 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
 
     $button_id = isset($args['id']) ? $args['id'] : '';
     if (empty($button_id)) {
-        return '<p style="color: red;">Error! swpm_render_pp_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
+        return '<p class="swpm-red-box">Error! swpm_render_pp_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
     }
 
     //Check new_window parameter
@@ -19,10 +19,15 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
     $button_cpt = get_post($button_id); //Retrieve the CPT for this button
 
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
+    //Verify that this membership level exists (to prevent user paying for a level that has been deleted)
+    if(!SwpmUtils::membership_level_id_exists($membership_level_id)){
+        return '<p class="swpm-red-box">Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.</p>';
+    }
+    
     $paypal_email = get_post_meta($button_id, 'paypal_email', true);
     $payment_amount = get_post_meta($button_id, 'payment_amount', true);
     if (!is_numeric($payment_amount)) {
-        return '<p style="color: red;">Error! The payment amount value of the button must be a numeric number. Example: 49.50 </p>';
+        return '<p class="swpm-red-box">Error! The payment amount value of the button must be a numeric number. Example: 49.50 </p>';
     }
     $payment_amount = round($payment_amount, 2); //round the amount to 2 decimal place.   
     $payment_currency = get_post_meta($button_id, 'payment_currency', true);
@@ -108,6 +113,11 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
     $button_cpt = get_post($button_id); //Retrieve the CPT for this button
 
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
+    //Verify that this membership level exists (to prevent user paying for a level that has been deleted)
+    if(!SwpmUtils::membership_level_id_exists($membership_level_id)){
+        return '<p class="swpm-red-box">Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.</p>';
+    }
+    
     $paypal_email = get_post_meta($button_id, 'paypal_email', true);
     $payment_currency = get_post_meta($button_id, 'payment_currency', true);
 

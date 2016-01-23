@@ -30,7 +30,13 @@ class SwpmPaymentButtonsListTable extends SWPM_List_Table {
                 return get_post_meta($item['ID'], 'membership_level_id', true);
                 break;
             case 'button_shortcode':
-                $shortcode = '[swpm_payment_button id='.$item['ID'].']';
+                $level_id = get_post_meta($item['ID'], 'membership_level_id', true);
+                if(!SwpmUtils::membership_level_id_exists($level_id)){
+                    //This membership level doesn't exist. Show an error instead of the shortcode.
+                    $shortcode = 'Error! The membership level you specified in this button does not exist. You may have deleted this level. Edit this button and use a valid membership level.';
+                } else {
+                    $shortcode = '[swpm_payment_button id='.$item['ID'].']';
+                }
                 return $shortcode;
                 break;            
         }

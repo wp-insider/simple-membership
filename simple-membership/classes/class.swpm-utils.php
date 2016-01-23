@@ -96,6 +96,17 @@ abstract class SwpmUtils {
         return $wpdb->get_col($query);
     }
     
+    public static function membership_level_id_exists($level_id){
+        //Returns true if the specified membership level exists in the system. Returns false if the level has been deleted (or doesn't exist).
+        $all_level_ids = SwpmUtils::get_all_membership_level_ids();
+        if (in_array($level_id, $all_level_ids)) {
+            //Valid level ID
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public static function get_registration_link($for = 'all', $send_email = false, $member_id = '') {
         $members = array();
         global $wpdb;

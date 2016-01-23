@@ -78,7 +78,10 @@ class SwpmMembers extends SWPM_List_Table {
         $s = filter_input(INPUT_POST, 's');
         $status = filter_input(INPUT_GET, 'status');
         $filter1 = '';
+        
+        //Add the search parameter to the query
         if (!empty($s)) {
+            $s = trim($s);//Trim the input
             $filter1 .= "( user_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR first_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR last_name LIKE '%" . strip_tags($s) . "%' "
@@ -89,11 +92,13 @@ class SwpmMembers extends SWPM_List_Table {
                     . " OR company_name LIKE '%" . strip_tags($s) . "%' )";
         }
         
+        //Add account status filtering to the query
         $filter2 = '';
         if (!empty($status)){
             $filter2 .= "account_state = '" . $status .  "'";
         }
         
+        //Build the WHERE clause of the query string
         if (!empty($filter1) && !empty($filter2)){
             $query .= "WHERE " . $filter1 . " AND " . $filter2;
         }
@@ -103,16 +108,21 @@ class SwpmMembers extends SWPM_List_Table {
         else if (!empty($filter2)){
             $query .= "WHERE " . $filter2 ;
         }
+        
+        //Build the orderby and order query parameters
         $orderby = filter_input(INPUT_GET, 'orderby');
         $orderby = empty($orderby) ? 'member_id' : $orderby;
         $order = filter_input(INPUT_GET, 'order');
-        $order = empty($order) ? 'DESC' : $order;        
+        $order = empty($order) ? 'DESC' : $order;
         $sortable_columns = $this->get_sortable_columns();
         $orderby = SwpmUtils::sanitize_value_by_array($orderby, $sortable_columns);
         $order = SwpmUtils::sanitize_value_by_array($order, array('DESC' => '1', 'ASC' => '1'));
-
         $query.=' ORDER BY ' . $orderby . ' ' . $order;
+        
+        //Execute the query
         $totalitems = $wpdb->query($query); //return the total number of affected rows
+        
+        //Pagination setup
         $perpage = 20;
         $paged = filter_input(INPUT_GET, 'paged');
         if (empty($paged) || !is_numeric($paged) || $paged <= 0) {
@@ -136,7 +146,8 @@ class SwpmMembers extends SWPM_List_Table {
         $this->_column_headers = array($columns, $hidden, $sortable);
         $this->items = $wpdb->get_results($query, ARRAY_A);
     }
-    function get_user_count_by_state(){
+    
+    function get_user_count_by_account_state(){
         global $wpdb;
         $query = "SELECT count(member_id) AS count, account_state FROM " . $wpdb->prefix . "swpm_members_tbl GROUP BY account_state";
         $result = $wpdb->get_results($query, ARRAY_A);
@@ -151,8 +162,9 @@ class SwpmMembers extends SWPM_List_Table {
    
         return $count;
     }
+    
     function no_items() {
-        _e('No Member found.');
+        _e('No member found.');
     }
 
     function process_form_request() {

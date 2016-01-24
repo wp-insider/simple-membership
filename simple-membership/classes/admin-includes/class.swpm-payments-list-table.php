@@ -2,7 +2,7 @@
 
 include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/common/class.swpm-list-table.php');
 
-class SWPMPaymentsListTable extends SWPM_List_Table {
+class SWPMPaymentsListTable extends WP_List_Table {
 
     function __construct() {
         global $status, $page;

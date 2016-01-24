@@ -117,6 +117,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TOD 3.1.8 =
+- Improved the members and payments menu rendering in smaller screen devices.
+
 = 3.1.7 =
 - Added debug logging for after a password is reset successfully.
 - The plugin will prevent WordPress's default password reset email notification from going out when a member resets the password.

@@ -2,7 +2,7 @@
 
 include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/common/class.swpm-list-table.php');
 
-class SwpmMembers extends SWPM_List_Table {
+class SwpmMembers extends WP_List_Table {
 
     function __construct() {
         parent::__construct(array(

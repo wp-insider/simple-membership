@@ -2,7 +2,7 @@
 
 include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/common/class.swpm-list-table.php');
 
-class SwpmPaymentButtonsListTable extends SWPM_List_Table {
+class SwpmPaymentButtonsListTable extends WP_List_Table {
 
     private $per_page;
 

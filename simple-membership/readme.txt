@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.4.1
-Stable tag: 3.1.7
+Stable tag: 3.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -117,9 +117,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TOD 3.1.8 =
-- Improved the members and payments menu rendering in smaller screen devices.
+= 3.1.8 =
+- Improved the members and payments menu rendering for smaller screen devices.
 - Added a utility function to easily output a formatted date in the plugin according to the WordPress's date format settings.
+- Fixed a bug in the wp username and email validation functionality. Thanks to Klaas van der Linden for pointing it out.
+- The membership password reset form has been restructured (the HTML table has been removed).
 
 = 3.1.7 =
 - Added debug logging for after a password is reset successfully.

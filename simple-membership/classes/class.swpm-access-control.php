@@ -38,7 +38,7 @@ class SwpmAccessControl {
         $protect_older_posts = apply_filters('swpm_should_protect_older_post', false, $id);
         if ($protect_older_posts){
             $this->lastError = apply_filters ('swpm_restricted_post_msg_older_post', 
-                    SwpmUtils::_('This content can only be viewed by members who joined on or before ' . date(get_option( 'date_format' ), strtotime($post->post_date)))) ;
+                    SwpmUtils::_('This content can only be viewed by members who joined on or before ' . SwpmUtils::get_formatted_date_according_to_wp_settings($post->post_date) ));
             return false;
         }
         $perms = SwpmPermission::get_instance($auth->get('membership_level'));

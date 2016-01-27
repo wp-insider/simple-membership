@@ -119,6 +119,7 @@ https://simple-membership-plugin.com/
 
 = TOD 3.1.8 =
 - Improved the members and payments menu rendering in smaller screen devices.
+- Added a utility function to easily output a formatted date in the plugin according to the WordPress's date format settings.
 
 = 3.1.7 =
 - Added debug logging for after a password is reset successfully.

@@ -288,17 +288,37 @@ abstract class SwpmUtils {
     }
 
     public static function get_expire_date($start_date, $subscription_duration, $subscription_duration_type) {
-        if ($subscription_duration_type == SwpmMembershipLevel::FIXED_DATE) { //will expire after a fixed date.
-            return date(get_option('date_format'), strtotime($subscription_duration));
+        if ($subscription_duration_type == SwpmMembershipLevel::FIXED_DATE) { 
+            //Membership will expire after a fixed date.
+            return SwpmUtils::get_formatted_date_according_to_wp_settings($subscription_duration);
         }
+        
         $expires = self::calculate_subscription_period_days($subscription_duration, $subscription_duration_type);
-        if ($expires == 'noexpire') {// its set to no expiry until cancelled
+        if ($expires == 'noexpire') {
+            //Membership is set to no expiry or until cancelled.
             return SwpmUtils::_('Never');
         }
 
+        //Membership is set to a duration expiry settings.
+        
         return date(get_option('date_format'), strtotime($start_date . ' ' . $expires . ' days'));
     }
 
+    /* 
+     * Formats the given date value according to the WP date format settings. This function is useful for displaying a human readable date value to the user.
+     */
+    public static function get_formatted_date_according_to_wp_settings($date){
+        $date_format = get_option('date_format');
+        if (empty($date_format)) {
+            //WordPress's date form settings is not set. Lets set a default format.
+            $date_format = 'Y-m-d';
+        }
+
+        $date_obj = new DateTime($date);
+        $formatted_date = $date_obj->format($date_format);//Format the date value using date format settings
+        return $formatted_date; 
+    }
+    
     public static function swpm_username_exists($user_name) {
         global $wpdb;
         $member_table = $wpdb->prefix . 'swpm_members_tbl';

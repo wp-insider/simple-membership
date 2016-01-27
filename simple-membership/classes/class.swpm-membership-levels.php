@@ -43,7 +43,8 @@ class SwpmMembershipLevels extends WP_List_Table {
                 return 'No Expiry';
             }
             if ($item['subscription_duration_type'] == SwpmMembershipLevel::FIXED_DATE) {
-                return date(get_option('date_format'), strtotime($item['subscription_period']));
+                $formatted_date = SwpmUtils::get_formatted_date_according_to_wp_settings($item['subscription_period']);
+                return $formatted_date;
             }
             if ($item['subscription_duration_type'] == SwpmMembershipLevel::DAYS) {
                 return $item['subscription_period'] . " Day(s)";

@@ -117,6 +117,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO - 3.1.9 =
+- Added trailingslashit() to the after logout redirect URL.
+
 = 3.1.8 =
 - Improved the members and payments menu rendering for smaller screen devices.
 - Added a utility function to easily output a formatted date in the plugin according to the WordPress's date format settings.

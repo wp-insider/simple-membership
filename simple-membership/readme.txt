@@ -119,6 +119,7 @@ https://simple-membership-plugin.com/
 
 = TODO - 3.1.9 =
 - Added trailingslashit() to the after logout redirect URL.
+- Created a new extension to show member info. [usage documentation](https://simple-membership-plugin.com/simple-membership-addon-show-member-info/)
 
 = 3.1.8 =
 - Improved the members and payments menu rendering for smaller screen devices.

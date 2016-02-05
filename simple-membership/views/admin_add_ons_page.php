@@ -105,6 +105,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-and-google-recaptcha-integration/',
             );
             array_push($addons_data, $addon_12);
+
+            $addon_13 = array(
+                'name' => 'Show Member Info',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/show-member-info.png',
+                'description' => 'Allows you to show various member info using shortcodes.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-addon-show-member-info/',
+            );
+            array_push($addons_data, $addon_13);
             
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {

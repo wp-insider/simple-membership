@@ -170,6 +170,8 @@ class SwpmAuth {
             $expire = $expiration; //The minimum cookie expiration should be at least couple of days.
         }
 
+        setcookie("swpm_in_use", "swpm_in_use", $expire, COOKIEPATH, COOKIE_DOMAIN);
+        
         $expiration_timestamp = SwpmUtils::get_expiration_timestamp($this->userData);
         $enable_expired_login = SwpmSettings::get_instance()->get_value('enable-expired-account-login', '');
         // make sure cookie doesn't live beyond account expiration date.

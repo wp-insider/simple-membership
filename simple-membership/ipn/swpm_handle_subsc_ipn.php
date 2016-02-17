@@ -63,11 +63,9 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
             $body = "Your account has been upgraded successfully";
         }
         $from_address = $settings->get_value('email-from');
-        $login_link = $settings->get_value('login-page-url');
-
-        $tags1 = array("{first_name}", "{last_name}", "{user_name}", "{login_link}");
-        $vals1 = array($resultset->first_name, $resultset->last_name, $resultset->user_name, $login_link);
-        $email_body = str_replace($tags1, $vals1, $body);
+        
+        $additional_args = array();
+        $email_body = SwpmMiscUtils::replace_dynamic_tags($body, $swpm_id, $additional_args);
         $headers = 'From: ' . $from_address . "\r\n";
     }// End of existing user account upgrade
     else {
@@ -128,11 +126,10 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
             $body = "Please use the following link to complete your registration. \n {reg_link}";
         }
         $from_address = $settings->get_value('email-from');
-
-        $tags = array("{first_name}", "{last_name}", "{reg_link}");
-        $vals = array($data['first_name'], $data['last_name'], $reg_url);
         $body = html_entity_decode($body);
-        $email_body = str_replace($tags, $vals, $body);
+        
+        $additional_args = array('reg_link' => $reg_url);
+        $email_body = SwpmMiscUtils::replace_dynamic_tags($body, $id, $additional_args);        
         $headers = 'From: ' . $from_address . "\r\n";
     }
 

@@ -176,4 +176,31 @@ class SwpmMiscUtils {
         return $pageURL;
     }
 
+    public static function replace_dynamic_tags($msg_body, $member_id, $additional_args='') {
+        $settings = SwpmSettings::get_instance();
+        $user_record = SwpmMemberUtils::get_user_by_id($member_id);
+
+        $password = '';
+        $reg_link = '';
+        if (!empty($additional_args)) {
+            $password = isset($additional_args['password']) ? $additional_args['password'] : $password;
+            $reg_link = isset($additional_args['reg_link']) ? $additional_args['reg_link'] : $reg_link;
+        }
+        $login_link = $settings->get_value('login-page-url');
+                
+        //Define the replacable tags
+        $tags = array("{member_id}", "{user_name}", "{first_name}", "{last_name}", "{membership_level}",
+            "{account_state}", "{email}", "{phone}", "{member_since}", "{subscription_starts}", "{company_name}", 
+            "{password}", "{login_link}", "{reg_link}"
+        );
+    
+        //Define the values
+        $vals = array($member_id, $user_record->user_name, $user_record->first_name, $user_record->last_name, $user_record->membership_level,
+            $user_record->account_state, $user_record->email, $user_record->phone, $user_record->member_since, $user_record->subscription_starts, $user_record->company_name,
+            $password, $login_link, $reg_link
+        );
+    
+        $msg_body = str_replace($tags, $vals, $msg_body);
+        return $msg_body;
+    }
 }

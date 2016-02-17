@@ -30,6 +30,11 @@ abstract class SwpmRegistration {
         $keys = array_map('swpm_enclose_var', array_keys($member_info));
         $body = html_entity_decode($body);
         $body = str_replace($keys, $values, $body);
+        
+        $swpm_user = SwpmMemberUtils::get_user_by_user_name($member_info['user_name']);
+        $member_id = $swpm_user->member_id;
+        $body = SwpmMiscUtils::replace_dynamic_tags($body, $member_id);//Do the standard merge var replacement.
+        
         $email = sanitize_email(filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW));
         
         wp_mail(trim($email), $subject, $body, $headers);

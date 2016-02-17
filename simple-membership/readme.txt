@@ -118,6 +118,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO - 3.1.9 =
+- Added new merge vars that can be used in the registration complete email. These are {member_id}, {account_state}, {email}, {member_since}
 - Added trailingslashit() to the after logout redirect URL.
 - Created a new extension to show member info. [usage documentation](https://simple-membership-plugin.com/simple-membership-addon-show-member-info/)
 - A new cookie is dropped when a member logs into the site. It can be used for caching plugin compatibility.

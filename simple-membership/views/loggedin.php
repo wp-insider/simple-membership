@@ -1,3 +1,6 @@
+<?php
+$auth = SwpmAuth::get_instance();
+?>
 <div class="swpm-login-widget-logged">
     <div class="swpm-logged-username">
         <div class="swpm-logged-username-label swpm-logged-label"><?php echo  SwpmUtils::_('Logged in as') ?></div>

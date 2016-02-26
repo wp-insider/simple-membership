@@ -3,8 +3,8 @@ Contributors: smp7, wp.insider, amijanina
 Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
-Tested up to: 4.4.1
-Stable tag: 3.1.8
+Tested up to: 4.4
+Stable tag: 3.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,8 @@ All the payments from your members are recorded in the plugin. You can view them
 = Member Login Widget on The Sidebar =
 You can easily add a member login widget on the sidebar of your site. Simply use the login form shortcode in the sidebar widget.
 
+You can also customize the member login widget by creating a custom template file in your theme (or child theme) folder.
+
 = Documentation =
 
 Read the [setup documentation](https://simple-membership-plugin.com/simple-membership-documentation/) after you install the plugin to get started.
@@ -54,6 +56,7 @@ You can create a free forum user account and ask your questions.
 * Comments on your protected posts will also be protected automatically.
 * There is an option to enable debug logging so you can troubleshoot membership payment related issues easily (if any).
 * Ability to customize the content protection message that gets shown to non-members.
+* Ability to use merge vars in the membership email notification.
 * Membership management side is handled by the plugin.
 * Ability to manually approve your members.
 * Ability to import WordPress users as members.
@@ -117,11 +120,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 3.1.9 =
+= 3.1.9 =
 - Added new merge vars that can be used in the registration complete email. These are {member_id}, {account_state}, {email}, {member_since}
 - Added trailingslashit() to the after logout redirect URL.
 - Created a new extension to show member info. [usage documentation](https://simple-membership-plugin.com/simple-membership-addon-show-member-info/)
 - A new cookie is dropped when a member logs into the site. It can be used for caching plugin compatibility.
+- Added a new function to load the template for login widget and password reset form. This will allow customization of the login widget by adding the custom template to the theme folder.
 
 = 3.1.8 =
 - Improved the members and payments menu rendering for smaller screen devices.

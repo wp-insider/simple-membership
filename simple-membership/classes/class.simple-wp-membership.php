@@ -3,6 +3,7 @@
 include_once('class.swpm-utils-misc.php');
 include_once('class.swpm-utils.php');
 include_once('class.swpm-utils-member.php');
+include_once('class.swpm-utils-template.php');
 include_once('class.swpm-init-time-tasks.php');
 include_once('class.swpm-settings.php');
 include_once('class.swpm-protection.php');
@@ -242,13 +243,11 @@ class SimpleWpMembership {
         ob_start();
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
-            include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/loggedin.php');
+            //Load the template for logged-in member
+            SwpmUtilsTemplate::swpm_load_template('loggedin.php', false);
         } else {
-            $setting = SwpmSettings::get_instance();
-            $password_reset_url = $setting->get_value('reset-page-url');
-            $join_url = $setting->get_value('join-us-page-url');
-
-            include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/login.php');
+            //Load the login widget template
+            SwpmUtilsTemplate::swpm_load_template('login.php', false);
         }
         return ob_get_clean();
     }
@@ -259,7 +258,8 @@ class SimpleWpMembership {
             return '';
         }
         ob_start();
-        include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/forgot_password.php');
+        //Load the forgot password template
+        SwpmUtilsTemplate::swpm_load_template('forgot_password.php', false);
         return ob_get_clean();
     }
 

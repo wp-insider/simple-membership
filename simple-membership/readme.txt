@@ -99,6 +99,7 @@ The following language translations are already available:
 * Latvian
 * Indonesian
 * Hebrew
+* Catalan
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -119,6 +120,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 3.2.0 =
+- Added Catalan language translation file. The translation was submitted by Josep Ramon.
 
 = 3.1.9 =
 - Added new merge vars that can be used in the registration complete email. These are {member_id}, {account_state}, {email}, {member_since}

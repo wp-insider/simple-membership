@@ -83,8 +83,10 @@ class SwpmCategoryList extends WP_List_Table {
 
     function prepare_items() {
         $all_categories = array();
-        $all_cat_ids = get_categories(array('hide_empty' => '0'));
-        $totalitems = count($all_cat_ids);
+        $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
+        $taxonomies['category'] = 'category';
+        $all_terms = get_terms( $taxonomies, 'orderby=count&hide_empty=0&order=DESC');        
+        $totalitems = count($all_terms);
         $perpage = 100;
         $paged = !empty($_GET["paged"]) ? esc_sql($_GET["paged"]) : '';
         if (empty($paged) || !is_numeric($paged) || $paged <= 0) {
@@ -95,8 +97,8 @@ class SwpmCategoryList extends WP_List_Table {
         if (!empty($paged) && !empty($perpage)) {
             $offset = ($paged - 1) * $perpage;
         }
-        for ($i = $offset; $i < ((int) $offset + (int) $perpage) && !empty($all_cat_ids[$i]); $i++) {
-            $all_categories[] = $all_cat_ids[$i];
+        for ($i = $offset; $i < ((int) $offset + (int) $perpage) && !empty($all_terms[$i]); $i++) {
+            $all_categories[] = $all_terms[$i];
         }
         $this->set_pagination_args(array(
             "total_items" => $totalitems,

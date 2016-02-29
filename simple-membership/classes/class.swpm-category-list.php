@@ -30,8 +30,9 @@ class SwpmCategoryList extends WP_List_Table {
     function get_columns() {
         return array(
             'cb' => '<input type="checkbox" />'
-            , 'term_id' => SwpmUtils::_('ID')
-            , 'name' => SwpmUtils::_('Name')
+            , 'term_id' => SwpmUtils::_('Category ID')
+            , 'name' => SwpmUtils::_('Category Name')
+            , 'taxonomy' => SwpmUtils::_('Category Type (Taxonomy)')
             , 'description' => SwpmUtils::_('Description')
             , 'count' => SwpmUtils::_('Count')
         );
@@ -51,6 +52,16 @@ class SwpmCategoryList extends WP_List_Table {
         return $item->term_id;
     }
 
+    function column_taxonomy($item) {
+        $taxonomy = $item->taxonomy;
+        if ($taxonomy == 'category'){
+            $taxonomy = 'Post Category';
+        } else {
+            $taxonomy = 'Custom Post Type ('.$taxonomy.')';
+        }
+        return $taxonomy;
+    }
+    
     function column_cb($item) {
         return sprintf(
                 '<input type="hidden" name="ids_in_page[]" value="%s">

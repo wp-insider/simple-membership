@@ -121,8 +121,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= 3.2.0 =
+= TOD - 3.2.0 =
 - Added Catalan language translation file. The translation was submitted by Josep Ramon.
+- Custom post type categories are also listed in the category protection menu.
 
 = 3.1.9 =
 - Added new merge vars that can be used in the registration complete email. These are {member_id}, {account_state}, {email}, {member_since}

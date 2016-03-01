@@ -120,6 +120,10 @@ abstract class SwpmProtectionBase {
         $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
         $taxonomies['category'] = 'category';
         $terms = wp_get_post_terms( $post_id, $taxonomies, array('fields'=>'ids'));
+        if(!is_array($terms)){
+            return false;
+        }
+        
         foreach ($terms as $key=>$value){
             if (in_array($value, $this->categories)) {return true;}
         }
@@ -133,6 +137,9 @@ abstract class SwpmProtectionBase {
         $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
         $taxonomies['category'] = 'category';
         $terms = get_term($id, $taxonomies);
+        if(!is_array($terms)){
+            return false;
+        }
         
         foreach ($terms as $term){
             if ($term->parent == 0) {continue;}
@@ -149,7 +156,10 @@ abstract class SwpmProtectionBase {
         $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
         $taxonomies['category'] = 'category';
         $terms = wp_get_post_terms( $post_id, $taxonomies, array('fields'=>'all'));
-               
+        if(!is_array($terms)){
+            return false;
+        }
+        
         foreach ($terms as $term){
             if ($term->parent != 0 &&in_array($term->parent, $this->categories)) {
                 return true;                

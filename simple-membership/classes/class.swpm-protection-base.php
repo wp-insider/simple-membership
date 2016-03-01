@@ -114,40 +114,48 @@ abstract class SwpmProtectionBase {
     }
 
     public function post_in_categories($post_id) {
-        if (empty($this->categories))
+        if (empty($this->categories)){
             return false;
-        return (/* ($this->bitmap&1)===1) && */ in_category((array) $this->categories, $post_id));
+        }
+        $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
+        $taxonomies['category'] = 'category';
+        $terms = wp_get_post_terms( $post_id, $taxonomies, array('fields'=>'ids'));
+        foreach ($terms as $key=>$value){
+            if (in_array($value, $this->categories)) {return true;}
+        }
+        return false;               
     }
 
     public function in_parent_categories($id) {
-        if (empty($this->categories))
+    if (empty($this->categories)){
             return false;
-        $parents = explode(',', get_category_parents($id, false, ','));
-        $parents = array_unique($parents);
-        foreach ($parents as $parent) {
-            if (empty($parent))
-                continue;
-            if (/* (($this->bitmap&1)===1) && */(in_array($parent, (array) $this->categories)))
-                return true;
+        }
+        $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
+        $taxonomies['category'] = 'category';
+        $terms = get_term($id, $taxonomies);
+        
+        foreach ($terms as $term){
+            if ($term->parent == 0) {continue;}
+            
+            if (in_array($term->parent, $this->categories)) {return true;}
         }
         return false;
     }
 
     public function post_in_parent_categories($post_id) {
-        if (empty($this->categories))
+        if (empty($this->categories)){
             return false;
-        $cats = get_the_category($post_id);
-        $parents = array();
-        foreach ($cats as $key => $cat) {
-            $parents = array_merge($parents, explode(',', get_category_parents($cat->cat_ID, false, ',')));
         }
-        $parents = array_unique($parents);
-        foreach ($parents as $parent) {
-            if (empty($parent))
-                continue;
-            if (/* (($this->bitmap&1)===1) && */(in_array(get_cat_ID($parent), (array) $this->categories)))
-                return true;
+        $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
+        $taxonomies['category'] = 'category';
+        $terms = wp_get_post_terms( $post_id, $taxonomies, array('fields'=>'all'));
+               
+        foreach ($terms as $term){
+            if ($term->parent != 0 &&in_array($term->parent, $this->categories)) {
+                return true;                
+            }            
         }
+
         return false;
     }
 

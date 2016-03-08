@@ -124,6 +124,9 @@ https://simple-membership-plugin.com/
 = TOD - 3.2.0 =
 - Added Catalan language translation file. The translation was submitted by Josep Ramon.
 - Custom post type categories are also listed in the category protection menu.
+- Added a new filter (swpm_members_menu_items_per_page) that can be used to customize the number of items that is listed in the members menu.
+- The default number of items listed in the members menu by default has been increased to 50.
+
 
 = 3.1.9 =
 - Added new merge vars that can be used in the registration complete email. These are {member_id}, {account_state}, {email}, {member_since}

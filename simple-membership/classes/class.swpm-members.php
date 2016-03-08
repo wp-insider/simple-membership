@@ -135,7 +135,7 @@ class SwpmMembers extends WP_List_Table {
         $totalitems = $wpdb->query($query); //return the total number of affected rows
         
         //Pagination setup
-        $perpage = 20;
+        $perpage = apply_filters('swpm_members_menu_items_per_page', 50);
         $paged = filter_input(INPUT_GET, 'paged');
         if (empty($paged) || !is_numeric($paged) || $paged <= 0) {
             $paged = 1;

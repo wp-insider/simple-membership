@@ -412,7 +412,11 @@ class SimpleWpMembership {
     }
 
     public function filter_comment($content) {
-    if (is_admin()) {return $content;}
+        if (is_admin()) {
+            //Do not apply filtering for admin side viewing
+            return $content;
+        }
+    
         $acl = SwpmAccessControl::get_instance();
         global $comment;
         return $acl->filter_comment($comment->comment_post_ID, $content);
@@ -420,6 +424,7 @@ class SimpleWpMembership {
 
     public function filter_content($content) {
         if (is_preview() || is_admin()) {
+            //Do not apply filtering for admin side viewing or preview page viewing.
             return $content;
         }
         $acl = SwpmAccessControl::get_instance();

@@ -2,31 +2,31 @@
     <form id="swpm-registration-form" name="swpm-registration-form" method="post" action="">
         <input type ="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
         <table>
-            <tr>
+            <tr class="swpm-registration-username-row">
                 <td><label for="user_name"><?php echo SwpmUtils::_('Username') ?></label></td>
                 <td><input type="text" id="user_name" class="validate[required,custom[noapostrophe],custom[SWPMUserName],minSize[4],ajax[ajaxUserCall]]" value="<?php echo $user_name; ?>" size="50" name="user_name" /></td>
             </tr>
-            <tr>
+            <tr class="swpm-registration-email-row">
                 <td><label for="email"><?php echo SwpmUtils::_('Email') ?></label></td>
                 <td><input type="text" id="email" class="validate[required,custom[email],ajax[ajaxEmailCall]]" value="<?php echo $email; ?>" size="50" name="email" /></td>
             </tr>
-            <tr>
+            <tr class="swpm-registration-password-row">
                 <td><label for="password"><?php echo SwpmUtils::_('Password') ?></label></td>
                 <td><input type="password" autocomplete="off" id="password" value="" size="50" name="password" /></td>
             </tr>
-            <tr>
+            <tr class="swpm-registration-password-retype-row">
                 <td><label for="password_re"><?php echo SwpmUtils::_('Repeat Password') ?></label></td>
                 <td><input type="password" autocomplete="off" id="password_re" value="" size="50" name="password_re" /></td>
             </tr>
-            <tr>
+            <tr class="swpm-registration-firstname-row">
                 <td><label for="first_name"><?php echo SwpmUtils::_('First Name') ?></label></td>
                 <td><input type="text" id="first_name" value="<?php echo $first_name; ?>" size="50" name="first_name" /></td>
             </tr>
-            <tr>
+            <tr class="swpm-registration-lastname-row">
                 <td><label for="last_name"><?php echo SwpmUtils::_('Last Name') ?></label></td>
                 <td><input type="text" id="last_name" value="<?php echo $last_name; ?>" size="50" name="last_name" /></td>
             </tr>
-            <tr>
+            <tr class="swpm-registration-membership-level-row">
                 <td><label for="membership_level"><?php echo SwpmUtils::_('Membership Level') ?></label></td>
                 <td>
                     <?php echo $membership_level_alias; ?>
@@ -42,7 +42,7 @@
         </div>
         
         <input type="hidden" name="action" value="custom_posts" />
-        <?php wp_nonce_field('name_of_my_action', 'name_of_nonce_field'); ?>
+        
     </form>
 </div>
 <script>

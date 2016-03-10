@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.4
-Stable tag: 3.1.9
+Stable tag: 3.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,12 +121,15 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TOD - 3.2.0 =
+= 3.2.0 =
 - Added Catalan language translation file. The translation was submitted by Josep Ramon.
 - Custom post type categories are also listed in the category protection menu.
 - Added a new filter (swpm_members_menu_items_per_page) that can be used to customize the number of items that is listed in the members menu.
 - The default number of items listed in the members menu by default has been increased to 50.
-
+- Comment protection fix for posts using "more" tag.
+- Comments of protected posts are also protected.
+- Added CSS classes for all the field rows in the standard membership registration form.
+- Added CSS classes for all the field rows in the edit profile form.
 
 = 3.1.9 =
 - Added new merge vars that can be used in the registration complete email. These are {member_id}, {account_state}, {email}, {member_since}

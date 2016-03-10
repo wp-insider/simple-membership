@@ -88,14 +88,13 @@ class SwpmAccessControl {
                 $error_msg = '<div class="swpm-margin-top-10">' . SwpmUtils::_("You need to login to view the rest of the content. ") . SwpmSettings::get_instance()->get_login_link() . '</div>';
                 $this->lastError = apply_filters('swpm_not_logged_in_more_tag_msg', $error_msg);
             }
-
             return do_shortcode($post_segments[0]) . $this->lastError;
         }
 
         return $this->lastError;
     }
-    public function filter_comment($id,$content){
-        if($this->can_i_read_comment($id)) { return $content; }
+    public function filter_comment($parent_post_id,$content){
+        if($this->can_i_read_post($parent_post_id)) { return $content; }
         return $this->lastError;
     }
     public function filter_post_with_moretag($id, $more_link, $more_link_text){

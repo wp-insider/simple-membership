@@ -39,9 +39,7 @@ class SwpmCategoryList extends WP_List_Table {
     }
 
     function get_sortable_columns() {
-        return array(
-            'name' => array('name', true)
-        );
+        return array();
     }
 
     function column_default($item, $column_name) {
@@ -99,7 +97,7 @@ class SwpmCategoryList extends WP_List_Table {
         $all_terms = get_terms( $taxonomies, 'orderby=count&hide_empty=0&order=DESC');        
         $totalitems = count($all_terms);
         $perpage = 100;
-        $paged = !empty($_GET["paged"]) ? esc_sql($_GET["paged"]) : '';
+        $paged = !empty($_GET["paged"]) ? strip_tags($_GET["paged"]) : '';
         if (empty($paged) || !is_numeric($paged) || $paged <= 0) {
             $paged = 1;
         }

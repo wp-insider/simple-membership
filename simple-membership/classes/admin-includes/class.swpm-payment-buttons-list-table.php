@@ -16,7 +16,7 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
             'ajax' => false //does this table support ajax?
         ));
 
-        $this->per_page = 30;
+        $this->per_page = 50;
     }
 
     function column_default($item, $column_name) {
@@ -75,9 +75,10 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
     }
 
     function get_sortable_columns() {
-        $sortable_columns = array(
-            'ID' => array('ID', false), //true means its already sorted
-        );
+        $sortable_columns = array();
+//        $sortable_columns = array(
+//            'ID' => array('ID', false), //true means its already sorted
+//        );
         return $sortable_columns;
     }
 

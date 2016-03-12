@@ -100,8 +100,8 @@ class SwpmMembershipLevels extends WP_List_Table {
         }
 
         $totalitems = $wpdb->query($query); //return the total number of affected rows
-        $perpage = 20;
-        $paged = !empty($_GET["paged"]) ? esc_sql($_GET["paged"]) : '';
+        $perpage = 50;
+        $paged = !empty($_GET["paged"]) ? strip_tags($_GET["paged"]) : '';
         if (empty($paged) || !is_numeric($paged) || $paged <= 0) {
             $paged = 1;
         }

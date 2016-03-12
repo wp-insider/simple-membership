@@ -121,6 +121,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.2.1 =
+- [TODO - update filter reference document] Added a new filter (swpm_transactions_menu_items_per_page) that can be used to customize the number of items that is listed in the transactions menu.
+- Added sanitization for the sort inputs in the member transactions table.
+- Added more sorting option in the transactions table.
+
 = 3.2.0 =
 - Added Catalan language translation file. The translation was submitted by Josep Ramon.
 - Custom post type categories are also listed in the category protection menu.

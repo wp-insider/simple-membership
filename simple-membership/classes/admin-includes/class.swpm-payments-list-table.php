@@ -89,6 +89,8 @@ class SWPMPaymentsListTable extends WP_List_Table {
         $sortable_columns = array(
             'id' => array('id', false), //true means its already sorted
             'membership_level' => array('membership_level', false),
+            'last_name' => array('last_name', false),
+            'txn_date' => array('txn_date', false),
         );
         return $sortable_columns;
     }
@@ -128,7 +130,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
     function prepare_items() {
 
         // Lets decide how many records per page to show
-        $per_page = 50;
+        $per_page = apply_filters('swpm_transactions_menu_items_per_page', 50);
 
         $columns = $this->get_columns();
         $hidden = array();
@@ -145,6 +147,11 @@ class SWPMPaymentsListTable extends WP_List_Table {
             $orderby_column = "id";
             $sort_order = "DESC";
         }
+
+        //Sanitize the inputs
+        $orderby_column = SwpmUtils::sanitize_value_by_array($orderby_column, $sortable);
+        $sort_order = SwpmUtils::sanitize_value_by_array($sort_order, array('DESC' => '1', 'ASC' => '1'));        
+        
         global $wpdb;
         $payments_table_name = $wpdb->prefix . "swpm_payments_tbl";
 

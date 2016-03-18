@@ -311,6 +311,8 @@ class SwpmSettings {
         $output['reset-page-url'] = esc_url($input['reset-page-url']);
         $output['join-us-page-url'] = esc_url($input['join-us-page-url']);
         $output['default-account-status'] = esc_attr($input['default-account-status']);
+        $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
+        
         return $output;
     }
 

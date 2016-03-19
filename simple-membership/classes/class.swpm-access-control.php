@@ -70,6 +70,7 @@ class SwpmAccessControl {
         return $this->lastError;
     }
     public function filter_post($id,$content){
+        if (SwpmUtils::is_first_click_free($content)) {return $content;}
         if(in_array($id, $this->moretags)) {return $content; }
         if($this->can_i_read_post($id)) {return $content; } 
         $moretag = SwpmSettings::get_instance()->get_value('enable-moretag');
@@ -98,6 +99,7 @@ class SwpmAccessControl {
         return $this->lastError;
     }
     public function filter_post_with_moretag($id, $more_link, $more_link_text){
+        if (SwpmUtils::is_first_click_free($content)) {return $content;}
         $this->moretags[] = $id;
         if($this->can_i_read_post($id)) {
             return $more_link;

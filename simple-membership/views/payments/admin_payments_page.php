@@ -6,7 +6,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : '';
 
 <div class="wrap">
 
-    <h2><?php echo SwpmUtils::_('Simple Membership::Payments') ?></h2>
+    <h1><?php echo SwpmUtils::_('Simple Membership::Payments') ?></h1>
 
     <h2 class="nav-tab-wrapper">
         <a class="nav-tab <?php echo ($tab == '') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments"><?php SwpmUtils::e('Transactions'); ?></a>

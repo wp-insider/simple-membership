@@ -126,6 +126,7 @@ https://simple-membership-plugin.com/
 - Added sanitization for the sort inputs in the member transactions table.
 - Added more sorting option in the transactions table.
 - Fixed an issue with the auto delete pending account settings.
+- Changed admin heading structure from h2 to h1.
 
 = 3.2.0 =
 - Added Catalan language translation file. The translation was submitted by Josep Ramon.

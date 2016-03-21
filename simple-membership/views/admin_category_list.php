@@ -1,5 +1,5 @@
 <div class="wrap">
-    <h1><?php screen_icon('users'); ?><?php echo  SwpmUtils::_('Simple WP Membership::Categories') ?></h1>
+    <h1><?php echo SwpmUtils::_('Simple WP Membership::Categories') ?></h1>
     <?php include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_membership_level_menu.php'); ?>
     
     <div style="background: none repeat scroll 0 0 #FFF6D5;border: 1px solid #D1B655;color: #3F2502;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">

@@ -1,5 +1,4 @@
 <div class="wrap" id="swpm-profile-page" type="add">
-<?php //screen_icon(); ?>
 <form action="" method="post" name="swpm-create-user" id="swpm-create-user" class="validate"<?php do_action('user_new_form_tag');?>>
 <input name="action" type="hidden" value="createuser" />
 <?php wp_nonce_field( 'create-swpmuser', '_wpnonce_create-swpmuser' ) ?>

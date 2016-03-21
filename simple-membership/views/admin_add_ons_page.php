@@ -114,6 +114,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             );
             array_push($addons_data, $addon_13);
             
+            $addon_14 = array(
+                'name' => 'Google First Click Free',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/google-first-click-free-addon.png',
+                'description' => 'Allows you to integrate with the Google First Click Free feature.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-google-first-click-free-integration-addon',
+            );
+            array_push($addons_data, $addon_14);            
+            
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {
                 $output .= '<div class="swpm_addon_item_canvas">';

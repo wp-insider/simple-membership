@@ -70,9 +70,10 @@ class SwpmAccessControl {
         return $this->lastError;
     }
     public function filter_post($id,$content){
-        if (SwpmUtils::is_first_click_free($content)) {return $content;}
+        if(SwpmUtils::is_first_click_free($content)) {return $content;}
         if(in_array($id, $this->moretags)) {return $content; }
         if($this->can_i_read_post($id)) {return $content; } 
+        
         $moretag = SwpmSettings::get_instance()->get_value('enable-moretag');
         if (empty($moretag)){
             return $this->lastError;

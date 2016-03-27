@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.4
-Stable tag: 3.2.0
+Stable tag: 3.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,10 +121,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.2.1 =
-- [TODO - update filter reference document] Added a new filter (swpm_transactions_menu_items_per_page) that can be used to customize the number of items that is listed in the transactions menu.
-- Added sanitization for the sort inputs in the member transactions table.
+= 3.2.1 =
+- Added a new filter (swpm_transactions_menu_items_per_page) that can be used to customize the number of items that is listed in the transactions menu.
 - Added more sorting option in the transactions table.
+- Added sanitization for the sort inputs in the member transactions table.
 - Fixed an issue with the auto delete pending account settings.
 - Changed admin heading structure from h2 to h1.
 

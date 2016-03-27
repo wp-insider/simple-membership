@@ -20,7 +20,7 @@ function swpm_create_new_pp_subscription_button() {
             <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Subscription Button Configuration'); ?></label></h3>
             <div class="inside">
 
-                <input type="hidden" name="button_type" value="<?php echo strip_tags($_REQUEST['button_type']); ?>">
+                <input type="hidden" name="button_type" value="<?php echo sanitize_text_field($_REQUEST['button_type']); ?>">
                 <input type="hidden" name="swpm_button_type_selected" value="1">
 
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
@@ -210,33 +210,32 @@ function swpm_save_new_pp_subscription_button_data() {
 
         $button_id = wp_insert_post(
                 array(
-                    'post_title' => strip_tags($_REQUEST['button_name']),
+                    'post_title' => sanitize_text_field($_REQUEST['button_name']),
                     'post_type' => 'swpm_payment_button',
                     'post_content' => '',
                     'post_status' => 'publish'
                 )
         );
 
-        $button_type = strip_tags($_REQUEST['button_type']);
+        $button_type = sanitize_text_field($_REQUEST['button_type']);
         add_post_meta($button_id, 'button_type', $button_type);
-        add_post_meta($button_id, 'membership_level_id', strip_tags($_REQUEST['membership_level_id']));
-        //add_post_meta($button_id, 'payment_amount', trim(strip_tags($_REQUEST['payment_amount'])));
-        add_post_meta($button_id, 'payment_currency', strip_tags($_REQUEST['payment_currency']));
-        add_post_meta($button_id, 'return_url', trim(strip_tags($_REQUEST['return_url'])));
-        add_post_meta($button_id, 'paypal_email', trim(strip_tags($_REQUEST['paypal_email'])));
-        add_post_meta($button_id, 'button_image_url', trim(strip_tags($_REQUEST['button_image_url'])));
+        add_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
+        add_post_meta($button_id, 'payment_currency', sanitize_text_field($_REQUEST['payment_currency']));
+        add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
+        add_post_meta($button_id, 'paypal_email', trim(sanitize_email($_REQUEST['paypal_email'])));
+        add_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
 
         //Subscription billing details
-        add_post_meta($button_id, 'billing_amount', strip_tags($_REQUEST['billing_amount']));
-        add_post_meta($button_id, 'billing_cycle', strip_tags($_REQUEST['billing_cycle']));
-        add_post_meta($button_id, 'billing_cycle_term', strip_tags($_REQUEST['billing_cycle_term']));
-        add_post_meta($button_id, 'billing_cycle_count', strip_tags($_REQUEST['billing_cycle_count']));
+        add_post_meta($button_id, 'billing_amount', sanitize_text_field($_REQUEST['billing_amount']));
+        add_post_meta($button_id, 'billing_cycle', sanitize_text_field($_REQUEST['billing_cycle']));
+        add_post_meta($button_id, 'billing_cycle_term', sanitize_text_field($_REQUEST['billing_cycle_term']));
+        add_post_meta($button_id, 'billing_cycle_count', sanitize_text_field($_REQUEST['billing_cycle_count']));
         add_post_meta($button_id, 'billing_reattempt', isset($_REQUEST['billing_reattempt']) ? '1' : '');
 
         //Trial billing details
-        add_post_meta($button_id, 'trial_billing_amount', strip_tags($_REQUEST['trial_billing_amount']));
-        add_post_meta($button_id, 'trial_billing_cycle', strip_tags($_REQUEST['trial_billing_cycle']));
-        add_post_meta($button_id, 'trial_billing_cycle_term', strip_tags($_REQUEST['trial_billing_cycle_term']));
+        add_post_meta($button_id, 'trial_billing_amount', sanitize_text_field($_REQUEST['trial_billing_amount']));
+        add_post_meta($button_id, 'trial_billing_cycle', sanitize_text_field($_REQUEST['trial_billing_cycle']));
+        add_post_meta($button_id, 'trial_billing_cycle_term', sanitize_text_field($_REQUEST['trial_billing_cycle_term']));
 
         //Redirect to the edit interface of this button with $button_id        
         $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
@@ -257,8 +256,8 @@ add_action('swpm_edit_payment_button_for_pp_subscription', 'swpm_edit_pp_subscri
 function swpm_edit_pp_subscription_button() {
     //Retrieve the payment button data and present it for editing.    
 
-    $button_id = strip_tags($_REQUEST['button_id']);
-    $button_type = strip_tags($_REQUEST['button_type']);
+    $button_id = sanitize_text_field($_REQUEST['button_id']);
+    $button_type = sanitize_text_field($_REQUEST['button_type']);
 
     $button = get_post($button_id); //Retrieve the CPT for this button
 
@@ -482,9 +481,9 @@ function swpm_edit_pp_subscription_button_data() {
         //TODO - Do some basic validation check?
         
         //Update and Save the edited payment button data
-        $button_id = strip_tags($_REQUEST['button_id']);
-        $button_type = strip_tags($_REQUEST['button_type']);
-        $button_name = strip_tags($_REQUEST['button_name']);
+        $button_id = sanitize_text_field($_REQUEST['button_id']);
+        $button_type = sanitize_text_field($_REQUEST['button_type']);
+        $button_name = sanitize_text_field($_REQUEST['button_name']);
 
         $button_post = array(
             'ID' => $button_id,
@@ -494,24 +493,23 @@ function swpm_edit_pp_subscription_button_data() {
         wp_update_post($button_post);
 
         update_post_meta($button_id, 'button_type', $button_type);
-        update_post_meta($button_id, 'membership_level_id', strip_tags($_REQUEST['membership_level_id']));
-        //update_post_meta($button_id, 'payment_amount', trim(strip_tags($_REQUEST['payment_amount'])));
-        update_post_meta($button_id, 'payment_currency', strip_tags($_REQUEST['payment_currency']));
-        update_post_meta($button_id, 'return_url', trim(strip_tags($_REQUEST['return_url'])));
-        update_post_meta($button_id, 'paypal_email', trim(strip_tags($_REQUEST['paypal_email'])));
-        update_post_meta($button_id, 'button_image_url', trim(strip_tags($_REQUEST['button_image_url'])));
+        update_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
+        update_post_meta($button_id, 'payment_currency', sanitize_text_field($_REQUEST['payment_currency']));
+        update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
+        update_post_meta($button_id, 'paypal_email', trim(sanitize_email($_REQUEST['paypal_email'])));
+        update_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
 
         //Subscription billing details
-        update_post_meta($button_id, 'billing_amount', strip_tags($_REQUEST['billing_amount']));
-        update_post_meta($button_id, 'billing_cycle', strip_tags($_REQUEST['billing_cycle']));
-        update_post_meta($button_id, 'billing_cycle_term', strip_tags($_REQUEST['billing_cycle_term']));
-        update_post_meta($button_id, 'billing_cycle_count', strip_tags($_REQUEST['billing_cycle_count']));
+        update_post_meta($button_id, 'billing_amount', sanitize_text_field($_REQUEST['billing_amount']));
+        update_post_meta($button_id, 'billing_cycle', sanitize_text_field($_REQUEST['billing_cycle']));
+        update_post_meta($button_id, 'billing_cycle_term', sanitize_text_field($_REQUEST['billing_cycle_term']));
+        update_post_meta($button_id, 'billing_cycle_count', sanitize_text_field($_REQUEST['billing_cycle_count']));
         update_post_meta($button_id, 'billing_reattempt', isset($_REQUEST['billing_reattempt']) ? '1' : '');
 
         //Trial billing details
-        update_post_meta($button_id, 'trial_billing_amount', strip_tags($_REQUEST['trial_billing_amount']));
-        update_post_meta($button_id, 'trial_billing_cycle', strip_tags($_REQUEST['trial_billing_cycle']));
-        update_post_meta($button_id, 'trial_billing_cycle_term', strip_tags($_REQUEST['trial_billing_cycle_term']));
+        update_post_meta($button_id, 'trial_billing_amount', sanitize_text_field($_REQUEST['trial_billing_amount']));
+        update_post_meta($button_id, 'trial_billing_cycle', sanitize_text_field($_REQUEST['trial_billing_cycle']));
+        update_post_meta($button_id, 'trial_billing_cycle_term', sanitize_text_field($_REQUEST['trial_billing_cycle_term']));
         
         echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
     }

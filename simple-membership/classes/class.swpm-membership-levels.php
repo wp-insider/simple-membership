@@ -86,8 +86,9 @@ class SwpmMembershipLevels extends WP_List_Table {
         $this->process_bulk_action();
 
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
-        if (isset($_POST['s']))
-            $query .= " AND alias LIKE '%" . strip_tags($_POST['s']) . "%' ";
+        if (isset($_POST['s'])){
+            $query .= " AND alias LIKE '%" . sanitize_text_field($_POST['s']) . "%' ";
+        }
         $orderby = !empty($_GET["orderby"]) ? esc_sql($_GET["orderby"]) : 'id';
         $order = !empty($_GET["order"]) ? esc_sql($_GET["order"]) : 'DESC';
 
@@ -101,7 +102,7 @@ class SwpmMembershipLevels extends WP_List_Table {
 
         $totalitems = $wpdb->query($query); //return the total number of affected rows
         $perpage = 50;
-        $paged = !empty($_GET["paged"]) ? strip_tags($_GET["paged"]) : '';
+        $paged = !empty($_GET["paged"]) ? sanitize_text_field($_GET["paged"]) : '';
         if (empty($paged) || !is_numeric($paged) || $paged <= 0) {
             $paged = 1;
         }

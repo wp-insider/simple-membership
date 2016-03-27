@@ -27,7 +27,7 @@ $payments_list_table = new SWPMPaymentsListTable();
 //Check if an action was performed
 if (isset($_REQUEST['action'])) { //Do list table form row action tasks
     if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete_txn') { //Delete link was clicked for a row in list table
-        $record_id = strip_tags($_REQUEST['id']);
+        $record_id = sanitize_text_field($_REQUEST['id']);
         $payments_list_table->delete_record($record_id);
         $success_msg = '<div id="message" class="updated"><p><strong>';
         $success_msg .= SwpmUtils::_('The selected entry was deleted!');

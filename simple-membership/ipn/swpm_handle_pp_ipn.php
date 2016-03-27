@@ -138,16 +138,17 @@ class swpm_paypal_ipn_handler {
             $cart_item_data_quantity = $current_cart_item['quantity'];
             $cart_item_data_total = $current_cart_item['mc_gross'];
             $cart_item_data_currency = $current_cart_item['mc_currency'];
-            if(empty($cart_item_data_quantity))
-            {
-                    $cart_item_data_quantity = 1;
-            }
+            if(empty($cart_item_data_quantity)){
+                $cart_item_data_quantity = 1;
+            }            
             $this->debug_log('Item Number: '.$cart_item_data_num,true);
             $this->debug_log('Item Name: '.$cart_item_data_name,true);
             $this->debug_log('Item Quantity: '.$cart_item_data_quantity,true);
             $this->debug_log('Item Total: '.$cart_item_data_total,true);
             $this->debug_log('Item Currency: '.$cart_item_data_currency,true);
 
+            //Get the button id
+            $button_id = $cart_item_data_num;//Button id is the item number.
 
             //*** Handle Membership Payment ***
             //--------------------------------------------------------------------------------------

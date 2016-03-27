@@ -107,7 +107,7 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
     function process_delete_action() {
 
         if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete_payment_btn') { //Delete link was clicked for a row in list table
-            $record_id = strip_tags($_REQUEST['button_id']);
+            $record_id = sanitize_text_field($_REQUEST['button_id']);
             wp_delete_post( $record_id );
             $success_msg = '<div id="message" class="updated"><p>';
             $success_msg .= SwpmUtils::_('The selected entry was deleted!');

@@ -19,7 +19,7 @@ function swpm_create_new_pp_buy_now_button() {
         <div class="inside">
 
             <form id="pp_button_config_form" method="post">
-                <input type="hidden" name="button_type" value="<?php echo strip_tags($_REQUEST['button_type']); ?>">
+                <input type="hidden" name="button_type" value="<?php echo sanitize_text_field($_REQUEST['button_type']); ?>">
                 <input type="hidden" name="swpm_button_type_selected" value="1">
 
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
@@ -134,29 +134,30 @@ add_action('swpm_create_new_button_process_submission', 'swpm_save_new_pp_buy_no
 function swpm_save_new_pp_buy_now_button_data() {
     if (isset($_REQUEST['swpm_pp_buy_now_save_submit'])) {
         //This is a PayPal buy now button save event. Process the submission.
-        //TODO - Do some basic validation check??
+        //TODO - Do some extra validation check?
+        
         //Save the button data
         $button_id = wp_insert_post(
                 array(
-                    'post_title' => strip_tags($_REQUEST['button_name']),
+                    'post_title' => sanitize_text_field($_REQUEST['button_name']),
                     'post_type' => 'swpm_payment_button',
                     'post_content' => '',
                     'post_status' => 'publish'
                 )
         );
 
-        $button_type = strip_tags($_REQUEST['button_type']);
+        $button_type = sanitize_text_field($_REQUEST['button_type']);
         add_post_meta($button_id, 'button_type', $button_type);
-        add_post_meta($button_id, 'membership_level_id', strip_tags($_REQUEST['membership_level_id']));
-        add_post_meta($button_id, 'payment_amount', trim(strip_tags($_REQUEST['payment_amount'])));
-        add_post_meta($button_id, 'payment_currency', strip_tags($_REQUEST['payment_currency']));
-        add_post_meta($button_id, 'return_url', trim(strip_tags($_REQUEST['return_url'])));
-        add_post_meta($button_id, 'paypal_email', trim(strip_tags($_REQUEST['paypal_email'])));
-        add_post_meta($button_id, 'button_image_url', trim(strip_tags($_REQUEST['button_image_url'])));
+        add_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
+        add_post_meta($button_id, 'payment_amount', trim(sanitize_text_field($_REQUEST['payment_amount'])));
+        add_post_meta($button_id, 'payment_currency', sanitize_text_field($_REQUEST['payment_currency']));
+        add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
+        add_post_meta($button_id, 'paypal_email', trim(sanitize_email($_REQUEST['paypal_email'])));
+        add_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
 
         //Redirect to the edit interface of this button with $button_id        
         //$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
-        //Redirect to the manager payment buttons interface
+        //Redirect to the manage payment buttons interface
         $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=payment_buttons';
         SwpmMiscUtils::redirect_to_url($url);
     }
@@ -176,8 +177,8 @@ function swpm_edit_pp_buy_now_button() {
 
     //Retrieve the payment button data and present it for editing.    
 
-    $button_id = strip_tags($_REQUEST['button_id']);
-    $button_type = strip_tags($_REQUEST['button_type']);
+    $button_id = sanitize_text_field($_REQUEST['button_id']);
+    $button_type = sanitize_text_field($_REQUEST['button_type']);
 
     $button = get_post($button_id); //Retrieve the CPT for this button
 
@@ -315,11 +316,12 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_pp_buy_now_
 function swpm_edit_pp_buy_now_button_data() {
     if (isset($_REQUEST['swpm_pp_buy_now_edit_submit'])) {
         //This is a PayPal buy now button edit event. Process the submission.
-        //TODO - Do some basic validation check?
+        //TODO - Do some extra  validation check?
+        
         //Update and Save the edited payment button data
-        $button_id = strip_tags($_REQUEST['button_id']);
-        $button_type = strip_tags($_REQUEST['button_type']);
-        $button_name = strip_tags($_REQUEST['button_name']);
+        $button_id = sanitize_text_field($_REQUEST['button_id']);
+        $button_type = sanitize_text_field($_REQUEST['button_type']);
+        $button_name = sanitize_text_field($_REQUEST['button_name']);
 
         $button_post = array(
             'ID' => $button_id,
@@ -329,12 +331,12 @@ function swpm_edit_pp_buy_now_button_data() {
         wp_update_post($button_post);
 
         update_post_meta($button_id, 'button_type', $button_type);
-        update_post_meta($button_id, 'membership_level_id', strip_tags($_REQUEST['membership_level_id']));
-        update_post_meta($button_id, 'payment_amount', trim(strip_tags($_REQUEST['payment_amount'])));
-        update_post_meta($button_id, 'payment_currency', strip_tags($_REQUEST['payment_currency']));
-        update_post_meta($button_id, 'return_url', trim(strip_tags($_REQUEST['return_url'])));
-        update_post_meta($button_id, 'paypal_email', trim(strip_tags($_REQUEST['paypal_email'])));
-        update_post_meta($button_id, 'button_image_url', trim(strip_tags($_REQUEST['button_image_url'])));
+        update_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
+        update_post_meta($button_id, 'payment_amount', trim(sanitize_text_field($_REQUEST['payment_amount'])));
+        update_post_meta($button_id, 'payment_currency', sanitize_text_field($_REQUEST['payment_currency']));
+        update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
+        update_post_meta($button_id, 'paypal_email', trim(sanitize_email($_REQUEST['paypal_email'])));
+        update_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
 
         echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
     }

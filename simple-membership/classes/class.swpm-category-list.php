@@ -97,7 +97,7 @@ class SwpmCategoryList extends WP_List_Table {
         $all_terms = get_terms( $taxonomies, 'orderby=count&hide_empty=0&order=DESC');        
         $totalitems = count($all_terms);
         $perpage = 100;
-        $paged = !empty($_GET["paged"]) ? strip_tags($_GET["paged"]) : '';
+        $paged = !empty($_GET["paged"]) ? sanitize_text_field($_GET["paged"]) : '';
         if (empty($paged) || !is_numeric($paged) || $paged <= 0) {
             $paged = 1;
         }

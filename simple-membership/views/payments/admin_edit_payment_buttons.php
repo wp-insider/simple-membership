@@ -16,7 +16,7 @@ do_action('swpm_edit_payment_button_process_submission'); //Addons can use this 
 <?php
 //Fire the action hook. The addons can render the payment button edit interface
 //Button type (button_type) and Button id (button_id) must be present in the REQUEST
-$button_type = strip_tags($_REQUEST['button_type']);
-$button_id = strip_tags($_REQUEST['button_id']);
+$button_type = sanitize_text_field($_REQUEST['button_type']);
+$button_id = sanitize_text_field($_REQUEST['button_id']);
 do_action('swpm_edit_payment_button_for_' . $button_type, $button_id);
 

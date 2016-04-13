@@ -41,12 +41,26 @@ class SwpmInitTimeTasks {
             $this->process_password_reset();
             $this->register_member();
             $this->edit_profile();
+             $allow_comments = SwpmSettings::get_instance()->get_value('members-login-to-comment');
+             if (!empty($allow_comments)){
+                 $this->restrict_comments_to_members();
+             }
         }
 
         //IPN listener
         $this->swpm_ipn_listener();
     }
-
+    public function restrict_comments_to_members(){
+        if (is_admin()) {return;}
+        
+        if (SwpmAuth::get_instance()->is_logged_in()){return;}
+        
+        $comment_id = filter_input(INPUT_POST, 'comment_post_ID');
+        if (empty($comment_id)) {return;}
+        
+        $_POST = array();        
+        wp_die(SwpmUtils::_('Comments not allowed.'));
+    }
     public function admin_init() {
         $createswpmuser = filter_input(INPUT_POST, 'createswpmuser');
         if (!empty($createswpmuser)) {

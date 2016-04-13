@@ -62,7 +62,8 @@ class SimpleWpMembership {
         add_action('wp_logout', array(&$this, 'wp_logout'));
         add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2);
         add_action('swpm_logout', array(&$this, 'swpm_logout'));
-
+        add_filter('comment_form_defaults', array(&$this, 'change_comment_field'));
+        add_action('wp_head', array(&$this,'wp_head_callback'));
         //AJAX hooks
         add_action('wp_ajax_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
         add_action('wp_ajax_nopriv_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
@@ -74,7 +75,43 @@ class SimpleWpMembership {
         add_action('plugins_loaded', array(&$this, "plugins_loaded"));
         add_action('password_reset', array(&$this, 'wp_password_reset_hook'), 10, 2);
     }
-
+    public function wp_head_callback(){
+        customize_comment_form();
+    }
+    private function customize_comment_form(){
+        $allow_comments = SwpmSettings::get_instance()->get_value('members-login-to-comment');
+        if (empty($allow_comments)){return;}        
+        if (SwpmAuth::get_instance()->is_logged_in()){return;}
+        
+        ?>
+        <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                $('#respond').html("<?php SwpmUtils::e("Please Login to Comment."); ?>");
+            });
+        </script>
+        <?php
+    }
+    public function change_comment_field($fields){        
+        if (SwpmAuth::get_instance()->is_logged_in()){return $fields;}
+        
+        $allow_comments = SwpmSettings::get_instance()->get_value('members-login-to-comment');
+        if (empty($allow_comments)){ return $first_name;}        
+        
+        $fields = array();
+        $login_link = SwpmUtils::_('Please Login to Comment.');
+        $fields['comment_field'] = $login_link;
+        $fields['title_reply'] = '';
+        $fields['cancel_reply_link'] = '';
+        $fields['comment_notes_before'] = '';
+        $fields['comment_notes_after'] = '';
+        $fields['fields'] = '';
+        $fields['label_submit'] = '';
+        $fields['title_reply_to'] = '';
+        $fields['id_submit'] = '';
+        $fields['id_form'] = '';
+        
+        return $fields;        
+    }
     function wp_password_reset_hook($user, $pass) {
         $swpm_user = SwpmMemberUtils::get_user_by_user_name($user->user_login);
         $swpm_id = $swpm_user->member_id;

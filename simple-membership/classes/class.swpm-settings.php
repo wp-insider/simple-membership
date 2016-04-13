@@ -59,6 +59,9 @@ class SwpmSettings {
             'options' => array(0 => 'Do not delete', 1 => 'Older than 1 month', 2 => 'Older than 2 months'),
             'default' => '0',
             'message' => SwpmUtils::_('Select how long you want to keep "pending" account.')));
+        
+        add_settings_field('members-login-to-comment', SwpmUtils::_('Members Must Login to Comment'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'members-login-to-comment',
+            'message' => SwpmUtils::_('Check this option if you only want to allow the members of the site to be able to post a comment.')));        
         /* 
         add_settings_field('protect-everything',  SwpmUtils::_('Protect Everything'),
             array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
@@ -312,6 +315,7 @@ class SwpmSettings {
         $output['join-us-page-url'] = esc_url($input['join-us-page-url']);
         $output['default-account-status'] = esc_attr($input['default-account-status']);
         $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
+        $output['members-login-to-comment'] = isset($input['members-login-to-comment']) ? esc_attr($input['members-login-to-comment']) : "";
         
         return $output;
     }

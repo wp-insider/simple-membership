@@ -3,8 +3,8 @@ Contributors: smp7, wp.insider, amijanina
 Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
-Tested up to: 4.4
-Stable tag: 3.2.1
+Tested up to: 4.5
+Stable tag: 3.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,7 @@ You can create a free forum user account and ask your questions.
 * Customize the password reset email for members.
 * Use Google reCAPTCHA on your member registration form.
 * The login and registration widgets will be responsive if you are using a responsive theme.
+* Ability to restrict the commenting feature on your site to your members only.
 * Front-end member registration page.
 * Front-end member profiles.
 * Front-end member login page.
@@ -120,6 +121,10 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO 3.2.2 =
+- New feature to only allow the members of the site to be able to post a comment.
+
 
 = 3.2.1 =
 - Added a new filter (swpm_transactions_menu_items_per_page) that can be used to customize the number of items that is listed in the transactions menu.

@@ -11,10 +11,13 @@ class SwpmCommentFormRelated {
             return;            
         }
         
+        //Apply a filter to the message so it can be customized using the custom message plugin
+        $comment_form_msg = apply_filters('swpm_login_to_comment_msg', SwpmUtils::_("Please Login to Comment."));
+        $comment_form_msg = '<div class="swpm-login-to-comment-msg">' . $comment_form_msg . '</div>';
         ?>
         <script type="text/javascript">
             jQuery(document).ready(function($) {
-                $('#respond').html("<?php SwpmUtils::e("Please Login to Comment."); ?>");
+                $('#respond').html('<?php echo $comment_form_msg; ?>');
             });
         </script>
         <?php        

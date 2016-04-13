@@ -60,8 +60,9 @@ class SwpmSettings {
             'default' => '0',
             'message' => SwpmUtils::_('Select how long you want to keep "pending" account.')));
         
-        add_settings_field('members-login-to-comment', SwpmUtils::_('Members Must Login to Comment'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'members-login-to-comment',
-            'message' => SwpmUtils::_('Check this option if you only want to allow the members of the site to be able to post a comment.')));        
+        add_settings_field('members-login-to-comment', SwpmUtils::_('Members Must be Logged in to Comment'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'members-login-to-comment',
+            'message' => SwpmUtils::_('Enable this option if you only want the members of the site to be able to post a comment.')));        
+        
         /* 
         add_settings_field('protect-everything',  SwpmUtils::_('Protect Everything'),
             array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',

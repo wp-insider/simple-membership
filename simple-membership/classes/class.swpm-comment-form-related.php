@@ -12,7 +12,7 @@ class SwpmCommentFormRelated {
         }
         
         //Apply a filter to the message so it can be customized using the custom message plugin
-        $comment_form_msg = apply_filters('swpm_login_to_comment_msg', SwpmUtils::_("Please Login to Comment."));
+        $comment_form_msg = apply_filters('swpm_login_to_comment_msg', SwpmUtils::_("Please login to comment."));
         $comment_form_msg = '<div class="swpm-login-to-comment-msg">' . $comment_form_msg . '</div>';
         ?>
         <script type="text/javascript">
@@ -76,7 +76,7 @@ class SwpmCommentFormRelated {
         
         //Stop this request -> 1)we are on the front-side. 2) Comment posted by a not logged in member. 3) comment_post_ID missing. 
         $_POST = array();        
-        wp_die(SwpmUtils::_('Comments not allowed by non-member.'));
+        wp_die(SwpmUtils::_('Comments not allowed by a non-member.'));
     }
     
 }

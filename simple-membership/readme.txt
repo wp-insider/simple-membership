@@ -122,11 +122,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.2.2 =
+= 3.2.2 =
 - New feature to only allow the members of the site to be able to post a comment.
 - Moved the "Allow Account Deletion" option to the Advanced Settings tab of the plugin.
 - Moved the "Auto Delete Pending Account" option to the Advanced Settings tab of the plugin.
-
+- WordPress 4.5 compatibility.
 
 = 3.2.1 =
 - Added a new filter (swpm_transactions_menu_items_per_page) that can be used to customize the number of items that is listed in the transactions menu.

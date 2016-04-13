@@ -124,6 +124,8 @@ https://simple-membership-plugin.com/
 
 = TODO 3.2.2 =
 - New feature to only allow the members of the site to be able to post a comment.
+- Moved the "Allow Account Deletion" option to the Advanced Settings tab of the plugin.
+- Moved the "Auto Delete Pending Account" option to the Advanced Settings tab of the plugin.
 
 
 = 3.2.1 =

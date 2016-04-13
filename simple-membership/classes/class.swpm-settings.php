@@ -52,13 +52,6 @@ class SwpmSettings {
             'options' => SwpmUtils::get_account_state_options(),
             'default' => 'active',
             'message' => SwpmUtils::_('Select the default account status for newly registered users. If you want to manually approve the members then you can set the status to "Pending".')));
-        add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'allow-account-deletion',
-            'options' => SwpmUtils::get_account_state_options(),
-            'message' => SwpmUtils::_('Allow users to delete their accounts.')));
-        add_settings_field('delete-pending-account', SwpmUtils::_('Auto Delete Pending Account'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'delete-pending-account',
-            'options' => array(0 => 'Do not delete', 1 => 'Older than 1 month', 2 => 'Older than 2 months'),
-            'default' => '0',
-            'message' => SwpmUtils::_('Select how long you want to keep "pending" account.')));
         
         add_settings_field('members-login-to-comment', SwpmUtils::_('Members Must be Logged in to Comment'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'members-login-to-comment',
             'message' => SwpmUtils::_('Enable this option if you only want the members of the site to be able to post a comment.')));        
@@ -158,6 +151,16 @@ class SwpmSettings {
 
         add_settings_field('enable-expired-account-login', SwpmUtils::_('Enable Expired Account Login'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'enable-expired-account-login',
             'message' => SwpmUtils::_("When enabled, expired members will be able to log into the system but won't be able to view any protected content. This allows them to easily renew their account by making another payment.")));
+        
+        add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'allow-account-deletion',
+            'options' => SwpmUtils::get_account_state_options(),
+            'message' => SwpmUtils::_('Allow users to delete their accounts.')));
+        add_settings_field('delete-pending-account', SwpmUtils::_('Auto Delete Pending Account'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'delete-pending-account',
+            'options' => array(0 => 'Do not delete', 1 => 'Older than 1 month', 2 => 'Older than 2 months'),
+            'default' => '0',
+            'message' => SwpmUtils::_('Select how long you want to keep "pending" account.')));
+        
+        
     }
 
     private function tab_6() {
@@ -305,8 +308,7 @@ class SwpmSettings {
         $output['enable-free-membership'] = isset($input['enable-free-membership']) ? esc_attr($input['enable-free-membership']) : "";
         $output['enable-moretag'] = isset($input['enable-moretag']) ? esc_attr($input['enable-moretag']) : "";
         $output['enable-debug'] = isset($input['enable-debug']) ? esc_attr($input['enable-debug']) : "";
-        $output['enable-sandbox-testing'] = isset($input['enable-sandbox-testing']) ? esc_attr($input['enable-sandbox-testing']) : "";
-        $output['allow-account-deletion'] = isset($input['allow-account-deletion']) ? esc_attr($input['allow-account-deletion']) : "";
+        $output['enable-sandbox-testing'] = isset($input['enable-sandbox-testing']) ? esc_attr($input['enable-sandbox-testing']) : "";        
 
         $output['free-membership-id'] = ($input['free-membership-id'] != 1) ? absint($input['free-membership-id']) : '';
         $output['login-page-url'] = esc_url($input['login-page-url']);
@@ -315,7 +317,6 @@ class SwpmSettings {
         $output['reset-page-url'] = esc_url($input['reset-page-url']);
         $output['join-us-page-url'] = esc_url($input['join-us-page-url']);
         $output['default-account-status'] = esc_attr($input['default-account-status']);
-        $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
         $output['members-login-to-comment'] = isset($input['members-login-to-comment']) ? esc_attr($input['members-login-to-comment']) : "";
         
         return $output;
@@ -354,6 +355,8 @@ class SwpmSettings {
         }
         $output = $this->settings;
         $output['enable-expired-account-login'] = isset($input['enable-expired-account-login']) ? esc_attr($input['enable-expired-account-login']) : "";
+        $output['allow-account-deletion'] = isset($input['allow-account-deletion']) ? esc_attr($input['allow-account-deletion']) : "";
+        $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
 
         return $output;
     }

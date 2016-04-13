@@ -76,7 +76,7 @@ class SimpleWpMembership {
         add_action('password_reset', array(&$this, 'wp_password_reset_hook'), 10, 2);
     }
     public function wp_head_callback(){
-        customize_comment_form();
+        $this->customize_comment_form();
     }
     private function customize_comment_form(){
         $allow_comments = SwpmSettings::get_instance()->get_value('members-login-to-comment');

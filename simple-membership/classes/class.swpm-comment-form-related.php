@@ -49,4 +49,31 @@ class SwpmCommentFormRelated {
         return $fields;        
     }
     
+    /*
+     * This function checks and restricts comment posting (via HTTP POST) to members only (if the feature is enabled)
+     */
+    public static function check_and_restrict_comment_posting_to_members(){    
+        $allow_comments = SwpmSettings::get_instance()->get_value('members-login-to-comment');
+        if (empty($allow_comments)){
+            return;
+        }
+         
+        if (is_admin()) {
+            return;            
+        }          
+             
+        if (SwpmAuth::get_instance()->is_logged_in()){
+            return;            
+        }
+        
+        $comment_id = filter_input(INPUT_POST, 'comment_post_ID');
+        if (empty($comment_id)) {
+            return;            
+        }
+        
+        //Stop this request -> 1)we are on the front-side. 2) Comment posted by a not logged in member. 3) comment_post_ID missing. 
+        $_POST = array();        
+        wp_die(SwpmUtils::_('Comments not allowed by non-member.'));
+    }
+    
 }

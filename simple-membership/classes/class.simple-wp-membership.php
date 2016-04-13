@@ -39,7 +39,7 @@ class SimpleWpMembership {
         add_filter('the_content', array(&$this, 'filter_content'), 11, 1);
         add_filter('widget_text', 'do_shortcode');
         add_filter('show_admin_bar', array(&$this, 'hide_adminbar'));
-        add_filter('comment_text', array(&$this, 'filter_comment'));//TODO - move the filter_comment function to comment-form-related class.
+        add_filter('comment_text', array(&$this, 'filter_comment'));
         add_filter('comment_form_defaults', array('SwpmCommentFormRelated', 'customize_comment_fields'));
         add_filter('wp_get_attachment_url', array(&$this, 'filter_attachment_url'), 10, 2);
         add_filter('wp_get_attachment_metadata', array(&$this, 'filter_attachment'), 10, 2);

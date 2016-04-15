@@ -440,4 +440,19 @@ abstract class SwpmUtils {
         list($is_first_click, $content) = $filtered;
         return $is_first_click;       
     }
+public static function get_current_url() {
+    $pageURL = 'http';
+    if (isset($_SERVER['SCRIPT_URI']) && !empty($_SERVER['SCRIPT_URI']))
+        return $_SERVER['SCRIPT_URI'];
+    if (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on")) {
+        $pageURL .= "s";
+    }
+    $pageURL .= "://";
+    if (isset($_SERVER["SERVER_PORT"]) && ($_SERVER["SERVER_PORT"] != "80")) {
+        $pageURL .= ltrim($_SERVER["SERVER_NAME"], ".*")/* ":".$_SERVER["SERVER_PORT"] */ . $_SERVER["REQUEST_URI"];
+    } else {
+        $pageURL .= ltrim($_SERVER["SERVER_NAME"], ".*") . $_SERVER["REQUEST_URI"];
+    }
+    return $pageURL;
+}    
 }

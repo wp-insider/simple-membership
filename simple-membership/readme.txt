@@ -124,6 +124,7 @@ https://simple-membership-plugin.com/
 
 = TODO - 3.2.3 =
 - Updated the Russian language file. Thanks to @dimabuko for updating the language file.
+- Updated the Portuguese language file. Thanks to @Juan for updating the language file.
 - Added a new addon for better custom post type protection.
 
 = 3.2.2 =

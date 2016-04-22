@@ -126,6 +126,7 @@ https://simple-membership-plugin.com/
 - Updated the Russian language file. Thanks to @dimabuko for updating the language file.
 - Updated the Portuguese language file. Thanks to @Juan for updating the language file.
 - Added a new addon for better custom post type protection.
+- Updated the PayPal IPN validation code so it is compatible with the upcoming PayPal changes.
 
 = 3.2.2 =
 - New feature to only allow the members of the site to be able to post a comment.

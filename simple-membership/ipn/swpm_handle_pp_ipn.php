@@ -192,75 +192,66 @@ class swpm_paypal_ipn_handler {
 
     function swpm_validate_ipn()
     {
-      // parse the paypal URL
-      $url_parsed=parse_url($this->paypal_url);
+        //Generate the post string from the _POST vars aswell as load the _POST vars into an arry
+        $post_string = '';
+        foreach ($_POST as $field=>$value) {
+            $this->ipn_data["$field"] = $value;
+            $post_string .= $field.'='.urlencode(stripslashes($value)).'&';
+        }
 
-      // generate the post string from the _POST vars aswell as load the _POST vars into an arry
-      $post_string = '';
-      foreach ($_POST as $field=>$value) {
-         $this->ipn_data["$field"] = $value;
-         $post_string .= $field.'='.urlencode(stripslashes($value)).'&';
-      }
+        $this->post_string = $post_string;
+        $this->debug_log('Post string : '. $this->post_string,true);
 
-      $this->post_string = $post_string;
-      $this->debug_log('Post string : '. $this->post_string,true);
-
-      $post_string.="cmd=_notify-validate"; // append ipn command
-
-      // open the connection to paypal
-      if($this->sandbox_mode){//connect to PayPal sandbox
-	      $uri = 'ssl://'.$url_parsed['host'];
-	      $port = '443';
-	      $fp = fsockopen($uri,$port,$err_num,$err_str,30);
-      }
-      else{//connect to live PayPal site using standard approach
-      	$fp = fsockopen($url_parsed['host'],"80",$err_num,$err_str,30);
-      }
-
-      if(!$fp)
-      {
-         // could not open the connection.  If loggin is on, the error message
-         // will be in the log.
-         $this->debug_log('Connection to '.$url_parsed['host']." failed.fsockopen error no. $errnum: $errstr",false);
-         return false;
-
-      }
-      else
-      {
-         // Post the data back to paypal
-         fputs($fp, "POST $url_parsed[path] HTTP/1.1\r\n");
-         fputs($fp, "Host: $url_parsed[host]\r\n");
-         fputs($fp, "Content-type: application/x-www-form-urlencoded\r\n");
-         fputs($fp, "Content-length: ".strlen($post_string)."\r\n");
-         fputs($fp, "Connection: close\r\n\r\n");
-         fputs($fp, $post_string . "\r\n\r\n");
-
-         // loop through the response from the server and append to variable
-         while(!feof($fp)) {
-            $this->ipn_response .= fgets($fp, 1024);
-         }
-
-         fclose($fp); // close connection
-
-         $this->debug_log('Connection to '.$url_parsed['host'].' successfuly completed.',true);
-      }
-
-      //if (eregi("VERIFIED",$this->ipn_response))
-      if (strpos($this->ipn_response, "VERIFIED") !== false)
-      {
-         // Valid IPN transaction.
-         $this->debug_log('IPN successfully verified.',true);
-         return true;
-
-      }
-      else
-      {
-         // Invalid IPN transaction.  Check the log for details.
-         $this->debug_log('IPN validation failed.',false);
-         return false;
-      }
+        //IPN validation check
+        if($this->validate_ipn_using_remote_post()){
+            //We can also use an alternative validation using the validate_ipn_using_curl() function
+            return true;
+        } else {
+            return false;
+        }
+        
    }
 
+    function validate_ipn_using_remote_post(){
+        $this->debug_log( 'Checking if PayPal IPN response is valid', true);
+        
+        // Get received values from post data
+        $validate_ipn = array( 'cmd' => '_notify-validate' );
+        $validate_ipn += wp_unslash( $_POST );
+
+        // Send back post vars to paypal
+        $params = array(
+                'body'        => $validate_ipn,
+                'timeout'     => 60,
+                'httpversion' => '1.1',
+                'compress'    => false,
+                'decompress'  => false,
+                'user-agent'  => 'Simple Membership Plugin',
+        );
+
+        // Post back to get a response.
+        $connection_url = $this->sandbox_mode ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+        $this->debug_log('Connecting to: ' . $connection_url, true);
+        $response = wp_safe_remote_post( $connection_url, $params );
+
+        //The following two lines can be used for debugging
+        //$this->debug_log( 'IPN Request: ' . print_r( $params, true ) , true);
+        //$this->debug_log( 'IPN Response: ' . print_r( $response, true ), true);
+
+        // Check to see if the request was valid.
+        if ( ! is_wp_error( $response ) && strstr( $response['body'], 'VERIFIED' ) ) {
+            $this->debug_log('IPN successfully verified.', true);
+            return true;
+        }
+
+        // Invalid IPN transaction. Check the log for details.
+        $this->debug_log('IPN validation failed.', false);
+        if ( is_wp_error( $response ) ) {
+            $this->debug_log('Error response: ' . $response->get_error_message(), false);
+        }
+        return false;        
+    }
+    
     function debug_log($message,$success,$end=false)
     {
         SwpmLog::log_simple_debug($message, $success, $end);

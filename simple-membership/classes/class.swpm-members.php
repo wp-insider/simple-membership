@@ -332,16 +332,21 @@ class SwpmMembers extends WP_List_Table {
 
     public static function delete_wp_user($user_name) {
         $wp_user_id = username_exists($user_name);
-        $ud = get_userdata($wp_user_id);
-        if (!empty($ud) && (isset($ud->wp_capabilities['administrator']) || $ud->wp_user_level == 10)) {
+        if (empty($wp_user_id) || !is_numeric($wp_user_id)) {return;}
+        
+        if (!self::is_wp_super_user($wp_user_id)){
+            include_once(ABSPATH . 'wp-admin/includes/user.php');
+            wp_delete_user($wp_user_id, 1); //assigns all related to this user to admin.            
+        }
+        else  {
             SwpmTransfer::get_instance()->set('status', 'For consistency, we do not allow deleting any associated wordpress account with administrator role.<br/>'
                     . 'Please delete from <a href="users.php">Users</a> menu.');
             return;
         }
-        if ($wp_user_id) {
-            include_once(ABSPATH . 'wp-admin/includes/user.php');
-            wp_delete_user($wp_user_id, 1); //assigns all related to this user to admin.
-        }
+    }
+    public static function is_wp_super_user($wp_user_id){
+        $ud = get_userdata($wp_user_id);
+        return (!empty($ud) && (isset($ud->wp_capabilities['administrator']) || $ud->wp_user_level == 10));
     }
 
 }

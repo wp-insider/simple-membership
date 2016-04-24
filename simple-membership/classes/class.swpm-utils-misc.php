@@ -216,11 +216,12 @@ class SwpmMiscUtils {
     public static function get_renewal_link() {
         $renewal = SwpmSettings::get_instance()->get_value('renewal-page-url');
         if (empty($renewal)) {
-            return '<span style="color:red;">Simple Membership is not configured correctly.'
-                    . 'Please contact <a href="mailto:' . get_option('admin_email') . '">Admin</a>';
+            //No renewal page is configured so don't show any renewal page link. It is okay to have no renewal page configured.
+            return '';
         }
-        return SwpmUtils::_('Please') . ' <a class="swpm-login-link" href="' . $renewal . '">' . SwpmUtils::_('renew') . '</a> ' . SwpmUtils::_('renew your account to gain access to this content.');
-    }        
+        return SwpmUtils::_('Please') . ' <a class="swpm-renewal-link" href="' . $renewal . '">' . SwpmUtils::_('renew') . '</a> ' . SwpmUtils::_(' your account to gain access to this content.');
+    }
+    
     public static function compare_url($url1, $url2){
         $url1 = trailingslashit(strtolower($url1));
         $url2 = trailingslashit(strtolower($url2));        

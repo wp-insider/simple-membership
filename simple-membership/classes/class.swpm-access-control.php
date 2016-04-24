@@ -31,7 +31,7 @@ class SwpmAccessControl {
         }
 
         if ($auth->is_expired_account()){
-            $text = SwpmUtils::_('Your account has expired.') .  SwpmMiscUtils::get_renewal_link();
+            $text = SwpmUtils::_('Your account has expired. ') .  SwpmMiscUtils::get_renewal_link();
             $error_msg = '<div class="swpm-account-expired-msg swpm-yellow-box">'.$text.'</div>';
             $this->lastError = apply_filters('swpm_account_expired_msg', $error_msg);
             return false;                        
@@ -56,27 +56,24 @@ class SwpmAccessControl {
         if (!$protected->is_protected_comment($id)){ return true;}
         $auth = SwpmAuth::get_instance();
         if(!$auth->is_logged_in()){
-            $this->lastError = apply_filters('swpm_not_logged_in_comment_msg', 
-                    SwpmUtils::_("You need to login to view this content. ")
-                    . SwpmMiscUtils::get_login_link());
+            $error_msg = '<div class="swpm-not-logged-in">' . SwpmUtils::_("You need to login to view this content. ") . '</div>';
+            $this->lastError = apply_filters('swpm_not_logged_in_comment_msg', $error_msg);
             return false;            
         }
         if ($auth->is_expired_account()){
-            $text = SwpmUtils::_('Your account has expired.') .  SwpmMiscUtils::get_renewal_link();
+            $text = SwpmUtils::_('Your account has expired. ') .  SwpmMiscUtils::get_renewal_link();
             $error_msg = '<div class="swpm-account-expired-msg swpm-yellow-box">'.$text.'</div>';
             $this->lastError = apply_filters('swpm_account_expired_msg', $error_msg);
             return false;                        
-        }        
+        }
+        
         $perms = SwpmPermission::get_instance($auth->get('membership_level'));
         if($perms->is_permitted_comment($id)) {return true; }
-        $this->lastError = apply_filters ('swpm_restricted_comment_msg', 
-                '<div class="swpm-no-access-msg">'
-                . SwpmUtils::_("This content is not permitted for your membership level.").'</div>' );
+        $error_msg = '<div class="swpm-no-access-msg">' . SwpmUtils::_("This content is not permitted for your membership level.").'</div>';
+        $this->lastError = apply_filters ('swpm_restricted_comment_msg', $error_msg);
         return false;
     }
-    public function why(){
-        return $this->lastError;
-    }
+
     public function filter_post($id,$content){
         if (self::is_current_url_unrestricted()) {return $content;}
         if(SwpmUtils::is_first_click_free($content)) {return $content;}
@@ -107,11 +104,13 @@ class SwpmAccessControl {
 
         return $this->lastError;
     }
+    
     public function filter_comment($parent_post_id,$content){
         if (self::is_current_url_unrestricted()) {return $content;}
         if($this->can_i_read_post($parent_post_id)) { return $content; }
         return $this->lastError;
     }
+    
     public function filter_post_with_moretag($id, $more_link, $more_link_text){
         if (self::is_current_url_unrestricted()) {return $content;}
         if (SwpmUtils::is_first_click_free($content)) {return $content;}
@@ -123,6 +122,10 @@ class SwpmAccessControl {
                 . SwpmUtils::_("You need to login to view the rest of the content. ") 
                 . SwpmMiscUtils::get_login_link(). '</div>';
         return apply_filters('swpm_not_logged_in_more_tag_msg', $msg);
+    }
+    
+    public function why(){
+        return $this->lastError;
     }
     
     public static function is_current_url_unrestricted(){

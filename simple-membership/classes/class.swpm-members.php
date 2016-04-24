@@ -335,18 +335,33 @@ class SwpmMembers extends WP_List_Table {
         if (empty($wp_user_id) || !is_numeric($wp_user_id)) {return;}
         
         if (!self::is_wp_super_user($wp_user_id)){
+            //Not an admin user so it is safe to delete this user.
             include_once(ABSPATH . 'wp-admin/includes/user.php');
             wp_delete_user($wp_user_id, 1); //assigns all related to this user to admin.            
         }
         else  {
-            SwpmTransfer::get_instance()->set('status', 'For consistency, we do not allow deleting any associated wordpress account with administrator role.<br/>'
-                    . 'Please delete from <a href="users.php">Users</a> menu.');
+            //This is an admin user. So not going to delete the WP User record.
+            SwpmTransfer::get_instance()->set('status', 'For safety, we do not allow deletion of any associated wordpress account with administrator role.');
             return;
         }
     }
+    
     public static function is_wp_super_user($wp_user_id){
-        $ud = get_userdata($wp_user_id);
-        return (!empty($ud) && (isset($ud->wp_capabilities['administrator']) || $ud->wp_user_level == 10));
+        $user_data = get_userdata($wp_user_id);
+        if (empty($user_data)){
+            //Not an admin user if we can't find his data for the given ID.
+            return false;
+        }
+        if (isset($user_data->wp_capabilities['administrator'])){//Check capability
+            //admin user
+            return true;
+        }
+        if ($user_data->wp_user_level == 10){//Check for old style wp user level
+            //admin user
+            return true;            
+        }
+        //This is not an admin user
+        return false;
     }
 
 }

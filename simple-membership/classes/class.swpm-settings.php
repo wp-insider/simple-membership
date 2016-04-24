@@ -152,6 +152,9 @@ class SwpmSettings {
         add_settings_field('enable-expired-account-login', SwpmUtils::_('Enable Expired Account Login'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'enable-expired-account-login',
             'message' => SwpmUtils::_("When enabled, expired members will be able to log into the system but won't be able to view any protected content. This allows them to easily renew their account by making another payment.")));
         
+        add_settings_field('renewal-page-url', SwpmUtils::_('Membership Renewal URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'renewal-page-url',
+            'message' => SwpmUtils::_('You can create a renewal page for your site. Read <a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">this documentation</a> to learn how to create a renewal page.')) );
+        
         add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'allow-account-deletion',
             'options' => SwpmUtils::get_account_state_options(),
             'message' => SwpmUtils::_('Allow users to delete their accounts.')));
@@ -159,9 +162,6 @@ class SwpmSettings {
             'options' => array(0 => 'Do not delete', 1 => 'Older than 1 month', 2 => 'Older than 2 months'),
             'default' => '0',
             'message' => SwpmUtils::_('Select how long you want to keep "pending" account.')));
-        
-        add_settings_field('renewal-page-url', SwpmUtils::_('Membership Renewal URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'renewal-page-url',
-            'message' => ''));
         
     }
 

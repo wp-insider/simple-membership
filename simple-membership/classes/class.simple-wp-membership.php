@@ -442,7 +442,7 @@ class SimpleWpMembership {
         }
         $acl = SwpmAccessControl::get_instance();
         global $post;
-        return $acl->filter_post($post->ID, $content);
+        return $acl->filter_post($post, $content);
     }
 
     public function filter_moretag($more_link, $more_link_text = "More") {
@@ -452,7 +452,7 @@ class SimpleWpMembership {
         }
         $acl = SwpmAccessControl::get_instance();
         global $post;
-        return $acl->filter_post_with_moretag($post->ID, $more_link, $more_link_text);
+        return $acl->filter_post_with_moretag($post, $more_link, $more_link_text);
     }
 
     public function init_hook() {

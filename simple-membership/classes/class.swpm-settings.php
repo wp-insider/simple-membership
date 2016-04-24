@@ -160,6 +160,8 @@ class SwpmSettings {
             'default' => '0',
             'message' => SwpmUtils::_('Select how long you want to keep "pending" account.')));
         
+        add_settings_field('renewal-page-url', SwpmUtils::_('Membership Renewal URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'renewal-page-url',
+            'message' => ''));
         
     }
 
@@ -357,7 +359,7 @@ class SwpmSettings {
         $output['enable-expired-account-login'] = isset($input['enable-expired-account-login']) ? esc_attr($input['enable-expired-account-login']) : "";
         $output['allow-account-deletion'] = isset($input['allow-account-deletion']) ? esc_attr($input['allow-account-deletion']) : "";
         $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
-
+        $output['renewal-page-url'] = esc_url($input['renewal-page-url']);
         return $output;
     }
 
@@ -387,15 +389,4 @@ class SwpmSettings {
         </h2>
         <?php
     }
-
-    public function get_login_link() {
-        $login = $this->get_value('login-page-url');
-        $joinus = $this->get_value('join-us-page-url');
-        if (empty($login) || empty($joinus)) {
-            return '<span style="color:red;">Simple Membership is not configured correctly.'
-                    . 'Please contact <a href="mailto:' . get_option('admin_email') . '">Admin</a>';
-        }
-        return SwpmUtils::_('Please') . ' <a class="swpm-login-link" href="' . $login . '">' . SwpmUtils::_('Login') . '</a>. ' . SwpmUtils::_('Not a Member?') . ' <a href="' . $joinus . '">' . SwpmUtils::_('Join Us') . '</a>';
-    }
-
 }

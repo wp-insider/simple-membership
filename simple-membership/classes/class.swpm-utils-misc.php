@@ -203,4 +203,48 @@ class SwpmMiscUtils {
         $msg_body = str_replace($tags, $vals, $msg_body);
         return $msg_body;
     }
+    public static function get_login_link() {
+        $login = SwpmSettings::get_instance()->get_value('login-page-url');
+        $joinus = SwpmSettings::get_instance()->get_value('join-us-page-url');
+        if (empty($login) || empty($joinus)) {
+            return '<span style="color:red;">Simple Membership is not configured correctly.'
+                    . 'Please contact <a href="mailto:' . get_option('admin_email') . '">Admin</a>';
+        }
+        return SwpmUtils::_('Please') . ' <a class="swpm-login-link" href="' . $login . '">' . SwpmUtils::_('Login') . '</a>. ' . SwpmUtils::_('Not a Member?') . ' <a href="' . $joinus . '">' . SwpmUtils::_('Join Us') . '</a>';
+    }
+
+    public static function get_renewal_link() {
+        $renewal = SwpmSettings::get_instance()->get_value('renewal-page-url');
+        if (empty($renewal)) {
+            return '<span style="color:red;">Simple Membership is not configured correctly.'
+                    . 'Please contact <a href="mailto:' . get_option('admin_email') . '">Admin</a>';
+        }
+        return SwpmUtils::_('Please') . ' <a class="swpm-login-link" href="' . $renewal . '">' . SwpmUtils::_('renew') . '</a> ' . SwpmUtils::_('renew your account to gain access to this content.');
+    }        
+    public static function compare_url($url1, $url2){
+        $url1 = trailingslashit(strtolower($url1));
+        $url2 = trailingslashit(strtolower($url2));        
+        if ($url1 == $url2) {return true;}        
+        
+        $url1 = parse_url($url1);
+        $url2 = parse_url($url2); 
+        
+        $components = array('scheme','host','port','path');
+        
+        foreach ($components as $key=>$value){
+            if (!isset($url1[$value])&& !isset($url2[$value])) {continue;}
+            
+            if (!isset($url2[$value])) {return false;}
+            if (!isset($url1[$value])) {return false;}            
+            
+            if ($url1[$value] != $url2[$value]) {return false;}
+        }
+
+        if (!isset($url1['query'])&& !isset($url2['query'])) {return true;}
+
+        if (!isset($url2['query'])) {return false;}
+        if (!isset($url1['query'])) {return false;}            
+            
+        return strpos($url1['query'], $url2['query']) || strpos($url2['query'], $url1['query']);                
+    }
 }

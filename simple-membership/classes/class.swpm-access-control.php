@@ -1,55 +1,88 @@
 <?php
+
 class SwpmAccessControl {
+    
     private $lastError;
     private $moretags;
     private static $_this;
+    
     private function __construct(){
         $this->lastError = '';
         $this->moretags  = array();
     }
+    
     public static function get_instance(){
         self::$_this = empty(self::$_this)? new SwpmAccessControl():self::$_this;
         return self::$_this;
     }
 
     public function can_i_read_post($post){
-        if (!is_a($post, 'WP_Post')) {return SwpmUtils::_('Error! $post is not a valid WP_Post object.'); }
+        if (!is_a($post, 'WP_Post')) {
+            return SwpmUtils::_('Error! $post is not a valid WP_Post object.');
+        }
+        
         $id = $post->ID;
         $this->lastError = '';
         $auth = SwpmAuth::get_instance();
-        $protect_everything = SwpmSettings::get_instance()->get_value('protect-everything');
-        if(!empty($protect_everything)){ 
-            $error_msg = SwpmUtils::_( 'You need to login to view this content. ' ) . SwpmMiscUtils::get_login_link();
-            $this->lastError = apply_filters('swpm_not_logged_in_post_msg', $error_msg);
-            return false;                       
-        }
+        
+        //$protect_everything = SwpmSettings::get_instance()->get_value('protect-everything');
+        //if(!empty($protect_everything)){ 
+            //Protect everything is enabled.
+            //TODO - This feature is not implemented yet.
+        //}
+        
+        //Check if this is a protected post.
         $protected = SwpmProtection::get_instance();
-        if (!$protected->is_protected($id)){ return true;}        
+        if (!$protected->is_protected($id)){ 
+            //This is a totally unprotected post. So everyone has access to it.
+            return true;
+        }
+        
+        /*** At this point, we have a protected post. So we need to check if this user can view this post. ***/
+        
+        //Check if the user is logged in.
         if(!$auth->is_logged_in()){
-            $error_msg = SwpmUtils::_( 'You need to login to view this content. ' ) . SwpmMiscUtils::get_login_link();
+            //This user is not logged into the site. No access to this protected post.
+            $text = SwpmUtils::_('You need to login to view this content. ') . SwpmMiscUtils::get_login_link();
+            $error_msg = '<div class="swpm-post-not-logged-in-msg">'.$text.'</div>';
             $this->lastError = apply_filters('swpm_not_logged_in_post_msg', $error_msg);
             return false;            
         }
 
+        //Check if the account is expired
         if ($auth->is_expired_account()){
+            //This user's account is expired. No access to this post. Show account expiry message.
             $text = SwpmUtils::_('Your account has expired. ') .  SwpmMiscUtils::get_renewal_link();
-            $error_msg = '<div class="swpm-account-expired-msg swpm-yellow-box">'.$text.'</div>';
+            $error_msg = '<div class="swpm-post-account-expired-msg swpm-yellow-box">'.$text.'</div>';
             $this->lastError = apply_filters('swpm_account_expired_msg', $error_msg);
             return false;                        
         }
+        
+        //Check older post protection addon settings (if being used on this site).
         $protect_older_posts = apply_filters('swpm_should_protect_older_post', false, $id);
         if ($protect_older_posts){
-            $this->lastError = apply_filters ('swpm_restricted_post_msg_older_post', 
-                    SwpmUtils::_('This content can only be viewed by members who joined on or before ' 
-                            . SwpmUtils::get_formatted_date_according_to_wp_settings($post->post_date) ));
+            //This post falls under the older post protection condition. No access to it.
+            $text = SwpmUtils::_('This content can only be viewed by members who joined on or before ' . SwpmUtils::get_formatted_date_according_to_wp_settings($post->post_date));
+            $error_msg = '<div class="swpm-post-older-post-msg">'.$text.'</div>';
+            $this->lastError = apply_filters ('swpm_restricted_post_msg_older_post', $error_msg);
             return false;
         }
+        
+        //Check if this user's membership level has access to this post
         $permission = SwpmPermission::get_instance($auth->get('membership_level'));
-        if($permission->is_permitted($id)) {return true;}
-        $this->lastError = apply_filters ('swpm_restricted_post_msg', 
-                '<div class="swpm-no-access-msg">'
-                . SwpmUtils::_('This content is not permitted for your membership level.').'</div>') ;
-        return false;
+        if($permission->is_permitted($id)) {
+            //This user's membership level has access to it. Show this post to this user.
+            return true;
+        } else {
+            //User's level DOES NOT have access to this post.
+            $text = SwpmUtils::_('This content is not permitted for your membership level.');
+            $error_msg = '<div class="swpm-post-no-access-msg">'.$text.'</div>';
+            $this->lastError = apply_filters ('swpm_restricted_post_msg', $error_msg);
+            return false;
+        }
+        
+        //All checks have passed. Show this post to the user.
+        return true;
     }
     
     public function can_i_read_comment($comment){
@@ -115,7 +148,7 @@ class SwpmAccessControl {
             return false;
         }
         
-        //All checks have passed. Show this comment to this user.
+        //All checks have passed at this stage. Show this comment to this user.
         return true;
     }
 
@@ -193,4 +226,5 @@ class SwpmAccessControl {
         
         return SwpmMiscUtils::compare_url($registration_page_url, $current_page_url);
     }
+    
 }

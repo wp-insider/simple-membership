@@ -44,8 +44,6 @@ class SimpleWpMembership {
         add_filter('wp_get_attachment_url', array(&$this, 'filter_attachment_url'), 10, 2);
         add_filter('wp_get_attachment_metadata', array(&$this, 'filter_attachment'), 10, 2);
         add_filter('attachment_fields_to_save', array(&$this, 'save_attachment_extra'), 10, 2);
-        // the_content_more_link filter adds empty line. we have an alternative implementation of more tag protection.
-        //add_filter('the_content_more_link', array(&$this, 'filter_moretag'), 10, 2);
 
         //TODO - refactor these shortcodes into the shortcodes handler class
         add_shortcode("swpm_registration_form", array(&$this, 'registration_form'));
@@ -443,16 +441,6 @@ class SimpleWpMembership {
         $acl = SwpmAccessControl::get_instance();
         global $post;
         return $acl->filter_post($post, $content);
-    }
-
-    public function filter_moretag($more_link, $more_link_text = "More") {
-        $moretag = SwpmSettings::get_instance()->get_value('enable-moretag');
-        if (empty($moretag)) {
-            return $more_link;
-        }
-        $acl = SwpmAccessControl::get_instance();
-        global $post;
-        return $acl->filter_post_with_moretag($post, $more_link, $more_link_text);
     }
 
     public function init_hook() {

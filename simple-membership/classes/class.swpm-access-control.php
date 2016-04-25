@@ -232,25 +232,6 @@ class SwpmAccessControl {
         return $this->lastError;
     }
     
-    public function filter_post_with_moretag($post, $more_link, $more_link_text){
-        if(!is_a($post, 'WP_Post')) {
-            return SwpmUtils::_('Error! $post is not a valid WP_Post object.');
-        }
-        
-        $id = $post->ID;
-        if(self::expired_user_has_access_to_this_page()) {return $more_link;}
-        if(SwpmUtils::is_first_click_free($more_link)) {return $more_link;}
-        $this->moretags[] = $id;
-        if($this->can_i_read_post($post)) {
-            return $more_link;
-        }
-        
-        $msg = '<div class="swpm-margin-top-10">'
-                . SwpmUtils::_("You need to login to view the rest of the content. ") 
-                . SwpmMiscUtils::get_login_link(). '</div>';
-        return apply_filters('swpm_not_logged_in_more_tag_msg', $msg);
-    }
-    
     public function why(){
         return $this->lastError;
     }

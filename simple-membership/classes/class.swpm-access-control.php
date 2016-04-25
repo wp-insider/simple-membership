@@ -157,46 +157,71 @@ class SwpmAccessControl {
             return SwpmUtils::_('Error! $post is not a valid WP_Post object.');
         }
         
-        $id = $post->ID;
-        
         if(self::expired_user_has_access_to_this_page()) {
-            return $content;//An expired user viewing this page and it is a system page so allow access.
+            return $content;//An expired user is viewing this page and it is a system page, so allow access.
         }
-        if(SwpmUtils::is_first_click_free($content)) {
-            return $content;//First click free is true so allow access.
-        }
-        if(in_array($id, $this->moretags)) {
-            return $content;//More tag access.
-        }
-        if($this->can_i_read_post($post)) {
-            return $content;//This member's has access to this post so allow access.
-        } 
         
+        if(SwpmUtils::is_first_click_free($content)) {
+            return $content;//First click free is true, so allow access.
+        }
+
+        if($this->can_i_read_post($post)) {
+            return $content;//This member has access to this post, so allow access.
+        } 
+
+        //Check and apply more tag protection.
+        $more_tag_protection_value = $this->check_and_apply_more_tag_protection($post);
+        if(!empty($more_tag_protection_value)){
+            //More tag protection was found in the post. Return the modified $content.
+            return $more_tag_protection_value;
+        }
+        
+        //Return whatever the result is from calling the earlier protection check functions.
+        return $this->lastError;
+    }
+    
+    public function check_and_apply_more_tag_protection($post){
         //Check if more tag protection is enabled.
         $moretag = SwpmSettings::get_instance()->get_value('enable-moretag');
         if (empty($moretag)){
-            //More tag protection is disabled in this site.
-            //Return whatever the result is from calling the above protection check functions.
-            return $this->lastError;
+            //More tag protection is disabled in this site. So return empty string.
+            return '';
         } else {
-            //More tag protection is enabled in this site. Need to check the segments.
+            //More tag protection is enabled in this site. Need to check the post segments to see if there is content after more tag.
             $post_segments = explode( '<!--more-->', $post->post_content);
             if (count($post_segments) >= 2){
                 //There is content after the more tag.
-                if (SwpmAuth::get_instance()->is_logged_in()){
-                    $text = SwpmUtils::_(" The rest of the content is not permitted for your membership level.");
-                    $error_msg = '<div class="swpm-margin-top-10">' . $text . '</div>';
-                    $this->lastError = apply_filters ('swpm_restricted_more_tag_msg', $error_msg);
-                }
-                else {
+                $auth = SwpmAuth::get_instance();
+                if(!$auth->is_logged_in()){
+                    //User is not logged-in. Need to show the login message after the more tag.
                     $text = SwpmUtils::_("You need to login to view the rest of the content. ") . SwpmMiscUtils::get_login_link();
-                    $error_msg = '<div class="swpm-margin-top-10">' . $text . '</div>';
+                    $error_msg = '<div class="swpm-more-tag-not-logged-in swpm-margin-top-10">' . $text . '</div>';
                     $this->lastError = apply_filters('swpm_not_logged_in_more_tag_msg', $error_msg);
+                } else {
+                    //The user is logged in. 
+                    //Lets check if the user's account is expired.
+                    if ($auth->is_expired_account()){
+                        //This user's account is expired. Not allowed to see this post. Show account expiry notice also.
+                        $text = SwpmUtils::_('Your account has expired. ') .  SwpmMiscUtils::get_renewal_link();
+                        $error_msg = '<div class="swpm-more-tag-account-expired-msg swpm-yellow-box">'.$text.'</div>';
+                        $this->lastError = apply_filters('swpm_account_expired_more_tag_msg', $error_msg);
+                    } else {
+                        //At this stage, the user does not have permission to view the content after the more tag.
+                        $text = SwpmUtils::_(" The rest of the content is not permitted for your membership level.");
+                        $error_msg = '<div class="swpm-more-tag-restricted-msg swpm-margin-top-10">' . $text . '</div>';
+                        $this->lastError = apply_filters ('swpm_restricted_more_tag_msg', $error_msg);
+                    }
                 }
-                return do_shortcode($post_segments[0]) . $this->lastError;
-            }
-        }
-        return $this->lastError;
+                
+                //Create the content that will be shown for this post. Show the first segment (before more tag) + any message from running the protection checks.
+                $new_post_content = do_shortcode($post_segments[0]) . $this->lastError;
+                return $new_post_content;  
+                
+            }//End of segment count condition check.
+        }//End of more tag enabled condition check.
+        
+        //More tag protection not applicable for this post. Return empty string.
+        return '';
     }
     
     public function filter_comment($comment, $content){

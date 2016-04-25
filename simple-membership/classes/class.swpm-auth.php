@@ -75,19 +75,20 @@ class SwpmAuth {
         if (empty($this->userData)) {
             return false;
         }
+        
         $enable_expired_login = SwpmSettings::get_instance()->get_value('enable-expired-account-login', '');
 
         $can_login = true;
-        if ($this->userData->account_state == 'inactive') {
+        if ($this->userData->account_state == 'inactive' && empty($enable_expired_login)) {
             $this->lastStatusMsg = SwpmUtils::_('Account is inactive.');
-            $can_login = false;
-        } else if ($this->userData->account_state == 'pending') {
-            $this->lastStatusMsg = SwpmUtils::_('Account is pending.');
             $can_login = false;
         } else if (($this->userData->account_state == 'expired') && empty($enable_expired_login)) {
             $this->lastStatusMsg = SwpmUtils::_('Account has expired.');
             $can_login = false;
-        }
+        } else if ($this->userData->account_state == 'pending') {
+            $this->lastStatusMsg = SwpmUtils::_('Account is pending.');
+            $can_login = false;
+        } 
 
         if (!$can_login) {
             $this->isLoggedIn = false;
@@ -294,11 +295,15 @@ class SwpmAuth {
     }
 
     public function is_expired_account() {
-        // should be called after logging in.
         if (!$this->is_logged_in()) {
             return null;
         }
-        return $this->get('account_state') === 'expired';
+        $account_status = $this->get('account_state');
+        if($account_status == 'expired' || $account_status == 'inactive'){
+            //Expired or Inactive accounts are both considered to be expired.
+            return true;
+        }
+        return false;
     }
 
 }

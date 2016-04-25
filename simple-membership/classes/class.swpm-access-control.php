@@ -153,12 +153,24 @@ class SwpmAccessControl {
     }
 
     public function filter_post($post,$content){
-        if (!is_a($post, 'WP_Post')) {return SwpmUtils::_('$post is not valid WP_Post object.'); }
+        if (!is_a($post, 'WP_Post')) {
+            return SwpmUtils::_('Error! $post is not a valid WP_Post object.');
+        }
+        
         $id = $post->ID;
-        if (self::is_current_url_unrestricted()) {return $content;}
-        if(SwpmUtils::is_first_click_free($content)) {return $content;}
-        if(in_array($id, $this->moretags)) {return $content; }
-        if($this->can_i_read_post($post)) {return $content; } 
+        
+        if(self::expired_user_has_access_to_this_page()) {
+            return $content;//An expired user viewing this page and it is a system page so allow access.
+        }
+        if(SwpmUtils::is_first_click_free($content)) {
+            return $content;//First click free is true so allow access.
+        }
+        if(in_array($id, $this->moretags)) {
+            return $content;//More tag access.
+        }
+        if($this->can_i_read_post($post)) {
+            return $content;//This member's has access to this post so allow access.
+        } 
         
         $moretag = SwpmSettings::get_instance()->get_value('enable-moretag');
         if (empty($moretag)){
@@ -168,14 +180,13 @@ class SwpmAccessControl {
 
         if (count($post_segments) >= 2){
             if (SwpmAuth::get_instance()->is_logged_in()){
-                $error_msg = '<div class="swpm-margin-top-10">' 
-                        . SwpmUtils::_(" The rest of the content is not permitted for your membership level.") . '</div>';
+                $text = SwpmUtils::_(" The rest of the content is not permitted for your membership level.");
+                $error_msg = '<div class="swpm-margin-top-10">' . $text . '</div>';
                 $this->lastError = apply_filters ('swpm_restricted_more_tag_msg', $error_msg);
             }
             else {
-                $error_msg = '<div class="swpm-margin-top-10">' 
-                        . SwpmUtils::_("You need to login to view the rest of the content. ") 
-                        . SwpmMiscUtils::get_login_link() . '</div>';
+                $text = SwpmUtils::_("You need to login to view the rest of the content. ") . SwpmMiscUtils::get_login_link();
+                $error_msg = '<div class="swpm-margin-top-10">' . $text . '</div>';
                 $this->lastError = apply_filters('swpm_not_logged_in_more_tag_msg', $error_msg);
             }
             return do_shortcode($post_segments[0]) . $this->lastError;
@@ -185,20 +196,26 @@ class SwpmAccessControl {
     }
     
     public function filter_comment($comment, $content){
-        if (self::is_current_url_unrestricted()) {return $content;}
-        if($this->can_i_read_comment($comment)) { return $content; }
+        if($this->can_i_read_comment($comment)) {
+            //This user has access to this comment.
+            return $content;
+        }
         return $this->lastError;
     }
     
     public function filter_post_with_moretag($post, $more_link, $more_link_text){
-        if (!is_a($post, 'WP_Post')) {return SwpmUtils::_('$post is not valid WP_Post object.'); }
+        if(!is_a($post, 'WP_Post')) {
+            return SwpmUtils::_('Error! $post is not a valid WP_Post object.');
+        }
+        
         $id = $post->ID;
-        if (self::is_current_url_unrestricted()) {return $more_link;}
-        if (SwpmUtils::is_first_click_free($more_link)) {return $more_link;}
+        if(self::expired_user_has_access_to_this_page()) {return $more_link;}
+        if(SwpmUtils::is_first_click_free($more_link)) {return $more_link;}
         $this->moretags[] = $id;
         if($this->can_i_read_post($post)) {
             return $more_link;
         }
+        
         $msg = '<div class="swpm-margin-top-10">'
                 . SwpmUtils::_("You need to login to view the rest of the content. ") 
                 . SwpmMiscUtils::get_login_link(). '</div>';
@@ -209,22 +226,56 @@ class SwpmAccessControl {
         return $this->lastError;
     }
     
-    public static function is_current_url_unrestricted(){ 
+    /*
+     * This function checks if the current user is an expired user and has access to the system page content (if the current URL is a system page).
+     */
+    public static function expired_user_has_access_to_this_page(){
+        $auth = SwpmAuth::get_instance();
+        
+        //Check if the user is logged-into the site.
+        if(!$auth->is_logged_in()){
+            //Anonymous user. No access. No need to check anything else.
+            return false;
+        }
+        
+        //Check if account is expired.
+        if (!$auth->is_expired_account()){
+            //This users account is not expired. No need to check anything else.
+            return false;
+        }
+        
+        /*** We have a expired member. Lets check if he is viewing a page that is a core system used URL. ***/
+        if (self::is_current_url_a_system_page()){ 
+            //Allow this expired user to view this post/page content since this is a core system page.
+            return true;
+        }
+        
+        //Not a system used page. So the expired user has no access to this page.
+        return false;
+    }
+    
+    /*
+     * This function checks if the current page being viewed is one of the system used URLs
+     */
+    public static function is_current_url_a_system_page(){
+        $current_page_url = SwpmMiscUtils::get_current_page_url();
+        
+        //Check if the current page is the membership renewal page.
         $renewal_url = SwpmSettings::get_instance()->get_value('renewal-page-url');        
         if (empty($renewal_url)) {return false;}
-        
-        $current_page_url = SwpmMiscUtils::get_current_page_url();
         if (SwpmMiscUtils::compare_url($renewal_url, $current_page_url)) {return true;}
 
+        //Check if the current page is the membership logn page.
         $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
         if (empty($login_page_url)) {return false;}
-        
         if (SwpmMiscUtils::compare_url($login_page_url, $current_page_url)) {return true;}
 
+        //Check if the current page is the membership join page.
         $registration_page_url = SwpmSettings::get_instance()->get_value('registration-page-url');
         if (empty($registration_page_url)) {return false;}
+        if (SwpmMiscUtils::compare_url($registration_page_url, $current_page_url)) {return true;}
         
-        return SwpmMiscUtils::compare_url($registration_page_url, $current_page_url);
+        return false;
     }
     
 }

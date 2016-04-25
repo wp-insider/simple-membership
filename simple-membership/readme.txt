@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.5
-Stable tag: 3.2.3
+Stable tag: 3.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,7 @@ You can create a free forum user account and ask your questions.
 
 * Works with any WordPress theme.
 * Ability to protect photo galleries.
+* Ability to protect attachment pages.
 * Show teaser content to convert visitors into members.
 * Comments on your protected posts will also be protected automatically.
 * There is an option to enable debug logging so you can troubleshoot membership payment related issues easily (if any).
@@ -121,6 +122,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 3.2.4 =
+- Fixed a bug with attachment protection showing an error message.
 
 = 3.2.3 =
 - Added a new option so you can configure a membership account renewal page in the plugin.

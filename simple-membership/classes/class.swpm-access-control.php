@@ -18,7 +18,8 @@ class SwpmAccessControl {
 
     public function can_i_read_post($post){
         if (!is_a($post, 'WP_Post')) {
-            return SwpmUtils::_('Error! $post is not a valid WP_Post object.');
+            //This is not a WP_Post object. So we don't want to handle it in our plugin.
+            return true;
         }
         
         $id = $post->ID;
@@ -87,7 +88,8 @@ class SwpmAccessControl {
     
     public function can_i_read_comment($comment){
         if (!is_a($comment, 'WP_Comment')) {
-            return SwpmUtils::_('Error! $comment is not a valid WP_Comment object.');
+            //This is not a valid WP_Comment object. So we don't want to handle it in our plugin.
+            return true;
         }
 
         $id = $comment->comment_ID;
@@ -154,7 +156,9 @@ class SwpmAccessControl {
 
     public function filter_post($post,$content){
         if (!is_a($post, 'WP_Post')) {
-            return SwpmUtils::_('Error! $post is not a valid WP_Post object.');
+            //This is not a WP_Post object. So we don't want to handle it in our plugin.
+            return $content;
+            //return SwpmUtils::_('Error! $post is not a valid WP_Post object.');
         }
         
         if(self::expired_user_has_access_to_this_page()) {

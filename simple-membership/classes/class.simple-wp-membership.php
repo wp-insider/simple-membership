@@ -110,10 +110,11 @@ class SimpleWpMembership {
         if (has_post_thumbnail($post_id)) {
             return $content;
         }
-        if ($acl->can_i_read_post($post_id)) {
+        
+        $post = get_post($post_id);
+        if ($acl->can_i_read_post($post)) {
             return $content;
         }
-
 
         if (isset($content['file'])) {
             $content['file'] = 'restricted-icon.png';
@@ -130,7 +131,7 @@ class SimpleWpMembership {
                 $content['sizes']['medium']['file'] = 'restricted-icon.png';
                 $content['sizes']['medium']['mime-type'] = 'image/png';
             }
-            if ($content['sizes']['post-thumbnail']) {
+            if (isset($content['sizes']['post-thumbnail'])) {
                 $content['sizes']['post-thumbnail']['file'] = 'restricted-icon.png';
                 $content['sizes']['post-thumbnail']['mime-type'] = 'image/png';
             }
@@ -147,7 +148,8 @@ class SimpleWpMembership {
             return $content;
         }
 
-        if ($acl->can_i_read_post($post_id)) {
+        $post = get_post($post_id);
+        if ($acl->can_i_read_post($post)) {
             return $content;
         }
 

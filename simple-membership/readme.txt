@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.5
-Stable tag: 3.2.2
+Stable tag: 3.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,10 +122,16 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 3.2.3 =
+= 3.2.3 =
+- Added a new option so you can configure a membership account renewal page in the plugin.
+- The account expiry message will include the renewal page link (if you configure the renewal page).
+- Removed login link from the comment protection message. You can customize the comment protection message using the custom message addon.
 - Updated the Russian language file. Thanks to @dimabuko for updating the language file.
 - Updated the Portuguese language file. Thanks to @Juan for updating the language file.
 - Added a new addon for better custom post type protection.
+- Made an improvement to the wp user delete function.
+- More tag protection check improvements.
+- Account with "inactive" status can also log into the site if the "Allows expired login" feature is enabled.
 - Updated the PayPal IPN validation code so it is compatible with the upcoming PayPal changes.
 
 = 3.2.2 =

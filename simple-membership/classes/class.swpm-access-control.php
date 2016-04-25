@@ -172,26 +172,30 @@ class SwpmAccessControl {
             return $content;//This member's has access to this post so allow access.
         } 
         
+        //Check if more tag protection is enabled.
         $moretag = SwpmSettings::get_instance()->get_value('enable-moretag');
         if (empty($moretag)){
+            //More tag protection is disabled in this site.
+            //Return whatever the result is from calling the above protection check functions.
             return $this->lastError;
-        }
-        $post_segments = explode( '<!--more-->', $post->post_content);
-
-        if (count($post_segments) >= 2){
-            if (SwpmAuth::get_instance()->is_logged_in()){
-                $text = SwpmUtils::_(" The rest of the content is not permitted for your membership level.");
-                $error_msg = '<div class="swpm-margin-top-10">' . $text . '</div>';
-                $this->lastError = apply_filters ('swpm_restricted_more_tag_msg', $error_msg);
+        } else {
+            //More tag protection is enabled in this site. Need to check the segments.
+            $post_segments = explode( '<!--more-->', $post->post_content);
+            if (count($post_segments) >= 2){
+                //There is content after the more tag.
+                if (SwpmAuth::get_instance()->is_logged_in()){
+                    $text = SwpmUtils::_(" The rest of the content is not permitted for your membership level.");
+                    $error_msg = '<div class="swpm-margin-top-10">' . $text . '</div>';
+                    $this->lastError = apply_filters ('swpm_restricted_more_tag_msg', $error_msg);
+                }
+                else {
+                    $text = SwpmUtils::_("You need to login to view the rest of the content. ") . SwpmMiscUtils::get_login_link();
+                    $error_msg = '<div class="swpm-margin-top-10">' . $text . '</div>';
+                    $this->lastError = apply_filters('swpm_not_logged_in_more_tag_msg', $error_msg);
+                }
+                return do_shortcode($post_segments[0]) . $this->lastError;
             }
-            else {
-                $text = SwpmUtils::_("You need to login to view the rest of the content. ") . SwpmMiscUtils::get_login_link();
-                $error_msg = '<div class="swpm-margin-top-10">' . $text . '</div>';
-                $this->lastError = apply_filters('swpm_not_logged_in_more_tag_msg', $error_msg);
-            }
-            return do_shortcode($post_segments[0]) . $this->lastError;
         }
-
         return $this->lastError;
     }
     

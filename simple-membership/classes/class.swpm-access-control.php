@@ -13,8 +13,8 @@ class SwpmAccessControl {
     }
 
     public function can_i_read_post($post){
-        if (!is_a($post, 'WP_Post')) {return SwpmUtils::_('$post is not valid WP_Post object.'); }
-        $id= $post->ID;
+        if (!is_a($post, 'WP_Post')) {return SwpmUtils::_('Error! $post is not a valid WP_Post object.'); }
+        $id = $post->ID;
         $this->lastError = '';
         $auth = SwpmAuth::get_instance();
         $protect_everything = SwpmSettings::get_instance()->get_value('protect-everything');
@@ -44,65 +44,79 @@ class SwpmAccessControl {
                             . SwpmUtils::get_formatted_date_according_to_wp_settings($post->post_date) ));
             return false;
         }
-        $perms = SwpmPermission::get_instance($auth->get('membership_level'));
-        if($perms->is_permitted($id)) {return true;}
+        $permission = SwpmPermission::get_instance($auth->get('membership_level'));
+        if($permission->is_permitted($id)) {return true;}
         $this->lastError = apply_filters ('swpm_restricted_post_msg', 
                 '<div class="swpm-no-access-msg">'
                 . SwpmUtils::_('This content is not permitted for your membership level.').'</div>') ;
         return false;
     }
+    
     public function can_i_read_comment($comment){
-        if (!is_a($comment, 'WP_Comment')) {return SwpmUtils::_('$comment is not valid WP_Comment object.'); }
+        if (!is_a($comment, 'WP_Comment')) {
+            return SwpmUtils::_('Error! $comment is not a valid WP_Comment object.');
+        }
+
         $id = $comment->comment_ID;
         $post_id = $comment->comment_post_ID;
         $post = get_post($post_id);
         $this->lastError = '';
         $auth = SwpmAuth::get_instance();
         
-        // check parent post protection status.
-        $protect_everything = SwpmSettings::get_instance()->get_value('protect-everything');
-        if(!empty($protect_everything)){ 
-            $error_msg = SwpmUtils::_( 'You need to login to view this content. ' ) . SwpmMiscUtils::get_login_link();
-            $this->lastError = apply_filters('swpm_not_logged_in_comment_msg', $error_msg);
-            return false;                       
-        }
+        //Check if everything protected settings is on.
+        //$protect_everything = SwpmSettings::get_instance()->get_value('protect-everything');
+        //if(!empty($protect_everything)){ 
+            //Everything is protected by default.
+            //TODO - This feature is currently not implemented.
+        //}
+        
+        //Check if the post (that this comment belongs to) is protected.
         $protected = SwpmProtection::get_instance();
-        if (!$protected->is_protected($post_id)){ return true;}        
+        if (!$protected->is_protected($post_id)){ 
+            //The post of this comment is not protected. So this is an unprotected comment. Show it to everyone.
+            return true;
+        }
+        
+        /*** At this point, we have a protected comment. So we need to check if this user can view this comment. ***/
+        
+        //Check if the user is logged-in as a member.
         if(!$auth->is_logged_in()){
-            $error_msg = SwpmUtils::_( 'You need to login to view this content. ' ) . SwpmMiscUtils::get_login_link();
+            //User is not logged-in. Not allowed to see this protected comment.
+            $error_msg = '<div class="swpm-comment-not-logged-in">' . SwpmUtils::_("You need to login to view this content. ") . '</div>';
             $this->lastError = apply_filters('swpm_not_logged_in_comment_msg', $error_msg);
             return false;            
         }
 
+        //Check if member account is expired.
         if ($auth->is_expired_account()){
+            //This user's account is expired. Not allowed to see this comment. Show account expiry notice also.
             $text = SwpmUtils::_('Your account has expired. ') .  SwpmMiscUtils::get_renewal_link();
-            $error_msg = '<div class="swpm-account-expired-msg swpm-yellow-box">'.$text.'</div>';
+            $error_msg = '<div class="swpm-comment-account-expired-msg swpm-yellow-box">'.$text.'</div>';
             $this->lastError = apply_filters('swpm_account_expired_msg', $error_msg);
             return false;                        
         }
+        
+        //Check if older post protection addon is active and protection according to it's settings.
         $protect_older_posts = apply_filters('swpm_should_protect_older_post', false, $post_id);
         if ($protect_older_posts){
-            $this->lastError = apply_filters ('swpm_restricted_post_msg_older_post', 
-                    SwpmUtils::_('This content can only be viewed by members who joined on or before ' 
-                            . SwpmUtils::get_formatted_date_according_to_wp_settings($post->post_date) ));
+            //This comment is protected due to the older post protection addon settings configuration.
+            $text = SwpmUtils::_('This content can only be viewed by members who joined on or before ' . SwpmUtils::get_formatted_date_according_to_wp_settings($post->post_date));
+            $error_msg = '<div class="swpm-comment-older-post-msg">'.$text.'</div>';
+            $this->lastError = apply_filters ('swpm_restricted_comment_older_post', $error_msg);
             return false;
         }
-        $perms = SwpmPermission::get_instance($auth->get('membership_level'));
-        if(!$perms->is_permitted($post_id)) {
         
-            $this->lastError = apply_filters ('swpm_restricted_comment_msg', 
-                    '<div class="swpm-no-access-msg">'
-                    . SwpmUtils::_('This content is not permitted for your membership level.').'</div>') ;
+        //Check if this member can view this comment based on his membership level
+        $permission = SwpmPermission::get_instance($auth->get('membership_level'));
+        if(!$permission->is_permitted($post_id)) {
+            //This member's membership level doesn't have access to this comment's post. Not allowed to see this comment.
+            $error_msg = '<div class="swpm-comment-no-access-msg">' . SwpmUtils::_('This content is not permitted for your membership level.').'</div>';
+            $this->lastError = apply_filters ('swpm_restricted_comment_msg', $error_msg);
             return false;
         }
-        // check if the comment itself is protected.
-        if (!$protected->is_protected_comment($id)){ return true;}
         
-        if($perms->is_permitted_comment($id)) {return true; }
-        
-        $error_msg = '<div class="swpm-no-access-msg">' . SwpmUtils::_("This content is not permitted for your membership level.").'</div>';
-        $this->lastError = apply_filters ('swpm_restricted_comment_msg', $error_msg);
-        return false;
+        //All checks have passed. Show this comment to this user.
+        return true;
     }
 
     public function filter_post($post,$content){

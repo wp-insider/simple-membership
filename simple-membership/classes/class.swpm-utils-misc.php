@@ -204,13 +204,18 @@ class SwpmMiscUtils {
         return $msg_body;
     }
     public static function get_login_link() {
-        $login = SwpmSettings::get_instance()->get_value('login-page-url');
-        $joinus = SwpmSettings::get_instance()->get_value('join-us-page-url');
+        $current_url = self::get_current_page_url();
+        $login = add_query_arg('swpm_redirect_url', $current_url,
+                SwpmSettings::get_instance()->get_value('login-page-url'));
+        
+        $joinus = SwpmSettings::get_instance()->get_value('join-us-page-url');        
         if (empty($login) || empty($joinus)) {
             return '<span style="color:red;">Simple Membership is not configured correctly.'
                     . 'Please contact <a href="mailto:' . get_option('admin_email') . '">Admin</a>';
         }
-        return SwpmUtils::_('Please') . ' <a class="swpm-login-link" href="' . $login . '">' . SwpmUtils::_('Login') . '</a>. ' . SwpmUtils::_('Not a Member?') . ' <a href="' . $joinus . '">' . SwpmUtils::_('Join Us') . '</a>';
+        return SwpmUtils::_('Please') . ' <a class="swpm-login-link" href="' . $login . '">' 
+                . SwpmUtils::_('Login') . '</a>. ' . SwpmUtils::_('Not a Member?') 
+                . ' <a href="' . $joinus . '">' . SwpmUtils::_('Join Us') . '</a>';
     }
 
     public static function get_renewal_link() {

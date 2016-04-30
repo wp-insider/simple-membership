@@ -123,6 +123,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= 3.2.5 =
+- Added a new feature to enable redirection to the last page after login (where they clicked the login link). 
+This new option is available in the after login redirection addon.
+https://wordpress.org/plugins/simple-membership-after-login-redirection/
+
 = 3.2.4 =
 - Fixed a bug with attachment protection showing an error message.
 

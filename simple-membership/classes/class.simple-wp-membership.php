@@ -59,6 +59,7 @@ class SimpleWpMembership {
         add_action('wp_enqueue_scripts', array(&$this, 'front_library'));
         add_action('load-toplevel_page_simple_wp_membership', array(&$this, 'admin_library'));
         add_action('load-wp-membership_page_simple_wp_membership_levels', array(&$this, 'admin_library'));
+        add_action('load-wp-membership_page_simple_wp_membership_payments', array(&$this, 'admin_library'));
         add_action('profile_update', array(&$this, 'sync_with_wp_profile'), 10, 2);
         add_action('wp_logout', array(&$this, 'wp_logout'));
         add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2);
@@ -505,6 +506,7 @@ class SimpleWpMembership {
         $level_action = filter_input(INPUT_GET, 'level_action');
         $action2 = filter_input(INPUT_GET, 'action2');
         $action = $level_action ? $level_action : ($action2 ? $action2 : "");
+        $output = '';
         switch ($action) {
             case 'add':
             case 'edit':
@@ -519,7 +521,12 @@ class SimpleWpMembership {
             case 'delete':
                 $levels->delete();
             default:
-                $levels->show();
+                $output = apply_filters('swpm_admin_membership_menu_details_hook', '', $action);
+                if (empty($output)) {
+                    $output = $levels->show();
+                }
+                $selected = $level_action;
+                include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_membership_levels.php');                
                 break;
         }
     }
@@ -569,6 +576,32 @@ class SimpleWpMembership {
     }
 
     public function payments_menu() {
+        $selected = filter_input(INPUT_GET, 'tab');
+        ob_start();
+        switch ($selected) {
+            case 'payment_buttons':
+                include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_payment_buttons.php');
+                break;
+            case 'create_new_button':
+                include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_create_payment_buttons.php');
+                break;
+            case 'edit_button':
+                include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_edit_payment_buttons.php');
+                break;
+            case 'all_txns':
+                include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_all_payment_transactions.php');
+                break;
+            default:
+                $result = apply_filters('swpm_admin_payments_menu_details_hook', '', $selected);
+                if (empty($result)){
+                    include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_all_payment_transactions.php');
+                }
+                else{
+                    echo $result;
+                }
+                break;        
+        }
+        $output = ob_get_clean();
         include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/admin_payments_page.php');
     }
 

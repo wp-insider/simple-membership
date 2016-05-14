@@ -440,24 +440,6 @@ abstract class SwpmUtils {
         list($is_first_click, $content) = $filtered;
         return $is_first_click;       
     }
-    public static function build_tab_menu($base_url, $title, $tag, $selected_tag){
-        $html = '<a class="nav-tab ' . (($selected_tag == $tag) ? 'nav-tab-active' : '')
-                . '" href="' . $base_url . $tag . '">'
-                . SwpmUtils::_($title)
-                . '</a>';
-        return $html;    
-    }
-    
-    public static function write_content_to_stream($file_name, $content){
-        header('Content-Encoding: UTF-8');
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Content-Description: File Transfer");
-        header('Content-Type: text/csv; charset=utf-8');
-        header("Content-disposition: attachment; filename=" . $file_name . ".csv");
 
-        header("Content-Length: " . strlen($content));
-        echo "\xEF\xBB\xBF";
-        echo $content;
-        exit;        
-    }    
+    
 }

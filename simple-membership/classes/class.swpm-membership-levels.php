@@ -186,11 +186,8 @@ class SwpmMembershipLevels extends WP_List_Table {
     }
 
     function show() {
-        ob_start();
-        $status = filter_input(INPUT_GET, 'status');
-        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_membership_level_list.php');
-        $output = ob_get_clean();
-        return $output;
+        $selected = "";
+        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_membership_levels.php');
     }
 
     function manage() {

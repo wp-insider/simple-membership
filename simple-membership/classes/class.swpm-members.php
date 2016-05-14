@@ -364,4 +364,73 @@ class SwpmMembers extends WP_List_Table {
         return false;
     }
 
+    function handle_main_members_admin_menu()
+    {
+        do_action( 'swpm_members_menu_start' );
+        
+        $action = filter_input(INPUT_GET, 'member_action');
+        $action = empty($action) ? filter_input(INPUT_POST, 'action') : $action;
+        $selected = $action;
+        
+        ?>
+        <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
+        <h1><?php echo SwpmUtils::_('Simple WP Membership::Members') ?>
+            <a href="admin.php?page=simple_wp_membership&member_action=add" class="add-new-h2"><?php echo SwpmUtils::_('Add New'); ?></a>
+        </h1>
+        
+        <h2 class="nav-tab-wrapper swpm-members-nav-tab-wrapper">
+            <a class="nav-tab <?php echo ($selected == "") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership"><?php echo SwpmUtils::_('Members') ?></a>
+            <a class="nav-tab <?php echo ($selected == "add") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=add"><?php echo SwpmUtils::_('Add Member') ?></a>
+            <?php
+            
+            //Trigger hooks that allows an extension to add extra nav tabs in the members menu.
+            do_action ('swpm_members_menu_nav_tabs', $selected);
+            
+            $menu_tabs = apply_filters('swpm_members_additional_menu_tabs_array', array());
+            foreach ($menu_tabs as $member_action => $title){
+                ?>
+                <a class="nav-tab <?php echo ($selected == $member_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=<?php echo $member_action; ?>" ><?php SwpmUtils::e($title); ?></a>
+                <?php
+            }
+            
+            ?>
+        </h2>            
+        <?php
+        
+        do_action( 'swpm_members_menu_after_nav_tabs' );
+        
+        //Trigger hook so anyone listening for this particular action can handle the output.
+        do_action( 'swpm_members_menu_body_' . $action );
+        
+        //Allows an addon to completely override the body section of the members admin menu for a given action.
+        $output = apply_filters('swpm_members_menu_body_override', '', $action);
+        if (!empty($output)) {
+            //An addon has overriden the 
+            echo $output;
+            echo '</div>';//<!-- end of wrap -->
+            return;
+        }
+
+        //Switch case for the various different actions handled by the core plugin.
+        switch ($action) {
+            case 'members_list':
+                //Show the members listing
+                echo $this->show();
+                break;
+            case 'add':
+                //Process member profile add
+                $this->process_form_request();
+                break;                
+            case 'edit':
+                //Process member profile edit
+                $this->process_form_request();
+                break;             
+            default:
+                //Show the members listing page by default.
+                echo $this->show();
+                break;
+        }
+        
+        echo '</div>';//<!-- end of wrap -->
+    }
 }

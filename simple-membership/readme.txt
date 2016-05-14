@@ -126,6 +126,8 @@ https://simple-membership-plugin.com/
 
 = TODO 3.2.6 =
 - Added Hungarian language translation file. The translation was submitted by Laura Szitar.
+- Improved the members menu navigation menu so the tabs are always visible (even when you go to the add or edit members screen).
+
 
 = 3.2.5 =
 - Added a new feature to enable redirection to the last page after login (where they clicked the login link). 

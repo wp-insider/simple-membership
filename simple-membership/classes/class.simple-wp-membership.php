@@ -487,8 +487,8 @@ class SimpleWpMembership {
     public function menu() {
         $menu_parent_slug = 'simple_wp_membership';
 
-        add_menu_page(__("WP Membership", 'swpm'), __("WP Membership", 'swpm'), 'manage_options', $menu_parent_slug, array(&$this, "admin_members"), 'dashicons-id');
-        add_submenu_page($menu_parent_slug, __("Members", 'swpm'), __('Members', 'swpm'), 'manage_options', 'simple_wp_membership', array(&$this, "admin_members"));
+        add_menu_page(__("WP Membership", 'swpm'), __("WP Membership", 'swpm'), 'manage_options', $menu_parent_slug, array(&$this, "admin_members_menu"), 'dashicons-id');
+        add_submenu_page($menu_parent_slug, __("Members", 'swpm'), __('Members', 'swpm'), 'manage_options', 'simple_wp_membership', array(&$this, "admin_members_menu"));
         add_submenu_page($menu_parent_slug, __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), 'manage_options', 'simple_wp_membership_levels', array(&$this, "admin_membership_levels"));
         add_submenu_page($menu_parent_slug, __("Settings", 'swpm'), __("Settings", 'swpm'), 'manage_options', 'simple_wp_membership_settings', array(&$this, "admin_settings"));
         add_submenu_page($menu_parent_slug, __("Payments", 'swpm'), __("Payments", 'swpm'), 'manage_options', 'simple_wp_membership_payments', array(&$this, "payments_menu"));
@@ -524,26 +524,10 @@ class SimpleWpMembership {
         }
     }
 
-    public function admin_members() {
+    public function admin_members_menu() {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-members.php');
         $members = new SwpmMembers();
-        $action = filter_input(INPUT_GET, 'member_action');
-        $action = empty($action) ? filter_input(INPUT_POST, 'action') : $action;
-        $output = '';       
-        switch ($action) {
-            case 'add':
-            case 'edit':
-                $members->process_form_request();
-                break;
-            default:
-                $output = apply_filters('swpm_admin_member_menu_details_hook', '', $action);
-                if (empty($output)) {
-                    $output = $members->show();
-                }
-                $selected = $action;
-                include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_members.php');
-                break;
-        }
+        $members->handle_main_members_admin_menu();
     }
 
     public function admin_settings() {

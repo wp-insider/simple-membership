@@ -12,13 +12,30 @@ class SwpmSettings {
     }
 
     public function init_config_hooks() {
+        //This function is called from "admin_init"
+        //It sets up the various tabs and the fields for the settings admin page.
+        
         if (is_admin()) { // for frontend just load settings but dont try to render settings page.
+            
+            //Read the value of tab query arg.
             $tab = filter_input(INPUT_GET, 'tab');
             $tab = empty($tab) ? filter_input(INPUT_POST, 'tab') : $tab;
             $this->current_tab = empty($tab) ? 1 : $tab;
-            $this->tabs = array(1 => SwpmUtils::_('General Settings'), 2 => SwpmUtils::_('Payment Settings'),
-                3 => SwpmUtils::_('Email Settings'), 4 => SwpmUtils::_('Tools'), 5 => SwpmUtils::_('Advanced Settings'), 6 => SwpmUtils::_('Addons Settings'));
+            
+            //Setup the available settings tabs array.
+            $this->tabs = array(
+                1 => SwpmUtils::_('General Settings'), 
+                2 => SwpmUtils::_('Payment Settings'),
+                3 => SwpmUtils::_('Email Settings'), 
+                4 => SwpmUtils::_('Tools'), 
+                5 => SwpmUtils::_('Advanced Settings'), 
+                6 => SwpmUtils::_('Addons Settings')
+            );
+            
+            //Register the draw tab action hook. It will be triggered using do_action("swpm-draw-tab")
             add_action('swpm-draw-tab', array(&$this, 'draw_tabs'));
+            
+            //Register the various settings fields for the current tab.
             $method = 'tab_' . $this->current_tab;
             if (method_exists($this, $method)) {
                 $this->$method();
@@ -27,7 +44,8 @@ class SwpmSettings {
     }
 
     private function tab_1() {
-
+        //Register settings sections and fileds for the general settings tab.
+        
         register_setting('swpm-settings-tab-1', 'swpm-settings', array(&$this, 'sanitize_tab_1'));
 
         //This settings section has no heading
@@ -85,10 +103,13 @@ class SwpmSettings {
     }
 
     private function tab_2() {
+        //Register settings sections and fileds for the payment settings tab.
 
     }
 
     private function tab_3() {
+        //Register settings sections and fileds for the email settings tab.
+        
         //Show settings updated message when it is updated
         if (isset($_REQUEST['settings-updated'])) {
             echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_('Settings updated!') . '</p></div>';
@@ -134,10 +155,13 @@ class SwpmSettings {
     }
 
     private function tab_4() {
+        //Register settings sections and fileds for the tools tab.
 
     }
 
     private function tab_5() {
+        //Register settings sections and fileds for the advanced settings tab.
+        
         //Show settings updated message when it is updated
         if (isset($_REQUEST['settings-updated'])) {
             echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_('Settings updated!') . '</p></div>';
@@ -164,6 +188,7 @@ class SwpmSettings {
     }
 
     private function tab_6() {
+        //Register settings sections and fileds for the addon settings tab.
 
     }
 
@@ -381,9 +406,9 @@ class SwpmSettings {
         $current = $this->current_tab;
         ?>
         <h2 class="nav-tab-wrapper">
-            <?php foreach ($this->tabs as $id => $label): ?>
+            <?php foreach ($this->tabs as $id => $label){ ?>
                 <a class="nav-tab <?php echo ($current == $id) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=<?php echo $id ?>"><?php echo $label ?></a>
-            <?php endforeach; ?>
+            <?php } ?>
         </h2>
         <?php
     }

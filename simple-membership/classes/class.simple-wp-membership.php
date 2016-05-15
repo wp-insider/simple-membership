@@ -491,8 +491,8 @@ class SimpleWpMembership {
         add_submenu_page($menu_parent_slug, __("Members", 'swpm'), __('Members', 'swpm'), 'manage_options', 'simple_wp_membership', array(&$this, "admin_members_menu"));
         add_submenu_page($menu_parent_slug, __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), 'manage_options', 'simple_wp_membership_levels', array(&$this, "admin_membership_levels_menu"));
         add_submenu_page($menu_parent_slug, __("Settings", 'swpm'), __("Settings", 'swpm'), 'manage_options', 'simple_wp_membership_settings', array(&$this, "admin_settings_menu"));
-        add_submenu_page($menu_parent_slug, __("Payments", 'swpm'), __("Payments", 'swpm'), 'manage_options', 'simple_wp_membership_payments', array(&$this, "payments_menu"));
-        add_submenu_page($menu_parent_slug, __("Add-ons", 'swpm'), __("Add-ons", 'swpm'), 'manage_options', 'simple_wp_membership_addons', array(&$this, "add_ons_menu"));
+        add_submenu_page($menu_parent_slug, __("Payments", 'swpm'), __("Payments", 'swpm'), 'manage_options', 'simple_wp_membership_payments', array(&$this, "admin_payments_menu"));
+        add_submenu_page($menu_parent_slug, __("Add-ons", 'swpm'), __("Add-ons", 'swpm'), 'manage_options', 'simple_wp_membership_addons', array(&$this, "admin_add_ons_menu"));
 
         do_action('swpm_after_main_admin_menu', $menu_parent_slug);
 
@@ -519,11 +519,13 @@ class SimpleWpMembership {
         $settings->handle_main_settings_admin_menu();
     }
 
-    public function payments_menu() {
-        include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/admin_payments_page.php');
+    public function admin_payments_menu() {
+        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/admin-includes/class.swpm-payments-admin-menu.php');
+        $payments_admin = new SwpmPaymentsAdminMenu();
+        $payments_admin->handle_main_payments_admin_menu();
     }
 
-    public function add_ons_menu() {
+    public function admin_add_ons_menu() {
         include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_add_ons_page.php');
     }
 

@@ -32,8 +32,8 @@ class SwpmSettings {
                 6 => SwpmUtils::_('Addons Settings')
             );
             
-            //Register the draw tab action hook. It will be triggered using do_action("swpm-draw-tab")
-            add_action('swpm-draw-tab', array(&$this, 'draw_tabs'));
+            //Register the draw tab action hook. It will be triggered using do_action("swpm-draw-settings-nav-tabs")
+            add_action('swpm-draw-settings-nav-tabs', array(&$this, 'draw_tabs'));
             
             //Register the various settings fields for the current tab.
             $method = 'tab_' . $this->current_tab;
@@ -414,28 +414,59 @@ class SwpmSettings {
     }
     
     public function handle_main_settings_admin_menu(){
-        
+
         do_action( 'swpm_settings_menu_start' );
         
+        ?>
+        <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
+
+        <h1><?php echo SwpmUtils::_('Simple WP Membership::Settings') ?></h1><!-- page title -->
+        
+        <!-- start nav menu tabs -->
+        <?php do_action("swpm-draw-settings-nav-tabs"); ?>
+        <!-- end nav menu tabs -->
+        <?php
+        
+        do_action( 'swpm_settings_menu_after_nav_tabs' );
+        
+        //Switch to handle the body of each of the various settings pages based on the currently selected tab
         $current_tab = $this->current_tab;
         switch ($current_tab) {
-            case 6:
-                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_addon_settings.php');
+            case 1:
+                //General settings
+                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
+                break;            
+            case 2:
+                //Payment settings
+                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/admin_payment_settings.php');
+                break;
+            case 3:
+                //Email settings
+                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
                 break;
             case 4:
+                //Tools
                 $link_for = filter_input(INPUT_POST, 'swpm_link_for', FILTER_SANITIZE_STRING);
                 $member_id = filter_input(INPUT_POST, 'member_id', FILTER_SANITIZE_NUMBER_INT);
                 $send_email = filter_input(INPUT_POST, 'swpm_reminder_email', FILTER_SANITIZE_NUMBER_INT);
                 $links = SwpmUtils::get_registration_link($link_for, $send_email, $member_id);
                 include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_tools_settings.php');
                 break;
-            case 2:
-                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/admin_payment_settings.php');
+            case 5:
+                //Advanced settings
+                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
                 break;
+            case 6:
+                //Addon settings
+                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_addon_settings.php');
+                break;            
             default:
+                //The default fallback (general settings)
                 include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
                 break;
         }
+        
+        echo '</div>';//<!-- end of wrap -->
         
     }
     

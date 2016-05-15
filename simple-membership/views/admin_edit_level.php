@@ -2,8 +2,13 @@
 <form action="" method="post" name="swpm-edit-level" id="swpm-edit-level" class="validate"<?php do_action('level_edit_form_tag');?>>
 <input name="action" type="hidden" value="editlevel" />
 <?php wp_nonce_field( 'edit-swpmlevel', '_wpnonce_edit-swpmlevel' ) ?>
-<h3><?php echo  SwpmUtils::_('Edit membership level'); ?></h3>
-<p><?php echo  SwpmUtils::_('Edit membership level.'); ?></p>
+<h2><?php echo  SwpmUtils::_('Edit membership level'); ?></h2>
+<p>
+    <?php 
+    echo SwpmUtils::_('You can edit details of a selected membership level from this interface. ');
+    echo SwpmUtils::_('You are currently editing: '). stripslashes($alias);
+    ?>
+</p>
 <table class="form-table">
     <tbody>
 	<tr>

@@ -1,6 +1,6 @@
 <div class="wrap" id="swpm-level-page">
 
-<form action="" method="post" name="swpm-create-level" id="swpm-create-level" class="validate"<?php do_action('level_new_form_tag');?>>
+<form action="" method="post" name="swpm-create-level" id="swpm-create-level" class="validate">
 <input name="action" type="hidden" value="createlevel" />
 <h3>Add Membership Level</h3>
 <p><?php echo  SwpmUtils::_('Create new membership level.'); ?></p>

@@ -183,16 +183,34 @@ class SwpmMembershipLevels extends WP_List_Table {
             $id = absint($_REQUEST['id']);
             $query = $wpdb->prepare("DELETE FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $id);
             $wpdb->query($query);
+            echo '<div id="message" class="updated fade"><p>Selected record deleted successfully!</p></div>';
         }
     }
 
     function show() {
-        $selected = "";
-        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_membership_levels.php');
+        ?>
+        <div class="swpm-margin-top-10"></div>
+        <form method="post">
+            <p class="search-box">
+                <label class="screen-reader-text" for="search_id-search-input">
+                    search:</label>
+                <input id="search_id-search-input" type="text" name="s" value="" />
+                <input id="search-submit" class="button" type="submit" name="" value="<?php echo  SwpmUtils::_('Search')?>" />
+            </p>
+        </form>
+
+        <?php $this->prepare_items(); ?>
+        <form method="post">
+            <?php $this->display(); ?>
+        </form>
+
+        <p>
+            <a href="admin.php?page=simple_wp_membership_levels&level_action=add" class="button-primary"><?php SwpmUtils::e('Add New') ?></a>
+        </p>
+        <?php
     }
 
     function manage() {
-        $selected = "manage";
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_membership_manage.php');
     }
 
@@ -208,8 +226,54 @@ class SwpmMembershipLevels extends WP_List_Table {
         do_action( 'swpm_membership_level_menu_start' );
         
         $level_action = filter_input(INPUT_GET, 'level_action');
-        $action2 = filter_input(INPUT_GET, 'action2');
-        $action = $level_action ? $level_action : ($action2 ? $action2 : "");
+        $action = $level_action;
+        $selected= $action;
+        
+        ?>
+        <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
+
+        <!-- page title -->
+        <h1><?php echo  SwpmUtils::_('Simple WP Membership::Membership Levels') ?></h1>
+            
+        <!-- start nav menu tabs -->
+        <h2 class="nav-tab-wrapper">
+            <a class="nav-tab <?php echo ($selected == "") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels"><?php echo SwpmUtils::_('Membership Levels') ?></a>
+            <a class="nav-tab <?php echo ($selected == "add") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=add"><?php echo SwpmUtils::_('Add Level') ?></a>
+            <a class="nav-tab <?php echo ($selected == "manage") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=manage"><?php echo SwpmUtils::_('Manage Content Production') ?></a>
+            <a class="nav-tab <?php echo ($selected == "category_list") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=category_list"><?php echo SwpmUtils::_('Category Protection') ?></a>
+            <?php
+            
+            //Trigger hooks that allows an extension to add extra nav tabs in the membership levels menu.
+            do_action ('swpm_membership_levels_menu_nav_tabs', $selected);
+            
+            $menu_tabs = apply_filters('swpm_membership_levels_additional_menu_tabs_array', array());
+            foreach ($menu_tabs as $level_action => $title){
+                ?>
+                <a class="nav-tab <?php echo ($selected == $member_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=<?php echo $level_action; ?>" ><?php SwpmUtils::e($title); ?></a>
+                <?php
+            }
+            
+            ?>            
+        </h2>
+        <!-- end nav menu tabs -->
+        
+        <?php
+        
+        do_action( 'swpm_membership_level_menu_after_nav_tabs' );
+        
+        //Trigger hook so anyone listening for this particular action can handle the output.
+        do_action( 'swpm_membership_level_menu_body_' . $action );
+        
+        //Allows an addon to completely override the body section of the membership level admin menu for a given action.
+        $output = apply_filters('swpm_membership_level_menu_body_override', '', $action);
+        if (!empty($output)) {
+            //An addon has overriden the body of this page for the given action. So no need to do anything in core.
+            echo $output;
+            echo '</div>';//<!-- end of wrap -->
+            return;
+        }
+        
+        //Switch case for the various different actions handled by the core plugin.
         switch ($action) {
             case 'add':
             case 'edit':
@@ -227,7 +291,8 @@ class SwpmMembershipLevels extends WP_List_Table {
                 $this->show();
                 break;
         }
-        
+
+        echo '</div>';//<!-- end of wrap --> 
     }
     
 }

@@ -162,6 +162,10 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
         $updatedb = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s WHERE member_id=%s", $account_state, $member_id);
         $resultset = $wpdb->query($updatedb);
         swpm_debug_log_subsc("Subscription cancellation received! Member account deactivated. Member ID: " . $member_id, true);
+        
+        $ipn_data['member_id'] = $member_id;
+        do_action('swpm_subscription_payment_cancelled', $ipn_data);//Hook for recurring payment received
+        
     } else {
         swpm_debug_log_subsc("No member found for the given subscriber ID: " . $subscr_id, false);
         return;
@@ -184,6 +188,9 @@ function swpm_update_member_subscription_start_date_if_applicable($ipn_data) {
         $current_primary_level = $query_db->membership_level;
         swpm_debug_log_subsc("Found a record in the member table. The Member ID of the account to check is: " . $swpm_id . " Membership Level: " . $current_primary_level, true);
 
+        $ipn_data['member_id'] = $swpm_id;
+        do_action('swpm_recurring_payment_received', $ipn_data);//Hook for recurring payment received
+        
         $subscription_starts = (date("Y-m-d"));
 
         $updatedb = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s,subscription_starts=%s WHERE member_id=%d", $account_state, $subscription_starts, $swpm_id);

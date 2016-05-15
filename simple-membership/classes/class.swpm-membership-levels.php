@@ -203,4 +203,31 @@ class SwpmMembershipLevels extends WP_List_Table {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_category_list.php');
     }
 
+    function handle_main_membership_level_admin_menu(){
+        
+        do_action( 'swpm_membership_level_menu_start' );
+        
+        $level_action = filter_input(INPUT_GET, 'level_action');
+        $action2 = filter_input(INPUT_GET, 'action2');
+        $action = $level_action ? $level_action : ($action2 ? $action2 : "");
+        switch ($action) {
+            case 'add':
+            case 'edit':
+                $this->process_form_request();
+                break;
+            case 'manage':
+                $this->manage();
+                break;
+            case 'category_list':
+                $this->manage_categroy();
+                break;
+            case 'delete':
+                $this->delete();
+            default:
+                $this->show();
+                break;
+        }
+        
+    }
+    
 }

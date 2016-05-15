@@ -489,7 +489,7 @@ class SimpleWpMembership {
 
         add_menu_page(__("WP Membership", 'swpm'), __("WP Membership", 'swpm'), 'manage_options', $menu_parent_slug, array(&$this, "admin_members_menu"), 'dashicons-id');
         add_submenu_page($menu_parent_slug, __("Members", 'swpm'), __('Members', 'swpm'), 'manage_options', 'simple_wp_membership', array(&$this, "admin_members_menu"));
-        add_submenu_page($menu_parent_slug, __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), 'manage_options', 'simple_wp_membership_levels', array(&$this, "admin_membership_levels"));
+        add_submenu_page($menu_parent_slug, __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), 'manage_options', 'simple_wp_membership_levels', array(&$this, "admin_membership_levels_menu"));
         add_submenu_page($menu_parent_slug, __("Settings", 'swpm'), __("Settings", 'swpm'), 'manage_options', 'simple_wp_membership_settings', array(&$this, "admin_settings"));
         add_submenu_page($menu_parent_slug, __("Payments", 'swpm'), __("Payments", 'swpm'), 'manage_options', 'simple_wp_membership_payments', array(&$this, "payments_menu"));
         add_submenu_page($menu_parent_slug, __("Add-ons", 'swpm'), __("Add-ons", 'swpm'), 'manage_options', 'simple_wp_membership_addons', array(&$this, "add_ons_menu"));
@@ -499,35 +499,18 @@ class SimpleWpMembership {
         $this->meta_box();
     }
 
-    public function admin_membership_levels() {
-        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-membership-levels.php');
-        $levels = new SwpmMembershipLevels();
-        $level_action = filter_input(INPUT_GET, 'level_action');
-        $action2 = filter_input(INPUT_GET, 'action2');
-        $action = $level_action ? $level_action : ($action2 ? $action2 : "");
-        switch ($action) {
-            case 'add':
-            case 'edit':
-                $levels->process_form_request();
-                break;
-            case 'manage':
-                $levels->manage();
-                break;
-            case 'category_list':
-                $levels->manage_categroy();
-                break;
-            case 'delete':
-                $levels->delete();
-            default:
-                $levels->show();
-                break;
-        }
-    }
-
+    /* Render the members menu in admin dashboard */
     public function admin_members_menu() {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-members.php');
         $members = new SwpmMembers();
         $members->handle_main_members_admin_menu();
+    }
+    
+    /* Render the membership levels menu in admin dashboard */
+    public function admin_membership_levels_menu() {
+        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-membership-levels.php');
+        $levels = new SwpmMembershipLevels();
+        $levels->handle_main_membership_level_admin_menu();
     }
 
     public function admin_settings() {

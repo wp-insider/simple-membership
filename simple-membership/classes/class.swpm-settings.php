@@ -12,8 +12,6 @@ class SwpmSettings {
     }
 
     public function init_config_hooks() {
-        $page = filter_input(INPUT_GET, 'page');
-//        if($page == 'simple_wp_membership_settings'){
         if (is_admin()) { // for frontend just load settings but dont try to render settings page.
             $tab = filter_input(INPUT_GET, 'tab');
             $tab = empty($tab) ? filter_input(INPUT_POST, 'tab') : $tab;

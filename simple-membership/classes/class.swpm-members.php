@@ -1,6 +1,8 @@
 <?php
 
-include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/common/class.swpm-list-table.php');
+if (!class_exists('WP_List_Table')){
+    require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+}
 
 class SwpmMembers extends WP_List_Table {
 
@@ -374,11 +376,12 @@ class SwpmMembers extends WP_List_Table {
         
         ?>
         <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
-        <h1><?php echo SwpmUtils::_('Simple WP Membership::Members') ?>
+
+        <h1><?php echo SwpmUtils::_('Simple WP Membership::Members') ?><!-- page title -->
             <a href="admin.php?page=simple_wp_membership&member_action=add" class="add-new-h2"><?php echo SwpmUtils::_('Add New'); ?></a>
         </h1>
         
-        <h2 class="nav-tab-wrapper swpm-members-nav-tab-wrapper">
+        <h2 class="nav-tab-wrapper swpm-members-nav-tab-wrapper"><!-- start nav menu tabs -->
             <a class="nav-tab <?php echo ($selected == "") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership"><?php echo SwpmUtils::_('Members') ?></a>
             <a class="nav-tab <?php echo ($selected == "add") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=add"><?php echo SwpmUtils::_('Add Member') ?></a>
             <?php
@@ -394,7 +397,7 @@ class SwpmMembers extends WP_List_Table {
             }
             
             ?>
-        </h2>            
+        </h2><!-- end nav menu tabs -->
         <?php
         
         do_action( 'swpm_members_menu_after_nav_tabs' );
@@ -405,7 +408,7 @@ class SwpmMembers extends WP_List_Table {
         //Allows an addon to completely override the body section of the members admin menu for a given action.
         $output = apply_filters('swpm_members_menu_body_override', '', $action);
         if (!empty($output)) {
-            //An addon has overriden the 
+            //An addon has overriden the body of this page for the given action. So no need to do anything in core.
             echo $output;
             echo '</div>';//<!-- end of wrap -->
             return;

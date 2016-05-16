@@ -123,8 +123,7 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
-
-= TODO 3.2.6 =
+= 3.2.6 =
 - Added Hungarian language translation file. The translation was submitted by Laura Szitar.
 - Improved the members menu navigation menu so the tabs are always visible (even when you go to the add or edit members screen).
 - Added 2 new action hooks (They are triggered when subscription is cancelled and when a recurring payment is received).

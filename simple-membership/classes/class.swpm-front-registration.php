@@ -27,26 +27,34 @@ class SwpmFrontRegistration extends SwpmRegistration {
                 $membership_level = $member->membership_level;
             }
         } else if (!empty($level)) { 
+            //Membership level is specified in the shortcode (level specific registration form).
             $member = SwpmTransfer::$default_fields;
             $membership_level = absint($level);
         }
+        
+        //Check if free membership registration is disalbed on the site
         if (empty($membership_level)) {
             $joinuspage_link = '<a href="' . $joinuspage_url . '">Join us</a>';
-            return '<p>'
-            . SwpmUtils::_('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.')
-            . '</p><p>'
-            . SwpmUtils::_('You will receive a unique link via email after the payment. You will be able to use that link to complete the premium membership registration.')
-            . '</p>';
+            $free_rego_disabled_msg = '<p>';
+            $free_rego_disabled_msg .= SwpmUtils::_('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.');
+            $free_rego_disabled_msg .= '</p><p>';
+            $free_rego_disabled_msg .= SwpmUtils::_('You will receive a unique link via email after the payment. You will be able to use that link to complete the premium membership registration.');
+            $free_rego_disabled_msg .= '</p>';
+            return $free_rego_disabled_msg;
         }
+        
+        //Trigger the filter to override the registration form (the form builder addon uses this filter)
         $form = apply_filters('swpm_registration_form_override', '', $membership_level);
         if (!empty($form)) {
+            //An addon has overridden the registration form. So use that one.
             return $form;
         }
 
+        //Handle the registration form in core plugin
         $mebership_info = SwpmPermission::get_instance($membership_level);
         $membership_level = $mebership_info->get('id');
         if (empty($membership_level)) {
-            return "Membership Level Not Found.";
+            return "Error! Failed to retrieve membership level ID from the membership info object.";
         }
         $level_identifier = md5($membership_level);
         $membership_level_alias = $mebership_info->get('alias');

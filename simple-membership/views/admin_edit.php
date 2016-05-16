@@ -3,7 +3,11 @@
     <input name="action" type="hidden" value="edituser" />
     <?php wp_nonce_field( 'edit-swpmuser', '_wpnonce_edit-swpmuser' ) ?>
     <h3><?php echo  SwpmUtils::_('Edit Member') ?></h3>
-    <p><?php echo  SwpmUtils::_('Edit existing member details.'); ?></p>
+    <p>
+        <?php echo  SwpmUtils::_('Edit existing member details.'); ?>
+        <?php echo  SwpmUtils::_(' You are currenty editing member with member ID: '); ?>
+        <?php echo esc_attr($member_id); ?>
+    </p>
     <table class="form-table">
         <tr class="form-field form-required">
             <th scope="row"><label for="user_name"><?php echo  SwpmUtils::_('Username'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>

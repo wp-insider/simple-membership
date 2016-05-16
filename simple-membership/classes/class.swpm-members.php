@@ -385,6 +385,9 @@ class SwpmMembers extends WP_List_Table {
             <a class="nav-tab <?php echo ($selected == "") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership"><?php echo SwpmUtils::_('Members') ?></a>
             <a class="nav-tab <?php echo ($selected == "add") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=add"><?php echo SwpmUtils::_('Add Member') ?></a>
             <?php
+            if ($selected == 'edit') {//Only show the "edit member" tab when a member profile is being edited from the admin side.
+                echo '<a class="nav-tab nav-tab-active" href="#">Edit Member</a>';
+            }            
             
             //Trigger hooks that allows an extension to add extra nav tabs in the members menu.
             do_action ('swpm_members_menu_nav_tabs', $selected);

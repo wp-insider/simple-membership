@@ -13,6 +13,14 @@ class SwpmFrontRegistration extends SwpmRegistration {
     }
 
     public function regigstration_ui($level) {
+        
+        //Trigger the filter to override the registration form (the form builder addon uses this filter)
+        $form = apply_filters('swpm_registration_form_override', '', $level);//The $level value could be empty also so the code handling the filter need to check for it.
+        if (!empty($form)) {
+            //An addon has overridden the registration form. So use that one.
+            return $form;
+        }
+        
         $settings_configs = SwpmSettings::get_instance();
         $joinuspage_url = $settings_configs->get_value('join-us-page-url');
         $membership_level = '';
@@ -41,13 +49,6 @@ class SwpmFrontRegistration extends SwpmRegistration {
             $free_rego_disabled_msg .= SwpmUtils::_('You will receive a unique link via email after the payment. You will be able to use that link to complete the premium membership registration.');
             $free_rego_disabled_msg .= '</p>';
             return $free_rego_disabled_msg;
-        }
-        
-        //Trigger the filter to override the registration form (the form builder addon uses this filter)
-        $form = apply_filters('swpm_registration_form_override', '', $membership_level);
-        if (!empty($form)) {
-            //An addon has overridden the registration form. So use that one.
-            return $form;
         }
 
         //Handle the registration form in core plugin

@@ -13,11 +13,6 @@ class SwpmFrontRegistration extends SwpmRegistration {
     }
 
     public function regigstration_ui($level) {
-        $form = apply_filters('swpm_registration_form_override', '', $level);
-        if (!empty($form)) {
-            return $form;
-        }
-
         $settings_configs = SwpmSettings::get_instance();
         $joinuspage_url = $settings_configs->get_value('join-us-page-url');
         $membership_level = '';
@@ -31,20 +26,22 @@ class SwpmFrontRegistration extends SwpmRegistration {
             } else {
                 $membership_level = $member->membership_level;
             }
-        } else if (!empty($level)) {
+        } else if (!empty($level)) { 
             $member = SwpmTransfer::$default_fields;
             $membership_level = absint($level);
         }
         if (empty($membership_level)) {
             $joinuspage_link = '<a href="' . $joinuspage_url . '">Join us</a>';
-            echo '<p>';
-            SwpmUtils::e('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.');
-            echo '</p><p>';
-            SwpmUtils::e('You will receive a unique link via email after the payment. You will be able to use that link to complete the premium membership registration.');
-            echo '</p>';
-            return;
+            return '<p>'
+            . SwpmUtils::_('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.')
+            . '</p><p>'
+            . SwpmUtils::_('You will receive a unique link via email after the payment. You will be able to use that link to complete the premium membership registration.')
+            . '</p>';
         }
-
+        $form = apply_filters('swpm_registration_form_override', '', $membership_level);
+        if (!empty($form)) {
+            return $form;
+        }
 
         $mebership_info = SwpmPermission::get_instance($membership_level);
         $membership_level = $mebership_info->get('id');

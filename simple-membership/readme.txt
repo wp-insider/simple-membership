@@ -548,7 +548,7 @@ http://wordpress.org/plugins/simple-membership-after-login-redirection/
 - First commit to WordPress repository.
 
 == Upgrade Notice ==
-If you are using the form builder adddon, then that addon will need to be upgraded to v1.1 also.
+If you are using the form builder addon, then that addon will need to be upgraded to v1.1 also.
 
 == Arbitrary section ==
 None

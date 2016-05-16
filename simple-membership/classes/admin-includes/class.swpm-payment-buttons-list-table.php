@@ -1,6 +1,8 @@
 <?php
 
-include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/common/class.swpm-list-table.php');
+if (!class_exists('WP_List_Table')){
+    require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+}
 
 class SwpmPaymentButtonsListTable extends WP_List_Table {
 

@@ -123,6 +123,10 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO 3.2.7 =
+- Added a "user profile delete" option in the admin profile edit interface of the plugin. Admins can use it to delete a user record while in the member edit interface.
+
 = 3.2.6 =
 - Added Hungarian language translation file. The translation was submitted by Laura Szitar.
 - Improved the members menu navigation menu so the tabs are always visible (even when you go to the add or edit members screen).

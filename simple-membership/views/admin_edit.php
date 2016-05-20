@@ -68,9 +68,15 @@
         
     </table>
     
-    <?php include('admin_member_form_common_js.php');?>
-    <?php echo  apply_filters('swpm_admin_custom_fields', '',$membership_level);?>
+    <?php include('admin_member_form_common_js.php'); ?>
+    <?php echo apply_filters('swpm_admin_custom_fields', '',$membership_level); ?>
     <?php submit_button( SwpmUtils::_('Edit User '), 'primary', 'editswpmuser', true, array( 'id' => 'createswpmusersub' ) ); ?>
+    <?php
+    $member_delete_url = "?page=simple_wp_membership&member_action=delete&member_id=".$member_id;
+    echo '<div class="swpm-admin-delete-user-profile-link">';
+    echo '<a style="color:red;font-weight:bold;" href="'.$member_delete_url.'" onclick="return confirm(\'Are you sure you want to delete this user profile?\')">'.SwpmUtils::_('Delete User Profile').'</a>';
+    echo '</div>';
+    ?>
 </form>
 </div>
 <script>

@@ -103,6 +103,7 @@ The following language translations are already available:
 * Hebrew
 * Catalan
 * Hungarian
+* Bosnian (Bosnia and Herzegovina)
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -126,6 +127,7 @@ https://simple-membership-plugin.com/
 
 = TODO 3.2.7 =
 - Added a "user profile delete" option in the admin profile edit interface of the plugin. Admins can use it to delete a user record while in the member edit interface.
+- Added Bosnian language translation file. The translation was submitted by Rejhan Puskar.
 
 = 3.2.6 =
 - Added Hungarian language translation file. The translation was submitted by Laura Szitar.

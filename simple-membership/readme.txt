@@ -128,6 +128,7 @@ https://simple-membership-plugin.com/
 = TODO 3.2.7 =
 - Added a "user profile delete" option in the admin profile edit interface of the plugin. Admins can use it to delete a user record while in the member edit interface.
 - Added Bosnian language translation file. The translation was submitted by Rejhan Puskar.
+- Updated the Japanese language file.
 
 = 3.2.6 =
 - Added Hungarian language translation file. The translation was submitted by Laura Szitar.

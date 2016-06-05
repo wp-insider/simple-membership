@@ -130,6 +130,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             );
             array_push($addons_data, $addon_15);
             
+            $addon_16 = array(
+                'name' => 'Member Data Exporter',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-data-exporter-addon.png',
+                'description' => 'Allows you to export all the members profile data and payments data to a CSV file.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-member-data-exporter-addon/',
+            );
+            array_push($addons_data, $addon_16);
+            
             
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {

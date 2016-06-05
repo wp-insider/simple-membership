@@ -37,19 +37,27 @@ abstract class SwpmRegistration {
         
         $email = sanitize_email(filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW));
         
+        //Send notification email to the member
         wp_mail(trim($email), $subject, $body, $headers);
         SwpmLog::log_simple_debug('Member notification email sent to: '.$email, true);
         
         if ($settings->get_value('enable-admin-notification-after-reg')) {
-            $to_email_address = $settings->get_value('admin-notification-email');
+            //Send notification email to the site admin
+            $admin_notification = $settings->get_value('admin-notification-email');
+            $admin_notification = empty($admin_notification) ? $from_address : $admin_notification;
+            $notify_emails_array = explode(",", $admin_notification);
+
             $headers = 'From: ' . $from_address . "\r\n";
             $subject = "Notification of New Member Registration";
             $body = "A new member has registered. The following email was sent to the member." .
                     "\n\n-------Member Email----------\n" . $body .
                     "\n\n------End------\n";
-            $admin_notification = empty($to_email_address) ? $from_address : $to_email_address;
-            wp_mail(trim($admin_notification), $subject, $body, $headers);
-            SwpmLog::log_simple_debug('Admin notification email sent to: '.$admin_notification, true);
+            
+            foreach ($notify_emails_array as $to_email){
+                $to_email = trim($to_email);
+                wp_mail($to_email, $subject, $body, $headers);
+                SwpmLog::log_simple_debug('Admin notification email sent to: '.$to_email, true);
+            }
         }
         return true;
     }

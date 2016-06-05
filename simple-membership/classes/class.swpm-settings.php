@@ -121,12 +121,16 @@ class SwpmSettings {
         add_settings_field('email-misc-from', SwpmUtils::_('From Email Address'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-misc-settings', array('item' => 'email-from',
             'message' => 'This value will be used as the sender\'s address for the emails. Example value: Your Name &lt;sales@your-domain.com&gt;'));
 
+        //Prompt to complete registration email settings
         add_settings_section('reg-prompt-email-settings', SwpmUtils::_('Email Settings (Prompt to Complete Registration )'), array(&$this, 'reg_prompt_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('reg-prompt-complete-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-prompt-email-settings', array('item' => 'reg-prompt-complete-mail-subject',
             'message' => ''));
         add_settings_field('reg-prompt-complete-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'reg-prompt-email-settings', array('item' => 'reg-prompt-complete-mail-body',
             'message' => ''));
 
+        //Registration complete email settings
+        $msg_for_admin_notify_email_field = SwpmUtils::_('Enter the email address where you want the admin notification email to be sent to.');
+        $msg_for_admin_notify_email_field .= SwpmUtils::_(' You can put multiple email addresses separated by comma (,) in the above field to send the notification to multiple email addresses.');
         add_settings_section('reg-email-settings', SwpmUtils::_('Email Settings (Registration Complete)'), array(&$this, 'reg_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('reg-complete-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-subject',
             'message' => ''));
@@ -135,19 +139,21 @@ class SwpmSettings {
         add_settings_field('enable-admin-notification-after-reg', SwpmUtils::_('Send Notification to Admin'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'enable-admin-notification-after-reg',
             'message' => SwpmUtils::_('Enable this option if you want the admin to receive a notification when a member registers.')));
         add_settings_field('admin-notification-email', SwpmUtils::_('Admin Email Address'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'admin-notification-email',
-            'message' => SwpmUtils::_('Enter the email address where you want the admin notification email to be sent to.')));
+            'message' => $msg_for_admin_notify_email_field));
         add_settings_field('enable-notification-after-manual-user-add', SwpmUtils::_('Send Email to Member When Added via Admin Dashboard'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'enable-notification-after-manual-user-add',
             'message' => ''));
 
+        //Password reset email settings
         add_settings_section('reset-password-settings', SwpmUtils::_('Email Settings (Password Reset)'), array(&$this, 'reset_password_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('reset-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reset-password-settings', array('item' => 'reset-mail-subject', 'message' => ''));
         add_settings_field('reset-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'reset-password-settings', array('item' => 'reset-mail-body', 'message' => ''));
 
-
+        //Account upgrade email settings
         add_settings_section('upgrade-email-settings', SwpmUtils::_(' Email Settings (Account Upgrade Notification)'), array(&$this, 'upgrade_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('upgrade-complete-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'upgrade-complete-mail-subject', 'message' => ''));
         add_settings_field('upgrade-complete-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'upgrade-complete-mail-body', 'message' => ''));
 
+        //Bulk account activate and notify email settings.
         add_settings_section('bulk-activate-email-settings', SwpmUtils::_(' Email Settings (Bulk Account Activate Notification)'), array(&$this, 'bulk_activate_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('bulk-activate-notify-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'bulk-activate-email-settings', array('item' => 'bulk-activate-notify-mail-subject', 'message' => ''));
         add_settings_field('bulk-activate-notify-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'bulk-activate-email-settings', array('item' => 'bulk-activate-notify-mail-body', 'message' => ''));
@@ -368,7 +374,7 @@ class SwpmSettings {
         $output['reg-prompt-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-prompt-complete-mail-body']));
         $output['email-from'] = trim($input['email-from']);
         $output['enable-admin-notification-after-reg'] = isset($input['enable-admin-notification-after-reg']) ? esc_attr($input['enable-admin-notification-after-reg']) : "";
-        $output['admin-notification-email'] = sanitize_email($input['admin-notification-email']);
+        $output['admin-notification-email'] = sanitize_text_field($input['admin-notification-email']);
         $output['enable-notification-after-manual-user-add'] = isset($input['enable-notification-after-manual-user-add']) ? esc_attr($input['enable-notification-after-manual-user-add']) : "";
 
         return $output;

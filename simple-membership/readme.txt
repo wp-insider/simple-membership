@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
 Requires at least: 3.3
 Tested up to: 4.5
-Stable tag: 3.2.6
+Stable tag: 3.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,7 +125,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.2.7 =
+= 3.2.7 =
+- Added a new option in the plugin settings so you can specify other WP user role (example: editor) to be able to use/see the plugin's admin interface.
 - Added a "user profile delete" option in the admin profile edit interface of the plugin. Admins can use it to delete a user record while in the member edit interface.
 - Added a new option so the member registration complete email notification can be sent to multiple site admins.
 - Added Bosnian language translation file. The translation was submitted by Rejhan Puskar.

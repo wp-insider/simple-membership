@@ -284,6 +284,9 @@ abstract class SwpmUtils {
     }
 
     public static function is_admin() {
+        //This function returns true if the current user has admin management permission.
+        //This function is NOT like the WordPress's is_admin() function which determins if we are on the admin end of the site.
+        //TODO - rename this function to something like is_admin_user()
         return current_user_can('manage_options');
     }
 

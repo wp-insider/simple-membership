@@ -23,7 +23,8 @@ class SwpmInitTimeTasks {
         //Crete the custom post types
         $this->create_post_type();
 
-        if (current_user_can('manage_options')) { // Admin stuff
+        if (current_user_can(SWPM_MANAGEMENT_PERMISSION)) { 
+            // Admin dashboard stuff
             $this->admin_init();
         }
 

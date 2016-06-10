@@ -19,7 +19,7 @@ class SwpmProtection extends SwpmProtectionBase {
     public function is_protected($id) {
         if ($this->post_in_parent_categories($id) || $this->post_in_categories($id)) {
             $this->msg = '<p style="background: #FFF6D5; border: 1px solid #D1B655; color: #3F2502; margin: 10px 0px 10px 0px; padding: 5px 5px 5px 10px;">
-                    The category or parent category of this post is protected. You can change the category protection settings from the <a href="admin.php?page=eMember_membership_level_menu&level_action=2" target="_blank">manage content protection</a> menu.
+                    The category or parent category of this post is protected. You can change the category protection settings from the <a href="admin.php?page=simple_wp_membership_levels&level_action=category_list" target="_blank">category protection</a> menu.
                     </p>';
             return true;
         }

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Simple WordPress Membership
-Version: 3.2.6
+Version: 3.2.7
 Plugin URI: https://simple-membership-plugin.com/
 Author: smp7, wp.insider
 Author URI: https://simple-membership-plugin.com/
@@ -17,7 +17,7 @@ include_once('classes/class.simple-wp-membership.php');
 include_once('classes/class.swpm-cronjob.php');
 include_once('swpm-compat.php');
 
-define('SIMPLE_WP_MEMBERSHIP_VER', '3.2.6');
+define('SIMPLE_WP_MEMBERSHIP_VER', '3.2.7');
 define('SIMPLE_WP_MEMBERSHIP_DB_VER', '1.2');
 define('SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url());
 define('SIMPLE_WP_MEMBERSHIP_PATH', dirname(__FILE__) . '/');
@@ -29,6 +29,15 @@ if (!defined('COOKIEHASH')) {
 }
 define('SIMPLE_WP_MEMBERSHIP_AUTH', 'simple_wp_membership_' . COOKIEHASH);
 define('SIMPLE_WP_MEMBERSHIP_SEC_AUTH', 'simple_wp_membership_sec_' . COOKIEHASH);
+
+//Management role/permission setup
+$admin_dashboard_permission = SwpmSettings::get_instance()->get_value('admin-dashboard-access-permission');
+if (empty($admin_dashboard_permission)) {
+    //By default only admins can manage/see admin dashboard
+    define("SWPM_MANAGEMENT_PERMISSION", "manage_options");
+} else {
+    define("SWPM_MANAGEMENT_PERMISSION", $admin_dashboard_permission);
+}
 
 register_activation_hook(SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::activate');
 register_deactivation_hook(SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::deactivate');

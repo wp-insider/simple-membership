@@ -335,7 +335,7 @@ class SimpleWpMembership {
 
     public function show_old_custom_box() {
         echo '<div class="dbx-b-ox-wrapper">' . "\n";
-        echo '<fieldset id="eMember_fieldsetid" class="dbx-box">' . "\n";
+        echo '<fieldset id="swpm_fieldsetid" class="dbx-box">' . "\n";
         echo '<div class="dbx-h-andle-wrapper"><h3 class="dbx-handle">' .
         __('Simple Membership Protection options', 'swpm') . "</h3></div>";
         echo '<div class="dbx-c-ontent-wrapper"><div class="dbx-content">';
@@ -487,12 +487,12 @@ class SimpleWpMembership {
     public function menu() {
         $menu_parent_slug = 'simple_wp_membership';
 
-        add_menu_page(__("WP Membership", 'swpm'), __("WP Membership", 'swpm'), 'manage_options', $menu_parent_slug, array(&$this, "admin_members_menu"), 'dashicons-id');
-        add_submenu_page($menu_parent_slug, __("Members", 'swpm'), __('Members', 'swpm'), 'manage_options', 'simple_wp_membership', array(&$this, "admin_members_menu"));
-        add_submenu_page($menu_parent_slug, __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), 'manage_options', 'simple_wp_membership_levels', array(&$this, "admin_membership_levels_menu"));
-        add_submenu_page($menu_parent_slug, __("Settings", 'swpm'), __("Settings", 'swpm'), 'manage_options', 'simple_wp_membership_settings', array(&$this, "admin_settings_menu"));
-        add_submenu_page($menu_parent_slug, __("Payments", 'swpm'), __("Payments", 'swpm'), 'manage_options', 'simple_wp_membership_payments', array(&$this, "admin_payments_menu"));
-        add_submenu_page($menu_parent_slug, __("Add-ons", 'swpm'), __("Add-ons", 'swpm'), 'manage_options', 'simple_wp_membership_addons', array(&$this, "admin_add_ons_menu"));
+        add_menu_page(__("WP Membership", 'swpm'), __("WP Membership", 'swpm'), SWPM_MANAGEMENT_PERMISSION, $menu_parent_slug, array(&$this, "admin_members_menu"), 'dashicons-id');
+        add_submenu_page($menu_parent_slug, __("Members", 'swpm'), __('Members', 'swpm'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership', array(&$this, "admin_members_menu"));
+        add_submenu_page($menu_parent_slug, __("Membership Levels", 'swpm'), __("Membership Levels", 'swpm'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_levels', array(&$this, "admin_membership_levels_menu"));
+        add_submenu_page($menu_parent_slug, __("Settings", 'swpm'), __("Settings", 'swpm'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_settings', array(&$this, "admin_settings_menu"));
+        add_submenu_page($menu_parent_slug, __("Payments", 'swpm'), __("Payments", 'swpm'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_payments', array(&$this, "admin_payments_menu"));
+        add_submenu_page($menu_parent_slug, __("Add-ons", 'swpm'), __("Add-ons", 'swpm'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_addons', array(&$this, "admin_add_ons_menu"));
 
         do_action('swpm_after_main_admin_menu', $menu_parent_slug);
 

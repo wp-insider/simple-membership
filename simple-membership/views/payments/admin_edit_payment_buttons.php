@@ -7,10 +7,8 @@ include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_p
 do_action('swpm_edit_payment_button_process_submission'); //Addons can use this hook to save the data after the form submit.
 ?>
 
-<div style="background: #DDDDDD;border: 1px solid #CCCCCC;color: #383838;margin: 10px 0;padding: 5px 5px 5px 10px;text-shadow: 1px 1px #FFFFFF;">
-    <p>
-        <?php echo SwpmUtils::_('You can edit a payment button using this interface.'); ?>
-    </p>
+<div class="swpm-grey-box">
+    <?php echo SwpmUtils::_('You can edit a payment button using this interface.'); ?>
 </div>
 
 <?php

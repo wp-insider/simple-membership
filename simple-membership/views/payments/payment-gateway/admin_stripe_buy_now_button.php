@@ -1,22 +1,22 @@
 <?php
 /* * ***************************************************************
- * Render the new PayPal Buy now payment button creation interface
+ * Render the new Stripe Buy Now payment button creation interface
  * ************************************************************** */
-add_action('swpm_create_new_button_for_pp_buy_now', 'swpm_create_new_pp_buy_now_button');
+add_action('swpm_create_new_button_for_stripe_buy_now', 'swpm_create_new_stripe_buy_now_button');
 
-function swpm_create_new_pp_buy_now_button() {
+function swpm_create_new_stripe_buy_now_button() {
     ?>
 
     <div class="swpm-orange-box">
-        View the <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-buy-now-button-inside-the-simple-membership-plugin/">documentation</a>&nbsp;
-        to learn how to create a PayPal Buy Now payment button and use it.
+        View the <a target="_blank" href="https://simple-membership-plugin.com/create-stripe-buy-now-button-for-membership-payment/">documentation</a> 
+        to learn how to create a Stripe Buy Now payment button and use it.
     </div>
 
     <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now Button Configuration'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Stripe Buy Now Button Configuration'); ?></label></h3>
         <div class="inside">
 
-            <form id="pp_button_config_form" method="post">
+            <form id="stripe_button_config_form" method="post">
                 <input type="hidden" name="button_type" value="<?php echo sanitize_text_field($_REQUEST['button_type']); ?>">
                 <input type="hidden" name="swpm_button_type_selected" value="1">
 
@@ -96,10 +96,10 @@ function swpm_create_new_pp_buy_now_button() {
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('PayPal Email'); ?></th>
+                        <th scope="row"><?php echo SwpmUtils::_('Stripe Email'); ?></th>
                         <td>
                             <input type="text" size="50" name="paypal_email" value="" required />
-                            <p class="description">Enter your PayPal email address. The payment will go to this PayPal account.</p>
+                            <p class="description">Enter your Stripe email address. The payment will go to this Stripe account.</p>
                         </td>
                     </tr>                    
 
@@ -114,7 +114,7 @@ function swpm_create_new_pp_buy_now_button() {
                 </table>
 
                 <p class="submit">
-                    <input type="submit" name="swpm_pp_buy_now_save_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
+                    <input type="submit" name="swpm_stripe_buy_now_save_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
                 </p>
 
             </form>
@@ -125,13 +125,13 @@ function swpm_create_new_pp_buy_now_button() {
 }
 
 /*
- * Process submission and save the new PayPal Buy now payment button data
+ * Process submission and save the new Stripe Buy now payment button data
  */
-add_action('swpm_create_new_button_process_submission', 'swpm_save_new_pp_buy_now_button_data');
+add_action('swpm_create_new_button_process_submission', 'swpm_save_new_stripe_buy_now_button_data');
 
-function swpm_save_new_pp_buy_now_button_data() {
-    if (isset($_REQUEST['swpm_pp_buy_now_save_submit'])) {
-        //This is a PayPal buy now button save event. Process the submission.
+function swpm_save_new_stripe_buy_now_button_data() {
+    if (isset($_REQUEST['swpm_stripe_buy_now_save_submit'])) {
+        //This is a Stripe buy now button save event. Process the submission.
         //TODO - Do some extra validation check?
         
         //Save the button data
@@ -162,16 +162,16 @@ function swpm_save_new_pp_buy_now_button_data() {
 }
 
 /* * **********************************************************************
- * End of new PayPal Buy now payment button stuff
+ * End of new Stripe Buy now payment button stuff
  * ********************************************************************** */
 
 
 /* * ***************************************************************
- * Render edit PayPal Buy now payment button interface
+ * Render edit Stripe Buy now payment button interface
  * ************************************************************** */
-add_action('swpm_edit_payment_button_for_pp_buy_now', 'swpm_edit_pp_buy_now_button');
+add_action('swpm_edit_payment_button_for_stripe_buy_now', 'swpm_edit_stripe_buy_now_button');
 
-function swpm_edit_pp_buy_now_button() {
+function swpm_edit_stripe_buy_now_button() {
 
     //Retrieve the payment button data and present it for editing.    
 
@@ -188,10 +188,10 @@ function swpm_edit_pp_buy_now_button() {
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
     ?>
     <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now Button Configuration'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Stripe Buy Now Button Configuration'); ?></label></h3>
         <div class="inside">
 
-            <form id="pp_button_config_form" method="post">
+            <form id="stripe_button_config_form" method="post">
                 <input type="hidden" name="button_type" value="<?php echo $button_type; ?>">
 
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
@@ -278,10 +278,10 @@ function swpm_edit_pp_buy_now_button() {
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('PayPal Email'); ?></th>
+                        <th scope="row"><?php echo SwpmUtils::_('Stripe Email'); ?></th>
                         <td>
                             <input type="text" size="50" name="paypal_email" value="<?php echo $paypal_email; ?>" required />
-                            <p class="description">Enter your PayPal email address. The payment will go to this PayPal account.</p>
+                            <p class="description">Enter your Stripe email address. The payment will go to this Stripe account.</p>
                         </td>
                     </tr>                    
 
@@ -296,7 +296,7 @@ function swpm_edit_pp_buy_now_button() {
                 </table>
 
                 <p class="submit">
-                    <input type="submit" name="swpm_pp_buy_now_edit_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
+                    <input type="submit" name="swpm_stripe_buy_now_edit_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
                 </p>
 
             </form>
@@ -307,13 +307,13 @@ function swpm_edit_pp_buy_now_button() {
 }
 
 /*
- * Process submission and save the edited PayPal Buy now payment button data
+ * Process submission and save the edited Stripe Buy now payment button data
  */
-add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_pp_buy_now_button_data');
+add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_stripe_buy_now_button_data');
 
-function swpm_edit_pp_buy_now_button_data() {
-    if (isset($_REQUEST['swpm_pp_buy_now_edit_submit'])) {
-        //This is a PayPal buy now button edit event. Process the submission.
+function swpm_edit_stripe_buy_now_button_data() {
+    if (isset($_REQUEST['swpm_stripe_buy_now_edit_submit'])) {
+        //This is a Stripe buy now button edit event. Process the submission.
         //TODO - Do some extra  validation check?
         
         //Update and Save the edited payment button data
@@ -341,5 +341,5 @@ function swpm_edit_pp_buy_now_button_data() {
 }
 
 /************************************************************************
- * End of edit PayPal Buy now payment button stuff
+ * End of edit Stripe Buy now payment button stuff
  ************************************************************************/

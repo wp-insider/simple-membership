@@ -22,10 +22,11 @@ class SwpmShortcodesHandler {
         }
 
         $button_id = $id;
-        $button = get_post($button_id); //Retrieve the CPT for this button
+        //$button = get_post($button_id); //Retrieve the CPT for this button
         $button_type = get_post_meta($button_id, 'button_type', true);
 
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_button_shortcode_view.php');
+        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_button_shortcode_view.php');
 
         $button_code = '';
         $button_code = apply_filters('swpm_payment_button_shortcode_for_' . $button_type, $button_code, $args);

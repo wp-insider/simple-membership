@@ -36,7 +36,21 @@ class SwpmAuth {
         $swpm_password = empty($pass) ? filter_input(INPUT_POST, 'swpm_password') : $pass;
         $swpm_user_name = empty($user) ? apply_filters('swpm_user_name', filter_input(INPUT_POST, 'swpm_user_name')) : $user;
                 
-        if (!empty($swpm_user_name) && !empty($swpm_password)) {            
+        if (!empty($swpm_user_name) && !empty($swpm_password)) {
+            //SWPM member login request.
+            
+            //First, lets make sure this user is not already logged into the site as an "Admin" user. We don't want to override that admin login session.
+            if (current_user_can('administrator')) {
+                //This user is logged in as ADMIN then trying to do another login as a member. Stop the login request processing (we don't want to override your admin login session).
+                $error_msg = '';
+                $error_msg .= '<p>'.SwpmUtils::_('Error! Simple Membership plugin cannot process this login request.').'</p>';
+                $error_msg .= '<p>'.SwpmUtils::_('You are logged into the site as an ADMIN user in this browser. First, logout from WP Admin then you will be able to log in as a member.').'</p>';
+                $error_msg .= '<p>'.SwpmUtils::_('Alternatively, you can use a different browser (where you are not logged-in as ADMIN) to test the membership login.').'</p>';
+                $error_msg .= '<p>'.SwpmUtils::_('Your normal visitors or members will never see this message. This message is ONLY for ADMIN user.').'</p>';
+                wp_die($error_msg);
+            }
+            
+            //Lets process the request. Check username and password
             $user = sanitize_user($swpm_user_name);
             $pass = trim($swpm_password);
             SwpmLog::log_auth_debug("Authenticate request - Username: " . $swpm_user_name, true);

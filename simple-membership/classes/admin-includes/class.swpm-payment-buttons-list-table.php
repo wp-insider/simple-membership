@@ -31,6 +31,10 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
             case 'membership_level':
                 return get_post_meta($item['ID'], 'membership_level_id', true);
                 break;
+            case 'button_type':
+                $button_type = get_post_meta($item['ID'], 'button_type', true);
+                return $button_type;
+                break;
             case 'button_shortcode':
                 $level_id = get_post_meta($item['ID'], 'membership_level_id', true);
                 if(!SwpmUtils::membership_level_id_exists($level_id)){
@@ -71,6 +75,7 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
             'ID' => SwpmUtils::_('Payment Button ID'),
             'title' => SwpmUtils::_('Payment Button Title'),
             'membership_level' => SwpmUtils::_('Membership Level ID'),
+            'button_type' => SwpmUtils::_('Button Type'),
             'button_shortcode' => SwpmUtils::_('Button Shortcode'),
         );
         return $columns;

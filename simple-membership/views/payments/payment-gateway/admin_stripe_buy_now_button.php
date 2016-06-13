@@ -131,7 +131,7 @@ function swpm_create_new_stripe_buy_now_button() {
                             <input type="text" size="50" name="stripe_live_publishable_key" value="" required />
                             <p class="description">Enter your Stripe live publishable key.</p>
                         </td>
-                    </tr>                    
+                    </tr>
                     
                     <tr valign="top">
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional.'); ?></div></th>
@@ -230,9 +230,15 @@ function swpm_edit_stripe_buy_now_button() {
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
     $payment_amount = get_post_meta($button_id, 'payment_amount', true);
     $payment_currency = get_post_meta($button_id, 'payment_currency', true);
+    
+    $stripe_test_secret_key = get_post_meta($button_id, 'stripe_test_secret_key', true);
+    $stripe_test_publishable_key = get_post_meta($button_id, 'stripe_test_publishable_key', true);
+    $stripe_live_secret_key = get_post_meta($button_id, 'stripe_live_secret_key', true);
+    $stripe_live_publishable_key = get_post_meta($button_id, 'stripe_live_publishable_key', true);
+    
     $return_url = get_post_meta($button_id, 'return_url', true);
-    $paypal_email = get_post_meta($button_id, 'paypal_email', true);
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
+    
     ?>
     <div class="postbox">
         <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Stripe Buy Now Button Configuration'); ?></label></h3>
@@ -250,7 +256,6 @@ function swpm_edit_stripe_buy_now_button() {
                             <p class="description">This is the ID of this payment button. It is automatically generated for you and it cannot be changed.</p>
                         </td>
                     </tr>
-
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Button Title'); ?></th>
                         <td>
@@ -258,7 +263,6 @@ function swpm_edit_stripe_buy_now_button() {
                             <p class="description">Give this membership payment button a name. Example: Gold membership payment</p>
                         </td>
                     </tr>
-
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Membership Level'); ?></th>
                         <td>
@@ -268,7 +272,6 @@ function swpm_edit_stripe_buy_now_button() {
                             <p class="description">Select the membership level this payment button is for.</p>
                         </td>
                     </tr>
-
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Payment Amount'); ?></th>
                         <td>
@@ -276,7 +279,6 @@ function swpm_edit_stripe_buy_now_button() {
                             <p class="description">Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).</p>
                         </td>
                     </tr>
-
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Payment Currency'); ?></th>
                         <td>                            
@@ -317,21 +319,49 @@ function swpm_edit_stripe_buy_now_button() {
                     </tr>
 
                     <tr valign="top">
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Stripe API keys. You can get this from your Stripe account.'); ?></div></th>
+                    </tr>
+                    
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Test Secret Key'); ?></th>
+                        <td>
+                            <input type="text" size="50" name="stripe_test_secret_key" value="<?php echo $stripe_test_secret_key; ?>" required />
+                            <p class="description">Enter your Stripe test secret key.</p>
+                        </td>
+                    </tr>                    
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Test Publishable Key'); ?></th>
+                        <td>
+                            <input type="text" size="50" name="stripe_test_publishable_key" value="<?php echo $stripe_test_publishable_key; ?>" required />
+                            <p class="description">Enter your Stripe test publishable key.</p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Live Secret Key'); ?></th>
+                        <td>
+                            <input type="text" size="50" name="stripe_live_secret_key" value="<?php echo $stripe_live_secret_key; ?>" required />
+                            <p class="description">Enter your Stripe live secret key.</p>
+                        </td>
+                    </tr>                    
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Live Publishable Key'); ?></th>
+                        <td>
+                            <input type="text" size="50" name="stripe_live_publishable_key" value="<?php echo $stripe_live_publishable_key; ?>" required />
+                            <p class="description">Enter your Stripe live publishable key.</p>
+                        </td>
+                    </tr>
+                    
+                    <tr valign="top">
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional.'); ?></div></th>
+                    </tr>
+                    
+                    <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Return URL'); ?></th>
                         <td>
                             <input type="text" size="100" name="return_url" value="<?php echo $return_url; ?>" />
                             <p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
                         </td>
                     </tr>
-
-                    <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Stripe Email'); ?></th>
-                        <td>
-                            <input type="text" size="50" name="paypal_email" value="<?php echo $paypal_email; ?>" required />
-                            <p class="description">Enter your Stripe email address. The payment will go to this Stripe account.</p>
-                        </td>
-                    </tr>                    
-
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Button Image URL'); ?></th>
                         <td>
@@ -361,7 +391,7 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_stripe_buy_
 function swpm_edit_stripe_buy_now_button_data() {
     if (isset($_REQUEST['swpm_stripe_buy_now_edit_submit'])) {
         //This is a Stripe buy now button edit event. Process the submission.
-        //TODO - Do some extra  validation check?
+        //TODO - Do some extra  validation check if required
         
         //Update and Save the edited payment button data
         $button_id = sanitize_text_field($_REQUEST['button_id']);
@@ -379,8 +409,13 @@ function swpm_edit_stripe_buy_now_button_data() {
         update_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
         update_post_meta($button_id, 'payment_amount', trim(sanitize_text_field($_REQUEST['payment_amount'])));
         update_post_meta($button_id, 'payment_currency', sanitize_text_field($_REQUEST['payment_currency']));
+        
+        update_post_meta($button_id, 'stripe_test_secret_key', trim(sanitize_text_field($_REQUEST['stripe_test_secret_key'])));
+        update_post_meta($button_id, 'stripe_test_publishable_key', trim(sanitize_text_field($_REQUEST['stripe_test_publishable_key'])));
+        update_post_meta($button_id, 'stripe_live_secret_key', trim(sanitize_text_field($_REQUEST['stripe_live_secret_key'])));
+        update_post_meta($button_id, 'stripe_live_publishable_key', trim(sanitize_text_field($_REQUEST['stripe_live_publishable_key'])));
+        
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
-        update_post_meta($button_id, 'paypal_email', trim(sanitize_email($_REQUEST['paypal_email'])));
         update_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
 
         echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';

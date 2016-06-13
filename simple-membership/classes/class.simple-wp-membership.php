@@ -55,7 +55,7 @@ class SimpleWpMembership {
 
         add_action('wp_head', array(&$this,'wp_head_callback'));
         add_action('save_post', array(&$this, 'save_postdata'));
-        add_action('admin_notices', array(&$this, 'notices'));
+        add_action('admin_notices', array(&$this, 'do_admin_notices'));
         add_action('wp_enqueue_scripts', array(&$this, 'front_library'));
         add_action('load-toplevel_page_simple_wp_membership', array(&$this, 'admin_library'));
         add_action('load-wp-membership_page_simple_wp_membership_levels', array(&$this, 'admin_library'));
@@ -294,6 +294,7 @@ class SimpleWpMembership {
         return SwpmUtils::_('You are not logged in.');
     }
 
+    /* If any message/notice was set during the execution then this function will output that message */
     public function notices() {
         $message = SwpmTransfer::get_instance()->get('status');
         $succeeded = false;
@@ -321,6 +322,33 @@ class SimpleWpMembership {
         return $succeeded;
     }
 
+    /* 
+     * This function is hooked to WordPress's admin_notices action hook 
+     * It is used to show any plugin specific notices/warnings in the admin interface
+     */
+    public function do_admin_notices(){
+        $this->notices();//Show any execution specific notices in the admin interface.
+        
+        //Show any other general warnings/notices to the admin.
+        if(SwpmMiscUtils::is_swpm_admin_page()){
+            //we are in an admin page for SWPM plugin.
+            
+            $msg = '';
+            //Show notice if running in sandbox mode.
+            $settings = SwpmSettings::get_instance();
+            $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
+            if($sandbox_enabled){
+                $msg .= '<p>'.SwpmUtils::_('You have the sandbox payment mode enabled in plugin settings. Make sure to turn off the sandbox mode when you want to do live transactions.').'</p>';
+            }
+            
+            if(!empty($msg)){//Show warning messages if any.
+                echo '<div id="message" class="error">';
+                echo $msg;
+                echo '</div>';
+            }
+        }
+    }
+    
     public function meta_box() {
         if (function_exists('add_meta_box')) {
             $post_types = get_post_types();

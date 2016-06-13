@@ -125,6 +125,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO - 3.2.8 =
+- Added a notice in the admin interface to notify you when you keep the sandbox payment mode enabled.
+
+
 = 3.2.7 =
 - Added a new option in the plugin settings so you can specify other WP user role (example: editor) to be able to use/see the plugin's admin interface.
 - Added a "user profile delete" option in the admin profile edit interface of the plugin. Admins can use it to delete a user record while in the member edit interface.

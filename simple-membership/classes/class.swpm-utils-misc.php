@@ -256,4 +256,12 @@ class SwpmMiscUtils {
             
         return strpos($url1['query'], $url2['query']) || strpos($url2['query'], $url1['query']);                
     }
+    
+    public static function is_swpm_admin_page(){
+        if (isset($_GET['page']) && (stripos($_GET['page'], 'simple_wp_membership') !== false)) {
+            //This is an admin page of the SWPM plugin
+            return true;
+        } 
+        return false;
+    }
 }

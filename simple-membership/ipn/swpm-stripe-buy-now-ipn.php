@@ -12,14 +12,14 @@ class SwpmStripeBuyNowIpnHandler {
         //SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
         
         //Include the Stripe library.
-        include(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/lib/Stripe.php');
+        include(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
         
         //Read and sanitize the request parameters.
-        $button_id = sanitize_text_feild($_REQUEST['item_number']);
-        $button_title = sanitize_text_feild($_REQUEST['item_name']);
-        $payment_amount = sanitize_text_feild($_REQUEST['item_price']);
+        $button_id = sanitize_text_field($_REQUEST['item_number']);
+        $button_title = sanitize_text_field($_REQUEST['item_name']);
+        $payment_amount = sanitize_text_field($_REQUEST['item_price']);
         $price_in_cents = $payment_amount * 100 ;//The amount (in cents). This value is used in Stripe API.
-        $currency_code = sanitize_text_feild($_REQUEST['currency_code']);
+        $currency_code = sanitize_text_field($_REQUEST['currency_code']);
         
         $stripe_token = sanitize_text_field($_POST['stripeToken']);
         $stripe_token_type = sanitize_text_field($_POST['stripeTokenType']);
@@ -86,6 +86,8 @@ class SwpmStripeBuyNowIpnHandler {
         }
 
         //Everything went ahead smoothly with the charge.
+        SwpmLog::log_simple_debug("Stripe Buy Now charge successful.", true);
+        
         
         //********************************************************************
         //TODO Create the $ipn_data array then call the following function

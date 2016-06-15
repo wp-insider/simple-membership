@@ -17,7 +17,7 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
 
     $settings = SwpmSettings::get_instance();
     $button_cpt = get_post($button_id); //Retrieve the CPT for this button
-
+    
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
     //Verify that this membership level exists (to prevent user paying for a level that has been deleted)
     if(!SwpmUtils::membership_level_id_exists($membership_level_id)){
@@ -111,7 +111,7 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
 
     $settings = SwpmSettings::get_instance();
     $button_cpt = get_post($button_id); //Retrieve the CPT for this button
-
+    
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
     //Verify that this membership level exists (to prevent user paying for a level that has been deleted)
     if(!SwpmUtils::membership_level_id_exists($membership_level_id)){

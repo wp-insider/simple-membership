@@ -146,11 +146,21 @@ class SwpmInitTimeTasks {
     /* PayPal Payment IPN listener */
 
     public function swpm_ipn_listener() {
+        
+        //Listen and handle PayPal IPN
         $swpm_process_ipn = filter_input(INPUT_GET, 'swpm_process_ipn');
         if ($swpm_process_ipn == '1') {
             include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_pp_ipn.php');
             exit;
         }
+        
+        //Listen and handle Stripe Buy Now IPN
+        $swpm_process_stripe_buy_now = filter_input(INPUT_GET, 'swpm_process_stripe_buy_now');
+        if ($swpm_process_stripe_buy_now == '1') {
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-buy-now-ipn.php');
+            exit;
+        }
+        
     }
 
 }

@@ -18,13 +18,20 @@ class SwpmShortcodesHandler {
                         ), $args));
 
         if (empty($id)) {
-            return '<p style="color: red;">Error! You must specify a button ID with this shortcode. Check the usage documentation.</p>';
+            return '<p class="swpm-red-box">Error! You must specify a button ID with this shortcode. Check the usage documentation.</p>';
         }
 
         $button_id = $id;
         //$button = get_post($button_id); //Retrieve the CPT for this button
         $button_type = get_post_meta($button_id, 'button_type', true);
-
+        if(empty($button_type)){
+            $error_msg = '<p class="swpm-red-box">';
+            $error_msg .= 'Error! The button ID ('.$button_id.') you specified in the shortcode does not exist. You may have deleted this payment button. ';
+            $error_msg .= 'Go to the Manage Payment Buttons interface then copy and paste the correct button ID in the shortcode.';
+            $error_msg .= '</p>';
+            return $error_msg;
+        }
+    
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_button_shortcode_view.php');
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_button_shortcode_view.php');
 

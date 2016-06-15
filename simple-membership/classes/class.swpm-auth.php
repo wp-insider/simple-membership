@@ -43,7 +43,7 @@ class SwpmAuth {
             if (current_user_can('administrator')) {
                 //This user is logged in as ADMIN then trying to do another login as a member. Stop the login request processing (we don't want to override your admin login session).
                 $error_msg = '';
-                $error_msg .= '<p>'.SwpmUtils::_('Error! Simple Membership plugin cannot process this login request.').'</p>';
+                $error_msg .= '<p>'.SwpmUtils::_('Warning! Simple Membership plugin cannot process this login request to prevent you from getting logged out of WP Admin accidentally.').'</p>';
                 $error_msg .= '<p>'.SwpmUtils::_('You are logged into the site as an ADMIN user in this browser. First, logout from WP Admin then you will be able to log in as a member.').'</p>';
                 $error_msg .= '<p>'.SwpmUtils::_('Alternatively, you can use a different browser (where you are not logged-in as ADMIN) to test the membership login.').'</p>';
                 $error_msg .= '<p>'.SwpmUtils::_('Your normal visitors or members will never see this message. This message is ONLY for ADMIN user.').'</p>';

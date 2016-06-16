@@ -22,6 +22,8 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
                 if ($query_db) {
                     $swpm_id = $query_db->member_id;
                     swpm_debug_log_subsc("Found a match in the member database using unique reference. Member ID: " . $swpm_id, true);
+                } else {
+                    swpm_debug_log_subsc("Did not find a match for an existing member profile for the given reference. This must me a new payment from a new member.", true);
                 }
             } else {
                 swpm_debug_log_subsc("Unique reference is missing in the notification so we have to assume that this is not a payment for an existing member.", true);
@@ -88,8 +90,8 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         $data['address_street'] = $ipn_data['address_street'];
         $data['address_city'] = $ipn_data['address_city'];
         $data['address_state'] = $ipn_data['address_state'];
-        $data['address_zipcode'] = $ipn_data['address_zip'];
-        $data['country'] = $ipn_data['address_country'];
+        $data['address_zipcode'] = isset($ipn_data['address_zip'])? $ipn_data['address_zip'] : '';
+        $data['country'] = isset($ipn_data['address_country'])? $ipn_data['address_country'] : '';
         $data['member_since'] = $data['subscription_starts'] = $data['last_accessed'] = date("Y-m-d");
         $data['account_state'] = $default_account_status;
         $reg_code = uniqid();

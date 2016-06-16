@@ -24,7 +24,7 @@ class SwpmTransactions {
         $txn_data['txn_date'] = $current_date;
         $txn_data['txn_id'] = $ipn_data['txn_id'];
         $txn_data['subscr_id'] = $ipn_data['subscr_id'];
-        $txn_data['reference'] = $custom_var['reference'];
+        $txn_data['reference'] = isset($custom_var['reference'])? $custom_var['reference'] : '';
         $txn_data['payment_amount'] = $ipn_data['mc_gross'];
         $txn_data['gateway'] = $ipn_data['gateway'];
         $txn_data['status'] = $ipn_data['status'];

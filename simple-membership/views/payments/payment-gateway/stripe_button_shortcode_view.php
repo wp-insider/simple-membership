@@ -97,6 +97,7 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
     $output .= "<input type='hidden' value='{$item_name}' name='item_name' />";
     $output .= "<input type='hidden' value='{$payment_amount}' name='item_price' />";
     $output .= "<input type='hidden' value='{$payment_currency}' name='currency_code' />";
+    $output .= "<input type='hidden' value='{$custom_field_value}' name='custom' />";
     
     //Filter to add additional payment input fields to the form.
     $output .= apply_filters('swpm_stripe_payment_form_additional_fields', '');

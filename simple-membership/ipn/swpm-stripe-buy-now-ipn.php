@@ -1,5 +1,7 @@
 <?php
 
+include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php');
+
 class SwpmStripeBuyNowIpnHandler {
     
     public function __construct() {
@@ -32,6 +34,8 @@ class SwpmStripeBuyNowIpnHandler {
             SwpmLog::log_simple_debug("Fatal Error! Failed to retrieve the payment button post object for the given button ID: ". $button_id, false);
             wp_die("Fatal Error! Payment button (ID: ".$button_id.") does not exist. This request will fail.");
         }
+        
+        $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
         
         //Validate and verify some of the main values.
         $true_payment_amount = get_post_meta($button_id, 'payment_amount', true);
@@ -88,13 +92,54 @@ class SwpmStripeBuyNowIpnHandler {
         //Everything went ahead smoothly with the charge.
         SwpmLog::log_simple_debug("Stripe Buy Now charge successful.", true);
         
+        //Grab the charge ID and set it as the transaction ID.
+        $txn_id = $charge->id;//$charge->balance_transaction;
+        //The charge ID can be used to retrieve the transaction details using hte following call.
+        //\Stripe\Charge::retrieve($charge->id);
+        $custom = sanitize_text_field($_REQUEST['custom']);
+        $custom_var = SwpmTransactions::parse_custom_var($custom);
+        $swpm_id = isset($custom_var['swpm_id'])? $custom_var['swpm_id']: '';
         
-        //********************************************************************
-        //TODO Create the $ipn_data array then call the following function
-        //swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref, $swpm_id = '')
+        //Create the $ipn_data array.
+        $ipn_data = array();
+        $ipn_data['mc_gross'] = $payment_amount;
+        $ipn_data['first_name'] = '';
+        $ipn_data['last_name'] = '';
+        $ipn_data['payer_email'] = $stripe_email;
+        $ipn_data['membership_level'] = $membership_level_id;
+        $ipn_data['txn_id'] = $txn_id;
+        $ipn_data['subscr_id'] = $txn_id;
+        $ipn_data['swpm_id'] = $swpm_id;
+        $ipn_data['ip'] = $custom_var['user_ip'];
+        $ipn_data['custom'] = $custom;
+        $ipn_data['gateway'] = 'stripe';
+        $ipn_data['status'] = 'completed';
         
+        $ipn_data['address_street'] = '';
+        $ipn_data['address_city'] = '';
+        $ipn_data['address_state'] = '';
+        $ipn_data['address_zipcode'] = '';
+        $ipn_data['country'] = '';
+
+        //Handle the membership signup related tasks.
+        swpm_handle_subsc_signup_stand_alone($ipn_data,$membership_level_id,$txn_id,$swpm_id);
+        
+        //Save the transaction record
+        SwpmTransactions::save_txn_record($ipn_data);
+        SwpmLog::log_simple_debug('Transaction data saved.', true);
+        
+        //Trigger the stripe IPN processed action hook (so other plugins can can listen for this event).
+        do_action('swpm_stripe_ipn_processed', $ipn_data);
+        
+        //Redirect the user to the return URL (or to the homepage if a return URL is not specified for this payment button).
+        $return_url = get_post_meta($button_id, 'return_url', true);
+        if (empty($return_url)) {
+            $return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+        }
+        SwpmLog::log_simple_debug("Redirecting customer to: ".$return_url, true);
         SwpmLog::log_simple_debug("End of Stripe Buy Now IPN processing.", true, true);
-        exit;//TODO - remove me with a redirection here.
+        SwpmMiscUtils::redirect_to_url($return_url);
+    
     }
 }
 

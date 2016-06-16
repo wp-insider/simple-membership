@@ -126,9 +126,11 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO - 3.2.8 =
+- [TODO - complete Usage Doc] Added Stripe Buy Now option for membership payment.
 - Added a notice in the admin interface to notify you when you keep the sandbox payment mode enabled.
 - Added a check in the authentication system to stop login request processing if the user is already logged into the site as ADMIN.
 - The payment button shortcode will now check to make sure you entered a valid button ID in the shortcode.
+- Fixed a couple of minor debug notice warnings.
 
 = 3.2.7 =
 - Added a new option in the plugin settings so you can specify other WP user role (example: editor) to be able to use/see the plugin's admin interface.

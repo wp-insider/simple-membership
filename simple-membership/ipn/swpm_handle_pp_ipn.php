@@ -186,7 +186,11 @@ class swpm_paypal_ipn_handler {
         SwpmTransactions::save_txn_record($this->ipn_data, $cart_items);
         $this->debug_log('Transaction data saved.', true);
         
+        //Trigger the PayPal IPN processed action hook (so other plugins can can listen for this event).
         do_action('swpm_paypal_ipn_processed', $this->ipn_data);
+        
+        do_action('swpm_payment_ipn_processed', $this->ipn_data);
+                
         return true;
     }
 

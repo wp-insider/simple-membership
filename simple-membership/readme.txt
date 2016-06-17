@@ -1,10 +1,10 @@
 === Simple Membership ===
 Contributors: smp7, wp.insider, amijanina
 Donate link: https://simple-membership-plugin.com/
-Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress,
+Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe
 Requires at least: 3.3
 Tested up to: 4.5
-Stable tag: 3.2.7
+Stable tag: 3.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,8 @@ Non-members viewing a protected page will be prompted to login or become a membe
 You can configure it to have free and/or paid memberships on your site. Paid membership payment is handled securely via PayPal. 
 
 Both one time and recurring/subscription payments are supported.
+
+You can also accept one time membership payment via Stripe payment gateway.
 
 = Membership Payments Log = 
 All the payments from your members are recorded in the plugin. You can view them anytime by visiting the payments menu from the admin dashboard.
@@ -125,8 +127,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 3.2.8 =
-- [TODO - complete Usage Doc] Added Stripe Buy Now option for membership payment.
+= 3.2.8 =
+- Added Stripe Buy Now option for membership payment.
+  Stripe payment usage documentation: https://simple-membership-plugin.com/create-stripe-buy-now-button-for-membership-payment/
 - Added a notice in the admin interface to notify you when you keep the sandbox payment mode enabled.
 - Added a check in the authentication system to stop login request processing if the user is already logged into the site as ADMIN.
 - The payment button shortcode will now check to make sure you entered a valid button ID in the shortcode.

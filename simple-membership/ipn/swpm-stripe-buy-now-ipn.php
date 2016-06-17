@@ -131,6 +131,8 @@ class SwpmStripeBuyNowIpnHandler {
         //Trigger the stripe IPN processed action hook (so other plugins can can listen for this event).
         do_action('swpm_stripe_ipn_processed', $ipn_data);
         
+        do_action('swpm_payment_ipn_processed', $ipn_data);
+        
         //Redirect the user to the return URL (or to the homepage if a return URL is not specified for this payment button).
         $return_url = get_post_meta($button_id, 'return_url', true);
         if (empty($return_url)) {

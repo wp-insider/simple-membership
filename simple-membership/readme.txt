@@ -131,6 +131,7 @@ https://simple-membership-plugin.com/
 - Added a check in the authentication system to stop login request processing if the user is already logged into the site as ADMIN.
 - The payment button shortcode will now check to make sure you entered a valid button ID in the shortcode.
 - Fixed a couple of minor debug notice warnings.
+- Bugfix: Admin Dashboard Access Permission setting not saving correctly.
 
 = 3.2.7 =
 - Added a new option in the plugin settings so you can specify other WP user role (example: editor) to be able to use/see the plugin's admin interface.

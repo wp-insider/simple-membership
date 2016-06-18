@@ -106,6 +106,7 @@ The following language translations are already available:
 * Catalan
 * Hungarian
 * Bosnian (Bosnia and Herzegovina)
+* Slovak
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -126,6 +127,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO 3.2.9 =
+- Added Slovak language translation file. The translation was submitted by Marek Kucak.
 
 = 3.2.8 =
 - Added Stripe Buy Now option for membership payment.

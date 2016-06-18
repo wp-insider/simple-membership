@@ -52,7 +52,7 @@
 	</tr>
 	<tr>
 		<th scope="row"><label for="company_name"><?php echo  SwpmUtils::_('Company') ?></label></th>
-		<td><input name="company_name" type="text" id="company_name" class="code regular-text" value="<?php echo esc_attr($company_name); ?>" /></td>
+		<td><input name="company_name" type="text" id="company_name" class="regular-text" value="<?php echo esc_attr($company_name); ?>" /></td>
 	</tr>      
 	<tr>
 		<th scope="row"><label for="member_since"><?php echo  SwpmUtils::_('Member Since') ?> </label></th>

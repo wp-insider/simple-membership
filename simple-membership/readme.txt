@@ -129,6 +129,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 3.2.9 =
+- [TODO - Test content protection] Lowered the priority of "the_content" filter processing.
 - Added Slovak language translation file. The translation was submitted by Marek Kucak.
 
 = 3.2.8 =

@@ -56,9 +56,8 @@ class SwpmMembers extends WP_List_Table {
 
     function column_member_id($item) {
         $actions = array(
-            'edit' => sprintf('<a href="admin.php?page=%s&member_action=edit&member_id=%s">Edit</a>', $_REQUEST['page'], $item['member_id']),
-            'delete' => sprintf('<a href="?page=%s&member_action=delete&member_id=%s"
-                                    onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>', $_REQUEST['page'], $item['member_id']),
+            'edit' => sprintf('<a href="admin.php?page=simple_wp_membership&member_action=edit&member_id=%s">Edit</a>', $item['member_id']),
+            'delete' => sprintf('<a href="admin.php?page=simple_wp_membership&member_action=delete&member_id=%s" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>', $item['member_id']),
         );
         return $item['member_id'] . $this->row_actions($actions);
     }

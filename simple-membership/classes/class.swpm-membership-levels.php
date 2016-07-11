@@ -68,9 +68,8 @@ class SwpmMembershipLevels extends WP_List_Table {
 
     function column_id($item) {
         $actions = array(
-            'edit' => sprintf('<a href="admin.php?page=%s&level_action=edit&id=%s">Edit</a>', $_REQUEST['page'], $item['id']),
-            'delete' => sprintf('<a href="?page=%s&level_action=delete&id=%s"
-                                    onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>', $_REQUEST['page'], $item['id']),
+            'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_levels&level_action=edit&id=%s">Edit</a>', $item['id']),
+            'delete' => sprintf('<a href="admin.php?page=simple_wp_membership_levels&level_action=delete&id=%s" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>', $item['id']),
         );
         return $item['id'] . $this->row_actions($actions);
     }

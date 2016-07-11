@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe
 Requires at least: 3.3
 Tested up to: 4.5
-Stable tag: 3.2.8
+Stable tag: 3.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,9 +128,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.2.9 =
-- [TODO - Test content protection] Lowered the priority of "the_content" filter processing.
+= 3.2.9 =
+- Lowered the priority of "the_content" filter processing (this should be helpful compatibility with some of the content builder type plugins).
 - Added Slovak language translation file. The translation was submitted by Marek Kucak.
+- XSS vulnerability fix for page request parameter.
 
 = 3.2.8 =
 - Added Stripe Buy Now option for membership payment.

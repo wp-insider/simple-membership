@@ -129,7 +129,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = 3.2.9 =
-- Lowered the priority of "the_content" filter processing (this should be helpful compatibility with some of the content builder type plugins).
+- Lowered the priority of "the_content" filter processing (this should be helpful for compatibility with some of the content builder type plugins).
 - Added Slovak language translation file. The translation was submitted by Marek Kucak.
 - XSS vulnerability fix for page request parameter.
 

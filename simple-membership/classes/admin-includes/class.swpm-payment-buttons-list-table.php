@@ -97,14 +97,18 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
     }
 
     function process_bulk_action() {
-        //Detect when a bulk action is being triggered... //print_r($_REQUEST);
+        //Detect when a bulk action is being triggered...
         if ('delete' === $this->current_action()) {
-            $records_to_delete = $_REQUEST['paymentbutton'];
+            $records_to_delete = array_map( 'sanitize_text_field', $_REQUEST['paymentbutton'] );
             if (empty($records_to_delete)) {
                 echo '<div id="message" class="updated fade"><p>Error! You need to select multiple records to perform a bulk action!</p></div>';
                 return;
             }
-            foreach ($records_to_delete as $record_id) {                
+
+            foreach ($records_to_delete as $record_id) {
+                if(!is_numeric($record_id)){
+                    wp_die('Error! ID must be a numeric number.');
+                }
                 wp_delete_post( $record_id );
             }
             echo '<div id="message" class="updated fade"><p>Selected records deleted successfully!</p></div>';
@@ -115,6 +119,9 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
 
         if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete_payment_btn') { //Delete link was clicked for a row in list table
             $record_id = sanitize_text_field($_REQUEST['button_id']);
+            if(!is_numeric($record_id)){
+                wp_die('Error! ID must be a numeric number.');
+            }
             wp_delete_post( $record_id );
             $success_msg = '<div id="message" class="updated"><p>';
             $success_msg .= SwpmUtils::_('The selected entry was deleted!');

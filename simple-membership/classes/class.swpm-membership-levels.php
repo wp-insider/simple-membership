@@ -131,8 +131,15 @@ class SwpmMembershipLevels extends WP_List_Table {
 
     function process_form_request() {
         if (isset($_REQUEST['id'])) {
-            return $this->edit($_REQUEST['id']);
+            //This is a level edit action
+            $record_id = sanitize_text_field($_REQUEST['id']);
+            if(!is_numeric($record_id)){
+                wp_die('Error! ID must be numeric.');
+            }            
+            return $this->edit($record_id);
         }
+        
+        //Level add action
         return $this->add();
     }
 
@@ -161,14 +168,15 @@ class SwpmMembershipLevels extends WP_List_Table {
         global $wpdb;
 
         if ('bulk_delete' === $this->current_action()) {
-            //print_r($_REQUEST);
-
-            $records_to_delete = $_REQUEST['ids'];
+            $records_to_delete = array_map( 'sanitize_text_field', $_REQUEST['ids'] );
             if (empty($records_to_delete)) {
                 echo '<div id="message" class="updated fade"><p>Error! You need to select multiple records to perform a bulk action!</p></div>';
                 return;
             }
             foreach ($records_to_delete as $record_id) {
+                if( !is_numeric( $record_id )){
+                    wp_die('Error! ID must be numeric.');
+                }
                 $query = $wpdb->prepare("DELETE FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $record_id);
                 $wpdb->query($query);
             }
@@ -179,7 +187,8 @@ class SwpmMembershipLevels extends WP_List_Table {
     function delete() {
         global $wpdb;
         if (isset($_REQUEST['id'])) {
-            $id = absint($_REQUEST['id']);
+            $id = sanitize_text_field($_REQUEST['id']);
+            $id = absint($id);
             $query = $wpdb->prepare("DELETE FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $id);
             $wpdb->query($query);
             echo '<div id="message" class="updated fade"><p>Selected record deleted successfully!</p></div>';

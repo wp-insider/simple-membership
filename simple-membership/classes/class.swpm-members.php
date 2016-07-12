@@ -185,8 +185,15 @@ class SwpmMembers extends WP_List_Table {
 
     function process_form_request() {
         if (isset($_REQUEST['member_id'])){
-            return $this->edit(absint($_REQUEST['member_id']));
+            //This is a member profile edit action
+            $record_id = sanitize_text_field($_REQUEST['member_id']);
+            if(!is_numeric($record_id)){
+                wp_die('Error! ID must be numeric.');
+            }
+            return $this->edit(absint($record_id));
         }
+        
+        //This is an profile add action.
         return $this->add();
     }
 
@@ -232,6 +239,7 @@ class SwpmMembers extends WP_List_Table {
     function process_bulk_action() {
         //Detect when a bulk action is being triggered... then perform the action.
         $members = isset($_REQUEST['members'])? $_REQUEST['members']: array();
+        $members = array_map( 'sanitize_text_field', $members );
         
         $current_action = $this->current_action();
         if(!empty($current_action)){         
@@ -248,6 +256,9 @@ class SwpmMembers extends WP_List_Table {
         //perform the bulk operation according to the selection
         if ('bulk_delete' === $current_action) {
             foreach ($members as $record_id) {
+                if(!is_numeric($record_id)){
+                    wp_die('Error! ID must be numeric.');
+                }
                 SwpmMembers::delete_user_by_id($record_id);
             }
             echo '<div id="message" class="updated fade"><p>Selected records deleted successfully!</p></div>';
@@ -305,12 +316,16 @@ class SwpmMembers extends WP_List_Table {
     
     function delete() {
         if (isset($_REQUEST['member_id'])) {
-            $id = absint($_REQUEST['member_id']);
+            $id = sanitize_text_field($_REQUEST['member_id']);
+            $id = absint($id);
             SwpmMembers::delete_user_by_id($id);
         }
     }
 
     public static function delete_user_by_id($id) {
+        if(!is_numeric($id)){
+            wp_die('Error! Member ID must be numeric.');
+        }
         $swpm_user = SwpmMemberUtils::get_user_by_id($id);
         $user_name = $swpm_user->user_name;
         SwpmMembers::delete_wp_user($user_name);//Deletes the WP User record

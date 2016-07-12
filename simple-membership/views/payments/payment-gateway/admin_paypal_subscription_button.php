@@ -204,7 +204,6 @@ add_action('swpm_create_new_button_process_submission', 'swpm_save_new_pp_subscr
 function swpm_save_new_pp_subscription_button_data() {
     if (isset($_REQUEST['swpm_pp_subscription_save_submit'])) {
         //This is a PayPal subscription button save event. Process the submission.
-        //TODO - Do some basic validation check??
 
         $button_id = wp_insert_post(
                 array(
@@ -255,6 +254,7 @@ function swpm_edit_pp_subscription_button() {
     //Retrieve the payment button data and present it for editing.    
 
     $button_id = sanitize_text_field($_REQUEST['button_id']);
+    $button_id = absint($button_id);
     $button_type = sanitize_text_field($_REQUEST['button_type']);
 
     $button = get_post($button_id); //Retrieve the CPT for this button
@@ -476,10 +476,10 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_pp_subscrip
 function swpm_edit_pp_subscription_button_data() {
     if (isset($_REQUEST['swpm_pp_subscription_save_submit'])) {
         //This is a PayPal subscription button edit event. Process the submission.
-        //TODO - Do some basic validation check?
         
         //Update and Save the edited payment button data
         $button_id = sanitize_text_field($_REQUEST['button_id']);
+        $button_id = absint($button_id);
         $button_type = sanitize_text_field($_REQUEST['button_type']);
         $button_name = sanitize_text_field($_REQUEST['button_name']);
 

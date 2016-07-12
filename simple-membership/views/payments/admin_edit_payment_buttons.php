@@ -18,5 +18,6 @@ do_action('swpm_edit_payment_button_process_submission'); //Addons can use this 
 //Button type (button_type) and Button id (button_id) must be present in the REQUEST
 $button_type = sanitize_text_field($_REQUEST['button_type']);
 $button_id = sanitize_text_field($_REQUEST['button_id']);
+$button_id = absint($button_id);
 do_action('swpm_edit_payment_button_for_' . $button_type, $button_id);
 

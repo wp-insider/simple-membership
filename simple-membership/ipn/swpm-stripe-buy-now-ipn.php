@@ -18,6 +18,7 @@ class SwpmStripeBuyNowIpnHandler {
         
         //Read and sanitize the request parameters.
         $button_id = sanitize_text_field($_REQUEST['item_number']);
+        $button_id = absint($button_id);
         $button_title = sanitize_text_field($_REQUEST['item_name']);
         $payment_amount = sanitize_text_field($_REQUEST['item_price']);
         $price_in_cents = $payment_amount * 100 ;//The amount (in cents). This value is used in Stripe API.

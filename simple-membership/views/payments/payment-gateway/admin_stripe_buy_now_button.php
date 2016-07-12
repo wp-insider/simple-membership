@@ -166,7 +166,6 @@ add_action('swpm_create_new_button_process_submission', 'swpm_save_new_stripe_bu
 function swpm_save_new_stripe_buy_now_button_data() {
     if (isset($_REQUEST['swpm_stripe_buy_now_save_submit'])) {
         //This is a Stripe buy now button save event. Process the submission.
-        //TODO - Do some extra validation check?
         
         //Save the button data
         $button_id = wp_insert_post(
@@ -215,6 +214,7 @@ function swpm_edit_stripe_buy_now_button() {
     //Retrieve the payment button data and present it for editing.    
 
     $button_id = sanitize_text_field($_REQUEST['button_id']);
+    $button_id = absint($button_id);
     $button_type = sanitize_text_field($_REQUEST['button_type']);
 
     $button = get_post($button_id); //Retrieve the CPT for this button
@@ -376,10 +376,10 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_stripe_buy_
 function swpm_edit_stripe_buy_now_button_data() {
     if (isset($_REQUEST['swpm_stripe_buy_now_edit_submit'])) {
         //This is a Stripe buy now button edit event. Process the submission.
-        //TODO - Do some extra  validation check if required
         
         //Update and Save the edited payment button data
         $button_id = sanitize_text_field($_REQUEST['button_id']);
+        $button_id = absint($button_id); 
         $button_type = sanitize_text_field($_REQUEST['button_type']);
         $button_name = sanitize_text_field($_REQUEST['button_name']);
 

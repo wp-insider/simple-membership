@@ -207,8 +207,8 @@ class SwpmMembers extends WP_List_Table {
         $member = SwpmTransfer::$default_fields;
         $member['member_since'] = date('Y-m-d');
         $member['subscription_starts'] = date('Y-m-d');
-        if (isset($_POST['createswpmuser'])) {
-            $member = $_POST;
+        if (isset($_POST['createswpmuser'])) {            
+            $member = array_map( 'sanitize_text_field', $_POST );
         }
         extract($member, EXTR_SKIP);
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
@@ -223,10 +223,15 @@ class SwpmMembers extends WP_List_Table {
         $query = "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = $id";
         $member = $wpdb->get_row($query, ARRAY_A);
         if (isset($_POST["editswpmuser"])) {
-            $_POST['user_name'] = $member['user_name'];
-            $_POST['email'] = $member['email'];
+            $_POST['user_name'] = sanitize_text_field($member['user_name']);
+            $_POST['email'] = sanitize_email($member['email']);
             foreach($_POST as $key=>$value){
-                $member[$key] = $value;
+                $key = sanitize_text_field($key);
+                if($key == 'email'){
+                    $member[$key] = sanitize_email($value);
+                } else {
+                    $member[$key] = sanitize_text_field($value);
+                }
             }
         }
         extract($member, EXTR_SKIP);

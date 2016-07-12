@@ -61,7 +61,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $membership_level_alias = $mebership_info->get('alias');
         $swpm_registration_submit = filter_input(INPUT_POST, 'swpm_registration_submit');
         if (!empty($swpm_registration_submit)) {
-            $member = $_POST;
+            $member = array_map( 'sanitize_text_field', $_POST );
         }
         ob_start();
         extract((array) $member, EXTR_SKIP);

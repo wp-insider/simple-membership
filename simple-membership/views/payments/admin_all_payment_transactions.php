@@ -11,8 +11,8 @@
     <div class="inside">
         <?php echo SwpmUtils::_('Search for a transaction by using email or name'); ?>
         <br /><br />
-        <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
-            <input name="swpm_txn_search" type="text" size="40" value="<?php echo isset($_POST['swpm_txn_search']) ? $_POST['swpm_txn_search'] : ''; ?>"/>
+        <form method="post" action="">
+            <input name="swpm_txn_search" type="text" size="40" value="<?php echo isset($_POST['swpm_txn_search']) ? esc_attr($_POST['swpm_txn_search']) : ''; ?>"/>
             <input type="submit" name="swpm_txn_search_btn" class="button" value="<?php echo SwpmUtils::_('Search'); ?>" />
         </form>
     </div></div>

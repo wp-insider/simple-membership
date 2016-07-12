@@ -105,18 +105,21 @@ class SWPMPaymentsListTable extends WP_List_Table {
     }
 
     function process_bulk_action() {
-        //Detect when a bulk action is being triggered... //print_r($_GET);
+        //Detect when a bulk action is being triggered... 
         if ('delete' === $this->current_action()) {
-            $records_to_delete = $_GET['transaction'];
+            $records_to_delete = array_map( 'sanitize_text_field', $_GET['transaction'] );
             if (empty($records_to_delete)) {
                 echo '<div id="message" class="updated fade"><p>Error! You need to select multiple records to perform a bulk action!</p></div>';
                 return;
             }
             foreach ($records_to_delete as $record_id) {
+                if( !is_numeric( $record_id )){
+                    wp_die('Error! ID must be numeric.');
+                }                
                 global $wpdb;
                 $payments_table_name = $wpdb->prefix . "swpm_payments_tbl";
-                $updatedb = "DELETE FROM $payments_table_name WHERE id='$record_id'";
-                $results = $wpdb->query($updatedb);
+                $query_string = "DELETE FROM $payments_table_name WHERE id='$record_id'";
+                $results = $wpdb->query($query_string);
             }
             echo '<div id="message" class="updated fade"><p>Selected records deleted successfully!</p></div>';
         }
@@ -130,7 +133,9 @@ class SWPMPaymentsListTable extends WP_List_Table {
     }
 
     function prepare_items() {
-
+        global $wpdb;
+        $payments_table_name = $wpdb->prefix . "swpm_payments_tbl";
+        
         // Lets decide how many records per page to show
         $per_page = apply_filters('swpm_transactions_menu_items_per_page', 50);
 
@@ -142,26 +147,21 @@ class SWPMPaymentsListTable extends WP_List_Table {
 
         $this->process_bulk_action();
 
-        // This checks for sorting input and sorts the data.
-        $orderby_column = isset($_GET['orderby']) ? $_GET['orderby'] : '';
-        $sort_order = isset($_GET['order']) ? $_GET['order'] : '';
+        //This checks for sorting input. Read and sanitize the inputs
+        $orderby_column = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : '';
+        $sort_order = isset($_GET['order']) ? sanitize_text_field($_GET['order']) : '';
         if (empty($orderby_column)) {
             $orderby_column = "id";
             $sort_order = "DESC";
         }
-
-        //Sanitize the inputs
         $orderby_column = SwpmUtils::sanitize_value_by_array($orderby_column, $sortable);
         $sort_order = SwpmUtils::sanitize_value_by_array($sort_order, array('DESC' => '1', 'ASC' => '1'));        
-        
-        global $wpdb;
-        $payments_table_name = $wpdb->prefix . "swpm_payments_tbl";
 
         //pagination requirement
         $current_page = $this->get_pagenum();
 
         if (isset($_POST['swpm_txn_search'])) {//Only load the searched records
-            $search_term = trim(strip_tags($_POST['swpm_txn_search']));
+            $search_term = trim(sanitize_text_field($_POST['swpm_txn_search']));
             $prepare_query = $wpdb->prepare("SELECT * FROM " . $payments_table_name . " WHERE `email` LIKE '%%%s%%' OR `txn_id` LIKE '%%%s%%' OR `first_name` LIKE '%%%s%%' OR `last_name` LIKE '%%%s%%'", $search_term, $search_term, $search_term, $search_term);
             $data = $wpdb->get_results($prepare_query, ARRAY_A);
             $total_items = count($data);

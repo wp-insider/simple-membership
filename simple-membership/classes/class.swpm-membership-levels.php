@@ -89,6 +89,8 @@ class SwpmMembershipLevels extends WP_List_Table {
         if (isset($_POST['s'])){
             $query .= " AND alias LIKE '%" . sanitize_text_field($_POST['s']) . "%' ";
         }
+        
+        //Read and sanitize the sort inputs.
         $orderby = !empty($_GET["orderby"]) ? esc_sql($_GET["orderby"]) : 'id';
         $order = !empty($_GET["order"]) ? esc_sql($_GET["order"]) : 'DESC';
 
@@ -100,7 +102,7 @@ class SwpmMembershipLevels extends WP_List_Table {
             $query.=' ORDER BY ' . $orderby . ' ' . $order;
         }
 
-        $totalitems = $wpdb->query($query); //return the total number of affected rows
+        $totalitems = $wpdb->query($query); //Return the total number of affected rows
         $perpage = 50;
         $paged = !empty($_GET["paged"]) ? sanitize_text_field($_GET["paged"]) : '';
         if (empty($paged) || !is_numeric($paged) || $paged <= 0) {
@@ -144,12 +146,7 @@ class SwpmMembershipLevels extends WP_List_Table {
     }
 
     function add() {
-        global $wpdb;
-        $member = SwpmTransfer::$default_fields;
-        if (isset($_POST['createswpmlevel'])) {
-            $member = $_POST;
-        }
-        extract($member, EXTR_SKIP);
+        //Level add interface
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_add_level.php');
         return false;
     }

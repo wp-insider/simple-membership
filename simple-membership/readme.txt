@@ -128,7 +128,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= 3.3.0=
+= 3.3.0 =
 - Updated the Hungarian language file.
 - Improved input sanitization.
 

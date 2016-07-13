@@ -127,7 +127,6 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
-
 = 3.3.0 =
 - Updated the Hungarian language file.
 - Improved input sanitization.

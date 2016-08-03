@@ -78,7 +78,7 @@ class SwpmMemberUtils {
     public static function get_user_by_email($swpm_email) {
         //Retrieves the SWPM user record for the given member email address
         global $wpdb;
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE email = %d", $swpm_email);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE email = %s", $swpm_email);
         $result = $wpdb->get_row($query);
         return $result;
     }

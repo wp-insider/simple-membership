@@ -184,8 +184,11 @@ class SwpmSettings {
             'message' => SwpmUtils::_('You can create a renewal page for your site. Read <a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">this documentation</a> to learn how to create a renewal page.')) );
         
         add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'allow-account-deletion',
-            'options' => SwpmUtils::get_account_state_options(),
             'message' => SwpmUtils::_('Allow users to delete their accounts.')));
+        
+        add_settings_field('use-wordpress-timezone', SwpmUtils::_('Use WordPress Timezone'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'use-wordpress-timezone',
+            'message' => SwpmUtils::_('Use this option if you want to use the timezone value specified in your WordPress General Settings interface.')));
+        
         add_settings_field('delete-pending-account', SwpmUtils::_('Auto Delete Pending Account'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'delete-pending-account',
             'options' => array(0 => 'Do not delete', 1 => 'Older than 1 month', 2 => 'Older than 2 months'),
             'default' => '0',
@@ -390,6 +393,7 @@ class SwpmSettings {
         $output = $this->settings;
         $output['enable-expired-account-login'] = isset($input['enable-expired-account-login']) ? esc_attr($input['enable-expired-account-login']) : "";
         $output['allow-account-deletion'] = isset($input['allow-account-deletion']) ? esc_attr($input['allow-account-deletion']) : "";
+        $output['use-wordpress-timezone'] = isset($input['use-wordpress-timezone']) ? '1' : "";
         $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
         $output['admin-dashboard-access-permission'] = isset($input['admin-dashboard-access-permission']) ? esc_attr($input['admin-dashboard-access-permission']) : '';
         $output['renewal-page-url'] = esc_url($input['renewal-page-url']);

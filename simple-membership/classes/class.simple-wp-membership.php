@@ -74,6 +74,16 @@ class SimpleWpMembership {
         add_action('admin_init', array(&$this, 'admin_init_hook'));
         add_action('plugins_loaded', array(&$this, "plugins_loaded"));
         add_action('password_reset', array(&$this, 'wp_password_reset_hook'), 10, 2);
+        
+        //Set timezone preference (if enabled)
+        $use_wp_timezone = SwpmSettings::get_instance()->get_value('use-wordpress-timezone');
+        if ($use_wp_timezone == '1'){//Set the wp timezone    
+            $wp_timezone_string = get_option('timezone_string');
+            if(!empty($wp_timezone_string)){
+                date_default_timezone_set($wp_timezone_string);
+            }
+        }
+
     }
     
     public function wp_head_callback(){

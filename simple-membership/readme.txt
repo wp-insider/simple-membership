@@ -3,8 +3,8 @@ Contributors: smp7, wp.insider, amijanina
 Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe
 Requires at least: 3.3
-Tested up to: 4.5
-Stable tag: 3.3.0
+Tested up to: 4.6
+Stable tag: 3.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,6 +127,11 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 3.3.1 =
+- Added an option in the advanced settings menu to use the timezone value specified in your WordPress General Settings interface.
+- WordPress 4.6 compatibility.
+
 = 3.3.0 =
 - Updated the Hungarian language file.
 - Improved input sanitization.

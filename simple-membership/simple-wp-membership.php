@@ -30,14 +30,7 @@ if (!defined('COOKIEHASH')) {
 define('SIMPLE_WP_MEMBERSHIP_AUTH', 'simple_wp_membership_' . COOKIEHASH);
 define('SIMPLE_WP_MEMBERSHIP_SEC_AUTH', 'simple_wp_membership_sec_' . COOKIEHASH);
 
-//Management role/permission setup
-$admin_dashboard_permission = SwpmSettings::get_instance()->get_value('admin-dashboard-access-permission');
-if (empty($admin_dashboard_permission)) {
-    //By default only admins can manage/see admin dashboard
-    define("SWPM_MANAGEMENT_PERMISSION", "manage_options");
-} else {
-    define("SWPM_MANAGEMENT_PERMISSION", $admin_dashboard_permission);
-}
+SwpmUtils::do_misc_initial_plugin_setup_tasks();
 
 register_activation_hook(SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::activate');
 register_deactivation_hook(SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::deactivate');
@@ -55,4 +48,4 @@ function swpm_add_settings_link($links, $file) {
     return $links;
 }
 
-add_filter('plugin_action_links', 'swpm_add_settings_link', 10, 2);             
+add_filter('plugin_action_links', 'swpm_add_settings_link', 10, 2);

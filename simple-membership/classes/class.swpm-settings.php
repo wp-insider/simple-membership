@@ -393,7 +393,7 @@ class SwpmSettings {
         $output = $this->settings;
         $output['enable-expired-account-login'] = isset($input['enable-expired-account-login']) ? esc_attr($input['enable-expired-account-login']) : "";
         $output['allow-account-deletion'] = isset($input['allow-account-deletion']) ? esc_attr($input['allow-account-deletion']) : "";
-        $output['use-wordpress-timezone'] = isset($input['use-wordpress-timezone']) ? '1' : "";
+        $output['use-wordpress-timezone'] = isset($input['use-wordpress-timezone']) ? esc_attr($input['use-wordpress-timezone']) : "";
         $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
         $output['admin-dashboard-access-permission'] = isset($input['admin-dashboard-access-permission']) ? esc_attr($input['admin-dashboard-access-permission']) : '';
         $output['renewal-page-url'] = esc_url($input['renewal-page-url']);

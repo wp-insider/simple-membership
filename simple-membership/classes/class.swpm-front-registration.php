@@ -84,6 +84,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
             $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
             $after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_('Registration Successful. ') . SwpmUtils::_('Please') . ' <a href="' . $login_page_url . '">' . SwpmUtils::_('Login') . '</a></div>';
+            $after_rego_msg = apply_filters ('swpm_registration_success_msg', $after_rego_msg);
             $message = array('succeeded' => true, 'message' => $after_rego_msg);
             SwpmTransfer::get_instance()->set('status', $message);
             return;

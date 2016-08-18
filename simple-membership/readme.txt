@@ -131,6 +131,7 @@ https://simple-membership-plugin.com/
 = TODO - 3.3.2 =
 - The "Registration Successful" message can now be customized using the custom messages addon.
 - TODO - Need to release the custom messages addon for the above feature..
+- Updated the Dutch language translation file.
 
 = 3.3.1 =
 - Added an option in the advanced settings menu to use the timezone value specified in your WordPress General Settings interface.

@@ -1,18 +1,18 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Simple WP Membership\n"
-"POT-Creation-Date: 2016-05-24 11:52+0200\n"
-"PO-Revision-Date: 2016-05-24 15:25+0200\n"
-"Last-Translator: \n"
-"Language-Team: Robin Roelofsen <info@dreamdesignsolutions.nl>\n"
-"Language: nl_NL\n"
+"Project-Id-Version: simple membership\n"
+"POT-Creation-Date: 2016-08-16 16:04+0300\n"
+"PO-Revision-Date: 2016-08-17 13:06+0300\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.8\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
+"Last-Translator: Websites with a Heart <info@websiteswithaheart.com>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl_NL\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: classes/class.simple-wp-membership.php:264
@@ -21,7 +21,7 @@ msgstr "Je bent niet ingelogd."
 
 #: classes/class.simple-wp-membership.php:298
 msgid "Simple WP Membership Protection"
-msgstr "Simple WP Membership Afscherming"
+msgstr "Simple WP Lidmaatschap Afscherming"
 
 #: classes/class.simple-wp-membership.php:310
 msgid "Simple Membership Protection options"
@@ -29,15 +29,15 @@ msgstr "Simple Membership Afscherm opties"
 
 #: classes/class.simple-wp-membership.php:326
 msgid "Do you want to protect this content?"
-msgstr "Wil je deze inhoud verbergen?"
+msgstr "Wil je deze inhoud afschermen?"
 
 #: classes/class.simple-wp-membership.php:331
 msgid "Select the membership level that can access this content:"
-msgstr "Selecteer de lidmaatschapniveaus die toegang hebben tot deze inhoud:"
+msgstr "Selecteer het lidmaatschap niveau dat toegang heeft tot deze inhoud:"
 
 #: classes/class.simple-wp-membership.php:464
 msgid "WP Membership"
-msgstr "WP Membership"
+msgstr "WP Lidmaatschap"
 
 #: classes/class.simple-wp-membership.php:465 classes/class.swpm-members.php:10
 #: views/admin_members_menu.php:2
@@ -48,7 +48,7 @@ msgstr "Leden"
 #: classes/class.swpm-category-list.php:20
 #: classes/class.swpm-membership-levels.php:11
 msgid "Membership Levels"
-msgstr "Niveaus"
+msgstr "Lidmaatschap niveaus"
 
 #: classes/class.simple-wp-membership.php:467
 msgid "Settings"
@@ -60,13 +60,13 @@ msgstr "Betalingen"
 
 #: classes/class.simple-wp-membership.php:469
 msgid "Add-ons"
-msgstr "Extra Functies"
+msgstr "Add-Ons/Extensies"
 
 #: classes/class.swpm-access-control.php:21
 #: classes/class.swpm-access-control.php:28
 #: classes/class.swpm-access-control.php:55
 msgid "You need to login to view this content. "
-msgstr "Je moet inloggen om deze inhoud te kunnen bekijken. "
+msgstr "Je moet inloggen om deze inhoud te bekijken. "
 
 #: classes/class.swpm-access-control.php:34
 #: classes/class.swpm-access-control.php:60
@@ -74,33 +74,33 @@ msgid ""
 "Your account has expired. Please renew your account to gain access to this "
 "content."
 msgstr ""
-"Je lidmaatschap is verlopen. Vernieuw je lidmaatschap om deze inhoud te "
-"kunnen bekijken."
+"Je account is verlopen. Vernieuw je account om toegang tot deze inhoud te "
+"krijgen."
 
 #: classes/class.swpm-access-control.php:41
 msgid "This content can only be viewed by members who joined on or before "
 msgstr ""
-"Deze inhoud kan alleen worden bekeken door leden die lid zijn geworden op of "
-"voor "
+"Deze content kan alleen bekeken worden door leden die lid zijn geworden op "
+"of voor "
 
 #: classes/class.swpm-access-control.php:46
 #: classes/class.swpm-access-control.php:66
 msgid "This content is not permitted for your membership level."
-msgstr "Deze inhoud is niet beschikbaar voor jouw lidmaatschapniveau."
+msgstr "Deze inhoud is niet toegankelijk voor jouw lidmaatschap."
 
 #: classes/class.swpm-access-control.php:84
 msgid " The rest of the content is not permitted for your membership level."
 msgstr ""
-"De rest van deze inhoud is niet beschikbaar op jouw lidmaatschapniveau."
+"De rest van de inhoud is niet toegankelijk voor jouw lidmaatschapsniveau."
 
 #: classes/class.swpm-access-control.php:88
 #: classes/class.swpm-access-control.php:106
 msgid "You need to login to view the rest of the content. "
-msgstr "Je moet inloggen om de rest van de inhoud te kunnen bekijken. "
+msgstr "Je moet inloggen om de rest van deze inhoud te bekijken."
 
 #: classes/class.swpm-admin-registration.php:54
 msgid "Member record added successfully."
-msgstr "Lidmaatschap record met succes toegevoegd."
+msgstr "Lid succesvol toegevoegd"
 
 #: classes/class.swpm-admin-registration.php:59
 #: classes/class.swpm-admin-registration.php:81
@@ -116,15 +116,15 @@ msgstr "Je huidige wachtwoord"
 
 #: classes/class.swpm-ajax.php:14
 msgid "Invalid Email Address"
-msgstr "Ongeldig e-mail adres"
+msgstr "Ongeldig e-mailadres"
 
 #: classes/class.swpm-ajax.php:21 classes/class.swpm-ajax.php:36
 msgid "Aready taken"
-msgstr "Bestaat al"
+msgstr "Al bezet"
 
 #: classes/class.swpm-ajax.php:30
 msgid "Name contains invalid character"
-msgstr "Naam bevat ongeldig karakter"
+msgstr "Naam bevat ongeldig teken"
 
 #: classes/class.swpm-ajax.php:37
 msgid "Available"
@@ -132,23 +132,23 @@ msgstr "Beschikbaar"
 
 #: classes/class.swpm-auth.php:50
 msgid "User Not Found."
-msgstr "Gebruiker onbekend."
+msgstr "Gebruiker niet gevonden."
 
 #: classes/class.swpm-auth.php:57
 msgid "Password Empty or Invalid."
-msgstr "Password is niet ingevuld of is ongeldig."
+msgstr "Wachtwoord leeg of ongeldig."
 
 #: classes/class.swpm-auth.php:82
 msgid "Account is inactive."
-msgstr "Lidmaatschap niet actief."
+msgstr "Dit account is niet actief."
 
 #: classes/class.swpm-auth.php:85
 msgid "Account is pending."
-msgstr "Lidmaatschap in behandeling."
+msgstr "Deze account is in behandeling voor activering."
 
 #: classes/class.swpm-auth.php:88 classes/class.swpm-auth.php:106
 msgid "Account has expired."
-msgstr "Lidmaatschap verlopen."
+msgstr "Account is verlopen."
 
 #: classes/class.swpm-auth.php:114
 msgid "You are logged in as:"
@@ -160,7 +160,7 @@ msgstr "Je bent uitgelogd."
 
 #: classes/class.swpm-auth.php:210
 msgid "Session Expired."
-msgstr "Sessie is verlopen."
+msgstr "Sessie verlopen."
 
 #: classes/class.swpm-auth.php:219
 msgid "Invalid Username"
@@ -168,7 +168,7 @@ msgstr "Ongeldige gebruikersnaam"
 
 #: classes/class.swpm-auth.php:227
 msgid "Please login again."
-msgstr "Log nogmaals in."
+msgstr "Opnieuw inloggen alsjeblieft."
 
 #: classes/class.swpm-category-list.php:19 classes/class.swpm-members.php:23
 #: classes/class.swpm-membership-levels.php:10
@@ -180,7 +180,7 @@ msgstr "Log nogmaals in."
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:37
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:310
 msgid "Membership Level"
-msgstr "Lidmaatschapniveau"
+msgstr "Lidmaatschap niveau"
 
 #: classes/class.swpm-category-list.php:33 classes/class.swpm-members.php:18
 #: classes/class.swpm-membership-levels.php:19
@@ -193,7 +193,7 @@ msgstr "Naam"
 
 #: classes/class.swpm-category-list.php:35
 msgid "Description"
-msgstr "Omschrijving"
+msgstr "Omschijving"
 
 #: classes/class.swpm-category-list.php:36
 msgid "Count"
@@ -207,27 +207,27 @@ msgstr "Categorie afscherming bijgewerkt!"
 msgid ""
 "Wordpress account exists with given username. But given email doesn't match."
 msgstr ""
-"Er bestaat een WordPress gebruiker met deze gebruikersnaam. Het opgegeven e-"
-"mail adres komt niet overeen."
+"Wordpress account met gebruikersnaam bestaat. Maar het email adres komt niet "
+"overeen."
 
 #: classes/class.swpm-form.php:31
 msgid ""
 "Wordpress account exists with given email. But given username doesn't match."
 msgstr ""
-"Er bestaat een WordPress gebruiker met dit e-mail adres. De opgegeven "
-"gebruikersnaam komt niet overeen."
+"Wordpress account met email adres bestaat, Maar gebruikersnaam komt niet "
+"overeen."
 
 #: classes/class.swpm-form.php:40
 msgid "Username is required"
-msgstr "Gebruikersnaam is vereist"
+msgstr "Gebruikersnaam is verplicht."
 
 #: classes/class.swpm-form.php:44
 msgid "Username contains invalid character"
-msgstr "Gebruikersnaam bevat ongeldig karakter"
+msgstr "Gebruikersnaam bevat ongeldig teken"
 
 #: classes/class.swpm-form.php:52
 msgid "Username already exists."
-msgstr "Gebruikersnaam is al in gebruik"
+msgstr "Gebruikersnaam bestaat al"
 
 #: classes/class.swpm-form.php:75
 msgid "Password is required"
@@ -235,19 +235,19 @@ msgstr "Wachtwoord is vereist"
 
 #: classes/class.swpm-form.php:82
 msgid "Password mismatch"
-msgstr "Wachtwoord klopt niet"
+msgstr "Wachtwoorden komen niet overeen"
 
 #: classes/class.swpm-form.php:93
 msgid "Email is required"
-msgstr "E-mail adres is vereist"
+msgstr "Email is vereist"
 
 #: classes/class.swpm-form.php:97
 msgid "Email is invalid"
-msgstr "E-mail adres is ongeldig"
+msgstr "Email is niet geldig"
 
 #: classes/class.swpm-form.php:113
 msgid "Email is already used."
-msgstr "E-mail adres is al in gebruik"
+msgstr "Email is al in gebruik."
 
 #: classes/class.swpm-form.php:170
 msgid "Member since field is invalid"
@@ -255,7 +255,7 @@ msgstr "Lid sinds veld is ongeldig"
 
 #: classes/class.swpm-form.php:181
 msgid "Access starts field is invalid"
-msgstr "Toegang begint op veld is ongeldig"
+msgstr "Inschrijving start veld is ongeldig"
 
 #: classes/class.swpm-form.php:191
 msgid "Gender field is invalid"
@@ -263,19 +263,19 @@ msgstr "Geslacht veld is ongeldig"
 
 #: classes/class.swpm-form.php:202
 msgid "Account state field is invalid"
-msgstr "Lidmaatschap status veld is ongeldig"
+msgstr "Account status veld is ongeldig"
 
 #: classes/class.swpm-form.php:209
 msgid "Invalid membership level"
-msgstr "Ongeldig lidmaatschapniveau"
+msgstr "Ongeldige lidmaatschap niveau"
 
 #: classes/class.swpm-front-registration.php:71
 msgid "Security check: captcha validation failed."
-msgstr "Veilgheidscontrole: captcha controle mislukt."
+msgstr "Security check: captcha validatie mislukt."
 
 #: classes/class.swpm-front-registration.php:80
 msgid "Registration Successful. "
-msgstr "Met succes geregistreerd."
+msgstr "Registratie gelukt."
 
 #: classes/class.swpm-front-registration.php:80
 #: classes/class.swpm-settings.php:377
@@ -290,56 +290,56 @@ msgstr "Inloggen"
 #: classes/class.swpm-front-registration.php:92
 #: classes/class.swpm-front-registration.php:179
 msgid "Please correct the following"
-msgstr "Corrigeer het volgende"
+msgstr "Corrigeer alsjeblieft het volgende"
 
 #: classes/class.swpm-front-registration.php:123
 msgid "Membership Level Couldn't be found."
-msgstr "Lidmaatschapniveau niet gevonden."
+msgstr "Lidmaatschap niveau kon niet worden gevonden."
 
 #: classes/class.swpm-front-registration.php:162
 msgid "Profile updated successfully."
-msgstr "Profiel met succes bijgewerkt."
+msgstr "Profiel succesvol bijgewerkt"
 
 #: classes/class.swpm-front-registration.php:170
 msgid ""
 "Profile updated successfully. You will need to re-login since you changed "
 "your password."
 msgstr ""
-"Profiel met succes bijgewerkt. Je moet opnieuw inloggen aangezien je je "
-"wachtwoord hebt veranderd."
+"Profiel succesvol bijgewerkt. Je moet opnieuw inloggen omdat je wachtwoord "
+"veranderd is."
 
 #: classes/class.swpm-front-registration.php:189
 msgid "Email address not valid."
-msgstr "E-mail adres ongeldig"
+msgstr "Dit e-mailadres is ongeldig."
 
 #: classes/class.swpm-front-registration.php:200
 msgid "No user found with that email address."
-msgstr "Geen gebruiker gevonden met dat e-mail adres."
+msgstr "Geen gebruiker gevonden met dit e-mailadres."
 
 #: classes/class.swpm-front-registration.php:201
 #: classes/class.swpm-front-registration.php:225
 msgid "Email Address: "
-msgstr "E-mail adres: "
+msgstr "E-mailadres:"
 
 #: classes/class.swpm-front-registration.php:224
 msgid "New password has been sent to your email address."
-msgstr "Een nieuw password is naar uw e-mail adres verzonden."
+msgstr "Een nieuw wachtwoord is naar je email adres verzonden."
 
 #: classes/class.swpm-init-time-tasks.php:108
 msgid "Sorry, Nonce verification failed."
-msgstr "Het spijt me, de nonce verificatie is mislukt."
+msgstr "Sorry, Nonce verificatie mislukt."
 
 #: classes/class.swpm-init-time-tasks.php:115
 msgid "Sorry, Password didn't match."
-msgstr "Het spijt me, het wachtwoord kwam niet overeen."
+msgstr "Sorry, wachtwoord komt niet overeen."
 
 #: classes/class.swpm-level-form.php:47
 msgid "Date format is not valid."
-msgstr "Datumformaat is niet geldig."
+msgstr "Datumnotatie is niet geldig."
 
 #: classes/class.swpm-level-form.php:55
 msgid "Access duration must be > 0."
-msgstr "Toegangsduur moet groter zijn dan 0"
+msgstr "Duur van toegang moet groter zijn dan 0."
 
 #: classes/class.swpm-member-utils.php:22
 #: classes/class.swpm-member-utils.php:30
@@ -373,15 +373,15 @@ msgstr "Achternaam"
 
 #: classes/class.swpm-members.php:22 views/add.php:10 views/edit.php:9
 msgid "Email"
-msgstr "E-mail adres"
+msgstr "Email adres"
 
 #: classes/class.swpm-members.php:24 views/admin_member_form_common_part.php:11
 msgid "Access Starts"
-msgstr "Toegang begint op"
+msgstr "Toegang begint"
 
 #: classes/class.swpm-members.php:25
 msgid "Account State"
-msgstr "Lidmaatschap status"
+msgstr "Account status"
 
 #: classes/class.swpm-members.php:41
 #: classes/class.swpm-membership-levels.php:35
@@ -392,31 +392,31 @@ msgstr "Verwijder"
 
 #: classes/class.swpm-members.php:42
 msgid "Set Status to Active"
-msgstr "Zet Status op Actief"
+msgstr "Status instellen op actief"
 
 #: classes/class.swpm-members.php:44
 msgid "Set Status to Inactive"
-msgstr "Zet Status op Niet Actief"
+msgstr "Status instellen op niet-actief"
 
 #: classes/class.swpm-members.php:45
 msgid "Set Status to Pending"
-msgstr "Zet Status op In Behandeling"
+msgstr "Status instellen op in afwachting"
 
 #: classes/class.swpm-members.php:46
 msgid "Set Status to Expired"
-msgstr "Zet Status op Verlopen"
+msgstr "Status instellen op verlopen"
 
 #: classes/class.swpm-members.php:121
 msgid "No Member found."
-msgstr "Geen lid gevonden"
+msgstr "Geen leden gevonden."
 
 #: classes/class.swpm-membership-level.php:38
 msgid "Membership Level Creation Successful."
-msgstr "Lidmaatschapniveau met succes aangemaakt."
+msgstr "Lidmaatschap niveau met succes aangemaakt."
 
 #: classes/class.swpm-membership-level.php:57
 msgid "Updated Successfully."
-msgstr "Met succes bijgewerkt."
+msgstr "Succesvol bijgewerkt."
 
 #: classes/class.swpm-membership-levels.php:21
 msgid "Role"
@@ -424,7 +424,7 @@ msgstr "Rol"
 
 #: classes/class.swpm-membership-levels.php:22
 msgid "Access Valid For/Until"
-msgstr "Toegang geldig gedurende/tot"
+msgstr "Toegang geldig voor/tot"
 
 #: classes/class.swpm-misc-utils.php:50
 msgid "Registration"
@@ -440,60 +440,60 @@ msgstr "Profiel"
 
 #: classes/class.swpm-misc-utils.php:119
 msgid "Password Reset"
-msgstr "Password opnieuw instellen"
+msgstr "Wachtwoord herstel"
 
 #: classes/class.swpm-settings.php:21 classes/class.swpm-settings.php:39
 msgid "General Settings"
-msgstr "Algemene Instellingen"
+msgstr "Algemene instellingen"
 
 #: classes/class.swpm-settings.php:21
 msgid "Payment Settings"
-msgstr "Betalingen"
+msgstr "Betaling instellingen"
 
 #: classes/class.swpm-settings.php:22
 msgid "Email Settings"
-msgstr "E-mail"
+msgstr "E-mail instellingen"
 
 #: classes/class.swpm-settings.php:22
 msgid "Tools"
-msgstr "Gereedschappen"
+msgstr "Tools"
 
 #: classes/class.swpm-settings.php:22 classes/class.swpm-settings.php:150
 msgid "Advanced Settings"
-msgstr "Geavanceerd"
+msgstr "Geavanceerde instellingen"
 
 #: classes/class.swpm-settings.php:22
 msgid "Addons Settings"
-msgstr "Extra Functies"
+msgstr "Addon Instellingen"
 
 #: classes/class.swpm-settings.php:38
 msgid "Plugin Documentation"
-msgstr "Plug-in Documentatie"
+msgstr "Plugin Documentatie"
 
 #: classes/class.swpm-settings.php:40
 msgid "Enable Free Membership"
-msgstr "Gratis lidmaatschap"
+msgstr "Gratis Lidmaatschap Inschakelen"
 
 #: classes/class.swpm-settings.php:41
 msgid ""
 "Enable/disable registration for free membership level. When you enable this "
 "option, make sure to specify a free membership level ID in the field below."
 msgstr ""
-"Zet registratie voor een gratis lidmaatschapniveau aan of uit. Zorg ervoor "
-"dat - wanneer je deze optie aanzet - je het ID van het gratis "
-"lidmaatschapniveau in het veld hieronder invult."
+"In-/uitschakelen registratie voor gratis lidmaatschap niveau. Als je deze "
+"optie inschakelt, zorg er dan voor dat je een gratis lidmaatschap niveau ID "
+"opgeeft in het veld hieronder."
 
 #: classes/class.swpm-settings.php:42
 msgid "Free Membership Level ID"
-msgstr "Gratis lidmaatschapniveau ID"
+msgstr "Gratis Lidmaatschap Niveau ID"
 
 #: classes/class.swpm-settings.php:43
 msgid "Assign free membership level ID"
-msgstr "Wijs gratis lidmaatschapniveau ID toe"
+msgstr "Gratis lidmaatschap niveau ID toewijzen"
 
 #: classes/class.swpm-settings.php:44
 msgid "Enable More Tag Protection"
-msgstr "Lees Meer tag afscherming"
+msgstr "Inschakelen Meer Tag Afscherming"
 
 #: classes/class.swpm-settings.php:45
 msgid ""
@@ -501,60 +501,58 @@ msgid ""
 "after the More tag is protected. Anything before the more tag is teaser "
 "content."
 msgstr ""
-"Zet de \"Lees meer\" tag afscherming in berichten en pagina's aan of uit. "
-"Alles na de Lees meer tag wordt afgeschermd. Alles voor de Lees meer tag is "
-"\"teaser\" inhoud."
+"Schakelt \"meer\" tag bescherming in berichten en pagina's. Alles wat na de "
+"Meer tag komt is afgeschermd. Alles voor de meer tag is teaser inhoud."
 
 #: classes/class.swpm-settings.php:46
 msgid "Hide Adminbar"
-msgstr "Verberg de admin balk"
+msgstr "Verberg de adminbalk"
 
 #: classes/class.swpm-settings.php:47
 msgid ""
 "WordPress shows an admin toolbar to the logged in users of the site. Check "
 "this box if you want to hide that admin toolbar in the fronend of your site."
 msgstr ""
-"Wordpress toont een admin balk aan de ingelogde gebruikers van de site. Vink "
-"dit hokje aan wanneer je de admin balk in het front-end van je site wilt "
-"verbergen."
+"Wordpress toont aan ingelogde gebruikers een adminbalk. Vink dit hokje aan "
+"als je de adminbalk in de frontend van je website wilt verbergen."
 
 #: classes/class.swpm-settings.php:49
 msgid "Default Account Status"
-msgstr "Standaard lidmaatschap status"
+msgstr "Standaard Lidmaatschap Status"
 
 #: classes/class.swpm-settings.php:52
 msgid ""
 "Select the default account status for newly registered users. If you want to "
 "manually approve the members then you can set the status to \"Pending\"."
 msgstr ""
-"Selecteer de standaard lidmaatschapstatus voor nieuw geregistreerde "
-"gebruikers. Wanneer je de leden handmatig wilt toevoegen, kun je de status "
-"op \"In behandeling\" zetten."
+"Selecteer de standaard lidmaatschap status van nieuw geregistreerde "
+"gebruikers. Als je leden handmatig wilt goedkeuren, stel dan de status \"In "
+"afwachting\" in."
 
 #: classes/class.swpm-settings.php:53
 msgid "Allow Account Deletion"
-msgstr "Lidmaatschap beëindiging"
+msgstr "Lidmaatschap verwijderen toestaan"
 
 #: classes/class.swpm-settings.php:55
 msgid "Allow users to delete their accounts."
-msgstr "Sta toe dat leden hun lidmaatschap beëindigen."
+msgstr "Toestaan dat gebruikers hun lidmaatschap kunnen verwijderen."
 
 #: classes/class.swpm-settings.php:56
 msgid "Auto Delete Pending Account"
-msgstr "Automatisch verwijderen lidmaatschap in behandeling"
+msgstr "Automatisch verwijderen account in afwachting"
 
 #: classes/class.swpm-settings.php:59
 msgid "Select how long you want to keep \"pending\" account."
 msgstr ""
-"Selecteer hoe lang je toestaat dat een lidmaatschap \"in behandeling\" is."
+"Selecteer hoe lang je een lidmaatschap \"in afwachting\" wilt aanhouden."
 
 #: classes/class.swpm-settings.php:67
 msgid "Pages Settings"
-msgstr "Pagina-instellingen"
+msgstr "Pagina instellingen"
 
 #: classes/class.swpm-settings.php:68
 msgid "Login Page URL"
-msgstr "Inlog pagina URL"
+msgstr "Login pagina URL"
 
 #: classes/class.swpm-settings.php:70
 msgid "Registration Page URL"
@@ -562,33 +560,31 @@ msgstr "Registratie pagina URL"
 
 #: classes/class.swpm-settings.php:72
 msgid "Join Us Page URL"
-msgstr "Meld Je Aan pagina URL"
+msgstr "Aanmeld pagina URL"
 
 #: classes/class.swpm-settings.php:74
 msgid "Edit Profile Page URL"
-msgstr "Bewerk Profiel pagina URL"
+msgstr "Wijzig Profiel pagina URL"
 
 #: classes/class.swpm-settings.php:76
 msgid "Password Reset Page URL"
-msgstr "Wachtwoord Opnieuw Instellen pagina URL"
+msgstr "Wachtwoord Reset pagina URL"
 
 #: classes/class.swpm-settings.php:79
 msgid "Test & Debug Settings"
-msgstr "Test & Foutopsporingsinstellingen"
+msgstr "Test & Debug instellingen"
 
 #: classes/class.swpm-settings.php:81
 msgid "Check this option to enable debug logging."
-msgstr "Zet deze optie aan om foutopsporing aan te zetten."
+msgstr "Schakel deze optie in om debug logging aan te zetten."
 
 #: classes/class.swpm-settings.php:86
 msgid "Enable Sandbox Testing"
-msgstr "Testen in testomgeving"
+msgstr "Sandbox Testen inschakelen"
 
 #: classes/class.swpm-settings.php:87
 msgid "Enable this option if you want to do sandbox payment testing."
-msgstr ""
-"Schakel deze optie in wanneer je testbetalingen in de testomgeving wilt "
-"uitvoeren."
+msgstr "Schakel deze optie in als je sandbox testbetalingen wilt uitvoeren."
 
 #: classes/class.swpm-settings.php:97 classes/class.swpm-settings.php:145
 #: classes/class.swpm-settings.php:243
@@ -597,68 +593,70 @@ msgstr "Instellingen bijgewerkt!"
 
 #: classes/class.swpm-settings.php:102
 msgid "Email Misc. Settings"
-msgstr "Diverse e-mail berichten"
+msgstr "Diverse email instellingen"
 
 #: classes/class.swpm-settings.php:103
 msgid "From Email Address"
-msgstr "Vanaf e-mail adres"
+msgstr "E-mailadres afzender"
 
 #: classes/class.swpm-settings.php:106
 msgid "Email Settings (Prompt to Complete Registration )"
-msgstr "E-mail bericht (registratie voltooien)"
+msgstr "Email instellingen (herinnering om registratie te voltooien)"
 
 #: classes/class.swpm-settings.php:107 classes/class.swpm-settings.php:113
 #: classes/class.swpm-settings.php:125 classes/class.swpm-settings.php:132
 msgid "Email Subject"
-msgstr "E-mail onderwerp"
+msgstr "Email onderwerp"
 
 #: classes/class.swpm-settings.php:109 classes/class.swpm-settings.php:115
 #: classes/class.swpm-settings.php:127 classes/class.swpm-settings.php:134
 msgid "Email Body"
-msgstr "E-mail bericht"
+msgstr "Email inhoud"
 
 #: classes/class.swpm-settings.php:112
 msgid "Email Settings (Registration Complete)"
-msgstr "E-mail bericht (registratie voltooid)"
+msgstr "Email instellingen (Registratie voltooid)"
 
 #: classes/class.swpm-settings.php:117
 msgid "Send Notification to Admin"
-msgstr "Stuur bericht naar beheerder"
+msgstr "Stuur een bericht naar de beheerder"
 
 #: classes/class.swpm-settings.php:118
 msgid ""
 "Enable this option if you want the admin to receive a notification when a "
 "member registers."
 msgstr ""
-"Zet deze optie aan wanneer je wilt dat de beheerder een bericht ontvangt "
-"wanneer een nieuw lid zich registreert."
+"Schakel deze optie om de beheerder een melding te laten ontvangen wanneer "
+"een lid registreert."
 
 #: classes/class.swpm-settings.php:119
 msgid "Admin Email Address"
-msgstr "Beheerder e-mail adres"
+msgstr "Beheerder Emailadres"
 
 #: classes/class.swpm-settings.php:120
 msgid ""
 "Enter the email address where you want the admin notification email to be "
 "sent to."
 msgstr ""
-"Voer het e-mail adres in waar je de mail voor de beheerder heen wilt sturen."
+"Voer het e-mailadres in waar de beheerder notificatie e-mail naar toe moet "
+"worden verzonden."
 
 #: classes/class.swpm-settings.php:121
 msgid "Send Email to Member When Added via Admin Dashboard"
-msgstr "Stuur email naar nieuw lid wanneer aangemaakt via het beheer dashboard"
+msgstr ""
+"E-mail verzenden naar lid wanneer deze via Admin Dashboard is toegevoegd"
 
 #: classes/class.swpm-settings.php:124
 msgid "Email Settings (Password Reset)"
-msgstr "E-mail bericht (wachtwoord opnieuw instellen)"
+msgstr "E-mail Instellingen (Wachtwoord herstel)"
 
 #: classes/class.swpm-settings.php:131
 msgid " Email Settings (Account Upgrade Notification)"
-msgstr "E-mail bericht (lidmaatschap opwaarderen)"
+msgstr "Email instellingen (Bericht Account Upgrade)"
 
 #: classes/class.swpm-settings.php:152
 msgid "Enable Expired Account Login"
-msgstr "Inloggen verlopen lidmaatschap"
+msgstr "Verlopen account kan inloggen"
 
 #: classes/class.swpm-settings.php:153
 msgid ""
@@ -666,10 +664,9 @@ msgid ""
 "be able to view any protected content. This allows them to easily renew "
 "their account by making another payment."
 msgstr ""
-"Wanneer deze optie aanstaat kunnen leden met een verlopen lidmaatschap "
-"inloggen op het systeem, maar kunnen de afgeschermde inhoud dan niet zien. "
-"Dit laat ze eenvoudig hun lidmaatschap vernieuwen door een nieuwe betaling "
-"te doen."
+"Wanneer ingeschakeld, kunnen leden met een verlopen account wel inloggen op "
+"het systeem, maar geen afgeschermde inhoud zien. Hierdoor kunnen ze "
+"gemakkelijk hun account vernieuwen door een betaling te maken."
 
 #: classes/class.swpm-settings.php:377
 msgid "Not a Member?"
@@ -685,7 +682,7 @@ msgstr "Actief"
 
 #: classes/class.swpm-utils.php:68
 msgid "Inactive"
-msgstr "Niet actief"
+msgstr "Niet Actief"
 
 #: classes/class.swpm-utils.php:69
 msgid "Pending"
@@ -701,33 +698,33 @@ msgstr "Nooit"
 
 #: classes/class.swpm-utils.php:371
 msgid "Delete Account"
-msgstr "Verwijder lidmaatschap"
+msgstr "Verwijder Account"
 
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:63
 msgid "Payment Button ID"
-msgstr "Betalingsbutton ID"
+msgstr "Betaalknop ID"
 
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:64
 msgid "Payment Button Title"
-msgstr "Betalingsbutton Titel"
+msgstr "Betaalknop titel"
 
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:65
 msgid "Membership Level ID"
-msgstr "Lidmaatschapniveau ID"
+msgstr "Lidmaatschap niveau ID"
 
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:66
 msgid "Button Shortcode"
-msgstr "Button Shortcode"
+msgstr "Knop Shortcode"
 
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:106
 #: views/admin_members_list.php:15
 #: views/payments/admin_all_payment_transactions.php:33
 msgid "The selected entry was deleted!"
-msgstr "De geselecteerde gegevens zijn verwijderd!"
+msgstr "Het geselecteerde item is verwijderd!"
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:53
 msgid "View Profile"
-msgstr "Bekijk p[rofiel"
+msgstr "Bekijk Profiel"
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:72
 msgid "Row ID"
@@ -736,11 +733,11 @@ msgstr "Rij ID"
 #: classes/admin-includes/class.swpm-payments-list-table.php:73
 #: views/forgot_password.php:5
 msgid "Email Address"
-msgstr "E-mail adres"
+msgstr "Email Adres"
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:76
 msgid "Member Profile"
-msgstr "Lid Profiel"
+msgstr "Profiel Lid"
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:77
 msgid "Date"
@@ -760,15 +757,15 @@ msgstr "Lijstweergave"
 
 #: classes/common/class.swpm-list-table.php:138
 msgid "Excerpt View"
-msgstr "Uittrekselweergave"
+msgstr "Samenvatting weergave"
 
 #: classes/common/class.swpm-list-table.php:305
 msgid "No items found."
-msgstr "Geen onderdelen gevonden."
+msgstr "Geen items gevonden."
 
 #: classes/common/class.swpm-list-table.php:431
 msgid "Select bulk action"
-msgstr "Selecteer bulk actie"
+msgstr "Kies bulk actie"
 
 #: classes/common/class.swpm-list-table.php:433
 msgid "Bulk Actions"
@@ -780,11 +777,11 @@ msgstr "Toepassen"
 
 #: classes/common/class.swpm-list-table.php:543
 msgid "Filter by date"
-msgstr "Filteren op datum"
+msgstr "Filter op datum"
 
 #: classes/common/class.swpm-list-table.php:545
 msgid "All dates"
-msgstr "Alle datums"
+msgstr "Alle data"
 
 #: classes/common/class.swpm-list-table.php:555
 #, php-format
@@ -794,7 +791,7 @@ msgstr "%1$s %2$d"
 #: classes/common/class.swpm-list-table.php:599
 #, php-format
 msgid "%s pending"
-msgstr "%s in behandeling"
+msgstr "%s (In behandeling)"
 
 #: classes/common/class.swpm-list-table.php:704
 msgid "Select Page"
@@ -802,23 +799,23 @@ msgstr "Selecteer pagina"
 
 #: classes/common/class.swpm-list-table.php:848
 msgid "Select All"
-msgstr "Selecteer allemaal"
+msgstr "Alles Selecteren"
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:47
 msgid "Your membership profile will be updated to reflect the payment."
-msgstr "Deze betaling wordt toegevoegd aan jouw lidmaatschap profiel."
+msgstr "Je lidmaatschap profiel wordt bijgewerkt met deze betaling."
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:48
 msgid "Your profile username: "
-msgstr "Jouw profiel gebruikersnaam: "
+msgstr "Je gebruikersnaam"
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:60
 msgid "Click on the following link to complete the registration."
-msgstr "Klik op de volgende link om de registratie af te ronden."
+msgstr "Klik op de volgende link om je inschrijving te voltooien."
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:61
 msgid "Click here to complete your paid registration"
-msgstr "Klik hier om jouw betaalde registratie af te ronden."
+msgstr "Klik hier om je betaalde inschrijving te voltooien"
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:66
 msgid ""
@@ -826,38 +823,38 @@ msgid ""
 "processed. Please check back in a few minutes. An email will be sent to you "
 "with the details shortly."
 msgstr ""
-"Wanneer je net een lidmaatschap betaling hebt verricht, dan moet de betaling "
-"nog worden verwerkt. Probeer het over een aantal minuten nog eens. Je krijgt "
-"spoedig een e-mail met de betalingsgegevens."
+"Als je net een lidmaatschap betaling hebt gemaakt, dan moet je betaling nog "
+"worden verwerkt. probeer het over een paar minuten nog eens. Je ontvangt "
+"binnenkort ook een e-mail met de details."
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:80
 msgid "Expiry: "
-msgstr "Verloopt: "
+msgstr "Vervaldatum: "
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:82
 msgid "You are not logged-in as a member"
-msgstr "Je bent niet als lid aangemeld."
+msgstr "Je bent niet ingelogd als lid"
 
 #: views/add.php:14 views/admin_add.php:19 views/admin_edit.php:17
 #: views/edit.php:13 views/login.php:11
 msgid "Password"
-msgstr "Wachtwoord"
+msgstr "Wachtwoord:"
 
 #: views/add.php:18 views/edit.php:17
 msgid "Repeat Password"
-msgstr "Herhaal wachtwoord"
+msgstr "Herhaal Wachtwoord"
 
 #: views/add.php:41
 msgid "Register"
-msgstr "Registreer"
+msgstr "Aanmelden"
 
 #: views/admin_add.php:6
 msgid "Add Member"
-msgstr "Voeg een lid toe"
+msgstr "Lid toevoegen"
 
 #: views/admin_add.php:7
 msgid "Create a brand new user and add it to this site."
-msgstr "Maak een nieuwe gebruiker aan, en voeg deze toe aan de website."
+msgstr "Een nieuwe gebruiker maken en toevoegen aan deze site."
 
 #: views/admin_add.php:11 views/admin_add.php:15 views/admin_add_level.php:11
 #: views/admin_add_level.php:15 views/admin_add_level.php:19
@@ -868,7 +865,7 @@ msgstr "(vereist)"
 
 #: views/admin_add.php:15 views/admin_edit.php:13
 msgid "E-mail"
-msgstr "E-mail"
+msgstr "Email"
 
 #: views/admin_add.php:19
 msgid "(twice, required)"
@@ -876,7 +873,7 @@ msgstr "(tweemaal, vereist)"
 
 #: views/admin_add.php:24 views/admin_edit.php:21
 msgid "Strength indicator"
-msgstr "Sterkte-indicator"
+msgstr "Sterkte indicator"
 
 #: views/admin_add.php:25 views/admin_edit.php:22
 msgid ""
@@ -884,17 +881,17 @@ msgid ""
 "stronger, use upper and lower case letters, numbers and symbols like ! \" ? "
 "$ % ^ &amp; )."
 msgstr ""
-"Hint: Het wachtwoord moet minimaal zeven karakters bevatten. Gebruik "
-"hoofdletters en kleine letters, nummers en symbolen zoals ! \" ? $ % ^ &amp; "
-"om het wachtwoord sterker te maken)."
+"Hint: Je wachtwoord moet minstens zeven karakters bevatten. Om het sterker "
+"te maken gebruik je hoofdletters en kleine letters, nummers en symbolen "
+"zoals ! ? / $ %  ^ & ; ) \""
 
 #: views/admin_add.php:29 views/admin_edit.php:26 views/loggedin.php:7
 msgid "Account Status"
-msgstr "Lidmaatschap Status"
+msgstr "Account Status"
 
 #: views/admin_add.php:39
 msgid "Add New Member "
-msgstr "Voeg een nieuw lid toe"
+msgstr "Voeg nieuw lid toe"
 
 #: views/admin_addon_settings.php:3 views/admin_settings.php:3
 #: views/admin_tools_settings.php:3 views/payments/admin_payment_settings.php:3
@@ -906,9 +903,8 @@ msgid ""
 "Some of the simple membership plugin's addon settings and options will be "
 "displayed here (if you have them)"
 msgstr ""
-"De instellingen en opties van een aantal extra functies voor de Simple "
-"Membership plug-in worden hier weergegeven (wanneer je deze hebt "
-"geïnstalleerd)"
+"Sommige van addon instellingen en opties van de WP Membership plugin worden "
+"hier weergegeven (als je ze hebt)"
 
 #: views/admin_addon_settings.php:13
 msgid "Save Changes"
@@ -916,11 +912,11 @@ msgstr "Opslaan"
 
 #: views/admin_add_level.php:6
 msgid "Create new membership level."
-msgstr "Maak een nieuw lidmaatschapniveau aan"
+msgstr "Maak een nieuw Lidmaatschap niveau"
 
 #: views/admin_add_level.php:11 views/admin_edit_level.php:10
 msgid "Membership Level Name"
-msgstr "Lidmaatschapniveau naam"
+msgstr "Lidmaatschap Niveau Naam"
 
 #: views/admin_add_level.php:15 views/admin_edit_level.php:14
 msgid "Default WordPress Role"
@@ -928,55 +924,55 @@ msgstr "Standaard WordPress Rol"
 
 #: views/admin_add_level.php:19 views/admin_edit_level.php:18
 msgid "Access Duration"
-msgstr "Toegangstijd"
+msgstr "Duur toegang"
 
 #: views/admin_add_level.php:22
 msgid "No Expiry (Access for this level will not expire until cancelled"
 msgstr ""
-"Verloopt niet (toegang voor dit niveau verloopt niet tot het wordt opgezegd"
+"Geen Vervaldatum (Toegang voor dit niveau vervalt niet, tenzij geannuleerd)"
 
 #: views/admin_add_level.php:23 views/admin_add_level.php:25
 #: views/admin_add_level.php:27 views/admin_add_level.php:29
 #: views/admin_edit_level.php:22 views/admin_edit_level.php:25
 #: views/admin_edit_level.php:28 views/admin_edit_level.php:31
 msgid "Expire After"
-msgstr "Verloop na"
+msgstr "Vervallen na"
 
 #: views/admin_add_level.php:24 views/admin_edit_level.php:23
 msgid "Days (Access expires after given number of days)"
-msgstr "dagen (toegang verloopt na het aantal opgegeven dagen)"
+msgstr "Dagen (Toegang vervalt na bepaald aantal dagen)"
 
 #: views/admin_add_level.php:26
 msgid "Weeks (Access expires after given number of weeks"
-msgstr "weken (toegang verloopt na het aantal opgegeven weken)"
+msgstr "Weken (Toegang vervalt na bepaald aantal weken)"
 
 #: views/admin_add_level.php:28 views/admin_edit_level.php:29
 msgid "Months (Access expires after given number of months)"
-msgstr "maanden (toegang verloopt na het aantal opgegeven maanden)"
+msgstr "Maanden (Toegang vervalt na bepaald aantal maanden)"
 
 #: views/admin_add_level.php:30 views/admin_edit_level.php:32
 msgid "Years (Access expires after given number of years)"
-msgstr "jaren (toegang verloopt na het aantal opgegeven jaren)"
+msgstr "Jaren (Toegang vervalt na bepaald aantal jaren)"
 
 #: views/admin_add_level.php:31 views/admin_edit_level.php:34
 msgid "Fixed Date Expiry"
-msgstr "Vaste datum"
+msgstr "Vaste vervaldatum"
 
 #: views/admin_add_level.php:32 views/admin_edit_level.php:35
 msgid "(Access expires on a fixed date)"
-msgstr "(toegang verloopt op een vaste datum)"
+msgstr "(Toegang vervalt op een vaste datum)"
 
 #: views/admin_add_level.php:38
 msgid "Add New Membership Level "
-msgstr "Voeg een nieuw lidmaatschapniveau toe"
+msgstr "Voeg een nieuw lidmaatschap niveau toe"
 
 #: views/admin_add_ons_page.php:7
 msgid "Simple WP Membership::Add-ons"
-msgstr "Simple WP Membership::Extra Functies"
+msgstr "Simple WP Membership::Add-ons"
 
 #: views/admin_category_list.php:2
 msgid "Simple WP Membership::Categories"
-msgstr "Simple WP Membership::Categorieën"
+msgstr "Simple WP Membership :: Categorieën"
 
 #: views/admin_category_list.php:7
 msgid ""
@@ -984,9 +980,9 @@ msgid ""
 "\"General Protection\" from the drop-down box below and then select the "
 "categories that should be protected from non-logged in users."
 msgstr ""
-"Bescherm als eerste de categorie op jouw site door \"General Protection\" te "
-"selecteren in de drop-down box hieronder. Selecteer dan de categorieën die "
-"moeten worden beschermd tegen niet-ingelogde gebruikers."
+"Scherm eerst de categorie op je hele site af door 'Algemene Afscherming' te "
+"kiezen uit het drop-down vak hieronder. Selecteer vervolgens de categorieën "
+"die afgeschermd moeten worden van niet-ingelogde gebruikers."
 
 #: views/admin_category_list.php:10
 msgid ""
@@ -994,9 +990,9 @@ msgid ""
 "then select the categories you want to grant access to (for that particular "
 "membership level)."
 msgstr ""
-"Selecteer hierna een bestaand lidmaatschapniveau van de drop-down box "
-"hieronder, en selecteer dan alle categorieën die je toegang wilt geven (voor "
-"dat specifieke lidmaatschapniveau)."
+"Selecteer vervolgens een bestaand lidmaatschap niveau uit de keuzelijst "
+"hieronder en selecteer de categorieën waartoe je toegang wilt geven (voor "
+"dat specifieke niveau van lidmaatschap)."
 
 #: views/admin_edit.php:5
 msgid "Edit Member"
@@ -1004,23 +1000,23 @@ msgstr "Bewerk lid"
 
 #: views/admin_edit.php:6
 msgid "Edit existing member details."
-msgstr "Bewerk gegevens bestaand lid."
+msgstr "Wijzig gegevens bestaand lid."
 
 #: views/admin_edit.php:17
 msgid "(twice, leave empty to retain old password)"
-msgstr "(tweemaal, laat leeg om het oude wachtwoord te behouden)"
+msgstr "(Tweemaal, leeglaten om oude wachtwoord te behouden)"
 
 #: views/admin_edit.php:33
 msgid "Notify User"
-msgstr "Gebruiker inlichten"
+msgstr "Gebruiker op de hoogte brengen"
 
 #: views/admin_edit.php:40
 msgid "Subscriber ID/Reference"
-msgstr "Inschrijf ID/Referentie"
+msgstr "Abonnee ID/Referentie"
 
 #: views/admin_edit.php:44
 msgid "Last Accessed From IP"
-msgstr "Laatst gebruikt vanaf IP"
+msgstr "Laatst ingelogd via IP"
 
 #: views/admin_edit.php:52
 msgid "Edit User "
@@ -1028,24 +1024,24 @@ msgstr "Wijzig gebruiker"
 
 #: views/admin_edit_level.php:5
 msgid "Edit membership level"
-msgstr "Wijzig lidmaatschapniveau"
+msgstr "Wijzig  lidmaatschap niveau"
 
 #: views/admin_edit_level.php:6
 msgid "Edit membership level."
-msgstr "Wijzig lidmaatschapniveau."
+msgstr "Wijzig  lidmaatschap niveau."
 
 #: views/admin_edit_level.php:21
 msgid "No Expiry (Access for this level will not expire until cancelled)"
 msgstr ""
-"Verloopt niet (toegang voor dit niveau verloopt niet tot het wordt opgezegd)"
+"Geen Vervaldatum (Toegang voor dit niveau vervalt niet, tenzij geannuleerd)"
 
 #: views/admin_edit_level.php:26
 msgid "Weeks (Access expires after given number of weeks)"
-msgstr "weken (toegang verloopt na het aantal opgegeven weken) ("
+msgstr "Weken (Toegang vervalt na bepaald aantal weken)"
 
 #: views/admin_edit_level.php:41
 msgid "Edit Membership Level "
-msgstr "Wijzig lidmaatschap niveau"
+msgstr "Wijzig  lidmaatschap niveau"
 
 #: views/admin_members.php:2
 msgid "Simple WP Membership::Members"
@@ -1053,11 +1049,11 @@ msgstr "Simple WP Membership::Leden"
 
 #: views/admin_members.php:3 views/admin_members_list.php:30
 msgid "Add New"
-msgstr "Voeg nieuw toe"
+msgstr "Nieuwe toevoegen "
 
 #: views/admin_membership_levels.php:2
 msgid "Simple WP Membership::Membership Levels"
-msgstr "Simple WP Membership::Lidmaatschapniveaus"
+msgstr "Simple WP Membership::Lidmaatschap niveaus"
 
 #: views/admin_membership_levels.php:12 views/admin_members_list.php:6
 msgid "search"
@@ -1077,7 +1073,7 @@ msgstr "Categorie Afscherming"
 
 #: views/admin_membership_manage.php:17
 msgid "Example Content Protection Settings"
-msgstr "Voorbeeld inhoud afscherming instellingen"
+msgstr "Voorbeeld inhoud afscherm instellingen"
 
 #: views/admin_member_form_common_part.php:23
 msgid "Gender"
@@ -1117,7 +1113,7 @@ msgstr "Lid sinds"
 
 #: views/admin_tools_settings.php:9
 msgid "Generate a Registration Completion link"
-msgstr "Genereer een Voltooien Registratie link"
+msgstr "Genereer een Registratie Voltooien link"
 
 #: views/admin_tools_settings.php:12
 msgid ""
@@ -1125,13 +1121,13 @@ msgid ""
 "your customer if they have missed the email that was automatically sent out "
 "to them after the payment."
 msgstr ""
-"Je kunt hier zelf een Voltooien Registratie link genereren en aan je klant "
-"geven, wanneer deze de automatische e-mail die was toegezonden na betaling "
-"heeft gemist."
+"Je kunt hier zelf een 'registratie compleet'-link genereren en aan je klant "
+"geven als zij de automatische e-mail die hen was toegezonden na betaling "
+"hebben gemist."
 
 #: views/admin_tools_settings.php:17
 msgid "Generate Registration Completion Link"
-msgstr "Genereer Voltooien Registratie link"
+msgstr "Genereer 'registratie voltooid'- link"
 
 #: views/admin_tools_settings.php:20
 msgid "OR"
@@ -1139,19 +1135,19 @@ msgstr "OF"
 
 #: views/admin_tools_settings.php:21
 msgid "For All Pending Registrations"
-msgstr "Voor alle in behandeling zijnde registraties"
+msgstr "Voor alle registraties in behandeling"
 
 #: views/admin_tools_settings.php:24
 msgid "Registration Completion Links Will Appear Below:"
-msgstr "De Voltooien Registratie link verschijnt hieronder:"
+msgstr "Registratie voltooid links verschijnen hieronder:"
 
 #: views/admin_tools_settings.php:31
 msgid "Send Registration Reminder Email too"
-msgstr "Stuur ook een registratie herinnering "
+msgstr "Stuur ook een Registratie herinnering email"
 
 #: views/admin_tools_settings.php:34
 msgid "Submit"
-msgstr "Verstuur"
+msgstr "Verzenden"
 
 #: views/edit.php:59
 msgid "Update"
@@ -1159,7 +1155,7 @@ msgstr "Bijwerken"
 
 #: views/forgot_password.php:12
 msgid "Reset Password"
-msgstr "Wachtwoord opnieuw instellen"
+msgstr "Reset Wachtwoord"
 
 #: views/loggedin.php:3
 msgid "Logged in as"
@@ -1171,7 +1167,7 @@ msgstr "Lidmaatschap"
 
 #: views/loggedin.php:15
 msgid "Account Expiry"
-msgstr "Lidmaatschap verloopt"
+msgstr "Account verloopt"
 
 #: views/loggedin.php:19
 msgid "Logout"
@@ -1179,7 +1175,7 @@ msgstr "Uitloggen"
 
 #: views/login.php:18
 msgid "Remember Me"
-msgstr "Onthoud mijn gegevens"
+msgstr "Onthoud mij"
 
 #: views/login.php:24
 msgid "Forgot Password"
@@ -1187,45 +1183,43 @@ msgstr "Wachtwoord vergeten"
 
 #: views/payments/admin_all_payment_transactions.php:7
 msgid "All the payments/transactions of your members are recorded here."
-msgstr "Alle betalingen en transacties van jouw leden worden hier bijgehouden."
+msgstr "Alle betalingen / transacties van je leden zijn hier opgenomen."
 
 #: views/payments/admin_all_payment_transactions.php:14
 msgid "Search for a transaction by using email or name"
-msgstr "Zoek voor een transactie op e-mail adres of naam"
+msgstr "Zoekt u een transactie met behulp van e-mail of naam"
 
 #: views/payments/admin_all_payment_transactions.php:18
 msgid "Search"
-msgstr "Zoeken"
+msgstr "﻿Zoeken"
 
 #: views/payments/admin_create_payment_buttons.php:13
 msgid ""
 "You can create new payment button for your memberships using this interface."
 msgstr ""
-"Je kunt via dit scherm een nieuwe betalingsbutton voor jouw lidmaatschappen "
-"maken."
+"Met deze interface kun je een nieuwe betaalknop maken voor je "
+"lidmaatschappen."
 
 #: views/payments/admin_create_payment_buttons.php:22
 msgid "Select Payment Button Type"
-msgstr "Selecteer betalingsbutton soort"
+msgstr "Selecteer Type Betaal-knop"
 
 #: views/payments/admin_create_payment_buttons.php:34
 msgid "Next"
-msgstr "Volgende"
+msgstr "volgende"
 
 #: views/payments/admin_edit_payment_buttons.php:12
 msgid "You can edit a payment button using this interface."
-msgstr "Je kunt via dit scherm een betalingsbutton bewerken."
+msgstr "Je kunt een betaling knop bewerken met deze interface."
 
 #: views/payments/admin_payments_page.php:9
 msgid "Simple Membership::Payments"
-msgstr "Simple Membership::Betalingen"
+msgstr "Simple WP Membership::Betalingen"
 
 #: views/payments/admin_payment_buttons.php:7
 msgid ""
 "All the membership buttons that you created in the plugin are displayed here."
-msgstr ""
-"Alle lidmaatschapbuttons die je  in deze plug-in hebt gemaakt staan "
-"hieronder."
+msgstr "Alle lidmaatschap knoppen die je hebt gemaakt staan hier."
 
 #: views/payments/admin_payment_settings.php:31
 msgid "PayPal Integration Settings"
@@ -1233,32 +1227,32 @@ msgstr "PayPal Integratie Instellingen"
 
 #: views/payments/admin_payment_settings.php:34
 msgid "Generate the \"Advanced Variables\" Code for your PayPal button"
-msgstr "Genereer de \"Geavanceerde Variabelen\" code voor je PayPal button"
+msgstr "Genereer de \"Geavanceerde Variabelen\" Code voor je PayPal knop"
 
 #: views/payments/admin_payment_settings.php:37
 msgid "Enter the Membership Level ID"
-msgstr "Voer het lidmaatschapniveau ID in"
+msgstr "Voer het lidmaatschapsniveau-ID in"
 
 #: views/payments/admin_payment_settings.php:39
 msgid "Generate Code"
-msgstr "Genereer de code"
+msgstr "Genereer Code"
 
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:18
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:192
 msgid "PayPal Buy Now Button Configuration"
-msgstr "PayPal Koop Nu Button Configuratie"
+msgstr "PayPal Buy Now Knop Configuratie"
 
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:28
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:209
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:29
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:302
 msgid "Button Title"
-msgstr "Button Titel"
+msgstr "Knop titel"
 
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:46
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:227
 msgid "Payment Amount"
-msgstr "Betalingsbedrag"
+msgstr "Te Betalen Bedrag:"
 
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:54
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:235
@@ -1272,80 +1266,80 @@ msgstr "Betalingsvaluta"
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:173
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:446
 msgid "Return URL"
-msgstr "Terugkeer URL"
+msgstr "Retour URL"
 
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:101
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:282
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:86
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:359
 msgid "PayPal Email"
-msgstr "PayPal e-mail adres"
+msgstr "PayPal Email "
 
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:109
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:290
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:181
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:454
 msgid "Button Image URL"
-msgstr "Button Afbeelding URL"
+msgstr "Knop Afbeelding URL"
 
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:119
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:300
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:193
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:466
 msgid "Save Payment Data"
-msgstr "Bewaar betalingsgegevens"
+msgstr "Betalingsgegevens Opslaan"
 
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:201
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:294
 msgid "Button ID"
-msgstr "Button ID"
+msgstr "Knop ID"
 
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:20
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:288
 msgid "PayPal Subscription Button Configuration"
-msgstr "PayPal Abonnement Button Configuratie"
+msgstr "PayPal Subscription Knop Configuratie"
 
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:94
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:367
 msgid "Billing Amount Each Cycle"
-msgstr "Betalingsbedrag per periode"
+msgstr "Factuur bedrag per cyclus"
 
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:102
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:375
 msgid "Billing Cycle"
-msgstr "Betalingsperiode"
+msgstr "Factureringscyclus "
 
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:115
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:388
 msgid "Billing Cycle Count"
-msgstr "Betalingsperiode Aantal"
+msgstr "Factureringscyclus Teller"
 
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:123
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:396
 msgid "Re-attempt on Failure"
-msgstr "Nogmaals proberen bij probleem"
+msgstr "Opnieuw proberen indien mislukt"
 
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:136
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:409
 msgid ""
 "Trial Billing Details (Leave empty if you are not offering a trial period)"
 msgstr ""
-"Proef Betalingsgegevens (leeglaten wanneer je geen proefperiode aanbiedt)"
+"Rekening Details Proefperiode (Laat leeg als je geen proefperiode aanbiedt)"
 
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:142
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:415
 msgid "Trial Billing Amount"
-msgstr "Proef Betalingsbedrag"
+msgstr "Proefperiode bedrag"
 
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:150
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:423
 msgid "Trial Billing Period"
-msgstr "Proef Betalingsperiode"
+msgstr "Looptijd proefperiode"
 
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:167
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:440
 msgid "Optional Details"
-msgstr "Optionele Gegevens"
+msgstr "Optionele Details"
 
 #: views/payments/payment-gateway/paypal_button_shortcode_view.php:77
 #: views/payments/payment-gateway/paypal_button_shortcode_view.php:79
@@ -1355,75 +1349,4 @@ msgstr "Koop Nu"
 #: views/payments/payment-gateway/paypal_button_shortcode_view.php:197
 #: views/payments/payment-gateway/paypal_button_shortcode_view.php:199
 msgid "Subscribe Now"
-msgstr "Meld Je Nu Aan"
-
-#~ msgid "You are not allowed to view this content"
-#~ msgstr "U bent niet gemachtigd deze inhoud te bekijken."
-
-#~ msgid "Registration Successful."
-#~ msgstr "Registratie is gelukt."
-
-#~ msgid "Invalid User Name"
-#~ msgstr "Ongeldige gebruikersnaam"
-
-#~ msgid "Bad Cookie Hash"
-#~ msgstr "Verkeerde Cookie hash"
-
-#~ msgid ""
-#~ "Wordpress account exists with given user name. But given email doesn't "
-#~ "match."
-#~ msgstr ""
-#~ "Het Wordpress account met deze gebruikersnaam bestaat. Maar het email "
-#~ "adres klopt niet. "
-
-#~ msgid ""
-#~ "Wordpress account exists with given email. But given user name doesn't "
-#~ "match."
-#~ msgstr ""
-#~ "Dit Wordpress account met dit email adres bestaat maar de gebruikersnaam "
-#~ "klopt niet."
-
-#~ msgid "User name is required"
-#~ msgstr "De gebruikersnaam is vereist."
-
-#~ msgid "User name already exists."
-#~ msgstr "Deze gebruikersnaam bestaat reeds."
-
-#~ msgid "Subscription starts field is invalid"
-#~ msgstr "Inschrijving start veld is ongeldig"
-
-#~ msgid "Email Address Not Valid."
-#~ msgstr "Email adres is ongeldig."
-
-#~ msgid "Subscriptoin duration must be > 0."
-#~ msgstr "Duur van lidmaatschap moet groter zijn dan 0."
-
-#~ msgid "User Name"
-#~ msgstr "Gebruikersnaam"
-
-#~ msgid "Subscription Starts"
-#~ msgstr "Inschrijving start"
-
-#~ msgid "Subscription Valid For"
-#~ msgstr "Inschrijving geldig voor"
-
-#~ msgid "Enable/disable registration for free membership level"
-#~ msgstr "Inschakelen/uitschakelen van registratie voor gratis Lidmaatschap"
-
-#~ msgid "Send Notification To Admin"
-#~ msgstr "Stuur een bericht naar de beheerder"
-
-#~ msgid "Display SWPM Login."
-#~ msgstr "Toon SWPM login"
-
-#~ msgid "SWPM Login"
-#~ msgstr "SWPM Login"
-
-#~ msgid "User name"
-#~ msgstr "Gebruikersnaam"
-
-#~ msgid "Subscription Duration"
-#~ msgstr "Inschrijftermijn"
-
-#~ msgid "No Expiry"
-#~ msgstr "Verloopt niet"
+msgstr "Nu inschrijven"

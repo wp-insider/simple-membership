@@ -292,43 +292,43 @@ class SwpmSettings {
     }
 
     public function general_settings_callback() {
-        SwpmUtils::e('General Plugin Settings.');
+        _e('General Plugin Settings.', 'swpm');
     }
 
     public function pages_settings_callback() {
-        SwpmUtils::e('Page Setup and URL Related settings.');
+        _e('Page Setup and URL Related settings.', 'swpm');
     }
 
     public function testndebug_settings_callback() {
-        SwpmUtils::e('Testing and Debug Related Settings.');
+        _e('Testing and Debug Related Settings.', 'swpm');
     }
 
     public function reg_email_settings_callback() {
-        SwpmUtils::e('This email will be sent to your users when they complete the registration and become a member.');
+        _e('This email will be sent to your users when they complete the registration and become a member.', 'swpm');
     }
 
     public function reset_password_settings_callback() {
-        SwpmUtils::e('This email will be sent to your users when they use the password reset functionality.');
+        _e('This email will be sent to your users when they use the password reset functionality.', 'swpm');
     }
 
     public function email_misc_settings_callback() {
-        SwpmUtils::e('Settings in this section apply to all emails.');
+        _e('Settings in this section apply to all emails.', 'swpm');
     }
 
     public function upgrade_email_settings_callback() {
-        SwpmUtils::e('This email will be sent to your users after account upgrade (when an existing member pays for a new membership level).');
+        _e('This email will be sent to your users after account upgrade (when an existing member pays for a new membership level).', 'swpm');
     }
 
     public function bulk_activate_email_settings_callback() {
-        SwpmUtils::e('This email will be sent to your members when you use the bulk account activate and notify action.');
+        _e('This email will be sent to your members when you use the bulk account activate and notify action.', 'swpm');
     }
     
     public function reg_prompt_email_settings_callback() {
-        SwpmUtils::e('This email will be sent to prompt users to complete registration after the payment.');
+        _e('This email will be sent to prompt users to complete registration after the payment.', 'swpm');
     }
 
     public function advanced_settings_callback() {
-        SwpmUtils::e('This page allows you to configure some advanced features of the plugin.');
+        _e('This page allows you to configure some advanced features of the plugin.', 'swpm');
     }
 
     public function sanitize_tab_1($input) {

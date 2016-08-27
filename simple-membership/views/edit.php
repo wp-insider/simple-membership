@@ -1,3 +1,11 @@
+<?php
+
+$auth = SwpmAuth::get_instance();
+$user_data = (array) $auth->userData;
+$user_data['membership_level_alias'] = $auth->get('alias');
+extract($user_data, EXTR_SKIP);
+
+?>
 <div class="swpm-edit-profile-form">
 <form id="swpm-editprofile-form" name="swpm-editprofile-form" method="post" action="">
     <table>

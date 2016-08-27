@@ -285,11 +285,9 @@ class SimpleWpMembership {
             if (!empty($out)) {
                 return $out;
             }
-            $user_data = (array) $auth->userData;
-            $user_data['membership_level_alias'] = $auth->get('alias');
             ob_start();
-            extract($user_data, EXTR_SKIP);
-            include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/edit.php');
+            //Load the edit profile template
+            SwpmUtilsTemplate::swpm_load_template('edit.php', false);
             return ob_get_clean();
         }
         return SwpmUtils::_('You are not logged in.');

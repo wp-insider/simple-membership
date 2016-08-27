@@ -131,7 +131,7 @@ https://simple-membership-plugin.com/
 = TODO - 3.3.2 =
 - The "Registration Successful" message can now be customized using the custom messages addon.
 - TODO - Need to release the custom messages addon for the above feature.
-- The edit profile template file can now also be overriden using the swpm_load_template_files filter.
+- The edit profile template file can now also be overridden using the swpm_load_template_files filter.
 - Updated the Dutch language translation file.
 - Added Estonian language translation file.
 

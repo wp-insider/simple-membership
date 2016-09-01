@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe
 Requires at least: 3.3
 Tested up to: 4.6
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,10 +128,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO - 3.3.2 =
-- The "Registration Successful" message can now be customized using the custom messages addon.
-- TODO - Need to release the custom messages addon for the above feature.
+= 3.3.2 =
 - You can now view a member's last accessed date and time value by editing the member's profile from the admin dashboard.
+- The "Registration Successful" message can now be customized using the custom messages addon.
 - The edit profile template file can now also be overridden using the swpm_load_template_files filter.
 - Updated the Dutch language translation file.
 - Added Estonian language translation file.

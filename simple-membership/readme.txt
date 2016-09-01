@@ -134,6 +134,7 @@ https://simple-membership-plugin.com/
 - The edit profile template file can now also be overridden using the swpm_load_template_files filter.
 - Updated the Dutch language translation file.
 - Added Estonian language translation file.
+- Updated the Stripe payment gateway library to the latest version.
 
 = 3.3.1 =
 - Added an option in the advanced settings menu to use the timezone value specified in your WordPress General Settings interface.

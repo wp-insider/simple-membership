@@ -89,9 +89,20 @@ class SwpmAuth {
         if (empty($this->userData)) {
             return false;
         }
-        
+        global $wpdb;
         $enable_expired_login = SwpmSettings::get_instance()->get_value('enable-expired-account-login', '');
 
+        //Update the last accessed date and IP address for this login attempt. $wpdb->update(table, data, where, format, where format)
+        $last_accessed_date = current_time('mysql');
+        $last_accessed_ip = SwpmUtils::get_user_ip_address();
+        $wpdb->update($wpdb->prefix . 'swpm_members_tbl',
+                array('last_accessed' => $last_accessed_date, 'last_accessed_from_ip' => $last_accessed_ip),
+                array('member_id' => $this->userData->member_id),
+                array('%s', '%s'),
+                array('%d')
+         );
+        
+        //Check the member's account status.
         $can_login = true;
         if ($this->userData->account_state == 'inactive' && empty($enable_expired_login)) {
             $this->lastStatusMsg = SwpmUtils::_('Account is inactive.');
@@ -112,10 +123,7 @@ class SwpmAuth {
 
         if (SwpmUtils::is_subscription_expired($this->userData)) {
             if ($this->userData->account_state == 'active') {
-                global $wpdb;
-                $wpdb->update(
-                        $wpdb->prefix . 'swpm_members_tbl', array('account_state' => 'expired'), array('member_id' => $this->userData->member_id), array('%s'), array('%d')
-                );
+                $wpdb->update($wpdb->prefix . 'swpm_members_tbl', array('account_state' => 'expired'), array('member_id' => $this->userData->member_id), array('%s'), array('%d'));
             }
             if (empty($enable_expired_login)) {
                 $this->lastStatusMsg = SwpmUtils::_('Account has expired.');

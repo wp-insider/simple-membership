@@ -131,6 +131,7 @@ https://simple-membership-plugin.com/
 = TODO - 3.3.2 =
 - The "Registration Successful" message can now be customized using the custom messages addon.
 - TODO - Need to release the custom messages addon for the above feature.
+- You can now view a member's last accessed date and time value by editing the member's profile from the admin dashboard.
 - The edit profile template file can now also be overridden using the swpm_load_template_files filter.
 - Updated the Dutch language translation file.
 - Added Estonian language translation file.

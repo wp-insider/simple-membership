@@ -167,7 +167,8 @@ class swpm_paypal_ipn_handler {
                     swpm_handle_subsc_signup_stand_alone($this->ipn_data,$subsc_ref,$this->ipn_data['txn_id'],$swpm_id);
                 }
                 else if($transaction_type == "subscr_payment"){
-                    //swpm_update_member_subscription_start_date_if_applicable($this->ipn_data);
+                    $this->debug_log('swpm subscr_payment type transaction. Checking if the member profile needed to be updated',true);
+                    swpm_update_member_subscription_start_date_if_applicable($this->ipn_data);
                 }
             }
             else

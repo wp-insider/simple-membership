@@ -1,4 +1,7 @@
 <?php 
+
+//$this refers to class "SwpmMembers" in this context.
+
 if (isset($_REQUEST['member_action']) && $_REQUEST['member_action'] == 'delete') {
     //Delete this record
     $this->delete();

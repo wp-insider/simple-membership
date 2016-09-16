@@ -55,9 +55,10 @@ class SwpmMembers extends WP_List_Table {
     }
 
     function column_member_id($item) {
+        $delete_swpmuser_nonce = wp_create_nonce( 'delete_swpmuser_admin_end' );
         $actions = array(
             'edit' => sprintf('<a href="admin.php?page=simple_wp_membership&member_action=edit&member_id=%s">Edit</a>', $item['member_id']),
-            'delete' => sprintf('<a href="admin.php?page=simple_wp_membership&member_action=delete&member_id=%s" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>', $item['member_id']),
+            'delete' => sprintf('<a href="admin.php?page=simple_wp_membership&member_action=delete&member_id=%s&delete_swpmuser_nonce=%s" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>', $item['member_id'], $delete_swpmuser_nonce),
         );
         return $item['member_id'] . $this->row_actions($actions);
     }
@@ -321,6 +322,12 @@ class SwpmMembers extends WP_List_Table {
     
     function delete() {
         if (isset($_REQUEST['member_id'])) {
+            //Check nonce
+            if ( !isset($_REQUEST['delete_swpmuser_nonce']) || !wp_verify_nonce($_REQUEST['delete_swpmuser_nonce'], 'delete_swpmuser_admin_end' )){
+                //Nonce check failed.
+                wp_die(SwpmUtils::_("Error! Nonce verification failed for user delete from admin end."));
+            }
+        
             $id = sanitize_text_field($_REQUEST['member_id']);
             $id = absint($id);
             SwpmMembers::delete_user_by_id($id);

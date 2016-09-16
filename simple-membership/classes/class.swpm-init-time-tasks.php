@@ -52,12 +52,12 @@ class SwpmInitTimeTasks {
     public function admin_init() {
         $createswpmuser = filter_input(INPUT_POST, 'createswpmuser');
         if (!empty($createswpmuser)) {
-            SwpmAdminRegistration::get_instance()->register();
+            SwpmAdminRegistration::get_instance()->register_admin_end();
         }
         $editswpmuser = filter_input(INPUT_POST, 'editswpmuser');
         if (!empty($editswpmuser)) {
             $id = filter_input(INPUT_GET, 'member_id', FILTER_VALIDATE_INT);
-            SwpmAdminRegistration::get_instance()->edit($id);
+            SwpmAdminRegistration::get_instance()->edit_admin_end($id);
         }
         $createswpmlevel = filter_input(INPUT_POST, 'createswpmlevel');
         if (!empty($createswpmlevel)) {

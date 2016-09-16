@@ -1,7 +1,7 @@
 <div class="wrap" id="swpm-profile-page" type="edit">
     <form action="" method="post" name="swpm-edit-user" id="swpm-edit-user" class="validate"<?php do_action('user_new_form_tag');?>>
     <input name="action" type="hidden" value="edituser" />
-    <?php wp_nonce_field( 'edit-swpmuser', '_wpnonce_edit-swpmuser' ) ?>
+    <?php wp_nonce_field( 'edit_swpmuser_admin_end', '_wpnonce_edit_swpmuser_admin_end' ) ?>
     <h3><?php echo  SwpmUtils::_('Edit Member') ?></h3>
     <p>
         <?php echo  SwpmUtils::_('Edit existing member details.'); ?>
@@ -82,7 +82,8 @@
     <?php echo apply_filters('swpm_admin_custom_fields', '',$membership_level); ?>
     <?php submit_button( SwpmUtils::_('Edit User '), 'primary', 'editswpmuser', true, array( 'id' => 'createswpmusersub' ) ); ?>
     <?php
-    $member_delete_url = "?page=simple_wp_membership&member_action=delete&member_id=".$member_id;
+    $delete_swpmuser_nonce = wp_create_nonce( 'delete_swpmuser_admin_end' );
+    $member_delete_url = "?page=simple_wp_membership&member_action=delete&member_id=".$member_id."&delete_swpmuser_nonce=".$delete_swpmuser_nonce;
     echo '<div class="swpm-admin-delete-user-profile-link">';
     echo '<a style="color:red;font-weight:bold;" href="'.$member_delete_url.'" onclick="return confirm(\'Are you sure you want to delete this user profile?\')">'.SwpmUtils::_('Delete User Profile').'</a>';
     echo '</div>';

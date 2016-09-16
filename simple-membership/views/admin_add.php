@@ -1,7 +1,7 @@
 <div class="wrap" id="swpm-profile-page" type="add">
 <form action="" method="post" name="swpm-create-user" id="swpm-create-user" class="validate"<?php do_action('user_new_form_tag');?>>
 <input name="action" type="hidden" value="createuser" />
-<?php wp_nonce_field( 'create-swpmuser', '_wpnonce_create-swpmuser' ) ?>
+<?php wp_nonce_field( 'create_swpmuser_admin_end', '_wpnonce_create_swpmuser_admin_end' ) ?>
 <h3><?php echo  SwpmUtils::_('Add Member') ?></h3>
 <p><?php echo  SwpmUtils::_('Create a brand new user and add it to this site.'); ?></p>
 <table class="form-table">

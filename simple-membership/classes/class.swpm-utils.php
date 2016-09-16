@@ -357,7 +357,6 @@ abstract class SwpmUtils {
 
     public static function get_free_level() {
         $encrypted = filter_input(INPUT_POST, 'level_identifier');
-        global $wpdb;
         if (!empty($encrypted)) {
             return SwpmPermission::get_instance($encrypted)->get('id');
         }

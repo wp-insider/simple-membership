@@ -15,7 +15,13 @@ class SwpmAdminRegistration extends SwpmRegistration {
 
     }
 
-    public function register() {
+    public function register_admin_end() {
+        //Check nonce
+        if ( !isset( $_POST['_wpnonce_create_swpmuser_admin_end'] ) || !wp_verify_nonce($_POST['_wpnonce_create_swpmuser_admin_end'], 'create_swpmuser_admin_end' )){
+            //Nonce check failed.
+            wp_die(SwpmUtils::_("Error! Nonce verification failed for user registration from admin end."));
+        }
+        
         global $wpdb;
         $member = SwpmTransfer::$default_fields;
         $form = new SwpmForm($member);
@@ -26,7 +32,8 @@ class SwpmAdminRegistration extends SwpmRegistration {
             $plain_password = $member_info['plain_password'];
             unset($member_info['plain_password']);
             $wpdb->insert($wpdb->prefix . "swpm_members_tbl", $member_info);
-            /*             * ******************** register to wordpress ********** */
+            
+            //Register to wordpress
             $query = $wpdb->prepare("SELECT role FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $member_info['membership_level']);
             $wp_user_info = array();
             $wp_user_info['user_nicename'] = implode('-', explode(' ', $member_info['user_name']));
@@ -44,7 +51,9 @@ class SwpmAdminRegistration extends SwpmRegistration {
             $wp_user_info['role'] = $wpdb->get_var($query);
             $wp_user_info['user_registered'] = date('Y-m-d H:i:s');
             SwpmUtils::create_wp_user($wp_user_info);
-            /*             * ******************** register to wordpress ********** */
+            //End register to wordpress
+            
+            //Send notification
             $send_notification = SwpmSettings::get_instance()->get_value('enable-notification-after-manual-user-add');
             $member_info['plain_password'] = $plain_password;
             $this->member_info = $member_info;
@@ -60,7 +69,13 @@ class SwpmAdminRegistration extends SwpmRegistration {
         SwpmTransfer::get_instance()->set('status', $message);
     }
 
-    public function edit($id) {
+    public function edit_admin_end($id) {
+        //Check nonce
+        if ( !isset( $_POST['_wpnonce_edit_swpmuser_admin_end'] ) || !wp_verify_nonce($_POST['_wpnonce_edit_swpmuser_admin_end'], 'edit_swpmuser_admin_end' )){
+            //Nonce check failed.
+            wp_die(SwpmUtils::_("Error! Nonce verification failed for user edit from admin end."));
+        }
+        
         global $wpdb;
         $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id = %d", $id);
         $member = $wpdb->get_row($query, ARRAY_A);

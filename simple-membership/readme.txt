@@ -130,7 +130,7 @@ https://simple-membership-plugin.com/
 
 = TODO - 3.3.3 =
 - Improvements for a recurring payment received transaction. It will update the profile even if the membership level setting is using a duration type value.
-
+- Added nonce verification check in various admin side actions.
 
 = 3.3.2 =
 - You can now view a member's last accessed date and time value by editing the member's profile from the admin dashboard.

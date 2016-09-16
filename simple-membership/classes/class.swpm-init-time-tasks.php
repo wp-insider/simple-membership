@@ -23,11 +23,6 @@ class SwpmInitTimeTasks {
         //Crete the custom post types
         $this->create_post_type();
 
-        if (current_user_can(SWPM_MANAGEMENT_PERMISSION)) { 
-            // Admin dashboard stuff
-            $this->admin_init();
-        }
-
         //Do frontend-only init time tasks
         if (!is_admin()) {
             SwpmAuth::get_instance();
@@ -43,6 +38,12 @@ class SwpmInitTimeTasks {
             $this->register_member();
             $this->edit_profile();
             SwpmCommentFormRelated::check_and_restrict_comment_posting_to_members();
+        } else {
+            //Do admin side init time tasks
+            if (current_user_can(SWPM_MANAGEMENT_PERMISSION)) { 
+                //Admin dashboard side stuff
+                $this->admin_init();
+            }
         }
 
         //IPN listener
@@ -61,12 +62,12 @@ class SwpmInitTimeTasks {
         }
         $createswpmlevel = filter_input(INPUT_POST, 'createswpmlevel');
         if (!empty($createswpmlevel)) {
-            SwpmMembershipLevel::get_instance()->create();
+            SwpmMembershipLevel::get_instance()->create_level();
         }
         $editswpmlevel = filter_input(INPUT_POST, 'editswpmlevel');
         if (!empty($editswpmlevel)) {
             $id = filter_input(INPUT_GET, 'id');
-            SwpmMembershipLevel::get_instance()->edit($id);
+            SwpmMembershipLevel::get_instance()->edit_level($id);
         }
         $update_category_list = filter_input(INPUT_POST, 'update_category_list');
         if (!empty($update_category_list)) {

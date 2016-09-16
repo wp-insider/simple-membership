@@ -67,9 +67,11 @@ class SwpmMembershipLevels extends WP_List_Table {
     }
 
     function column_id($item) {
+        $delete_swpmlevel_nonce = wp_create_nonce( 'nonce_delete_swpmlevel_admin_end' );
+        
         $actions = array(
             'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_levels&level_action=edit&id=%s">Edit</a>', $item['id']),
-            'delete' => sprintf('<a href="admin.php?page=simple_wp_membership_levels&level_action=delete&id=%s" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>', $item['id']),
+            'delete' => sprintf('<a href="admin.php?page=simple_wp_membership_levels&level_action=delete&id=%s&delete_swpmlevel_nonce=%s" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>', $item['id'],$delete_swpmlevel_nonce),
         );
         return $item['id'] . $this->row_actions($actions);
     }
@@ -181,9 +183,19 @@ class SwpmMembershipLevels extends WP_List_Table {
         }
     }
 
-    function delete() {
+    function delete_level() {
         global $wpdb;
         if (isset($_REQUEST['id'])) {
+            
+            //Check we are on the admin end and user has management permission 
+            SwpmMiscUtils::check_user_permission_and_is_admin('membership level delete');
+        
+            //Check nonce
+            if ( !isset($_REQUEST['delete_swpmlevel_nonce']) || !wp_verify_nonce($_REQUEST['delete_swpmlevel_nonce'], 'nonce_delete_swpmlevel_admin_end' )){
+                //Nonce check failed.
+                wp_die(SwpmUtils::_("Error! Nonce verification failed for membership level delete from admin end."));
+            }
+            
             $id = sanitize_text_field($_REQUEST['id']);
             $id = absint($id);
             $query = $wpdb->prepare("DELETE FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $id);
@@ -192,7 +204,7 @@ class SwpmMembershipLevels extends WP_List_Table {
         }
     }
 
-    function show() {
+    function show_levels() {
         ?>
         <div class="swpm-margin-top-10"></div>
         <form method="post">
@@ -291,9 +303,9 @@ class SwpmMembershipLevels extends WP_List_Table {
                 $this->manage_categroy();
                 break;
             case 'delete':
-                $this->delete();
+                $this->delete_level();
             default:
-                $this->show();
+                $this->show_levels();
                 break;
         }
 

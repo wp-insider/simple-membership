@@ -17,7 +17,7 @@ class SwpmMembershipLevel {
     private static $_instance = null;
 
     private function __construct() {
-        ;
+        //NOP
     }
 
     public static function get_instance() {
@@ -25,7 +25,16 @@ class SwpmMembershipLevel {
         return self::$_instance;
     }
 
-    public function create() {
+    public function create_level() {
+        //Check we are on the admin end and user has management permission 
+        SwpmMiscUtils::check_user_permission_and_is_admin('membership level creation');
+        
+        //Check nonce
+        if ( !isset($_POST['_wpnonce_create_swpmlevel_admin_end']) || !wp_verify_nonce($_POST['_wpnonce_create_swpmlevel_admin_end'], 'create_swpmlevel_admin_end' )){
+            //Nonce check failed.
+            wp_die(SwpmUtils::_("Error! Nonce verification failed for membership level creation from admin end."));
+        }
+        
         global $wpdb;
         $level = SwpmTransfer::$default_level_fields;
         $form = new SwpmLevelForm($level);
@@ -44,7 +53,16 @@ class SwpmMembershipLevel {
         SwpmTransfer::get_instance()->set('status', $message);
     }
 
-    public function edit($id) {
+    public function edit_level($id) {
+        //Check we are on the admin end and user has management permission 
+        SwpmMiscUtils::check_user_permission_and_is_admin('membership level edit');
+        
+        //Check nonce
+        if ( !isset($_POST['_wpnonce_edit_swpmlevel_admin_end']) || !wp_verify_nonce($_POST['_wpnonce_edit_swpmlevel_admin_end'], 'edit_swpmlevel_admin_end' )){
+            //Nonce check failed.
+            wp_die(SwpmUtils::_("Error! Nonce verification failed for membership level edit from admin end."));
+        }
+        
         global $wpdb;
         $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $id);
         $level = $wpdb->get_row($query, ARRAY_A);

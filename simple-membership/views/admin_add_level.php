@@ -4,7 +4,7 @@
 <input name="action" type="hidden" value="createlevel" />
 <h3>Add Membership Level</h3>
 <p><?php echo  SwpmUtils::_('Create new membership level.'); ?></p>
-<?php wp_nonce_field( 'create-swpmlevel', '_wpnonce_create-swpmlevel' ) ?>
+<?php wp_nonce_field( 'create_swpmlevel_admin_end', '_wpnonce_create_swpmlevel_admin_end' ) ?>
 <table class="form-table">
     <tbody>
 	<tr>

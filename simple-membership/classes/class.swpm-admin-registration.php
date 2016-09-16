@@ -16,6 +16,9 @@ class SwpmAdminRegistration extends SwpmRegistration {
     }
 
     public function register_admin_end() {
+        //Check we are on the admin end and user has management permission 
+        SwpmMiscUtils::check_user_permission_and_is_admin('member creation by admin');
+        
         //Check nonce
         if ( !isset( $_POST['_wpnonce_create_swpmuser_admin_end'] ) || !wp_verify_nonce($_POST['_wpnonce_create_swpmuser_admin_end'], 'create_swpmuser_admin_end' )){
             //Nonce check failed.
@@ -70,8 +73,11 @@ class SwpmAdminRegistration extends SwpmRegistration {
     }
 
     public function edit_admin_end($id) {
+        //Check we are on the admin end and user has management permission 
+        SwpmMiscUtils::check_user_permission_and_is_admin('member edit by admin');
+        
         //Check nonce
-        if ( !isset( $_POST['_wpnonce_edit_swpmuser_admin_end'] ) || !wp_verify_nonce($_POST['_wpnonce_edit_swpmuser_admin_end'], 'edit_swpmuser_admin_end' )){
+        if ( !isset($_POST['_wpnonce_edit_swpmuser_admin_end']) || !wp_verify_nonce($_POST['_wpnonce_edit_swpmuser_admin_end'], 'edit_swpmuser_admin_end' )){
             //Nonce check failed.
             wp_die(SwpmUtils::_("Error! Nonce verification failed for user edit from admin end."));
         }

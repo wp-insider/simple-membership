@@ -264,4 +264,18 @@ class SwpmMiscUtils {
         } 
         return false;
     }
+    
+    public static function check_user_permission_and_is_admin($action_name){
+        //Check we are on the admin end
+        if (!is_admin()) {
+            //Error! This is not on the admin end. This can only be done from the admin side
+            wp_die(SwpmUtils::_("Error! This action (".$action_name.") can only be done from admin end."));
+        }
+
+        //Check user has management permission
+        if (!current_user_can(SWPM_MANAGEMENT_PERMISSION)) { 
+            //Error! Only management users can do this
+            wp_die(SwpmUtils::_("Error! This action (".$action_name.") can only be done by an user with management permission."));
+        }        
+    }
 }

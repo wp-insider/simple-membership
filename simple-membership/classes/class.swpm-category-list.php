@@ -68,6 +68,9 @@ class SwpmCategoryList extends WP_List_Table {
     }
 
     public static function update_category_list() {
+        //Check we are on the admin end and user has management permission 
+        SwpmMiscUtils::check_user_permission_and_is_admin('category protection update');
+        
         $selected = filter_input(INPUT_POST, 'membership_level_id');
         $selected_level_id = empty($selected) ? 1 : $selected;
         $category = ($selected_level_id == 1) ?

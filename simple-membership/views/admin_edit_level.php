@@ -1,7 +1,7 @@
 <div class="wrap" id="swpm-level-page">
 <form action="" method="post" name="swpm-edit-level" id="swpm-edit-level" class="validate"<?php do_action('level_edit_form_tag');?>>
 <input name="action" type="hidden" value="editlevel" />
-<?php wp_nonce_field( 'edit-swpmlevel', '_wpnonce_edit-swpmlevel' ) ?>
+<?php wp_nonce_field( 'edit_swpmlevel_admin_end', '_wpnonce_edit_swpmlevel_admin_end' ) ?>
 <h2><?php echo  SwpmUtils::_('Edit membership level'); ?></h2>
 <p>
     <?php 

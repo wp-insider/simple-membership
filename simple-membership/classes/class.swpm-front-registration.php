@@ -70,15 +70,17 @@ class SwpmFrontRegistration extends SwpmRegistration {
     }
 
     public function register() {
+        
         //If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
         $captcha_validation_output = apply_filters('swpm_validate_registration_form_submission', '');
-
         if (!empty($captcha_validation_output)) {
             $message = array('succeeded' => false, 'message' => SwpmUtils::_('Security check: captcha validation failed.'));
             SwpmTransfer::get_instance()->set('status', $message);
             return;
         }
-        if ($this->create_swpm_user() && $this->create_wp_user() && $this->send_reg_email()) {
+        
+        
+        if ($this->create_swpm_user() && $this->prepare_and_create_wp_user_front_end() && $this->send_reg_email()) {
             do_action('swpm_front_end_registration_complete'); //Keep this action hook for people who are using it (so their implementation doesn't break).
             do_action('swpm_front_end_registration_complete_user_data', $this->member_info);
 
@@ -136,10 +138,22 @@ class SwpmFrontRegistration extends SwpmRegistration {
         return true;
     }
 
-    private function create_wp_user() {
+    private function prepare_and_create_wp_user_front_end() {
         global $wpdb;
         $member_info = $this->member_info;
+        
+        //Retrieve the user role assigned for this level
         $query = $wpdb->prepare("SELECT role FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $member_info['membership_level']);
+        $user_role = $wpdb->get_var($query);
+        //Check to make sure that the user role of this level is not admin.
+        if($user_role == 'administrator'){
+            //For security reasons we don't allow users with administrator role to be creted from the front-end. That can only be done from the admin dashboard side.
+            $error_msg = '<p>Error! The user role for this membership level (level ID: '.$member_info['membership_level'].') is set to "Administrator".</p>';
+            $error_msg .= '<p>For security reasons, member registration to this level is not permitted from the front end.</p>';
+            $error_msg .= '<p>An administrator of the site can manually create a member record with this access level from the admin dashboard side.</p>';
+            wp_die($error_msg);
+        }
+
         $wp_user_info = array();
         $wp_user_info['user_nicename'] = implode('-', explode(' ', $member_info['user_name']));
         $wp_user_info['display_name'] = $member_info['user_name'];
@@ -149,7 +163,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $wp_user_info['last_name'] = $member_info['last_name'];
         $wp_user_info['user_login'] = $member_info['user_name'];
         $wp_user_info['password'] = $member_info['plain_password'];
-        $wp_user_info['role'] = $wpdb->get_var($query);
+        $wp_user_info['role'] = $user_role;
         $wp_user_info['user_registered'] = date('Y-m-d H:i:s');
         SwpmUtils::create_wp_user($wp_user_info);
         return true;

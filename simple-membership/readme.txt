@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe
 Requires at least: 3.3
 Tested up to: 4.6
-Stable tag: 3.3.3
+Stable tag: 3.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,6 +127,10 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 3.3.4 =
+- If you are editing the post protection settings of a post that belongs to a protected category, it will now show a message in the protection settings box to let you know.
+- Improved nonce check with the protection settings saving functionality.
 
 = 3.3.3 =
 - Improvements for a recurring payment received transaction. It will update the profile even if the membership level setting is using a duration type value.

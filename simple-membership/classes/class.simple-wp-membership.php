@@ -375,15 +375,18 @@ class SimpleWpMembership {
     public function inner_custom_box() {
         global $post, $wpdb;
         $id = $post->ID;
-        // Use nonce for verification
-        $is_protected = SwpmProtection::get_instance()->is_protected($id);
+        $protection_obj = SwpmProtection::get_instance();
+        $is_protected = $protection_obj->is_protected($id);
+        
+        //Nonce input
         echo '<input type="hidden" name="swpm_post_protection_box_nonce" value="' .wp_create_nonce('swpm_post_protection_box_nonce_action') . '" />';
+        
         // The actual fields for data entry
         echo '<h4>' . __("Do you want to protect this content?", 'swpm') . '</h4>';
-        echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") .
-        '  name="swpm_protect_post" value="1" /> No, Do not protect this content. <br/>';
-        echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") .
-        '  name="swpm_protect_post" value="2" /> Yes, Protect this content.<br/>';
+        echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="1" /> No, Do not protect this content. <br/>';
+        echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="2" /> Yes, Protect this content.<br/>';
+        echo $protection_obj->get_last_message();
+        
         echo '<h4>' . __("Select the membership level that can access this content:", 'swpm') . "</h4>";
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
         $levels = $wpdb->get_results($query, ARRAY_A);

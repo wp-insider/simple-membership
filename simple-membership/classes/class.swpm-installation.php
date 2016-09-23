@@ -247,6 +247,11 @@ class SwpmInstallation {
         }
 
         $settings->set_value('swpm-active-version', SIMPLE_WP_MEMBERSHIP_VER)->save(); //save everything.
+        
+        //Generate and save a swpm private key for this site
+        $unique_id = uniqid('', true);
+        add_option('swpm_private_key_one',$unique_id);
+    
     }
 
 }

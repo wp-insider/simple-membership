@@ -29,8 +29,19 @@
             <tr class="swpm-registration-membership-level-row">
                 <td><label for="membership_level"><?php echo SwpmUtils::_('Membership Level') ?></label></td>
                 <td>
-                    <?php echo $membership_level_alias; ?>
-                    <input type="hidden" value="<?php echo $membership_level; ?>" size="50" name="membership_level" id="membership_level" />
+                    <?php 
+                    echo $membership_level_alias;//Show the level name in the form.
+                    //Add the input fields for the level data.
+                    echo '<input type="hidden" value="'.$membership_level.'" size="50" name="membership_level" id="membership_level" />';
+                    //Add the level input verification data.
+                    $swpm_p_key = get_option('swpm_private_key_one');
+                    if(empty($swpm_p_key)){
+                        $swpm_p_key = uniqid('', true);
+                        update_option('swpm_private_key_one',$swpm_p_key);
+                    }
+                    $swpm_level_hash = md5($swpm_p_key.'|'.$membership_level);//level hash
+                    echo '<input type="hidden" name="swpm_level_hash" value="' . $swpm_level_hash . '" />';
+                    ?>
                 </td>
             </tr>           
         </table>        

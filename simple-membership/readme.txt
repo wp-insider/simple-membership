@@ -128,6 +128,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.3.5 =
+- Added an extra check for the membership level data on the registration form.
+
 = 3.3.4 =
 - If you are editing the post protection settings of a post that belongs to a protected category, it will now show a message in the protection settings box to let you know.
 - Improved nonce check with the protection settings saving functionality.

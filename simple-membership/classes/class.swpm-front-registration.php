@@ -69,7 +69,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         return ob_get_clean();
     }
 
-    public function register() {
+    public function register_front_end() {
         
         //If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
         $captcha_validation_output = apply_filters('swpm_validate_registration_form_submission', '');
@@ -79,7 +79,19 @@ class SwpmFrontRegistration extends SwpmRegistration {
             return;
         }
         
-        
+        //Validate swpm level hash data.
+        $hash_val_posted = sanitize_text_field($_POST['swpm_level_hash']);
+        $level_value = sanitize_text_field($_POST['membership_level']);
+        $swpm_p_key = get_option('swpm_private_key_one');
+        $hash_val = md5($swpm_p_key.'|'.$level_value);
+        if($hash_val != $hash_val_posted){//Level hash validation failed.
+            $msg = '<p>Error! Security check failed for membership level validation.</p>';
+            $msg .= '<p>The submitted membership level data does not seem to be authentic.</p>';
+            $msg .= '<p>If you are using caching please empty the cache data and try again.</p>';
+            wp_die($msg);
+        }
+            
+        //Crete the member profile and send notification
         if ($this->create_swpm_user() && $this->prepare_and_create_wp_user_front_end() && $this->send_reg_email()) {
             do_action('swpm_front_end_registration_complete'); //Keep this action hook for people who are using it (so their implementation doesn't break).
             do_action('swpm_front_end_registration_complete_user_data', $this->member_info);

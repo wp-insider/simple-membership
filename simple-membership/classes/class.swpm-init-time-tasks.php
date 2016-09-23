@@ -132,7 +132,7 @@ class SwpmInitTimeTasks {
     private function register_member() {
         $registration = filter_input(INPUT_POST, 'swpm_registration_submit');
         if (!empty($registration)) {
-            SwpmFrontRegistration::get_instance()->register();
+            SwpmFrontRegistration::get_instance()->register_front_end();
         }
     }
 

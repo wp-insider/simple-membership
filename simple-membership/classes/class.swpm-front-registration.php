@@ -183,10 +183,18 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
     public function edit_profile_front_end() {
         global $wpdb;
+        //Check that the member is logged in
         $auth = SwpmAuth::get_instance();
         if (!$auth->is_logged_in()) {
             return;
         }
+        
+        //Check nonce
+        if ( !isset($_POST['swpm_profile_edit_nonce_val']) || !wp_verify_nonce($_POST['swpm_profile_edit_nonce_val'], 'swpm_profile_edit_nonce_action' )){
+            //Nonce check failed.
+            wp_die(SwpmUtils::_("Error! Nonce verification failed for front end profile edit."));
+        }
+        
         $user_data = (array) $auth->userData;
         unset($user_data['permitted']);
         $form = new SwpmForm($user_data);

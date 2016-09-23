@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Simple WordPress Membership
-Version: 3.3.4
+Version: 3.3.5
 Plugin URI: https://simple-membership-plugin.com/
 Author: smp7, wp.insider
 Author URI: https://simple-membership-plugin.com/
@@ -17,7 +17,7 @@ include_once('classes/class.simple-wp-membership.php');
 include_once('classes/class.swpm-cronjob.php');
 include_once('swpm-compat.php');
 
-define('SIMPLE_WP_MEMBERSHIP_VER', '3.3.4');
+define('SIMPLE_WP_MEMBERSHIP_VER', '3.3.5');
 define('SIMPLE_WP_MEMBERSHIP_DB_VER', '1.2');
 define('SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url());
 define('SIMPLE_WP_MEMBERSHIP_PATH', dirname(__FILE__) . '/');

@@ -8,6 +8,7 @@ extract($user_data, EXTR_SKIP);
 ?>
 <div class="swpm-edit-profile-form">
 <form id="swpm-editprofile-form" name="swpm-editprofile-form" method="post" action="">
+    <?php wp_nonce_field( 'swpm_profile_edit_nonce_action', 'swpm_profile_edit_nonce_val' ) ?>
     <table>
         <tr class="swpm-profile-username-row">
             <td><label for="user_name"><?php echo  SwpmUtils::_('Username') ?></label></td>

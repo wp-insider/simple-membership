@@ -127,7 +127,6 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
-
 = 3.3.5 =
 - Added nonce check on the edit profile form.
 - Added an extra check for the membership level data on the registration form.

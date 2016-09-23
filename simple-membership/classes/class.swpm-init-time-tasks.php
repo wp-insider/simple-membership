@@ -139,7 +139,7 @@ class SwpmInitTimeTasks {
     private function edit_profile() {
         $swpm_editprofile_submit = filter_input(INPUT_POST, 'swpm_editprofile_submit');
         if (!empty($swpm_editprofile_submit)) {
-            SwpmFrontRegistration::get_instance()->edit();
+            SwpmFrontRegistration::get_instance()->edit_profile_front_end();
             //TODO - do a redirect?
         }
     }

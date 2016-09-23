@@ -181,7 +181,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         return true;
     }
 
-    public function edit() {
+    public function edit_profile_front_end() {
         global $wpdb;
         $auth = SwpmAuth::get_instance();
         if (!$auth->is_logged_in()) {

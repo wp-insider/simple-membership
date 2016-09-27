@@ -49,13 +49,20 @@ abstract class SwpmRegistration {
 
             $headers = 'From: ' . $from_address . "\r\n";
             $subject = "Notification of New Member Registration";
-            $body = "A new member has registered. The following email was sent to the member." .
-                    "\n\n-------Member Email----------\n" . $body .
-                    "\n\n------End------\n";
+            $admin_notify_body = $settings->get_value('reg-complete-mail-body-admin');
+            if(empty($admin_notify_body)){
+                $admin_notify_body = "A new member has completed the registration.\n\n" .
+                "Username: {user_name}\n" .
+                "Email: {email}\n\n" .
+                "Please login to the admin dashboard to view details of this user.\n\n" .
+                "You can customize this email message from the Email Settings menu of the plugin.\n\n" .
+                "Thank You";                        
+            }
+            $admin_notify_body = SwpmMiscUtils::replace_dynamic_tags($admin_notify_body, $member_id);//Do the standard merge var replacement.
             
             foreach ($notify_emails_array as $to_email){
                 $to_email = trim($to_email);
-                wp_mail($to_email, $subject, $body, $headers);
+                wp_mail($to_email, $subject, $admin_notify_body, $headers);
                 SwpmLog::log_simple_debug('Admin notification email sent to: '.$to_email, true);
             }
         }

@@ -147,8 +147,7 @@ class SwpmInstallation {
                     meta_type varchar(255) NOT NULL DEFAULT 'text',
                     meta_default text,
                     meta_context varchar(255) NOT NULL DEFAULT 'default',
-                    KEY level_id (level_id),
-                    UNIQUE KEY (level_id,meta_key(100))
+                    KEY level_id (level_id)
         )" . $charset_collate . " AUTO_INCREMENT=1;";
         dbDelta($sql);
 
@@ -195,6 +194,12 @@ class SwpmInstallation {
                 "Please login to the member area at the following URL:\n\n" .
                 "{login_link}\n\n" .
                 "Thank You";
+        $reg_email_body_admin = "A new member has completed the registration.\n\n" .
+                "Username: {user_name}\n" .
+                "Email: {email}\n\n" .
+                "Please login to the admin dashboard to view details of this user.\n\n" .
+                "You can customize this email message from the Email Settings menu of the plugin.\n\n" .
+                "Thank You";
 
         $upgrade_email_subject = "Subject for email sent after account upgrade";
         $upgrade_email_body = "Dear {first_name} {last_name}" .
@@ -238,10 +243,12 @@ class SwpmInstallation {
                     ->set_value('account-change-email-subject', stripslashes($status_change_email_subject))
                     ->set_value('account-change-email-body', stripslashes($status_change_email_body))
                     ->set_value('email-from', trim(get_option('admin_email')));
-            
+            $settings->set_value('reg-complete-mail-body-admin', stripslashes($reg_email_body_admin));
+
             $settings->set_value('bulk-activate-notify-mail-subject', stripslashes($bulk_activate_email_subject));
             $settings->set_value('bulk-activate-notify-mail-body', stripslashes($bulk_activate_email_body));
         }
+        
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {
             //Do upgrade tasks
         }

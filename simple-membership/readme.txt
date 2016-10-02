@@ -107,6 +107,7 @@ The following language translations are already available:
 * Hungarian
 * Bosnian (Bosnia and Herzegovina)
 * Slovak
+* Italian
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -127,6 +128,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= TODO 3.3.7 =
+- Added Italian language translation file. The translation was submitted by Roberto Paura.
 
 = 3.3.6 =
 - Added a new option so the admin notification email content can be customized from the email settings menu of the plugin.

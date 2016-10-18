@@ -130,7 +130,9 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 3.3.7 =
+- [TODO] Need to add the [Member Payments Addon] to the listing.
 - Added Italian language translation file. The translation was submitted by Roberto Paura.
+
 
 = 3.3.6 =
 - Added a new option so the admin notification email content can be customized from the email settings menu of the plugin.

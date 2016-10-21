@@ -137,6 +137,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-member-data-exporter-addon/',
             );
             array_push($addons_data, $addon_16);
+
+            $addon_17 = array(
+                'name' => 'Display Member Payments',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-member-payments-addon.png',
+                'description' => 'This addon allows you to display the member payments on a page using a shortcode.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-member-payments-listing-addon/',
+            );
+            array_push($addons_data, $addon_17);
             
             
             /*** Show the addons list ***/

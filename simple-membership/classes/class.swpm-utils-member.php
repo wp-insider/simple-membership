@@ -86,5 +86,17 @@ class SwpmMemberUtils {
     public static function is_valid_user_name($user_name){
         return preg_match("/^[a-zA-Z0-9!@#$%&+\/=?^_`{|}~\.-]+$/", $user_name)== 1;
     }
-    
+ 
+    /*
+     * Use this function to update or set account status of a member easily.
+     */
+    public static function update_account_state($member_id, $new_status = 'active') {
+        global $wpdb;
+        $members_table_name = $wpdb->prefix . "swpm_members_tbl";
+        
+        SwpmLog::log_simple_debug("Updating the account status value of member (" . $member_id . ") to: " . $new_status, true);
+        $query = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s WHERE member_id=%s", $new_status, $member_id);
+        $resultset = $wpdb->query($query);
+    }
+
 }

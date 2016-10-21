@@ -64,7 +64,7 @@ class SwpmLog {
         $debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
 
         // Timestamp
-        $text = '[' . date('m/d/Y g:i A') . '] - ' . (($success) ? 'SUCCESS :' : 'FAILURE :') . $message . "\n";
+        $text = '[' . date('m/d/Y g:i A') . '] - ' . (($success) ? 'SUCCESS: ' : 'FAILURE: ') . $message . "\n";
         if ($end) {
             $text .= "\n------------------------------------------------------------------\n\n";
         }
@@ -85,7 +85,7 @@ class SwpmLog {
         $debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log-auth.txt';
 
         // Timestamp
-        $text = '[' . date('m/d/Y g:i A') . '] - ' . (($success) ? 'SUCCESS :' : 'FAILURE :') . $message . "\n";
+        $text = '[' . date('m/d/Y g:i A') . '] - ' . (($success) ? 'SUCCESS: ' : 'FAILURE: ') . $message . "\n";
         if ($end) {
             $text .= "\n------------------------------------------------------------------\n\n";
         }
@@ -107,7 +107,7 @@ class SwpmLog {
                 continue;
             }
 
-            $text = '[' . date('m/d/Y g:i A') . '] - SUCCESS : Log file reset';
+            $text = '[' . date('m/d/Y g:i A') . '] - SUCCESS: Log file reset';
             $text .= "\n------------------------------------------------------------------\n\n";
             $fp = fopen($logfile, 'w');
             if ($fp != FALSE) {

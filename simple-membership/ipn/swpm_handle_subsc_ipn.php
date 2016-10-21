@@ -158,11 +158,12 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
     swpm_debug_log_subsc("Retrieving member account from the database. Subscr_id: " . $subscr_id, true);
     $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id=%s", $subscr_id), OBJECT);
     if ($resultset) {
-        //Deactivate this account as it is a refund or cancellation
+        
         $member_id = $resultset->member_id;
-        $account_state = 'inactive';
-        $updatedb = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s WHERE member_id=%s", $account_state, $member_id);
-        $resultset = $wpdb->query($updatedb);
+        
+        //Deactivate this account as it is a refund or cancellation
+        $account_state = 'inactive';        
+        SwpmMemberUtils::update_account_state($member_id, $account_state);
         swpm_debug_log_subsc("Subscription cancellation received! Member account deactivated. Member ID: " . $member_id, true);
         
         $ipn_data['member_id'] = $member_id;

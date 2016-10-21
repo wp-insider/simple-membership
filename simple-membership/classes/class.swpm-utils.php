@@ -69,8 +69,7 @@ abstract class SwpmUtils {
         if (SwpmMembershipLevel::FIXED_DATE == $permission->get('subscription_duration_type')) {
             return strtotime($permission->get('subscription_period'));
         }
-        $days = self::calculate_subscription_period_days(
-                        $permission->get('subscription_period'), $permission->get('subscription_duration_type'));
+        $days = self::calculate_subscription_period_days($permission->get('subscription_period'), $permission->get('subscription_duration_type'));
         if ($days == 'noexpire') {
             return PHP_INT_MAX; // which is equivalent to
         }
@@ -119,6 +118,13 @@ abstract class SwpmUtils {
         global $wpdb;
         $query = "SELECT id FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id != 1";
         return $wpdb->get_col($query);
+    }
+    
+    public static function get_membership_level_row_by_id($level_id){
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id=%d", $level_id);
+        $level_resultset = $wpdb->get_row($query);
+        return $level_resultset;
     }
     
     public static function membership_level_id_exists($level_id){

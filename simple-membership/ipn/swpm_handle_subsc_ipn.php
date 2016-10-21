@@ -4,7 +4,6 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
     global $wpdb;
     $settings = SwpmSettings::get_instance();
     $members_table_name = $wpdb->prefix . "swpm_members_tbl";
-    $membership_level_table = $wpdb->prefix . "swpm_membership_tbl";
     $membership_level = $subsc_ref;
     $subscr_id = $unique_ref;
 
@@ -161,10 +160,44 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
         
         $member_id = $resultset->member_id;
         
-        //Deactivate this account as it is a refund or cancellation
-        $account_state = 'inactive';        
-        SwpmMemberUtils::update_account_state($member_id, $account_state);
-        swpm_debug_log_subsc("Subscription cancellation received! Member account deactivated. Member ID: " . $member_id, true);
+        //Check if this is a refund notification.
+        if ($refund) {
+            //This is a refund (not just a subscription cancellation or end). So deactivate the account regardless.
+            SwpmMemberUtils::update_account_state($member_id, 'inactive');//Set the account status to inactive.
+            swpm_debug_log_subsc("Subscription refund notification received! Member account deactivated.", true);
+            return;
+        }
+        
+        //This is a cancellation or end of subscription term (no refund).
+        
+        //Lets retrieve the membership level and details
+        $level_id = $resultset->membership_level;
+        swpm_debug_log_subsc("Membership level ID of the member is: " . $level_id, true);
+        $level_row = SwpmUtils::get_membership_level_row_by_id($level_id);
+        $subs_duration_type = $level_row->subscription_duration_type;
+        if($subs_duration_type == SwpmMembershipLevel::NO_EXPIRY){
+            //This is a level with "no expiry" or "until cancelled" duration.
+            swpm_debug_log_subsc('This is a level with "no expiry" or "until cancelled" duration', true);
+            
+            //Deactivate this account as the membership level is "no expiry" or "until cancelled".
+            $account_state = 'inactive';
+            SwpmMemberUtils::update_account_state($member_id, $account_state);
+            swpm_debug_log_subsc("Subscription cancellation or end of term received! Member account deactivated. Member ID: " . $member_id, true);
+
+        } else if ($subs_duration_type == SwpmMembershipLevel::FIXED_DATE){
+            //This is a level with a "fixed expiry date" duration.
+            swpm_debug_log_subsc('This is a level with a "fixed expiry date" duration.', true);
+            swpm_debug_log_subsc('Nothing to do here. The account will expire on the fixed set date.', true);
+
+        } else {
+            //This is a level with "duration" type expiry (example: 30 days, 1 year etc). subscription_period has the duration/period.
+            swpm_debug_log_subsc('This is a level with "duration" type expiry (example: 30 days, 6 months, 1 year etc).', true);
+            swpm_debug_log_subsc('Nothing to do here. The account will expire after the duration time is over.', true);
+            
+            //TODO Later as an improvement. If you wanted to segment the members who have unsubscribed, you can set the account status to "unsubscribed" here. 
+            //Make sure the cronjob to do expiry check and deactivate the member accounts treat this status as if it is "active".
+            
+        }
         
         $ipn_data['member_id'] = $member_id;
         do_action('swpm_subscription_payment_cancelled', $ipn_data);//Hook for recurring payment received
@@ -178,7 +211,6 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
 function swpm_update_member_subscription_start_date_if_applicable($ipn_data) {
     global $wpdb;
     $members_table_name = $wpdb->prefix . "swpm_members_tbl";
-    $membership_level_table = $wpdb->prefix . "swpm_membership_tbl";
     $email = $ipn_data['payer_email'];
     $subscr_id = $ipn_data['subscr_id'];
     $account_state = SwpmSettings::get_instance()->get_value('default-account-status', 'active');

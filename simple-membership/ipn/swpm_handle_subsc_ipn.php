@@ -48,7 +48,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         }
         $old_membership_level = $resultset->membership_level;
 
-        swpm_debug_log_subsc("Upgrading the current membership level (" . $old_membership_level . ") of this member to the newly paid level (" . $membership_level . ")", true);
+        swpm_debug_log_subsc("Updating the current membership level (" . $old_membership_level . ") of this member to the newly paid level (" . $membership_level . ")", true);
         $updatedb = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s, membership_level=%d,subscription_starts=%s,subscr_id=%s WHERE member_id=%d", $account_state, $membership_level, $subscription_starts, $subscr_id, $swpm_id);
         $results = $wpdb->query($updatedb);
         do_action('swpm_membership_changed', array('member_id' => $swpm_id, 'from_level' => $old_membership_level, 'to_level' => $membership_level));
@@ -175,6 +175,7 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
         swpm_debug_log_subsc("Membership level ID of the member is: " . $level_id, true);
         $level_row = SwpmUtils::get_membership_level_row_by_id($level_id);
         $subs_duration_type = $level_row->subscription_duration_type;
+        
         if($subs_duration_type == SwpmMembershipLevel::NO_EXPIRY){
             //This is a level with "no expiry" or "until cancelled" duration.
             swpm_debug_log_subsc('This is a level with "no expiry" or "until cancelled" duration', true);
@@ -191,7 +192,10 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
 
         } else {
             //This is a level with "duration" type expiry (example: 30 days, 1 year etc). subscription_period has the duration/period.
-            swpm_debug_log_subsc('This is a level with "duration" type expiry (example: 30 days, 6 months, 1 year etc).', true);
+            $subs_period = $level_row->subscription_period;
+            $subs_period_unit = $level_row->subscription_unit;
+
+            swpm_debug_log_subsc('This is a level with "duration" type expiry (example: 30 days). Duration period: ' . $subs_period . ', Unit: ' . $subs_period_unit, true);
             swpm_debug_log_subsc('Nothing to do here. The account will expire after the duration time is over.', true);
             
             //TODO Later as an improvement. If you wanted to segment the members who have unsubscribed, you can set the account status to "unsubscribed" here. 
@@ -232,7 +236,8 @@ function swpm_update_member_subscription_start_date_if_applicable($ipn_data) {
         $resultset = $wpdb->query($updatedb);
         swpm_debug_log_subsc("Updated the member profile with current date as the subscription start date.", true);
     } else {
-        swpm_debug_log_subsc("Did not find a record in the members table for subscriber ID: " . $subscr_id, true);
+        swpm_debug_log_subsc("Did not find an existing record in the members table for subscriber ID: " . $subscr_id, true);
+        swpm_debug_log_subsc("This is a new subscription payment for a new subscription agreement.", true);
     }
 }
 
@@ -246,7 +251,7 @@ function swpm_debug_log_subsc($message, $success, $end = false) {
     $debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
 
     // Timestamp
-    $text = '[' . date('m/d/Y g:i A') . '] - ' . (($success) ? 'SUCCESS :' : 'FAILURE :') . $message . "\n";
+    $text = '[' . date('m/d/Y g:i A') . '] - ' . (($success) ? 'SUCCESS: ' : 'FAILURE: ') . $message . "\n";
     if ($end) {
         $text .= "\n------------------------------------------------------------------\n\n";
     }

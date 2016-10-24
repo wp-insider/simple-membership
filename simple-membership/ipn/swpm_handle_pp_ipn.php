@@ -89,13 +89,13 @@ class swpm_paypal_ipn_handler {
 
         if (($transaction_type == "subscr_signup"))
         {
-            $this->debug_log('Subscription signup IPN received... nothing to do here(handled by the subscription IPN handler)',true);
+            $this->debug_log('Subscription signup IPN received... (handled by the subscription IPN handler)',true);
             // Code to handle the signup IPN for subscription
             $subsc_ref = $customvariables['subsc_ref'];
 
             if (!empty($subsc_ref))
             {
-                $this->debug_log('swpm integration is being used... creating member account...',true);
+                $this->debug_log('Found a membership level ID. Creating member account...',true);
                 $swpm_id = $customvariables['swpm_id'];
                 swpm_handle_subsc_signup_stand_alone($this->ipn_data,$subsc_ref,$this->ipn_data['subscr_id'],$swpm_id);
                 //Handle customized subscription signup
@@ -105,8 +105,8 @@ class swpm_paypal_ipn_handler {
         else if (($transaction_type == "subscr_cancel") || ($transaction_type == "subscr_eot") || ($transaction_type == "subscr_failed"))
         {
             // Code to handle the IPN for subscription cancellation
+            $this->debug_log('Subscription cancellation IPN received... (handled by the subscription IPN handler)',true);
             swpm_handle_subsc_cancel_stand_alone($this->ipn_data);
-            $this->debug_log('Subscription cancellation IPN received... nothing to do here(handled by the subscription IPN handler)',true);
             return true;
         }
         else
@@ -167,7 +167,7 @@ class swpm_paypal_ipn_handler {
                     swpm_handle_subsc_signup_stand_alone($this->ipn_data,$subsc_ref,$this->ipn_data['txn_id'],$swpm_id);
                 }
                 else if($transaction_type == "subscr_payment"){
-                    $this->debug_log('swpm subscr_payment type transaction. Checking if the member profile needed to be updated',true);
+                    $this->debug_log('Transaction type: subscr_payment. Checking if the member profile needed to be updated',true);
                     swpm_update_member_subscription_start_date_if_applicable($this->ipn_data);
                 }
             }

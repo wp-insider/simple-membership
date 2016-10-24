@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Description of BMembershipLevel
- *
- * @author nur
+ * Description of SwpmMembershipLevel
  */
 class SwpmMembershipLevel {
 
@@ -25,6 +23,25 @@ class SwpmMembershipLevel {
         return self::$_instance;
     }
 
+    public static function get_level_duration_type_string($type){
+        $type_string = '';
+        switch($type){
+            case '0': $type_string = 'No Expiry or Until Cancelled';
+                break;
+            case '1': $type_string = 'Days';
+                break;
+            case '2': $type_string = 'Weeks';
+                break;
+            case '3': $type_string = 'Months';
+                break;
+            case '4': $type_string = 'Years';
+                break;
+            case '5': $type_string = 'Fixed Date';
+                break;
+        }
+        return $type_string;
+    }
+    
     public function create_level() {
         //Check we are on the admin end and user has management permission 
         SwpmMiscUtils::check_user_permission_and_is_admin('membership level creation');

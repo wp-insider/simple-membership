@@ -57,21 +57,7 @@ class swpm_paypal_ipn_handler {
         }
         
         $custom = $this->ipn_data['custom'];
-        $delimiter = "&";
-        $customvariables = array();
-        $namevaluecombos = explode($delimiter, $custom);
-        foreach ($namevaluecombos as $keyval_unparsed)
-        {
-            $equalsignposition = strpos($keyval_unparsed, '=');
-            if ($equalsignposition === false)
-            {
-                $customvariables[$keyval_unparsed] = '';
-                continue;
-            }
-            $key = substr($keyval_unparsed, 0, $equalsignposition);
-            $value = substr($keyval_unparsed, $equalsignposition + 1);
-            $customvariables[$key] = $value;
-        }
+        $customvariables = SwpmTransactions::parse_custom_var($custom);
         
         //Handle refunds
         if ($gross_total < 0)
@@ -163,7 +149,7 @@ class swpm_paypal_ipn_handler {
                 }
                 if ($transaction_type == "web_accept")
                 {
-                    $this->debug_log('swpm integration is being used... creating member account...',true);
+                    $this->debug_log('Transaction type: web_accept. Creating member account...',true);
                     swpm_handle_subsc_signup_stand_alone($this->ipn_data,$subsc_ref,$this->ipn_data['txn_id'],$swpm_id);
                 }
                 else if($transaction_type == "subscr_payment"){

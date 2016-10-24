@@ -3,6 +3,7 @@
 include_once('class.swpm-utils-misc.php');
 include_once('class.swpm-utils.php');
 include_once('class.swpm-utils-member.php');
+include_once('class.swpm-utils-membership-level.php');
 include_once('class.swpm-utils-template.php');
 include_once('class.swpm-init-time-tasks.php');
 include_once('class.swpm-comment-form-related.php');
@@ -24,7 +25,6 @@ include_once('class.swpm-front-registration.php');
 include_once('class.swpm-admin-registration.php');
 include_once('class.swpm-membership-level.php');
 include_once('class.swpm-membership-level-custom.php');
-include_once('class.swpm-membership-level-utils.php');
 include_once('class.swpm-permission-collection.php');
 include_once('class.swpm-auth-permission-collection.php');
 include_once('class.swpm-transactions.php');

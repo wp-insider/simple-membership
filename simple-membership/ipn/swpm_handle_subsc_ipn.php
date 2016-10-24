@@ -138,31 +138,43 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
     swpm_debug_log_subsc("Member signup/upgrade completion email successfully sent to: " . $email, true);
 }
 
+/* 
+ * All in one function that can handle notification for refund, cancellation, end of term
+ */
 function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
-    if ($refund) {
-        $subscr_id = $ipn_data['parent_txn_id'];
-        swpm_debug_log_subsc("Refund notification check - check if a member account needs to be deactivated... parent_txn_id: " . $ipn_data['parent_txn_id'], true);
-    } else {
-        $subscr_id = $ipn_data['subscr_id'];
-    }
-
-    if (empty($subscr_id)) {
-        swpm_debug_log_subsc("No subscr_id associated with this transaction. Nothing to do here.", true);
-        return;
-    }
-
+   
     global $wpdb;
     $members_table_name = $wpdb->prefix . "swpm_members_tbl";
+    
+    $customvariables = SwpmTransactions::parse_custom_var($ipn_data['custom']);
+    $swpm_id = $customvariables['swpm_id'];
 
-    swpm_debug_log_subsc("Retrieving member account from the database. Subscr_id: " . $subscr_id, true);
-    $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id=%s", $subscr_id), OBJECT);
+    swpm_debug_log_subsc("Refund/Cancellation check - lets see if a member account needs to be deactivated.", true);
+    //swpm_debug_log_subsc("Parent txn id: " . $ipn_data['parent_txn_id'] . ", Subscr ID: " . $ipn_data['subscr_id'] . ", SWPM ID: " . $swpm_id, true);
+
+    if(!empty($swpm_id)){
+        //This IPN has the SWPM ID. Retrieve the member record using member ID.
+        swpm_debug_log_subsc("Member ID is present. Retrieving member account from the database. Member ID: " . $swpm_id, true);
+        $resultset = SwpmMemberUtils::get_user_by_id($swpm_id);
+    } else if (isset($ipn_data['subscr_id']) && !empty($ipn_data['subscr_id'])) {
+        //This IPN has the subscriber ID. Retrieve the member record using subscr_id.
+        $subscr_id = $ipn_data['subscr_id'];
+        swpm_debug_log_subsc("Subscriber ID is present. Retrieving member account from the database. Subscr_id: " . $subscr_id, true);
+        $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id=%s", $subscr_id), OBJECT);
+    } else {
+        //Refund for a one time transaction. Use the parent transaction ID to retrieve the profile.
+        $subscr_id = $ipn_data['parent_txn_id'];
+        $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id=%s", $subscr_id), OBJECT);
+    }
+    
     if ($resultset) {
+        //We have found a member profile for this notification.
         
         $member_id = $resultset->member_id;
         
-        //Check if this is a refund notification.
+        //First, check if this is a refund notification. 
         if ($refund) {
-            //This is a refund (not just a subscription cancellation or end). So deactivate the account regardless.
+            //This is a refund (not just a subscription cancellation or end). So deactivate the account regardless and bail.
             SwpmMemberUtils::update_account_state($member_id, 'inactive');//Set the account status to inactive.
             swpm_debug_log_subsc("Subscription refund notification received! Member account deactivated.", true);
             return;
@@ -193,9 +205,9 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
         } else {
             //This is a level with "duration" type expiry (example: 30 days, 1 year etc). subscription_period has the duration/period.
             $subs_period = $level_row->subscription_period;
-            $subs_period_unit = $level_row->subscription_unit;
+            $subs_period_unit = SwpmMembershipLevel::get_level_duration_type_string($level_row->subscription_duration_type);
 
-            swpm_debug_log_subsc('This is a level with "duration" type expiry (example: 30 days). Duration period: ' . $subs_period . ', Unit: ' . $subs_period_unit, true);
+            swpm_debug_log_subsc('This is a level with "duration" type expiry. Duration period: ' . $subs_period . ', Unit: ' . $subs_period_unit, true);
             swpm_debug_log_subsc('Nothing to do here. The account will expire after the duration time is over.', true);
             
             //TODO Later as an improvement. If you wanted to segment the members who have unsubscribed, you can set the account status to "unsubscribed" here. 
@@ -207,7 +219,7 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
         do_action('swpm_subscription_payment_cancelled', $ipn_data);//Hook for recurring payment received
         
     } else {
-        swpm_debug_log_subsc("No member found for the given subscriber ID: " . $subscr_id, false);
+        swpm_debug_log_subsc("No associated active member record found for this notification.", false);
         return;
     }
 }
@@ -220,7 +232,7 @@ function swpm_update_member_subscription_start_date_if_applicable($ipn_data) {
     $account_state = SwpmSettings::get_instance()->get_value('default-account-status', 'active');
     swpm_debug_log_subsc("Updating subscription start date if applicable for this subscription payment. Subscriber ID: " . $subscr_id . " Email: " . $email, true);
 
-    //We can also query using the email address
+    //We can also query using the email address or SWPM ID (if present in custom var).
     $query_db = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name WHERE subscr_id = %s", $subscr_id), OBJECT);
     if ($query_db) {
         $swpm_id = $query_db->member_id;

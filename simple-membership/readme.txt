@@ -129,6 +129,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.3.8 =
+- [TODO] - add the aweber addon to the listing. Image is already in the images folder.
+
+
 = 3.3.7 =
 - Added Italian language translation file. The translation was submitted by Roberto Paura.
 - Improved the paypal refund handling.

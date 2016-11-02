@@ -130,7 +130,6 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 3.3.8 =
-- [TODO] - add the aweber addon to the listing. Image is already in the images folder.
 - The set_user_role action hook will now pass the 3rd optional parameter.
 - The account renewal payment will take into account any remaining time (when the user's level is using a duration type expiry).
 

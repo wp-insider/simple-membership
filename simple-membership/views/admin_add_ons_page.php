@@ -146,6 +146,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             );
             array_push($addons_data, $addon_17);
             
+            $addon_17 = array(
+                'name' => 'AWeber Integration',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-aweber-integration-addon.png',
+                'description' => 'You can automatically signup your members to a specific list in your AWeber account when they register.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-aweber-integration-addon/',
+            );
+            array_push($addons_data, $addon_17);            
+            
             
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {

@@ -38,9 +38,8 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         swpm_debug_log_subsc("Modifying the existing membership profile... Member ID: " . $swpm_id, true);
 
         //Upgrade the member account        
-        $account_state = 'active'; //This is renewal or upgrade of a previously active account. So the status should be set to active
-        $subscription_starts = (date("Y-m-d"));
-
+        $account_state = 'active'; //This is renewal or upgrade of a previously active account. So the status should be set to active      
+        
         $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where member_id=%d", $swpm_id), OBJECT);
         if (!$resultset) {
             swpm_debug_log_subsc("ERROR! Could not find a member account record for the given Member ID: " . $swpm_id, false);
@@ -48,6 +47,12 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         }
         $old_membership_level = $resultset->membership_level;
 
+        //If the payment is for the same/existing membership level, then this is a renewal. Refresh the start date as appropriate.
+        $args = array('swpm_id' => $swpm_id, 'membership_level' => $membership_level, 'old_membership_level' => $old_membership_level);
+        $subscription_starts = SwpmMemberUtils::calculate_access_start_date_for_account_update($args);
+        $subscription_starts = apply_filters('swpm_account_update_subscription_starts', $subscription_starts, $args);
+        swpm_debug_log_subsc("Setting access starts date value to: " . $subscription_starts, true);
+        
         swpm_debug_log_subsc("Updating the current membership level (" . $old_membership_level . ") of this member to the newly paid level (" . $membership_level . ")", true);
         $updatedb = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s, membership_level=%d,subscription_starts=%s,subscr_id=%s WHERE member_id=%d", $account_state, $membership_level, $subscription_starts, $subscr_id, $swpm_id);
         $results = $wpdb->query($updatedb);

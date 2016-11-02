@@ -289,8 +289,7 @@ class SwpmAuth {
 
     public function get_expire_date() {
         if ($this->isLoggedIn) {
-            return SwpmUtils::get_expire_date(
-                            $this->get('subscription_starts'), $this->get('subscription_period'), $this->get('subscription_duration_type'));
+            return SwpmUtils::get_formatted_expiry_date($this->get('subscription_starts'), $this->get('subscription_period'), $this->get('subscription_duration_type'));
         }
         return "";
     }

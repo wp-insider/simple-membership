@@ -78,9 +78,33 @@ abstract class SwpmUtils {
 
     public static function is_subscription_expired($user) {
         $expiration_timestamp = SwpmUtils::get_expiration_timestamp($user);
-        return $expiration_timestamp < time();
+        if($expiration_timestamp < time()){
+            //Account expired.
+            return true;
+        }
+        return false;        
     }
 
+    /*
+     * Returns a formatted expiry date string (of a member). This can be useful to echo the date value.
+     */
+    public static function get_formatted_expiry_date($start_date, $subscription_duration, $subscription_duration_type) {
+        if ($subscription_duration_type == SwpmMembershipLevel::FIXED_DATE) { 
+            //Membership will expire after a fixed date.
+            return SwpmUtils::get_formatted_date_according_to_wp_settings($subscription_duration);
+        }
+        
+        $expires = self::calculate_subscription_period_days($subscription_duration, $subscription_duration_type);
+        if ($expires == 'noexpire') {
+            //Membership is set to no expiry or until cancelled.
+            return SwpmUtils::_('Never');
+        }
+
+        //Membership is set to a duration expiry settings.
+        
+        return date(get_option('date_format'), strtotime($start_date . ' ' . $expires . ' days'));
+    }
+    
     public static function gender_dropdown($selected = 'not specified') {
         return '<option ' . ((strtolower($selected) == 'male') ? 'selected="selected"' : "") . ' value="male">Male</option>' .
                 '<option ' . ((strtolower($selected) == 'female') ? 'selected="selected"' : "") . ' value="female">Female</option>' .
@@ -197,7 +221,10 @@ abstract class SwpmUtils {
         if (in_array('administrator', array_keys((array) $caps))) {
             return;
         }
-        do_action('set_user_role', $wp_user_id, $role); //Fire the action for other plugin(s)
+        
+        $old_roles = array();
+        do_action('set_user_role', $wp_user_id, $role, $old_roles); //Trigger the action hook for other plugin(s)
+        
         wp_update_user(array('ID' => $wp_user_id, 'role' => $role));
         $roles = new WP_Roles();
         $level = $roles->roles[$role]['capabilities'];
@@ -320,23 +347,6 @@ abstract class SwpmUtils {
         //This function is NOT like the WordPress's is_admin() function which determins if we are on the admin end of the site.
         //TODO - rename this function to something like is_admin_user()
         return current_user_can('manage_options');
-    }
-
-    public static function get_expire_date($start_date, $subscription_duration, $subscription_duration_type) {
-        if ($subscription_duration_type == SwpmMembershipLevel::FIXED_DATE) { 
-            //Membership will expire after a fixed date.
-            return SwpmUtils::get_formatted_date_according_to_wp_settings($subscription_duration);
-        }
-        
-        $expires = self::calculate_subscription_period_days($subscription_duration, $subscription_duration_type);
-        if ($expires == 'noexpire') {
-            //Membership is set to no expiry or until cancelled.
-            return SwpmUtils::_('Never');
-        }
-
-        //Membership is set to a duration expiry settings.
-        
-        return date(get_option('date_format'), strtotime($start_date . ' ' . $expires . ' days'));
     }
 
     /* 

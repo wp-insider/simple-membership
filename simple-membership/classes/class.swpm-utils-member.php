@@ -58,7 +58,12 @@ class SwpmMemberUtils {
         return apply_filters('swpm_get_member_field_by_id', $default, $id, $field);
     }
     
-
+    public static function get_expiry_date_timestamp_by_user_id($swpm_id){
+        $swpm_user = SwpmMemberUtils::get_user_by_id($swpm_id);
+        $expiry_timestamp = SwpmUtils::get_expiration_timestamp($swpm_user);
+        return $expiry_timestamp;
+    }
+    
     public static function get_user_by_id($swpm_id) {
         //Retrieves the SWPM user record for the given member ID
         global $wpdb;
@@ -97,6 +102,49 @@ class SwpmMemberUtils {
         SwpmLog::log_simple_debug("Updating the account status value of member (" . $member_id . ") to: " . $new_status, true);
         $query = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s WHERE member_id=%s", $new_status, $member_id);
         $resultset = $wpdb->query($query);
+    }
+
+
+    /*
+     * Calculates the Access Starts date value considering the level and current expiry. Useful for after payment member profile update.
+     */
+    public static function calculate_access_start_date_for_account_update($args){
+        $swpm_id = $args['swpm_id'];
+        $membership_level = $args['membership_level'];
+        $old_membership_level = $args['old_membership_level'];
+
+        $subscription_starts = (date("Y-m-d"));
+        if($membership_level == $old_membership_level){
+            //Payment for the same membership level (renewal).
+
+            //Algorithm - ONLY set the $subscription_starts date to current expiry date if the current expiry date is in the future. 
+            //Otherwise set $subscription_starts to TODAY.
+            $expiry_timestamp = SwpmMemberUtils::get_expiry_date_timestamp_by_user_id($swpm_id);
+            if($expiry_timestamp > time()){
+                //Account is not expired. Expiry date is in the future.
+                $level_row = SwpmUtils::get_membership_level_row_by_id($membership_level);
+                $subs_duration_type = $level_row->subscription_duration_type;
+                if($subs_duration_type == SwpmMembershipLevel::NO_EXPIRY){
+                    //No expiry type level.
+                    //Use todays date for $subscription_starts date parameter.
+                } else if ($subs_duration_type == SwpmMembershipLevel::FIXED_DATE){
+                    //Fixed date expiry level.
+                    //Use todays date for $subscription_starts date parameter.
+                } else {
+                    //Duration expiry level.
+                    //Set the $subscription_starts date to the current expiry date so the renewal time starts from then.
+                    $subscription_starts = date('Y-m-d', $expiry_timestamp);
+                }
+            } else {
+                //Account is already expired.
+                //Use todays date for $subscription_starts date parameter.
+            }
+        } else {
+            //Payment for a NEW membership level (upgrade).
+            //Use todays date for $subscription_starts date parameter.
+        }
+        
+        return $subscription_starts;
     }
 
 }

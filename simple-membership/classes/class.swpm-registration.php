@@ -39,7 +39,7 @@ abstract class SwpmRegistration {
         
         //Send notification email to the member
         wp_mail(trim($email), $subject, $body, $headers);
-        SwpmLog::log_simple_debug('Member notification email sent to: '.$email, true);
+        SwpmLog::log_simple_debug('Member registration complete email sent to: '.$email.'. From email address value used: '.$from_address, true);
         
         if ($settings->get_value('enable-admin-notification-after-reg')) {
             //Send notification email to the site admin

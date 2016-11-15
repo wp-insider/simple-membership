@@ -132,6 +132,7 @@ https://simple-membership-plugin.com/
 = TODO 3.3.8 =
 - The set_user_role action hook will now pass the 3rd optional parameter.
 - The account renewal payment will take into account any remaining time (when the user's level is using a duration type expiry).
+- The members can now user their email address (instead of username) and password to log into the site. The username field of the member login form will accept either the email address or the username.
 
 = 3.3.7 =
 - Added Italian language translation file. The translation was submitted by Roberto Paura.

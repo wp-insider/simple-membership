@@ -35,10 +35,10 @@ class SwpmAuth {
         global $wpdb;
         $swpm_password = empty($pass) ? filter_input(INPUT_POST, 'swpm_password') : $pass;
         $swpm_user_name = empty($user) ? apply_filters('swpm_user_name', filter_input(INPUT_POST, 'swpm_user_name')) : $user;
-                
+
         if (!empty($swpm_user_name) && !empty($swpm_password)) {
             //SWPM member login request.
-            
+        
             //First, lets make sure this user is not already logged into the site as an "Admin" user. We don't want to override that admin login session.
             if (current_user_can('administrator')) {
                 //This user is logged in as ADMIN then trying to do another login as a member. Stop the login request processing (we don't want to override your admin login session).
@@ -50,10 +50,20 @@ class SwpmAuth {
                 wp_die($error_msg);
             }
             
+            if(is_email($swpm_user_name)){//User is trying to log-in using an email address
+                $email = sanitize_email($swpm_user_name);
+                $query = $wpdb->prepare("SELECT user_name FROM " . $wpdb->prefix . "swpm_members_tbl WHERE email = %s", $email);
+                $username = $wpdb->get_var($query);
+                if($username){//Found a user record
+                    $swpm_user_name = $username;//Grab the usrename value so it can be used in the authentication process.
+                    SwpmLog::log_auth_debug("Authentication request using email address: " . $email.', Found a user record with username: '.$swpm_user_name, true);
+                }
+            }
+            
             //Lets process the request. Check username and password
             $user = sanitize_user($swpm_user_name);
             $pass = trim($swpm_password);
-            SwpmLog::log_auth_debug("Authenticate request - Username: " . $swpm_user_name, true);
+            SwpmLog::log_auth_debug("Authentication request - Username: " . $swpm_user_name, true);
             
             $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE user_name = %s";
             $userData = $wpdb->get_row($wpdb->prepare($query, $user));

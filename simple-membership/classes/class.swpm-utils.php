@@ -222,10 +222,12 @@ abstract class SwpmUtils {
             return;
         }
         
-        $old_roles = array();
-        do_action('set_user_role', $wp_user_id, $role, $old_roles); //Trigger the action hook for other plugin(s)
+        //No need to trigger this action hook as the wp_update_user() function will trigger it automatically.
+        //$old_roles = array();
+        //do_action('set_user_role', $wp_user_id, $role, $old_roles); //Trigger the action hook for other plugin(s)
         
         wp_update_user(array('ID' => $wp_user_id, 'role' => $role));
+        
         $roles = new WP_Roles();
         $level = $roles->roles[$role]['capabilities'];
         if (isset($level['level_10']) && $level['level_10']) {

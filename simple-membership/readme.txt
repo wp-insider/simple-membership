@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe
 Requires at least: 4.0
 Tested up to: 4.6
-Stable tag: 3.3.7
+Stable tag: 3.3.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,10 +129,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.3.8 =
-- The set_user_role action hook will now pass the 3rd optional parameter.
+= 3.3.8 =
 - The account renewal payment will take into account any remaining time (when the user's level is using a duration type expiry).
 - The members can now user their email address (instead of username) and password to log into the site. The username field of the member login form will accept either the email address or the username.
+- The set_user_role action hook will not be triggered by the plugin as the wp_update_user() function will take care of it automatically.
 
 = 3.3.7 =
 - Added Italian language translation file. The translation was submitted by Roberto Paura.

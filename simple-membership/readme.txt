@@ -129,6 +129,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.3.9 =
+- Deleted the Spanish language files from the plugin folder so it can pull the language from translate.wordpress.org
+
 = 3.3.8 =
 - The account renewal payment will take into account any remaining time (when the user's level is using a duration type expiry).
 - The members can now user their email address (instead of username) and password to log into the site. The username field of the member login form will accept either the email address or the username.

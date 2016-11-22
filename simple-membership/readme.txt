@@ -131,6 +131,7 @@ https://simple-membership-plugin.com/
 
 = TODO 3.3.9 =
 - Deleted the Spanish language files from the plugin folder so it can pull the language from translate.wordpress.org
+- Regenerated the POT file.
 
 = 3.3.8 =
 - The account renewal payment will take into account any remaining time (when the user's level is using a duration type expiry).

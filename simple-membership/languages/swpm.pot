@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Simple Membershp\n"
-"POT-Creation-Date: 2016-08-18 21:30+1000\n"
-"PO-Revision-Date: 2016-08-18 21:31+1000\n"
+"Project-Id-Version: Simple Membership\n"
+"POT-Creation-Date: 2016-11-22 14:13+1000\n"
+"PO-Revision-Date: 2016-11-22 14:14+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -13,21 +13,21 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: classes/class.simple-wp-membership.php:295
+#: classes/class.simple-wp-membership.php:293
 msgid "You are not logged in."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:342
+#: classes/class.simple-wp-membership.php:340
 msgid ""
 "You have the sandbox payment mode enabled in plugin settings. Make sure to "
 "turn off the sandbox mode when you want to do live transactions."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:357
+#: classes/class.simple-wp-membership.php:355
 msgid "Simple WP Membership Protection"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:369
+#: classes/class.simple-wp-membership.php:367
 msgid "Simple Membership Protection options"
 msgstr ""
 
@@ -39,31 +39,31 @@ msgstr ""
 msgid "Select the membership level that can access this content:"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:519
+#: classes/class.simple-wp-membership.php:524
 msgid "WP Membership"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:520
-#: classes/class.swpm-members.php:12 classes/class.swpm-members.php:404
+#: classes/class.simple-wp-membership.php:525
+#: classes/class.swpm-members.php:12 classes/class.swpm-members.php:414
 msgid "Members"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:521
+#: classes/class.simple-wp-membership.php:526
 #: classes/class.swpm-category-list.php:20
 #: classes/class.swpm-membership-levels.php:12
-#: classes/class.swpm-membership-levels.php:245
+#: classes/class.swpm-membership-levels.php:257
 msgid "Membership Levels"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:522
+#: classes/class.simple-wp-membership.php:527
 msgid "Settings"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:523
+#: classes/class.simple-wp-membership.php:528
 msgid "Payments"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:524
+#: classes/class.simple-wp-membership.php:529
 msgid "Add-ons"
 msgstr ""
 
@@ -96,19 +96,27 @@ msgstr ""
 msgid " The rest of the content is not permitted for your membership level."
 msgstr ""
 
-#: classes/class.swpm-admin-registration.php:54
+#: classes/class.swpm-admin-registration.php:25
+msgid "Error! Nonce verification failed for user registration from admin end."
+msgstr ""
+
+#: classes/class.swpm-admin-registration.php:66
 msgid "Member record added successfully."
 msgstr ""
 
-#: classes/class.swpm-admin-registration.php:59
-#: classes/class.swpm-admin-registration.php:81
-#: classes/class.swpm-admin-registration.php:105
-#: classes/class.swpm-membership-level.php:43
-#: classes/class.swpm-membership-level.php:62
+#: classes/class.swpm-admin-registration.php:71
+#: classes/class.swpm-admin-registration.php:102
+#: classes/class.swpm-admin-registration.php:126
+#: classes/class.swpm-membership-level.php:69
+#: classes/class.swpm-membership-level.php:97
 msgid "Please correct the following:"
 msgstr ""
 
-#: classes/class.swpm-admin-registration.php:96
+#: classes/class.swpm-admin-registration.php:82
+msgid "Error! Nonce verification failed for user edit from admin end."
+msgstr ""
+
+#: classes/class.swpm-admin-registration.php:117
 msgid "Your current password"
 msgstr ""
 
@@ -152,43 +160,43 @@ msgid ""
 "ONLY for ADMIN user."
 msgstr ""
 
-#: classes/class.swpm-auth.php:64
+#: classes/class.swpm-auth.php:74
 msgid "User Not Found."
 msgstr ""
 
-#: classes/class.swpm-auth.php:71
+#: classes/class.swpm-auth.php:81
 msgid "Password Empty or Invalid."
 msgstr ""
 
-#: classes/class.swpm-auth.php:97
+#: classes/class.swpm-auth.php:118
 msgid "Account is inactive."
 msgstr ""
 
-#: classes/class.swpm-auth.php:100 classes/class.swpm-auth.php:121
+#: classes/class.swpm-auth.php:121 classes/class.swpm-auth.php:139
 msgid "Account has expired."
 msgstr ""
 
-#: classes/class.swpm-auth.php:103
+#: classes/class.swpm-auth.php:124
 msgid "Account is pending."
 msgstr ""
 
-#: classes/class.swpm-auth.php:129
+#: classes/class.swpm-auth.php:147
 msgid "You are logged in as:"
 msgstr ""
 
-#: classes/class.swpm-auth.php:175
+#: classes/class.swpm-auth.php:193
 msgid "Logged Out Successfully."
 msgstr ""
 
-#: classes/class.swpm-auth.php:227
+#: classes/class.swpm-auth.php:245
 msgid "Session Expired."
 msgstr ""
 
-#: classes/class.swpm-auth.php:236
+#: classes/class.swpm-auth.php:254
 msgid "Invalid Username"
 msgstr ""
 
-#: classes/class.swpm-auth.php:244
+#: classes/class.swpm-auth.php:262
 msgid "Please login again."
 msgstr ""
 
@@ -197,7 +205,7 @@ msgstr ""
 #: classes/class.swpm-membership-levels.php:21
 #: classes/admin-includes/class.swpm-payments-list-table.php:85
 #: views/add.php:30 views/admin_member_form_common_part.php:2
-#: views/edit.php:53
+#: views/edit.php:62
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:34
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:217
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:35
@@ -227,7 +235,7 @@ msgstr ""
 msgid "Count"
 msgstr ""
 
-#: classes/class.swpm-category-list.php:89
+#: classes/class.swpm-category-list.php:92
 msgid "Category protection updated!"
 msgstr ""
 
@@ -320,61 +328,65 @@ msgstr ""
 msgid "Security check: captcha validation failed."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:86
+#: classes/class.swpm-front-registration.php:100
 msgid "Registration Successful. "
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:86
+#: classes/class.swpm-front-registration.php:100
 #: classes/class.swpm-utils-misc.php:218 classes/class.swpm-utils-misc.php:230
 msgid "Please"
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:86
+#: classes/class.swpm-front-registration.php:100
 #: classes/class.swpm-utils-misc.php:218 views/login.php:27
 msgid "Login"
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:99
-#: classes/class.swpm-front-registration.php:186
+#: classes/class.swpm-front-registration.php:113
+#: classes/class.swpm-front-registration.php:220
 msgid "Please correct the following"
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:130
+#: classes/class.swpm-front-registration.php:144
 msgid "Membership Level Couldn't be found."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:169
+#: classes/class.swpm-front-registration.php:195
+msgid "Error! Nonce verification failed for front end profile edit."
+msgstr ""
+
+#: classes/class.swpm-front-registration.php:203
 msgid "Profile updated successfully."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:177
+#: classes/class.swpm-front-registration.php:211
 msgid ""
 "Profile updated successfully. You will need to re-login since you changed "
 "your password."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:196
+#: classes/class.swpm-front-registration.php:230
 msgid "Email address not valid."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:207
+#: classes/class.swpm-front-registration.php:241
 msgid "No user found with that email address."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:208
-#: classes/class.swpm-front-registration.php:234
+#: classes/class.swpm-front-registration.php:242
+#: classes/class.swpm-front-registration.php:268
 msgid "Email Address: "
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:233
+#: classes/class.swpm-front-registration.php:267
 msgid "New password has been sent to your email address."
 msgstr ""
 
-#: classes/class.swpm-init-time-tasks.php:111
+#: classes/class.swpm-init-time-tasks.php:112
 msgid "Sorry, Nonce verification failed."
 msgstr ""
 
-#: classes/class.swpm-init-time-tasks.php:118
+#: classes/class.swpm-init-time-tasks.php:119
 msgid "Sorry, Password didn't match."
 msgstr ""
 
@@ -396,25 +408,25 @@ msgid "ID"
 msgstr ""
 
 #: classes/class.swpm-members.php:21 views/add.php:6 views/admin_add.php:10
-#: views/admin_edit.php:13 views/edit.php:5 views/login.php:11
+#: views/admin_edit.php:13 views/edit.php:14
 msgid "Username"
 msgstr ""
 
 #: classes/class.swpm-members.php:22
 #: classes/admin-includes/class.swpm-payments-list-table.php:78
 #: views/add.php:22 views/admin_member_form_common_part.php:15
-#: views/edit.php:21
+#: views/edit.php:30
 msgid "First Name"
 msgstr ""
 
 #: classes/class.swpm-members.php:23
 #: classes/admin-includes/class.swpm-payments-list-table.php:79
 #: views/add.php:26 views/admin_member_form_common_part.php:19
-#: views/edit.php:25
+#: views/edit.php:34
 msgid "Last Name"
 msgstr ""
 
-#: classes/class.swpm-members.php:24 views/add.php:10 views/edit.php:9
+#: classes/class.swpm-members.php:24 views/add.php:10 views/edit.php:18
 msgid "Email"
 msgstr ""
 
@@ -454,31 +466,46 @@ msgstr ""
 msgid "Set Status to Expired"
 msgstr ""
 
-#: classes/class.swpm-members.php:68
+#: classes/class.swpm-members.php:69
 msgid "incomplete"
 msgstr ""
 
-#: classes/class.swpm-members.php:183
+#: classes/class.swpm-members.php:184
 msgid "No member found."
 msgstr ""
 
-#: classes/class.swpm-members.php:399
+#: classes/class.swpm-members.php:331
+msgid "Error! Nonce verification failed for user delete from admin end."
+msgstr ""
+
+#: classes/class.swpm-members.php:409
 msgid "Simple WP Membership::Members"
 msgstr ""
 
-#: classes/class.swpm-members.php:400 views/admin_members_list.php:40
+#: classes/class.swpm-members.php:410 views/admin_members_list.php:43
 msgid "Add New"
 msgstr ""
 
-#: classes/class.swpm-members.php:405 views/admin_add.php:5
+#: classes/class.swpm-members.php:415 views/admin_add.php:5
 msgid "Add Member"
 msgstr ""
 
-#: classes/class.swpm-membership-level.php:38
+#: classes/class.swpm-membership-level.php:52
+msgid ""
+"Error! Nonce verification failed for membership level creation from admin "
+"end."
+msgstr ""
+
+#: classes/class.swpm-membership-level.php:64
 msgid "Membership Level Creation Successful."
 msgstr ""
 
-#: classes/class.swpm-membership-level.php:57
+#: classes/class.swpm-membership-level.php:80
+msgid ""
+"Error! Nonce verification failed for membership level edit from admin end."
+msgstr ""
+
+#: classes/class.swpm-membership-level.php:92
 msgid "Membership Level Updated Successfully."
 msgstr ""
 
@@ -490,25 +517,30 @@ msgstr ""
 msgid "Access Valid For/Until"
 msgstr ""
 
-#: classes/class.swpm-membership-levels.php:203
-#: views/admin_members_list.php:27
+#: classes/class.swpm-membership-levels.php:196
+msgid ""
+"Error! Nonce verification failed for membership level delete from admin end."
+msgstr ""
+
+#: classes/class.swpm-membership-levels.php:215
+#: views/admin_members_list.php:30
 #: views/payments/admin_all_payment_transactions.php:16
 msgid "Search"
 msgstr ""
 
-#: classes/class.swpm-membership-levels.php:241
+#: classes/class.swpm-membership-levels.php:253
 msgid "Simple WP Membership::Membership Levels"
 msgstr ""
 
-#: classes/class.swpm-membership-levels.php:246
+#: classes/class.swpm-membership-levels.php:258
 msgid "Add Level"
 msgstr ""
 
-#: classes/class.swpm-membership-levels.php:247
+#: classes/class.swpm-membership-levels.php:259
 msgid "Manage Content Production"
 msgstr ""
 
-#: classes/class.swpm-membership-levels.php:248
+#: classes/class.swpm-membership-levels.php:260
 msgid "Category Protection"
 msgstr ""
 
@@ -528,7 +560,7 @@ msgstr ""
 msgid "Tools"
 msgstr ""
 
-#: classes/class.swpm-settings.php:31 classes/class.swpm-settings.php:178
+#: classes/class.swpm-settings.php:31 classes/class.swpm-settings.php:182
 msgid "Advanced Settings"
 msgstr ""
 
@@ -649,8 +681,8 @@ msgstr ""
 msgid "Enable this option if you want to do sandbox payment testing."
 msgstr ""
 
-#: classes/class.swpm-settings.php:115 classes/class.swpm-settings.php:173
-#: classes/class.swpm-settings.php:290
+#: classes/class.swpm-settings.php:115 classes/class.swpm-settings.php:177
+#: classes/class.swpm-settings.php:294
 msgid "Settings updated!"
 msgstr ""
 
@@ -666,15 +698,15 @@ msgstr ""
 msgid "Email Settings (Prompt to Complete Registration )"
 msgstr ""
 
-#: classes/class.swpm-settings.php:126 classes/class.swpm-settings.php:135
-#: classes/class.swpm-settings.php:148 classes/class.swpm-settings.php:153
-#: classes/class.swpm-settings.php:158
+#: classes/class.swpm-settings.php:126 classes/class.swpm-settings.php:136
+#: classes/class.swpm-settings.php:152 classes/class.swpm-settings.php:157
+#: classes/class.swpm-settings.php:162
 msgid "Email Subject"
 msgstr ""
 
-#: classes/class.swpm-settings.php:128 classes/class.swpm-settings.php:137
-#: classes/class.swpm-settings.php:149 classes/class.swpm-settings.php:154
-#: classes/class.swpm-settings.php:159
+#: classes/class.swpm-settings.php:128 classes/class.swpm-settings.php:138
+#: classes/class.swpm-settings.php:153 classes/class.swpm-settings.php:158
+#: classes/class.swpm-settings.php:163
 msgid "Email Body"
 msgstr ""
 
@@ -691,149 +723,160 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-settings.php:134
+msgid ""
+"This email will be sent to the admin when a new user completes the "
+"membership registration. Only works if you have enabled the \"Send "
+"Notification to Admin\" option above."
+msgstr ""
+
+#: classes/class.swpm-settings.php:135
 msgid "Email Settings (Registration Complete)"
 msgstr ""
 
-#: classes/class.swpm-settings.php:139
+#: classes/class.swpm-settings.php:140
 msgid "Send Notification to Admin"
 msgstr ""
 
-#: classes/class.swpm-settings.php:140
+#: classes/class.swpm-settings.php:141
 msgid ""
 "Enable this option if you want the admin to receive a notification when a "
 "member registers."
 msgstr ""
 
-#: classes/class.swpm-settings.php:141
+#: classes/class.swpm-settings.php:142
 msgid "Admin Email Address"
 msgstr ""
 
-#: classes/class.swpm-settings.php:143
-msgid "Send Email to Member When Added via Admin Dashboard"
+#: classes/class.swpm-settings.php:144
+msgid "Admin Notification Email Body"
 msgstr ""
 
 #: classes/class.swpm-settings.php:147
+msgid "Send Email to Member When Added via Admin Dashboard"
+msgstr ""
+
+#: classes/class.swpm-settings.php:151
 msgid "Email Settings (Password Reset)"
 msgstr ""
 
-#: classes/class.swpm-settings.php:152
+#: classes/class.swpm-settings.php:156
 msgid " Email Settings (Account Upgrade Notification)"
 msgstr ""
 
-#: classes/class.swpm-settings.php:157
+#: classes/class.swpm-settings.php:161
 msgid " Email Settings (Bulk Account Activate Notification)"
 msgstr ""
 
-#: classes/class.swpm-settings.php:180
+#: classes/class.swpm-settings.php:184
 msgid "Enable Expired Account Login"
 msgstr ""
 
-#: classes/class.swpm-settings.php:181
+#: classes/class.swpm-settings.php:185
 msgid ""
 "When enabled, expired members will be able to log into the system but won't "
 "be able to view any protected content. This allows them to easily renew "
 "their account by making another payment."
 msgstr ""
 
-#: classes/class.swpm-settings.php:183
+#: classes/class.swpm-settings.php:187
 msgid "Membership Renewal URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:184
+#: classes/class.swpm-settings.php:188
 msgid ""
 "You can create a renewal page for your site. Read <a href=\"https://simple-"
 "membership-plugin.com/creating-membership-renewal-button/\" target=\"_blank"
 "\">this documentation</a> to learn how to create a renewal page."
 msgstr ""
 
-#: classes/class.swpm-settings.php:186
+#: classes/class.swpm-settings.php:190
 msgid "Allow Account Deletion"
 msgstr ""
 
-#: classes/class.swpm-settings.php:187
+#: classes/class.swpm-settings.php:191
 msgid "Allow users to delete their accounts."
 msgstr ""
 
-#: classes/class.swpm-settings.php:189
+#: classes/class.swpm-settings.php:193
 msgid "Use WordPress Timezone"
 msgstr ""
 
-#: classes/class.swpm-settings.php:190
+#: classes/class.swpm-settings.php:194
 msgid ""
 "Use this option if you want to use the timezone value specified in your "
 "WordPress General Settings interface."
 msgstr ""
 
-#: classes/class.swpm-settings.php:192
+#: classes/class.swpm-settings.php:196
 msgid "Auto Delete Pending Account"
 msgstr ""
 
-#: classes/class.swpm-settings.php:195
+#: classes/class.swpm-settings.php:199
 msgid "Select how long you want to keep \"pending\" account."
 msgstr ""
 
-#: classes/class.swpm-settings.php:197
+#: classes/class.swpm-settings.php:201
 msgid "Admin Dashboard Access Permission"
 msgstr ""
 
-#: classes/class.swpm-settings.php:200
+#: classes/class.swpm-settings.php:204
 msgid ""
 "SWPM admin dashboard is accessible to admin users only (just like any other "
 "plugin). You can allow users with other WP user role to access the SWPM "
 "admin dashboard by selecting a value here."
 msgstr ""
 
-#: classes/class.swpm-settings.php:295
+#: classes/class.swpm-settings.php:299
 msgid "General Plugin Settings."
 msgstr ""
 
-#: classes/class.swpm-settings.php:299
+#: classes/class.swpm-settings.php:303
 msgid "Page Setup and URL Related settings."
 msgstr ""
 
-#: classes/class.swpm-settings.php:303
+#: classes/class.swpm-settings.php:307
 msgid "Testing and Debug Related Settings."
 msgstr ""
 
-#: classes/class.swpm-settings.php:307
+#: classes/class.swpm-settings.php:311
 msgid ""
 "This email will be sent to your users when they complete the registration "
 "and become a member."
 msgstr ""
 
-#: classes/class.swpm-settings.php:311
+#: classes/class.swpm-settings.php:315
 msgid ""
 "This email will be sent to your users when they use the password reset "
 "functionality."
 msgstr ""
 
-#: classes/class.swpm-settings.php:315
+#: classes/class.swpm-settings.php:319
 msgid "Settings in this section apply to all emails."
 msgstr ""
 
-#: classes/class.swpm-settings.php:319
+#: classes/class.swpm-settings.php:323
 msgid ""
 "This email will be sent to your users after account upgrade (when an "
 "existing member pays for a new membership level)."
 msgstr ""
 
-#: classes/class.swpm-settings.php:323
+#: classes/class.swpm-settings.php:327
 msgid ""
 "This email will be sent to your members when you use the bulk account "
 "activate and notify action."
 msgstr ""
 
-#: classes/class.swpm-settings.php:327
+#: classes/class.swpm-settings.php:331
 msgid ""
 "This email will be sent to prompt users to complete registration after the "
 "payment."
 msgstr ""
 
-#: classes/class.swpm-settings.php:331
+#: classes/class.swpm-settings.php:335
 msgid "This page allows you to configure some advanced features of the plugin."
 msgstr ""
 
-#: classes/class.swpm-settings.php:437
+#: classes/class.swpm-settings.php:442
 msgid "Simple WP Membership::Settings"
 msgstr ""
 
@@ -876,31 +919,35 @@ msgstr ""
 msgid " your account to gain access to this content."
 msgstr ""
 
+#: classes/class.swpm-utils-misc.php:272 classes/class.swpm-utils-misc.php:278
+msgid "Error! This action ("
+msgstr ""
+
 #: classes/class.swpm-utils-template.php:38
 msgid "Error! Failed to find a template path for the specified template: "
 msgstr ""
 
-#: classes/class.swpm-utils.php:92
-msgid "Active"
-msgstr ""
-
-#: classes/class.swpm-utils.php:93
-msgid "Inactive"
-msgstr ""
-
-#: classes/class.swpm-utils.php:94
-msgid "Pending"
-msgstr ""
-
-#: classes/class.swpm-utils.php:95
-msgid "Expired"
-msgstr ""
-
-#: classes/class.swpm-utils.php:328
+#: classes/class.swpm-utils.php:100
 msgid "Never"
 msgstr ""
 
-#: classes/class.swpm-utils.php:420
+#: classes/class.swpm-utils.php:115
+msgid "Active"
+msgstr ""
+
+#: classes/class.swpm-utils.php:116
+msgid "Inactive"
+msgstr ""
+
+#: classes/class.swpm-utils.php:117
+msgid "Pending"
+msgstr ""
+
+#: classes/class.swpm-utils.php:118
+msgid "Expired"
+msgstr ""
+
+#: classes/class.swpm-utils.php:437
 msgid "Delete Account"
 msgstr ""
 
@@ -925,7 +972,7 @@ msgid "Button Shortcode"
 msgstr ""
 
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:127
-#: views/admin_members_list.php:6
+#: views/admin_members_list.php:9
 #: views/payments/admin_all_payment_transactions.php:32
 msgid "The selected entry was deleted!"
 msgstr ""
@@ -999,15 +1046,15 @@ msgid "You are not logged-in as a member"
 msgstr ""
 
 #: views/add.php:14 views/admin_add.php:18 views/admin_edit.php:38
-#: views/edit.php:13 views/login.php:17
+#: views/edit.php:22 views/login.php:17
 msgid "Password"
 msgstr ""
 
-#: views/add.php:18 views/edit.php:17
+#: views/add.php:18 views/edit.php:26
 msgid "Repeat Password"
 msgstr ""
 
-#: views/add.php:41
+#: views/add.php:52
 msgid "Register"
 msgstr ""
 
@@ -1158,14 +1205,22 @@ msgid "Subscriber ID/Reference"
 msgstr ""
 
 #: views/admin_edit.php:65
+msgid "Last Accessed Date"
+msgstr ""
+
+#: views/admin_edit.php:68 views/admin_edit.php:75
+msgid "This value gets updated when this member logs into your site."
+msgstr ""
+
+#: views/admin_edit.php:72
 msgid "Last Accessed From IP"
 msgstr ""
 
-#: views/admin_edit.php:73
+#: views/admin_edit.php:83
 msgid "Edit User "
 msgstr ""
 
-#: views/admin_edit.php:77
+#: views/admin_edit.php:88
 msgid "Delete User Profile"
 msgstr ""
 
@@ -1202,27 +1257,27 @@ msgstr ""
 msgid "Gender"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:30 views/edit.php:29
+#: views/admin_member_form_common_part.php:30 views/edit.php:38
 msgid "Phone"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:34 views/edit.php:33
+#: views/admin_member_form_common_part.php:34 views/edit.php:42
 msgid "Street"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:38 views/edit.php:37
+#: views/admin_member_form_common_part.php:38 views/edit.php:46
 msgid "City"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:42 views/edit.php:41
+#: views/admin_member_form_common_part.php:42 views/edit.php:50
 msgid "State"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:46 views/edit.php:45
+#: views/admin_member_form_common_part.php:46 views/edit.php:54
 msgid "Zipcode"
 msgstr ""
 
-#: views/admin_member_form_common_part.php:50 views/edit.php:49
+#: views/admin_member_form_common_part.php:50 views/edit.php:58
 msgid "Country"
 msgstr ""
 
@@ -1275,7 +1330,7 @@ msgstr ""
 msgid "Registration completion links will appear below"
 msgstr ""
 
-#: views/edit.php:60
+#: views/edit.php:69
 msgid "Update"
 msgstr ""
 
@@ -1297,6 +1352,10 @@ msgstr ""
 
 #: views/loggedin.php:22
 msgid "Logout"
+msgstr ""
+
+#: views/login.php:11
+msgid "Username or Email"
 msgstr ""
 
 #: views/login.php:24

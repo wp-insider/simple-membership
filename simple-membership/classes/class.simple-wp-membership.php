@@ -62,7 +62,7 @@ class SimpleWpMembership {
         add_action('profile_update', array(&$this, 'sync_with_wp_profile'), 10, 2);
         add_action('wp_logout', array(&$this, 'wp_logout'));
         add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2);
-        add_action('swpm_logout', array(&$this, 'swpm_logout'));
+        add_action('swpm_logout', array(&$this, 'swpm_do_user_logout'));
         
         //AJAX hooks
         add_action('wp_ajax_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
@@ -207,12 +207,13 @@ class SimpleWpMembership {
         }
         do_action('swpm_after_login');
         if (!SwpmUtils::is_ajax()) {
-            wp_redirect(site_url());
+            $redirect_url = apply_filters('swpm_after_login_redirect_url',SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL);
+            wp_redirect($redirect_url);
             exit(0);
         }
     }
 
-    public function swpm_logout() {
+    public function swpm_do_user_logout() {
         if (is_user_logged_in()) {
             wp_logout();
             wp_set_current_user(0);

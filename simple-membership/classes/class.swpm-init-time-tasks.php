@@ -30,8 +30,8 @@ class SwpmInitTimeTasks {
             $swpm_logout = filter_input(INPUT_GET, 'swpm-logout');
             if (!empty($swpm_logout)) {
                 SwpmAuth::get_instance()->logout();
-                $home_url = home_url();
-                wp_redirect(trailingslashit($home_url));
+                $redirect_url = apply_filters('swpm_after_logout_redirect_url',SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL);                
+                wp_redirect(trailingslashit($redirect_url));
                 exit(0);
             }
             $this->process_password_reset();

@@ -68,6 +68,7 @@ class SwpmBraintreeBuyNowIpnHandler {
         $result = Braintree_Transaction::sale([
           'amount' => $payment_amount,
           'paymentMethodNonce' => $_POST['payment_method_nonce'],
+          'channel' => 'TipsandTricks_SP',
           'options' => [
           'submitForSettlement' => True
           ],

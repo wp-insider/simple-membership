@@ -162,6 +162,13 @@ class SwpmInitTimeTasks {
             exit;
         }
         
+        //Listen and handle Braintree Buy Now IPN
+        $swpm_process_braintree_buy_now = filter_input(INPUT_GET, 'swpm_process_braintree_buy_now');
+        if ($swpm_process_braintree_buy_now == '1') {
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-braintree-buy-now-ipn.php');
+            exit;
+        }
+        
     }
 
 }

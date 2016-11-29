@@ -5,6 +5,7 @@
 include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_buy_now_button.php');
 include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_button.php');
 include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_buy_now_button.php');
+include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_braintree_buy_now_button.php');
 
 do_action('swpm_create_new_button_process_submission');//Addons can use this hook to save the data after the form submit then redirect to the "edit" interface of that newly created button.
     
@@ -27,6 +28,8 @@ if (!isset($_REQUEST['swpm_button_type_selected'])) {
                 <input type="radio" name="button_type" value="pp_subscription"><?php SwpmUtils::e('PayPal Subscription'); ?>
                 <br />
                 <input type="radio" name="button_type" value="stripe_buy_now"><?php SwpmUtils::e('Stripe Buy Now'); ?>
+                <br />
+                <input type="radio" name="button_type" value="braintree_buy_now"><?php SwpmUtils::e('Braintree Buy Now'); ?>
                 <br />
                 <?php
                 apply_filters('swpm_new_button_select_button_type', '');

@@ -134,6 +134,7 @@ https://simple-membership-plugin.com/
 - Regenerated the POT file.
 - The after login redirection now uses home_url() instead of site_url(). The URL also gets passed via a filter.
 - Added a new filter for the after logout redirection URL.
+- Added the Braintree payment gateway so you can accept membership payments using Braintree.
 
 = 3.3.8 =
 - The account renewal payment will take into account any remaining time (when the user's level is using a duration type expiry).

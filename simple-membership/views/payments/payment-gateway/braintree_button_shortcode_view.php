@@ -34,8 +34,7 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args) {
         return '<p class="swpm-red-box">Error! The payment amount value of the button must be a numeric number. Example: 49.50 </p>';
     }
     $payment_amount = round($payment_amount, 2); //round the amount to 2 decimal place.
-//    $price_in_cents = $payment_amount * 100 ;//The amount (in cents). This value is passed to Stripe API.
-//    $payment_currency = get_post_meta($button_id, 'payment_currency', true);
+	$payment_currency = get_post_meta($button_id, 'currency_code', true);
    
     //Return, cancel, notifiy URLs
     $return_url = get_post_meta($button_id, 'return_url', true);
@@ -98,6 +97,7 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args) {
     $output.='<p><input type="text" name="first_name" placeholder="First Name" value="'.(isset($member_first_name) ? $member_first_name : '').'" required></p>';
     $output.='<p><input type="text" name="last_name" placeholder="Last Name" value="'.(isset($member_last_name) ? $member_last_name : '').'" required></p>';
     $output.='<p><input type="text" name="member_email" placeholder="Email" value="'.(isset($member_email) ? $member_email : '').'" required></p>';
+    $output.='<div id="swpm-braintree-amount-container-'.$uniqid.'" class="swpm-braintree-amount-container"><p>'.$payment_amount.' '.$payment_currency.'</p></div>';
     $output.='</div>';
     $output.='<button id="swpm-show-form-btn-'.$uniqid.'" class="swpm-braintree-pay-now-button swpm-braintree-show-form-button-'.$button_id.'" type="button" onclick="swpm_braintree_show_form_'.$uniqid.'();">'.$button_text.'</button>';
     $output.='<button id="swpm-submit-form-btn-'.$uniqid.'" class="swpm-braintree-pay-now-button swpm-braintree-submit-form-button-'.$button_id.'" type="submit" style="display: none;">'.$button_text.'</button>';
@@ -116,7 +116,7 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args) {
     $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
     $output .= "<input type='hidden' value='{$item_name}' name='item_name' />";
     $output .= "<input type='hidden' value='{$payment_amount}' name='item_price' />";
-//    $output .= "<input type='hidden' value='{$payment_currency}' name='currency_code' />";
+	$output .= "<input type='hidden' value='{$payment_currency}' name='currency_code' />";
     $output .= "<input type='hidden' value='{$custom_field_value}' name='custom' />";
     
     //Filter to add additional payment input fields to the form.

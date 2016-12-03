@@ -65,24 +65,7 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode=fal
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Merchant Account Name'); ?></th>
-                        <td>
-                            <input type="text" size="50" name="braintree_merchant_acc_name" value="<?php echo ($is_edit_mode ? $bt_opts['braintree_merchant_acc_name'] : '');?>" />
-                            <p class="description">Enter you Braintree Merchant Account Name. Leave it blank to use your default account.<br />
-                            Please note currency depends on the Merchant Account you chose.
-                            <?php if ($is_edit_mode) {
-                            	if (isset($bt_opts['currency_code']) && $bt_opts['currency_code']!='') { ?>
-                            	<br />Your current account currency is <strong><?php echo $bt_opts['currency_code']; ?></strong>
-                            <?php
-                            	}
-                            }
-                            ?>
-                            </p>
-                        </td>
-                    </tr>
-
-                    <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Braintree API keys. You can get this from your Braintree account.'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Braintree API key and account details. You can get this from your Braintree account.'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
@@ -108,6 +91,21 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode=fal
                         </td>
                     </tr>
 
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Merchant Account ID'); ?></th>
+                        <td>
+                            <input type="text" size="50" name="braintree_merchant_acc_name" value="<?php echo ($is_edit_mode ? $bt_opts['braintree_merchant_acc_name'] : '');?>" required />
+                            <p class="description">Enter your Braintree Merchant Account ID. Please note currency depends on the Merchant Account ID you specify. Leave empty to use the default one.
+                            <?php if ($is_edit_mode) {
+                            	if (isset($bt_opts['currency_code']) && $bt_opts['currency_code']!='') { ?>
+                            	<br />Your current account currency is set to: <strong><?php echo $bt_opts['currency_code']; ?></strong>
+                            <?php
+                            	}
+                            }
+                            ?>
+                            </p>
+                        </td>
+                    </tr>
                     
                     <tr valign="top">
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional.'); ?></div></th>
@@ -209,8 +207,6 @@ function swpm_get_braintree_default_currency($params) {
     } else {
         $braintree_env="production";
     }
-
-    if ($params['merc_name']=='') $params['merc_name']='none'; // This should use default merc account if no name specified
 
     require_once(SIMPLE_WP_MEMBERSHIP_PATH.'lib/braintree/lib/autoload.php');
 	try {

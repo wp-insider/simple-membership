@@ -3,8 +3,8 @@ Contributors: smp7, wp.insider, amijanina
 Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe
 Requires at least: 4.0
-Tested up to: 4.6
-Stable tag: 3.3.8
+Tested up to: 4.7
+Stable tag: 3.3.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,8 +129,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.3.9 =
+= 3.3.9 =
 - Deleted the Spanish language files from the plugin folder so it can pull the language from translate.wordpress.org
+- WordPress 4.7 compatibility.
 - Regenerated the POT file.
 - The after login redirection now uses home_url() instead of site_url(). The URL also gets passed via a filter.
 - Added a new filter for the after logout redirection URL.

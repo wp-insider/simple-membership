@@ -129,6 +129,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.4.0 =
+- Updated the Italian language file. Thanks to Nicolò Monili for updating the translation.
+- Deleted the German language files from the plugin folder so it can pull the language from translate.wordpress.org
+
 = 3.3.9 =
 - Deleted the Spanish language files from the plugin folder so it can pull the language from translate.wordpress.org
 - WordPress 4.7 compatibility.

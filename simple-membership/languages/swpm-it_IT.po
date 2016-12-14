@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Simple Membershp\n"
 "POT-Creation-Date: 2016-12-09 10:34+0100\n"
-"PO-Revision-Date: 2016-12-12 11:15+0100\n"
+"PO-Revision-Date: 2016-12-13 14:59+0100\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: classes/class.simple-wp-membership.php:295
 msgid "You are not logged in."
-msgstr "Non hai effettuato l\\'accesso."
+msgstr "Non hai effettuato l&#39;accesso."
 
 #: classes/class.simple-wp-membership.php:342
 msgid ""
@@ -75,7 +75,7 @@ msgstr "Componenti aggiuntivi"
 #: classes/class.swpm-access-control.php:47
 #: classes/class.swpm-access-control.php:120
 msgid "You need to login to view this content. "
-msgstr "Devi eseguire l\\'accesso per visualizzare questo contenuto."
+msgstr "Devi eseguire l&#39;accesso per visualizzare questo contenuto."
 
 #: classes/class.swpm-access-control.php:56
 #: classes/class.swpm-access-control.php:128
@@ -97,7 +97,7 @@ msgstr "Questo contenuto non è accessibile al tuo livello di iscrizione."
 
 #: classes/class.swpm-access-control.php:201
 msgid "You need to login to view the rest of the content. "
-msgstr "Devi eseguire l\\'accesso per visualizzare il resto del contenuto."
+msgstr "Devi eseguire l&#39;accesso per visualizzare il resto del contenuto."
 
 #: classes/class.swpm-access-control.php:214
 msgid " The rest of the content is not permitted for your membership level."
@@ -159,7 +159,7 @@ msgid ""
 "as ADMIN) to test the membership login."
 msgstr ""
 "In alternativa, puoi usare un altro browser (quando non hai un accesso come "
-"ADMIN) per testare l\\'accesso dei membri."
+"ADMIN) per testare l&#39;accesso dei membri."
 
 #: classes/class.swpm-auth.php:49
 msgid ""
@@ -179,19 +179,19 @@ msgstr "Password vuota o non valida."
 
 #: classes/class.swpm-auth.php:97
 msgid "Account is inactive."
-msgstr "L\\'account è inattivo."
+msgstr "L&#39;account è inattivo."
 
 #: classes/class.swpm-auth.php:100 classes/class.swpm-auth.php:121
 msgid "Account has expired."
-msgstr "L\\'account è scaduto."
+msgstr "L&#39;account è scaduto."
 
 #: classes/class.swpm-auth.php:103
 msgid "Account is pending."
-msgstr "L\\'account è in attesa."
+msgstr "L&#39;account è in attesa."
 
 #: classes/class.swpm-auth.php:129
 msgid "You are logged in as:"
-msgstr "Hai eseguito l\\'accesso come:"
+msgstr "Hai eseguito l&#39;accesso come:"
 
 #: classes/class.swpm-auth.php:175
 msgid "Logged Out Successfully."
@@ -249,11 +249,11 @@ msgstr "Protezione categoria aggiornata!"
 
 #: classes/class.swpm-comment-form-related.php:15
 msgid "Please login to comment."
-msgstr "Esegui l\\'accesso per commentare"
+msgstr "Esegui l&#39;accesso per commentare"
 
 #: classes/class.swpm-comment-form-related.php:40
 msgid "Please Login to Comment."
-msgstr "Esegui l\\'accesso per Commentare"
+msgstr "Esegui l&#39;accesso per Commentare"
 
 #: classes/class.swpm-comment-form-related.php:79
 msgid "Comments not allowed by a non-member."
@@ -263,14 +263,14 @@ msgstr "Commenti consentiti solo agli utenti membri."
 msgid ""
 "Wordpress account exists with given username. But given email doesn't match."
 msgstr ""
-"Un account Wordpress con questo username esiste. Ma l\\'email utilizzata non "
-"corrisponde."
+"Un account Wordpress con questo username esiste. Ma l&#39;email utilizzata "
+"non corrisponde."
 
 #: classes/class.swpm-form.php:34
 msgid ""
 "Wordpress account exists with given email. But given username doesn't match."
 msgstr ""
-"Un account Wordpress con questo indirizzo email esiste. Ma l\\'username "
+"Un account Wordpress con questo indirizzo email esiste. Ma l&#39;username "
 "utilizzato non corrisponde."
 
 #: classes/class.swpm-form.php:43
@@ -279,7 +279,7 @@ msgstr "Username richiesto"
 
 #: classes/class.swpm-form.php:47
 msgid "Username contains invalid character"
-msgstr "L\\'Username contiene caratteri non validi"
+msgstr "L&#39;Username contiene caratteri non validi"
 
 #: classes/class.swpm-form.php:55
 msgid "Username already exists."
@@ -376,7 +376,7 @@ msgid ""
 "Profile updated successfully. You will need to re-login since you changed "
 "your password."
 msgstr ""
-"Profilo aggiornato correttamente. Devi eseguire nuovamente l\\'accesso "
+"Profilo aggiornato correttamente. Devi eseguire nuovamente l&#39;accesso "
 "perche la tua password è cambiata."
 
 #: classes/class.swpm-front-registration.php:196
@@ -410,7 +410,7 @@ msgstr "Il formato data non è valido."
 
 #: classes/class.swpm-level-form.php:55
 msgid "Access duration must be > 0."
-msgstr "La durata dell\\'accesso deve essere > di 0."
+msgstr "La durata dell&#39;accesso deve essere > di 0."
 
 #: classes/class.swpm-members.php:11
 msgid "Member"
@@ -465,7 +465,7 @@ msgstr "Imposta lo stato Attivo"
 
 #: classes/class.swpm-members.php:45
 msgid "Set Status to Active and Notify"
-msgstr "Imposta lo stato Attivo e Notifica l\\'utente"
+msgstr "Imposta lo stato Attivo e Notifica l&#39;utente"
 
 #: classes/class.swpm-members.php:46
 msgid "Set Status to Inactive"
@@ -566,7 +566,7 @@ msgstr "Documentazione plugin"
 
 #: classes/class.swpm-settings.php:56
 msgid "Enable Free Membership"
-msgstr "Abilita l\\'iscrizione gratuita"
+msgstr "Abilita l&#39;iscrizione gratuita"
 
 #: classes/class.swpm-settings.php:57
 msgid ""
@@ -609,8 +609,8 @@ msgid ""
 "this if you want to hide that admin toolbar in the frontend of your site."
 msgstr ""
 "Wordpress visualizza una barra di amministrazione agli utenti che hanno "
-"eseguito l\\'accesso sul sito. Abilita questa opzione se vuoi nascondere la "
-"barra di amministrazione nel frontend del tuo sito."
+"eseguito l&#39;accesso sul sito. Abilita questa opzione se vuoi nascondere "
+"la barra di amministrazione nel frontend del tuo sito."
 
 #: classes/class.swpm-settings.php:64
 msgid "Show Adminbar to Admin"
@@ -640,7 +640,7 @@ msgstr ""
 
 #: classes/class.swpm-settings.php:72
 msgid "Members Must be Logged in to Comment"
-msgstr "I membri devono eseguire l\\'accesso per commentare"
+msgstr "I membri devono eseguire l&#39;accesso per commentare"
 
 #: classes/class.swpm-settings.php:73
 msgid ""
@@ -782,10 +782,10 @@ msgid ""
 "be able to view any protected content. This allows them to easily renew "
 "their account by making another payment."
 msgstr ""
-"Quando abilitato, i membri con account scaduti potranno eseguire l\\'accesso "
-"ma non saranno in grado di visualizzare il contenuto protetto. Questo "
-"permette agli utenti di rinnovare il proprio account eseguendo un nuovo "
-"pagamento."
+"Quando abilitato, i membri con account scaduti potranno eseguire l&#39;"
+"accesso ma non saranno in grado di visualizzare il contenuto protetto. "
+"Questo permette agli utenti di rinnovare il proprio account eseguendo un "
+"nuovo pagamento."
 
 #: classes/class.swpm-settings.php:183
 msgid "Membership Renewal URL"
@@ -797,10 +797,10 @@ msgid ""
 "membership-plugin.com/creating-membership-renewal-button/\" target=\"_blank"
 "\">this documentation</a> to learn how to create a renewal page."
 msgstr ""
-"Puoi creare una pagina per il rinnovo dell\\'iscrizione sul tuo sito. Leggi "
-"<a href=\"https://simple-membership-plugin.com/creating-membership-renewal-"
-"button/\" target=\"_blank\">questa documentazione</a> per imparare a creare "
-"una pagina di rinnovo iscrizione."
+"Puoi creare una pagina per il rinnovo dell&#39;iscrizione sul tuo sito. "
+"Leggi <a href=\"https://simple-membership-plugin.com/creating-membership-"
+"renewal-button/\" target=\"_blank\">questa documentazione</a> per imparare a "
+"creare una pagina di rinnovo iscrizione."
 
 #: classes/class.swpm-settings.php:186
 msgid "Allow Account Deletion"
@@ -889,7 +889,7 @@ msgid ""
 "This email will be sent to your members when you use the bulk account "
 "activate and notify action."
 msgstr ""
-"Questa email sarà inviata ai tuoi membri quando utilizzerai l\\'azione di "
+"Questa email sarà inviata ai tuoi membri quando utilizzerai l&#39;azione di "
 "notifica e attivazione account bulk."
 
 #: classes/class.swpm-settings.php:327
@@ -915,7 +915,7 @@ msgstr "Simple WP Membership::Impostazioni"
 #: classes/class.swpm-utils-member.php:37
 #: classes/class.swpm-utils-member.php:47
 msgid "User is not logged in."
-msgstr "L\\'utente non ha eseguito l\\'accesso."
+msgstr "L&#39;utente non ha eseguito l&#39;accesso."
 
 #: classes/class.swpm-utils-misc.php:50
 msgid "Registration"
@@ -939,15 +939,15 @@ msgstr "Non sei un membro?"
 
 #: classes/class.swpm-utils-misc.php:219 views/login.php:33
 msgid "Join Us"
-msgstr "Unisciti a noi"
+msgstr "Registrati"
 
 #: classes/class.swpm-utils-misc.php:230
 msgid "renew"
-msgstr "rinnova"
+msgstr " di rinnovare"
 
 #: classes/class.swpm-utils-misc.php:230
 msgid " your account to gain access to this content."
-msgstr " il tuo account per garantirti l\\'accesso a questo contenuto."
+msgstr " l&#39;account per garantirsi l&#39;accesso a questo contenuto."
 
 #: classes/class.swpm-utils-template.php:38
 msgid "Error! Failed to find a template path for the specified template: "
@@ -1065,9 +1065,9 @@ msgid ""
 "processed. Please check back in a few minutes. An email will be sent to you "
 "with the details shortly."
 msgstr ""
-"Se avete appena effettuato un pagamento per l\\'iscrizione allora il vostro "
-"pagamento è ancora in fase di elaborazione. Si prega di controllare tra "
-"pochi minuti. Vi verrà inviata una email a breve con tutti i dettagli."
+"Se avete appena effettuato un pagamento per l&#39;iscrizione allora il "
+"vostro pagamento è ancora in fase di elaborazione. Si prega di controllare "
+"tra pochi minuti. Vi verrà inviata una email a breve con tutti i dettagli."
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:88
 msgid "Expiry: "
@@ -1075,7 +1075,7 @@ msgstr "Scadenza:"
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:90
 msgid "You are not logged-in as a member"
-msgstr "Non hai l\\'acceso come membro"
+msgstr "Non hai l&#39;acceso come membro"
 
 #: views/add.php:14 views/admin_add.php:18 views/admin_edit.php:38
 #: views/edit.php:13 views/login.php:17
@@ -1163,8 +1163,8 @@ msgstr "Durata accesso"
 #: views/admin_add_level.php:22
 msgid "No Expiry (Access for this level will not expire until cancelled"
 msgstr ""
-"Nessuna scadenza (l\\'accesso a questo livello non scade fino alla "
-"cancellazione dell\\'account)"
+"Nessuna scadenza (l&#39;accesso a questo livello non scade fino alla "
+"cancellazione dell&#39;account)"
 
 #: views/admin_add_level.php:23 views/admin_add_level.php:25
 #: views/admin_add_level.php:27 views/admin_add_level.php:29
@@ -1175,19 +1175,19 @@ msgstr "Scadenza dopo"
 
 #: views/admin_add_level.php:24 views/admin_edit_level.php:28
 msgid "Days (Access expires after given number of days)"
-msgstr "Giorni (l\\'accesso scade dopo un certo numero di giorni)"
+msgstr "Giorni (l&#39;accesso scade dopo un certo numero di giorni)"
 
 #: views/admin_add_level.php:26
 msgid "Weeks (Access expires after given number of weeks"
-msgstr "Settimane (l\\'accesso scade dopo un certo numero di settimane)"
+msgstr "Settimane (l&#39;accesso scade dopo un certo numero di settimane)"
 
 #: views/admin_add_level.php:28 views/admin_edit_level.php:34
 msgid "Months (Access expires after given number of months)"
-msgstr "Mesi (l\\'accesso scade dopo un certo numero di mesi)"
+msgstr "Mesi (l&#39;accesso scade dopo un certo numero di mesi)"
 
 #: views/admin_add_level.php:30 views/admin_edit_level.php:37
 msgid "Years (Access expires after given number of years)"
-msgstr "Anni (l\\'accesso scade dopo un certo numero di anni)"
+msgstr "Anni (l&#39;accesso scade dopo un certo numero di anni)"
 
 #: views/admin_add_level.php:31 views/admin_edit_level.php:39
 msgid "Fixed Date Expiry"
@@ -1195,7 +1195,7 @@ msgstr "Data fissata per la scadenza"
 
 #: views/admin_add_level.php:32 views/admin_edit_level.php:40
 msgid "(Access expires on a fixed date)"
-msgstr "(l\\'accesso scade a una data prefissata)"
+msgstr "(l&#39;accesso scade a una data prefissata)"
 
 #: views/admin_add_level.php:38
 msgid "Add New Membership Level "
@@ -1214,7 +1214,7 @@ msgstr ""
 "Prima di tutto, proteggi a livello globale la categoria sul tuo sito "
 "selezionando \"Protezione Generale\" dal menu a tendina in basso e quindi "
 "seleziona le categorie che dovrebbero essere protette per gli utenti che non "
-"hanno eseguito l\\'accesso."
+"hanno eseguito l&#39;accesso."
 
 #: views/admin_category_list.php:8
 msgid ""
@@ -1223,8 +1223,8 @@ msgid ""
 "membership level)."
 msgstr ""
 "Dopodichè, seleziona un livello di iscrizione esistente dal menu a tendina "
-"in basso e seleziona le categorie a cui vuoi garantire l\\'accesso (per quel "
-"particolare livello di iscrizione)"
+"in basso e seleziona le categorie a cui vuoi garantire l&#39;accesso (per "
+"quel particolare livello di iscrizione)"
 
 #: views/admin_edit.php:5
 msgid "Edit Member"
@@ -1244,7 +1244,7 @@ msgstr "(Due volte, lasciare vuoto per mantenere la vecchia password)"
 
 #: views/admin_edit.php:54
 msgid "Notify User"
-msgstr "Notificare l\\'utente"
+msgstr "Notificare l&#39;utente"
 
 #: views/admin_edit.php:61
 msgid "Subscriber ID/Reference"
@@ -1252,7 +1252,7 @@ msgstr "ID/Riferimento Sottoscrittore "
 
 #: views/admin_edit.php:65
 msgid "Last Accessed From IP"
-msgstr "Ultima accesso dall\\'IP"
+msgstr "Ultima accesso dall&#39;IP"
 
 #: views/admin_edit.php:73
 msgid "Edit User "
@@ -1279,12 +1279,12 @@ msgstr "Attualmente stai modificando:"
 #: views/admin_edit_level.php:26
 msgid "No Expiry (Access for this level will not expire until cancelled)"
 msgstr ""
-"Nessuna scadenza (l\\'accesso a questo livello non scade fino alla "
-"cancellazione dell\\'account)"
+"Nessuna scadenza (l&#39;accesso a questo livello non scade fino alla "
+"cancellazione dell&#39;account)"
 
 #: views/admin_edit_level.php:31
 msgid "Weeks (Access expires after given number of weeks)"
-msgstr "Settimane (l\\'accesso scade dopo un certo numero di settimane)"
+msgstr "Settimane (l&#39;accesso scade dopo un certo numero di settimane)"
 
 #: views/admin_edit_level.php:46
 msgid "Edit Membership Level "
@@ -1341,8 +1341,8 @@ msgid ""
 "to them after the payment."
 msgstr ""
 "Qui è possibile generare manualmente un link di \"Completamento registrazione"
-"\" ed inviarlo al vostro cliente in caso avesse smarrito l\\'email che gli è "
-"stata inviata automaticamente dopo il pagamento."
+"\" ed inviarlo al vostro cliente in caso avesse smarrito l&#39;email che gli "
+"è stata inviata automaticamente dopo il pagamento."
 
 #: views/admin_tools_settings.php:14
 msgid "Generate Registration Completion Link"
@@ -1358,7 +1358,7 @@ msgstr "Per tutte le registrazioni incomplete"
 
 #: views/admin_tools_settings.php:23
 msgid "Send Registration Reminder Email Too"
-msgstr "Inviare l\\'email di promemoria-registrazione a"
+msgstr "Inviare l&#39;email di promemoria-registrazione a"
 
 #: views/admin_tools_settings.php:29
 msgid "Submit"
@@ -1415,7 +1415,7 @@ msgstr "Tutti i pagamenti/transazioni dei tuoi membri sono registrati qui."
 
 #: views/payments/admin_all_payment_transactions.php:12
 msgid "Search for a transaction by using email or name"
-msgstr "Cerca una transazione utilizzando l\\'email o il nome utente"
+msgstr "Cerca una transazione utilizzando l&#39;email o il nome utente"
 
 #: views/payments/admin_create_payment_buttons.php:14
 msgid ""
@@ -1455,7 +1455,7 @@ msgstr ""
 
 #: views/payments/admin_payment_settings.php:33
 msgid "Enter the Membership Level ID"
-msgstr "Inserisci l\\'ID livello iscrizione"
+msgstr "Inserisci l&#39;ID livello iscrizione"
 
 #: views/payments/admin_payment_settings.php:35
 msgid "Generate Code"

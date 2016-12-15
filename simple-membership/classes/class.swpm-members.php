@@ -85,12 +85,19 @@ class SwpmMembers extends WP_List_Table {
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl";
         $query .= " LEFT JOIN " . $wpdb->prefix . "swpm_membership_tbl";
         $query .= " ON ( membership_level = id ) ";
-        $s = filter_input(INPUT_POST, 's');
+        
+        //Get the search string (if any)
+        $s = filter_input(INPUT_GET, 's');
+        if(empty($s)){
+            $s = filter_input(INPUT_POST, 's');
+        }
+        
         $status = filter_input(INPUT_GET, 'status');
         $filter1 = '';
         
         //Add the search parameter to the query
         if (!empty($s)) {
+            $s = sanitize_text_field($s);
             $s = trim($s);//Trim the input
             $filter1 .= "( user_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR first_name LIKE '%" . strip_tags($s) . "%' "

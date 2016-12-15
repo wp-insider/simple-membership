@@ -24,7 +24,7 @@ $count = $this->get_user_count_by_account_state();
 </ul>
 
 <br />
-<form method="post">
+<form method="get">
     <p class="search-box">
         <input id="search_id-search-input" type="text" name="s" value="<?php echo isset($_REQUEST['s'])? esc_attr($_REQUEST['s']): ''; ?>" />
         <input id="search-submit" class="button" type="submit" name="" value="<?php echo SwpmUtils::_('Search') ?>" />

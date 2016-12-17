@@ -29,7 +29,7 @@ You can configure it to have free and/or paid memberships on your site. Paid mem
 
 Both one time and recurring/subscription payments are supported.
 
-You can also accept one time membership payment via Stripe payment gateway.
+You can also accept one time membership payment via Stripe or Braintree payment gateway.
 
 = Membership Payments Log = 
 All the payments from your members are recorded in the plugin. You can view them anytime by visiting the payments menu from the admin dashboard.

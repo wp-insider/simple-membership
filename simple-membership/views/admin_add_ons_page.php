@@ -35,10 +35,10 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             array_push($addons_data, $addon_3);
 
             $addon_4 = array(
-                'name' => 'WP User Import',
-                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/wp-user-import.png',
-                'description' => 'Addon for importing existing Wordpress users to Simple Membership plugin',
-                'page_url' => 'https://simple-membership-plugin.com/import-existing-wordpress-users-simple-membership-plugin/',
+                'name' => 'Member Directory Listing',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-member-directory-listing-addon.png',
+                'description' => 'Allows you to create a list of all the users on your site, with pagination and search option.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-member-directory-listing-addon/',
             );
             array_push($addons_data, $addon_4);
 
@@ -154,6 +154,13 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             );
             array_push($addons_data, $addon_17);            
             
+            $addon_18 = array(
+                'name' => 'WP User Import',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/wp-user-import.png',
+                'description' => 'Addon for importing existing Wordpress users to Simple Membership plugin',
+                'page_url' => 'https://simple-membership-plugin.com/import-existing-wordpress-users-simple-membership-plugin/',
+            );
+            array_push($addons_data, $addon_18);
             
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {

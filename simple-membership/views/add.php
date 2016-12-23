@@ -4,11 +4,11 @@
         <table>
             <tr class="swpm-registration-username-row">
                 <td><label for="user_name"><?php echo SwpmUtils::_('Username') ?></label></td>
-                <td><input type="text" id="user_name" class="validate[required,custom[noapostrophe],custom[SWPMUserName],minSize[4],ajax[ajaxUserCall]]" value="<?php echo $user_name; ?>" size="50" name="user_name" /></td>
+                <td><input type="text" id="user_name" class="validate[required,custom[noapostrophe],custom[SWPMUserName],minSize[4],ajax[ajaxUserCall]]" value="<?php echo esc_attr($user_name); ?>" size="50" name="user_name" /></td>
             </tr>
             <tr class="swpm-registration-email-row">
                 <td><label for="email"><?php echo SwpmUtils::_('Email') ?></label></td>
-                <td><input type="text" id="email" class="validate[required,custom[email],ajax[ajaxEmailCall]]" value="<?php echo $email; ?>" size="50" name="email" /></td>
+                <td><input type="text" id="email" class="validate[required,custom[email],ajax[ajaxEmailCall]]" value="<?php echo esc_attr($email); ?>" size="50" name="email" /></td>
             </tr>
             <tr class="swpm-registration-password-row">
                 <td><label for="password"><?php echo SwpmUtils::_('Password') ?></label></td>
@@ -20,11 +20,11 @@
             </tr>
             <tr class="swpm-registration-firstname-row">
                 <td><label for="first_name"><?php echo SwpmUtils::_('First Name') ?></label></td>
-                <td><input type="text" id="first_name" value="<?php echo $first_name; ?>" size="50" name="first_name" /></td>
+                <td><input type="text" id="first_name" value="<?php echo esc_attr($first_name); ?>" size="50" name="first_name" /></td>
             </tr>
             <tr class="swpm-registration-lastname-row">
                 <td><label for="last_name"><?php echo SwpmUtils::_('Last Name') ?></label></td>
-                <td><input type="text" id="last_name" value="<?php echo $last_name; ?>" size="50" name="last_name" /></td>
+                <td><input type="text" id="last_name" value="<?php echo esc_attr($last_name); ?>" size="50" name="last_name" /></td>
             </tr>
             <tr class="swpm-registration-membership-level-row">
                 <td><label for="membership_level"><?php echo SwpmUtils::_('Membership Level') ?></label></td>

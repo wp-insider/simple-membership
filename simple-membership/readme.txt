@@ -133,6 +133,7 @@ https://simple-membership-plugin.com/
 - Updated the Italian language file. Thanks to Nicolò Monili for updating the translation.
 - Deleted the German language files from the plugin folder so it can pull the language from translate.wordpress.org
 - Improved the member search functionality when used with pagination.
+- Added more sanitization on the registration form.
 - Added a few utility functions to the membership level utility class.
 
 = 3.3.9 =

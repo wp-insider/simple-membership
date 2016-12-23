@@ -23,6 +23,9 @@ $join_url = $setting->get_value('join-us-page-url');
                 <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" value="checked='checked'"></span>
                 <span class="swpm-rember-label"> <?php echo SwpmUtils::_('Remember Me') ?></span>
             </div>
+            
+            <div class="swpm-before-login-submit-section"><?php echo apply_filters('swpm_before_login_form_submit_button', ''); ?></div>
+            
             <div class="swpm-login-submit">
                 <input type="submit" class="swpm-login-form-submit" name="swpm-login" value="<?php echo SwpmUtils::_('Login') ?>"/>
             </div>

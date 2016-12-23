@@ -38,7 +38,7 @@ class SwpmAuth {
 
         if (!empty($swpm_user_name) && !empty($swpm_password)) {
             //SWPM member login request.
-        
+                                
             //First, lets make sure this user is not already logged into the site as an "Admin" user. We don't want to override that admin login session.
             if (current_user_can('administrator')) {
                 //This user is logged in as ADMIN then trying to do another login as a member. Stop the login request processing (we don't want to override your admin login session).
@@ -50,6 +50,13 @@ class SwpmAuth {
                 wp_die($error_msg);
             }
             
+            //If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
+            $captcha_validation_output = apply_filters('swpm_validate_login_form_submission', '');
+            if (!empty($captcha_validation_output)) {
+                $this->lastStatusMsg = SwpmUtils::_('Captcha validation failed on login form.');
+                return;
+            }
+        
             if(is_email($swpm_user_name)){//User is trying to log-in using an email address
                 $email = sanitize_email($swpm_user_name);
                 $query = $wpdb->prepare("SELECT user_name FROM " . $wpdb->prefix . "swpm_members_tbl WHERE email = %s", $email);

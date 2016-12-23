@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 3.3.9
+Stable tag: 3.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,12 +129,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.4.0 =
+= 3.4.0 =
 - Updated the Italian language file. Thanks to Nicolò Monili for updating the translation.
 - Deleted the German language files from the plugin folder so it can pull the language from translate.wordpress.org
 - Improved the member search functionality when used with pagination.
 - Added more sanitization on the registration form.
 - Added a few utility functions to the membership level utility class.
+- Google reCAPTCHA addon updated to enable captcha on the login form.
 - Stripe Checkout: The plugin now sets the "receipt_email" parameter for Stripe checkout so a receipt gets sent from Stripe.
 
 = 3.3.9 =

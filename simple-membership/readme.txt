@@ -135,6 +135,7 @@ https://simple-membership-plugin.com/
 - Improved the member search functionality when used with pagination.
 - Added more sanitization on the registration form.
 - Added a few utility functions to the membership level utility class.
+- Stripe Checkout: The plugin now sets the "receipt_email" parameter for Stripe checkout so a receipt gets sent from Stripe.
 
 = 3.3.9 =
 - Deleted the Spanish language files from the plugin folder so it can pull the language from translate.wordpress.org

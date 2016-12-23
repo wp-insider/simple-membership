@@ -79,6 +79,7 @@ class SwpmStripeBuyNowIpnHandler {
             "currency" => strtolower($currency_code),
             "source" => $token,
             "description" => $button_title,
+            "receipt_email" => $stripe_email,
         ));
         } catch(\Stripe\Error\Card $e) {
             // The card has been declined

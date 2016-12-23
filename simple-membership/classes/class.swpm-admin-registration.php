@@ -29,7 +29,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
         $member = SwpmTransfer::$default_fields;
         $form = new SwpmForm($member);
         if ($form->is_valid()) {
-            $member_info = $form->get_sanitized();
+            $member_info = $form->get_sanitized_member_form_data();
             $account_status = SwpmSettings::get_instance()->get_value('default-account-status', 'active');
             $member_info['account_state'] = $account_status;
             $plain_password = $member_info['plain_password'];
@@ -91,7 +91,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
         unset($member['user_name']);
         $form = new SwpmForm($member);
         if ($form->is_valid()) {
-            $member = $form->get_sanitized();
+            $member = $form->get_sanitized_member_form_data();
             $plain_password = isset($member['plain_password']) ? $member['plain_password'] : "";
             SwpmUtils::update_wp_user($user_name, $member);
             unset($member['plain_password']);

@@ -290,7 +290,7 @@ class SwpmForm {
         return count($this->errors) < 1;
     }
 
-    public function get_sanitized() {
+    public function get_sanitized_member_form_data() {
         return $this->sanitized;
     }
 

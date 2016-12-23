@@ -116,8 +116,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
             return false;
         }
 
-
-        $member_info = $form->get_sanitized();
+        $member_info = $form->get_sanitized_member_form_data();
         $free_level = SwpmUtils::get_free_level();
         $account_status = SwpmSettings::get_instance()->get_value('default-account-status', 'active');
         $member_info['last_accessed_from_ip'] = SwpmUtils::get_user_ip_address();
@@ -202,7 +201,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
             global $wpdb;
             $message = array('succeeded' => true, 'message' => SwpmUtils::_('Profile updated successfully.'));
 
-            $member_info = $form->get_sanitized();
+            $member_info = $form->get_sanitized_member_form_data();
             SwpmUtils::update_wp_user($auth->get('user_name'), $member_info); //Update corresponding wp user record.
 
 

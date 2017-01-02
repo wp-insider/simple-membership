@@ -96,10 +96,16 @@ class SwpmMemberUtils {
         return $result;
     }
     
-    public static function is_valid_user_name($user_name){
-        return preg_match("/^[a-zA-Z0-9!@#$%&+\/=?^_`{|}~\.-]+$/", $user_name)== 1;
+    /*
+     * Use this function to update or set membership level of a member easily.
+     */
+    public static function update_membership_level($member_id, $target_membership_level) {
+        global $wpdb;
+        $members_table_name = $wpdb->prefix . "swpm_members_tbl";
+        $query = $wpdb->prepare("UPDATE $members_table_name SET membership_level=%s WHERE member_id=%s", $target_membership_level, $member_id);
+        $resultset = $wpdb->query($query);
     }
- 
+    
     /*
      * Use this function to update or set account status of a member easily.
      */
@@ -113,7 +119,7 @@ class SwpmMemberUtils {
     }
 
     /*
-     * Use this function to update or set account status of a member easily.
+     * Use this function to update or set access starts date of a member easily.
      */
     public static function update_access_starts_date($member_id, $new_date) {
         global $wpdb;
@@ -164,4 +170,8 @@ class SwpmMemberUtils {
         return $subscription_starts;
     }
 
+    public static function is_valid_user_name($user_name){
+        return preg_match("/^[a-zA-Z0-9!@#$%&+\/=?^_`{|}~\.-]+$/", $user_name)== 1;
+    }
+    
 }

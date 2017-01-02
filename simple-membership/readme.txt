@@ -130,7 +130,9 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 3.4.1 =
+- Added an option to bulk update the "Membership Level" value of a group of members.
 - Added an option to bulk update the "Access Starts" date value of a group of members.
+
 
 = 3.4.0 =
 - Updated the Italian language file. Thanks to Nicolò Monili for updating the translation.

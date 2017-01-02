@@ -88,6 +88,14 @@ class SwpmMemberUtils {
         return $result;
     }
     
+    public static function get_all_members_of_a_level($level_id) {
+        //Retrieves all the SWPM user records for the given membership level
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE membership_level = %s", $level_id);
+        $result = $wpdb->get_results($query);
+        return $result;
+    }
+    
     public static function is_valid_user_name($user_name){
         return preg_match("/^[a-zA-Z0-9!@#$%&+\/=?^_`{|}~\.-]+$/", $user_name)== 1;
     }
@@ -104,7 +112,16 @@ class SwpmMemberUtils {
         $resultset = $wpdb->query($query);
     }
 
-
+    /*
+     * Use this function to update or set account status of a member easily.
+     */
+    public static function update_access_starts_date($member_id, $new_date) {
+        global $wpdb;
+        $members_table_name = $wpdb->prefix . "swpm_members_tbl";
+        $query = $wpdb->prepare("UPDATE $members_table_name SET subscription_starts=%s WHERE member_id=%s", $new_date, $member_id);
+        $resultset = $wpdb->query($query);
+    }
+    
     /*
      * Calculates the Access Starts date value considering the level and current expiry. Useful for after payment member profile update.
      */

@@ -486,6 +486,7 @@ class SimpleWpMembership {
     }
 
     public function admin_library() {
+        //Only loaded on selective swpm admin menu page rendering.
         $this->common_library();
         wp_enqueue_script('password-strength-meter');
         wp_enqueue_script('swpm.password-meter', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-meter.js');

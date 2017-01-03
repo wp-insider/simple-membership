@@ -134,8 +134,51 @@ class swpm_paypal_ipn_handler {
             $this->debug_log('Item Currency: '.$cart_item_data_currency,true);
 
             //Get the button id
+            $pp_hosted_button = false;
             $button_id = $cart_item_data_num;//Button id is the item number.
+            $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
+            if(!SwpmUtils::membership_level_id_exists($membership_level_id)){
+                $this->debug_log('This payment button was not created in the plugin. This is a paypal hosted button.', true);
+                $pp_hosted_button = true;
+            }
+    
+            //Price check
+            $check_price = true;
+            $msg = "";
+            $msg = apply_filters('swpm_before_price_check_filter', $msg, $current_cart_item);
+            if (!empty($msg) && $msg == "price-check-override") {//This filter allows an extension to do a customized version of price check (if needed)
+                $check_price = false;
+                $this->debug_log('Price and currency check has been overridden by an addon/extension.', true);
+            }
+            if ($check_price && !$pp_hosted_button) {
+                //Check according to buy now payment or subscription payment.
+                $button_type = get_post_meta($button_id, 'button_type', true);
+                if ( $button_type == 'pp_buy_now'){//This is a PayPal buy now type button
+                    $expected_amount = (get_post_meta($button_id, 'payment_amount', true)) * $cart_item_data_quantity;
+                    $expected_amount = round($expected_amount, 2);
+                    $received_amount = $cart_item_data_total;
+                } else if ($button_type == 'pp_subscription'){//This is a PayPal subscription type button
+                    //Trial payment or recurring payment?
+                    //TODO - is_recurring_payment() check to determine if it is a recurring payment
+                    $trial_billing_amount = get_post_meta($button_id, 'trial_billing_amount', true);
+                    $billing_amount = get_post_meta($button_id, 'billing_amount', true);
+                    $expected_amount = 0;
+                    $received_amount = $cart_item_data_total;
+                } else {
+                    $this->debug_log('Error! Unexpected button type: '.$button_type, false);
+                    return false;
+                }
 
+                if ($received_amount < $expected_amount) {
+                    //Error! amount received is less than expected. This is invalid.
+                    $this->debug_log('Expected amount: '.$expected_amount, true);
+                    $this->debug_log('Received amount: '.$received_amount, true);                    
+                    $this->debug_log('Price check failed. Amount received is less than the amount expected. This payment will not be processed.', false);
+                    return false;
+                }
+
+            }
+            
             //*** Handle Membership Payment ***
             //--------------------------------------------------------------------------------------
             // ========= Need to find the (level ID) in the custom variable ============

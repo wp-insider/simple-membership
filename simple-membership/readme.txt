@@ -108,6 +108,7 @@ The following language translations are already available:
 * Bosnian (Bosnia and Herzegovina)
 * Slovak
 * Italian
+* Norwegian
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -132,7 +133,7 @@ https://simple-membership-plugin.com/
 = TODO 3.4.1 =
 - Added an option to bulk update the "Membership Level" value of a group of members.
 - Added an option to bulk update the "Access Starts" date value of a group of members.
-
+- Added Norwegian language translation file. The translation was submitted by Tom Nordstrønen.
 
 = 3.4.0 =
 - Updated the Italian language file. Thanks to Nicolò Monili for updating the translation.

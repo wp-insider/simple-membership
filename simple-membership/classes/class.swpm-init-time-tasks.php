@@ -140,7 +140,7 @@ class SwpmInitTimeTasks {
         $swpm_editprofile_submit = filter_input(INPUT_POST, 'swpm_editprofile_submit');
         if (!empty($swpm_editprofile_submit)) {
             SwpmFrontRegistration::get_instance()->edit_profile_front_end();
-            //TODO - do a redirect?
+            //TODO - allow an option to do a redirect if successful edit profile form submission?
         }
     }
 

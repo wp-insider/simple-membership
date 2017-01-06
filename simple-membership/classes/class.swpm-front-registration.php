@@ -215,11 +215,13 @@ class SwpmFrontRegistration extends SwpmRegistration {
             $auth->reload_user_data();
 
             SwpmTransfer::get_instance()->set('status', $message);
+            do_action('swpm_front_end_profile_edited', $member_info);
+            return true;//Successful form submission.
         } else {
             $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following'),
                 'extra' => $form->get_errors());
             SwpmTransfer::get_instance()->set('status', $message);
-            return;
+            return false;//Error in the form submission.
         }
     }
 

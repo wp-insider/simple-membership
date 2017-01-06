@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,6 +132,9 @@ https://simple-membership-plugin.com/
 
 = 3.4.2 = 
 - Fixed an issue with some sites getting a blank screen for the members menu due to a PHP short tag usage.
+- Added a new action hook that gets triggered after a member edits the profile from the edit profile page.
+- The edit_profile_front_end() function now returns true or false based on if the form was submitted successfully or not.
+- Added extra comment in the IPN handling code.
 
 = 3.4.1 =
 - Added an option to bulk update the "Membership Level" value of a group of members.

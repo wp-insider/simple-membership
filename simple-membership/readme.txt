@@ -130,6 +130,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= 3.4.2 = 
+- Fixed an issue with some sites getting a blank screen for the members menu due to a PHP short tag usage.
+
 = 3.4.1 =
 - Added an option to bulk update the "Membership Level" value of a group of members.
 - Added an option to bulk update the "Access Starts" date value of a group of members.

@@ -543,7 +543,7 @@ class SwpmMembers extends WP_List_Table {
                 $('#swpm_bulk_user_start_date_change_date').dateinput({'format':'yyyy-mm-dd',selectors: true,yearRange:[-100,100]});
             });
             </script>
-        <?
+        <?php
         echo '</div></div>'; //<!-- end of #poststuff #post-body -->
     }
 

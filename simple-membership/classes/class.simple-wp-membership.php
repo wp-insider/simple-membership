@@ -489,9 +489,9 @@ class SimpleWpMembership {
         //Only loaded on selective swpm admin menu page rendering.
         $this->common_library();
         wp_enqueue_script('password-strength-meter');
-        wp_enqueue_script('swpm.password-meter', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-meter.js');
+        wp_enqueue_script('swpm.password-meter', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-meter.js', array('jquery'));
         wp_enqueue_style('jquery.tools.dateinput', SIMPLE_WP_MEMBERSHIP_URL . '/css/jquery.tools.dateinput.css');
-        wp_enqueue_script('jquery.tools', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.tools18.min.js');
+        wp_enqueue_script('jquery.tools', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.tools18.min.js', array('jquery'));
         $settings = array('statusChangeEmailHead' => SwpmSettings::get_instance()->get_value('account-change-email-subject'),
             'statusChangeEmailBody' => SwpmSettings::get_instance()->get_value('account-change-email-body'));
         wp_localize_script('swpm.password-meter', 'SwpmSettings', $settings);
@@ -505,8 +505,8 @@ class SimpleWpMembership {
         wp_enqueue_script('jquery');
         wp_enqueue_style('swpm.common', SIMPLE_WP_MEMBERSHIP_URL . '/css/swpm.common.css');
         wp_enqueue_style('validationEngine.jquery', SIMPLE_WP_MEMBERSHIP_URL . '/css/validationEngine.jquery.css');
-        wp_enqueue_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js');
-        wp_enqueue_script('jquery.validationEngine', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine.js');
+        wp_enqueue_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'));
+        wp_enqueue_script('jquery.validationEngine', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine.js', array('jquery'));
     }
 
     public function registration_form($atts) {

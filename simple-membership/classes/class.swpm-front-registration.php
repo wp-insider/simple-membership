@@ -117,6 +117,21 @@ class SwpmFrontRegistration extends SwpmRegistration {
         }
 
         $member_info = $form->get_sanitized_member_form_data();
+        
+        //Check if the email belongs to an existing wp user account with admin role.
+        $wp_user_id = email_exists($member_info['email']);
+        if ($wp_user_id) {
+            //A wp user account exist with this email.
+            //Check if the user has admin role.
+            $admin_user = SwpmMemberUtils::wp_user_has_admin_role($wp_user_id);
+            if($admin_user){
+                //This email belongs to an admin user. Update is not allowed on admin users. Show error message then exit.
+                $error_msg = '<p>This email address ('.$member_info['email'].') belongs to an admin user. This email cannot be used to register a new account on this site.</p>';
+                wp_die($error_msg);            
+            }
+        }
+        
+        //Go ahead and create the SWPM user record.
         $free_level = SwpmUtils::get_free_level();
         $account_status = SwpmSettings::get_instance()->get_value('default-account-status', 'active');
         $member_info['last_accessed_from_ip'] = SwpmUtils::get_user_ip_address();

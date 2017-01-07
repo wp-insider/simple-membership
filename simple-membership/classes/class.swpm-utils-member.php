@@ -174,4 +174,13 @@ class SwpmMemberUtils {
         return preg_match("/^[a-zA-Z0-9!@#$%&+\/=?^_`{|}~\.-]+$/", $user_name)== 1;
     }
     
+    public static function wp_user_has_admin_role($wp_user_id){
+        $caps = get_user_meta($wp_user_id, 'wp_capabilities', true);
+        if (is_array($caps) && in_array('administrator', array_keys((array) $caps))){
+            //This wp user has "administrator" role.
+            return true;
+        }
+        return false;
+    }
+    
 }

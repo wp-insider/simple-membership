@@ -222,10 +222,7 @@ abstract class SwpmUtils {
             return;
         }
         
-        //No need to trigger this action hook as the wp_update_user() function will trigger it automatically.
-        //$old_roles = array();
-        //do_action('set_user_role', $wp_user_id, $role, $old_roles); //Trigger the action hook for other plugin(s)
-        
+        //wp_update_user() function will trigger the 'set_user_role' hook.
         wp_update_user(array('ID' => $wp_user_id, 'role' => $role));
         
         $roles = new WP_Roles();
@@ -301,29 +298,45 @@ abstract class SwpmUtils {
     }
 
     public static function create_wp_user($wp_user_data) {
-        if (self::is_multisite_install()) {//MS install
+        
+        //Check if the email belongs to an existing wp user account.
+        $wp_user_id = email_exists($wp_user_data['user_email']);
+        if ($wp_user_id) {
+            //A wp user account exist with this email.
+            
+            //Check if the user has admin role.
+            $admin_user = SwpmMemberUtils::wp_user_has_admin_role($wp_user_id);
+            if($admin_user){
+                //This email belongs to an admin user. Update is not allowed on admin users. Show error message then exit.
+                $error_msg = '<p>This email address ('.$wp_user_data['user_email'].') belongs to an admin user. This email cannot be used to register a new account on this site.</p>';
+                wp_die($error_msg);            
+            }
+        }
+
+        //At this point 1) A WP User with this email doesn't exist. Or 2) The associated wp user doesn't have admin role
+        //Lets create a new wp user record or attach the SWPM profile to an existing user accordingly.
+        
+        if (self::is_multisite_install()) {
+            //WP Multi-Sit install
             global $blog_id;
-            if ($wp_user_id = email_exists($wp_user_data['user_email'])) {// if user exists then just add him to current blog.
+            if ($wp_user_id) {
+                //If user exists then just add him to current blog.
                 add_existing_user_to_blog(array('user_id' => $wp_user_id, 'role' => 'subscriber'));
                 return $wp_user_id;
             }
             $wp_user_id = wpmu_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
             $role = 'subscriber'; //TODO - add user as a subscriber first. The subsequent update user role function to update the role to the correct one
             add_user_to_blog($blog_id, $wp_user_id, $role);
-        } else {//Single site install
-            $wp_user_id = email_exists($wp_user_data['user_email']);
+        } else {
+            //WP Single site install
             if ($wp_user_id) {
                 return $wp_user_id;
             }
             $wp_user_id = wp_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
         }
         $wp_user_data['ID'] = $wp_user_id;
-        wp_update_user($wp_user_data);
-        $user_info = get_userdata($wp_user_id);
-        $user_cap = (isset($user_info->wp_capabilities) && is_array($user_info->wp_capabilities)) ? array_keys($user_info->wp_capabilities) : array();
-        if (!in_array('administrator', $user_cap)) {
-            SwpmUtils::update_wp_user_Role($wp_user_id, $wp_user_data['role']);
-        }
+        wp_update_user($wp_user_data);//Core WP function. Updates the user info and role.
+
         return $wp_user_id;
     }
 

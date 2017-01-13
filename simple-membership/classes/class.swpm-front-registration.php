@@ -42,7 +42,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         
         //Check if free membership registration is disalbed on the site
         if (empty($membership_level)) {
-            $joinuspage_link = '<a href="' . $joinuspage_url . '">'.SwpmUtils::_('Join us').'</a>';
+            $joinuspage_link = '<a href="' . $joinuspage_url . '">'.SwpmUtils::_('Join Us').'</a>';
             $free_rego_disabled_msg = '<p>';
             $free_rego_disabled_msg .= SwpmUtils::_('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.');
             $free_rego_disabled_msg .= '</p><p>';

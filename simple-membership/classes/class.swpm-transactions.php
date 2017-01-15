@@ -16,7 +16,6 @@ class SwpmTransactions {
         $txn_data['email'] = $ipn_data['payer_email'];
         $txn_data['first_name'] = $ipn_data['first_name'];
         $txn_data['last_name'] = $ipn_data['last_name'];
-        $txn_data['last_name'] = $ipn_data['last_name'];
         $txn_data['ip_address'] = $ipn_data['ip'];
         $txn_data['member_id'] = $custom_var['swpm_id'];
         $txn_data['membership_level'] = $custom_var['subsc_ref'];

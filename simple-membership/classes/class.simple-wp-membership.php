@@ -158,8 +158,25 @@ class SimpleWpMembership {
     }
 
     public function admin_init_hook() {
-        $this->common_library();
-        SwpmSettings::get_instance()->init_config_hooks();
+        //This hook is triggered in the wp-admin side only.
+        
+        $this->common_library();//Load the common JS libraries and Styles
+        $swpm_settings_obj = SwpmSettings::get_instance();
+        
+        //Check if the "Disable Access to WP Dashboard" option is enabled.
+        $disable_wp_dashboard_for_non_admins = $swpm_settings_obj->get_value('disable-access-to-wp-dashboard');
+        if($disable_wp_dashboard_for_non_admins){
+            //This option is enabled
+            if (!current_user_can('administrator')) {
+                //This is a non-admin user. Do not show the wp dashobard.
+                $message = '<p>'.SwpmUtils::_('The admin of this site does not allow users to access the wp dashobard.').'</p>';                
+                $message .= '<p>'.SwpmUtils::_('Go back to the home page by ').'<a href="'.SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL.'">'.SwpmUtils::_('clicking here').'</a>.'.'</p>';
+                wp_die($message);
+            }
+        }
+        
+        //Initialize the settings menu hooks.
+        $swpm_settings_obj->init_config_hooks();
         $addon_saved = filter_input(INPUT_POST, 'swpm-addon-settings');
         if (!empty($addon_saved)) {
             do_action('swpm_addon_settings_save');

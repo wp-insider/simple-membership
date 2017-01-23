@@ -143,9 +143,8 @@ class SwpmInitTimeTasks {
             //TODO - allow an option to do a redirect if successful edit profile form submission?
         }
     }
-
-    /* PayPal Payment IPN listener */
-
+    
+    /* Payment Gateway IPN listener */
     public function swpm_ipn_listener() {
         
         //Listen and handle PayPal IPN

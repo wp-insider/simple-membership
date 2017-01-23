@@ -278,4 +278,17 @@ class SwpmMiscUtils {
             wp_die(SwpmUtils::_("Error! This action (".$action_name.") can only be done by an user with management permission."));
         }        
     }
+    
+    public static function format_raw_content_for_front_end_display($raw_content){
+        $formatted_content = wptexturize ($raw_content);
+        $formatted_content = convert_smilies ($formatted_content);
+        $formatted_content = convert_chars ($formatted_content);
+        $formatted_content = wpautop ($formatted_content);
+        $formatted_content = shortcode_unautop ($formatted_content);
+        $formatted_content = prepend_attachment ($formatted_content);
+        $formatted_content = capital_P_dangit ($formatted_content);
+        $formatted_content = do_shortcode($formatted_content);
+        
+        return $formatted_content;
+    }
 }

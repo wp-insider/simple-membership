@@ -130,6 +130,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.4.3 =
+- Improved the formatting for the content that appears before the "more" tag on a more tag protected post.
+
 = 3.4.2 = 
 - Fixed an issue with some sites getting a blank screen for the members menu due to a PHP short tag usage.
 - Added a new action hook that gets triggered after a member edits the profile from the edit profile page.

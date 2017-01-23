@@ -174,7 +174,7 @@ class SwpmAccessControl {
         } 
 
         //Check and apply more tag protection.
-        $more_tag_protection_value = $this->check_and_apply_more_tag_protection($post);
+        $more_tag_protection_value = $this->check_and_apply_more_tag_protection($post, $content);
         if(!empty($more_tag_protection_value)){
             //More tag protection was found in the post. Return the modified $content.
             return $more_tag_protection_value;
@@ -184,7 +184,10 @@ class SwpmAccessControl {
         return $this->lastError;
     }
     
-    public function check_and_apply_more_tag_protection($post){
+    public function check_and_apply_more_tag_protection($post, $content){
+        //More tag protection is checked after all the OTHER protections have alrady been checked. 
+        //So if a valid logged-in member is accessing a post he has access to then this code won't execute.
+        
         //Check if more tag protection is enabled.
         $moretag = SwpmSettings::get_instance()->get_value('enable-moretag');
         if (empty($moretag)){
@@ -216,9 +219,9 @@ class SwpmAccessControl {
                         $more_tag_check_msg = apply_filters ('swpm_restricted_more_tag_msg', $error_msg);
                     }
                 }
-                
-                //Create the content that will be shown for this post. Show the first segment (before more tag) + any message from running the protection checks.
-                $new_post_content = do_shortcode($post_segments[0]) . $more_tag_check_msg;
+
+                $filtered_before_more_content = SwpmMiscUtils::format_raw_content_for_front_end_display($post_segments[0]);
+                $new_post_content = $filtered_before_more_content . $more_tag_check_msg;
                 return $new_post_content;  
                 
             }//End of segment count condition check.

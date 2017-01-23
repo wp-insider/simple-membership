@@ -200,7 +200,7 @@ class SwpmAccessControl {
                     //User is not logged-in. Need to show the login message after the more tag.
                     $text = SwpmUtils::_("You need to login to view the rest of the content. ") . SwpmMiscUtils::get_login_link();
                     $error_msg = '<div class="swpm-more-tag-not-logged-in swpm-margin-top-10">' . $text . '</div>';
-                    $this->lastError = apply_filters('swpm_not_logged_in_more_tag_msg', $error_msg);
+                    $more_tag_check_msg = apply_filters('swpm_not_logged_in_more_tag_msg', $error_msg);
                 } else {
                     //The user is logged in. 
                     //Lets check if the user's account is expired.
@@ -208,17 +208,17 @@ class SwpmAccessControl {
                         //This user's account is expired. Not allowed to see this post. Show account expiry notice also.
                         $text = SwpmUtils::_('Your account has expired. ') .  SwpmMiscUtils::get_renewal_link();
                         $error_msg = '<div class="swpm-more-tag-account-expired-msg swpm-yellow-box">'.$text.'</div>';
-                        $this->lastError = apply_filters('swpm_account_expired_more_tag_msg', $error_msg);
+                        $more_tag_check_msg = apply_filters('swpm_account_expired_more_tag_msg', $error_msg);
                     } else {
                         //At this stage, the user does not have permission to view the content after the more tag.
                         $text = SwpmUtils::_(" The rest of the content is not permitted for your membership level.");
                         $error_msg = '<div class="swpm-more-tag-restricted-msg swpm-margin-top-10">' . $text . '</div>';
-                        $this->lastError = apply_filters ('swpm_restricted_more_tag_msg', $error_msg);
+                        $more_tag_check_msg = apply_filters ('swpm_restricted_more_tag_msg', $error_msg);
                     }
                 }
                 
                 //Create the content that will be shown for this post. Show the first segment (before more tag) + any message from running the protection checks.
-                $new_post_content = do_shortcode($post_segments[0]) . $this->lastError;
+                $new_post_content = do_shortcode($post_segments[0]) . $more_tag_check_msg;
                 return $new_post_content;  
                 
             }//End of segment count condition check.

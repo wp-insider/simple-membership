@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 3.4.2
+Stable tag: 3.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -109,6 +109,7 @@ The following language translations are already available:
 * Slovak
 * Italian
 * Norwegian
+* Mexican
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -130,8 +131,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.4.3 =
+= TODO - 3.4.3 =
 - Improved the formatting for the content that appears before the "more" tag on a more tag protected post.
+- Added Mexican language translation file. The translation was submitted by Enrique alfonso.
+- Re-added the local copy of the Spanish translation files (Someone submitted incorrect translation to the translate.wordpress.org site overwriting the good translation)
 
 = 3.4.2 = 
 - Fixed an issue with some sites getting a blank screen for the members menu due to a PHP short tag usage.

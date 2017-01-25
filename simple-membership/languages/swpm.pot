@@ -1571,3 +1571,10 @@ msgstr ""
 #: views/payments/payment-gateway/paypal_button_shortcode_view.php:215
 msgid "Subscribe Now"
 msgstr ""
+
+# Translation strings from addons.
+msgid "Type password Here"
+msgstr ""
+
+msgid "Retype password Here"
+msgstr ""

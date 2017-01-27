@@ -1578,3 +1578,6 @@ msgstr ""
 
 msgid "Retype password Here"
 msgstr ""
+
+msgid "Registration is complete. You can now log into the site."
+msgstr ""

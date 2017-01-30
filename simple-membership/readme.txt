@@ -131,6 +131,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 4.4.4 =
+- Updated the spanish language translation file.
+
 = 3.4.3 =
 - Improved the formatting for the content that appears before the "more" tag on a more tag protected post.
 - Added a new feature to disable wp dashboard access for non-admin wp users. You can find this option under the general settings tab.

@@ -453,40 +453,43 @@ class SwpmMembers extends WP_List_Table {
         ?>
 
         <div class="postbox">
-        <h3 class="hndle"><label for="title">Bulk Update Membership Level of Members</label></h3>
+        <h3 class="hndle"><label for="title"><?php SwpmUtils::e('Bulk Update Membership Level of Members'); ?></label></h3>
         <div class="inside">
-            <p>You can manually change the membership level of any member by editing the record from the members menu. You can use the following option to bulk update the membership level of users who belong to the level you select below.</p>
+            <p>
+                <?php SwpmUtils::e('You can manually change the membership level of any member by editing the record from the members menu. '); ?>
+                <?php SwpmUtils::e('You can use the following option to bulk update the membership level of users who belong to the level you select below.'); ?>
+            </p>
             <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
                 <table width="100%" border="0" cellspacing="0" cellpadding="6">
                     <tr valign="top">
                         <td width="25%" align="left">
-                            <strong>Membership Level: </strong>
+                            <strong><?php SwpmUtils::e('Membership Level: '); ?></strong>
                         </td>
                         <td align="left">
                             <select name="swpm_bulk_change_level_from">
-                                <option value="please_select">Select Current Level</option>
+                                <option value="please_select"><?php SwpmUtils::e('Select Current Level'); ?></option>
                                 <?php echo SwpmUtils::membership_level_dropdown(); ?>
                             </select>
-                            <p class="description">Select the current membership level (the membership level of all members who are in this level will be updated).</p>
+                            <p class="description"><?php SwpmUtils::e('Select the current membership level (the membership level of all members who are in this level will be updated).'); ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
                         <td width="25%" align="left">
-                            <strong>Level to Change to: </strong>
+                            <strong><?php SwpmUtils::e('Level to Change to: '); ?></strong>
                         </td>
                         <td align="left">
                             <select name="swpm_bulk_change_level_to">
-                                <option value="please_select">Select Target Level</option>
+                                <option value="please_select"><?php SwpmUtils::e('Select Target Level'); ?></option>
                                 <?php echo SwpmUtils::membership_level_dropdown(); ?>
                             </select>
-                            <p class="description">Select the new membership level.</p>
+                            <p class="description"><?php SwpmUtils::e('Select the new membership level.'); ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
                         <td width="25%" align="left">
-                            <input type="submit" class="button" name="swpm_bulk_change_level_process" value="Bulk Change Membership Level" />
+                            <input type="submit" class="button" name="swpm_bulk_change_level_process" value="<?php SwpmUtils::e('Bulk Change Membership Level'); ?>" />
                         </td>
                         <td align="left"></td>
                     </tr>
@@ -496,25 +499,25 @@ class SwpmMembers extends WP_List_Table {
             </div></div>
 
             <div class="postbox">
-            <h3 class="hndle"><label for="title">Bulk Update Access Starts Date of Members</label></h3>
+            <h3 class="hndle"><label for="title"><?php SwpmUtils::e('Bulk Update Access Starts Date of Members'); ?></label></h3>
             <div class="inside">
 
                 <p>
-                    The access starts date of a member is set to the day the user registers. This date value is used to calculate how long the member can access your content that are protected with a duration type protection in the membership level.
-                    You can manually set a specific access starts date value of all members who belong to a particular level using the following option.
+                    <?php SwpmUtils::e('The access starts date of a member is set to the day the user registers. This date value is used to calculate how long the member can access your content that are protected with a duration type protection in the membership level. '); ?>
+                    <?php SwpmUtils::e('You can manually set a specific access starts date value of all members who belong to a particular level using the following option.'); ?>
                 </p>
                 <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
 
                     <table width="100%" border="0" cellspacing="0" cellpadding="6">
                         <tr valign="top">
                             <td width="25%" align="left">
-                                <strong>Membership Level: </strong>
+                                <strong><?php SwpmUtils::e('Membership Level: '); ?></strong>
                             </td><td align="left">
                                 <select name="swpm_bulk_user_start_date_change_level">
-                                    <option value="please_select">Select Level</option>
+                                    <option value="please_select"><?php SwpmUtils::e('Select Level'); ?></option>
                                     <?php echo SwpmUtils::membership_level_dropdown(); ?>
                                 </select>
-                                <p class="description">Select the Membership level (the access start date of all members who are in this level will be updated).</p>
+                                <p class="description"><?php SwpmUtils::e('Select the Membership level (the access start date of all members who are in this level will be updated).'); ?></p>
                             </td>
                         </tr>
 
@@ -523,13 +526,13 @@ class SwpmMembers extends WP_List_Table {
                                 <strong>Access Starts Date: </strong>
                             </td><td align="left">
                                 <input name="swpm_bulk_user_start_date_change_date" id="swpm_bulk_user_start_date_change_date" class="swpm-select-date" type="text" size="20" value="<?php echo (date("Y-m-d")); ?>" />
-                                <p class="description">Specify the access starts date value.</p>
+                                <p class="description"><?php SwpmUtils::e('Specify the access starts date value.'); ?></p>
                             </td>
                         </tr>
 
                         <tr valign="top">
                             <td width="25%" align="left">
-                                <input type="submit" class="button" name="swpm_bulk_user_start_date_change_process" value="Bulk Change Access Starts Date" />
+                                <input type="submit" class="button" name="swpm_bulk_user_start_date_change_process" value="<?php SwpmUtils::e('Bulk Change Access Starts Date'); ?>" />
                             </td>
                             <td align="left"></td>
                         </tr>

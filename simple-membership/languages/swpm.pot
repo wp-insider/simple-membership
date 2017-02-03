@@ -1798,3 +1798,15 @@ msgstr ""
 
 msgid "Registration is complete. You can now log into the site."
 msgstr ""
+
+msgid " Field has invalid character"
+msgstr ""
+
+msgid " Password does not match"
+msgstr ""
+
+msgid "Already taken."
+msgstr ""
+
+msgid " Password does not match"
+msgstr ""

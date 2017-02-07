@@ -203,11 +203,11 @@ class SwpmAuth {
 
     private function set_cookie($remember = '', $secure = '') {
         if ($remember) {
-            $expiration = time() + 1209600; // 14 days
-            $expire = $expiration + 43200; // 12 hours grace period
+            $expiration = time() + 1209600; //14 days
+            $expire = $expiration + 43200; //12 hours grace period
         } else {
-            $expiration = time() + 172800; // 2 days.
-            $expire = $expiration; //The minimum cookie expiration should be at least couple of days.
+            $expiration = time() + 259200; //3 days.
+            $expire = $expiration; //The minimum cookie expiration should be at least a few days.
         }
 
         setcookie("swpm_in_use", "swpm_in_use", $expire, COOKIEPATH, COOKIE_DOMAIN);
@@ -226,7 +226,6 @@ class SwpmAuth {
         $hash = hash_hmac('md5', $this->userData->user_name . '|' . $expiration, $key);
         $auth_cookie = $this->userData->user_name . '|' . $expiration . '|' . $hash;
         $auth_cookie_name = $secure ? SIMPLE_WP_MEMBERSHIP_SEC_AUTH : SIMPLE_WP_MEMBERSHIP_AUTH;
-        //setcookie($auth_cookie_name, $auth_cookie, $expire, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN, $secure, true);
         setcookie($auth_cookie_name, $auth_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true);
     }
 

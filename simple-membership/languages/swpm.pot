@@ -1809,9 +1809,6 @@ msgstr ""
 msgid "Already taken."
 msgstr ""
 
-msgid " Password does not match"
-msgstr ""
-
 msgid "Street Address"
 msgstr ""
 

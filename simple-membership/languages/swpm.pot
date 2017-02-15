@@ -1789,7 +1789,7 @@ msgstr ""
 msgid "Subscribe Now"
 msgstr ""
 
-# Translation strings from addons.
+#: Translation strings from addons
 msgid "Type password Here"
 msgstr ""
 

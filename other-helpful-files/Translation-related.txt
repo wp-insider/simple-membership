@@ -5,6 +5,7 @@ Add the following translation strings to the swpm.pot file AFTER you generate a 
 =================================
 
 #: Translation strings from addons
+#: Form builder addon strings
 msgid "Type password Here"
 msgstr ""
 
@@ -24,4 +25,16 @@ msgid "Already taken."
 msgstr ""
 
 msgid " Password does not match"
+msgstr ""
+
+msgid "Street Address"
+msgstr ""
+
+msgid "Apt, Suite, Bldg. (optional)"
+msgstr ""
+
+msgid "State / Province / Region"
+msgstr ""
+
+msgid "Postal / Zip Code"
 msgstr ""

@@ -58,7 +58,8 @@ abstract class SwpmRegistration {
                 "You can customize this email message from the Email Settings menu of the plugin.\n\n" .
                 "Thank You";                        
             }
-            $admin_notify_body = SwpmMiscUtils::replace_dynamic_tags($admin_notify_body, $member_id);//Do the standard merge var replacement.
+            $additional_args = array('password' => $member_info['plain_password']);
+            $admin_notify_body = SwpmMiscUtils::replace_dynamic_tags($admin_notify_body, $member_id, $additional_args);//Do the standard merge var replacement.
             
             foreach ($notify_emails_array as $to_email){
                 $to_email = trim($to_email);

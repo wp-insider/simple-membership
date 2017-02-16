@@ -132,7 +132,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 4.4.4 =
-- Updated the spanish language translation file.
+- Updated the Spanish language translation file.
+- The {password} email merge tag will work in the admin notification email when a member submits the registration form.
 
 = 3.4.3 =
 - Improved the formatting for the content that appears before the "more" tag on a more tag protected post.

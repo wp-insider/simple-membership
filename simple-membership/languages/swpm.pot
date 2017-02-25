@@ -14,7 +14,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 #: classes/class.simple-wp-membership.php:172
-msgid "The admin of this site does not allow users to access the wp dashobard."
+msgid "The admin of this site does not allow users to access the wp dashboard."
 msgstr ""
 
 #: classes/class.simple-wp-membership.php:173

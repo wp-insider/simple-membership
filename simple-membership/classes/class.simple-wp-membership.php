@@ -167,11 +167,16 @@ class SimpleWpMembership {
         $disable_wp_dashboard_for_non_admins = $swpm_settings_obj->get_value('disable-access-to-wp-dashboard');
         if($disable_wp_dashboard_for_non_admins){
             //This option is enabled
-            if (!current_user_can('administrator')) {
-                //This is a non-admin user. Do not show the wp dashobard.
-                $message = '<p>'.SwpmUtils::_('The admin of this site does not allow users to access the wp dashobard.').'</p>';                
-                $message .= '<p>'.SwpmUtils::_('Go back to the home page by ').'<a href="'.SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL.'">'.SwpmUtils::_('clicking here').'</a>.'.'</p>';
-                wp_die($message);
+            if((defined('DOING_AJAX') && DOING_AJAX)){
+                //This is an ajax request. Don't do the disable dashboard check for ajax.
+            } else {
+                //Not an ajax request. Do the check.
+                if (!current_user_can('administrator')) {
+                    //This is a non-admin user. Do not show the wp dashobard.
+                    $message = '<p>'.SwpmUtils::_('The admin of this site does not allow users to access the wp dashobard.').'</p>';                
+                    $message .= '<p>'.SwpmUtils::_('Go back to the home page by ').'<a href="'.SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL.'">'.SwpmUtils::_('clicking here').'</a>.'.'</p>';
+                    wp_die($message);
+                }
             }
         }
         

@@ -134,6 +134,8 @@ https://simple-membership-plugin.com/
 = TODO 4.4.4 =
 - Updated the Spanish language translation file.
 - The {password} email merge tag will work in the admin notification email when a member submits the registration form.
+- Excluded the disable dashboard feature check from AJAX request.
+
 
 = 3.4.3 =
 - Improved the formatting for the content that appears before the "more" tag on a more tag protected post.

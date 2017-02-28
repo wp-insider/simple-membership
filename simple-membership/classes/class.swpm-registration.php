@@ -37,6 +37,8 @@ abstract class SwpmRegistration {
         
         $email = sanitize_email(filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW));
         
+        $body = apply_filters('swpm_registration_complete_email_body', $body);//This filter can be used to modify the registration complete email body dynamically.
+        
         //Send notification email to the member
         wp_mail(trim($email), $subject, $body, $headers);
         SwpmLog::log_simple_debug('Member registration complete email sent to: '.$email.'. From email address value used: '.$from_address, true);

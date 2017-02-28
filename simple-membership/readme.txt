@@ -135,6 +135,7 @@ https://simple-membership-plugin.com/
 - Updated the Spanish language translation file.
 - The {password} email merge tag will work in the admin notification email when a member submits the registration form.
 - Excluded the disable dashboard feature check from AJAX request.
+- Added a new filter to allow overriding of the registration complete email dynamically using custom code.
 - Minor typo fix.
 
 = 3.4.3 =

@@ -136,6 +136,7 @@ https://simple-membership-plugin.com/
 - The {password} email merge tag will work in the admin notification email when a member submits the registration form.
 - Excluded the disable dashboard feature check from AJAX request.
 - Added a new filter to allow overriding of the registration complete email dynamically using custom code.
+- Added a placeholder text message for the password field in the "Edit Profile" page.
 - Minor typo fix.
 
 = 3.4.3 =

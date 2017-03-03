@@ -1789,6 +1789,9 @@ msgstr ""
 msgid "Subscribe Now"
 msgstr ""
 
+msgid "Leave empty to keep the current password"
+msgstr ""
+
 #: Translation strings from addons
 #: Form builder addon strings
 msgid "Type password Here"

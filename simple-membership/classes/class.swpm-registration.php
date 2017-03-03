@@ -50,7 +50,12 @@ abstract class SwpmRegistration {
             $notify_emails_array = explode(",", $admin_notification);
 
             $headers = 'From: ' . $from_address . "\r\n";
-            $subject = "Notification of New Member Registration";
+            
+            $admin_notify_subject = $settings->get_value('reg-complete-mail-subject-admin');
+            if(empty($admin_notify_subject)){
+                $admin_notify_subject = "Notification of New Member Registration";
+            }
+            
             $admin_notify_body = $settings->get_value('reg-complete-mail-body-admin');
             if(empty($admin_notify_body)){
                 $admin_notify_body = "A new member has completed the registration.\n\n" .
@@ -65,7 +70,7 @@ abstract class SwpmRegistration {
             
             foreach ($notify_emails_array as $to_email){
                 $to_email = trim($to_email);
-                wp_mail($to_email, $subject, $admin_notify_body, $headers);
+                wp_mail($to_email, $admin_notify_subject, $admin_notify_body, $headers);
                 SwpmLog::log_simple_debug('Admin notification email sent to: '.$to_email, true);
             }
         }

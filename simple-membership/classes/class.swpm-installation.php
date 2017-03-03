@@ -194,6 +194,7 @@ class SwpmInstallation {
                 "Please login to the member area at the following URL:\n\n" .
                 "{login_link}\n\n" .
                 "Thank You";
+        $reg_email_subject_admin = "Notification of New Member Registration";
         $reg_email_body_admin = "A new member has completed the registration.\n\n" .
                 "Username: {user_name}\n" .
                 "Email: {email}\n\n" .
@@ -243,6 +244,8 @@ class SwpmInstallation {
                     ->set_value('account-change-email-subject', stripslashes($status_change_email_subject))
                     ->set_value('account-change-email-body', stripslashes($status_change_email_body))
                     ->set_value('email-from', trim(get_option('admin_email')));
+
+            $settings->set_value('reg-complete-mail-subject-admin', stripslashes($reg_email_subject_admin));
             $settings->set_value('reg-complete-mail-body-admin', stripslashes($reg_email_body_admin));
 
             $settings->set_value('bulk-activate-notify-mail-subject', stripslashes($bulk_activate_email_subject));

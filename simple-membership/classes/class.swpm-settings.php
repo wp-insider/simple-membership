@@ -133,7 +133,10 @@ class SwpmSettings {
         //Registration complete email settings
         $msg_for_admin_notify_email_field = SwpmUtils::_('Enter the email address where you want the admin notification email to be sent to.');
         $msg_for_admin_notify_email_field .= SwpmUtils::_(' You can put multiple email addresses separated by comma (,) in the above field to send the notification to multiple email addresses.');
+        
+        $msg_for_admin_notify_email_subj = SwpmUtils::_('Enter the subject for the admin notification email.');
         $admin_notify_email_body_msg = SwpmUtils::_('This email will be sent to the admin when a new user completes the membership registration. Only works if you have enabled the "Send Notification to Admin" option above.');
+        
         add_settings_section('reg-email-settings', SwpmUtils::_('Email Settings (Registration Complete)'), array(&$this, 'reg_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('reg-complete-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-subject',
             'message' => ''));
@@ -143,6 +146,8 @@ class SwpmSettings {
             'message' => SwpmUtils::_('Enable this option if you want the admin to receive a notification when a member registers.')));
         add_settings_field('admin-notification-email', SwpmUtils::_('Admin Email Address'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'admin-notification-email',
             'message' => $msg_for_admin_notify_email_field));
+        add_settings_field('reg-complete-mail-subject-admin', SwpmUtils::_('Admin Notification Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-subject-admin',
+            'message' => $msg_for_admin_notify_email_subj));        
         add_settings_field('reg-complete-mail-body-admin', SwpmUtils::_('Admin Notification Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-body-admin',
             'message' => $admin_notify_email_body_msg));        
         
@@ -373,6 +378,7 @@ class SwpmSettings {
         $output = $this->settings;
         $output['reg-complete-mail-subject'] = sanitize_text_field($input['reg-complete-mail-subject']);
         $output['reg-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-complete-mail-body']));
+        $output['reg-complete-mail-subject-admin'] = sanitize_text_field($input['reg-complete-mail-subject-admin']);
         $output['reg-complete-mail-body-admin'] = wp_kses_data(force_balance_tags($input['reg-complete-mail-body-admin']));
 
         $output['reset-mail-subject'] = sanitize_text_field($input['reset-mail-subject']);

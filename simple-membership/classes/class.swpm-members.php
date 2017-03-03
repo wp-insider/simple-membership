@@ -31,6 +31,8 @@ class SwpmMembers extends WP_List_Table {
         return array(
             'member_id' => array('member_id', true), //True means already sorted
             'user_name' => array('user_name', false),
+            'first_name' => array('first_name', false),
+            'last_name' => array('last_name', false),
             'email' => array('email', false),
             'alias' => array('alias', false),
             'account_state' => array('account_state', false),

@@ -162,6 +162,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             );
             array_push($addons_data, $addon_18);
             
+            $addon_19 = array(
+                'name' => 'ConvertKit Integration',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-convertkit-integration-addon.png',
+                'description' => 'Allows you to automatically signup your members to a sequence in your ConvertKit account',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-convertkit-integration-addon/',
+            );
+            array_push($addons_data, $addon_19);            
+            
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {
                 $output .= '<div class="swpm_addon_item_canvas">';

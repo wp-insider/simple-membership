@@ -138,6 +138,7 @@ https://simple-membership-plugin.com/
 - Added a new filter to allow overriding of the registration complete email dynamically using custom code.
 - Added a placeholder text message for the password field in the "Edit Profile" page.
 - Added a new settings field to allow customization of the "Admin Notification Email Subject".
+- The manage members menu can be sorted using first name and last name.
 - Minor typo fix.
 
 = 3.4.3 =

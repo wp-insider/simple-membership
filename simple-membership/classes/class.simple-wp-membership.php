@@ -172,7 +172,7 @@ class SimpleWpMembership {
             } else {
                 //Not an ajax request. Do the check.
                 if (!current_user_can('administrator')) {
-                    //This is a non-admin user. Do not show the wp dashobard.
+                    //This is a non-admin user. Do not show the wp dashboard.
                     $message = '<p>'.SwpmUtils::_('The admin of this site does not allow users to access the wp dashboard.').'</p>';                
                     $message .= '<p>'.SwpmUtils::_('Go back to the home page by ').'<a href="'.SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL.'">'.SwpmUtils::_('clicking here').'</a>.'.'</p>';
                     wp_die($message);

@@ -131,6 +131,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.4.5 = 
+- Added a new action hook that gets triggered when a member is added via the "Add Member" menu of admin dashboard.
+
 = 3.4.4 =
 - Updated the Spanish language translation file.
 - The {password} email merge tag will work in the admin notification email when a member submits the registration form.

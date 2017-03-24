@@ -63,6 +63,11 @@ class SwpmAdminRegistration extends SwpmRegistration {
             if (!empty($send_notification)) {
                 $this->send_reg_email();
             }
+            
+            //Trigger action hook
+            do_action('swpm_admin_end_registration_complete_user_data', $member_info);
+            
+            //Save success message
             $message = array('succeeded' => true, 'message' => '<p>' . SwpmUtils::_('Member record added successfully.') . '</p>');
             SwpmTransfer::get_instance()->set('status', $message);
             wp_redirect('admin.php?page=simple_wp_membership');

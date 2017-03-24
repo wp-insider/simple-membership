@@ -133,6 +133,8 @@ https://simple-membership-plugin.com/
 
 = TODO 3.4.5 = 
 - Added a new action hook that gets triggered when a member is added via the "Add Member" menu of admin dashboard.
+- [TODO - release updated copy of the mailchimp addon]
+
 
 = 3.4.4 =
 - Updated the Spanish language translation file.

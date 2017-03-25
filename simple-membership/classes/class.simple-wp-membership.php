@@ -605,7 +605,7 @@ class SimpleWpMembership {
         SwpmInstallation::run_safe_installer();
     }
 
-    public function deactivate() {
+    public static function deactivate() {
         wp_clear_scheduled_hook('swpm_account_status_event');
         wp_clear_scheduled_hook('swpm_delete_pending_account_event');
     }

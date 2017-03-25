@@ -135,6 +135,7 @@ https://simple-membership-plugin.com/
 - Added a new action hook that gets triggered when a member is added via the "Add Member" menu of admin dashboard.
 - The mailchimp addon will now add users to a list when added via the admin dashboard.
 - The paypal checkout custom field value will be encoded.
+- Fixed warning - Non-static method SimpleWpMembership::deactivate() should not be called statically.
 
 = 3.4.4 =
 - Updated the Spanish language translation file.

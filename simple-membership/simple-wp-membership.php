@@ -34,6 +34,7 @@ SwpmUtils::do_misc_initial_plugin_setup_tasks();
 
 register_activation_hook(SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::activate');
 register_deactivation_hook(SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::deactivate');
+
 add_action('swpm_login', 'SimpleWpMembership::swpm_login', 10, 3);
 
 $simple_membership = new SimpleWpMembership();

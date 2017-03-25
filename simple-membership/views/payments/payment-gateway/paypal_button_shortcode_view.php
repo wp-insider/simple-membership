@@ -75,6 +75,7 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
     $output .= '<input type="hidden" name="return" value="' . $return_url . '" />';
     $output .= '<input type="hidden" name="cancel_return" value="' . $cancel_url . '" />';
 
+    $custom_field_value = urlencode($custom_field_value);//URL encode the custom field value so nothing gets lost when it is passed around.
     $output .= '<input type="hidden" name="custom" value="' . $custom_field_value . '" />';
 
     //Filter to add additional payment input fields to the form (example: langauge code or country code etc).
@@ -202,6 +203,8 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
     $output .= '<input type="hidden" name="notify_url" value="' . $notify_url . '" />';
     $output .= '<input type="hidden" name="return" value="' . $return_url . '" />';
     $output .= '<input type="hidden" name="cancel_return" value="' . $cancel_url . '" />';
+    
+    $custom_field_value = urlencode($custom_field_value);//URL encode the custom field value so nothing gets lost when it is passed around.
     $output .= '<input type="hidden" name="custom" value="' . $custom_field_value . '" />';
 
     //Filter to add additional payment input fields to the form (example: langauge code or country code etc).

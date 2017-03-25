@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 3.4.4
+Stable tag: 3.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,10 +131,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.4.5 = 
+= 3.4.5 =
 - Added a new action hook that gets triggered when a member is added via the "Add Member" menu of admin dashboard.
-- [TODO - release updated copy of the mailchimp addon]
-
+- The mailchimp addon will now add users to a list when added via the admin dashboard.
+- The paypal checkout custom field value will be encoded.
 
 = 3.4.4 =
 - Updated the Spanish language translation file.

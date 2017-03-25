@@ -56,7 +56,8 @@ class swpm_paypal_ipn_handler {
             return true;
         }
         
-        $custom = $this->ipn_data['custom'];
+        $custom = urldecode($this->ipn_data['custom']);
+        $this->ipn_data['custom'] = $custom;
         $customvariables = SwpmTransactions::parse_custom_var($custom);
         
         //Handle refunds

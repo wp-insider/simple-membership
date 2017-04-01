@@ -110,6 +110,7 @@ The following language translations are already available:
 * Italian
 * Norwegian
 * Mexican
+* Arabic
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 

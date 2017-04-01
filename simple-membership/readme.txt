@@ -132,6 +132,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.4.6 = 
+- Added Arabic language translation to the plugin. The translation was submitted by Hanin Fatani.
+
 = 3.4.5 =
 - Added a new action hook that gets triggered when a member is added via the "Add Member" menu of admin dashboard.
 - The mailchimp addon will now add users to a list when added via the admin dashboard.

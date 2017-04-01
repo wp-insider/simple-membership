@@ -134,6 +134,7 @@ https://simple-membership-plugin.com/
 
 = TODO 3.4.6 = 
 - Added Arabic language translation to the plugin. The translation was submitted by Hanin Fatani.
+- Added an email tag {primary_address} that can be used in the notification email when address field is used in the form builder addon.
 
 = 3.4.5 =
 - Added a new action hook that gets triggered when a member is added via the "Add Member" menu of admin dashboard.

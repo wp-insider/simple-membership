@@ -187,17 +187,34 @@ class SwpmMiscUtils {
             $reg_link = isset($additional_args['reg_link']) ? $additional_args['reg_link'] : $reg_link;
         }
         $login_link = $settings->get_value('login-page-url');
-                
+
+        //Construct the primary address value
+        $primary_address = "";
+        if(!empty($user_record->address_street) && !empty($user_record->address_city)){
+            //An address value is present.
+            $primary_address .= $user_record->address_street;
+            $primary_address .= "\n" . $user_record->address_city;
+            if(!empty($user_record->address_state)){
+                $primary_address .= " " . $user_record->address_state;
+            }
+            if(!empty($user_record->address_zipcode)){
+                $primary_address .= " " . $user_record->address_zipcode;
+            }
+            if(!empty($user_record->country)){
+                $primary_address .= "\n" . $user_record->country;
+            }            
+        }
+        
         //Define the replacable tags
         $tags = array("{member_id}", "{user_name}", "{first_name}", "{last_name}", "{membership_level}",
             "{account_state}", "{email}", "{phone}", "{member_since}", "{subscription_starts}", "{company_name}", 
-            "{password}", "{login_link}", "{reg_link}"
+            "{password}", "{login_link}", "{reg_link}", "{primary_address}"
         );
     
         //Define the values
         $vals = array($member_id, $user_record->user_name, $user_record->first_name, $user_record->last_name, $user_record->membership_level,
             $user_record->account_state, $user_record->email, $user_record->phone, $user_record->member_since, $user_record->subscription_starts, $user_record->company_name,
-            $password, $login_link, $reg_link
+            $password, $login_link, $reg_link, $primary_address
         );
     
         $msg_body = str_replace($tags, $vals, $msg_body);

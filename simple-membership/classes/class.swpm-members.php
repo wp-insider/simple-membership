@@ -461,7 +461,7 @@ class SwpmMembers extends WP_List_Table {
                 <?php SwpmUtils::e('You can manually change the membership level of any member by editing the record from the members menu. '); ?>
                 <?php SwpmUtils::e('You can use the following option to bulk update the membership level of users who belong to the level you select below.'); ?>
             </p>
-            <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+            <form method="post" action="">
                 <table width="100%" border="0" cellspacing="0" cellpadding="6">
                     <tr valign="top">
                         <td width="25%" align="left">
@@ -508,7 +508,7 @@ class SwpmMembers extends WP_List_Table {
                     <?php SwpmUtils::e('The access starts date of a member is set to the day the user registers. This date value is used to calculate how long the member can access your content that are protected with a duration type protection in the membership level. '); ?>
                     <?php SwpmUtils::e('You can manually set a specific access starts date value of all members who belong to a particular level using the following option.'); ?>
                 </p>
-                <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+                <form method="post" action="">
 
                     <table width="100%" border="0" cellspacing="0" cellpadding="6">
                         <tr valign="top">

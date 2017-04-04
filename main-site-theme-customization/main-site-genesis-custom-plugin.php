@@ -3,10 +3,11 @@
 Plugin Name: Theme Customization Plugin (https://simple-membership-plugin.com)
 Version: v1.1
 Plugin URI: https://simple-membership-plugin.com
-Author: Ruhul Amin
+Author: wp.inider
 Author URI: https://simple-membership-plugin.com
 Description: Contains all the custom tweaks for main https://simple-membership-plugin.com WordPress install
 */
+
 //DOC - http://my.studiopress.com/snippets/
 //DOC2 - http://gregrickaby.com/genesis-code-snippets/
 //HELP - http://my.studiopress.com/help/

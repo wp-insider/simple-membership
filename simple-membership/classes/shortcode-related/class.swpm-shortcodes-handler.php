@@ -15,6 +15,7 @@ class SwpmShortcodesHandler {
             'id' => '',
             'button_text' => '',
             'new_window' => '',
+            'class' => '',
                         ), $args));
 
         if (empty($id)) {

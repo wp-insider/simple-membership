@@ -13,14 +13,14 @@ class SwpmFrontRegistration extends SwpmRegistration {
     }
 
     public function regigstration_ui($level) {
-        
+
         //Trigger the filter to override the registration form (the form builder addon uses this filter)
-        $form = apply_filters('swpm_registration_form_override', '', $level);//The $level value could be empty also so the code handling the filter need to check for it.
+        $form = apply_filters('swpm_registration_form_override', '', $level); //The $level value could be empty also so the code handling the filter need to check for it.
         if (!empty($form)) {
             //An addon has overridden the registration form. So use that one.
             return $form;
         }
-        
+
         $settings_configs = SwpmSettings::get_instance();
         $joinuspage_url = $settings_configs->get_value('join-us-page-url');
         $membership_level = '';
@@ -34,15 +34,15 @@ class SwpmFrontRegistration extends SwpmRegistration {
             } else {
                 $membership_level = $member->membership_level;
             }
-        } else if (!empty($level)) { 
+        } else if (!empty($level)) {
             //Membership level is specified in the shortcode (level specific registration form).
             $member = SwpmTransfer::$default_fields;
             $membership_level = absint($level);
         }
-        
+
         //Check if free membership registration is disalbed on the site
         if (empty($membership_level)) {
-            $joinuspage_link = '<a href="' . $joinuspage_url . '">'.SwpmUtils::_('Join Us').'</a>';
+            $joinuspage_link = '<a href="' . $joinuspage_url . '">' . SwpmUtils::_('Join Us') . '</a>';
             $free_rego_disabled_msg = '<p>';
             $free_rego_disabled_msg .= SwpmUtils::_('Free membership is disabled on this site. Please make a payment from the ' . $joinuspage_link . ' page to pay for a premium membership.');
             $free_rego_disabled_msg .= '</p><p>';
@@ -61,7 +61,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $membership_level_alias = $mebership_info->get('alias');
         $swpm_registration_submit = filter_input(INPUT_POST, 'swpm_registration_submit');
         if (!empty($swpm_registration_submit)) {
-            $member = array_map( 'sanitize_text_field', $_POST );
+            $member = array_map('sanitize_text_field', $_POST);
         }
         ob_start();
         extract((array) $member, EXTR_SKIP);
@@ -70,7 +70,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
     }
 
     public function register_front_end() {
-        
+
         //If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
         $captcha_validation_output = apply_filters('swpm_validate_registration_form_submission', '');
         if (!empty($captcha_validation_output)) {
@@ -78,19 +78,19 @@ class SwpmFrontRegistration extends SwpmRegistration {
             SwpmTransfer::get_instance()->set('status', $message);
             return;
         }
-        
+
         //Validate swpm level hash data.
         $hash_val_posted = sanitize_text_field($_POST['swpm_level_hash']);
         $level_value = sanitize_text_field($_POST['membership_level']);
         $swpm_p_key = get_option('swpm_private_key_one');
-        $hash_val = md5($swpm_p_key.'|'.$level_value);
-        if($hash_val != $hash_val_posted){//Level hash validation failed.
+        $hash_val = md5($swpm_p_key . '|' . $level_value);
+        if ($hash_val != $hash_val_posted) {//Level hash validation failed.
             $msg = '<p>Error! Security check failed for membership level validation.</p>';
             $msg .= '<p>The submitted membership level data does not seem to be authentic.</p>';
             $msg .= '<p>If you are using caching please empty the cache data and try again.</p>';
             wp_die($msg);
         }
-            
+
         //Crete the member profile and send notification
         if ($this->create_swpm_user() && $this->prepare_and_create_wp_user_front_end() && $this->send_reg_email()) {
             do_action('swpm_front_end_registration_complete'); //Keep this action hook for people who are using it (so their implementation doesn't break).
@@ -98,7 +98,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
             $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
             $after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_('Registration Successful. ') . SwpmUtils::_('Please') . ' <a href="' . $login_page_url . '">' . SwpmUtils::_('Login') . '</a></div>';
-            $after_rego_msg = apply_filters ('swpm_registration_success_msg', $after_rego_msg);
+            $after_rego_msg = apply_filters('swpm_registration_success_msg', $after_rego_msg);
             $message = array('succeeded' => true, 'message' => $after_rego_msg);
             SwpmTransfer::get_instance()->set('status', $message);
             return;
@@ -117,20 +117,20 @@ class SwpmFrontRegistration extends SwpmRegistration {
         }
 
         $member_info = $form->get_sanitized_member_form_data();
-        
+
         //Check if the email belongs to an existing wp user account with admin role.
         $wp_user_id = email_exists($member_info['email']);
         if ($wp_user_id) {
             //A wp user account exist with this email.
             //Check if the user has admin role.
             $admin_user = SwpmMemberUtils::wp_user_has_admin_role($wp_user_id);
-            if($admin_user){
+            if ($admin_user) {
                 //This email belongs to an admin user. Update is not allowed on admin users. Show error message then exit.
-                $error_msg = '<p>This email address ('.$member_info['email'].') belongs to an admin user. This email cannot be used to register a new account on this site.</p>';
-                wp_die($error_msg);            
+                $error_msg = '<p>This email address (' . $member_info['email'] . ') belongs to an admin user. This email cannot be used to register a new account on this site.</p>';
+                wp_die($error_msg);
             }
         }
-        
+
         //Go ahead and create the SWPM user record.
         $free_level = SwpmUtils::get_free_level();
         $account_status = SwpmSettings::get_instance()->get_value('default-account-status', 'active');
@@ -167,14 +167,14 @@ class SwpmFrontRegistration extends SwpmRegistration {
     private function prepare_and_create_wp_user_front_end() {
         global $wpdb;
         $member_info = $this->member_info;
-        
+
         //Retrieve the user role assigned for this level
         $query = $wpdb->prepare("SELECT role FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $member_info['membership_level']);
         $user_role = $wpdb->get_var($query);
         //Check to make sure that the user role of this level is not admin.
-        if($user_role == 'administrator'){
+        if ($user_role == 'administrator') {
             //For security reasons we don't allow users with administrator role to be creted from the front-end. That can only be done from the admin dashboard side.
-            $error_msg = '<p>Error! The user role for this membership level (level ID: '.$member_info['membership_level'].') is set to "Administrator".</p>';
+            $error_msg = '<p>Error! The user role for this membership level (level ID: ' . $member_info['membership_level'] . ') is set to "Administrator".</p>';
             $error_msg .= '<p>For security reasons, member registration to this level is not permitted from the front end.</p>';
             $error_msg .= '<p>An administrator of the site can manually create a member record with this access level from the admin dashboard side.</p>';
             wp_die($error_msg);
@@ -202,13 +202,13 @@ class SwpmFrontRegistration extends SwpmRegistration {
         if (!$auth->is_logged_in()) {
             return;
         }
-        
+
         //Check nonce
-        if ( !isset($_POST['swpm_profile_edit_nonce_val']) || !wp_verify_nonce($_POST['swpm_profile_edit_nonce_val'], 'swpm_profile_edit_nonce_action' )){
+        if (!isset($_POST['swpm_profile_edit_nonce_val']) || !wp_verify_nonce($_POST['swpm_profile_edit_nonce_val'], 'swpm_profile_edit_nonce_action')) {
             //Nonce check failed.
             wp_die(SwpmUtils::_("Error! Nonce verification failed for front end profile edit."));
         }
-        
+
         $user_data = (array) $auth->userData;
         unset($user_data['permitted']);
         $form = new SwpmForm($user_data);
@@ -231,16 +231,26 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
             SwpmTransfer::get_instance()->set('status', $message);
             do_action('swpm_front_end_profile_edited', $member_info);
-            return true;//Successful form submission.
+            return true; //Successful form submission.
         } else {
             $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following'),
                 'extra' => $form->get_errors());
             SwpmTransfer::get_instance()->set('status', $message);
-            return false;//Error in the form submission.
+            return false; //Error in the form submission.
         }
     }
 
     public function reset_password($email) {
+
+        //If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
+        $captcha_validation_output = apply_filters('swpm_validate_pass_reset_form_submission', '');
+        if (!empty($captcha_validation_output)) {
+            $message = '<div class="swpm-reset-pw-error">' . SwpmUtils::_("Captcha validation failed.") . '</div>';
+            $message = array('succeeded' => false, 'message' => $message);
+            SwpmTransfer::get_instance()->set('status', $message);
+            return;
+        }
+
         $email = sanitize_email($email);
         if (!is_email($email)) {
             $message = '<div class="swpm-reset-pw-error">' . SwpmUtils::_("Email address not valid.") . '</div>';
@@ -267,7 +277,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $wpdb->update($wpdb->prefix . "swpm_members_tbl", array('password' => $password_hash), array('member_id' => $user->member_id));
 
         //Update wp user password
-        add_filter('send_password_change_email', array(&$this, 'dont_send_password_change_email'),1,3);//Stop wordpress from sending a reset password email to admin.
+        add_filter('send_password_change_email', array(&$this, 'dont_send_password_change_email'), 1, 3); //Stop wordpress from sending a reset password email to admin.
         SwpmUtils::update_wp_user($user->user_name, array('plain_password' => $password));
 
         $body = $settings->get_value('reset-mail-body');
@@ -278,8 +288,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $from = $settings->get_value('email-from');
         $headers = "From: " . $from . "\r\n";
         wp_mail($email, $subject, $body, $headers);
-        SwpmLog::log_simple_debug("Member password has been reset. Password reset email sent to: ".$email,true);
-        
+        SwpmLog::log_simple_debug("Member password has been reset. Password reset email sent to: " . $email, true);
+
         $message = '<div class="swpm-reset-pw-success">' . SwpmUtils::_("New password has been sent to your email address.") . '</div>';
         $message .= '<div class="swpm-reset-pw-success-email">' . SwpmUtils::_("Email Address: ") . $email . '</div>';
 
@@ -287,10 +297,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
         SwpmTransfer::get_instance()->set('status', $message);
     }
 
-    function dont_send_password_change_email($send=false, $user='', $userdata='')
-    {
+    function dont_send_password_change_email($send = false, $user = '', $userdata = '') {
         //Stop the WordPress's default password change email notification to site admin  
         //Only the simple membership plugin's password reset email will be sent.
         return false;
     }
+
 }

@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 3.4.5
+Stable tag: 3.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,7 @@ You can create a free forum user account and ask your questions.
 * Send quick notification email to your members.
 * Customize the password reset email for members.
 * Use Google reCAPTCHA on your member registration form.
+* Use Google reCAPTCHA on your member login and password reset form.
 * The login and registration widgets will be responsive if you are using a responsive theme.
 * Ability to restrict the commenting feature on your site to your members only.
 * Front-end member registration page.
@@ -132,13 +133,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.4.6 = 
-
+= 3.4.6 = 
 - Added Arabic language translation to the plugin. The translation was submitted by Hanin Fatani.
 - Added an email tag {primary_address} that can be used in the notification email when address field is used in the form builder addon.
 - Removed the unnecessary $_SERVER["REQUEST_URI"] value from the post action.
-- Added reCAPTCHA support for password reset form (for reCAPTCHA addon).
-- Added styling support for Stripe and Braintree buttons ("class" shortcode parameter).
+- Added reCAPTCHA support on the password reset form (for reCAPTCHA addon).
+- Added an option to specify a custom CSS class for Stripe and Braintree buttons to customize the button style. (The new shortcode parameter is "class").
 
 = 3.4.5 =
 - Added a new action hook that gets triggered when a member is added via the "Add Member" menu of admin dashboard.

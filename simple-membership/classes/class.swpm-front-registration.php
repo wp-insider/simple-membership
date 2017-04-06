@@ -214,7 +214,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $form = new SwpmForm($user_data);
         if ($form->is_valid()) {
             global $wpdb;
-            $message = array('succeeded' => true, 'message' => SwpmUtils::_('Profile updated successfully.'));
+            $msg_str = '<div class="swpm-profile-update-success">' . SwpmUtils::_('Profile updated successfully.') . '</div>';
+            $message = array('succeeded' => true, 'message' => $msg_str);
 
             $member_info = $form->get_sanitized_member_form_data();
             SwpmUtils::update_wp_user($auth->get('user_name'), $member_info); //Update corresponding wp user record.
@@ -222,7 +223,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
             if (isset($member_info['plain_password'])) {
                 //Password was also changed so show the appropriate message
-                $message = array('succeeded' => true, 'message' => SwpmUtils::_('Profile updated successfully. You will need to re-login since you changed your password.'));
+                $msg_str = '<div class="swpm-profile-update-success">' . SwpmUtils::_('Profile updated successfully. You will need to re-login since you changed your password.') . '</div>';
+                $message = array('succeeded' => true, 'message' => $msg_str);
                 unset($member_info['plain_password']);
             }
 
@@ -233,8 +235,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
             do_action('swpm_front_end_profile_edited', $member_info);
             return true; //Successful form submission.
         } else {
-            $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following'),
-                'extra' => $form->get_errors());
+            $msg_str = '<div class="swpm-profile-update-error">' . SwpmUtils::_('Please correct the following.') . '</div>';
+            $message = array('succeeded' => false, 'message' => $msg_str, 'extra' => $form->get_errors());
             SwpmTransfer::get_instance()->set('status', $message);
             return false; //Error in the form submission.
         }
@@ -290,8 +292,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
         wp_mail($email, $subject, $body, $headers);
         SwpmLog::log_simple_debug("Member password has been reset. Password reset email sent to: " . $email, true);
 
-        $message = '<div class="swpm-reset-pw-success">' . SwpmUtils::_("New password has been sent to your email address.") . '</div>';
+        $message = '<div class="swpm-reset-pw-success-box">';
+        $message .= '<div class="swpm-reset-pw-success">' . SwpmUtils::_("New password has been sent to your email address.") . '</div>';
         $message .= '<div class="swpm-reset-pw-success-email">' . SwpmUtils::_("Email Address: ") . $email . '</div>';
+        $message .= '</div>';
 
         $message = array('succeeded' => false, 'message' => $message);
         SwpmTransfer::get_instance()->set('status', $message);

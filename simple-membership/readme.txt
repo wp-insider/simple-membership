@@ -133,6 +133,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.4.7 = 
+- Add the SWPM Misc Shortcodes addon to the listing.
+
 = 3.4.6 = 
 - Added Arabic language translation to the plugin. The translation was submitted by Hanin Fatani.
 - Added an email tag {primary_address} that can be used in the notification email when address field is used in the form builder addon.

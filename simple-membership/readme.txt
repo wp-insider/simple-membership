@@ -59,6 +59,7 @@ You can create a free forum user account and ask your questions.
 * Comments on your protected posts will also be protected automatically.
 * There is an option to enable debug logging so you can troubleshoot membership payment related issues easily (if any).
 * Ability to customize the content protection message that gets shown to non-members.
+* Ability to partially protect post or page content.
 * Ability to use merge vars in the membership email notification.
 * Membership management side is handled by the plugin.
 * Ability to manually approve your members.
@@ -134,6 +135,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 3.4.7 = 
+- Add the partial protection addon to the listing.
 - Add the SWPM Misc Shortcodes addon to the listing.
 
 = 3.4.6 = 

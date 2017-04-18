@@ -138,6 +138,7 @@ https://simple-membership-plugin.com/
 - Add the partial protection addon to the listing.
 - Add the SWPM Misc Shortcodes addon to the listing.
 - Removed bundled jquery.tools18.min.js, switched to built-in WP jQuery UI.
+- Fixed a typo in the manage content protection menu tab.
 
 = 3.4.6 = 
 - Added Arabic language translation to the plugin. The translation was submitted by Hanin Fatani.

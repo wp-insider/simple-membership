@@ -673,7 +673,7 @@ msgid "Add Level"
 msgstr ""
 
 #: classes/class.swpm-membership-levels.php:259
-msgid "Manage Content Production"
+msgid "Manage Content Protection"
 msgstr ""
 
 #: classes/class.swpm-membership-levels.php:260

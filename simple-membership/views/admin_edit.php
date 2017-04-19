@@ -1,5 +1,5 @@
 <div class="wrap" id="swpm-profile-page" type="edit">
-    <form action="" method="post" name="swpm-edit-user" id="swpm-edit-user" class="validate"<?php do_action('user_new_form_tag');?>>
+    <form action="" method="post" name="swpm-edit-user" id="swpm-edit-user" enctype="multipart/form-data" class="validate"<?php do_action('user_new_form_tag');?>>
     <input name="action" type="hidden" value="edituser" />
     <?php wp_nonce_field( 'edit_swpmuser_admin_end', '_wpnonce_edit_swpmuser_admin_end' ) ?>
     <h3><?php echo  SwpmUtils::_('Edit Member') ?></h3>

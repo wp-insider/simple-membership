@@ -545,7 +545,7 @@ class SwpmMembers extends WP_List_Table {
 
             <script>
             jQuery(document).ready(function($){
-                $('#swpm_bulk_user_start_date_change_date').dateinput({'format':'yyyy-mm-dd',selectors: true,yearRange:[-100,100]});
+                $('#swpm_bulk_user_start_date_change_date').datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: "-100:+100"});
             });
             </script>
         <?php

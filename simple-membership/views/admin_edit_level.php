@@ -48,7 +48,7 @@
 </div>
 <script>
 jQuery(document).ready(function($){
-    $('.swpm-date-picker').dateinput({'format':'yyyy-mm-dd',selectors: true,yearRange:[-100,100]});
+    $('.swpm-date-picker').datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: "-100:+100"});
     $("#swpm-edit-level").validationEngine('attach');
 });
 </script>

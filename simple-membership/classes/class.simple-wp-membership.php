@@ -53,7 +53,7 @@ class SimpleWpMembership {
 
         new SwpmShortcodesHandler(); //Tackle the shortcode definitions and implementation.
 
-        add_action('wp_head', array(&$this,'wp_head_callback'));
+        add_action('wp_head', array(&$this, 'wp_head_callback'));
         add_action('save_post', array(&$this, 'save_postdata'));
         add_action('admin_notices', array(&$this, 'do_admin_notices'));
         add_action('wp_enqueue_scripts', array(&$this, 'front_library'));
@@ -63,7 +63,7 @@ class SimpleWpMembership {
         add_action('wp_logout', array(&$this, 'wp_logout'));
         add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2);
         add_action('swpm_logout', array(&$this, 'swpm_do_user_logout'));
-        
+
         //AJAX hooks
         add_action('wp_ajax_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
         add_action('wp_ajax_nopriv_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
@@ -74,17 +74,14 @@ class SimpleWpMembership {
         add_action('admin_init', array(&$this, 'admin_init_hook'));
         add_action('plugins_loaded', array(&$this, "plugins_loaded"));
         add_action('password_reset', array(&$this, 'wp_password_reset_hook'), 10, 2);
-
     }
-    
-    public function wp_head_callback(){
+
+    public function wp_head_callback() {
         //This function is triggered by the wp_head action hook
-        
         //Check if members only commenting is allowed then customize the form accordingly
         SwpmCommentFormRelated::customize_comment_form();
-        
+
         //Other wp_head related tasks go here.
-        
     }
 
     function wp_password_reset_hook($user, $pass) {
@@ -111,7 +108,7 @@ class SimpleWpMembership {
         if (has_post_thumbnail($post_id)) {
             return $content;
         }
-        
+
         $post = get_post($post_id);
         if ($acl->can_i_read_post($post)) {
             return $content;
@@ -159,27 +156,27 @@ class SimpleWpMembership {
 
     public function admin_init_hook() {
         //This hook is triggered in the wp-admin side only.
-        
-        $this->common_library();//Load the common JS libraries and Styles
+
+        $this->common_library(); //Load the common JS libraries and Styles
         $swpm_settings_obj = SwpmSettings::get_instance();
-        
+
         //Check if the "Disable Access to WP Dashboard" option is enabled.
         $disable_wp_dashboard_for_non_admins = $swpm_settings_obj->get_value('disable-access-to-wp-dashboard');
-        if($disable_wp_dashboard_for_non_admins){
+        if ($disable_wp_dashboard_for_non_admins) {
             //This option is enabled
-            if((defined('DOING_AJAX') && DOING_AJAX)){
+            if ((defined('DOING_AJAX') && DOING_AJAX)) {
                 //This is an ajax request. Don't do the disable dashboard check for ajax.
             } else {
                 //Not an ajax request. Do the check.
                 if (!current_user_can('administrator')) {
                     //This is a non-admin user. Do not show the wp dashboard.
-                    $message = '<p>'.SwpmUtils::_('The admin of this site does not allow users to access the wp dashboard.').'</p>';                
-                    $message .= '<p>'.SwpmUtils::_('Go back to the home page by ').'<a href="'.SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL.'">'.SwpmUtils::_('clicking here').'</a>.'.'</p>';
+                    $message = '<p>' . SwpmUtils::_('The admin of this site does not allow users to access the wp dashboard.') . '</p>';
+                    $message .= '<p>' . SwpmUtils::_('Go back to the home page by ') . '<a href="' . SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '">' . SwpmUtils::_('clicking here') . '</a>.' . '</p>';
                     wp_die($message);
                 }
             }
         }
-        
+
         //Initialize the settings menu hooks.
         $swpm_settings_obj->init_config_hooks();
         $addon_saved = filter_input(INPUT_POST, 'swpm-addon-settings');
@@ -189,24 +186,23 @@ class SimpleWpMembership {
     }
 
     public function hide_adminbar() {
-        
+
         //Never show admin toolbar if the user is not even logged in
         if (!is_user_logged_in()) {
             return false;
         }
-        
+
         //Show admin toolbar to admin only feature is enabled.
         $show_to_admin = SwpmSettings::get_instance()->get_value('show-adminbar-admin-only');
-        if($show_to_admin){
+        if ($show_to_admin) {
             if (current_user_can('administrator')) {
                 //This is an admin user so show the tooldbar
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
         }
-        
+
         //Hide admin toolbar if the hide adminbar feature is enabled
         $hide = SwpmSettings::get_instance()->get_value('hide-adminbar');
         return $hide ? FALSE : TRUE;
@@ -224,12 +220,12 @@ class SimpleWpMembership {
             }
         }
         $user = wp_signon(array('user_login' => $user, 'user_password' => $pass, 'remember' => $rememberme), is_ssl());
-        if ( $user instanceof WP_User ){
+        if ($user instanceof WP_User) {
             wp_set_current_user($user->ID, $user->user_login);
         }
         do_action('swpm_after_login');
         if (!SwpmUtils::is_ajax()) {
-            $redirect_url = apply_filters('swpm_after_login_redirect_url',SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL);
+            $redirect_url = apply_filters('swpm_after_login_redirect_url', SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL);
             wp_redirect($redirect_url);
             exit(0);
         }
@@ -317,6 +313,7 @@ class SimpleWpMembership {
     }
 
     /* If any message/notice was set during the execution then this function will output that message */
+
     public function notices() {
         $message = SwpmTransfer::get_instance()->get('status');
         $succeeded = false;
@@ -344,33 +341,33 @@ class SimpleWpMembership {
         return $succeeded;
     }
 
-    /* 
+    /*
      * This function is hooked to WordPress's admin_notices action hook 
      * It is used to show any plugin specific notices/warnings in the admin interface
      */
-    public function do_admin_notices(){
-        $this->notices();//Show any execution specific notices in the admin interface.
-        
+
+    public function do_admin_notices() {
+        $this->notices(); //Show any execution specific notices in the admin interface.
         //Show any other general warnings/notices to the admin.
-        if(SwpmMiscUtils::is_swpm_admin_page()){
+        if (SwpmMiscUtils::is_swpm_admin_page()) {
             //we are in an admin page for SWPM plugin.
-            
+
             $msg = '';
             //Show notice if running in sandbox mode.
             $settings = SwpmSettings::get_instance();
             $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
-            if($sandbox_enabled){
-                $msg .= '<p>'.SwpmUtils::_('You have the sandbox payment mode enabled in plugin settings. Make sure to turn off the sandbox mode when you want to do live transactions.').'</p>';
+            if ($sandbox_enabled) {
+                $msg .= '<p>' . SwpmUtils::_('You have the sandbox payment mode enabled in plugin settings. Make sure to turn off the sandbox mode when you want to do live transactions.') . '</p>';
             }
-            
-            if(!empty($msg)){//Show warning messages if any.
+
+            if (!empty($msg)) {//Show warning messages if any.
                 echo '<div id="message" class="error">';
                 echo $msg;
                 echo '</div>';
             }
         }
     }
-    
+
     public function meta_box() {
         if (function_exists('add_meta_box')) {
             $post_types = get_post_types();
@@ -400,16 +397,16 @@ class SimpleWpMembership {
         $id = $post->ID;
         $protection_obj = SwpmProtection::get_instance();
         $is_protected = $protection_obj->is_protected($id);
-        
+
         //Nonce input
-        echo '<input type="hidden" name="swpm_post_protection_box_nonce" value="' .wp_create_nonce('swpm_post_protection_box_nonce_action') . '" />';
-        
+        echo '<input type="hidden" name="swpm_post_protection_box_nonce" value="' . wp_create_nonce('swpm_post_protection_box_nonce_action') . '" />';
+
         // The actual fields for data entry
         echo '<h4>' . __("Do you want to protect this content?", 'swpm') . '</h4>';
         echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="1" /> No, Do not protect this content. <br/>';
         echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="2" /> Yes, Protect this content.<br/>';
         echo $protection_obj->get_last_message();
-        
+
         echo '<h4>' . __("Select the membership level that can access this content:", 'swpm') . "</h4>";
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
         $levels = $wpdb->get_results($query, ARRAY_A);
@@ -423,21 +420,21 @@ class SimpleWpMembership {
         global $wpdb;
         $post_type = filter_input(INPUT_POST, 'post_type');
         $swpm_protect_post = filter_input(INPUT_POST, 'swpm_protect_post');
-        
+
         if (wp_is_post_revision($post_id)) {
             return;
         }
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return $post_id;
         }
-        
+
         //Check nonce
         $swpm_post_protection_box_nonce = filter_input(INPUT_POST, 'swpm_post_protection_box_nonce');
         if (!wp_verify_nonce($swpm_post_protection_box_nonce, 'swpm_post_protection_box_nonce_action')) {
             //Nonce check failed.
             return $post_id;
         }
-        
+
         if ('page' == $post_type) {
             if (!current_user_can('edit_page', $post_id)) {
                 return $post_id;
@@ -486,7 +483,7 @@ class SimpleWpMembership {
             //Do not apply filtering for admin side viewing
             return $content;
         }
-    
+
         $acl = SwpmAccessControl::get_instance();
         global $comment;
         return $acl->filter_comment($comment, $content);
@@ -512,8 +509,10 @@ class SimpleWpMembership {
         $this->common_library();
         wp_enqueue_script('password-strength-meter');
         wp_enqueue_script('swpm.password-meter', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-meter.js', array('jquery'));
-        wp_enqueue_style('jquery.tools.dateinput', SIMPLE_WP_MEMBERSHIP_URL . '/css/jquery.tools.dateinput.css');
-        wp_enqueue_script('jquery.tools', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.tools18.min.js', array('jquery'));
+        //jQuery UI style
+        wp_register_style('swpm-jquery-ui', SIMPLE_WP_MEMBERSHIP_URL . '/css/jquery-ui.min.css');
+        wp_enqueue_style('swpm-jquery-ui');
+        wp_enqueue_script('jquery-ui-datepicker');
         $settings = array('statusChangeEmailHead' => SwpmSettings::get_instance()->get_value('account-change-email-subject'),
             'statusChangeEmailBody' => SwpmSettings::get_instance()->get_value('account-change-email-body'));
         wp_localize_script('swpm.password-meter', 'SwpmSettings', $settings);
@@ -558,13 +557,15 @@ class SimpleWpMembership {
     }
 
     /* Render the members menu in admin dashboard */
+
     public function admin_members_menu() {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-members.php');
         $members = new SwpmMembers();
         $members->handle_main_members_admin_menu();
     }
-    
+
     /* Render the membership levels menu in admin dashboard */
+
     public function admin_membership_levels_menu() {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-membership-levels.php');
         $levels = new SwpmMembershipLevels();
@@ -572,6 +573,7 @@ class SimpleWpMembership {
     }
 
     /* Render the settings menu in admin dashboard */
+
     public function admin_settings_menu() {
         $settings = SwpmSettings::get_instance();
         $settings->handle_main_settings_admin_menu();

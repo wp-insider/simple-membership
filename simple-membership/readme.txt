@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 3.4.6
+Stable tag: 3.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,11 +134,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.4.7 = 
-- Add the partial protection addon to the listing.
-- Add the SWPM Misc Shortcodes addon to the listing.
+= 3.4.7 = 
+- There is a new feature for applying partial or section protection to posts and pages. This feature is available via a free addon.
 - Removed bundled jquery.tools18.min.js, switched to built-in WP jQuery UI.
 - Fixed a typo in the manage content protection menu tab.
+- Created a free addon for misc shortcodes.
 
 = 3.4.6 = 
 - Added Arabic language translation to the plugin. The translation was submitted by Hanin Fatani.

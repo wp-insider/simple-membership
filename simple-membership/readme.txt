@@ -134,6 +134,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.4.8 =
+- Added a new utility function to write array content to the debug log file.
+
 = 3.4.7 = 
 - There is a new feature for applying partial or section protection to posts and pages. This feature is available via a free addon.
 - Removed bundled jquery.tools18.min.js, switched to built-in WP jQuery UI.

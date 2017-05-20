@@ -136,6 +136,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 3.4.8 =
+- [TODO] - woocommerce addon to addons list.
 - Added a new utility function to write array content to the debug log file.
 - Added Czech language translation to the plugin. The translation was submitted by Novakovska Eva.
 

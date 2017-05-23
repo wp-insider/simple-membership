@@ -139,6 +139,7 @@ https://simple-membership-plugin.com/
 - [TODO] - woocommerce addon to addons list.
 - Added a new utility function to write array content to the debug log file.
 - Added Czech language translation to the plugin. The translation was submitted by Novakovska Eva.
+- Updated the French language translation file.
 
 = 3.4.7 = 
 - There is a new feature for applying partial or section protection to posts and pages. This feature is available via a free addon.

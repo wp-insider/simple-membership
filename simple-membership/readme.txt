@@ -114,6 +114,7 @@ The following language translations are already available:
 * Mexican
 * Arabic
 * Czech
+* Finish
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -140,6 +141,7 @@ https://simple-membership-plugin.com/
 - Added a new utility function to write array content to the debug log file.
 - Added Czech language translation to the plugin. The translation was submitted by Novakovska Eva.
 - Updated the French language translation file.
+- Added Finish language translation to the plugin. The translation was submitted by Lars Timberg.
 
 = 3.4.7 = 
 - There is a new feature for applying partial or section protection to posts and pages. This feature is available via a free addon.

@@ -142,6 +142,7 @@ https://simple-membership-plugin.com/
 - Added Czech language translation to the plugin. The translation was submitted by Novakovska Eva.
 - Updated the French language translation file.
 - Added Finish language translation to the plugin. The translation was submitted by Lars Timberg.
+- The password field in the edit profile page has been changed to a "password" type field.
 
 = 3.4.7 = 
 - There is a new feature for applying partial or section protection to posts and pages. This feature is available via a free addon.

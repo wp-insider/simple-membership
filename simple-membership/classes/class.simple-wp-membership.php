@@ -552,10 +552,21 @@ class SimpleWpMembership {
             'required' => array(
                 'alertText' => '* ' . SwpmUtils::_('This field is required'),
             ),
+            'SWPMUserName' => array(
+                'alertText' => '* ' . SwpmUtils::_('Invalid Username'),
+            ),
+            'minSize' => array(
+                'alertText' => '* ' . SwpmUtils::_('Minimum '),
+                'alertText2' => SwpmUtils::_(' characters required'),
+            ),
+            'noapostrophe' => array(
+                'alertText' => '* ' . SwpmUtils::_('Apostrophe character is not allowed'),
+            ),
         );
 
         if ($add_params !== false) {
-            $loc_data = array_replace_recursive($add_params,$loc_data);
+            // Additional parameters should be added to the array, replacing existing ones
+            $loc_data = array_replace_recursive($add_params, $loc_data);
         }
 
         wp_localize_script('swpm.validationEngine-localization', 'swpm_validationEngine_localization', $loc_data);

@@ -18,11 +18,11 @@ extract($user_data, EXTR_SKIP);
             </tr>
             <tr class="swpm-profile-password-row">
                 <td><label for="password"><?php echo SwpmUtils::_('Password'); ?></label></td>
-                <td><input type="text" id="password" value="" size="50" name="password" placeholder="<?php echo SwpmUtils::_('Leave empty to keep the current password'); ?>" /></td>
+                <td><input type="password" id="password" value="" size="50" name="password" placeholder="<?php echo SwpmUtils::_('Leave empty to keep the current password'); ?>" /></td>
             </tr>
             <tr class="swpm-profile-password-retype-row">
                 <td><label for="password_re"><?php echo SwpmUtils::_('Repeat Password'); ?></label></td>
-                <td><input type="text" id="password_re" value="" size="50" name="password_re" placeholder="<?php echo SwpmUtils::_('Leave empty to keep the current password'); ?>" /></td>
+                <td><input type="password" id="password_re" value="" size="50" name="password_re" placeholder="<?php echo SwpmUtils::_('Leave empty to keep the current password'); ?>" /></td>
             </tr>
             <tr class="swpm-profile-firstname-row">
                 <td><label for="first_name"><?php echo SwpmUtils::_('First Name'); ?></label></td>

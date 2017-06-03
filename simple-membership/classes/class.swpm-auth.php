@@ -156,16 +156,16 @@ class SwpmAuth {
         return true;
     }
 
-    private function check_password($password, $hash) {
+    private function check_password($plain_password, $hashed_pw) {
         global $wp_hasher;
-        if (empty($password)) {
+        if (empty($plain_password)) {
             return false;
         }
         if (empty($wp_hasher)) {
             require_once( ABSPATH . 'wp-includes/class-phpass.php');
             $wp_hasher = new PasswordHash(8, TRUE);
         }
-        return $wp_hasher->CheckPassword($password, $hash);
+        return $wp_hasher->CheckPassword($plain_password, $hashed_pw);
     }
 
     public function match_password($password) {

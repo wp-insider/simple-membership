@@ -74,6 +74,33 @@ class SwpmLog {
         fclose($fp);  // close file
     }
     
+    public static function log_array_data_to_debug($array_to_write, $success, $end = false) {
+        $settings = SwpmSettings::get_instance();
+        $debug_enabled = $settings->get_value('enable-debug');
+        if (empty($debug_enabled)) {//Debug is not enabled
+            return;
+        }
+
+        //Lets write to the log file
+        $debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
+
+        // Timestamp
+        $text = '[' . date('m/d/Y g:i A') . '] - ' . (($success) ? 'SUCCESS: ' : 'FAILURE: ') . "\n";
+        ob_start();
+        print_r($array_to_write);
+        $var = ob_get_contents();
+        ob_end_clean();
+        $text .= $var;
+    
+        if ($end) {
+            $text .= "\n------------------------------------------------------------------\n\n";
+        }
+        // Write to log
+        $fp = fopen($debug_log_file_name, 'a');
+        fwrite($fp, $text);
+        fclose($fp);  // close file
+    }
+    
     public static function log_auth_debug($message, $success, $end = false) {
         $settings = SwpmSettings::get_instance();
         $debug_enabled = $settings->get_value('enable-debug');

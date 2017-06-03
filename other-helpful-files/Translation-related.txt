@@ -5,7 +5,8 @@ Add the following translation strings to the swpm.pot file AFTER you generate a 
 =================================
 
 #: Translation strings from addons
-#: Form builder addon strings
+
+#: === Form builder addon strings ===
 msgid "Type password Here"
 msgstr ""
 
@@ -36,7 +37,10 @@ msgstr ""
 msgid "Postal / Zip Code"
 msgstr ""
 
-#: Partial protection addon strings
+msgid "Check this box to delete the image. The image will be deleted when you save the profile."
+msgstr ""
+
+#: === Partial protection addon strings ===
 msgid "You do not have permission to view this content."
 msgstr ""
 

@@ -534,7 +534,7 @@ class SimpleWpMembership {
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'));
     }
 
-    public static function enqueue_validation_scripts() {
+    public static function enqueue_validation_scripts($add_params = false) {
         //Localization for jquery.validationEngine
         //This array will be merged with $.validationEngineLanguage.allRules object from jquery.validationEngine-en.js file
         $loc_data = array(
@@ -553,6 +553,10 @@ class SimpleWpMembership {
                 'alertText' => '* ' . SwpmUtils::_('This field is required'),
             ),
         );
+
+        if ($add_params !== false) {
+            $loc_data = array_replace_recursive($add_params,$loc_data);
+        }
 
         wp_localize_script('swpm.validationEngine-localization', 'swpm_validationEngine_localization', $loc_data);
 

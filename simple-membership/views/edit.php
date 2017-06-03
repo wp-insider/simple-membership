@@ -1,9 +1,9 @@
 <?php
-SimpleWpMembership::enqueue_validation_scripts();
 $auth = SwpmAuth::get_instance();
 $user_data = (array) $auth->userData;
 $user_data['membership_level_alias'] = $auth->get('alias');
 extract($user_data, EXTR_SKIP);
+SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.SwpmAuth::get_instance()->get('member_id'))));
 ?>
 <div class="swpm-edit-profile-form">
     <form id="swpm-editprofile-form" name="swpm-editprofile-form" method="post" action="" class="swpm-validate-form">
@@ -73,8 +73,3 @@ extract($user_data, EXTR_SKIP);
 
     </form>
 </div>
-<script>
-    jQuery(document).ready(function($) {
-        $.validationEngineLanguage.allRules['ajaxEmailCall']['extraData'] = '&action=swpm_validate_email&member_id=<?php echo SwpmAuth::get_instance()->get('member_id'); ?>';
-    });
-</script>

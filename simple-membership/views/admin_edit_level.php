@@ -1,5 +1,6 @@
+<?php SimpleWpMembership::enqueue_validation_scripts(); ?>
 <div class="wrap" id="swpm-level-page">
-<form action="" method="post" name="swpm-edit-level" id="swpm-edit-level" class="validate"<?php do_action('level_edit_form_tag');?>>
+<form action="" method="post" name="swpm-edit-level" id="swpm-edit-level" class="validate swpm-validate-form"<?php do_action('level_edit_form_tag');?>>
 <input name="action" type="hidden" value="editlevel" />
 <?php wp_nonce_field( 'edit_swpmlevel_admin_end', '_wpnonce_edit_swpmlevel_admin_end' ) ?>
 <h2><?php echo  SwpmUtils::_('Edit membership level'); ?></h2>
@@ -49,6 +50,5 @@
 <script>
 jQuery(document).ready(function($){
     $('.swpm-date-picker').datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: "-100:+100"});
-    $("#swpm-edit-level").validationEngine('attach');
 });
 </script>

@@ -123,6 +123,8 @@ class SwpmAdminRegistration extends SwpmRegistration {
                 $values = array_values($member);
                 $keys = array_map('swpm_enclose_var', array_keys($member));
                 $body = html_entity_decode(str_replace($keys, $values, $body));
+                $subject=apply_filters('swpm_email_account_status_change_subject',$subject);
+                $body=apply_filters('swpm_email_account_status_change_body',$body);
                 wp_mail($email_address, $subject, $body, $headers);
             }
             wp_redirect('admin.php?page=simple_wp_membership');

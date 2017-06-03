@@ -297,7 +297,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $message .= '<div class="swpm-reset-pw-success-email">' . SwpmUtils::_("Email Address: ") . $email . '</div>';
         $message .= '</div>';
 
-        $message = array('succeeded' => false, 'message' => $message);
+        $message = array('succeeded' => false, 'message' => $message, 'pass_reset_sent' => true);
         SwpmTransfer::get_instance()->set('status', $message);
     }
 

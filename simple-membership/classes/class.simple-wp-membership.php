@@ -338,6 +338,9 @@ class SimpleWpMembership {
             echo '</ul>';
         }
         echo "</div>";
+        if (isset($message['pass_reset_sent'])) {
+            $succeeded = true;
+        }
         return $succeeded;
     }
 

@@ -1,5 +1,6 @@
+<?php SimpleWpMembership::enqueue_validation_scripts(); ?>
 <div class="swpm-registration-widget-form">
-    <form id="swpm-registration-form" name="swpm-registration-form" method="post" action="">
+    <form id="swpm-registration-form" class="swpm-validate-form" name="swpm-registration-form" method="post" action="">
         <input type ="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
         <table>
             <tr class="swpm-registration-username-row">
@@ -29,38 +30,35 @@
             <tr class="swpm-registration-membership-level-row">
                 <td><label for="membership_level"><?php echo SwpmUtils::_('Membership Level') ?></label></td>
                 <td>
-                    <?php 
-                    echo $membership_level_alias;//Show the level name in the form.
+                    <?php
+                    echo $membership_level_alias; //Show the level name in the form.
                     //Add the input fields for the level data.
-                    echo '<input type="hidden" value="'.$membership_level.'" size="50" name="membership_level" id="membership_level" />';
+                    echo '<input type="hidden" value="' . $membership_level . '" size="50" name="membership_level" id="membership_level" />';
                     //Add the level input verification data.
                     $swpm_p_key = get_option('swpm_private_key_one');
-                    if(empty($swpm_p_key)){
+                    if (empty($swpm_p_key)) {
                         $swpm_p_key = uniqid('', true);
-                        update_option('swpm_private_key_one',$swpm_p_key);
+                        update_option('swpm_private_key_one', $swpm_p_key);
                     }
-                    $swpm_level_hash = md5($swpm_p_key.'|'.$membership_level);//level hash
+                    $swpm_level_hash = md5($swpm_p_key . '|' . $membership_level); //level hash
                     echo '<input type="hidden" name="swpm_level_hash" value="' . $swpm_level_hash . '" />';
                     ?>
                 </td>
             </tr>           
         </table>        
-        
+
         <div class="swpm-before-registration-submit-section" align="center"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
-        
+
         <div class="swpm-registration-submit-section" align="center">
             <input type="submit" value="<?php echo SwpmUtils::_('Register') ?>" class="swpm-registration-submit" name="swpm_registration_submit" />
         </div>
-        
+
         <input type="hidden" name="action" value="custom_posts" />
-        
+
     </form>
 </div>
 <script>
     jQuery(document).ready(function ($) {
-        $.validationEngineLanguage.allRules['ajaxUserCall']['url'] = '<?php echo admin_url('admin-ajax.php'); ?>';
-        $.validationEngineLanguage.allRules['ajaxEmailCall']['url'] = '<?php echo admin_url('admin-ajax.php'); ?>';
         $.validationEngineLanguage.allRules['ajaxEmailCall']['extraData'] = '&action=swpm_validate_email&member_id=<?php echo filter_input(INPUT_GET, 'member_id'); ?>';
-        $("#swpm-registration-form").validationEngine('attach');
     });
 </script>

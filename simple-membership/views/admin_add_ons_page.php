@@ -179,12 +179,20 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             array_push($addons_data, $addon_21);  
             
             $addon_22 = array(
+                'name' => 'WooCommerce Payments',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-woocommerce-addon.png',
+                'description' => 'This addon can be used to accept membership payment via the WooCommerce plugin',
+                'page_url' => 'https://simple-membership-plugin.com/woocommerce-simple-membership-plugin-integration/',
+            );
+            array_push($addons_data, $addon_22);
+            
+            $addon_23 = array(
                 'name' => 'Miscellaneous Shortcodes',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-misc-shortcodes-addon.png',
                 'description' => 'This addon has a collection of miscellaneous shortcodes',
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-miscellaneous-shortcodes-addon/',
             );
-            array_push($addons_data, $addon_22);            
+            array_push($addons_data, $addon_23);
             
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {

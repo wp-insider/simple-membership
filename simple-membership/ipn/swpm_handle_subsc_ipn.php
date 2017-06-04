@@ -140,6 +140,8 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         $headers = 'From: ' . $from_address . "\r\n";
     }
 
+    $subject=apply_filters('swpm_email_signup_upgrade_complete_subject',$subject);
+    $email_body=apply_filters('swpm_email_signup_upgrade_complete_body',$email_body);
     wp_mail($email, $subject, $email_body, $headers);
     swpm_debug_log_subsc("Member signup/upgrade completion email successfully sent to: " . $email, true);
 }

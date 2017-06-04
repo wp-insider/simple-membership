@@ -1,5 +1,6 @@
+<?php SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.$member_id))); ?>
 <div class="wrap" id="swpm-profile-page" type="edit">
-    <form action="" method="post" name="swpm-edit-user" id="swpm-edit-user" enctype="multipart/form-data" class="validate"<?php do_action('user_new_form_tag');?>>
+    <form action="" method="post" name="swpm-edit-user" id="swpm-edit-user" enctype="multipart/form-data" class="validate swpm-validate-form"<?php do_action('user_new_form_tag');?>>
     <input name="action" type="hidden" value="edituser" />
     <?php wp_nonce_field( 'edit_swpmuser_admin_end', '_wpnonce_edit_swpmuser_admin_end' ) ?>
     <h3><?php echo  SwpmUtils::_('Edit Member') ?></h3>
@@ -92,9 +93,6 @@
 </div>
 <script>
 jQuery(document).ready(function($){    
-    $.validationEngineLanguage.allRules['ajaxEmailCall']['url']= '<?php echo admin_url('admin-ajax.php');?>';
-    $.validationEngineLanguage.allRules['ajaxEmailCall']['extraData']= '&action=swpm_validate_email&member_id=<?php echo $member_id;?>';
-    $("#swpm-edit-user").validationEngine('attach');
     $('#account_status_change').change(function(){
         var target = $(this).closest('tr');
         var $body = '<textarea rows="5" cols="60" id="notificationmailbody" name="notificationmailbody">' + SwpmSettings.statusChangeEmailBody + '</textarea>';

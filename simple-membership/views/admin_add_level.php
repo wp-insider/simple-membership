@@ -1,6 +1,7 @@
+<?php SimpleWpMembership::enqueue_validation_scripts(); ?>
 <div class="wrap" id="swpm-level-page">
 
-<form action="" method="post" name="swpm-create-level" id="swpm-create-level" class="validate">
+<form action="" method="post" name="swpm-create-level" id="swpm-create-level" class="validate swpm-validate-form">
 <input name="action" type="hidden" value="createlevel" />
 <h3>Add Membership Level</h3>
 <p><?php echo  SwpmUtils::_('Create new membership level.'); ?></p>
@@ -40,7 +41,6 @@
 </div>
 <script>
 jQuery(document).ready(function($){
-    $("#swpm-create-level").validationEngine('attach');
     $('.swpm-date-picker').datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: "-100:+100"});
 });
 </script>

@@ -338,6 +338,9 @@ class SimpleWpMembership {
             echo '</ul>';
         }
         echo "</div>";
+        if (isset($message['pass_reset_sent'])) {
+            $succeeded = true;
+        }
         return $succeeded;
     }
 
@@ -534,7 +537,7 @@ class SimpleWpMembership {
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'));
     }
 
-    public static function enqueue_validation_scripts() {
+    public static function enqueue_validation_scripts($add_params = false) {
         //Localization for jquery.validationEngine
         //This array will be merged with $.validationEngineLanguage.allRules object from jquery.validationEngine-en.js file
         $loc_data = array(
@@ -552,7 +555,22 @@ class SimpleWpMembership {
             'required' => array(
                 'alertText' => '* ' . SwpmUtils::_('This field is required'),
             ),
+            'SWPMUserName' => array(
+                'alertText' => '* ' . SwpmUtils::_('Invalid Username'),
+            ),
+            'minSize' => array(
+                'alertText' => '* ' . SwpmUtils::_('Minimum '),
+                'alertText2' => SwpmUtils::_(' characters required'),
+            ),
+            'noapostrophe' => array(
+                'alertText' => '* ' . SwpmUtils::_('Apostrophe character is not allowed'),
+            ),
         );
+
+        if ($add_params !== false) {
+            // Additional parameters should be added to the array, replacing existing ones
+            $loc_data = array_replace_recursive($add_params, $loc_data);
+        }
 
         wp_localize_script('swpm.validationEngine-localization', 'swpm_validationEngine_localization', $loc_data);
 

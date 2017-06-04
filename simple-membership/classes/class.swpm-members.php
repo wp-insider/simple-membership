@@ -317,6 +317,8 @@ class SwpmMembers extends WP_List_Table {
             $to_email_list = implode(',', $emails);
             $headers = 'From: ' . $from_address . "\r\n";
             $headers .= 'bcc: ' . $to_email_list . "\r\n";
+            $subject=apply_filters('swpm_email_bulk_set_status_subject',$subject);
+            $body=apply_filters('swpm_email_bulk_set_status_body',$body);
             wp_mail(array()/* $email_list */, $subject, $body, $headers);
             SwpmLog::log_simple_debug("Bulk activation email notification sent. Activation email sent to the following email: " . $to_email_list, true);
         }

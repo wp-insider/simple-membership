@@ -202,6 +202,8 @@ abstract class SwpmUtils {
                 $body = html_entity_decode($body);
                 $email_body = str_replace($tags, $vals, $body);
                 $headers = 'From: ' . $from_address . "\r\n";
+                $subject=apply_filters('swpm_email_complete_your_registration_subject',$subject);
+                $email_body=apply_filters('swpm_email_complete_your_registration_body',$email_body);
                 wp_mail($member->email, $subject, $email_body, $headers);
             }
             $links[] = $reg_url;

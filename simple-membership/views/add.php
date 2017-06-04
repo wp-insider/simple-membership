@@ -1,4 +1,4 @@
-<?php SimpleWpMembership::enqueue_validation_scripts(); ?>
+<?php SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.filter_input(INPUT_GET, 'member_id')))); ?>
 <div class="swpm-registration-widget-form">
     <form id="swpm-registration-form" class="swpm-validate-form" name="swpm-registration-form" method="post" action="">
         <input type ="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
@@ -57,8 +57,3 @@
 
     </form>
 </div>
-<script>
-    jQuery(document).ready(function ($) {
-        $.validationEngineLanguage.allRules['ajaxEmailCall']['extraData'] = '&action=swpm_validate_email&member_id=<?php echo filter_input(INPUT_GET, 'member_id'); ?>';
-    });
-</script>

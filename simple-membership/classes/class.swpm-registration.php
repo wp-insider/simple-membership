@@ -40,6 +40,8 @@ abstract class SwpmRegistration {
         $body = apply_filters('swpm_registration_complete_email_body', $body);//This filter can be used to modify the registration complete email body dynamically.
         
         //Send notification email to the member
+        $subject=apply_filters('swpm_email_registration_complete_subject',$subject);
+        $body=apply_filters('swpm_email_registration_complete_body',$body);
         wp_mail(trim($email), $subject, $body, $headers);
         SwpmLog::log_simple_debug('Member registration complete email sent to: '.$email.'. From email address value used: '.$from_address, true);
         
@@ -70,6 +72,8 @@ abstract class SwpmRegistration {
             
             foreach ($notify_emails_array as $to_email){
                 $to_email = trim($to_email);
+                $admin_notify_subject=apply_filters('swpm_email_admin_notify_subject',$admin_notify_subject);
+                $admin_notify_body=apply_filters('swpm_email_admin_notify_body',$admin_notify_body);
                 wp_mail($to_email, $admin_notify_subject, $admin_notify_body, $headers);
                 SwpmLog::log_simple_debug('Admin notification email sent to: '.$to_email, true);
             }

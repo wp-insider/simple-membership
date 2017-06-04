@@ -142,6 +142,7 @@ https://simple-membership-plugin.com/
 - Added apply_filters() for all email subjects and bodies. This should be useful for a multi-lingual site.
 - Updated the validation JS library to the latest.
 - Updated the French language translation file.
+- Updated the Spanish language translation file.
 - Added Czech language translation to the plugin. The translation was submitted by Novakovska Eva.
 - Added Finish language translation to the plugin. The translation was submitted by Lars Timberg.
 - The password field in the edit profile page has been changed to a "password" type field.

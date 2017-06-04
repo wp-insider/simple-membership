@@ -114,7 +114,7 @@ The following language translations are already available:
 * Mexican
 * Arabic
 * Czech
-* Finish
+* Finnish
 
 You can translate the plugin using the language [translation documentation](https://simple-membership-plugin.com/translate-simple-membership-plugin/).
 
@@ -144,7 +144,7 @@ https://simple-membership-plugin.com/
 - Updated the French language translation file.
 - Updated the Spanish language translation file.
 - Added Czech language translation to the plugin. The translation was submitted by Novakovska Eva.
-- Added Finish language translation to the plugin. The translation was submitted by Lars Timberg.
+- Added Finnish language translation to the plugin. The translation was submitted by Lars Timberg.
 - The password field in the edit profile page has been changed to a "password" type field.
 
 = 3.4.7 = 

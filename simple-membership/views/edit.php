@@ -3,8 +3,7 @@ $auth = SwpmAuth::get_instance();
 $user_data = (array) $auth->userData;
 $user_data['membership_level_alias'] = $auth->get('alias');
 extract($user_data, EXTR_SKIP);
-//The admin ajax causes an issue with the JS validation if done on form submission. The edit profile doesn't need JS validation on email. There is PHP validation which will catch any email error.
-//SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.SwpmAuth::get_instance()->get('member_id'))));
+SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.SwpmAuth::get_instance()->get('member_id'))));
 ?>
 <div class="swpm-edit-profile-form">
     <form id="swpm-editprofile-form" name="swpm-editprofile-form" method="post" action="" class="swpm-validate-form">

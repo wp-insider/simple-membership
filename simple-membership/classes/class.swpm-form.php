@@ -111,9 +111,10 @@ class SwpmForm {
             $result = $wpdb->get_var($wpdb->prepare($query, strip_tags($saned)));
         }
         
-        if ($result > 0) {
+        if ($result > 0) {            
             if ($saned != $this->fields['email']) {
-                $this->errors['email'] = SwpmUtils::_('Email is already used.');
+                $error_msg = SwpmUtils::_('Email is already used.') . " (" . $saned .")";
+                $this->errors['email'] = $error_msg;
                 return;
             }
         }

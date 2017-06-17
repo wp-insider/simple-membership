@@ -1408,7 +1408,7 @@
 		* @return nothing! the ajax validator handles the prompts itself
 		*/
 		 _ajax: function(field, rules, i, options) {
-                     
+
 			 var errorSelector = rules[i + 1];
 			 var rule = options.allrules[errorSelector];
 			 var extraData = rule.extraData;
@@ -1449,7 +1449,7 @@
 			 }
 
 			 // If there is an error or if the the field is already validated, do not re-execute AJAX
-			 if (!options.isError && !methods._checkAjaxFieldStatus(field.attr("id"), options) && options.eventTrigger!="submit") {
+			 if (!options.isError && !methods._checkAjaxFieldStatus(field.attr("id"), options)) {
 				 $.ajax({
 					 type: options.ajaxFormValidationMethod,
 					 url: rule.url,

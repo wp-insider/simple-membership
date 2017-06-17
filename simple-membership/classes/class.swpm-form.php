@@ -97,7 +97,7 @@ class SwpmForm {
             return;
         }
         if (!is_email($email)) {
-            $this->errors['email'] = SwpmUtils::_('Email is invalid');
+            $this->errors['email'] = SwpmUtils::_('Email is invalid') . " (".$email.")";
             return;
         }
         $saned = sanitize_email($email);

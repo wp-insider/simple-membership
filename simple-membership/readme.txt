@@ -138,6 +138,7 @@ https://simple-membership-plugin.com/
 
 = TODO 3.5.0 =
 - Updated the Spanish language translation file.
+- Improved the current page URL check for the renewal page.
 
 = 3.4.9 =
 - Fixed a member profile edit issue that was introduced in the previous version from JavaScript library update.

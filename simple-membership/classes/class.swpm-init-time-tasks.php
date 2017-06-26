@@ -3,7 +3,7 @@
 class SwpmInitTimeTasks {
 
     public function __construct() {
-
+        
     }
 
     public function do_init_tasks() {
@@ -30,7 +30,7 @@ class SwpmInitTimeTasks {
             $swpm_logout = filter_input(INPUT_GET, 'swpm-logout');
             if (!empty($swpm_logout)) {
                 SwpmAuth::get_instance()->logout();
-                $redirect_url = apply_filters('swpm_after_logout_redirect_url',SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL);                
+                $redirect_url = apply_filters('swpm_after_logout_redirect_url', SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL);
                 wp_redirect(trailingslashit($redirect_url));
                 exit(0);
             }
@@ -40,7 +40,7 @@ class SwpmInitTimeTasks {
             SwpmCommentFormRelated::check_and_restrict_comment_posting_to_members();
         } else {
             //Do admin side init time tasks
-            if (current_user_can(SWPM_MANAGEMENT_PERMISSION)) { 
+            if (current_user_can(SWPM_MANAGEMENT_PERMISSION)) {
                 //Admin dashboard side stuff
                 $this->admin_init();
             }
@@ -143,31 +143,38 @@ class SwpmInitTimeTasks {
             //TODO - allow an option to do a redirect if successful edit profile form submission?
         }
     }
-    
+
     /* Payment Gateway IPN listener */
+
     public function swpm_ipn_listener() {
-        
+
         //Listen and handle PayPal IPN
         $swpm_process_ipn = filter_input(INPUT_GET, 'swpm_process_ipn');
         if ($swpm_process_ipn == '1') {
             include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_pp_ipn.php');
             exit;
         }
-        
+
         //Listen and handle Stripe Buy Now IPN
         $swpm_process_stripe_buy_now = filter_input(INPUT_GET, 'swpm_process_stripe_buy_now');
         if ($swpm_process_stripe_buy_now == '1') {
             include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-buy-now-ipn.php');
             exit;
         }
-        
+
+        //Listen and handle Stripe Subscription IPN
+        $swpm_process_stripe_subscription = filter_input(INPUT_GET, 'swpm_process_stripe_subscription');
+        if ($swpm_process_stripe_subscription == '1') {
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-subscription-ipn.php');
+            exit;
+        }
+
         //Listen and handle Braintree Buy Now IPN
         $swpm_process_braintree_buy_now = filter_input(INPUT_GET, 'swpm_process_braintree_buy_now');
         if ($swpm_process_braintree_buy_now == '1') {
             include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-braintree-buy-now-ipn.php');
             exit;
         }
-        
     }
 
 }

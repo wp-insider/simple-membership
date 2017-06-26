@@ -13,8 +13,8 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
     }
 
     //Get class option for button styling, set Stripe's default if none specified
-    $class=isset($args['class']) ? $args['class'] : 'stripe-button-el';
-    
+    $class = isset($args['class']) ? $args['class'] : 'stripe-button-el';
+
     //Check new_window parameter
     $window_target = isset($args['new_window']) ? 'target="_blank"' : '';
     $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Buy Now');
@@ -97,7 +97,147 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
     $output .= "></script>";
     $output .= '</div>';
     $output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
-    
+
+    $output .= wp_nonce_field('stripe_payments', '_wpnonce', true, false);
+    $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
+    $output .= "<input type='hidden' value='{$item_name}' name='item_name' />";
+    $output .= "<input type='hidden' value='{$payment_amount}' name='item_price' />";
+    $output .= "<input type='hidden' value='{$payment_currency}' name='currency_code' />";
+    $output .= "<input type='hidden' value='{$custom_field_value}' name='custom' />";
+
+    //Filter to add additional payment input fields to the form.
+    $output .= apply_filters('swpm_stripe_payment_form_additional_fields', '');
+
+    $output .= "</form>";
+    $output .= '</div>'; //End .swpm_button_wrapper
+
+    return $output;
+}
+
+add_filter('swpm_payment_button_shortcode_for_stripe_subscription', 'swpm_render_stripe_subscription_button_sc_output', 10, 2);
+
+function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
+
+    $button_id = isset($args['id']) ? $args['id'] : '';
+    if (empty($button_id)) {
+        return '<p class="swpm-red-box">Error! swpm_render_stripe_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
+    }
+
+    //Get class option for button styling, set Stripe's default if none specified
+    $class = isset($args['class']) ? $args['class'] : 'stripe-button-el';
+
+    //Check new_window parameter
+    $window_target = isset($args['new_window']) ? 'target="_blank"' : '';
+    $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Buy Now');
+    $billing_address = isset($args['billing_address']) ? '1' : '';
+    ; //By default don't show the billing address in the checkout form.
+    $item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
+
+    $settings = SwpmSettings::get_instance();
+    $button_cpt = get_post($button_id); //Retrieve the CPT for this button
+    $item_name = htmlspecialchars($button_cpt->post_title);
+
+    $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
+    //Verify that this membership level exists (to prevent user paying for a level that has been deleted)
+    if (!SwpmUtils::membership_level_id_exists($membership_level_id)) {
+        return '<p class="swpm-red-box">Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.</p>';
+    }
+
+    //Return, cancel, notifiy URLs
+    $return_url = get_post_meta($button_id, 'return_url', true);
+    if (empty($return_url)) {
+        $return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+    }
+    $notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1'; //We are going to use it to do post payment processing.
+    //$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
+    //User's IP address
+    $user_ip = SwpmUtils::get_user_ip_address();
+    $_SESSION['swpm_payment_button_interaction'] = $user_ip;
+
+    //Custom field data
+    $custom_field_value = 'subsc_ref=' . $membership_level_id;
+    $custom_field_value .= '&user_ip=' . $user_ip;
+    if (SwpmMemberUtils::is_member_logged_in()) {
+        $custom_field_value .= '&swpm_id=' . SwpmMemberUtils::get_logged_in_members_id();
+    }
+    $custom_field_value = apply_filters('swpm_custom_field_value_filter', $custom_field_value);
+
+    //Sandbox settings
+    $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
+
+    //API keys
+    $stripe_test_secret_key = get_post_meta($button_id, 'stripe_test_secret_key', true);
+    $stripe_test_publishable_key = get_post_meta($button_id, 'stripe_test_publishable_key', true);
+    $stripe_live_secret_key = get_post_meta($button_id, 'stripe_live_secret_key', true);
+    $stripe_live_publishable_key = get_post_meta($button_id, 'stripe_live_publishable_key', true);
+    if ($sandbox_enabled) {
+        $secret_key = $stripe_test_secret_key;
+        $publishable_key = $stripe_test_publishable_key; //Use sandbox API key
+    } else {
+        $secret_key = $stripe_live_secret_key;
+        $publishable_key = $stripe_live_publishable_key; //Use live API key
+    }
+
+    $plan_id = get_post_meta($button_id, 'stripe_plan_id', true);
+
+    $plan_data = get_post_meta($button_id, 'stripe_plan_data', true);
+
+    if (empty($plan_data)) {
+        //no plan data available, let's try to request one
+        $result = SwpmMiscUtils::get_stripe_plan_info($secret_key, $plan_id);
+        if ($result['success'] === false) {
+            // some error occured, let's display it and stop processing the shortcode further
+            return '<p class="swpm-red-box">Stripe error occured: ' . $result['error_msg'] . '</p>';
+        } else {
+            // plan data has been successfully retreived
+            $plan_data = $result['plan_data'];
+            // Let's update post_meta in order to not re-request the data again on each button display
+            update_post_meta($button_id, 'stripe_plan_data', $plan_data);
+        }
+    }
+
+    //let's set some vars
+    $price_in_cents = $plan_data['amount'];
+    $payment_amount = $price_in_cents / 100;
+    $payment_currency = $plan_data['currency'];
+    $interval_count = $plan_data['interval_count'];
+    $interval = $plan_data['interval'];
+    $trial = $plan_data['trial_period_days'];
+    $plan_name = $plan_data['name'];
+    $description = $payment_amount . ' ' . strtoupper($payment_currency);
+    if ($interval_count == 1) {
+        $description .= ' / ' . $interval;
+    } else {
+        $description .= ' every ' . $plan_data['interval_count'] . ' ' . $plan_data['interval'] . 's';
+    }
+    // this should add info on trial period if available, but Stripe strips too long strings, so we leave it commented out for now.
+//        if ($trial != NULL) {
+//            $description .= '. '.$trial . ' days FREE trial.';
+//        }
+
+    /* === Stripe Buy Now Button Form === */
+    $output = '';
+    $output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
+    $output .= "<form action='" . $notify_url . "' METHOD='POST'> ";
+    $output .= "<div style='display: none !important'>";
+    $output .= "<script src='https://checkout.stripe.com/checkout.js' class='stripe-button'
+        data-key='" . $publishable_key . "'
+        data-panel-label='Sign Me Up!'
+        data-name='{$item_name}'";
+    $output .= "data-description='{$description}'";
+    $output .= "data-label='{$button_text}'"; //Stripe doesn't currenty support button image for their standard checkout.
+    $output .= "data-currency='{$payment_currency}'";
+    if (!empty($item_logo)) {//Show item logo/thumbnail in the stripe payment window
+        $output .= "data-image='{$item_logo}'";
+    }
+    if (!empty($billing_address)) {//Show billing address in the stipe payment window
+        $output .= "data-billingAddress='true'";
+    }
+    $output .= apply_filters('swpm_stripe_additional_checkout_data_parameters', ''); //Filter to allow the addition of extra data parameters for stripe checkout.
+    $output .= "></script>";
+    $output .= '</div>';
+    $output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
+
     $output .= wp_nonce_field('stripe_payments', '_wpnonce', true, false);
     $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
     $output .= "<input type='hidden' value='{$item_name}' name='item_name' />";

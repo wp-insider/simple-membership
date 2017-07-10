@@ -15,7 +15,7 @@ $this->prepare_items();
 $count = $this->get_user_count_by_account_state();
 ?>
 <ul class="subsubsub">
-    <li class="all"><a href="admin.php?page=simple_wp_membership" <?php echo $status == ""? "class='current'": "";?> >All <span class="count">(<?php echo $count['all'];?>)</span></a> |</li>
+    <li class="all"><a href="admin.php?page=simple_wp_membership" <?php echo $status == ""? "class='current'": "";?> ><?php echo SwpmUtils::_('All') ?> <span class="count">(<?php echo $count['all'];?>)</span></a> |</li>
 	<li class="active"><a href="admin.php?page=simple_wp_membership&status=active" <?php echo $status == "active"? "class='current'": "";?>><?php echo SwpmUtils::_('Active') ?> <span class="count">(<?php echo isset($count['active'])? $count['active']: 0 ?>)</span></a> |</li>
         <li class="active"><a href="admin.php?page=simple_wp_membership&status=inactive" <?php echo $status == "inactive"? "class='current'": "";?>><?php echo SwpmUtils::_('Inactive') ?> <span class="count">(<?php echo isset($count['inactive'])? $count['inactive']: 0 ?>)</span></a> |</li>
         <li class="pending"><a href="admin.php?page=simple_wp_membership&status=pending" <?php echo $status == "pending"? "class='current'": "";?>><?php echo SwpmUtils::_('Pending') ?> <span class="count">(<?php echo isset($count['pending'])? $count['pending']: 0 ?>)</span></a> |</li>

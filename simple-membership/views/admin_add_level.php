@@ -3,8 +3,8 @@
 
 <form action="" method="post" name="swpm-create-level" id="swpm-create-level" class="validate swpm-validate-form">
 <input name="action" type="hidden" value="createlevel" />
-<h3>Add Membership Level</h3>
-<p><?php echo  SwpmUtils::_('Create new membership level.'); ?></p>
+<h3><?php echo SwpmUtils::_('Add Membership Level'); ?></h3>
+<p><?php echo SwpmUtils::_('Create new membership level.'); ?></p>
 <?php wp_nonce_field( 'create_swpmlevel_admin_end', '_wpnonce_create_swpmlevel_admin_end' ) ?>
 <table class="form-table">
     <tbody>

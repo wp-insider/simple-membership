@@ -142,6 +142,7 @@ https://simple-membership-plugin.com/
 - Added translation for Spanish (Venezuela). Translation was done by Santos Guerra.
 - Improved the current page URL check for the renewal page.
 - The {member_since} and {subscription_starts} email merge tags will output a formatted date value.
+- Turned off autocomplete in the edit profile's password field.
 
 = 3.4.9 =
 - Fixed a member profile edit issue that was introduced in the previous version from JavaScript library update.

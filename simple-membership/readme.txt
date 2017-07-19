@@ -137,6 +137,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.5.1 =
+
 = 3.5.0 =
 - Updated the Spanish language translation file.
 - Added translation for Spanish (Venezuela). Translation was done by Santos Guerra.

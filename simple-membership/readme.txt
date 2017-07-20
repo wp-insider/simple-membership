@@ -138,6 +138,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 3.5.1 =
+- Added a new action hook (swpm_before_login_request_is_processed) that can be used to check stuff before the login request is processed by the plugin.
 
 = 3.5.0 =
 - Updated the Spanish language translation file.

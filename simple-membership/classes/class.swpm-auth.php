@@ -38,7 +38,11 @@ class SwpmAuth {
 
         if (!empty($swpm_user_name) && !empty($swpm_password)) {
             //SWPM member login request.
-                                
+            
+            //Trigger action hook that can be used to check stuff before the login request is processed by the plugin.
+            $args = array('username' => $swpm_user_name, 'password' => $swpm_password);
+            do_action('swpm_before_login_request_is_processed', $args);
+            
             //First, lets make sure this user is not already logged into the site as an "Admin" user. We don't want to override that admin login session.
             if (current_user_can('administrator')) {
                 //This user is logged in as ADMIN then trying to do another login as a member. Stop the login request processing (we don't want to override your admin login session).

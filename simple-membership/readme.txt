@@ -139,6 +139,7 @@ https://simple-membership-plugin.com/
 
 = TODO 3.5.1 =
 - Added a new action hook (swpm_before_login_request_is_processed) that can be used to check stuff before the login request is processed by the plugin.
+- Stripe button: zero-decimal currencies (like JPY) are no longer multiplied by 100.
 
 = 3.5.0 =
 - Updated the Spanish language translation file.

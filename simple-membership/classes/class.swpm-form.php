@@ -26,12 +26,16 @@ class SwpmForm {
         
         $user = get_user_by('login', $user_name);
         if ($user && ($user->user_email != $email)){
-            $this->errors['wp_email'] =  SwpmUtils::_('Wordpress account exists with given username. But given email doesn\'t match.');
+            $error_msg = SwpmUtils::_("Wordpress account exists with given username. But given email doesn't match.");
+            $error_msg .= SwpmUtils::_(" Use a different username to complete the registration. If you want to use that username then you must enter the correct email address associated with the existing WP user to connect with that account.");
+            $this->errors['wp_email'] = $error_msg;
             return;
         }
         $user = get_user_by('email', $email);
         if($user && ($user_name != $user->user_login)){
-            $this->errors['wp_user'] =  SwpmUtils::_('Wordpress account exists with given email. But given username doesn\'t match.');
+            $error_msg = SwpmUtils::_("Wordpress account exists with given email. But given username doesn't match.");
+            $error_msg .= SwpmUtils::_(" Use a different email address to complete the registration. If you want to use that email then you must enter the correct username associated with the existing WP user to connect with that account.");
+            $this->errors['wp_user'] = $error_msg;
         }
     }
     

@@ -21,9 +21,13 @@ class SwpmStripeBuyNowIpnHandler {
         $button_id = absint($button_id);
         $button_title = sanitize_text_field($_REQUEST['item_name']);
         $payment_amount = sanitize_text_field($_REQUEST['item_price']);
-        $price_in_cents = $payment_amount * 100 ;//The amount (in cents). This value is used in Stripe API.
         $currency_code = sanitize_text_field($_REQUEST['currency_code']);
-        
+        $zeroCents = unserialize(SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS);
+        if (in_array($currency_code,$zeroCents)) {
+            $price_in_cents = $payment_amount;
+        } else {
+            $price_in_cents = $payment_amount * 100 ;//The amount (in cents). This value is used in Stripe API.
+        }
         $stripe_token = sanitize_text_field($_POST['stripeToken']);
         $stripe_token_type = sanitize_text_field($_POST['stripeTokenType']);
         $stripe_email = sanitize_email($_POST['stripeEmail']);

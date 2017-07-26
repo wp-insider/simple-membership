@@ -30,6 +30,8 @@ if (!defined('COOKIEHASH')) {
 define('SIMPLE_WP_MEMBERSHIP_AUTH', 'simple_wp_membership_' . COOKIEHASH);
 define('SIMPLE_WP_MEMBERSHIP_SEC_AUTH', 'simple_wp_membership_sec_' . COOKIEHASH);
 
+define('SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS',serialize(array('JPY', 'MGA', 'VND', 'KRW')));
+
 SwpmUtils::do_misc_initial_plugin_setup_tasks();
 
 register_activation_hook(SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.php', 'SimpleWpMembership::activate');

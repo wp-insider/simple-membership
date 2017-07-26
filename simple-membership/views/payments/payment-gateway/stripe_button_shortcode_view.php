@@ -13,8 +13,8 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
     }
 
     //Get class option for button styling, set Stripe's default if none specified
-    $class=isset($args['class']) ? $args['class'] : 'stripe-button-el';
-    
+    $class = isset($args['class']) ? $args['class'] : 'stripe-button-el';
+
     //Check new_window parameter
     $window_target = isset($args['new_window']) ? 'target="_blank"' : '';
     $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Buy Now');
@@ -37,10 +37,15 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
     if (!is_numeric($payment_amount)) {
         return '<p class="swpm-red-box">Error! The payment amount value of the button must be a numeric number. Example: 49.50 </p>';
     }
-    $payment_amount = round($payment_amount, 2); //round the amount to 2 decimal place.
-    $price_in_cents = $payment_amount * 100; //The amount (in cents). This value is passed to Stripe API.
     $payment_currency = get_post_meta($button_id, 'payment_currency', true);
-
+    $payment_amount = round($payment_amount, 2); //round the amount to 2 decimal place.
+    $zeroCents = unserialize(SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS);
+    if (in_array($payment_currency, $zeroCents)) {
+        //this is zero-cents currency, amount shouldn't be multiplied by 100
+        $price_in_cents = $payment_amount;
+    } else {
+        $price_in_cents = $payment_amount * 100; //The amount (in cents). This value is passed to Stripe API.
+    }
     //Return, cancel, notifiy URLs
     $return_url = get_post_meta($button_id, 'return_url', true);
     if (empty($return_url)) {
@@ -97,7 +102,7 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
     $output .= "></script>";
     $output .= '</div>';
     $output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
-    
+
     $output .= wp_nonce_field('stripe_payments', '_wpnonce', true, false);
     $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
     $output .= "<input type='hidden' value='{$item_name}' name='item_name' />";

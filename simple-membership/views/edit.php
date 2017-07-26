@@ -16,7 +16,7 @@ extract($user_data, EXTR_SKIP);
             </tr>
             <tr class="swpm-profile-email-row">
                 <td><label for="email"><?php echo SwpmUtils::_('Email'); ?></label></td>
-                <td><input type="text" id="email" name="email" size="50" class="validate[required,custom[email],ajax[ajaxEmailCall]]" value="<?php echo $email; ?>" /></td>
+                <td><input type="text" id="email" name="email" size="50" autocomplete="off" class="validate[required,custom[email],ajax[ajaxEmailCall]]" value="<?php echo $email; ?>" /></td>
             </tr>
             <tr class="swpm-profile-password-row">
                 <td><label for="password"><?php echo SwpmUtils::_('Password'); ?></label></td>

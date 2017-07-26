@@ -9,7 +9,7 @@
             </tr>
             <tr class="swpm-registration-email-row">
                 <td><label for="email"><?php echo SwpmUtils::_('Email') ?></label></td>
-                <td><input type="text" id="email" class="validate[required,custom[email],ajax[ajaxEmailCall]]" value="<?php echo esc_attr($email); ?>" size="50" name="email" /></td>
+                <td><input type="text" autocomplete="off" id="email" class="validate[required,custom[email],ajax[ajaxEmailCall]]" value="<?php echo esc_attr($email); ?>" size="50" name="email" /></td>
             </tr>
             <tr class="swpm-registration-password-row">
                 <td><label for="password"><?php echo SwpmUtils::_('Password') ?></label></td>

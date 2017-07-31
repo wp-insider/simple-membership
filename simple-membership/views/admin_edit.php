@@ -38,7 +38,7 @@
         </tr>
         <tr class="form-required">
             <th scope="row"><label for="email"><?php echo  SwpmUtils::_('E-mail'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
-            <td><input name="email"  class="regular-text validate[required,custom[email],ajax[ajaxEmailCall]]"  type="text" id="email" value="<?php echo esc_attr($email); ?>" /></td>
+            <td><input name="email" autocomplete="off" class="regular-text validate[required,custom[email],ajax[ajaxEmailCall]]" type="text" id="email" value="<?php echo esc_attr($email); ?>" /></td>
         </tr>
         <tr class="">
             <th scope="row"><label for="password"><?php echo  SwpmUtils::_('Password'); ?> <span class="description"><?php /* translators: password input field */_e('(twice, leave empty to retain old password)'); ?></span></label></th>

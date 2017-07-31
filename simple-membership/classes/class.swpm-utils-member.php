@@ -88,6 +88,14 @@ class SwpmMemberUtils {
         return $result;
     }
     
+    public static function get_wp_user_from_swpm_user_id($swpm_id) {
+        //Retrieves the WP user record for the given SWPM member ID.
+        $swpm_user_row = SwpmMemberUtils::get_user_by_id($swpm_id);
+        $username = $swpm_user_row->user_name;
+        $wp_user = get_user_by('login', $username);
+        return $wp_user;
+    }
+    
     public static function get_all_members_of_a_level($level_id) {
         //Retrieves all the SWPM user records for the given membership level
         global $wpdb;

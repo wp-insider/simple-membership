@@ -7,9 +7,8 @@
     <p>
         <?php echo SwpmUtils::_('Next, select an existing membership level from the drop-down box below and then select posts and pages you want to grant access to (for that particular membership level).'); ?>
     </p>
-    <p>
-    <p style="color: red; font-size: 20px;font-weight: bold;">LINK BELOW &darr;&darr;&darr; NEEDS UPDATE!</p>
-    Read the <a href="https://simple-membership-plugin.com/use-category-protection-membership-site/" target="_blank">category protection documentation</a> to learn more.
+    <p>    
+    Read the <a href="https://simple-membership-plugin.com/apply-protection-posts-pages-bulk/" target="_blank">bulk protect posts and pages documentation</a> to learn how to use it.
 </p>
 </div>
 <style>

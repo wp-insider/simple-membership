@@ -31,7 +31,7 @@ class SwpmPostList extends WP_List_Table {
             $this->type = filter_input(INPUT_POST, 'list_type');
         }
         if (is_null($this->type)) {
-            $this->type = 'page';
+            $this->type = 'post';
         }
     }
 

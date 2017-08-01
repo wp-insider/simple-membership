@@ -8,9 +8,9 @@
         <?php echo SwpmUtils::_('Next, select an existing membership level from the drop-down box below and then select posts and pages you want to grant access to (for that particular membership level).'); ?>
     </p>
     <p>
-        <p style="color: red; font-size: 20px;font-weight: bold;">LINK BELOW &darr;&darr;&darr; NEEDS UPDATE!</p>
-        Read the <a href="https://simple-membership-plugin.com/use-category-protection-membership-site/" target="_blank">category protection documentation</a> to learn more.
-    </p>
+    <p style="color: red; font-size: 20px;font-weight: bold;">LINK BELOW &darr;&darr;&darr; NEEDS UPDATE!</p>
+    Read the <a href="https://simple-membership-plugin.com/use-category-protection-membership-site/" target="_blank">category protection documentation</a> to learn more.
+</p>
 </div>
 <style>
     #swpm-list-type-nav .nav-tab {
@@ -19,8 +19,8 @@
     }
 </style>
 <div id="swpm-list-type-nav" class="nav-tab-wrapper">
-    <a class="nav-tab<?php echo $post_list->type == 'page' ? ' nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=post_list&list_type=page"><?php SwpmUtils::e('Pages'); ?></a>
     <a class="nav-tab<?php echo $post_list->type == 'post' ? ' nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=post_list&list_type=post"><?php SwpmUtils::e('Posts'); ?></a>
+    <a class="nav-tab<?php echo $post_list->type == 'page' ? ' nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=post_list&list_type=page"><?php SwpmUtils::e('Pages'); ?></a>
     <a class="nav-tab<?php echo $post_list->type == 'custom_post' ? ' nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=post_list&list_type=custom_post"><?php SwpmUtils::e('Custom Posts'); ?></a>
 </div>
 <p><form id="post_list_form" method="post">    

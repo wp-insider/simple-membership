@@ -167,6 +167,13 @@ class SwpmInitTimeTasks {
             exit;
         }
 
+        //Listen and handle Stripe Subscription IPN
+        $swpm_process_stripe_subscription = filter_input(INPUT_GET, 'swpm_process_stripe_subscription');
+        if ($swpm_process_stripe_subscription == '1') {
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-subscription-ipn.php');
+            exit;
+        }
+
         //Listen and handle Braintree Buy Now IPN
         $swpm_process_braintree_buy_now = filter_input(INPUT_GET, 'swpm_process_braintree_buy_now');
         if ($swpm_process_braintree_buy_now == '1') {

@@ -129,6 +129,8 @@ class SwpmStripeSubscriptionIpnHandler {
         $custom_var = SwpmTransactions::parse_custom_var($custom);
         $swpm_id = isset($custom_var['swpm_id']) ? $custom_var['swpm_id'] : '';
 
+        $payment_amount = $customer->subscriptions->data[0]->plan->amount / 100;
+
         //Create the $ipn_data array.
         $ipn_data = array();
         $ipn_data['mc_gross'] = $payment_amount;

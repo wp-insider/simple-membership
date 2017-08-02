@@ -238,6 +238,13 @@ class SwpmMembershipLevels extends WP_List_Table {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_category_list.php');
     }
 
+    function manage_post() {
+        $selected = "post_list";
+        include_once('class.swpm-post-list.php');
+        $post_list = new SwpmPostList();
+        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_post_list.php');       
+    }
+    
     function handle_main_membership_level_admin_menu(){
         
         do_action( 'swpm_membership_level_menu_start' );
@@ -258,6 +265,7 @@ class SwpmMembershipLevels extends WP_List_Table {
             <a class="nav-tab <?php echo ($selected == "add") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=add"><?php echo SwpmUtils::_('Add Level') ?></a>
             <a class="nav-tab <?php echo ($selected == "manage") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=manage"><?php echo SwpmUtils::_('Manage Content Protection') ?></a>
             <a class="nav-tab <?php echo ($selected == "category_list") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=category_list"><?php echo SwpmUtils::_('Category Protection') ?></a>
+            <a class="nav-tab <?php echo ($selected == "post_list") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=post_list"><?php echo SwpmUtils::_('Post and Page Protection') ?></a>
             <?php
             
             //Trigger hooks that allows an extension to add extra nav tabs in the membership levels menu.
@@ -301,6 +309,9 @@ class SwpmMembershipLevels extends WP_List_Table {
                 break;
             case 'category_list':
                 $this->manage_categroy();
+                break;
+            case 'post_list':
+                $this->manage_post();
                 break;
             case 'delete':
                 $this->delete_level();

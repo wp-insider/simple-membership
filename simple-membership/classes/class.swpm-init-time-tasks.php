@@ -74,6 +74,11 @@ class SwpmInitTimeTasks {
             include_once('class.swpm-category-list.php');
             SwpmCategoryList::update_category_list();
         }
+        $update_post_list = filter_input(INPUT_POST, 'update_post_list');
+        if (!empty($update_post_list)) {
+            include_once('class.swpm-post-list.php');
+            SwpmPostList::update_post_list();
+        }
     }
 
     public function create_post_type() {

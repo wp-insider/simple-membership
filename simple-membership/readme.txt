@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.8
-Stable tag: 3.4.9
+Stable tag: 3.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,7 @@ You can create a free forum user account and ask your questions.
 * There is an option to enable debug logging so you can troubleshoot membership payment related issues easily (if any).
 * Ability to customize the content protection message that gets shown to non-members.
 * Ability to partially protect post or page content.
+* You can apply protection to posts and pages in bulk.
 * Ability to use merge vars in the membership email notification.
 * Membership management side is handled by the plugin.
 * Ability to manually approve your members.
@@ -137,11 +138,23 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.5.0 =
+= 3.5.2 =
+- There is a new feature to apply protection to posts and pages in bulk. The following documentation explains how to use this feature:
+https://simple-membership-plugin.com/apply-protection-posts-pages-bulk/
+
+- Added a new utility function in the SwpmMemberUtils class.
+
+= 3.5.1 =
+- Added a new action hook (swpm_before_login_request_is_processed) that can be used to check stuff before the login request is processed by the plugin.
+- Stripe button: zero-decimal currencies (like JPY) are no longer multiplied by 100.
+- Turned off autocomplete for the email input field in the registration and edit profile forms.
+
+= 3.5.0 =
 - Updated the Spanish language translation file.
 - Added translation for Spanish (Venezuela). Translation was done by Santos Guerra.
 - Improved the current page URL check for the renewal page.
 - The {member_since} and {subscription_starts} email merge tags will output a formatted date value.
+- Turned off autocomplete in the edit profile's password field.
 
 = 3.4.9 =
 - Fixed a member profile edit issue that was introduced in the previous version from JavaScript library update.

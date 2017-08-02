@@ -10,6 +10,39 @@ class SwpmStripeSubscriptionIpnHandler {
     }
 
     public function handle_stripe_ipn() {
+        if (isset($_GET['hook'])) {
+            //this is Webhook notify from Stripe
+            //TODO: add Webhook Signing Secret verification
+            //To do this, we need to get customer ID, retreive its details from Stripe, get button_id from metadata
+            //and see if the button has Signing Secret option set. If it is - we need to check signatures
+            //More details here: https://stripe.com/docs/webhooks#signatures
+
+            $input = @file_get_contents("php://input");
+            if (empty($input)) {
+                SwpmLog::log_simple_debug("Stripe Subscription Webhook sent empty data or page was accessed directly. Aborting.", false);
+                echo 'Empty Webhook data received.';
+                die;
+            }
+            //SwpmLog::log_simple_debug($input, true);
+            $event_json = json_decode($input);
+
+            $type = $event_json->type;
+
+            if ($type == 'customer.subscription.deleted') {
+                //Subscription expired or canceled
+                SwpmLog::log_simple_debug("Stripe Subscription Webhook received. Processing request...", true);
+                //Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
+                $customer = $event_json->data->object->customer;
+                $ipn_data = array();
+                $ipn_data['subscr_id'] = $customer;
+                $ipn_data['parent_txn_id'] = $customer;
+
+                swpm_handle_subsc_cancel_stand_alone($ipn_data);
+            }
+            http_response_code(200); //tells Stripe we received this notify
+            return;
+        }
+
         SwpmLog::log_simple_debug("Stripe Subscription IPN received. Processing request...", true);
         //SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
         //Include the Stripe library.
@@ -76,6 +109,16 @@ class SwpmStripeSubscriptionIpnHandler {
 
         //Everything went ahead smoothly with the charge.
         SwpmLog::log_simple_debug("Stripe Subscription successful.", true);
+
+        //let's add button_id to metadata
+        $customer->metadata = array('button_id' => $button_id);
+        try {
+            $customer->save();
+        } catch (Exception $e) {
+            SwpmLog::log_simple_debug("Error occured during Stripe customer metadata update. " . $e->getMessage(), false);
+            $body = $e->getJsonBody();
+            SwpmLog::log_simple_debug("Error details: " . $error_string, false);
+        }
 
         //Grab the charge ID and set it as the transaction ID.
         $txn_id = $customer->id; //$charge->balance_transaction;

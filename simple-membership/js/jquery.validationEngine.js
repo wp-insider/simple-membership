@@ -1449,7 +1449,7 @@
 			 }
 
 			 // If there is an error or if the the field is already validated, do not re-execute AJAX
-			 if (!options.isError && !methods._checkAjaxFieldStatus(field.attr("id"), options)) {
+			 if (!options.isError && !methods._checkAjaxFieldStatus(field.attr("id"), options) && options.eventTrigger!="submit") {
 				 $.ajax({
 					 type: options.ajaxFormValidationMethod,
 					 url: rule.url,

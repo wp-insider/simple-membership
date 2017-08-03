@@ -181,7 +181,7 @@ class SwpmMiscUtils {
         return $pageURL;
     }
 
-    public static function replace_dynamic_tags($msg_body, $member_id, $additional_args='') {
+    public static function replace_dynamic_tags($msg_body, $member_id, $additional_args = '') {
         $settings = SwpmSettings::get_instance();
         $user_record = SwpmMemberUtils::get_user_by_id($member_id);
 
@@ -195,41 +195,42 @@ class SwpmMiscUtils {
 
         //Construct the primary address value
         $primary_address = "";
-        if(!empty($user_record->address_street) && !empty($user_record->address_city)){
+        if (!empty($user_record->address_street) && !empty($user_record->address_city)) {
             //An address value is present.
             $primary_address .= $user_record->address_street;
             $primary_address .= "\n" . $user_record->address_city;
-            if(!empty($user_record->address_state)){
+            if (!empty($user_record->address_state)) {
                 $primary_address .= " " . $user_record->address_state;
             }
-            if(!empty($user_record->address_zipcode)){
+            if (!empty($user_record->address_zipcode)) {
                 $primary_address .= " " . $user_record->address_zipcode;
             }
-            if(!empty($user_record->country)){
+            if (!empty($user_record->country)) {
                 $primary_address .= "\n" . $user_record->country;
-            }            
+            }
         }
         
         //Format some field values
         $member_since_formatted = SwpmUtils::get_formatted_date_according_to_wp_settings($user_record->member_since);
         $subsc_starts_formatted = SwpmUtils::get_formatted_date_according_to_wp_settings($user_record->subscription_starts);
         
+
         //Define the replacable tags
         $tags = array("{member_id}", "{user_name}", "{first_name}", "{last_name}", "{membership_level}",
-            "{account_state}", "{email}", "{phone}", "{member_since}", "{subscription_starts}", "{company_name}", 
+            "{account_state}", "{email}", "{phone}", "{member_since}", "{subscription_starts}", "{company_name}",
             "{password}", "{login_link}", "{reg_link}", "{primary_address}"
         );
-    
+
         //Define the values
         $vals = array($member_id, $user_record->user_name, $user_record->first_name, $user_record->last_name, $user_record->membership_level,
             $user_record->account_state, $user_record->email, $user_record->phone, $member_since_formatted, $subsc_starts_formatted, $user_record->company_name,
             $password, $login_link, $reg_link, $primary_address
         );
-    
+
         $msg_body = str_replace($tags, $vals, $msg_body);
         return $msg_body;
     }
-    
+
     public static function get_login_link() {
         $login_url = SwpmSettings::get_instance()->get_value('login-page-url');
         $joinus_url = SwpmSettings::get_instance()->get_value('join-us-page-url');
@@ -237,13 +238,13 @@ class SwpmMiscUtils {
             return '<span style="color:red;">Simple Membership is not configured correctly. The login page or the join us page URL is missing in the settings configuration. '
                     . 'Please contact <a href="mailto:' . get_option('admin_email') . '">Admin</a>';
         }
-        
+
         //Create the login/protection message
-        $filtered_login_url = apply_filters('swpm_get_login_link_url', $login_url);//Addons can override the login URL value using this filter.
+        $filtered_login_url = apply_filters('swpm_get_login_link_url', $login_url); //Addons can override the login URL value using this filter.
         $login_msg = '';
         $login_msg .= SwpmUtils::_('Please') . ' <a class="swpm-login-link" href="' . $filtered_login_url . '">' . SwpmUtils::_('Login') . '</a>. ';
         $login_msg .= SwpmUtils::_('Not a Member?') . ' <a href="' . $joinus_url . '">' . SwpmUtils::_('Join Us') . '</a>';
-        
+
         return $login_msg;
     }
 
@@ -255,66 +256,113 @@ class SwpmMiscUtils {
         }
         return SwpmUtils::_('Please') . ' <a class="swpm-renewal-link" href="' . $renewal . '">' . SwpmUtils::_('renew') . '</a> ' . SwpmUtils::_(' your account to gain access to this content.');
     }
-    
-    public static function compare_url($url1, $url2){
+
+    public static function compare_url($url1, $url2) {
         $url1 = trailingslashit(strtolower($url1));
-        $url2 = trailingslashit(strtolower($url2));        
-        if ($url1 == $url2) {return true;}        
-        
-        $url1 = parse_url($url1);
-        $url2 = parse_url($url2); 
-        
-        $components = array('scheme','host','port','path');
-        
-        foreach ($components as $key=>$value){
-            if (!isset($url1[$value])&& !isset($url2[$value])) {continue;}
-            
-            if (!isset($url2[$value])) {return false;}
-            if (!isset($url1[$value])) {return false;}            
-            
-            if ($url1[$value] != $url2[$value]) {return false;}
+        $url2 = trailingslashit(strtolower($url2));
+        if ($url1 == $url2) {
+            return true;
         }
 
-        if (!isset($url1['query'])&& !isset($url2['query'])) {return true;}
+        $url1 = parse_url($url1);
+        $url2 = parse_url($url2);
 
-        if (!isset($url2['query'])) {return false;}
-        if (!isset($url1['query'])) {return false;}            
-            
-        return strpos($url1['query'], $url2['query']) || strpos($url2['query'], $url1['query']);                
+        $components = array('scheme', 'host', 'port', 'path');
+
+        foreach ($components as $key => $value) {
+            if (!isset($url1[$value]) && !isset($url2[$value])) {
+                continue;
+            }
+
+            if (!isset($url2[$value])) {
+                return false;
+            }
+            if (!isset($url1[$value])) {
+                return false;
+            }
+
+            if ($url1[$value] != $url2[$value]) {
+                return false;
+            }
+        }
+
+        if (!isset($url1['query']) && !isset($url2['query'])) {
+            return true;
+        }
+
+        if (!isset($url2['query'])) {
+            return false;
+        }
+        if (!isset($url1['query'])) {
+            return false;
+        }
+
+        return strpos($url1['query'], $url2['query']) || strpos($url2['query'], $url1['query']);
     }
-    
-    public static function is_swpm_admin_page(){
+
+    public static function is_swpm_admin_page() {
         if (isset($_GET['page']) && (stripos($_GET['page'], 'simple_wp_membership') !== false)) {
             //This is an admin page of the SWPM plugin
             return true;
-        } 
+        }
         return false;
     }
-    
-    public static function check_user_permission_and_is_admin($action_name){
+
+    public static function check_user_permission_and_is_admin($action_name) {
         //Check we are on the admin end
         if (!is_admin()) {
             //Error! This is not on the admin end. This can only be done from the admin side
-            wp_die(SwpmUtils::_("Error! This action (".$action_name.") can only be done from admin end."));
+            wp_die(SwpmUtils::_("Error! This action (" . $action_name . ") can only be done from admin end."));
         }
 
         //Check user has management permission
-        if (!current_user_can(SWPM_MANAGEMENT_PERMISSION)) { 
+        if (!current_user_can(SWPM_MANAGEMENT_PERMISSION)) {
             //Error! Only management users can do this
-            wp_die(SwpmUtils::_("Error! This action (".$action_name.") can only be done by an user with management permission."));
-        }        
+            wp_die(SwpmUtils::_("Error! This action (" . $action_name . ") can only be done by an user with management permission."));
+        }
     }
-    
-    public static function format_raw_content_for_front_end_display($raw_content){
-        $formatted_content = wptexturize ($raw_content);
-        $formatted_content = convert_smilies ($formatted_content);
-        $formatted_content = convert_chars ($formatted_content);
-        $formatted_content = wpautop ($formatted_content);
-        $formatted_content = shortcode_unautop ($formatted_content);
-        $formatted_content = prepend_attachment ($formatted_content);
-        $formatted_content = capital_P_dangit ($formatted_content);
+
+    public static function format_raw_content_for_front_end_display($raw_content) {
+        $formatted_content = wptexturize($raw_content);
+        $formatted_content = convert_smilies($formatted_content);
+        $formatted_content = convert_chars($formatted_content);
+        $formatted_content = wpautop($formatted_content);
+        $formatted_content = shortcode_unautop($formatted_content);
+        $formatted_content = prepend_attachment($formatted_content);
+        $formatted_content = capital_P_dangit($formatted_content);
         $formatted_content = do_shortcode($formatted_content);
-        
+
         return $formatted_content;
     }
+
+    public static function get_stripe_plan_info($api_key, $plan_id) {
+        require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
+
+        $stripe_err = '';
+
+        try {
+            \Stripe\Stripe::setApiKey($api_key);
+
+            $plan = \Stripe\Plan::retrieve($plan_id);
+        } catch (\Stripe\Error\Authentication $e) {
+            // Invalid secret key
+            $stripe_err = $e->getMessage();
+        } catch (Exception $e) {
+            //that's probably invalid plan ID or some other error
+            $stripe_err = $e->getMessage();
+        }
+        if (empty($stripe_err)) {
+            //we proceed with getting plan details only if no errors occured
+            $plan_data['name'] = $plan->name;
+            $plan_data['amount'] = $plan->amount;
+            $plan_data['currency'] = $plan->currency;
+            $plan_data['interval'] = $plan->interval;
+            $plan_data['interval_count'] = $plan->interval_count;
+            $plan_data['trial_period_days'] = $plan->trial_period_days;
+            return array('success' => true, 'plan_data' => $plan_data);
+        } else {
+            return array('success' => false, 'error_msg' => $stripe_err);
+        }
+    }
+
 }

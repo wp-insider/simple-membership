@@ -52,7 +52,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface($opts, $edit 
     ?>
 
     <div class="swpm-orange-box">
-        View the <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-subscription-button-inside-the-simple-membership-plugin/">documentation</a>&nbsp;
+        View the <a target="_blank" href="https://simple-membership-plugin.com/create-stripe-subscription-button-membership-payment/">documentation</a>&nbsp;
         to learn how to create a Stripe Subscription payment button and use it.
     </div>
 
@@ -96,7 +96,10 @@ function swpm_render_new_edit_stripe_subscription_button_interface($opts, $edit 
                         <th scope="row"><?php echo SwpmUtils::_('Stripe Plan ID'); ?></th>
                         <td>
                             <input type="text" name="stripe_plan_id" value="<?php echo ($edit ? $opts['stripe_plan_id'][0] : ''); ?>" required />
-                            <p class="description">ID of the plan that you want subscribers to be assigned to. You can get more details in documentation.</p>
+                            <p class="description">
+                                ID of the plan that you want subscribers to be assigned to. You can get more details in the 
+                                <a href="https://simple-membership-plugin.com/create-stripe-subscription-button-membership-payment/" target="_blank">documentation</a>.
+                            </p>
                         </td>
                     </tr>
 
@@ -148,7 +151,8 @@ function swpm_render_new_edit_stripe_subscription_button_interface($opts, $edit 
                         <td>
                             <kbd><?php echo SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1&hook=1'; ?></kbd>
                             <p class="description">You should create a new Webhook in your Stripe account and put this URL there if you want the plugin to handle subscription expiration automatically.<br />
-                                You can get more info in documentation.</p>
+                                You can get more info in the <a href="https://simple-membership-plugin.com/create-stripe-subscription-button-membership-payment/" target="_blank">documentation</a>.
+                            </p>
                         </td>
                     </tr>
 

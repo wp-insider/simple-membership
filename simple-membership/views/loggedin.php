@@ -18,7 +18,16 @@ $auth = SwpmAuth::get_instance();
         <div class="swpm-logged-expiry-label swpm-logged-label"><?php echo  SwpmUtils::_('Account Expiry') ?></div>
         <div class="swpm-logged-expiry-value swpm-logged-value"><?php echo $auth->get_expire_date(); ?></div>
     </div>
+    <?php
+    $edit_profile_page_url = SwpmSettings::get_instance()->get_value('profile-page-url');
+    if (!empty($edit_profile_page_url)) {
+        //Show the edit profile link
+        echo '<div class="swpm-edit-profile-link">';
+        echo '<a href="'.$edit_profile_page_url.'">'.SwpmUtils::_("Edit Profile").'</a>';
+        echo '</div>';
+    }
+    ?>
     <div class="swpm-logged-logout-link">
-        <a href="?swpm-logout=true"><?php echo  SwpmUtils::_('Logout') ?></a>
+        <a href="?swpm-logout=true"><?php echo SwpmUtils::_('Logout') ?></a>
     </div>
 </div>

@@ -5,6 +5,19 @@
 
 function swpm_render_new_edit_stripe_subscription_button_interface($opts, $edit = false) {
 
+    //Test for PHP v5.4.0 or show error and don't show the remaining interface.
+    if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+        //The server is using at least PHP version 5.4.0
+        //Can use Braintree gateway library
+    } else {
+        //This server can't handle Braintree library
+        echo '<div class="swpm-red-box">';
+        echo '<p>The Stripe subscription gateway library requires at least PHP 5.4.0. Your server is using a very old version of PHP.</p>';
+        echo '<p>Request your hosting provider to upgrade your PHP to a more recent version then you will be able to use the Stripe subscription buttons.<p>';
+        echo '</div>';
+        return;
+    }
+    
     function swpm_stripe_subscr_gen_curr_opts($selected = false) {
         $curr_arr = array(
             "USD" => "US Dollars ($)",
@@ -224,7 +237,7 @@ function swpm_edit_stripe_subscription_button() {
 add_action('swpm_create_new_button_process_submission', 'swpm_save_edit_stripe_subscription_button_data');
 add_action('swpm_edit_payment_button_process_submission', 'swpm_save_edit_stripe_subscription_button_data');
 
-function swpm_save_edit_stripe_subscription_button_data() {
+function swpm_save_edit_stripe_subscription_button_data() {   
     if (isset($_REQUEST['swpm_stripe_subscription_save_submit'])) {
         $edit = false;
     }
@@ -272,7 +285,9 @@ function swpm_save_edit_stripe_subscription_button_data() {
             } else {
                 $secret_key = sanitize_text_field($_REQUEST['stripe_live_secret_key']);
             }
-            $result = SwpmMiscUtils::get_stripe_plan_info($secret_key, sanitize_text_field($_REQUEST['stripe_plan_id']));
+            
+            require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php');
+            $result = StripeUtilFunctions::get_stripe_plan_info($secret_key, sanitize_text_field($_REQUEST['stripe_plan_id']));
             if ($result['success']) {
                 $plan_data = $result['plan_data'];
             } else {

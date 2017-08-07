@@ -189,7 +189,18 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
 
     if (empty($plan_data)) {
         //no plan data available, let's try to request one
-        $result = SwpmMiscUtils::get_stripe_plan_info($secret_key, $plan_id);
+        
+        if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+            //This server's PHP version can't handle the library.
+            $error_msg = '<div class="swpm-red-box">';
+            $error_msg .= '<p>The Stripe Subscription payment gateway library requires at least PHP 5.4.0. Your server is using a very old version of PHP.</p>';
+            $error_msg .= '<p>Request your hosting provider to upgrade your PHP to a more recent version then you will be able to use the Stripe Subscription.<p>';
+            $error_msg .= '</div>';
+            return $error_msg;
+        }
+        
+        require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php');
+        $result = StripeUtilFunctions::get_stripe_plan_info($secret_key, $plan_id);
         if ($result['success'] === false) {
             // some error occured, let's display it and stop processing the shortcode further
             return '<p class="swpm-red-box">Stripe error occured: ' . $result['error_msg'] . '</p>';

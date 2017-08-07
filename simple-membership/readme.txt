@@ -140,6 +140,7 @@ https://simple-membership-plugin.com/
 
 = 3.5.4 =
 - Added a check for PHP5.4 to detect if a server is using very old version of PHP and show an appropriate warning message. This will prevent an error on server's using old PHP version.
+- Added a new feature in the paypal button configuration so you can specify a custom checkout page header/logo.
 
 = 3.5.3 =
 - The login widget now shows a link to the edit profile page (for the logged in members).

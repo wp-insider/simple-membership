@@ -78,6 +78,11 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
     $custom_field_value = urlencode($custom_field_value);//URL encode the custom field value so nothing gets lost when it is passed around.
     $output .= '<input type="hidden" name="custom" value="' . $custom_field_value . '" />';
 
+    $checkout_logo_image_url = get_post_meta($button_id, 'checkout_logo_image_url', true);
+    if (!empty($checkout_logo_image_url)) {
+        $output .= '<input type="hidden" name="image_url" value="' . $checkout_logo_image_url . '" />';
+    }
+    
     //Filter to add additional payment input fields to the form (example: langauge code or country code etc).
     $output .= apply_filters('swpm_pp_payment_form_additional_fields', '');
     
@@ -207,6 +212,11 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
     $custom_field_value = urlencode($custom_field_value);//URL encode the custom field value so nothing gets lost when it is passed around.
     $output .= '<input type="hidden" name="custom" value="' . $custom_field_value . '" />';
 
+    $checkout_logo_image_url = get_post_meta($button_id, 'checkout_logo_image_url', true);
+    if (!empty($checkout_logo_image_url)) {
+        $output .= '<input type="hidden" name="image_url" value="' . $checkout_logo_image_url . '" />';
+    }
+    
     //Filter to add additional payment input fields to the form (example: langauge code or country code etc).
     $output .= apply_filters('swpm_pp_payment_form_additional_fields', '');
             

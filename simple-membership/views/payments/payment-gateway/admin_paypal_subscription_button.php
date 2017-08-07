@@ -183,6 +183,14 @@ function swpm_create_new_pp_subscription_button() {
                         </td>
                     </tr> 
 
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Custom Checkout Page Logo Image'); ?></th>
+                        <td>
+                            <input type="text" size="100" name="checkout_logo_image_url" value="" />
+                            <p class="description">Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.</p>
+                        </td>
+                    </tr>
+                    
                 </table>
             </div>            
         </div><!-- end of optional details box -->        
@@ -221,6 +229,7 @@ function swpm_save_new_pp_subscription_button_data() {
         add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
         add_post_meta($button_id, 'paypal_email', trim(sanitize_email($_REQUEST['paypal_email'])));
         add_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
+        add_post_meta($button_id, 'checkout_logo_image_url', trim(sanitize_text_field($_REQUEST['checkout_logo_image_url'])));
 
         //Subscription billing details
         add_post_meta($button_id, 'billing_amount', sanitize_text_field($_REQUEST['billing_amount']));
@@ -265,7 +274,8 @@ function swpm_edit_pp_subscription_button() {
     $return_url = get_post_meta($button_id, 'return_url', true);
     $paypal_email = get_post_meta($button_id, 'paypal_email', true);
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
-
+    $checkout_logo_image_url = get_post_meta($button_id, 'checkout_logo_image_url', true);
+    
     //Subscription billing details
     $billing_amount = get_post_meta($button_id, 'billing_amount', true);
     $billing_cycle = get_post_meta($button_id, 'billing_cycle', true);
@@ -454,7 +464,15 @@ function swpm_edit_pp_subscription_button() {
                             <p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
                         </td>
                     </tr> 
-
+                    
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Custom Checkout Page Logo Image'); ?></th>
+                        <td>
+                            <input type="text" size="100" name="checkout_logo_image_url" value="<?php echo $checkout_logo_image_url; ?>" />
+                            <p class="description">Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.</p>
+                        </td>
+                    </tr>
+                    
                 </table>
             </div>            
         </div><!-- end of optional details box -->        
@@ -496,6 +514,7 @@ function swpm_edit_pp_subscription_button_data() {
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
         update_post_meta($button_id, 'paypal_email', trim(sanitize_email($_REQUEST['paypal_email'])));
         update_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
+        update_post_meta($button_id, 'checkout_logo_image_url', trim(sanitize_text_field($_REQUEST['checkout_logo_image_url'])));
 
         //Subscription billing details
         update_post_meta($button_id, 'billing_amount', sanitize_text_field($_REQUEST['billing_amount']));

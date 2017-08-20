@@ -1131,7 +1131,7 @@ msgstr "更新"
 
 #: views/forgot_password.php:12
 msgid "Reset Password"
-msgstr "パスワードリセッ"
+msgstr "パスワードリセット"
 
 #: views/loggedin.php:3
 msgid "Logged in as"

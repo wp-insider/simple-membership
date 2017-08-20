@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.8
-Stable tag: 3.5.2
+Stable tag: 3.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,15 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 3.5.4 =
+- Added a check for PHP5.4 to detect if a server is using very old version of PHP and show an appropriate warning message. This will prevent an error on server's using old PHP version.
+- Added a new feature in the paypal button configuration so you can specify a custom checkout page header/logo.
+
+= 3.5.3 =
+- The login widget now shows a link to the edit profile page (for the logged in members).
+- Applied a fix in the validation JS code that was preventing paid membership registration to be completed properly if the email field was skipped.
+- Added Stripe subscription checkout option.
 
 = 3.5.2 =
 - There is a new feature to apply protection to posts and pages in bulk. The following documentation explains how to use this feature:

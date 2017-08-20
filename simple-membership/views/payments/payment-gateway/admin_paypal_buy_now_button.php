@@ -109,8 +109,16 @@ function swpm_create_new_pp_buy_now_button() {
                             <input type="text" size="100" name="button_image_url" value="" />
                             <p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
                         </td>
-                    </tr> 
+                    </tr>
 
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Custom Checkout Page Logo Image'); ?></th>
+                        <td>
+                            <input type="text" size="100" name="checkout_logo_image_url" value="" />
+                            <p class="description">Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.</p>
+                        </td>
+                    </tr>
+                    
                 </table>
 
                 <p class="submit">
@@ -152,6 +160,7 @@ function swpm_save_new_pp_buy_now_button_data() {
         add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
         add_post_meta($button_id, 'paypal_email', trim(sanitize_email($_REQUEST['paypal_email'])));
         add_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
+        add_post_meta($button_id, 'checkout_logo_image_url', trim(sanitize_text_field($_REQUEST['checkout_logo_image_url'])));
 
         //Redirect to the edit interface of this button with $button_id        
         //$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
@@ -187,6 +196,8 @@ function swpm_edit_pp_buy_now_button() {
     $return_url = get_post_meta($button_id, 'return_url', true);
     $paypal_email = get_post_meta($button_id, 'paypal_email', true);
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
+    $checkout_logo_image_url = get_post_meta($button_id, 'checkout_logo_image_url', true);
+    
     ?>
     <div class="postbox">
         <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now Button Configuration'); ?></label></h3>
@@ -294,6 +305,14 @@ function swpm_edit_pp_buy_now_button() {
                         </td>
                     </tr> 
 
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Custom Checkout Page Logo Image'); ?></th>
+                        <td>
+                            <input type="text" size="100" name="checkout_logo_image_url" value="<?php echo $checkout_logo_image_url; ?>" />
+                            <p class="description">Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.</p>
+                        </td>
+                    </tr>
+                    
                 </table>
 
                 <p class="submit">
@@ -336,6 +355,7 @@ function swpm_edit_pp_buy_now_button_data() {
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
         update_post_meta($button_id, 'paypal_email', trim(sanitize_email($_REQUEST['paypal_email'])));
         update_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
+        update_post_meta($button_id, 'checkout_logo_image_url', trim(sanitize_text_field($_REQUEST['checkout_logo_image_url'])));
 
         echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
     }

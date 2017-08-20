@@ -351,11 +351,11 @@ abstract class SwpmUtils {
     }
 
     public static function _($msg) {
-        return __($msg, 'swpm');
+        return __($msg, 'simple-membership');
     }
 
     public static function e($msg) {
-        _e($msg, 'swpm');
+        _e($msg, 'simple-membership');
     }
 
     public static function is_admin() {

@@ -2,6 +2,7 @@
 /*
 Plugin Name: Simple WordPress Membership
 Version: 3.5.4
+Text Domain: simple-membership
 Plugin URI: https://simple-membership-plugin.com/
 Author: smp7, wp.insider
 Author URI: https://simple-membership-plugin.com/

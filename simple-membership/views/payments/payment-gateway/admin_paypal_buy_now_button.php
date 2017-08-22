@@ -73,6 +73,7 @@ function swpm_create_new_pp_buy_now_button() {
                                 <option value="NOK">Norwegian Krone</option>
                                 <option value="PHP">Philippine Pesos</option>
                                 <option value="PLN">Polish Zloty</option>
+                                <option value="RUB">Russian Ruble (₽)</option>
                                 <option value="SGD">Singapore Dollar ($)</option>
                                 <option value="ZAR">South African Rand (R)</option>
                                 <option value="KRW">South Korean Won</option>

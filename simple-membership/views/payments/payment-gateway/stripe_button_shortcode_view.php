@@ -47,10 +47,6 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
         $price_in_cents = $payment_amount * 100; //The amount (in cents). This value is passed to Stripe API.
     }
     //Return, cancel, notifiy URLs
-    $return_url = get_post_meta($button_id, 'return_url', true);
-    if (empty($return_url)) {
-        $return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
-    }
     $notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_buy_now=1'; //We are going to use it to do post payment processing.
     //$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
     //User's IP address
@@ -101,7 +97,13 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
     $output .= apply_filters('swpm_stripe_additional_checkout_data_parameters', ''); //Filter to allow the addition of extra data parameters for stripe checkout.
     $output .= "></script>";
     $output .= '</div>';
-    $output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
+
+    $button_image_url = get_post_meta($button_id, 'button_image_url', true);
+    if (!empty($button_image_url)) {
+        $output .= '<input type="image" src="' . $button_image_url . '" class="' . $class . '" alt="' . $button_text . '" title="' . $button_text . '" />';
+    } else {
+        $output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
+    }
 
     $output .= wp_nonce_field('stripe_payments', '_wpnonce', true, false);
     $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
@@ -149,10 +151,6 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
     }
 
     //Return, cancel, notifiy URLs
-    $return_url = get_post_meta($button_id, 'return_url', true);
-    if (empty($return_url)) {
-        $return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
-    }
     $notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1'; //We are going to use it to do post payment processing.
     //$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
     //User's IP address
@@ -189,7 +187,7 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
 
     if (empty($plan_data)) {
         //no plan data available, let's try to request one
-        
+
         if (version_compare(PHP_VERSION, '5.4.0', '<')) {
             //This server's PHP version can't handle the library.
             $error_msg = '<div class="swpm-red-box">';
@@ -198,7 +196,7 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
             $error_msg .= '</div>';
             return $error_msg;
         }
-        
+
         require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php');
         $result = StripeUtilFunctions::get_stripe_plan_info($secret_key, $plan_id);
         if ($result['success'] === false) {
@@ -252,7 +250,13 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
     $output .= apply_filters('swpm_stripe_additional_checkout_data_parameters', ''); //Filter to allow the addition of extra data parameters for stripe checkout.
     $output .= "></script>";
     $output .= '</div>';
-    $output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
+
+    $button_image_url = get_post_meta($button_id, 'button_image_url', true);
+    if (!empty($button_image_url)) {
+        $output .= '<input type="image" src="' . $button_image_url . '" class="' . $class . '" alt="' . $button_text . '" title="' . $button_text . '" />';
+    } else {
+        $output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
+    }
 
     $output .= wp_nonce_field('stripe_payments', '_wpnonce', true, false);
     $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';

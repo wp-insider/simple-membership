@@ -17,7 +17,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface($opts, $edit 
         echo '</div>';
         return;
     }
-    
+
     function swpm_stripe_subscr_gen_curr_opts($selected = false) {
         $curr_arr = array(
             "USD" => "US Dollars ($)",
@@ -182,7 +182,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface($opts, $edit 
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Return URL'); ?></th>
                         <td>
-                            <input type="text" size="100" name="return_url" value="" />
+                            <input type="text" size="100" name="return_url" value="<?php echo ($edit ? $opts['return_url'][0] : ''); ?>" />
                             <p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
                         </td>
                     </tr>
@@ -190,7 +190,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface($opts, $edit 
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Button Image URL'); ?></th>
                         <td>
-                            <input type="text" size="100" name="button_image_url" value="" />
+                            <input type="text" size="100" name="button_image_url" value="<?php echo ($edit ? $opts['button_image_url'][0] : ''); ?>" />
                             <p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
                         </td>
                     </tr> 
@@ -200,7 +200,8 @@ function swpm_render_new_edit_stripe_subscription_button_interface($opts, $edit 
         </div><!-- end of optional details box -->        
 
         <p class="submit">
-            <input type="submit" name="swpm_stripe_subscription_<?php echo ($edit ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
+            <input type="submit" name="swpm_stripe_subscription_<?php echo ($edit ? 'edit' : 'save');
+                                ?>_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
         </p>
 
     </form>
@@ -237,7 +238,7 @@ function swpm_edit_stripe_subscription_button() {
 add_action('swpm_create_new_button_process_submission', 'swpm_save_edit_stripe_subscription_button_data');
 add_action('swpm_edit_payment_button_process_submission', 'swpm_save_edit_stripe_subscription_button_data');
 
-function swpm_save_edit_stripe_subscription_button_data() {   
+function swpm_save_edit_stripe_subscription_button_data() {
     if (isset($_REQUEST['swpm_stripe_subscription_save_submit'])) {
         $edit = false;
     }
@@ -285,7 +286,7 @@ function swpm_save_edit_stripe_subscription_button_data() {
             } else {
                 $secret_key = sanitize_text_field($_REQUEST['stripe_live_secret_key']);
             }
-            
+
             require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php');
             $result = StripeUtilFunctions::get_stripe_plan_info($secret_key, sanitize_text_field($_REQUEST['stripe_plan_id']));
             if ($result['success']) {

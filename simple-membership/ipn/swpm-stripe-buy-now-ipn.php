@@ -114,7 +114,7 @@ class SwpmStripeBuyNowIpnHandler {
         $ipn_data['payer_email'] = $stripe_email;
         $ipn_data['membership_level'] = $membership_level_id;
         $ipn_data['txn_id'] = $txn_id;
-        $ipn_data['subscr_id'] = $txn_id;
+        $ipn_data['subscr_id'] = '';
         $ipn_data['swpm_id'] = $swpm_id;
         $ipn_data['ip'] = $custom_var['user_ip'];
         $ipn_data['custom'] = $custom;

@@ -120,11 +120,10 @@ class SwpmStripeSubscriptionIpnHandler {
             SwpmLog::log_simple_debug("Error details: " . $error_string, false);
         }
 
-        //Grab the charge ID and set it as the transaction ID.
+        //Grab customer ID and set it as the transaction ID.
         $txn_id = $customer->id; //$charge->balance_transaction;
-        //The charge ID can be used to
-        // retrieve the transaction details using hte following call.
-        //\Stripe\Charge::retrieve($charge->id);
+        //Grab subscription ID
+        $subscr_id = $customer->subscriptions->data[0]->id;
         $custom = sanitize_text_field($_REQUEST['custom']);
         $custom_var = SwpmTransactions::parse_custom_var($custom);
         $swpm_id = isset($custom_var['swpm_id']) ? $custom_var['swpm_id'] : '';
@@ -139,7 +138,7 @@ class SwpmStripeSubscriptionIpnHandler {
         $ipn_data['payer_email'] = $stripe_email;
         $ipn_data['membership_level'] = $membership_level_id;
         $ipn_data['txn_id'] = $txn_id;
-        $ipn_data['subscr_id'] = $txn_id;
+        $ipn_data['subscr_id'] = $subscr_id . '|' . $button_id;
         $ipn_data['swpm_id'] = $swpm_id;
         $ipn_data['ip'] = $custom_var['user_ip'];
         $ipn_data['custom'] = $custom;

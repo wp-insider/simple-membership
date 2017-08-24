@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.8
-Stable tag: 3.5.5
+Stable tag: 3.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,10 +138,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.5.6 ==
-- Stripe Subscription is now automatically canceled when a member delete his account. Will not work for members registered prior to this update.
+= 3.5.6 ==
 - Russian Ruble (₽) currency added for PayPal Buy Now and Subscription buttons. 
-- "Return URL" and "Button image URL" options for Stripe Subscription button are now properly saved and handled.
+- "Return URL" and "Button Image URL" options for Stripe Subscription button are now properly saved and handled.
+- Stripe Subscription is now automatically cancelled when a member deletes his account. Will not work for members registered prior to this update.
 
 = 3.5.5 =
 - Updated the language text domain from "swpm" to "simple-membership". This will make it easy for the translation to be handled via https://translate.wordpress.org/

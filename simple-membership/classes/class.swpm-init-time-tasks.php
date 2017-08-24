@@ -118,7 +118,7 @@ class SwpmInitTimeTasks {
         }
         if ($auth->match_password($password)) {
             $auth->delete();
-            wp_redirect(home_url());
+            wp_safe_redirect(get_home_url());
             exit(0);
         } else {
             SwpmUtils::account_delete_confirmation_ui(SwpmUtils::_("Sorry, Password didn't match."));

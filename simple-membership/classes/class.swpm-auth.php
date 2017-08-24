@@ -38,44 +38,43 @@ class SwpmAuth {
 
         if (!empty($swpm_user_name) && !empty($swpm_password)) {
             //SWPM member login request.
-            
             //Trigger action hook that can be used to check stuff before the login request is processed by the plugin.
             $args = array('username' => $swpm_user_name, 'password' => $swpm_password);
             do_action('swpm_before_login_request_is_processed', $args);
-            
+
             //First, lets make sure this user is not already logged into the site as an "Admin" user. We don't want to override that admin login session.
             if (current_user_can('administrator')) {
                 //This user is logged in as ADMIN then trying to do another login as a member. Stop the login request processing (we don't want to override your admin login session).
                 $error_msg = '';
-                $error_msg .= '<p>'.SwpmUtils::_('Warning! Simple Membership plugin cannot process this login request to prevent you from getting logged out of WP Admin accidentally.').'</p>';
-                $error_msg .= '<p>'.SwpmUtils::_('You are logged into the site as an ADMIN user in this browser. First, logout from WP Admin then you will be able to log in as a member.').'</p>';
-                $error_msg .= '<p>'.SwpmUtils::_('Alternatively, you can use a different browser (where you are not logged-in as ADMIN) to test the membership login.').'</p>';
-                $error_msg .= '<p>'.SwpmUtils::_('Your normal visitors or members will never see this message. This message is ONLY for ADMIN user.').'</p>';
+                $error_msg .= '<p>' . SwpmUtils::_('Warning! Simple Membership plugin cannot process this login request to prevent you from getting logged out of WP Admin accidentally.') . '</p>';
+                $error_msg .= '<p>' . SwpmUtils::_('You are logged into the site as an ADMIN user in this browser. First, logout from WP Admin then you will be able to log in as a member.') . '</p>';
+                $error_msg .= '<p>' . SwpmUtils::_('Alternatively, you can use a different browser (where you are not logged-in as ADMIN) to test the membership login.') . '</p>';
+                $error_msg .= '<p>' . SwpmUtils::_('Your normal visitors or members will never see this message. This message is ONLY for ADMIN user.') . '</p>';
                 wp_die($error_msg);
             }
-            
+
             //If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
             $captcha_validation_output = apply_filters('swpm_validate_login_form_submission', '');
             if (!empty($captcha_validation_output)) {
                 $this->lastStatusMsg = SwpmUtils::_('Captcha validation failed on login form.');
                 return;
             }
-        
-            if(is_email($swpm_user_name)){//User is trying to log-in using an email address
+
+            if (is_email($swpm_user_name)) {//User is trying to log-in using an email address
                 $email = sanitize_email($swpm_user_name);
                 $query = $wpdb->prepare("SELECT user_name FROM " . $wpdb->prefix . "swpm_members_tbl WHERE email = %s", $email);
                 $username = $wpdb->get_var($query);
-                if($username){//Found a user record
-                    $swpm_user_name = $username;//Grab the usrename value so it can be used in the authentication process.
-                    SwpmLog::log_auth_debug("Authentication request using email address: " . $email.', Found a user record with username: '.$swpm_user_name, true);
+                if ($username) {//Found a user record
+                    $swpm_user_name = $username; //Grab the usrename value so it can be used in the authentication process.
+                    SwpmLog::log_auth_debug("Authentication request using email address: " . $email . ', Found a user record with username: ' . $swpm_user_name, true);
                 }
             }
-            
+
             //Lets process the request. Check username and password
             $user = sanitize_user($swpm_user_name);
             $pass = trim($swpm_password);
             SwpmLog::log_auth_debug("Authentication request - Username: " . $swpm_user_name, true);
-            
+
             $query = "SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE user_name = %s";
             $userData = $wpdb->get_row($wpdb->prepare($query, $user));
             $this->userData = $userData;
@@ -98,7 +97,7 @@ class SwpmAuth {
                 $this->set_cookie($remember);
                 $this->isLoggedIn = true;
                 $this->lastStatusMsg = "Logged In.";
-                SwpmLog::log_auth_debug("Authentication successful for username: ".$user.". Executing swpm_login action hook.", true);
+                SwpmLog::log_auth_debug("Authentication successful for username: " . $user . ". Executing swpm_login action hook.", true);
                 do_action('swpm_login', $user, $pass, $remember);
                 return true;
             }
@@ -116,13 +115,9 @@ class SwpmAuth {
         //Update the last accessed date and IP address for this login attempt. $wpdb->update(table, data, where, format, where format)
         $last_accessed_date = current_time('mysql');
         $last_accessed_ip = SwpmUtils::get_user_ip_address();
-        $wpdb->update($wpdb->prefix . 'swpm_members_tbl',
-                array('last_accessed' => $last_accessed_date, 'last_accessed_from_ip' => $last_accessed_ip),
-                array('member_id' => $this->userData->member_id),
-                array('%s', '%s'),
-                array('%d')
-         );
-        
+        $wpdb->update($wpdb->prefix . 'swpm_members_tbl', array('last_accessed' => $last_accessed_date, 'last_accessed_from_ip' => $last_accessed_ip), array('member_id' => $this->userData->member_id), array('%s', '%s'), array('%d')
+        );
+
         //Check the member's account status.
         $can_login = true;
         if ($this->userData->account_state == 'inactive' && empty($enable_expired_login)) {
@@ -134,7 +129,7 @@ class SwpmAuth {
         } else if ($this->userData->account_state == 'pending') {
             $this->lastStatusMsg = SwpmUtils::_('Account is pending.');
             $can_login = false;
-        } 
+        }
 
         if (!$can_login) {
             $this->isLoggedIn = false;
@@ -215,7 +210,7 @@ class SwpmAuth {
         }
 
         setcookie("swpm_in_use", "swpm_in_use", $expire, COOKIEPATH, COOKIE_DOMAIN);
-        
+
         $expiration_timestamp = SwpmUtils::get_expiration_timestamp($this->userData);
         $enable_expired_login = SwpmSettings::get_instance()->get_value('enable-expired-account-login', '');
         // make sure cookie doesn't live beyond account expiration date.
@@ -242,7 +237,7 @@ class SwpmAuth {
         if (count($cookie_elements) != 3) {
             return false;
         }
-        
+
         //SwpmLog::log_auth_debug("validate() - " . $_COOKIE[$auth_cookie_name], true);
         list($username, $expiration, $hmac) = $cookie_elements;
         $expired = $expiration;
@@ -256,7 +251,7 @@ class SwpmAuth {
             SwpmLog::log_auth_debug("validate() - Session Expired", true);
             return false;
         }
-        
+
         global $wpdb;
         $query = " SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE user_name = %s";
         $user = $wpdb->get_row($wpdb->prepare($query, $username));
@@ -273,7 +268,7 @@ class SwpmAuth {
             SwpmLog::log_auth_debug("validate() - Bad Hash", true);
             return false;
         }
-        
+
         if ($expiration < time()) {
             $GLOBALS['login_grace_period'] = 1;
         }
@@ -320,6 +315,58 @@ class SwpmAuth {
         }
         $user_name = $this->get('user_name');
         $user_id = $this->get('member_id');
+        $subscr_id = $this->get('subscr_id');
+        $email = $this->get('email');
+        // let's check if Stripe subscription needs to be cancelled as well
+        global $wpdb;
+        $q = $wpdb->prepare('SELECT * 
+        FROM  `' . $wpdb->prefix . 'swpm_payments_tbl` 
+        WHERE email =  %s
+        AND gateway =  "stripe"
+        AND subscr_id = %s
+        LIMIT 1', array($email, $subscr_id));
+
+        $member = $wpdb->get_row($q, ARRAY_A);
+        if (!is_null($member)) {
+            //looks like we need to cancel Stripe subscription
+            $pieces = explode('|', $subscr_id);
+            if (!empty($pieces)) {
+                $subscr_id = $pieces[0];
+                $button_id = $pieces[1];
+                SwpmLog::log_simple_debug("Attempting to cancel Stripe Subscription #" . $subscr_id, true);
+                //check if button exists
+                if (get_post($button_id)) {
+                    $settings = SwpmSettings::get_instance();
+                    $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
+                    if ($sandbox_enabled) {
+                        SwpmLog::log_simple_debug("Sandbox payment mode is enabled. Using test API key details.", true);
+                        $secret_key = get_post_meta($button_id, 'stripe_test_secret_key', true);
+                        ; //Use sandbox API key
+                    } else {
+                        $secret_key = get_post_meta($button_id, 'stripe_live_secret_key', true);
+                        ; //Use live API key
+                    }
+                    //Include the Stripe library.
+                    include(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
+                    \Stripe\Stripe::setApiKey($secret_key);
+                    // Let's try to cancel subscription
+                    try {
+                        $sub = \Stripe\Subscription::retrieve($subscr_id);
+                        $sub->cancel();
+                    } catch (Exception $e) {
+                        SwpmLog::log_simple_debug("Error occured during Stripe Subscription cancellation. " . $e->getMessage(), false);
+                        $body = $e->getJsonBody();
+                        $error = $body['error'];
+                        $error_string = print_r($error, true);
+                        SwpmLog::log_simple_debug("Error details: " . $error_string, false);
+                    }
+                    if (!isset($error)) {
+                        SwpmLog::log_simple_debug("Stripe Subscription has been cancelled.", true);
+                    }
+                }
+            }
+        }
+
         wp_clear_auth_cookie();
         $this->logout();
         SwpmMembers::delete_swpm_user_by_id($user_id);
@@ -340,7 +387,7 @@ class SwpmAuth {
             return null;
         }
         $account_status = $this->get('account_state');
-        if($account_status == 'expired' || $account_status == 'inactive'){
+        if ($account_status == 'expired' || $account_status == 'inactive') {
             //Expired or Inactive accounts are both considered to be expired.
             return true;
         }

@@ -66,6 +66,7 @@ function swpm_create_new_pp_subscription_button() {
                                 <option value="NOK">Norwegian Krone</option>
                                 <option value="PHP">Philippine Pesos</option>
                                 <option value="PLN">Polish Zloty</option>
+                                <option value="RUB">Russian Ruble (₽)</option>
                                 <option value="SGD">Singapore Dollar ($)</option>
                                 <option value="ZAR">South African Rand (R)</option>
                                 <option value="KRW">South Korean Won</option>
@@ -190,7 +191,7 @@ function swpm_create_new_pp_subscription_button() {
                             <p class="description">Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.</p>
                         </td>
                     </tr>
-                    
+
                 </table>
             </div>            
         </div><!-- end of optional details box -->        
@@ -275,7 +276,7 @@ function swpm_edit_pp_subscription_button() {
     $paypal_email = get_post_meta($button_id, 'paypal_email', true);
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
     $checkout_logo_image_url = get_post_meta($button_id, 'checkout_logo_image_url', true);
-    
+
     //Subscription billing details
     $billing_amount = get_post_meta($button_id, 'billing_amount', true);
     $billing_cycle = get_post_meta($button_id, 'billing_cycle', true);
@@ -287,7 +288,6 @@ function swpm_edit_pp_subscription_button() {
     $trial_billing_amount = get_post_meta($button_id, 'trial_billing_amount', true);
     $trial_billing_cycle = get_post_meta($button_id, 'trial_billing_cycle', true);
     $trial_billing_cycle_term = get_post_meta($button_id, 'trial_billing_cycle_term', true);
-    
     ?>
     <form id="pp_button_config_form" method="post">
 
@@ -402,7 +402,9 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Re-attempt on Failure'); ?></th>
                         <td>
-                            <input type="checkbox" name="billing_reattempt" value="1" <?php if($billing_reattempt != ''){echo ' checked="checked"';} ?> />
+                            <input type="checkbox" name="billing_reattempt" value="1" <?php if ($billing_reattempt != '') {
+                                    echo ' checked="checked"';
+                                } ?> />
                             <p class="description">When checked, the payment will be re-attempted two more times if the payment fails. After the third failure, the subscription will be canceled..</p>
                         </td>
                     </tr>
@@ -464,7 +466,7 @@ function swpm_edit_pp_subscription_button() {
                             <p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
                         </td>
                     </tr> 
-                    
+
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Custom Checkout Page Logo Image'); ?></th>
                         <td>
@@ -472,7 +474,7 @@ function swpm_edit_pp_subscription_button() {
                             <p class="description">Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.</p>
                         </td>
                     </tr>
-                    
+
                 </table>
             </div>            
         </div><!-- end of optional details box -->        
@@ -494,7 +496,6 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_pp_subscrip
 function swpm_edit_pp_subscription_button_data() {
     if (isset($_REQUEST['swpm_pp_subscription_save_submit'])) {
         //This is a PayPal subscription button edit event. Process the submission.
-        
         //Update and Save the edited payment button data
         $button_id = sanitize_text_field($_REQUEST['button_id']);
         $button_id = absint($button_id);
@@ -527,7 +528,7 @@ function swpm_edit_pp_subscription_button_data() {
         update_post_meta($button_id, 'trial_billing_amount', sanitize_text_field($_REQUEST['trial_billing_amount']));
         update_post_meta($button_id, 'trial_billing_cycle', sanitize_text_field($_REQUEST['trial_billing_cycle']));
         update_post_meta($button_id, 'trial_billing_cycle_term', sanitize_text_field($_REQUEST['trial_billing_cycle_term']));
-        
+
         echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
     }
 }

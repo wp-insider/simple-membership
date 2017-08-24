@@ -138,6 +138,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.5.6 ==
+- Stripe Subscription is now automatically canceled when a member delete his account. Will not work for members registered prior to this update.
+- Russian Ruble (₽) currency added for PayPal Buy Now and Subscription buttons. 
+- "Return URL" and "Button image URL" options for Stripe Subscription button are now properly saved and handled.
+
 = 3.5.5 =
 - Updated the language text domain from "swpm" to "simple-membership". This will make it easy for the translation to be handled via https://translate.wordpress.org/
 

@@ -5,7 +5,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
     $settings = SwpmSettings::get_instance();
     $members_table_name = $wpdb->prefix . "swpm_members_tbl";
     $membership_level = $subsc_ref;
-    $subscr_id = $unique_ref;
+    $subscr_id = $ipn_data['subscr_id'];
 
     swpm_debug_log_subsc("swpm_handle_subsc_signup_stand_alone(). Custom value: " . $ipn_data['custom'] . ", Unique reference: " . $unique_ref, true);
     $custom_vars = parse_str($ipn_data['custom']);

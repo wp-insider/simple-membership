@@ -5,7 +5,12 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
     $settings = SwpmSettings::get_instance();
     $members_table_name = $wpdb->prefix . "swpm_members_tbl";
     $membership_level = $subsc_ref;
-    $subscr_id = $ipn_data['subscr_id'];
+
+    if (isset($ipn_data['gateway']) && $ipn_data['gateway'] == 'stripe' && isset($ipn_data['subscr_id'])) {
+        $subscr_id = $ipn_data['subscr_id'];
+    } else {
+        $subscr_id = $unique_ref;
+    }
 
     swpm_debug_log_subsc("swpm_handle_subsc_signup_stand_alone(). Custom value: " . $ipn_data['custom'] . ", Unique reference: " . $unique_ref, true);
     $custom_vars = parse_str($ipn_data['custom']);
@@ -39,7 +44,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
 
         //Upgrade the member account        
         $account_state = 'active'; //This is renewal or upgrade of a previously active account. So the status should be set to active      
-        
+
         $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where member_id=%d", $swpm_id), OBJECT);
         if (!$resultset) {
             swpm_debug_log_subsc("ERROR! Could not find a member account record for the given Member ID: " . $swpm_id, false);
@@ -52,7 +57,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         $subscription_starts = SwpmMemberUtils::calculate_access_start_date_for_account_update($args);
         $subscription_starts = apply_filters('swpm_account_update_subscription_starts', $subscription_starts, $args);
         swpm_debug_log_subsc("Setting access starts date value to: " . $subscription_starts, true);
-        
+
         swpm_debug_log_subsc("Updating the current membership level (" . $old_membership_level . ") of this member to the newly paid level (" . $membership_level . ")", true);
         //Set account status to active, update level to the newly paid level, update access start date, update subsriber ID (if applicable).
         $updatedb = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s, membership_level=%d,subscription_starts=%s,subscr_id=%s WHERE member_id=%d", $account_state, $membership_level, $subscription_starts, $subscr_id, $swpm_id);
@@ -70,7 +75,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
             $body = "Your account has been upgraded successfully";
         }
         $from_address = $settings->get_value('email-from');
-        
+
         $additional_args = array();
         $email_body = SwpmMiscUtils::replace_dynamic_tags($body, $swpm_id, $additional_args);
         $headers = 'From: ' . $from_address . "\r\n";
@@ -95,8 +100,8 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         $data['address_street'] = $ipn_data['address_street'];
         $data['address_city'] = $ipn_data['address_city'];
         $data['address_state'] = $ipn_data['address_state'];
-        $data['address_zipcode'] = isset($ipn_data['address_zip'])? $ipn_data['address_zip'] : '';
-        $data['country'] = isset($ipn_data['address_country'])? $ipn_data['address_country'] : '';
+        $data['address_zipcode'] = isset($ipn_data['address_zip']) ? $ipn_data['address_zip'] : '';
+        $data['country'] = isset($ipn_data['address_country']) ? $ipn_data['address_country'] : '';
         $data['member_since'] = $data['subscription_starts'] = $data['last_accessed'] = date("Y-m-d");
         $data['account_state'] = $default_account_status;
         $reg_code = uniqid();
@@ -106,7 +111,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         $data['subscr_id'] = $subscr_id;
         $data['last_accessed_from_ip'] = isset($user_ip) ? $user_ip : ''; //Save the users IP address
 
-        $data = array_filter($data);//Remove any null values.
+        $data = array_filter($data); //Remove any null values.
         $wpdb->insert($members_table_name, $data); //Create the member record
         $results = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id=%s and reg_code=%s", $subscr_id, $md5_code), OBJECT);
         $id = $results->member_id; //Alternatively use $wpdb->insert_id;
@@ -134,33 +139,34 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         }
         $from_address = $settings->get_value('email-from');
         $body = html_entity_decode($body);
-        
+
         $additional_args = array('reg_link' => $reg_url);
-        $email_body = SwpmMiscUtils::replace_dynamic_tags($body, $id, $additional_args);        
+        $email_body = SwpmMiscUtils::replace_dynamic_tags($body, $id, $additional_args);
         $headers = 'From: ' . $from_address . "\r\n";
     }
 
-    $subject=apply_filters('swpm_email_signup_upgrade_complete_subject',$subject);
-    $email_body=apply_filters('swpm_email_signup_upgrade_complete_body',$email_body);
+    $subject = apply_filters('swpm_email_signup_upgrade_complete_subject', $subject);
+    $email_body = apply_filters('swpm_email_signup_upgrade_complete_body', $email_body);
     wp_mail($email, $subject, $email_body, $headers);
     swpm_debug_log_subsc("Member signup/upgrade completion email successfully sent to: " . $email, true);
 }
 
-/* 
+/*
  * All in one function that can handle notification for refund, cancellation, end of term
  */
+
 function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
-   
+
     global $wpdb;
     $members_table_name = $wpdb->prefix . "swpm_members_tbl";
-    
+
     $customvariables = SwpmTransactions::parse_custom_var($ipn_data['custom']);
     $swpm_id = $customvariables['swpm_id'];
 
     swpm_debug_log_subsc("Refund/Cancellation check - lets see if a member account needs to be deactivated.", true);
     //swpm_debug_log_subsc("Parent txn id: " . $ipn_data['parent_txn_id'] . ", Subscr ID: " . $ipn_data['subscr_id'] . ", SWPM ID: " . $swpm_id, true);
 
-    if(!empty($swpm_id)){
+    if (!empty($swpm_id)) {
         //This IPN has the SWPM ID. Retrieve the member record using member ID.
         swpm_debug_log_subsc("Member ID is present. Retrieving member account from the database. Member ID: " . $swpm_id, true);
         $resultset = SwpmMemberUtils::get_user_by_id($swpm_id);
@@ -174,42 +180,39 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
         $subscr_id = $ipn_data['parent_txn_id'];
         $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id=%s", $subscr_id), OBJECT);
     }
-    
+
     if ($resultset) {
         //We have found a member profile for this notification.
-        
+
         $member_id = $resultset->member_id;
-        
+
         //First, check if this is a refund notification. 
         if ($refund) {
             //This is a refund (not just a subscription cancellation or end). So deactivate the account regardless and bail.
-            SwpmMemberUtils::update_account_state($member_id, 'inactive');//Set the account status to inactive.
+            SwpmMemberUtils::update_account_state($member_id, 'inactive'); //Set the account status to inactive.
             swpm_debug_log_subsc("Subscription refund notification received! Member account deactivated.", true);
             return;
         }
-        
+
         //This is a cancellation or end of subscription term (no refund).
-        
         //Lets retrieve the membership level and details
         $level_id = $resultset->membership_level;
         swpm_debug_log_subsc("Membership level ID of the member is: " . $level_id, true);
         $level_row = SwpmUtils::get_membership_level_row_by_id($level_id);
         $subs_duration_type = $level_row->subscription_duration_type;
-        
-        if($subs_duration_type == SwpmMembershipLevel::NO_EXPIRY){
+
+        if ($subs_duration_type == SwpmMembershipLevel::NO_EXPIRY) {
             //This is a level with "no expiry" or "until cancelled" duration.
             swpm_debug_log_subsc('This is a level with "no expiry" or "until cancelled" duration', true);
-            
+
             //Deactivate this account as the membership level is "no expiry" or "until cancelled".
             $account_state = 'inactive';
             SwpmMemberUtils::update_account_state($member_id, $account_state);
             swpm_debug_log_subsc("Subscription cancellation or end of term received! Member account deactivated. Member ID: " . $member_id, true);
-
-        } else if ($subs_duration_type == SwpmMembershipLevel::FIXED_DATE){
+        } else if ($subs_duration_type == SwpmMembershipLevel::FIXED_DATE) {
             //This is a level with a "fixed expiry date" duration.
             swpm_debug_log_subsc('This is a level with a "fixed expiry date" duration.', true);
             swpm_debug_log_subsc('Nothing to do here. The account will expire on the fixed set date.', true);
-
         } else {
             //This is a level with "duration" type expiry (example: 30 days, 1 year etc). subscription_period has the duration/period.
             $subs_period = $level_row->subscription_period;
@@ -217,15 +220,13 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
 
             swpm_debug_log_subsc('This is a level with "duration" type expiry. Duration period: ' . $subs_period . ', Unit: ' . $subs_period_unit, true);
             swpm_debug_log_subsc('Nothing to do here. The account will expire after the duration time is over.', true);
-            
+
             //TODO Later as an improvement. If you wanted to segment the members who have unsubscribed, you can set the account status to "unsubscribed" here. 
             //Make sure the cronjob to do expiry check and deactivate the member accounts treat this status as if it is "active".
-            
         }
-        
+
         $ipn_data['member_id'] = $member_id;
-        do_action('swpm_subscription_payment_cancelled', $ipn_data);//Hook for recurring payment received
-        
+        do_action('swpm_subscription_payment_cancelled', $ipn_data); //Hook for recurring payment received
     } else {
         swpm_debug_log_subsc("No associated active member record found for this notification.", false);
         return;
@@ -248,8 +249,8 @@ function swpm_update_member_subscription_start_date_if_applicable($ipn_data) {
         swpm_debug_log_subsc("Found a record in the member table. The Member ID of the account to check is: " . $swpm_id . " Membership Level: " . $current_primary_level, true);
 
         $ipn_data['member_id'] = $swpm_id;
-        do_action('swpm_recurring_payment_received', $ipn_data);//Hook for recurring payment received
-        
+        do_action('swpm_recurring_payment_received', $ipn_data); //Hook for recurring payment received
+
         $subscription_starts = (date("Y-m-d"));
 
         $updatedb = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s,subscription_starts=%s WHERE member_id=%d", $account_state, $subscription_starts, $swpm_id);

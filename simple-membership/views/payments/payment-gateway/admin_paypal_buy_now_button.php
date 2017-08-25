@@ -268,6 +268,7 @@ function swpm_edit_pp_buy_now_button() {
                                 <option value="NOK" <?php echo ($payment_currency == 'NOK') ? 'selected="selected"' : ''; ?>>Norwegian Krone</option>
                                 <option value="PHP" <?php echo ($payment_currency == 'PHP') ? 'selected="selected"' : ''; ?>>Philippine Pesos</option>
                                 <option value="PLN" <?php echo ($payment_currency == 'PLN') ? 'selected="selected"' : ''; ?>>Polish Zloty</option>
+                                <option value="RUB" <?php echo ($payment_currency == 'RUB') ? 'selected="selected"' : ''; ?>>Russian Ruble</option>
                                 <option value="SGD" <?php echo ($payment_currency == 'SGD') ? 'selected="selected"' : ''; ?>>Singapore Dollar ($)</option>
                                 <option value="ZAR" <?php echo ($payment_currency == 'ZAR') ? 'selected="selected"' : ''; ?>>South African Rand (R)</option>
                                 <option value="KRW" <?php echo ($payment_currency == 'KRW') ? 'selected="selected"' : ''; ?>>South Korean Won</option>

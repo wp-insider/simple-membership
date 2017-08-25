@@ -138,6 +138,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.5.7 =
+- Fixed rare permissions check bug (thanks to Neb).
+
 = 3.5.6 =
 - Russian Ruble (₽) currency added for PayPal Buy Now and Subscription buttons. 
 - "Return URL" and "Button Image URL" options for Stripe Subscription button are now properly saved and handled.

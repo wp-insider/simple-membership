@@ -11,7 +11,7 @@ class SwpmPermission extends SwpmProtectionBase {
     }
 
     public static function get_instance($level_id) {
-        if ($level_id == 1 || $level_id == md5(1)) {
+        if ($level_id === 1 || $level_id === md5(1)) {
             wp_die('Invalid Membership level!');
         }
         $key = is_numeric($level_id) ? md5($level_id) : $level_id;

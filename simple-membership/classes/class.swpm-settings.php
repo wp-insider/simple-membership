@@ -332,6 +332,8 @@ class SwpmSettings {
 
     public function bulk_activate_email_settings_callback() {
         SwpmUtils::e('This email will be sent to your members when you use the bulk account activate and notify action.');
+        SwpmUtils::e(' You cannot use email marge tags in this email. You can only use generic text.');
+
     }
     
     public function reg_prompt_email_settings_callback() {

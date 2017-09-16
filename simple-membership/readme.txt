@@ -139,6 +139,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = TODO 3.5.7 =
+- Added updated German translation file.
 - Fixed rare permissions check bug (thanks to Neb).
 
 = 3.5.6 =

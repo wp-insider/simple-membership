@@ -1,0 +1,2080 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Simple Membership\n"
+"POT-Creation-Date: 2017-06-04 10:43+1000\n"
+"PO-Revision-Date: 2017-08-24 19:50+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.3\n"
+"X-Poedit-KeywordsList: __;_e;e\n"
+"X-Poedit-Basepath: .\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de_DE\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: simple-membership/classes/class.simple-wp-membership.php:173
+msgid "The admin of this site does not allow users to access the wp dashboard."
+msgstr ""
+"Der Administrator dieser Website erlaubt es Benutzern nicht, auf das WP-"
+"Dashboard zuzugreifen."
+
+#: simple-membership/classes/class.simple-wp-membership.php:174
+msgid "Go back to the home page by "
+msgstr "Gehe zurück zur Startseite "
+
+#: simple-membership/classes/class.simple-wp-membership.php:174
+msgid "clicking here"
+msgstr "Hier klicken"
+
+#: simple-membership/classes/class.simple-wp-membership.php:312
+msgid "You are not logged in."
+msgstr "Sie sind nicht eingeloggt."
+
+#: simple-membership/classes/class.simple-wp-membership.php:363
+msgid ""
+"You have the sandbox payment mode enabled in plugin settings. Make sure to "
+"turn off the sandbox mode when you want to do live transactions."
+msgstr ""
+"Sie haben den Sandbox-Zahlungsmodus in den Plugin-Einstellungen aktiviert. "
+"Vergewissern Sie sich, den Sandbox-Modus auszuschalten, wenn Sie Live-"
+"Transaktionen durchführen möchten."
+
+#: simple-membership/classes/class.simple-wp-membership.php:378
+msgid "Simple WP Membership Protection"
+msgstr "Einfacher WP-Mitgliedschaftsschutz"
+
+#: simple-membership/classes/class.simple-wp-membership.php:390
+msgid "Simple Membership Protection options"
+msgstr "Einfache Mitgliedschaftsschutzoptionen"
+
+#: simple-membership/classes/class.simple-wp-membership.php:408
+msgid "Do you want to protect this content?"
+msgstr "Möchten Sie diesen Inhalt zu schützen?"
+
+#: simple-membership/classes/class.simple-wp-membership.php:413
+msgid "Select the membership level that can access this content:"
+msgstr ""
+"Wählen Sie die Mitgliedschaftsstufe aus, die auf diesen Inhalt zugreifen "
+"kann:"
+
+#: simple-membership/classes/class.simple-wp-membership.php:546
+#: simple-membership/classes/class.simple-wp-membership.php:550
+msgid "Validating, please wait"
+msgstr "Überprüfung, bitte warten"
+
+#: simple-membership/classes/class.simple-wp-membership.php:553
+msgid "Invalid email address"
+msgstr "Ungültige E-Mail-Adresse"
+
+#: simple-membership/classes/class.simple-wp-membership.php:556
+msgid "This field is required"
+msgstr "Dieses Feld ist erforderlich"
+
+#: simple-membership/classes/class.simple-wp-membership.php:559
+#: simple-membership/classes/class.swpm-auth.php:260
+msgid "Invalid Username"
+msgstr "Ungültiger Benutzername"
+
+#: simple-membership/classes/class.simple-wp-membership.php:562
+msgid "Minimum "
+msgstr "Minimum "
+
+#: simple-membership/classes/class.simple-wp-membership.php:563
+msgid " characters required"
+msgstr " Buchstaben erforderlich"
+
+#: simple-membership/classes/class.simple-wp-membership.php:566
+msgid "Apostrophe character is not allowed"
+msgstr "Apostroph ist nicht zulässig"
+
+#: simple-membership/classes/class.simple-wp-membership.php:597
+msgid "WP Membership"
+msgstr "WP Mitgliedschaft"
+
+#: simple-membership/classes/class.simple-wp-membership.php:598
+#: simple-membership/classes/class.swpm-members.php:11
+#: simple-membership/classes/class.swpm-members.php:579
+msgid "Members"
+msgstr "Mitglieder"
+
+#: simple-membership/classes/class.simple-wp-membership.php:599
+#: simple-membership/classes/class.swpm-category-list.php:20
+#: simple-membership/classes/class.swpm-membership-levels.php:12
+#: simple-membership/classes/class.swpm-membership-levels.php:257
+msgid "Membership Levels"
+msgstr "Mitgliedschaftsstufen"
+
+#: simple-membership/classes/class.simple-wp-membership.php:600
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: simple-membership/classes/class.simple-wp-membership.php:601
+msgid "Payments"
+msgstr "Zahlungen"
+
+#: simple-membership/classes/class.simple-wp-membership.php:602
+msgid "Add-ons"
+msgstr "Add-ons"
+
+#: simple-membership/classes/class.swpm-access-control.php:47
+#: simple-membership/classes/class.swpm-access-control.php:120
+msgid "You need to login to view this content. "
+msgstr "Sie müssen sich anmelden, um diesen Inhalt anzusehen. "
+
+#: simple-membership/classes/class.swpm-access-control.php:56
+#: simple-membership/classes/class.swpm-access-control.php:128
+#: simple-membership/classes/class.swpm-access-control.php:212
+msgid "Your account has expired. "
+msgstr "Ihr Konto ist abgelaufen. "
+
+#: simple-membership/classes/class.swpm-access-control.php:66
+#: simple-membership/classes/class.swpm-access-control.php:138
+msgid "This content can only be viewed by members who joined on or before "
+msgstr "Dieser Inhalt kann nur von Mitgliedern angesehen werden. "
+
+#: simple-membership/classes/class.swpm-access-control.php:79
+#: simple-membership/classes/class.swpm-access-control.php:148
+msgid "This content is not permitted for your membership level."
+msgstr "Dieser Inhalt ist für Ihre Mitgliedschaftsstufe nicht freigeschaltet."
+
+#: simple-membership/classes/class.swpm-access-control.php:204
+msgid "You need to login to view the rest of the content. "
+msgstr "Sie müssen sich anmelden, um den Rest des Inhalts anzuzeigen. "
+
+#: simple-membership/classes/class.swpm-access-control.php:217
+msgid " The rest of the content is not permitted for your membership level."
+msgstr ""
+" Der Rest des Inhalts ist für Ihre Mitgliedschaftsstufe nicht freigeschaltet."
+
+#: simple-membership/classes/class.swpm-admin-registration.php:25
+msgid "Error! Nonce verification failed for user registration from admin end."
+msgstr ""
+"Fehler! Überprüfung für Benutzerregistrierung vom Admin fehlgeschlagen."
+
+#: simple-membership/classes/class.swpm-admin-registration.php:71
+msgid "Member record added successfully."
+msgstr "Mitgliedsrekord wurde erfolgreich hinzugefügt."
+
+#: simple-membership/classes/class.swpm-admin-registration.php:76
+#: simple-membership/classes/class.swpm-admin-registration.php:107
+#: simple-membership/classes/class.swpm-admin-registration.php:133
+#: simple-membership/classes/class.swpm-membership-level.php:69
+#: simple-membership/classes/class.swpm-membership-level.php:97
+msgid "Please correct the following:"
+msgstr "Bitte korrigieren Sie folgendendes:"
+
+#: simple-membership/classes/class.swpm-admin-registration.php:87
+msgid "Error! Nonce verification failed for user edit from admin end."
+msgstr "Fehler! Überprüfung für Benutzerbearbeitung vom Admin fehlgeschlagen."
+
+#: simple-membership/classes/class.swpm-admin-registration.php:122
+msgid "Your current password"
+msgstr "Ihr aktuelles Passwort"
+
+#: simple-membership/classes/class.swpm-ajax.php:14
+msgid "Invalid Email Address"
+msgstr "Ungültige E-Mail Adresse"
+
+#: simple-membership/classes/class.swpm-ajax.php:21
+#: simple-membership/classes/class.swpm-ajax.php:36
+msgid "Aready taken"
+msgstr "Wird schon verwendet"
+
+#: simple-membership/classes/class.swpm-ajax.php:30
+msgid "Name contains invalid character"
+msgstr "Name enthält ungültiges Zeichen"
+
+#: simple-membership/classes/class.swpm-ajax.php:37
+msgid "Available"
+msgstr "Verfügbar"
+
+#: simple-membership/classes/class.swpm-auth.php:46
+msgid ""
+"Warning! Simple Membership plugin cannot process this login request to "
+"prevent you from getting logged out of WP Admin accidentally."
+msgstr ""
+"Achtung! Das WP Simple Membership Plugin kann diese Anmeldeanforderung nicht "
+"ausführen. Es wird verhindert, damit Sie sich nicht versehentlich als WP "
+"Admin ausloggen."
+
+#: simple-membership/classes/class.swpm-auth.php:47
+msgid ""
+"You are logged into the site as an ADMIN user in this browser. First, logout "
+"from WP Admin then you will be able to log in as a member."
+msgstr ""
+"Sie sind in diesem Browser als Admin-Benutzer angemeldet. Loggen Sie sich "
+"zuerst als Admin aus und um sich als Mitglied anmelden zu können."
+
+#: simple-membership/classes/class.swpm-auth.php:48
+msgid ""
+"Alternatively, you can use a different browser (where you are not logged-in "
+"as ADMIN) to test the membership login."
+msgstr ""
+"Alternativ können Sie einen anderen Browser verwenden (in welchem Sie nicht "
+"als Admin eingeloggt sind), um das Login-Interface zu testen."
+
+#: simple-membership/classes/class.swpm-auth.php:49
+msgid ""
+"Your normal visitors or members will never see this message. This message is "
+"ONLY for ADMIN user."
+msgstr ""
+"Ihre normalen Besucher oder Mitglieder werden diese Nachricht niemals sehen. "
+"Diese Nachricht ist nur für Admin-Benutzer."
+
+#: simple-membership/classes/class.swpm-auth.php:56
+msgid "Captcha validation failed on login form."
+msgstr "Captcha-Validierung fehlgeschlagen."
+
+#: simple-membership/classes/class.swpm-auth.php:81
+msgid "User Not Found."
+msgstr "Benutzer nicht gefunden."
+
+#: simple-membership/classes/class.swpm-auth.php:88
+msgid "Password Empty or Invalid."
+msgstr "Kennwort leer oder ungültig."
+
+#: simple-membership/classes/class.swpm-auth.php:125
+msgid "Account is inactive."
+msgstr "Ihr Konto ist inaktiv."
+
+#: simple-membership/classes/class.swpm-auth.php:128
+#: simple-membership/classes/class.swpm-auth.php:146
+msgid "Account has expired."
+msgstr "Ihr Konto ist abgelaufen."
+
+#: simple-membership/classes/class.swpm-auth.php:131
+msgid "Account is pending."
+msgstr "Ihr Konto ist inaktiv."
+
+#: simple-membership/classes/class.swpm-auth.php:154
+msgid "You are logged in as:"
+msgstr "Sie sind eingeloggt als:"
+
+#: simple-membership/classes/class.swpm-auth.php:200
+msgid "Logged Out Successfully."
+msgstr "Abmeldung war erfolgreich."
+
+#: simple-membership/classes/class.swpm-auth.php:251
+msgid "Session Expired."
+msgstr "Sitzung ist abgelaufen."
+
+#: simple-membership/classes/class.swpm-auth.php:268
+msgid "Please login again."
+msgstr "Bitte melden Sie sich erneut an."
+
+#: simple-membership/classes/class.swpm-category-list.php:19
+#: simple-membership/classes/class.swpm-members.php:24
+#: simple-membership/classes/class.swpm-membership-levels.php:11
+#: simple-membership/classes/class.swpm-membership-levels.php:21
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:85
+#: simple-membership/views/add.php:31
+#: simple-membership/views/admin_member_form_common_part.php:2
+#: simple-membership/views/edit.php:61
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:50
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:34
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:217
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:35
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:307
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:47
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:259
+msgid "Membership Level"
+msgstr "Mitgliedschaftsstufe"
+
+#: simple-membership/classes/class.swpm-category-list.php:33
+msgid "Category ID"
+msgstr "Kategorie ID"
+
+#: simple-membership/classes/class.swpm-category-list.php:34
+msgid "Category Name"
+msgstr "Kategorie Name"
+
+#: simple-membership/classes/class.swpm-category-list.php:35
+msgid "Category Type (Taxonomy)"
+msgstr "Kategorie Typ"
+
+#: simple-membership/classes/class.swpm-category-list.php:36
+msgid "Description"
+msgstr "Beschreibung"
+
+#: simple-membership/classes/class.swpm-category-list.php:37
+msgid "Count"
+msgstr "Anzahl"
+
+#: simple-membership/classes/class.swpm-category-list.php:92
+msgid "Category protection updated!"
+msgstr "Kategorie Schutz aktualisiert!"
+
+#: simple-membership/classes/class.swpm-category-list.php:130
+msgid "No category found."
+msgstr "Kategorie wurde nicht gefunden."
+
+#: simple-membership/classes/class.swpm-comment-form-related.php:15
+msgid "Please login to comment."
+msgstr "Bitte melden Sie sich an um zu kommentieren."
+
+#: simple-membership/classes/class.swpm-comment-form-related.php:40
+msgid "Please Login to Comment."
+msgstr "Bitte melden Sie sich an um zu kommentieren."
+
+#: simple-membership/classes/class.swpm-comment-form-related.php:79
+msgid "Comments not allowed by a non-member."
+msgstr "Bitte melden Sie sich an um zu kommentieren."
+
+#: simple-membership/classes/class.swpm-form.php:29
+msgid ""
+"Wordpress account exists with given username. But given email doesn't match."
+msgstr "Die angegebene E-Mail stimmt nicht überein."
+
+#: simple-membership/classes/class.swpm-form.php:34
+msgid ""
+"Wordpress account exists with given email. But given username doesn't match."
+msgstr "Die angegebene Benutzername stimmt nicht überein."
+
+#: simple-membership/classes/class.swpm-form.php:43
+msgid "Username is required"
+msgstr "Benutzername wird benötigt"
+
+#: simple-membership/classes/class.swpm-form.php:47
+msgid "Username contains invalid character"
+msgstr "Ihr Benutzername enthält ein ungültiges Zeichen"
+
+#: simple-membership/classes/class.swpm-form.php:55
+msgid "Username already exists."
+msgstr "Ihr Benutzername existiert bereits."
+
+#: simple-membership/classes/class.swpm-form.php:78
+msgid "Password is required"
+msgstr "Passwort wird benötigt"
+
+#: simple-membership/classes/class.swpm-form.php:85
+msgid "Password mismatch"
+msgstr "Die Passwörter stimmen nicht überein"
+
+#: simple-membership/classes/class.swpm-form.php:96
+msgid "Email is required"
+msgstr "E-Mail Adresse wird benötigt"
+
+#: simple-membership/classes/class.swpm-form.php:100
+msgid "Email is invalid"
+msgstr "E-Mail Adresse ist ungültig"
+
+#: simple-membership/classes/class.swpm-form.php:116
+msgid "Email is already used."
+msgstr "Ihre E-Mail Adresse existiert bereits."
+
+#: simple-membership/classes/class.swpm-form.php:173
+msgid "Member since field is invalid"
+msgstr "Diese Eingabe ist ungültig"
+
+#: simple-membership/classes/class.swpm-form.php:184
+msgid "Access starts field is invalid"
+msgstr "Das Zugriffsstartfeld ist ungültig"
+
+#: simple-membership/classes/class.swpm-form.php:194
+msgid "Gender field is invalid"
+msgstr "Geschlechtsangabe ist ungültig"
+
+#: simple-membership/classes/class.swpm-form.php:205
+msgid "Account state field is invalid"
+msgstr "Kontostatusfeld ist ungültig"
+
+#: simple-membership/classes/class.swpm-form.php:212
+msgid "Invalid membership level"
+msgstr "Ungültige Mitgliedschaftsstufe"
+
+#: simple-membership/classes/class.swpm-front-registration.php:33
+msgid ""
+"Error! Invalid Request. Could not find a match for the given security code "
+"and the user ID."
+msgstr ""
+"Fehler! Ungültige Anfrage. Konnte keine Übereinstimmung für den angegebenen "
+"Sicherheitscode und die Benutzer-ID finden."
+
+#: simple-membership/classes/class.swpm-front-registration.php:45
+#: simple-membership/classes/class.swpm-utils-misc.php:236
+#: simple-membership/views/login.php:36
+msgid "Join Us"
+msgstr "Registieren"
+
+#: simple-membership/classes/class.swpm-front-registration.php:47
+msgid ""
+"Free membership is disabled on this site. Please make a payment from the "
+msgstr ""
+"Die Kostenlose Mitgliedschaft ist auf dieser Seite deaktiviert. Bitte "
+"erstellen Sie eine Zahlung für "
+
+#: simple-membership/classes/class.swpm-front-registration.php:49
+msgid ""
+"You will receive a unique link via email after the payment. You will be able "
+"to use that link to complete the premium membership registration."
+msgstr ""
+"Sie erhalten einen einmaligen Link per E-Mail nach der Zahlung. Sie können "
+"diesen Link nutzen, um die Premium-Mitgliedschaftsregistrierung "
+"abzuschließen."
+
+#: simple-membership/classes/class.swpm-front-registration.php:77
+msgid "Security check: captcha validation failed."
+msgstr "Sicherheitskontrolle: Captcha-Validierung fehlgeschlagen."
+
+#: simple-membership/classes/class.swpm-front-registration.php:100
+msgid "Registration Successful. "
+msgstr "Registrierung erfolgreich. "
+
+#: simple-membership/classes/class.swpm-front-registration.php:100
+#: simple-membership/classes/class.swpm-utils-misc.php:235
+#: simple-membership/classes/class.swpm-utils-misc.php:247
+msgid "Please"
+msgstr "Bitte"
+
+#: simple-membership/classes/class.swpm-front-registration.php:100
+#: simple-membership/classes/class.swpm-utils-misc.php:235
+#: simple-membership/views/login.php:30
+msgid "Login"
+msgstr "Einloggen"
+
+#: simple-membership/classes/class.swpm-front-registration.php:113
+msgid "Please correct the following"
+msgstr "Bitte korrigieren Sie die folgenden"
+
+#: simple-membership/classes/class.swpm-front-registration.php:158
+msgid "Membership Level Couldn't be found."
+msgstr "Mitgliedschaftsstufe konnte nicht gefunden werden."
+
+#: simple-membership/classes/class.swpm-front-registration.php:209
+msgid "Error! Nonce verification failed for front end profile edit."
+msgstr "Fehler! Überprüfung für Front-End-Profil bearbeitung fehlgeschlagen."
+
+#: simple-membership/classes/class.swpm-front-registration.php:217
+msgid "Profile updated successfully."
+msgstr "Profil erfolgreich aktualisiert."
+
+#: simple-membership/classes/class.swpm-front-registration.php:226
+msgid ""
+"Profile updated successfully. You will need to re-login since you changed "
+"your password."
+msgstr ""
+"Profil erfolgreich aktualisiert. Sie müssen sich erneut anmelden, da Sie Ihr "
+"Passwort geändert haben."
+
+#: simple-membership/classes/class.swpm-front-registration.php:238
+msgid "Please correct the following."
+msgstr "Bitte korrigieren Sie folgendes."
+
+#: simple-membership/classes/class.swpm-front-registration.php:250
+msgid "Captcha validation failed."
+msgstr "Captcha-Validierung fehlgeschlagen."
+
+#: simple-membership/classes/class.swpm-front-registration.php:258
+msgid "Email address not valid."
+msgstr "E-Mail Adresse ist nicht gültig."
+
+#: simple-membership/classes/class.swpm-front-registration.php:269
+msgid "No user found with that email address."
+msgstr "Kein Benutzer mit dieser E-Mail-Adresse gefunden."
+
+#: simple-membership/classes/class.swpm-front-registration.php:270
+#: simple-membership/classes/class.swpm-front-registration.php:299
+msgid "Email Address: "
+msgstr "E-Mail Adresse: "
+
+#: simple-membership/classes/class.swpm-front-registration.php:298
+msgid "New password has been sent to your email address."
+msgstr "Es wurde ein neues Passwort an Ihre E-Mail-Adresse gesendet."
+
+#: simple-membership/classes/class.swpm-init-time-tasks.php:112
+msgid "Sorry, Nonce verification failed."
+msgstr "Sorry, überprüfung fehlgeschlagen."
+
+#: simple-membership/classes/class.swpm-init-time-tasks.php:119
+msgid "Sorry, Password didn't match."
+msgstr "Sorry, das Passwort stimmt nicht überein."
+
+#: simple-membership/classes/class.swpm-level-form.php:47
+msgid "Date format is not valid."
+msgstr "Datumsformat ist nicht gültig."
+
+#: simple-membership/classes/class.swpm-level-form.php:55
+msgid "Access duration must be > 0."
+msgstr "Die Zugriffsdauer muss über 0 sein."
+
+#: simple-membership/classes/class.swpm-members.php:10
+msgid "Member"
+msgstr "Mitglied"
+
+#: simple-membership/classes/class.swpm-members.php:19
+#: simple-membership/classes/class.swpm-membership-levels.php:20
+msgid "ID"
+msgstr "ID"
+
+#: simple-membership/classes/class.swpm-members.php:20
+#: simple-membership/views/add.php:7 simple-membership/views/admin_add.php:11
+#: simple-membership/views/admin_edit.php:14
+#: simple-membership/views/edit.php:13
+msgid "Username"
+msgstr "Benutzername"
+
+#: simple-membership/classes/class.swpm-members.php:21
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:78
+#: simple-membership/views/add.php:23
+#: simple-membership/views/admin_member_form_common_part.php:15
+#: simple-membership/views/edit.php:29
+msgid "First Name"
+msgstr "Vorname"
+
+#: simple-membership/classes/class.swpm-members.php:22
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:79
+#: simple-membership/views/add.php:27
+#: simple-membership/views/admin_member_form_common_part.php:19
+#: simple-membership/views/edit.php:33
+msgid "Last Name"
+msgstr "Nachname"
+
+#: simple-membership/classes/class.swpm-members.php:23
+#: simple-membership/views/add.php:11 simple-membership/views/edit.php:17
+msgid "Email"
+msgstr "E-Mail Adresse"
+
+#: simple-membership/classes/class.swpm-members.php:25
+#: simple-membership/views/admin_member_form_common_part.php:11
+msgid "Access Starts"
+msgstr "Registrierungsdatum"
+
+#: simple-membership/classes/class.swpm-members.php:26
+msgid "Account State"
+msgstr "Kontostatus"
+
+#: simple-membership/classes/class.swpm-members.php:44
+#: simple-membership/classes/class.swpm-membership-levels.php:36
+#: simple-membership/classes/admin-includes/class.swpm-payment-buttons-list-table.php:94
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:102
+msgid "Delete"
+msgstr "Löschen"
+
+#: simple-membership/classes/class.swpm-members.php:45
+msgid "Set Status to Active"
+msgstr "Setzen Sie den Status auf Aktiv"
+
+#: simple-membership/classes/class.swpm-members.php:46
+msgid "Set Status to Active and Notify"
+msgstr "Setzen Sie den Status auf Aktiv und Benachrichtigen"
+
+#: simple-membership/classes/class.swpm-members.php:47
+msgid "Set Status to Inactive"
+msgstr "Setzen Sie den Status auf Inaktiv"
+
+#: simple-membership/classes/class.swpm-members.php:48
+msgid "Set Status to Pending"
+msgstr "Setzen Sie den Status auf Ausstehend"
+
+#: simple-membership/classes/class.swpm-members.php:49
+msgid "Set Status to Expired"
+msgstr "Setzen Sie den Status auf abgelaufen"
+
+#: simple-membership/classes/class.swpm-members.php:70
+msgid "incomplete"
+msgstr "unvollständig"
+
+#: simple-membership/classes/class.swpm-members.php:189
+msgid "No member found."
+msgstr "Keine Mitglieder vorhanden."
+
+#: simple-membership/classes/class.swpm-members.php:335
+msgid "Error! Nonce verification failed for user delete from admin end."
+msgstr ""
+"Fehler! Überprüfung für Löschung eines Benutzers vom Admin fehlgeschlagen."
+
+#: simple-membership/classes/class.swpm-members.php:404
+#: simple-membership/classes/class.swpm-members.php:434
+msgid "Error! Please select a membership level first."
+msgstr "Fehler! Bitte wählen Sie zuerst eine Mitgliedsstufe aus."
+
+#: simple-membership/classes/class.swpm-members.php:421
+msgid "Membership level change operation completed successfully."
+msgstr "Änderung der Mitgliedschaftsstufe wurde erfolgreich abgeschlossen."
+
+#: simple-membership/classes/class.swpm-members.php:451
+msgid "Access starts date change operation successfully completed."
+msgstr "Datumsänderung erfolgreich abgeschlossen."
+
+#: simple-membership/classes/class.swpm-members.php:460
+msgid "Bulk Update Membership Level of Members"
+msgstr "Bulk Update Mitgliedschaft Ebene der Mitglieder"
+
+#: simple-membership/classes/class.swpm-members.php:463
+msgid ""
+"You can manually change the membership level of any member by editing the "
+"record from the members menu. "
+msgstr ""
+"Sie können die Mitgliedschaftsstufe eines beliebigen Mitglieds manuell "
+"ändern, indem Sie den Datensatz aus dem Mitgliedermenü bearbeiten. "
+
+#: simple-membership/classes/class.swpm-members.php:464
+msgid ""
+"You can use the following option to bulk update the membership level of "
+"users who belong to the level you select below."
+msgstr ""
+"Sie können die folgende Option verwenden, um die Mitgliedschaftsstufe von "
+"Benutzern zu aktualisieren, die zu der Ebene gehören, die Sie unten "
+"auswählen."
+
+#: simple-membership/classes/class.swpm-members.php:470
+#: simple-membership/classes/class.swpm-members.php:518
+msgid "Membership Level: "
+msgstr "Mitgliedschaftsstufe: "
+
+#: simple-membership/classes/class.swpm-members.php:474
+msgid "Select Current Level"
+msgstr "Wählen Sie die aktuelle Stufe aus"
+
+#: simple-membership/classes/class.swpm-members.php:477
+msgid ""
+"Select the current membership level (the membership level of all members who "
+"are in this level will be updated)."
+msgstr ""
+"Wählen Sie die aktuelle Mitgliedschaftsstufe aus (die Mitgliedschaftsstufe "
+"aller Mitglieder, die sich in dieser Ebene befinden, wird aktualisiert)."
+
+#: simple-membership/classes/class.swpm-members.php:483
+msgid "Level to Change to: "
+msgstr "Ebene zu ändern, um: "
+
+#: simple-membership/classes/class.swpm-members.php:487
+msgid "Select Target Level"
+msgstr "Ziel Ebene auswählen"
+
+#: simple-membership/classes/class.swpm-members.php:490
+msgid "Select the new membership level."
+msgstr "Wählen Sie die neue Mitgliedschaftsstufe aus."
+
+#: simple-membership/classes/class.swpm-members.php:496
+msgid "Bulk Change Membership Level"
+msgstr "Mitgliedschaftsstufe ändern"
+
+#: simple-membership/classes/class.swpm-members.php:506
+msgid "Bulk Update Access Starts Date of Members"
+msgstr "Upgradedatum der Mitglieder"
+
+#: simple-membership/classes/class.swpm-members.php:510
+msgid ""
+"The access starts date of a member is set to the day the user registers. "
+"This date value is used to calculate how long the member can access your "
+"content that are protected with a duration type protection in the membership "
+"level. "
+msgstr ""
+"Der Zugriff eines Mitglieds startet am Tag, an dem sich der Benutzer "
+"registriert hat. Dieser Datumswert wird verwendet, um zu berechnen, wie "
+"lange das Mitglied auf Ihre Inhalte zugreifen kann. "
+
+#: simple-membership/classes/class.swpm-members.php:511
+msgid ""
+"You can manually set a specific access starts date value of all members who "
+"belong to a particular level using the following option."
+msgstr ""
+"Sie können manuell ein bestimmten Datenwert aller Mitglieder festlegen , die "
+"zu einer bestimmten Ebene mit der folgenden Option gehören."
+
+#: simple-membership/classes/class.swpm-members.php:521
+msgid "Select Level"
+msgstr "Stufe auswählen"
+
+#: simple-membership/classes/class.swpm-members.php:524
+msgid ""
+"Select the Membership level (the access start date of all members who are in "
+"this level will be updated)."
+msgstr ""
+"Wählen Sie die Mitgliedschaftsstufe aus (das Zugangsstartdatum aller "
+"Mitglieder, die sich auf dieser Ebene befinden, wird aktualisiert)."
+
+#: simple-membership/classes/class.swpm-members.php:533
+msgid "Specify the access starts date value."
+msgstr "Geben Sie das Zugriffsdatum an."
+
+#: simple-membership/classes/class.swpm-members.php:539
+msgid "Bulk Change Access Starts Date"
+msgstr "Änderungszugriff start Datum"
+
+#: simple-membership/classes/class.swpm-members.php:574
+msgid "Simple WP Membership::Members"
+msgstr "Simple WP Membership::Mitglieder"
+
+#: simple-membership/classes/class.swpm-members.php:575
+#: simple-membership/classes/class.swpm-membership-levels.php:225
+#: simple-membership/views/admin_members_list.php:43
+msgid "Add New"
+msgstr "Neu hinzufügen"
+
+#: simple-membership/classes/class.swpm-members.php:580
+#: simple-membership/views/admin_add.php:6
+msgid "Add Member"
+msgstr "Neues Mitglied hinzufügen"
+
+#: simple-membership/classes/class.swpm-members.php:581
+msgid "Bulk Operation"
+msgstr "Bulk Operation"
+
+#: simple-membership/classes/class.swpm-membership-level.php:52
+msgid ""
+"Error! Nonce verification failed for membership level creation from admin "
+"end."
+msgstr ""
+"Fehler! Überprüfung für die Erstellung von Beiträgen aus dem Admin-Ende "
+"fehlgeschlagen."
+
+#: simple-membership/classes/class.swpm-membership-level.php:64
+msgid "Membership Level Creation Successful."
+msgstr "Mitgliedschaftstufen Erstellung erfolgreich."
+
+#: simple-membership/classes/class.swpm-membership-level.php:80
+msgid ""
+"Error! Nonce verification failed for membership level edit from admin end."
+msgstr ""
+"Fehler! Nonce-Überprüfung für Mitgliedschaftsniveau Bearbeiten von Admin-"
+"Ende fehlgeschlagen ."
+
+#: simple-membership/classes/class.swpm-membership-level.php:92
+msgid "Membership Level Updated Successfully."
+msgstr "Mitgliedschaftstufe wurde erfolgreich aktualisiert."
+
+#: simple-membership/classes/class.swpm-membership-levels.php:22
+msgid "Role"
+msgstr "Rolle"
+
+#: simple-membership/classes/class.swpm-membership-levels.php:23
+msgid "Access Valid For/Until"
+msgstr "Zugang gültig für/bis"
+
+#: simple-membership/classes/class.swpm-membership-levels.php:133
+msgid "No membership levels found."
+msgstr "Keine Mitgliedschaftsstufen gefunden."
+
+#: simple-membership/classes/class.swpm-membership-levels.php:196
+msgid ""
+"Error! Nonce verification failed for membership level delete from admin end."
+msgstr ""
+"Fehler! Nonce-Überprüfung für Mitgliedschaftsstufe aus dem Admin-Ende "
+"löschen  fehlgeschlagen."
+
+#: simple-membership/classes/class.swpm-membership-levels.php:215
+#: simple-membership/views/admin_members_list.php:30
+#: simple-membership/views/payments/admin_all_payment_transactions.php:16
+msgid "Search"
+msgstr "Suchen"
+
+#: simple-membership/classes/class.swpm-membership-levels.php:253
+msgid "Simple WP Membership::Membership Levels"
+msgstr "Simple WP Membership::Mitgliedschaftsstufen"
+
+#: simple-membership/classes/class.swpm-membership-levels.php:258
+msgid "Add Level"
+msgstr "Stufe hinzufügen"
+
+#: simple-membership/classes/class.swpm-membership-levels.php:259
+msgid "Manage Content Protection"
+msgstr "Inhalt schützen"
+
+#: simple-membership/classes/class.swpm-membership-levels.php:260
+msgid "Category Protection"
+msgstr "Kategorie schützen"
+
+#: simple-membership/classes/class.swpm-settings.php:27
+#: simple-membership/classes/class.swpm-settings.php:55
+msgid "General Settings"
+msgstr "Einstellungen"
+
+#: simple-membership/classes/class.swpm-settings.php:28
+msgid "Payment Settings"
+msgstr "Zahlungseinstellungen"
+
+#: simple-membership/classes/class.swpm-settings.php:29
+msgid "Email Settings"
+msgstr "E-Mail Einstellungen"
+
+#: simple-membership/classes/class.swpm-settings.php:30
+msgid "Tools"
+msgstr "Tools"
+
+#: simple-membership/classes/class.swpm-settings.php:31
+#: simple-membership/classes/class.swpm-settings.php:189
+msgid "Advanced Settings"
+msgstr "Erweiterte Einstellungen"
+
+#: simple-membership/classes/class.swpm-settings.php:32
+msgid "Addons Settings"
+msgstr "Addons Einstellungen"
+
+#: simple-membership/classes/class.swpm-settings.php:54
+msgid "Plugin Documentation"
+msgstr "Plugin-Dokumentation"
+
+#: simple-membership/classes/class.swpm-settings.php:56
+msgid "Enable Free Membership"
+msgstr "Kostenlose Mitgliedschaft erlauben"
+
+#: simple-membership/classes/class.swpm-settings.php:57
+msgid ""
+"Enable/disable registration for free membership level. When you enable this "
+"option, make sure to specify a free membership level ID in the field below."
+msgstr ""
+"Aktivierung / Deaktivierung der Registrierung für kostenlose "
+"Mitgliedschaften. Wenn Sie diese Option aktivieren, vergewissern Sie sich, "
+"dass Sie im Feld unten eine kostenlose Mitgliedschaftsstufen-ID angeben."
+
+#: simple-membership/classes/class.swpm-settings.php:58
+msgid "Free Membership Level ID"
+msgstr "Kostenlose Mitgliedschaftsstufen-ID"
+
+#: simple-membership/classes/class.swpm-settings.php:59
+msgid "Assign free membership level ID"
+msgstr "Kostenlose Mitgliedschaftsstufen-ID zuweisen"
+
+#: simple-membership/classes/class.swpm-settings.php:60
+msgid "Enable More Tag Protection"
+msgstr "Aktivieren Sie mehr Tag-Schutz"
+
+#: simple-membership/classes/class.swpm-settings.php:61
+msgid ""
+"Enables or disables \"more\" tag protection in the posts and pages. Anything "
+"after the More tag is protected. Anything before the more tag is teaser "
+"content."
+msgstr ""
+"Aktivieren oder deaktivieren Sie den Tag-Schutz in den Beiträgen und Seiten. "
+"Alles nach dem Tag ist geschützt. Alles vor dem Tag ist Teaser Inhalt."
+
+#: simple-membership/classes/class.swpm-settings.php:62
+msgid "Hide Adminbar"
+msgstr "Admin-Bar ausblenden"
+
+#: simple-membership/classes/class.swpm-settings.php:63
+msgid ""
+"WordPress shows an admin toolbar to the logged in users of the site. Check "
+"this if you want to hide that admin toolbar in the frontend of your site."
+msgstr ""
+"WordPress zeigt eine Admin-Symbolleiste für die angemeldeten Benutzer der "
+"Website. Überprüfen Sie dies, wenn Sie diese Admin-Symbolleiste im Frontend "
+"Ihrer Website verstecken möchten."
+
+#: simple-membership/classes/class.swpm-settings.php:64
+msgid "Show Adminbar to Admin"
+msgstr "Adminbar dem Admin anzeigen"
+
+#: simple-membership/classes/class.swpm-settings.php:65
+msgid ""
+"Use this option if you want to show the admin toolbar to admin users only. "
+"The admin toolbar will be hidden for all other users."
+msgstr ""
+"Verwenden Sie diese Option, wenn Sie die Admin-Symbolleiste nur für Admin-"
+"Benutzer anzeigen möchten. Die Admin-Symbolleiste wird für alle anderen "
+"Benutzer ausgeblendet."
+
+#: simple-membership/classes/class.swpm-settings.php:66
+msgid "Disable Access to WP Dashboard"
+msgstr "Deaktivieren Sie den Zugriff auf das WP Dashboard"
+
+#: simple-membership/classes/class.swpm-settings.php:67
+msgid ""
+"WordPress allows a sandard wp user to be able to go to the wp-admin URL and "
+"access his profile from the wp dashbaord. Using this option will prevent any "
+"non admin users from going to the wp dashboard."
+msgstr ""
+"WordPress ermöglicht es einem Standard-Wp-Benutzer, in die WP-Admin URL zu "
+"gelangen und auf sein Profil aus dem WP-Dashboard zuzugreifen. Mit dieser "
+"Option wird verhindert, dass keine Admin-Benutzer zum WP-Dashboard gehen."
+
+#: simple-membership/classes/class.swpm-settings.php:69
+msgid "Default Account Status"
+msgstr "Standardkonto Status"
+
+#: simple-membership/classes/class.swpm-settings.php:72
+msgid ""
+"Select the default account status for newly registered users. If you want to "
+"manually approve the members then you can set the status to \"Pending\"."
+msgstr ""
+"Wählen Sie den Standardkontostatus für neu registrierte Benutzer aus. Wenn "
+"Sie die Mitglieder manuell genehmigen möchten, können Sie den Status auf "
+"\"Ausstehend\" setzen."
+
+#: simple-membership/classes/class.swpm-settings.php:74
+msgid "Members Must be Logged in to Comment"
+msgstr "Mitglieder müssen angemeldet sein, um kommentieren zu können"
+
+#: simple-membership/classes/class.swpm-settings.php:75
+msgid ""
+"Enable this option if you only want the members of the site to be able to "
+"post a comment."
+msgstr ""
+"Aktivieren Sie diese Option, wenn Sie möchten, dass nur Mitglieder der "
+"Website einen Kommentar hinterlassen können."
+
+#: simple-membership/classes/class.swpm-settings.php:84
+msgid "Pages Settings"
+msgstr "Seiteneinstellungen"
+
+#: simple-membership/classes/class.swpm-settings.php:85
+msgid "Login Page URL"
+msgstr "Loginseiten-URL"
+
+#: simple-membership/classes/class.swpm-settings.php:87
+msgid "Registration Page URL"
+msgstr "Registrierungsseiten-URL"
+
+#: simple-membership/classes/class.swpm-settings.php:89
+msgid "Join Us Page URL"
+msgstr "Jetzt Anmelden-URL"
+
+#: simple-membership/classes/class.swpm-settings.php:91
+msgid "Edit Profile Page URL"
+msgstr "Profil bearbeiten-URL"
+
+#: simple-membership/classes/class.swpm-settings.php:93
+msgid "Password Reset Page URL"
+msgstr "Passwort zurücksetzten-URL"
+
+#: simple-membership/classes/class.swpm-settings.php:96
+msgid "Test & Debug Settings"
+msgstr "Test & Debug-Einstellungen"
+
+#: simple-membership/classes/class.swpm-settings.php:98
+msgid "Check this option to enable debug logging."
+msgstr ""
+"Aktivieren Sie diese Option, um die Debug-Protokollierung zu aktivieren."
+
+#: simple-membership/classes/class.swpm-settings.php:103
+msgid "Enable Sandbox Testing"
+msgstr "Sandbox-Test aktivieren"
+
+#: simple-membership/classes/class.swpm-settings.php:104
+msgid "Enable this option if you want to do sandbox payment testing."
+msgstr ""
+"Aktivieren Sie diese Option, wenn Sie Sandbox-Zahlungstests durchführen "
+"möchten."
+
+#: simple-membership/classes/class.swpm-settings.php:117
+#: simple-membership/classes/class.swpm-settings.php:184
+#: simple-membership/classes/class.swpm-settings.php:301
+msgid "Settings updated!"
+msgstr "Einstellungen aktualisiert!"
+
+#: simple-membership/classes/class.swpm-settings.php:122
+msgid "Email Misc. Settings"
+msgstr "E-Mail Einstellungen"
+
+#: simple-membership/classes/class.swpm-settings.php:123
+msgid "From Email Address"
+msgstr "Von E-Mail-Adresse"
+
+#: simple-membership/classes/class.swpm-settings.php:127
+msgid "Email Settings (Prompt to Complete Registration )"
+msgstr "E-Mail-Einstellungen (Eingabeaufforderung zur Anmeldung)"
+
+#: simple-membership/classes/class.swpm-settings.php:128
+#: simple-membership/classes/class.swpm-settings.php:141
+#: simple-membership/classes/class.swpm-settings.php:159
+#: simple-membership/classes/class.swpm-settings.php:164
+#: simple-membership/classes/class.swpm-settings.php:169
+msgid "Email Subject"
+msgstr "E-Mail Betreff"
+
+#: simple-membership/classes/class.swpm-settings.php:130
+#: simple-membership/classes/class.swpm-settings.php:143
+#: simple-membership/classes/class.swpm-settings.php:160
+#: simple-membership/classes/class.swpm-settings.php:165
+#: simple-membership/classes/class.swpm-settings.php:170
+msgid "Email Body"
+msgstr "Nachrichtentext"
+
+#: simple-membership/classes/class.swpm-settings.php:134
+msgid ""
+"Enter the email address where you want the admin notification email to be "
+"sent to."
+msgstr ""
+"Geben Sie die E-Mail-Adresse ein, an die die Admin-Benachrichtigungs-E-Mail "
+"gesendet werden soll."
+
+#: simple-membership/classes/class.swpm-settings.php:135
+msgid ""
+" You can put multiple email addresses separated by comma (,) in the above "
+"field to send the notification to multiple email addresses."
+msgstr ""
+"Sie können mehrere E-Mail-Adressen durch Komma (,) im obigen Feld getrennt, "
+"um die Benachrichtigung an mehrere E-Mail-Adressen zu senden."
+
+#: simple-membership/classes/class.swpm-settings.php:137
+msgid "Enter the subject for the admin notification email."
+msgstr "Geben Sie den Betreff für die Admin-Benachrichtigungs-E-Mail ein."
+
+#: simple-membership/classes/class.swpm-settings.php:138
+msgid ""
+"This email will be sent to the admin when a new user completes the "
+"membership registration. Only works if you have enabled the \"Send "
+"Notification to Admin\" option above."
+msgstr ""
+"Diese E-Mail wird an den Admin gesendet, wenn ein neuer Benutzer die "
+"Mitgliedschaftsregistrierung abschließt. Funktioniert nur, wenn Sie die "
+"Option \"Benachrichtigung an Admin senden\" oben aktiviert haben."
+
+#: simple-membership/classes/class.swpm-settings.php:140
+msgid "Email Settings (Registration Complete)"
+msgstr "E-Mail-Einstellungen (Anmeldung abgeschlossen)"
+
+#: simple-membership/classes/class.swpm-settings.php:145
+msgid "Send Notification to Admin"
+msgstr "Benachrichtigung an Admin senden"
+
+#: simple-membership/classes/class.swpm-settings.php:146
+msgid ""
+"Enable this option if you want the admin to receive a notification when a "
+"member registers."
+msgstr ""
+"Aktivieren Sie diese Option, wenn der Administrator eine Benachrichtigung "
+"erhalten soll, wenn ein Mitglied registriert wird."
+
+#: simple-membership/classes/class.swpm-settings.php:147
+msgid "Admin Email Address"
+msgstr "Admin E-Mail-Adresse"
+
+#: simple-membership/classes/class.swpm-settings.php:149
+msgid "Admin Notification Email Subject"
+msgstr "Admin Benachrichtigung E-Mail Betreff"
+
+#: simple-membership/classes/class.swpm-settings.php:151
+msgid "Admin Notification Email Body"
+msgstr "Admin Benachrichtigung E-Mail Nachrichtentext"
+
+#: simple-membership/classes/class.swpm-settings.php:154
+msgid "Send Email to Member When Added via Admin Dashboard"
+msgstr ""
+"E-Mail an Mitglied senden, wenn es über das Admin-Dashboard hinzugefügt wurde"
+
+#: simple-membership/classes/class.swpm-settings.php:158
+msgid "Email Settings (Password Reset)"
+msgstr "E-Mail-Einstellungen (Passwort zurücksetzen)"
+
+#: simple-membership/classes/class.swpm-settings.php:163
+msgid " Email Settings (Account Upgrade Notification)"
+msgstr " E-Mail-Einstellungen (Kontoaktualisierungsbenachrichtigung)"
+
+#: simple-membership/classes/class.swpm-settings.php:168
+msgid " Email Settings (Bulk Account Activate Notification)"
+msgstr " E-Mail-Einstellungen (Account Benachrichtigung aktivieren)"
+
+#: simple-membership/classes/class.swpm-settings.php:191
+msgid "Enable Expired Account Login"
+msgstr "Aktivieren Sie das \"abgelaufene Konto\" Login"
+
+#: simple-membership/classes/class.swpm-settings.php:192
+msgid ""
+"When enabled, expired members will be able to log into the system but won't "
+"be able to view any protected content. This allows them to easily renew "
+"their account by making another payment."
+msgstr ""
+"Wenn aktiviert, können abgelaufene Mitglieder sich in das System anmelden, "
+"können aber keine geschützten Inhalte anzeigen. Dies ermöglicht es ihnen, "
+"dass Ihre Nutzer ihre Mitgliedschaft verlängern können."
+
+#: simple-membership/classes/class.swpm-settings.php:194
+msgid "Membership Renewal URL"
+msgstr "Mitgliedschaft Erneuerung URL"
+
+#: simple-membership/classes/class.swpm-settings.php:195
+msgid ""
+"You can create a renewal page for your site. Read <a href=\"https://simple-"
+"membership-plugin.com/creating-membership-renewal-button/\" target=\"_blank"
+"\">this documentation</a> to learn how to create a renewal page."
+msgstr ""
+"Sie können eine Erneuerungsseite für Ihre Website erstellen. Lesen Sie <a "
+"href=\"https://simple-membership-plugin.com/creating-membership-renewal-"
+"button/\" target=\"_blank\"> Diese Dokumentation </a> um zu lernen, wie man "
+"eine Erneuerungsseite erstellt."
+
+#: simple-membership/classes/class.swpm-settings.php:197
+msgid "Allow Account Deletion"
+msgstr "Kontolöschung zulassen"
+
+#: simple-membership/classes/class.swpm-settings.php:198
+msgid "Allow users to delete their accounts."
+msgstr "Benutzern erlauben, ihre Konten zu löschen."
+
+#: simple-membership/classes/class.swpm-settings.php:200
+msgid "Use WordPress Timezone"
+msgstr "Verwenden Sie die WordPress Zeitzone"
+
+#: simple-membership/classes/class.swpm-settings.php:201
+msgid ""
+"Use this option if you want to use the timezone value specified in your "
+"WordPress General Settings interface."
+msgstr ""
+"Verwenden Sie diese Option, wenn Sie den in Ihrer WordPress Einstellungen "
+"angegebenen Zeitzonenwert verwenden möchten."
+
+#: simple-membership/classes/class.swpm-settings.php:203
+msgid "Auto Delete Pending Account"
+msgstr "Automatisch ausstehende Kontos löschen"
+
+#: simple-membership/classes/class.swpm-settings.php:206
+msgid "Select how long you want to keep \"pending\" account."
+msgstr ""
+"Wählen Sie aus, wie lange Sie ausstehende Benutzerkonten behalten möchten."
+
+#: simple-membership/classes/class.swpm-settings.php:208
+msgid "Admin Dashboard Access Permission"
+msgstr "Admin-Dashboard Zugriffsberechtigung"
+
+#: simple-membership/classes/class.swpm-settings.php:211
+msgid ""
+"SWPM admin dashboard is accessible to admin users only (just like any other "
+"plugin). You can allow users with other WP user role to access the SWPM "
+"admin dashboard by selecting a value here."
+msgstr ""
+"SWPM-Admin-Dashboard ist nur für Admin-Benutzer zugänglich (genau wie jedes "
+"andere Plugin). Sie können Benutzern mit anderer WP-Benutzerrolle erlauben, "
+"auf das SWPM-Admin-Dashboard zuzugreifen, indem Sie hier einen Wert "
+"auswählen."
+
+#: simple-membership/classes/class.swpm-settings.php:306
+msgid "General Plugin Settings."
+msgstr "Allgemeine Plugin-Einstellungen."
+
+#: simple-membership/classes/class.swpm-settings.php:310
+msgid "Page Setup and URL Related settings."
+msgstr "Page Setup und URL Zugehörige Einstellungen."
+
+#: simple-membership/classes/class.swpm-settings.php:314
+msgid "Testing and Debug Related Settings."
+msgstr "Testen und Debuggen von verwandten Einstellungen."
+
+#: simple-membership/classes/class.swpm-settings.php:318
+msgid ""
+"This email will be sent to your users when they complete the registration "
+"and become a member."
+msgstr ""
+"Diese E-Mail wird an Ihre Benutzer gesendet, wenn sie die Registrierung "
+"abschließen."
+
+#: simple-membership/classes/class.swpm-settings.php:322
+msgid ""
+"This email will be sent to your users when they use the password reset "
+"functionality."
+msgstr ""
+"Diese E-Mail wird an Ihre Benutzer gesendet, wenn sie das Passwort "
+"zurücksetzen."
+
+#: simple-membership/classes/class.swpm-settings.php:326
+msgid "Settings in this section apply to all emails."
+msgstr "Die Einstellungen in diesem Abschnitt gelten für alle E-Mails."
+
+#: simple-membership/classes/class.swpm-settings.php:330
+msgid ""
+"This email will be sent to your users after account upgrade (when an "
+"existing member pays for a new membership level)."
+msgstr ""
+"Diese E-Mail wird an Ihre Benutzer nach dem Konto-Upgrade gesendet (wenn ein "
+"bestehendes Mitglied für eine neue Mitgliedschaftsstufe bezahlt)."
+
+#: simple-membership/classes/class.swpm-settings.php:334
+msgid ""
+"This email will be sent to your members when you use the bulk account "
+"activate and notify action."
+msgstr ""
+"Diese E-Mail wird an Ihre Mitglieder gesendet, wenn Sie das Konto aktivieren."
+
+#: simple-membership/classes/class.swpm-settings.php:338
+msgid ""
+"This email will be sent to prompt users to complete registration after the "
+"payment."
+msgstr ""
+"Diese E-Mail wird gesendet, um Benutzer zu veranlassen, die Registrierung "
+"nach der Zahlung zu vervollständigen."
+
+#: simple-membership/classes/class.swpm-settings.php:342
+msgid "This page allows you to configure some advanced features of the plugin."
+msgstr ""
+"Auf dieser Seite können Sie einige erweiterte Funktionen dieses Plugins "
+"konfigurieren."
+
+#: simple-membership/classes/class.swpm-settings.php:451
+msgid "Simple WP Membership::Settings"
+msgstr "Simple WP Membership::Einstellungen"
+
+#: simple-membership/classes/class.swpm-utils-member.php:21
+#: simple-membership/classes/class.swpm-utils-member.php:29
+#: simple-membership/classes/class.swpm-utils-member.php:37
+#: simple-membership/classes/class.swpm-utils-member.php:47
+msgid "User is not logged in."
+msgstr "Benutzer ist nicht angemeldet."
+
+#: simple-membership/classes/class.swpm-utils-misc.php:50
+msgid "Registration"
+msgstr "Registrierung"
+
+#: simple-membership/classes/class.swpm-utils-misc.php:73
+msgid "Member Login"
+msgstr "Login für Mitglieder"
+
+#: simple-membership/classes/class.swpm-utils-misc.php:96
+msgid "Profile"
+msgstr "Profil"
+
+#: simple-membership/classes/class.swpm-utils-misc.php:119
+msgid "Password Reset"
+msgstr "Passwort zurücksetzen"
+
+#: simple-membership/classes/class.swpm-utils-misc.php:236
+msgid "Not a Member?"
+msgstr "Noch kein Mitglied?"
+
+#: simple-membership/classes/class.swpm-utils-misc.php:247
+msgid "renew"
+msgstr "erneuern"
+
+#: simple-membership/classes/class.swpm-utils-misc.php:247
+msgid " your account to gain access to this content."
+msgstr " Ihr Konto, um Zugang zu diesem Inhalt zu erhalten."
+
+#: simple-membership/classes/class.swpm-utils-misc.php:289
+#: simple-membership/classes/class.swpm-utils-misc.php:295
+msgid "Error! This action ("
+msgstr "Fehler! Diese Aktion ("
+
+#: simple-membership/classes/class.swpm-utils-template.php:38
+msgid "Error! Failed to find a template path for the specified template: "
+msgstr ""
+"Fehler! Fehler beim Suchen eines Vorlagenpfads für die angegebene Vorlage: "
+
+#: simple-membership/classes/class.swpm-utils.php:100
+msgid "Never"
+msgstr "Niemals"
+
+#: simple-membership/classes/class.swpm-utils.php:115
+msgid "Active"
+msgstr "Aktiv"
+
+#: simple-membership/classes/class.swpm-utils.php:116
+msgid "Inactive"
+msgstr "Inaktiv"
+
+#: simple-membership/classes/class.swpm-utils.php:117
+msgid "Pending"
+msgstr "Steht aus"
+
+#: simple-membership/classes/class.swpm-utils.php:118
+msgid "Expired"
+msgstr "Abgelaufen"
+
+#: simple-membership/classes/class.swpm-utils.php:452
+msgid "Delete Account"
+msgstr "Konto löschen"
+
+#: simple-membership/classes/admin-includes/class.swpm-payment-buttons-list-table.php:75
+msgid "Payment Button ID"
+msgstr "Zahlungs-Button-ID"
+
+#: simple-membership/classes/admin-includes/class.swpm-payment-buttons-list-table.php:76
+msgid "Payment Button Title"
+msgstr "Zahlungs Button Titel"
+
+#: simple-membership/classes/admin-includes/class.swpm-payment-buttons-list-table.php:77
+msgid "Membership Level ID"
+msgstr "Mitgliedsschaftsstufen ID"
+
+#: simple-membership/classes/admin-includes/class.swpm-payment-buttons-list-table.php:78
+msgid "Button Type"
+msgstr "Button Typ"
+
+#: simple-membership/classes/admin-includes/class.swpm-payment-buttons-list-table.php:79
+msgid "Button Shortcode"
+msgstr "Button Shortcode"
+
+#: simple-membership/classes/admin-includes/class.swpm-payment-buttons-list-table.php:127
+#: simple-membership/views/admin_members_list.php:9
+#: simple-membership/views/payments/admin_all_payment_transactions.php:32
+msgid "The selected entry was deleted!"
+msgstr "Der ausgewählte Eintrag wurde gelöscht!"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-admin-menu.php:21
+msgid "Simple Membership::Payments"
+msgstr "Simple Membership::Zahlungen"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-admin-menu.php:25
+msgid "Transactions"
+msgstr "Transaktionen"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-admin-menu.php:26
+msgid "Manage Payment Buttons"
+msgstr "Zahlungsarten verwalten"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-admin-menu.php:27
+#: simple-membership/views/payments/admin_payment_buttons.php:27
+msgid "Create New Button"
+msgstr "Neue Schaltfläche erstellen"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:57
+msgid "View Profile"
+msgstr "Profil anzeigen"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:76
+msgid "Row ID"
+msgstr "Zeilen-ID"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:77
+#: simple-membership/views/forgot_password.php:5
+msgid "Email Address"
+msgstr "E-Mail Adresse"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:80
+msgid "Member Profile"
+msgstr "Nutzerprofil"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:81
+msgid "Date"
+msgstr "Datum"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:82
+msgid "Transaction ID"
+msgstr "Transaktions-ID"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:83
+msgid "Subscriber ID"
+msgstr "Abonnenten-ID"
+
+#: simple-membership/classes/admin-includes/class.swpm-payments-list-table.php:84
+msgid "Amount"
+msgstr "Summe"
+
+#: simple-membership/classes/shortcode-related/class.swpm-shortcodes-handler.php:57
+msgid "Your membership profile will be updated to reflect the payment."
+msgstr "Ihr Profil wird aktualisiert, um die Zahlung zu geltend zu machen."
+
+#: simple-membership/classes/shortcode-related/class.swpm-shortcodes-handler.php:58
+msgid "Your profile username: "
+msgstr "Ihr Benutzername: "
+
+#: simple-membership/classes/shortcode-related/class.swpm-shortcodes-handler.php:70
+msgid "Click on the following link to complete the registration."
+msgstr ""
+"Klicken Sie auf den folgenden Link, um die Registrierung abzuschließen."
+
+#: simple-membership/classes/shortcode-related/class.swpm-shortcodes-handler.php:71
+msgid "Click here to complete your paid registration"
+msgstr "Klicken Sie hier, um Ihre bezahlte Registrierung abzuschließen"
+
+#: simple-membership/classes/shortcode-related/class.swpm-shortcodes-handler.php:76
+msgid ""
+"If you have just made a membership payment then your payment is yet to be "
+"processed. Please check back in a few minutes. An email will be sent to you "
+"with the details shortly."
+msgstr ""
+"Wenn Sie gerade eine Mitgliedschaft bezahlt haben, dann konnte Ihre Zahlung "
+"noch nicht verarbeitet werden. Probieren Sie es in ein paar Minuten erneut. "
+"Eine Bestätigungs E-Mail wird Ihnen in Kürze zugesandt."
+
+#: simple-membership/classes/shortcode-related/class.swpm-shortcodes-handler.php:90
+msgid "Expiry: "
+msgstr "Ablauf: "
+
+#: simple-membership/classes/shortcode-related/class.swpm-shortcodes-handler.php:92
+msgid "You are not logged-in as a member"
+msgstr "Sie sind nicht als Mitglied angemeldet. "
+
+#: simple-membership/views/add.php:15 simple-membership/views/admin_add.php:19
+#: simple-membership/views/admin_edit.php:39
+#: simple-membership/views/edit.php:21 simple-membership/views/login.php:17
+msgid "Password"
+msgstr "Passwort"
+
+#: simple-membership/views/add.php:19 simple-membership/views/edit.php:25
+msgid "Repeat Password"
+msgstr "Passwort wiederholen"
+
+#: simple-membership/views/add.php:53
+msgid "Register"
+msgstr "Registrieren"
+
+#: simple-membership/views/admin_add.php:7
+msgid "Create a brand new user and add it to this site."
+msgstr ""
+"Erstellen Sie einen neuen Benutzer und fügen Sie ihn zu dieser Website hinzu."
+
+#: simple-membership/views/admin_add.php:11
+#: simple-membership/views/admin_add.php:15
+#: simple-membership/views/admin_add_level.php:12
+#: simple-membership/views/admin_add_level.php:16
+#: simple-membership/views/admin_add_level.php:20
+#: simple-membership/views/admin_edit.php:14
+#: simple-membership/views/admin_edit.php:35
+#: simple-membership/views/admin_edit_level.php:16
+#: simple-membership/views/admin_edit_level.php:20
+#: simple-membership/views/admin_edit_level.php:24
+msgid "(required)"
+msgstr "(erforderlich)"
+
+#: simple-membership/views/admin_add.php:15
+#: simple-membership/views/admin_edit.php:35
+msgid "E-mail"
+msgstr "E-Mail Adresse"
+
+#: simple-membership/views/admin_add.php:19
+msgid "(twice, required)"
+msgstr "(Zweimal erforderlich)"
+
+#: simple-membership/views/admin_add.php:24
+#: simple-membership/views/admin_edit.php:43
+msgid "Strength indicator"
+msgstr "Passwortsicherheit"
+
+#: simple-membership/views/admin_add.php:25
+#: simple-membership/views/admin_edit.php:44
+msgid ""
+"Hint: The password should be at least seven characters long. To make it "
+"stronger, use upper and lower case letters, numbers and symbols like ! \" ? "
+"$ % ^ &amp; )."
+msgstr ""
+"Hinweis: Das Passwort sollte mindestens sieben Zeichen lang sein. Um es "
+"stärker zu machen, verwenden Sie Groß- und Kleinbuchstaben, Zahlen und "
+"Symbole wie! \" ? $ % ^ &)."
+
+#: simple-membership/views/admin_add.php:29
+#: simple-membership/views/admin_edit.php:48
+#: simple-membership/views/loggedin.php:10
+msgid "Account Status"
+msgstr "Kontostatus"
+
+#: simple-membership/views/admin_add.php:39
+msgid "Add New Member "
+msgstr "Neues Mitglied hinzufügen "
+
+#: simple-membership/views/admin_addon_settings.php:3
+msgid ""
+"Some of the simple membership plugin's addon settings and options will be "
+"displayed here (if you have them)"
+msgstr ""
+"Einige der einfachen Addoneinstellungen und Optionen werden hier angezeigt"
+
+#: simple-membership/views/admin_addon_settings.php:8
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: simple-membership/views/admin_add_level.php:7
+msgid "Create new membership level."
+msgstr "Neue Mitgliedschaftsstufe erstellen."
+
+#: simple-membership/views/admin_add_level.php:12
+#: simple-membership/views/admin_edit_level.php:16
+msgid "Membership Level Name"
+msgstr "Name der Mitgliedschaftsstufe"
+
+#: simple-membership/views/admin_add_level.php:16
+#: simple-membership/views/admin_edit_level.php:20
+msgid "Default WordPress Role"
+msgstr "Standard-WordPress-Rolle"
+
+#: simple-membership/views/admin_add_level.php:20
+#: simple-membership/views/admin_edit_level.php:24
+msgid "Access Duration"
+msgstr "Zugriffsdauer"
+
+#: simple-membership/views/admin_add_level.php:23
+msgid "No Expiry (Access for this level will not expire until cancelled"
+msgstr "Kein Ablauf (Zugang für diese Ebene wird nicht abgebrochen"
+
+#: simple-membership/views/admin_add_level.php:24
+#: simple-membership/views/admin_add_level.php:26
+#: simple-membership/views/admin_add_level.php:28
+#: simple-membership/views/admin_add_level.php:30
+#: simple-membership/views/admin_edit_level.php:28
+#: simple-membership/views/admin_edit_level.php:31
+#: simple-membership/views/admin_edit_level.php:34
+#: simple-membership/views/admin_edit_level.php:37
+msgid "Expire After"
+msgstr "Endet mit Ablauf"
+
+#: simple-membership/views/admin_add_level.php:25
+#: simple-membership/views/admin_edit_level.php:29
+msgid "Days (Access expires after given number of days)"
+msgstr "Tage (Zugang läuft nach vorgegebener Anzahl der Tage ab.)"
+
+#: simple-membership/views/admin_add_level.php:27
+msgid "Weeks (Access expires after given number of weeks"
+msgstr "Wochen (Zugang läuft nach vorgegebener Anzahl der Wochen ab.)"
+
+#: simple-membership/views/admin_add_level.php:29
+#: simple-membership/views/admin_edit_level.php:35
+msgid "Months (Access expires after given number of months)"
+msgstr "Monate (Zugang läuft nach vorgegebener Anzahl der Monate ab.)"
+
+#: simple-membership/views/admin_add_level.php:31
+#: simple-membership/views/admin_edit_level.php:38
+msgid "Years (Access expires after given number of years)"
+msgstr "Jahre (Zugang läuft nach vorgegebener Anzahl der Jahre ab.)"
+
+#: simple-membership/views/admin_add_level.php:32
+#: simple-membership/views/admin_edit_level.php:40
+msgid "Fixed Date Expiry"
+msgstr "Festes Ablaufdatum"
+
+#: simple-membership/views/admin_add_level.php:33
+#: simple-membership/views/admin_edit_level.php:41
+msgid "(Access expires on a fixed date)"
+msgstr "(Der Zugang läuft zu einem festen Termin ab)"
+
+#: simple-membership/views/admin_add_level.php:39
+msgid "Add New Membership Level "
+msgstr "Neue Mitgliedschaft hinzufügen "
+
+#: simple-membership/views/admin_add_ons_page.php:7
+msgid "Simple WP Membership::Add-ons"
+msgstr "Simple WP Membership::Add-ons"
+
+#: simple-membership/views/admin_category_list.php:5
+msgid ""
+"First of all, globally protect the category on your site by selecting "
+"\"General Protection\" from the drop-down box below and then select the "
+"categories that should be protected from non-logged in users."
+msgstr ""
+"Zuerst schützen Sie die Kategorie auf Ihrer Website, indem Sie \"Allgemeiner "
+"Schutz\" aus dem Dropdown-Feld unten auswählen und dann die Kategorien "
+"auswählen, die vor nicht angemeldeten Benutzern geschützt werden sollen."
+
+#: simple-membership/views/admin_category_list.php:8
+msgid ""
+"Next, select an existing membership level from the drop-down box below and "
+"then select the categories you want to grant access to (for that particular "
+"membership level)."
+msgstr ""
+"Als nächstes wählen Sie eine bestehende Mitgliedschaftsstufe aus der "
+"Dropdown-Liste aus. Wählen Sie dannach die Kategorien aus, denen Sie Zugriff "
+"für diese bestimmte Mitgliedschaftsstufe gewähren möchten."
+
+#: simple-membership/views/admin_category_list.php:17
+msgid "Membership Level:"
+msgstr "Mitgliedschaftsstufe:"
+
+#: simple-membership/views/admin_category_list.php:23
+#: simple-membership/views/edit.php:68
+msgid "Update"
+msgstr "Aktualisieren"
+
+#: simple-membership/views/admin_edit.php:6
+msgid "Edit Member"
+msgstr "Mitglied bearbeiten"
+
+#: simple-membership/views/admin_edit.php:8
+msgid "Edit existing member details."
+msgstr "Bearbeiten Sie die vorhandenen Mitgliedsdetails."
+
+#: simple-membership/views/admin_edit.php:9
+msgid " You are currenty editing member with member ID: "
+msgstr " Sie bearbeiten gerade das Mitglied mit der Mitglieds-ID: "
+
+#: simple-membership/views/admin_edit.php:39
+msgid "(twice, leave empty to retain old password)"
+msgstr "(leer lassen, um altes Passwort zu behalten)"
+
+#: simple-membership/views/admin_edit.php:55
+msgid "Notify User"
+msgstr "Benutzer benachrichtigen"
+
+#: simple-membership/views/admin_edit.php:62
+msgid "Subscriber ID/Reference"
+msgstr "Abonennten ID / Referenz"
+
+#: simple-membership/views/admin_edit.php:66
+msgid "Last Accessed Date"
+msgstr "Letztes Zugriffsdatum"
+
+#: simple-membership/views/admin_edit.php:69
+#: simple-membership/views/admin_edit.php:76
+msgid "This value gets updated when this member logs into your site."
+msgstr ""
+"Dieser Wert wird aktualisiert, wenn sich dieses Mitglied bei Ihrer Website "
+"anmeldet."
+
+#: simple-membership/views/admin_edit.php:73
+msgid "Last Accessed From IP"
+msgstr "Letzter Zugriff von IP"
+
+#: simple-membership/views/admin_edit.php:84
+msgid "Edit User "
+msgstr "Benutzer bearbeiten "
+
+#: simple-membership/views/admin_edit.php:89
+msgid "Delete User Profile"
+msgstr "Benutzerprofil löschen"
+
+#: simple-membership/views/admin_edit_level.php:6
+msgid "Edit membership level"
+msgstr "Mitgliedschaft bearbeiten"
+
+#: simple-membership/views/admin_edit_level.php:9
+msgid ""
+"You can edit details of a selected membership level from this interface. "
+msgstr ""
+"Sie können von dieser Schnittstelle aus eine ausgewählte "
+"Mitgliedschaftsstufe bearbeiten. "
+
+#: simple-membership/views/admin_edit_level.php:10
+msgid "You are currently editing: "
+msgstr "Sie bearbeiten gerade: "
+
+#: simple-membership/views/admin_edit_level.php:27
+msgid "No Expiry (Access for this level will not expire until cancelled)"
+msgstr "Kein Ablauf (Zugriff läuft nicht ab, bis er storniert wird)"
+
+#: simple-membership/views/admin_edit_level.php:32
+msgid "Weeks (Access expires after given number of weeks)"
+msgstr "Wochen (Zugang läuft nach vorgegebener Anzahl von Wochen)"
+
+#: simple-membership/views/admin_edit_level.php:47
+msgid "Edit Membership Level "
+msgstr "Mitgliedschaft bearbeiten "
+
+#: simple-membership/views/admin_membership_manage.php:18
+msgid "Example Content Protection Settings"
+msgstr "Beispiel Inhaltsschutzeinstellungen"
+
+#: simple-membership/views/admin_member_form_common_part.php:23
+msgid "Gender"
+msgstr "Geschlecht"
+
+#: simple-membership/views/admin_member_form_common_part.php:30
+#: simple-membership/views/edit.php:37
+msgid "Phone"
+msgstr "Telefonnummer"
+
+#: simple-membership/views/admin_member_form_common_part.php:34
+#: simple-membership/views/edit.php:41
+msgid "Street"
+msgstr "Straße"
+
+#: simple-membership/views/admin_member_form_common_part.php:38
+#: simple-membership/views/edit.php:45
+msgid "City"
+msgstr "Stadt"
+
+#: simple-membership/views/admin_member_form_common_part.php:42
+#: simple-membership/views/edit.php:49
+msgid "State"
+msgstr "Bundesland"
+
+#: simple-membership/views/admin_member_form_common_part.php:46
+#: simple-membership/views/edit.php:53
+msgid "Zipcode"
+msgstr "PLZ"
+
+#: simple-membership/views/admin_member_form_common_part.php:50
+#: simple-membership/views/edit.php:57
+msgid "Country"
+msgstr "Land"
+
+#: simple-membership/views/admin_member_form_common_part.php:54
+msgid "Company"
+msgstr "Firma"
+
+#: simple-membership/views/admin_member_form_common_part.php:58
+msgid "Member Since"
+msgstr "Mitglied seit"
+
+#: simple-membership/views/admin_tools_settings.php:6
+msgid "Generate a Registration Completion link"
+msgstr "Erzeugen Sie einen Bestätigungslink für eine Registrierung"
+
+#: simple-membership/views/admin_tools_settings.php:9
+msgid ""
+"You can manually generate a registration completion link here and give it to "
+"your customer if they have missed the email that was automatically sent out "
+"to them after the payment."
+msgstr ""
+"Sie können hier manuell einen Bestätigungslink für eine Registrierung "
+"generieren und ihn an Ihren Kunden weitergeben, wenn sie die E-Mail nicht "
+"erhlaten haben, die ihnen nach der Zahlung automatisch zugesandt wurde."
+
+#: simple-membership/views/admin_tools_settings.php:14
+msgid "Generate Registration Completion Link"
+msgstr "Generierung des Bestätigungslinks"
+
+#: simple-membership/views/admin_tools_settings.php:15
+msgid "For a Particular Member ID"
+msgstr "Für eine bestimmte Mitglieds-ID"
+
+#: simple-membership/views/admin_tools_settings.php:17
+msgid "OR"
+msgstr "ODER"
+
+#: simple-membership/views/admin_tools_settings.php:18
+msgid "For All Incomplete Registrations"
+msgstr "Für alle unvollständigen Anmeldungen"
+
+#: simple-membership/views/admin_tools_settings.php:23
+msgid "Send Registration Reminder Email Too"
+msgstr "Schicken Sie die Registrierungs-Erinnerung E-Mail an"
+
+#: simple-membership/views/admin_tools_settings.php:29
+msgid "Submit"
+msgstr "Absenden"
+
+#: simple-membership/views/admin_tools_settings.php:38
+msgid ""
+"Link(s) generated successfully. The following link(s) can be used to "
+"complete the registration."
+msgstr ""
+"Link(s) wurde(n) erfolgreich generiert Mit den folgenden Link(s) können Sie "
+"die Registrierung abschließen."
+
+#: simple-membership/views/admin_tools_settings.php:40
+msgid "Registration completion links will appear below"
+msgstr "Bestätigungslinks werden unten angezeigt"
+
+#: simple-membership/views/edit.php:22 simple-membership/views/edit.php:26
+msgid "Leave empty to keep the current password"
+msgstr "Lassen Sie das Feld leer, um das aktuelle Passwort beizubehalten."
+
+#: simple-membership/views/forgot_password.php:12
+msgid "Reset Password"
+msgstr "Passwort zurücksetzen"
+
+#: simple-membership/views/loggedin.php:6
+msgid "Logged in as"
+msgstr "Eingeloggt als"
+
+#: simple-membership/views/loggedin.php:14
+msgid "Membership"
+msgstr "Mitgliedschaft"
+
+#: simple-membership/views/loggedin.php:18
+msgid "Account Expiry"
+msgstr "Kontoablauf"
+
+#: simple-membership/views/loggedin.php:22
+msgid "Logout"
+msgstr "Ausloggen"
+
+#: simple-membership/views/login.php:11
+msgid "Username or Email"
+msgstr "Benutzername oder Passwort"
+
+#: simple-membership/views/login.php:24
+msgid "Remember Me"
+msgstr "Erinneren Sie sich an mich"
+
+#: simple-membership/views/login.php:33
+msgid "Forgot Password"
+msgstr "Passwort vergessen"
+
+#: simple-membership/views/payments/admin_all_payment_transactions.php:6
+msgid "All the payments/transactions of your members are recorded here."
+msgstr ""
+"Alle Zahlungen / Transaktionen Ihrer Mitglieder werden hier aufgezeichnet."
+
+#: simple-membership/views/payments/admin_all_payment_transactions.php:12
+msgid "Search for a transaction by using email or name"
+msgstr "Suchen Sie nach einer Transaktion per E-Mail oder Name"
+
+#: simple-membership/views/payments/admin_create_payment_buttons.php:15
+msgid ""
+"You can create new payment button for your memberships using this interface."
+msgstr ""
+"Mit dieser Oberfleche können Sie eine neue Zahlungsmöglichkeit für Ihre "
+"Mitgliedschaften erstellen."
+
+#: simple-membership/views/payments/admin_create_payment_buttons.php:23
+msgid "Select Payment Button Type"
+msgstr "Wählen Sie die Zahlungsart"
+
+#: simple-membership/views/payments/admin_create_payment_buttons.php:26
+msgid "PayPal Buy Now"
+msgstr "PayPal Jetzt kaufen"
+
+#: simple-membership/views/payments/admin_create_payment_buttons.php:28
+msgid "PayPal Subscription"
+msgstr "PayPal Abonnement"
+
+#: simple-membership/views/payments/admin_create_payment_buttons.php:30
+msgid "Stripe Buy Now"
+msgstr "Stripe Jetzt kaufen"
+
+#: simple-membership/views/payments/admin_create_payment_buttons.php:32
+msgid "Braintree Buy Now"
+msgstr "Braintree Jetzt kaufen"
+
+#: simple-membership/views/payments/admin_create_payment_buttons.php:39
+msgid "Next"
+msgstr "Weiter"
+
+#: simple-membership/views/payments/admin_edit_payment_buttons.php:13
+msgid "You can edit a payment button using this interface."
+msgstr "Sie können über diese Oberfläche eine Zahlungsschaltfläche bearbeiten."
+
+#: simple-membership/views/payments/admin_payment_buttons.php:6
+msgid ""
+"All the membership buttons that you created in the plugin are displayed here."
+msgstr ""
+"Hier werden alle Mitgliedsschaftsschaltflächen angezeigt, die du im Plugin "
+"erstellt hast."
+
+#: simple-membership/views/payments/admin_payment_settings.php:21
+msgid "Error! The membership level ID ("
+msgstr "Fehler! Die Mitgliederstufen-ID ("
+
+#: simple-membership/views/payments/admin_payment_settings.php:27
+msgid "PayPal Integration Settings"
+msgstr "PayPal Integration Einstellungen"
+
+#: simple-membership/views/payments/admin_payment_settings.php:30
+msgid "Generate the \"Advanced Variables\" Code for your PayPal button"
+msgstr "Generieren Sie den \"Advanced Variables\" Code für Ihren PayPal-Button"
+
+#: simple-membership/views/payments/admin_payment_settings.php:33
+msgid "Enter the Membership Level ID"
+msgstr "Geben Sie die Mitgliederstufen-ID ein"
+
+#: simple-membership/views/payments/admin_payment_settings.php:35
+msgid "Generate Code"
+msgstr "Code generieren"
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:22
+msgid "Braintree Buy Now Button Configuration"
+msgstr "Braintree \"Jetzt kaufen\" Button Konfiguration"
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:34
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:201
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:291
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:245
+msgid "Button ID"
+msgstr "Button ID"
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:42
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:26
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:209
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:27
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:299
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:39
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:252
+msgid "Button Title"
+msgstr "Button Titel"
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:60
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:44
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:227
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:57
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:268
+msgid "Payment Amount"
+msgstr "Zahlungsbetrag"
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:68
+msgid ""
+"Braintree API key and account details. You can get this from your Braintree "
+"account."
+msgstr ""
+"Braintree API Schlüssel und Konto Details. Sie können diese aus Ihrem "
+"Braintree Konto erhalten."
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:72
+msgid "Merchant ID"
+msgstr "Händler ID"
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:80
+msgid "Public Key"
+msgstr "Öffentlicher Schlüssel"
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:87
+msgid "Private Key"
+msgstr "Privater Schlüssel"
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:95
+msgid "Merchant Account ID"
+msgstr "Händler-Konto-ID"
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:113
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:137
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:347
+msgid "The following details are optional."
+msgstr "Die folgenden Angaben sind optional."
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:117
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:91
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:274
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:171
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:443
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:141
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:351
+msgid "Return URL"
+msgstr "Zu URL zurückkehren"
+
+#: simple-membership/views/payments/payment-gateway/admin_braintree_buy_now_button.php:127
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:117
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:300
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:191
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:463
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:151
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:361
+msgid "Save Payment Data"
+msgstr "Zahlungsdaten speichern"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:16
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:192
+msgid "PayPal Buy Now Button Configuration"
+msgstr "PayPal \"Jetzt kaufen\" Button Configuration"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:52
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:235
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:45
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:317
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:65
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:275
+msgid "Payment Currency"
+msgstr "Währung"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:99
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:282
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:84
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:356
+msgid "PayPal Email"
+msgstr "PayPal E-Mail Adresse"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:107
+#: simple-membership/views/payments/payment-gateway/admin_paypal_buy_now_button.php:290
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:179
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:451
+msgid "Button Image URL"
+msgstr "Button Bild-URL"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:18
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:285
+msgid "PayPal Subscription Button Configuration"
+msgstr "PayPal \"Abonnieren\" Button Konfiguration"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:92
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:364
+msgid "Billing Amount Each Cycle"
+msgstr "Abrechnungsbetrag des Zyklusses"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:100
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:372
+msgid "Billing Cycle"
+msgstr "Abrechnungszyklus"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:113
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:385
+msgid "Billing Cycle Count"
+msgstr "Abrechnungszyklen"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:121
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:393
+msgid "Re-attempt on Failure"
+msgstr "Ein Fehler ist aufgetreten! (Re-attempt on Failure)"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:134
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:406
+msgid ""
+"Trial Billing Details (Leave empty if you are not offering a trial period)"
+msgstr ""
+"Abrechnungsdetails für Probezeitraum (Leer lassen, wenn Sie keine Probezeit "
+"anbieten)"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:140
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:412
+msgid "Trial Billing Amount"
+msgstr "Rechnungsbetrag für Probezeitraum"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:148
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:420
+msgid "Trial Billing Period"
+msgstr "Abrechnungszeitraum für Probezeitraum"
+
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:165
+#: simple-membership/views/payments/payment-gateway/admin_paypal_subscription_button.php:437
+msgid "Optional Details"
+msgstr "Optionale Details"
+
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:29
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:236
+msgid "Stripe Buy Now Button Configuration"
+msgstr "Stripe \"Jetzt kaufen\" Button Konfiguration"
+
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:104
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:314
+msgid "Stripe API keys. You can get this from your Stripe account."
+msgstr "API-Schlüssel. Sie können diese von Ihrem Stripe-Konto erhalten."
+
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:108
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:318
+msgid "Test Secret Key"
+msgstr "Testen Sie den geheimen Schlüssel"
+
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:115
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:325
+msgid "Test Publishable Key"
+msgstr "Testen Sie den veröffentlichungs Schlüssel"
+
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:122
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:332
+msgid "Live Secret Key"
+msgstr "Geheimer Schlüssel"
+
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:129
+#: simple-membership/views/payments/payment-gateway/admin_stripe_buy_now_button.php:339
+msgid "Live Publishable Key"
+msgstr "Veröffentlichungs Schlüssel"
+
+#: simple-membership/views/payments/payment-gateway/braintree_button_shortcode_view.php:20
+#: simple-membership/views/payments/payment-gateway/paypal_button_shortcode_view.php:86
+#: simple-membership/views/payments/payment-gateway/paypal_button_shortcode_view.php:88
+#: simple-membership/views/payments/payment-gateway/stripe_button_shortcode_view.php:20
+msgid "Buy Now"
+msgstr "Kaufen"
+
+#: simple-membership/views/payments/payment-gateway/paypal_button_shortcode_view.php:216
+#: simple-membership/views/payments/payment-gateway/paypal_button_shortcode_view.php:218
+msgid "Subscribe Now"
+msgstr "Abonnieren"
+
+#: Translation strings from addons === Form builder addon
+msgid "Type password Here"
+msgstr "Passwort hier eingeben"
+
+msgid "Retype password Here"
+msgstr "Passwort hier wiederholen"
+
+msgid "Registration is complete. You can now log into the site."
+msgstr "Die Registrierung ist abgeschlossen. Sie können sich jetzt anmelden."
+
+msgid " Field has invalid character"
+msgstr " Ungültige Zeichen im Feld"
+
+msgid " Password does not match"
+msgstr " Das Passwort stimmt nicht überein"
+
+msgid "Already taken."
+msgstr "Wird schon verwendet."
+
+msgid "Street Address"
+msgstr "Straße"
+
+msgid "Apt, Suite, Bldg. (optional)"
+msgstr "Abteilung"
+
+msgid "State / Province / Region"
+msgstr "Bundesland"
+
+msgid "Postal / Zip Code"
+msgstr "Postleitzahl"
+
+msgid ""
+"Check this box to delete the image. The image will be deleted when you save "
+"the profile."
+msgstr ""
+"Aktivieren Sie dieses Kontrollkästchen, um das Bild zu löschen. Das Bild "
+"wird erst gelöscht, wenn Sie das Profil speichern."
+
+#: === Partial protection addon strings
+msgid "You do not have permission to view this content."
+msgstr "Sie sind nicht berechtigt, diesen Inhalt anzuzeigen."
+
+msgid "Your membership level does not have permission to view this content."
+msgstr ""
+"Ihre Mitgliedschaftsstufe hat keine Berechtigung, diesen Inhalt anzuzeigen."
+
+msgid "This content is for members only."
+msgstr "Dieser Inhalt ist nur für Mitglieder."

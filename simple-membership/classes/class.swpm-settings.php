@@ -18,8 +18,7 @@ class SwpmSettings {
         if (is_admin()) { // for frontend just load settings but dont try to render settings page.
             
             //Read the value of tab query arg.
-            $tab = filter_input(INPUT_GET, 'tab');
-            $tab = empty($tab) ? filter_input(INPUT_POST, 'tab') : $tab;
+            $tab = isset( $_REQUEST['tab'] ) ? sanitize_text_field($_REQUEST['tab']) : 1;
             $this->current_tab = empty($tab) ? 1 : $tab;
             
             //Setup the available settings tabs array.

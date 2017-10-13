@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.8
-Stable tag: 3.5.6
+Stable tag: 3.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,9 +138,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.5.7 =
+= 3.5.7 =
 - Added updated German translation file.
-- Fixed rare permissions check bug (thanks to Neb).
+- Fixed a permissions check bug (thanks to Neb).
+- Fixed a potential XSS vulnerability.
 
 = 3.5.6 =
 - Russian Ruble (₽) currency added for PayPal Buy Now and Subscription buttons. 

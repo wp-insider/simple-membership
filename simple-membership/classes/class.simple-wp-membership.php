@@ -6,6 +6,7 @@ include_once('class.swpm-utils-member.php');
 include_once('class.swpm-utils-membership-level.php');
 include_once('class.swpm-utils-template.php');
 include_once('class.swpm-init-time-tasks.php');
+include_once('class.swpm-wp-loaded-tasks.php');
 include_once('class.swpm-comment-form-related.php');
 include_once('class.swpm-settings.php');
 include_once('class.swpm-protection.php');
@@ -35,6 +36,7 @@ class SimpleWpMembership {
     public function __construct() {
         add_action('admin_menu', array(&$this, 'menu'));
         add_action('init', array(&$this, 'init_hook'));
+        add_action('wp_loaded', array(&$this, 'handle_wp_loaded_tasks'));
 
         add_filter('the_content', array(&$this, 'filter_content'), 20, 1);
         add_filter('widget_text', 'do_shortcode');
@@ -507,6 +509,11 @@ class SimpleWpMembership {
         $init_tasks->do_init_tasks();
     }
 
+    public function handle_wp_loaded_tasks(){
+        $wp_loaded_tasks = new SwpmWpLoadedTasks();
+        $wp_loaded_tasks->do_wp_loaded_tasks();
+    }
+    
     public function admin_library() {
         //Only loaded on selective swpm admin menu page rendering.
         $this->common_library();

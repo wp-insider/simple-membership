@@ -138,6 +138,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.5.8 =
+- Added a new function to logout the user from the swpm system if the corresponding wp user session is logged out.
+
 = 3.5.7 =
 - Added updated German translation file.
 - Fixed a permissions check bug (thanks to Neb).

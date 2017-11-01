@@ -86,7 +86,7 @@
     
     <?php include('admin_member_form_common_js.php'); ?>
     <?php echo apply_filters('swpm_admin_custom_fields', '',$membership_level); ?>
-    <?php submit_button( SwpmUtils::_('Edit User '), 'primary', 'editswpmuser', true, array( 'id' => 'createswpmusersub' ) ); ?>
+    <?php submit_button( SwpmUtils::_('Save Data'), 'primary', 'editswpmuser', true, array( 'id' => 'createswpmusersub' ) ); ?>
     <?php
     $delete_swpmuser_nonce = wp_create_nonce( 'delete_swpmuser_admin_end' );
     $member_delete_url = "?page=simple_wp_membership&member_action=delete&member_id=".$member_id."&delete_swpmuser_nonce=".$delete_swpmuser_nonce;

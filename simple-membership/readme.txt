@@ -140,6 +140,7 @@ https://simple-membership-plugin.com/
 
 = TODO 3.5.8 =
 - Added a new function to logout the user from the swpm system if the corresponding wp user session is logged out.
+- The company name field will now be shown in the edit profile form.
 
 = 3.5.7 =
 - Added updated German translation file.

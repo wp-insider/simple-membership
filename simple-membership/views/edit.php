@@ -58,6 +58,10 @@ extract($user_data, EXTR_SKIP);
                 <td><label for="country"><?php echo SwpmUtils::_('Country'); ?></label></td>
                 <td><input type="text" id="country" value="<?php echo $country; ?>" size="50" name="country" /></td>
             </tr>
+            <tr class="swpm-profile-company-row">
+                <td><label for="company_name"><?php echo SwpmUtils::_('Company Name'); ?></label></td>
+                <td><input type="text" id="company_name" value="<?php echo $company_name; ?>" size="50" name="company_name" /></td>
+            </tr>            
             <tr class="swpm-profile-membership-level-row">
                 <td><label for="membership_level"><?php echo SwpmUtils::_('Membership Level'); ?></label></td>
                 <td>

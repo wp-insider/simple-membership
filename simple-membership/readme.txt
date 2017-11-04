@@ -141,6 +141,7 @@ https://simple-membership-plugin.com/
 = TODO 3.5.8 =
 - Added a new function to logout the user from the swpm system if the corresponding wp user session is logged out.
 - Changed the "Edit Member" button text to "Save Data" in the admin member edit interface.
+- The company name field will now be shown in the edit profile form.
 
 = 3.5.7 =
 - Added updated German translation file.

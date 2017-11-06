@@ -63,7 +63,7 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
     $output .= '<input type="hidden" name="cmd" value="_xclick" />';
     $output .= '<input type="hidden" name="charset" value="utf-8" />';
     $output .= '<input type="hidden" name="bn" value="TipsandTricks_SP" />';
-    $output .= '<input type="hidden" name="business" value="' . $paypal_email . '" />';
+    $output .= '<input type="hidden" name="business" value="' . apply_filters('swpm_buy_now_button_paypal_email',$paypal_email) . '" />';
     $output .= '<input type="hidden" name="amount" value="' . $payment_amount . '" />';
     $output .= '<input type="hidden" name="currency_code" value="' . $payment_currency . '" />';
     $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
@@ -179,7 +179,7 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
     $output .= '<input type="hidden" name="cmd" value="_xclick-subscriptions" />';
     $output .= '<input type="hidden" name="charset" value="utf-8" />';
     $output .= '<input type="hidden" name="bn" value="TipsandTricks_SP" />';
-    $output .= '<input type="hidden" name="business" value="' . $paypal_email . '" />';
+    $output .= '<input type="hidden" name="business" value="' . apply_filters('swpm_subscription_button_paypal_email',$paypal_email) . '" />';
     $output .= '<input type="hidden" name="currency_code" value="' . $payment_currency . '" />';
     $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
     $output .= '<input type="hidden" name="item_name" value="' . htmlspecialchars($button_cpt->post_title) . '" />';

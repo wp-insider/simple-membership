@@ -5,7 +5,7 @@
 add_action('swpm_create_new_button_for_stripe_buy_now', 'swpm_create_new_stripe_buy_now_button');
 
 function swpm_create_new_stripe_buy_now_button() {
-    
+
     //Test for PHP v5.3.3 or show error and don't show the remaining interface.
     if (version_compare(PHP_VERSION, '5.3.3') >= 0) {
         //The server is using at least PHP version 5.3.3
@@ -103,7 +103,7 @@ function swpm_create_new_stripe_buy_now_button() {
                     <tr valign="top">
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Stripe API keys. You can get this from your Stripe account.'); ?></div></th>
                     </tr>
-                    
+
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Test Secret Key'); ?></th>
                         <td>
@@ -132,11 +132,19 @@ function swpm_create_new_stripe_buy_now_button() {
                             <p class="description">Enter your Stripe live publishable key.</p>
                         </td>
                     </tr>
-                    
+
                     <tr valign="top">
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional.'); ?></div></th>
                     </tr>
-                    
+
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Collect Customer Address'); ?></th>
+                        <td>
+                            <input type="checkbox" name="collect_address" value="1"/>
+                            <p class="description">Enable this option if you want to collect customer address during Stripe checkout.</p>
+                        </td>
+                    </tr>
+
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Return URL'); ?></th>
                         <td>
@@ -144,7 +152,7 @@ function swpm_create_new_stripe_buy_now_button() {
                             <p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
                         </td>
                     </tr>
-                    
+
                 </table>
 
                 <p class="submit">
@@ -166,7 +174,6 @@ add_action('swpm_create_new_button_process_submission', 'swpm_save_new_stripe_bu
 function swpm_save_new_stripe_buy_now_button_data() {
     if (isset($_REQUEST['swpm_stripe_buy_now_save_submit'])) {
         //This is a Stripe buy now button save event. Process the submission.
-        
         //Save the button data
         $button_id = wp_insert_post(
                 array(
@@ -182,15 +189,16 @@ function swpm_save_new_stripe_buy_now_button_data() {
         add_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
         add_post_meta($button_id, 'payment_amount', trim(sanitize_text_field($_REQUEST['payment_amount'])));
         add_post_meta($button_id, 'payment_currency', sanitize_text_field($_REQUEST['payment_currency']));
-        
+
         add_post_meta($button_id, 'stripe_test_secret_key', trim(sanitize_text_field($_REQUEST['stripe_test_secret_key'])));
         add_post_meta($button_id, 'stripe_test_publishable_key', trim(sanitize_text_field($_REQUEST['stripe_test_publishable_key'])));
         add_post_meta($button_id, 'stripe_live_secret_key', trim(sanitize_text_field($_REQUEST['stripe_live_secret_key'])));
         add_post_meta($button_id, 'stripe_live_publishable_key', trim(sanitize_text_field($_REQUEST['stripe_live_publishable_key'])));
 
+        add_post_meta($button_id, 'stripe_collect_address', isset($_POST['collect_address']) ? '1' : '');
+
         add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
         //add_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
-
         //Redirect to the edit interface of this button with $button_id        
         //$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
         //Redirect to the manage payment buttons interface
@@ -222,15 +230,21 @@ function swpm_edit_stripe_buy_now_button() {
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
     $payment_amount = get_post_meta($button_id, 'payment_amount', true);
     $payment_currency = get_post_meta($button_id, 'payment_currency', true);
-    
+
     $stripe_test_secret_key = get_post_meta($button_id, 'stripe_test_secret_key', true);
     $stripe_test_publishable_key = get_post_meta($button_id, 'stripe_test_publishable_key', true);
     $stripe_live_secret_key = get_post_meta($button_id, 'stripe_live_secret_key', true);
     $stripe_live_publishable_key = get_post_meta($button_id, 'stripe_live_publishable_key', true);
-    
+
+    $collect_address = get_post_meta($button_id, 'stripe_collect_address', true);
+    if ($collect_address == '1') {
+        $collect_address = ' checked';
+    } else {
+        $collect_address = '';
+    }
+
     $return_url = get_post_meta($button_id, 'return_url', true);
     //$button_image_url = get_post_meta($button_id, 'button_image_url', true);
-    
     ?>
     <div class="postbox">
         <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Stripe Buy Now Button Configuration'); ?></label></h3>
@@ -313,7 +327,7 @@ function swpm_edit_stripe_buy_now_button() {
                     <tr valign="top">
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Stripe API keys. You can get this from your Stripe account.'); ?></div></th>
                     </tr>
-                    
+
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Test Secret Key'); ?></th>
                         <td>
@@ -342,11 +356,19 @@ function swpm_edit_stripe_buy_now_button() {
                             <p class="description">Enter your Stripe live publishable key.</p>
                         </td>
                     </tr>
-                    
+
                     <tr valign="top">
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional.'); ?></div></th>
                     </tr>
-                    
+
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Collect Customer Address'); ?></th>
+                        <td>
+                            <input type="checkbox" name="collect_address" value="1"<?php echo $collect_address; ?>/>
+                            <p class="description">Enable this option if you want to collect customer address during Stripe checkout.</p>
+                        </td>
+                    </tr>
+
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Return URL'); ?></th>
                         <td>
@@ -376,10 +398,9 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_stripe_buy_
 function swpm_edit_stripe_buy_now_button_data() {
     if (isset($_REQUEST['swpm_stripe_buy_now_edit_submit'])) {
         //This is a Stripe buy now button edit event. Process the submission.
-        
         //Update and Save the edited payment button data
         $button_id = sanitize_text_field($_REQUEST['button_id']);
-        $button_id = absint($button_id); 
+        $button_id = absint($button_id);
         $button_type = sanitize_text_field($_REQUEST['button_type']);
         $button_name = sanitize_text_field($_REQUEST['button_name']);
 
@@ -394,12 +415,14 @@ function swpm_edit_stripe_buy_now_button_data() {
         update_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
         update_post_meta($button_id, 'payment_amount', trim(sanitize_text_field($_REQUEST['payment_amount'])));
         update_post_meta($button_id, 'payment_currency', sanitize_text_field($_REQUEST['payment_currency']));
-        
+
         update_post_meta($button_id, 'stripe_test_secret_key', trim(sanitize_text_field($_REQUEST['stripe_test_secret_key'])));
         update_post_meta($button_id, 'stripe_test_publishable_key', trim(sanitize_text_field($_REQUEST['stripe_test_publishable_key'])));
         update_post_meta($button_id, 'stripe_live_secret_key', trim(sanitize_text_field($_REQUEST['stripe_live_secret_key'])));
         update_post_meta($button_id, 'stripe_live_publishable_key', trim(sanitize_text_field($_REQUEST['stripe_live_publishable_key'])));
-        
+
+        update_post_meta($button_id, 'stripe_collect_address', isset($_POST['collect_address']) ? '1' : '');
+
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
         //update_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
 

@@ -180,6 +180,14 @@ function swpm_render_new_edit_stripe_subscription_button_interface($opts, $edit 
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 
                     <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Collect Customer Address'); ?></th>
+                        <td>
+                            <input type="checkbox" name="collect_address" value="1"<?php echo ($edit ? ((isset($opts['stripe_collect_address'][0]) && $opts['stripe_collect_address'][0] === '1') ? ' checked' : '') : ''); ?>/>
+                            <p class="description">Enable this option if you want to collect customer address during Stripe checkout.</p>
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Return URL'); ?></th>
                         <td>
                             <input type="text" size="100" name="return_url" value="<?php echo ($edit ? $opts['return_url'][0] : ''); ?>" />
@@ -275,6 +283,7 @@ function swpm_save_edit_stripe_subscription_button_data() {
         update_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
         update_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
+        update_post_meta($button_id, 'stripe_collect_address', isset($_POST['collect_address']) ? '1' : '');
 
         if ($edit) {
             // let's see if Stripe details (plan ID and Secret Key) are valid

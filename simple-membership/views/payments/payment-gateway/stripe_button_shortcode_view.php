@@ -18,8 +18,7 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
     //Check new_window parameter
     $window_target = isset($args['new_window']) ? 'target="_blank"' : '';
     $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Buy Now');
-    $billing_address = isset($args['billing_address']) ? '1' : '';
-    ; //By default don't show the billing address in the checkout form.
+
     $item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
     $settings = SwpmSettings::get_instance();
@@ -73,6 +72,18 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
         $publishable_key = $stripe_test_publishable_key; //Use sandbox API key
     } else {
         $publishable_key = $stripe_live_publishable_key; //Use live API key
+    }
+
+    //Billing address
+    $billing_address = isset($args['billing_address']) ? '1' : '';
+    //By default don't show the billing address in the checkout form.
+    //if billing_address parameter is not present in the shortcode, let's check button option
+    if ($billing_address === '') {
+        $collect_address = get_post_meta($button_id, 'stripe_collect_address', true);
+        if ($collect_address === '1') {
+            //Collect Address enabled in button settings
+            $billing_address = 1;
+        }
     }
 
     /* === Stripe Buy Now Button Form === */
@@ -136,8 +147,6 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
     //Check new_window parameter
     $window_target = isset($args['new_window']) ? 'target="_blank"' : '';
     $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Buy Now');
-    $billing_address = isset($args['billing_address']) ? '1' : '';
-    ; //By default don't show the billing address in the checkout form.
     $item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
     $settings = SwpmSettings::get_instance();
@@ -228,6 +237,17 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
 //        if ($trial != NULL) {
 //            $description .= '. '.$trial . ' days FREE trial.';
 //        }
+    //Billing address
+    $billing_address = isset($args['billing_address']) ? '1' : '';
+    //By default don't show the billing address in the checkout form.
+    //if billing_address parameter is not present in the shortcode, let's check button option
+    if ($billing_address === '') {
+        $collect_address = get_post_meta($button_id, 'stripe_collect_address', true);
+        if ($collect_address === '1') {
+            //Collect Address enabled in button settings
+            $billing_address = 1;
+        }
+    }
 
     /* === Stripe Buy Now Button Form === */
     $output = '';

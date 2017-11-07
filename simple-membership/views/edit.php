@@ -56,7 +56,7 @@ extract($user_data, EXTR_SKIP);
             </tr>
             <tr class="swpm-profile-country-row">
                 <td><label for="country"><?php echo SwpmUtils::_('Country'); ?></label></td>
-                <td><input type="text" id="country" value="<?php echo $country; ?>" size="50" name="country" /></td>
+                <td><select id="country" name="country"><?php echo SwpmMiscUtils::get_countries_dropdown($country) ?></select></td>
             </tr>
             <tr class="swpm-profile-company-row">
                 <td><label for="company_name"><?php echo SwpmUtils::_('Company Name'); ?></label></td>

@@ -165,7 +165,7 @@ class SwpmMiscUtils {
     public static function get_current_page_url() {
         $pageURL = 'http';
 
-        if (isset($_SERVER['SCRIPT_URI']) && !empty($_SERVER['SCRIPT_URI'])){
+        if (isset($_SERVER['SCRIPT_URI']) && !empty($_SERVER['SCRIPT_URI'])) {
             return $_SERVER['SCRIPT_URI'];
         }
 
@@ -174,7 +174,7 @@ class SwpmMiscUtils {
         }
         $pageURL .= "://";
         if (isset($_SERVER["SERVER_PORT"]) && ($_SERVER["SERVER_PORT"] != "80") && ($_SERVER["SERVER_PORT"] != "443")) {
-            $pageURL .= ltrim($_SERVER["SERVER_NAME"], ".*") . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];            
+            $pageURL .= ltrim($_SERVER["SERVER_NAME"], ".*") . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
         } else {
             $pageURL .= ltrim($_SERVER["SERVER_NAME"], ".*") . $_SERVER["REQUEST_URI"];
         }
@@ -209,11 +209,11 @@ class SwpmMiscUtils {
                 $primary_address .= "\n" . $user_record->country;
             }
         }
-        
+
         //Format some field values
         $member_since_formatted = SwpmUtils::get_formatted_date_according_to_wp_settings($user_record->member_since);
         $subsc_starts_formatted = SwpmUtils::get_formatted_date_according_to_wp_settings($user_record->subscription_starts);
-        
+
 
         //Define the replacable tags
         $tags = array("{member_id}", "{user_name}", "{first_name}", "{last_name}", "{membership_level}",
@@ -334,5 +334,74 @@ class SwpmMiscUtils {
 
         return $formatted_content;
     }
-    
+
+    public static function get_countries_dropdown($country = '') {
+        $countries = array("Afghanistan", "Albania", "Algeria", "Andorra",
+            "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia",
+            "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados",
+            "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
+            "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria",
+            "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde",
+            "Central African Republic", "Chad", "Chile", "China", "Colombi", "Comoros",
+            "Congo (Brazzaville)", "Congo", "Costa Rica", "Cote d\'Ivoire", "Croatia",
+            "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica",
+            "Dominican Republic", "East Timor (Timor Timur)", "Ecuador", "Egypt",
+            "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia",
+            "Fiji", "Finland", "France", "Gabon", "Gambia, The", "Georgia", "Germany",
+            "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau",
+            "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia",
+            "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
+            "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait",
+            "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya",
+            "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Madagascar",
+            "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands",
+            "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco",
+            "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia",
+            "Nauru", "Nepa", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria",
+            "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay",
+            "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda",
+            "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent", "Samoa", "San Marino",
+            "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles",
+            "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands",
+            "Somalia", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname",
+            "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan",
+            "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia",
+            "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates",
+            "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu",
+            "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe");
+        //let's try to "guess" country name
+        $curr_lev = -1;
+        $guess_country = '';
+        foreach ($countries as $country_name) {
+            similar_text(strtolower($country), strtolower($country_name), $lev);
+            if ($lev >= $curr_lev) {
+                //this is closest match so far
+                $curr_lev = $lev;
+                $guess_country = $country_name;
+            }
+            if ($curr_lev == 100) {
+                //exact match
+                break;
+            }
+        }
+        if ($curr_lev <= 80) {
+            // probably bad guess
+            $guess_country = '';
+        }
+        $countries_dropdown = '';
+        //let's add "(Please select)" option
+        $countries_dropdown .= "\r\n" . '<option value=""' . ($country == '' ? ' selected' : '') . '>' . SwpmUtils::_('(Please Select)') . '</option>';
+        if ($guess_country == '' && $country != '') {
+            //since we haven't guessed the country name, let's add current value to the options
+            $countries_dropdown .= "\r\n" . '<option value="' . $country . '" selected>' . $country . '</option>';
+        }
+        if ($guess_country != '') {
+            $country = $guess_country;
+        }
+        foreach ($countries as $country_name) {
+            $countries_dropdown .= "\r\n" . '<option value="' . $country_name . '"' . (strtolower($country_name) == strtolower($country) ? ' selected' : '') . '>' . $country_name . '</option>';
+        }
+        return $countries_dropdown;
+    }
+
 }

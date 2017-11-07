@@ -131,7 +131,7 @@
 }
 
 /* Edit profile form CSS */
-.swpm-edit-profile-form input[type="text"], .swpm-edit-profile-form input[type="password"]{
+.swpm-edit-profile-form input[type="text"], .swpm-edit-profile-form input[type="password"], .swpm-edit-profile-form select {
     width: 95%;
 }
 .swpm-edit-profile-submit-section{

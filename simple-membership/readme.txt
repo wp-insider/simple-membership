@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.8
-Stable tag: 3.5.7
+Stable tag: 3.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,10 +138,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.5.8 =
-- Added a new function to logout the user from the swpm system if the corresponding wp user session is logged out.
+= 3.5.8 =
 - Changed the "Edit Member" button text to "Save Data" in the admin member edit interface.
+- Added a new function to logout the user from the swpm system if the corresponding wp user session is logged out.
 - The company name field will now be shown in the edit profile form.
+- The stripe button configuration allows you to enable an option to collect billing address
+- The country field is now a dropdown option.
+- Added a filter hook for the paypal email address in the payment button.
 
 = 3.5.7 =
 - Added updated German translation file.

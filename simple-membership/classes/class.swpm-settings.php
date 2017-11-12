@@ -307,6 +307,10 @@ class SwpmSettings {
 
     public function pages_settings_callback() {
         SwpmUtils::e('Page Setup and URL Related settings.');
+        
+        echo '<p>';
+        SwpmUtils::e('The following pages are required for the plugin to function correctly. These pages were automatically created by the plugin at install time.');
+        echo '</p>';
     }
 
     public function testndebug_settings_callback() {

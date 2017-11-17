@@ -138,6 +138,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.5.9 = 
+- Japanese Yen currency fix for Stripe subscription.
+
 = 3.5.8 =
 - Changed the "Edit Member" button text to "Save Data" in the admin member edit interface.
 - Added a new function to logout the user from the swpm system if the corresponding wp user session is logged out.

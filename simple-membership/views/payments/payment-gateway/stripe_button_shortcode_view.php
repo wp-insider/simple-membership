@@ -221,13 +221,19 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
 
     //let's set some vars
     $price_in_cents = $plan_data['amount'];
-    $payment_amount = $price_in_cents / 100;
-    $payment_currency = $plan_data['currency'];
+    $payment_currency = strtoupper($plan_data['currency']);
+    $zeroCents = unserialize(SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS);
+    if (in_array($payment_currency, $zeroCents)) {
+        //this is zero-cents currency, amount shouldn't be devided by 100
+        $payment_amount = $price_in_cents;
+    } else {
+        $payment_amount = $price_in_cents / 100;
+    }
     $interval_count = $plan_data['interval_count'];
     $interval = $plan_data['interval'];
     $trial = $plan_data['trial_period_days'];
     $plan_name = $plan_data['name'];
-    $description = $payment_amount . ' ' . strtoupper($payment_currency);
+    $description = $payment_amount . ' ' . $payment_currency;
     if ($interval_count == 1) {
         $description .= ' / ' . $interval;
     } else {

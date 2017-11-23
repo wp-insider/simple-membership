@@ -196,6 +196,9 @@ class SwpmSettings {
         add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'allow-account-deletion',
             'message' => SwpmUtils::_('Allow users to delete their accounts.')));
         
+        add_settings_field('force-wp-user-sync', SwpmUtils::_('Force WP User Synchronization'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'force-wp-user-sync',
+            'message' => SwpmUtils::_('Enable this option if you want to force the member login to be synchronized with WP user account. This can be useful if you are using another plugin that uses WP user records. For example: bbPress plugin.')));
+        
         add_settings_field('use-wordpress-timezone', SwpmUtils::_('Use WordPress Timezone'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'use-wordpress-timezone',
             'message' => SwpmUtils::_('Use this option if you want to use the timezone value specified in your WordPress General Settings interface.')));
         
@@ -412,6 +415,7 @@ class SwpmSettings {
         $output = $this->settings;
         $output['enable-expired-account-login'] = isset($input['enable-expired-account-login']) ? esc_attr($input['enable-expired-account-login']) : "";
         $output['allow-account-deletion'] = isset($input['allow-account-deletion']) ? esc_attr($input['allow-account-deletion']) : "";
+        $output['force-wp-user-sync'] = isset($input['force-wp-user-sync']) ? esc_attr($input['force-wp-user-sync']) : "";
         $output['use-wordpress-timezone'] = isset($input['use-wordpress-timezone']) ? esc_attr($input['use-wordpress-timezone']) : "";
         $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
         $output['admin-dashboard-access-permission'] = isset($input['admin-dashboard-access-permission']) ? esc_attr($input['admin-dashboard-access-permission']) : '';

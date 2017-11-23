@@ -214,17 +214,37 @@ class SimpleWpMembership {
         SwpmLog::writeall();
     }
 
-    public static function swpm_login($user, $pass, $rememberme = true) {
-        if (is_user_logged_in()) {
+    public static function swpm_login($username, $pass, $rememberme = true) {
+        if (is_user_logged_in()) {            
             $current_user = wp_get_current_user();
-            if ($current_user->user_login == $user) {
+            SwpmLog::log_auth_debug("static function swpm_login(). User is logged in. WP Username: ". $current_user->user_login, true);
+            if ($current_user->user_login == $username) {
                 return;
             }
         }
-        $user = wp_signon(array('user_login' => $user, 'user_password' => $pass, 'remember' => $rememberme), is_ssl());
-        if ($user instanceof WP_User) {
-            wp_set_current_user($user->ID, $user->user_login);
+        SwpmLog::log_auth_debug("Trying wp_signon() with username: ". $username, true);
+        $user_obj = wp_signon(array('user_login' => $username, 'user_password' => $pass, 'remember' => $rememberme), is_ssl());
+        if ($user_obj instanceof WP_User) {
+            wp_set_current_user($user_obj->ID, $user_obj->user_login);
+            SwpmLog::log_auth_debug("Setting current WP user to: ". $user_obj->user_login, true);
+        } else {
+            SwpmLog::log_auth_debug("wp_signon() failed for the corresponding WP user account.", false);
+            if( is_wp_error( $user_obj ) ) {
+                //SwpmLog::log_auth_debug("Error Message: ". $user_obj->get_error_message(), false);
+                $force_wp_user_sync = SwpmSettings::get_instance()->get_value('force-wp-user-sync');
+                if (!empty($force_wp_user_sync)) {
+                    //Force WP user login sync is enabled. Show error and exit out since the WP user login failed.
+                    $error_msg = SwpmUtils::_("Error! This site has the force WP user login feature enabled in the settings. We could not find a WP user record for the given username: "). $username;
+                    $error_msg .= "<br /><br />" . SwpmUtils::_("This error is triggered when a member account doesn't have a corresponding WP user account. So the plugin fails to log the user into the WP User system.");
+                    $error_msg .= "<br /><br />" . SwpmUtils::_("Contact the site admin and request them to check your username in the WP Users menu to see what happened with the WP user entry of your account.");
+                    $error_msg .= "<br /><br />" . SwpmUtils::_("The site admin can disable the Force WP User Synchronization feature in the settings to disable this feature and this error will go away.");
+                    $error_msg .= "<br /><br />" . SwpmUtils::_("You can use the back button of your browser to go back to the site.");
+                    wp_die($error_msg);
+                }
+            }
         }
+        
+        SwpmLog::log_auth_debug("Triggering swpm_after_login hook.", true);
         do_action('swpm_after_login');
         if (!SwpmUtils::is_ajax()) {
             $redirect_url = apply_filters('swpm_after_login_redirect_url', SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL);

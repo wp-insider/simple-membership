@@ -22,8 +22,16 @@ class SwpmWpLoadedTasks {
         if (!is_user_logged_in()) {
             /* WP user is logged out. So logout the SWPM user (if applicable) */
             if (SwpmMemberUtils::is_member_logged_in()) {
+                
+                //Check if force WP user login sync is enabled or not
+                $force_wp_user_sync = SwpmSettings::get_instance()->get_value('force-wp-user-sync');
+                if (empty($force_wp_user_sync)) {
+                    return "";
+                }
+                /* Force WP user login sync is enabled. */
                 /* SWPM user is logged in the system. Log him out. */
-                SwpmLog::log_auth_debug("synchronise_swpm_logout_for_wp_users() - WP user session is logged out for this user. So logging out of the swpm session also.", true);
+                SwpmLog::log_auth_debug("synchronise_swpm_logout_for_wp_users() - Force wp user login sync is enabled. ", true);
+                SwpmLog::log_auth_debug("WP user session is logged out for this user. So logging out of the swpm session also.", true);
                 wp_logout();
             }
         }

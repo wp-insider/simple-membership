@@ -138,7 +138,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= TODO 3.5.9 = 
+= 3.5.9 =
 - Japanese Yen currency fix for Stripe subscription.
 - Added a new email merge tag for membership level name {membership_level_name}
 - There is a new option called "Force WP User Synchronization" in the advanced settings menu of the plugin.

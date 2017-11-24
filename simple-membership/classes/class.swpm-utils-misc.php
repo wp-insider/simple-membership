@@ -210,19 +210,20 @@ class SwpmMiscUtils {
             }
         }
 
+        $membership_level_name = SwpmMembershipLevelUtils::get_membership_level_name_of_a_member($member_id);
         //Format some field values
         $member_since_formatted = SwpmUtils::get_formatted_date_according_to_wp_settings($user_record->member_since);
         $subsc_starts_formatted = SwpmUtils::get_formatted_date_according_to_wp_settings($user_record->subscription_starts);
 
 
         //Define the replacable tags
-        $tags = array("{member_id}", "{user_name}", "{first_name}", "{last_name}", "{membership_level}",
+        $tags = array("{member_id}", "{user_name}", "{first_name}", "{last_name}", "{membership_level}", "{membership_level_name}",
             "{account_state}", "{email}", "{phone}", "{member_since}", "{subscription_starts}", "{company_name}",
             "{password}", "{login_link}", "{reg_link}", "{primary_address}"
         );
 
         //Define the values
-        $vals = array($member_id, $user_record->user_name, $user_record->first_name, $user_record->last_name, $user_record->membership_level,
+        $vals = array($member_id, $user_record->user_name, $user_record->first_name, $user_record->last_name, $user_record->membership_level, $membership_level_name,
             $user_record->account_state, $user_record->email, $user_record->phone, $member_since_formatted, $subsc_starts_formatted, $user_record->company_name,
             $password, $login_link, $reg_link, $primary_address
         );

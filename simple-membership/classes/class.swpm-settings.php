@@ -110,15 +110,11 @@ class SwpmSettings {
 
     private function tab_3() {
         //Register settings sections and fileds for the email settings tab.
-        
-        //Show settings updated message when it is updated
-        if (isset($_REQUEST['settings-updated'])) {
-            echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_('Settings updated!') . '</p></div>';
-        }
-        
+               
         register_setting('swpm-settings-tab-3', 'swpm-settings', array(&$this, 'sanitize_tab_3'));
         
         add_settings_section('email-misc-settings', SwpmUtils::_('Email Misc. Settings'), array(&$this, 'email_misc_settings_callback'), 'simple_wp_membership_settings');
+        
         add_settings_field('email-misc-from', SwpmUtils::_('From Email Address'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-misc-settings', array('item' => 'email-from',
             'message' => 'This value will be used as the sender\'s address for the emails. Example value: Your Name &lt;sales@your-domain.com&gt;'));
 
@@ -177,12 +173,7 @@ class SwpmSettings {
 
     private function tab_5() {
         //Register settings sections and fileds for the advanced settings tab.
-        
-        //Show settings updated message when it is updated
-        if (isset($_REQUEST['settings-updated'])) {
-            echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_('Settings updated!') . '</p></div>';
-        }
-        
+              
         register_setting('swpm-settings-tab-5', 'swpm-settings', array(&$this, 'sanitize_tab_5'));
 
         add_settings_section('advanced-settings', SwpmUtils::_('Advanced Settings'), array(&$this, 'advanced_settings_callback'), 'simple_wp_membership_settings');
@@ -329,6 +320,13 @@ class SwpmSettings {
     }
 
     public function email_misc_settings_callback() {
+        
+        //Show settings updated message when it is updated
+        if (isset($_REQUEST['settings-updated'])) {
+            //This status message need to be in the callback function to prevent header sent warning
+            echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_('Settings updated!') . '</p></div>';
+        }
+        
         SwpmUtils::e('Settings in this section apply to all emails.');
     }
 
@@ -347,6 +345,13 @@ class SwpmSettings {
     }
 
     public function advanced_settings_callback() {
+        
+        //Show settings updated message when it is updated
+        if (isset($_REQUEST['settings-updated'])) {
+            //This status message need to be in the callback function to prevent header sent warning
+            echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_('Settings updated!') . '</p></div>';
+        }
+        
         SwpmUtils::e('This page allows you to configure some advanced features of the plugin.');
     }
 

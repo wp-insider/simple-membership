@@ -22,6 +22,12 @@
                 echo '</strong></p></div>';
             }
         }
+        
+        echo '<div class="swpm-grey-box">';
+        echo '<p>';
+        SwpmUtils::e('You can create membership payment buttons from the payments menu of this plugin (useful if you want to offer paid membership on the site).');
+        echo '</p>';
+        echo '</div>';        
         ?>
         <div class="postbox">
             <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Integration Settings') ?></label></h3>

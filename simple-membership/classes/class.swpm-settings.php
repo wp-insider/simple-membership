@@ -113,6 +113,7 @@ class SwpmSettings {
                
         register_setting('swpm-settings-tab-3', 'swpm-settings', array(&$this, 'sanitize_tab_3'));
         
+        add_settings_section('email-settings-overview', SwpmUtils::_('Email Settings Overview'), array(&$this, 'email_settings_overview_callback'), 'simple_wp_membership_settings');
         add_settings_section('email-misc-settings', SwpmUtils::_('Email Misc. Settings'), array(&$this, 'email_misc_settings_callback'), 'simple_wp_membership_settings');
         
         add_settings_field('email-misc-from', SwpmUtils::_('From Email Address'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-misc-settings', array('item' => 'email-from',
@@ -319,6 +320,19 @@ class SwpmSettings {
         SwpmUtils::e('This email will be sent to your users when they use the password reset functionality.');
     }
 
+    public function email_settings_overview_callback() {
+        echo '<div class="swpm-grey-box">';
+        echo '<p>';
+        SwpmUtils::e('This interface lets you custsomize the various emails that gets sent to your members for various actions. The default settings should be good to get your started.');
+        echo '</p>';
+        
+        echo '<p>';
+        echo '<a href="https://simple-membership-plugin.com/email-merge-tags-email-shortcodes-for-email-customization/" target="_blank">'.SwpmUtils::_('This documentation').'</a>';
+        SwpmUtils::e(' explains what email merge tags you can use in the email body field to customize it (if you want to).');
+        echo '</p>';
+        echo '</div>';
+    }
+    
     public function email_misc_settings_callback() {
         
         //Show settings updated message when it is updated

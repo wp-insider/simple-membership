@@ -80,16 +80,21 @@ class SwpmAdminRegistration extends SwpmRegistration {
     public function edit_admin_end($id) {
         //Check we are on the admin end and user has management permission 
         SwpmMiscUtils::check_user_permission_and_is_admin('member edit by admin');
-        
+
         //Check nonce
         if ( !isset($_POST['_wpnonce_edit_swpmuser_admin_end']) || !wp_verify_nonce($_POST['_wpnonce_edit_swpmuser_admin_end'], 'edit_swpmuser_admin_end' )){
             //Nonce check failed.
             wp_die(SwpmUtils::_("Error! Nonce verification failed for user edit from admin end."));
         }
-        
+
         global $wpdb;
         $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id = %d", $id);
         $member = $wpdb->get_row($query, ARRAY_A);
+        // let's get previous membership level
+        $prev_level=false;
+        if ($member) {
+            $prev_level=$member['membership_level'];
+        }
         $email_address = $member['email'];
         $user_name = $member['user_name'];
         unset($member['member_id']);
@@ -101,11 +106,15 @@ class SwpmAdminRegistration extends SwpmRegistration {
             SwpmUtils::update_wp_user($user_name, $member);
             unset($member['plain_password']);
             $wpdb->update($wpdb->prefix . "swpm_members_tbl", $member, array('member_id' => $id));
+            // set previous membership level
+            $member['prev_membership_level'] = $prev_level;
+             //Trigger action hook
+            do_action('swpm_admin_end_edit_complete_user_data', $member);
             $message = array('succeeded' => true, 'message' => '<p>Member profile updated successfully.</p>');
             $error = apply_filters('swpm_admin_edit_custom_fields', array(), $member + array('member_id' => $id));
             if (!empty($error)) {
                 $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $error);
-                SwpmTransfer::get_instance()->set('status', $message);    
+                SwpmTransfer::get_instance()->set('status', $message);
                 return;
             }
             SwpmTransfer::get_instance()->set('status', $message);

@@ -62,7 +62,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         //Set account status to active, update level to the newly paid level, update access start date, update subsriber ID (if applicable).
         $updatedb = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s, membership_level=%d,subscription_starts=%s,subscr_id=%s WHERE member_id=%d", $account_state, $membership_level, $subscription_starts, $subscr_id, $swpm_id);
         $results = $wpdb->query($updatedb);
-        do_action('swpm_membership_changed', array('member_id' => $swpm_id, 'from_level' => $old_membership_level, 'to_level' => $membership_level));
+        do_action('swpm_membership_changed', array('member_id' => $swpm_id, 'member_info' => get_object_vars($resultset), 'from_level' => $old_membership_level, 'to_level' => $membership_level));
 
         //Set Email details for the account upgrade notification
         $email = $ipn_data['payer_email'];

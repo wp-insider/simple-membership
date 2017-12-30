@@ -147,52 +147,60 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             array_push($addons_data, $addon_17);
 
             $addon_18 = array(
+                'name' => 'Bulk Member Importer',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-bulk-member-importer-from-csv-addon.png',
+                'description' => 'Allows you to bulk import all your members info from a CSV file.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-bulk-import-member-data-csv-file/',
+            );
+            array_push($addons_data, $addon_18);
+            
+            $addon_19 = array(
                 'name' => 'Display Member Payments',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-member-payments-addon.png',
                 'description' => 'This addon allows you to display the member payments on a page using a shortcode.',
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-member-payments-listing-addon/',
             );
-            array_push($addons_data, $addon_18);
+            array_push($addons_data, $addon_19);
             
-            $addon_19 = array(
+            $addon_20 = array(
                 'name' => 'AWeber Integration',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-aweber-integration-addon.png',
                 'description' => 'You can automatically signup your members to a specific list in your AWeber account when they register.',
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-aweber-integration-addon/',
             );
-            array_push($addons_data, $addon_19);            
+            array_push($addons_data, $addon_20);
             
-            $addon_20 = array(
+            $addon_21 = array(
                 'name' => 'WP User Import',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/wp-user-import.png',
                 'description' => 'Addon for importing existing Wordpress users to Simple Membership plugin',
                 'page_url' => 'https://simple-membership-plugin.com/import-existing-wordpress-users-simple-membership-plugin/',
             );
-            array_push($addons_data, $addon_20);
+            array_push($addons_data, $addon_21);
             
-            $addon_21 = array(
+            $addon_22 = array(
                 'name' => 'ConvertKit Integration',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-convertkit-integration-addon.png',
                 'description' => 'Allows you to automatically signup your members to a sequence in your ConvertKit account',
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-convertkit-integration-addon/',
             );
-            array_push($addons_data, $addon_21);  
+            array_push($addons_data, $addon_22);
             
-            $addon_22 = array(
+            $addon_23 = array(
                 'name' => 'WooCommerce Payments',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-woocommerce-addon.png',
                 'description' => 'This addon can be used to accept membership payment via the WooCommerce plugin',
                 'page_url' => 'https://simple-membership-plugin.com/woocommerce-simple-membership-plugin-integration/',
             );
-            array_push($addons_data, $addon_22);
+            array_push($addons_data, $addon_23);
             
-            $addon_23 = array(
+            $addon_24 = array(
                 'name' => 'Miscellaneous Shortcodes',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-misc-shortcodes-addon.png',
                 'description' => 'This addon has a collection of miscellaneous shortcodes',
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-miscellaneous-shortcodes-addon/',
             );
-            array_push($addons_data, $addon_23);
+            array_push($addons_data, $addon_24);
             
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {

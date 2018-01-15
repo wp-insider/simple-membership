@@ -33,8 +33,9 @@ class SwpmStripeSubscriptionIpnHandler {
                 SwpmLog::log_simple_debug("Stripe Subscription Webhook received. Processing request...", true);
                 //Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
                 $customer = $event_json->data->object->customer;
+                $subscr_id=$event_json->data->object->id;
                 $ipn_data = array();
-                $ipn_data['subscr_id'] = $customer;
+                $ipn_data['subscr_id'] = $subscr_id;
                 $ipn_data['parent_txn_id'] = $customer;
 
                 swpm_handle_subsc_cancel_stand_alone($ipn_data);

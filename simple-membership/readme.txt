@@ -140,6 +140,7 @@ https://simple-membership-plugin.com/
 
 = TODO 3.6.0 =
 - Added extra help text in the email settings menu.
+- The subscription cancellation code will now use the subscriber ID.
 
 = 3.5.9 =
 - Japanese Yen currency fix for Stripe subscription.

@@ -44,7 +44,7 @@
     <?php echo  apply_filters('swpm_admin_edit_membership_level_ui', '', $id);?>
 </tbody>
 </table>
-<?php submit_button(SwpmUtils::_('Edit Membership Level '), 'primary', 'editswpmlevel', true, array( 'id' => 'editswpmlevelsub' ) ); ?>
+<?php submit_button(SwpmUtils::_('Save Membership Level '), 'primary', 'editswpmlevel', true, array( 'id' => 'editswpmlevelsub' ) ); ?>
 </form>
 </div>
 <script>

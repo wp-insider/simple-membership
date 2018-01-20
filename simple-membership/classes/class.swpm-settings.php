@@ -185,6 +185,9 @@ class SwpmSettings {
         add_settings_field('renewal-page-url', SwpmUtils::_('Membership Renewal URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'renewal-page-url',
             'message' => SwpmUtils::_('You can create a renewal page for your site. Read <a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">this documentation</a> to learn how to create a renewal page.')) );
         
+        add_settings_field('after-rego-redirect-page-url', SwpmUtils::_('After Registration Redirect URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'after-rego-redirect-page-url',
+            'message' => SwpmUtils::_('You can enter an URL here to redirect the members to this page after they submit the registration form. Read <a href="https://simple-membership-plugin.com/configure-registration-redirect-members/" target="_blank">this documentation</a> to learn how to setup after registration redirect.')) );
+        
         add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'allow-account-deletion',
             'message' => SwpmUtils::_('Allow users to delete their accounts.')));
         
@@ -439,6 +442,7 @@ class SwpmSettings {
         $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
         $output['admin-dashboard-access-permission'] = isset($input['admin-dashboard-access-permission']) ? esc_attr($input['admin-dashboard-access-permission']) : '';
         $output['renewal-page-url'] = esc_url($input['renewal-page-url']);
+        $output['after-rego-redirect-page-url'] = esc_url($input['after-rego-redirect-page-url']);
         return $output;
     }
 

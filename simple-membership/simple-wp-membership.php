@@ -1,12 +1,13 @@
 <?php
 /*
 Plugin Name: Simple WordPress Membership
-Version: 3.5.9
-Text Domain: simple-membership
+Version: 3.6.0
 Plugin URI: https://simple-membership-plugin.com/
 Author: smp7, wp.insider
 Author URI: https://simple-membership-plugin.com/
 Description: A flexible, well-supported, and easy-to-use WordPress membership plugin for offering free and premium content from your WordPress site.
+Text Domain: simple-membership
+Domain Path: /languages/
 */
 
 //Direct access to this file is not permitted
@@ -18,7 +19,7 @@ include_once('classes/class.simple-wp-membership.php');
 include_once('classes/class.swpm-cronjob.php');
 include_once('swpm-compat.php');
 
-define('SIMPLE_WP_MEMBERSHIP_VER', '3.5.9');
+define('SIMPLE_WP_MEMBERSHIP_VER', '3.6.0');
 define('SIMPLE_WP_MEMBERSHIP_DB_VER', '1.2');
 define('SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url());
 define('SIMPLE_WP_MEMBERSHIP_PATH', dirname(__FILE__) . '/');

@@ -142,6 +142,7 @@ https://simple-membership-plugin.com/
 - Added extra help text in the email settings menu.
 - The subscription cancellation code will now use the subscriber ID.
 - Changed the "Edit Membership Level" button label to say "Save Membership Level"
+- Updated the local copy of the German language file. Thanks to Herbert Heupke.
 
 = 3.5.9 =
 - Japanese Yen currency fix for Stripe subscription.

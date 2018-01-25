@@ -237,6 +237,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
                 $msg_str = '<div class="swpm-profile-update-success">' . SwpmUtils::_('Profile updated successfully. You will need to re-login since you changed your password.') . '</div>';
                 $message = array('succeeded' => true, 'message' => $msg_str);
                 unset($member_info['plain_password']);
+                wp_logout();//Log the user out from the WP user session also.
+                SwpmLog::log_simple_debug("Member has updated the password from profile edit page. Logging the user out so he can re-login using the new password.", true);
             }
 
             $wpdb->update($wpdb->prefix . "swpm_members_tbl", $member_info, array('member_id' => $auth->get('member_id')));

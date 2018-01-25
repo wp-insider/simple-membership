@@ -140,6 +140,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.6.1 =
+- The member gets logged out of the wp user session when the password is changed from profile edit page.
+
 = 3.6.0 =
 - Added a new feature to allow configuration of an after registration redirect. The advanced settings tab has the new option.
 - Added extra help text in the email settings menu.

@@ -141,6 +141,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 3.6.1 =
+- TODO - need to regenerate langauge POT file.
 - The member gets logged out of the wp user session when the password is changed from profile edit page.
 
 = 3.6.0 =

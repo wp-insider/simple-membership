@@ -143,6 +143,7 @@ https://simple-membership-plugin.com/
 = WIP 3.6.1 =
 - TODO - need to regenerate langauge POT file.
 - The member gets logged out of the wp user session when the password is changed from profile edit page.
+- Force logout is called when bad login hash is detected.
 
 = 3.6.0 =
 - Added a new feature to allow configuration of an after registration redirect. The advanced settings tab has the new option.

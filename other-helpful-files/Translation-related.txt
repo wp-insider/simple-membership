@@ -40,6 +40,9 @@ msgstr ""
 msgid "Check this box to delete the image. The image will be deleted when you save the profile."
 msgstr ""
 
+msgid "You will need to re-login since you changed your password."
+msgstr ""
+
 #: === Partial protection addon strings ===
 msgid "You do not have permission to view this content."
 msgstr ""

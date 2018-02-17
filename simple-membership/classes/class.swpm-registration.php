@@ -41,9 +41,13 @@ abstract class SwpmRegistration {
         
         //Send notification email to the member
         $subject = apply_filters('swpm_email_registration_complete_subject',$subject);
-        $body = apply_filters('swpm_email_registration_complete_body',$body);
-        wp_mail(trim($email), $subject, $body, $headers);
-        SwpmLog::log_simple_debug('Member registration complete email sent to: '.$email.'. From email address value used: '.$from_address, true);
+        $body = apply_filters('swpm_email_registration_complete_body',$body);//You can override the email to empty to disable this email.
+        if(!empty($body)){
+            wp_mail(trim($email), $subject, $body, $headers);
+            SwpmLog::log_simple_debug('Member registration complete email sent to: '.$email.'. From email address value used: '.$from_address, true);
+        } else {
+            SwpmLog::log_simple_debug('NOTICE: Registration complete email body value is empty. Member registration complete email will NOT be sent.', true);
+        }
         
         if ($settings->get_value('enable-admin-notification-after-reg')) {
             //Send notification email to the site admin

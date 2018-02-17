@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 3.6.0
+Stable tag: 3.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,8 +140,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.6.1 =
-- TODO - need to regenerate langauge POT file.
+= 3.6.1 =
+- Langauge POT file regenerated.
+- Added a new filter so the registration complete email body can be overriden and the email can be disabled using a small tweak.
 - The member gets logged out of the wp user session when the password is changed from profile edit page.
 - Force logout is called when bad login hash is detected.
 - Fixed a bug in the tools menu (prompt to complete registration email sending).

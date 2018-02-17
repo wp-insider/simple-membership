@@ -509,7 +509,7 @@ class SwpmSettings {
                 $link_for = filter_input(INPUT_POST, 'swpm_link_for', FILTER_SANITIZE_STRING);
                 $member_id = filter_input(INPUT_POST, 'member_id', FILTER_SANITIZE_NUMBER_INT);
                 $send_email = filter_input(INPUT_POST, 'swpm_reminder_email', FILTER_SANITIZE_NUMBER_INT);
-                $links = SwpmUtils::get_registration_link($link_for, $send_email, $member_id);
+                $links = SwpmUtils::get_registration_complete_prompt_link($link_for, $send_email, $member_id);
                 include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_tools_settings.php');
                 break;
             case 5:

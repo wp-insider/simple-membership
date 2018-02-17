@@ -162,7 +162,7 @@ abstract class SwpmUtils {
         }
     }
     
-    public static function get_registration_link($for = 'all', $send_email = false, $member_id = '') {
+    public static function get_registration_complete_prompt_link($for = 'all', $send_email = false, $member_id = '') {
         $members = array();
         global $wpdb;
         switch ($for) {
@@ -184,27 +184,34 @@ abstract class SwpmUtils {
         if (strpos($url, '?') !== false) {
             $separator = '&';
         }
-        $subject = $settings->get_value('reg-complete-mail-subject');
-        if (empty($subject)) {
-            $subject = "Please complete your registration";
-        }
-        $body = $settings->get_value('reg-complete-mail-body');
-        if (empty($body)) {
-            $body = "Please use the following link to complete your registration. \n {reg_link}";
-        }
-        $from_address = $settings->get_value('email-from');
+
         $links = array();
         foreach ($members as $member) {
             $reg_url = $url . $separator . 'member_id=' . $member->member_id . '&code=' . $member->reg_code;
             if (!empty($send_email) && empty($member->user_name)) {
                 $tags = array("{first_name}", "{last_name}", "{reg_link}");
                 $vals = array($member->first_name, $member->last_name, $reg_url);
+                
+                $subject = $settings->get_value('reg-prompt-complete-mail-subject');
+                if (empty($subject)) {
+                    $subject = "Please complete your registration";
+                }
+        
+                $body = $settings->get_value('reg-prompt-complete-mail-body');
+                if (empty($body)) {
+                    $body = "Please use the following link to complete your registration. \n {reg_link}";
+                }                
                 $body = html_entity_decode($body);
                 $email_body = str_replace($tags, $vals, $body);
+                
+                $from_address = $settings->get_value('email-from');
                 $headers = 'From: ' . $from_address . "\r\n";
-                $subject=apply_filters('swpm_email_complete_your_registration_subject',$subject);
-                $email_body=apply_filters('swpm_email_complete_your_registration_body',$email_body);
+                
+                $subject = apply_filters('swpm_email_complete_your_registration_subject',$subject);
+                $email_body = apply_filters('swpm_email_complete_your_registration_body',$email_body);
                 wp_mail($member->email, $subject, $email_body, $headers);
+                SwpmLog::log_simple_debug('Prompt to complete registration email sent to: '.$member->email.'. From email address value used: '.$from_address, true);
+                
             }
             $links[] = $reg_url;
         }

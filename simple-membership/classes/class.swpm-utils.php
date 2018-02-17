@@ -188,7 +188,7 @@ abstract class SwpmUtils {
         $links = array();
         foreach ($members as $member) {
             $reg_url = $url . $separator . 'member_id=' . $member->member_id . '&code=' . $member->reg_code;
-            if (!empty($send_email) && empty($member->user_name)) {
+            if ( $send_email && empty($member->user_name) ) {
                 $tags = array("{first_name}", "{last_name}", "{reg_link}");
                 $vals = array($member->first_name, $member->last_name, $reg_url);
                 

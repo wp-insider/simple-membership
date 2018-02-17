@@ -44,6 +44,12 @@
                                 <?php foreach ($links as $key => $link) { ?>
                                     <input type="text" size="120" readonly="readonly" name="link[<?php echo $key ?>]" value="<?php echo $link; ?>"/><br/>
                                 <?php } ?>
+                                    
+                                <?php
+                                if (isset($_REQUEST['swpm_reminder_email'])) {
+                                    echo '<div class="swpm-green-box">' . SwpmUtils::_('A prompt to complete registration email was also sent.') . '</div>';
+                                }
+                                ?>
                             </td>
                         </tr>
 

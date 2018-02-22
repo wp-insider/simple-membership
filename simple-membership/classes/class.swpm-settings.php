@@ -206,7 +206,10 @@ class SwpmSettings {
             'options' => array('manage_options' => 'Admin', 'edit_pages' => 'Editor', 'edit_published_posts' => 'Author', 'edit_posts' => 'Contributor'),
             'default' => 'manage_options',
             'message' => SwpmUtils::_('SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user role to access the SWPM admin dashboard by selecting a value here.')));
-        
+
+        add_settings_field('force-strong-passwords', SwpmUtils::_('Force Strong Password for Members'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'force-strong-passwords',
+            'message' => SwpmUtils::_('Force strong passwords for members.')));
+
     }
 
     private function tab_6() {
@@ -443,6 +446,7 @@ class SwpmSettings {
         $output['admin-dashboard-access-permission'] = isset($input['admin-dashboard-access-permission']) ? esc_attr($input['admin-dashboard-access-permission']) : '';
         $output['renewal-page-url'] = esc_url($input['renewal-page-url']);
         $output['after-rego-redirect-page-url'] = esc_url($input['after-rego-redirect-page-url']);
+        $output['force-strong-passwords'] = isset($input['force-strong-passwords']) ? esc_attr($input['force-strong-passwords']) : "";
         return $output;
     }
 

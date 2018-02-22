@@ -1,4 +1,12 @@
-<?php SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.filter_input(INPUT_GET, 'member_id')))); ?>
+<?php SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData' => '&action=swpm_validate_email&member_id=' . filter_input(INPUT_GET, 'member_id')))); 
+$settings=SwpmSettings::get_instance();
+$force_strong_pass=$settings->get_value('force-strong-passwords');
+if (!empty($force_strong_pass)) {
+    $pass_class="validate[required,custom[strongPass],minSize[8]]";
+} else {
+    $pass_class="";
+}
+?>
 <div class="swpm-registration-widget-form">
     <form id="swpm-registration-form" class="swpm-validate-form" name="swpm-registration-form" method="post" action="">
         <input type ="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
@@ -13,7 +21,7 @@
             </tr>
             <tr class="swpm-registration-password-row">
                 <td><label for="password"><?php echo SwpmUtils::_('Password') ?></label></td>
-                <td><input type="password" autocomplete="off" id="password" value="" size="50" name="password" /></td>
+                <td><input type="password" autocomplete="off" id="password" class="<?php echo $pass_class;?>" value="" size="50" name="password" /></td>
             </tr>
             <tr class="swpm-registration-password-retype-row">
                 <td><label for="password_re"><?php echo SwpmUtils::_('Repeat Password') ?></label></td>

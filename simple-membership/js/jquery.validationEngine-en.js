@@ -87,6 +87,10 @@
                     "regex": /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                     "alertText": "* Invalid email address"
                 },
+                "strongPass": {
+                  "regex": /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$/g,
+                  "alertText": "* Password must contain at least:<br />- a digit<br />- an uppercase letter<br />- a lowercase letter"
+                },
                 "SWPMUserName": {
                     "regex": /^[a-zA-Z0-9!@#$%&\'+\/=?^_`{|}~\.-]+$/,
                     "alertText": "* Invalid Username"

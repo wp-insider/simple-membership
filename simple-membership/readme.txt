@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 3.6.1
+Stable tag: 3.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,7 @@ You can create a free forum user account and ask your questions.
 * Front-end member login page.
 * Option to configure after login redirection for members.
 * Option to configure after registration redirect for members.
+* Option force the members to use strong password.
 
 = Language Translations =
 
@@ -139,6 +140,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 3.6.2 =
+- Added a new feature to enforce strong password on the password field. When this option is enabled in the advanced settings, the members will be required to use a strong password.
 
 = 3.6.1 =
 - Langauge POT file regenerated.

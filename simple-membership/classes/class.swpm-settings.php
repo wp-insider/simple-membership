@@ -191,6 +191,9 @@ class SwpmSettings {
         add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'allow-account-deletion',
             'message' => SwpmUtils::_('Allow users to delete their accounts.')));
         
+        add_settings_field('force-strong-passwords', SwpmUtils::_('Force Strong Password for Members'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'force-strong-passwords',
+            'message' => SwpmUtils::_('Enable this if you want the users to be forced to use a strong password for their accounts.')));
+        
         add_settings_field('force-wp-user-sync', SwpmUtils::_('Force WP User Synchronization'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'force-wp-user-sync',
             'message' => SwpmUtils::_('Enable this option if you want to force the member login to be synchronized with WP user account. This can be useful if you are using another plugin that uses WP user records. For example: bbPress plugin.')));
         
@@ -206,9 +209,6 @@ class SwpmSettings {
             'options' => array('manage_options' => 'Admin', 'edit_pages' => 'Editor', 'edit_published_posts' => 'Author', 'edit_posts' => 'Contributor'),
             'default' => 'manage_options',
             'message' => SwpmUtils::_('SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user role to access the SWPM admin dashboard by selecting a value here.')));
-
-        add_settings_field('force-strong-passwords', SwpmUtils::_('Force Strong Password for Members'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'force-strong-passwords',
-            'message' => SwpmUtils::_('Force strong passwords for members.')));
 
     }
 

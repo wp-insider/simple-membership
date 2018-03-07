@@ -428,8 +428,8 @@ class SimpleWpMembership {
 
         // The actual fields for data entry
         echo '<h4>' . __("Do you want to protect this content?", 'simple-membership') . '</h4>';
-        echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="1" /> No, Do not protect this content. <br/>';
-        echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="2" /> Yes, Protect this content.<br/>';
+        echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="1" /> '. SwpmUtils::_('No, Do not protect this content.') . '<br/>';
+        echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="2" /> '. SwpmUtils::_('Yes, Protect this content.') . '<br/>';
         echo $protection_obj->get_last_message();
 
         echo '<h4>' . __("Select the membership level that can access this content:", 'simple-membership') . "</h4>";

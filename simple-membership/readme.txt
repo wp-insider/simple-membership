@@ -25,11 +25,11 @@ When you are editing a post or page in the WordPress editor, you can select to p
 Non-members viewing a protected page will be prompted to login or become a member.
 
 = Have Free and Paid Memberships =
-You can configure it to have free and/or paid memberships on your site. Paid membership payment is handled securely via PayPal. 
+You can configure it to have free and/or paid memberships on your site. Paid membership payment is handled securely via PayPal. Membership payment can also be accepted using Stripe or Braintree payment gateways.
 
-Both one time and recurring/subscription payments are supported.
+Both one time and recurring/subscription payments are supported for PayPal and Stripe.
 
-You can also accept one time membership payment via Stripe or Braintree payment gateway.
+You can accept one time membership payment via Braintree payment gateway.
 
 = Membership Payments Log = 
 All the payments from your members are recorded in the plugin. You can view them anytime by visiting the payments menu from the admin dashboard.

@@ -186,7 +186,10 @@ class SwpmSettings {
             'message' => SwpmUtils::_('You can create a renewal page for your site. Read <a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">this documentation</a> to learn how to create a renewal page.')) );
         
         add_settings_field('after-rego-redirect-page-url', SwpmUtils::_('After Registration Redirect URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'after-rego-redirect-page-url',
-            'message' => SwpmUtils::_('You can enter an URL here to redirect the members to this page after they submit the registration form. Read <a href="https://simple-membership-plugin.com/configure-registration-redirect-members/" target="_blank">this documentation</a> to learn how to setup after registration redirect.')) );
+            'message' => SwpmUtils::_('You can enter an URL here to redirect the members to this page after they submit the registration form. Read <a href="https://simple-membership-plugin.com/configure-after-registration-redirect-for-members/" target="_blank">this documentation</a> to learn how to setup after registration redirect.')) );
+        
+        add_settings_field('auto-login-after-rego', SwpmUtils::_('Enable Auto Login After Registration'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'auto-login-after-rego',
+            'message' => SwpmUtils::_('Use this option if you want the members to be automatically logged into your site right after they complete the registration. Read <a href="https://simple-membership-plugin.com/configure-auto-login-after-registration-members/" target="_blank">this documentation</a> to learn more.')));
         
         add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'allow-account-deletion',
             'message' => SwpmUtils::_('Allow users to delete their accounts.')));
@@ -447,6 +450,8 @@ class SwpmSettings {
         $output['renewal-page-url'] = esc_url($input['renewal-page-url']);
         $output['after-rego-redirect-page-url'] = esc_url($input['after-rego-redirect-page-url']);
         $output['force-strong-passwords'] = isset($input['force-strong-passwords']) ? esc_attr($input['force-strong-passwords']) : "";
+        $output['auto-login-after-rego'] = isset($input['auto-login-after-rego']) ? esc_attr($input['auto-login-after-rego']) : "";
+        
         return $output;
     }
 

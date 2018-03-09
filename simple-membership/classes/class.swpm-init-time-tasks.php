@@ -153,9 +153,16 @@ class SwpmInitTimeTasks {
     }
     
     public function check_and_handle_auto_login() {
+        
         if(isset($_REQUEST['swpm_auto_login']) && $_REQUEST['swpm_auto_login'] == '1'){
             //Handle the auto login
             SwpmLog::log_simple_debug("Handling auto login request...", true);
+            
+            $enable_auto_login = SwpmSettings::get_instance()->get_value('auto-login-after-rego');
+            if(empty($enable_auto_login)) {
+                SwpmLog::log_simple_debug("Auto login after registration feature is disabled in settings.", true);
+                return;
+            }
             
             //Check auto login nonce value
             $auto_login_nonce = isset($_REQUEST['swpm_auto_login_nonce'])? $_REQUEST['swpm_auto_login_nonce'] : '';

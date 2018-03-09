@@ -7,6 +7,7 @@ include_once('class.swpm-utils-membership-level.php');
 include_once('class.swpm-utils-template.php');
 include_once('class.swpm-init-time-tasks.php');
 include_once('class.swpm-wp-loaded-tasks.php');
+include_once('class.swpm-self-action-handler.php');
 include_once('class.swpm-comment-form-related.php');
 include_once('class.swpm-settings.php');
 include_once('class.swpm-protection.php');
@@ -34,6 +35,10 @@ include_once('shortcode-related/class.swpm-shortcodes-handler.php');
 class SimpleWpMembership {
 
     public function __construct() {
+        
+        new SwpmShortcodesHandler(); //Tackle the shortcode definitions and implementation.
+        new SwpmSelfActionHandler(); //Tackle the self action hook handling.
+        
         add_action('admin_menu', array(&$this, 'menu'));
         add_action('init', array(&$this, 'init_hook'));
         add_action('wp_loaded', array(&$this, 'handle_wp_loaded_tasks'));
@@ -52,8 +57,6 @@ class SimpleWpMembership {
         add_shortcode('swpm_profile_form', array(&$this, 'profile_form'));
         add_shortcode('swpm_login_form', array(&$this, 'login'));
         add_shortcode('swpm_reset_form', array(&$this, 'reset'));
-
-        new SwpmShortcodesHandler(); //Tackle the shortcode definitions and implementation.
 
         add_action('wp_head', array(&$this, 'wp_head_callback'));
         add_action('save_post', array(&$this, 'save_postdata'));

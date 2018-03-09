@@ -26,7 +26,10 @@ class SwpmInitTimeTasks {
         //Do frontend-only init time tasks
         if (!is_admin()) {
             SwpmAuth::get_instance();
+            
+            $this->check_and_handle_auto_login();
             $this->verify_and_delete_account();
+            
             $swpm_logout = filter_input(INPUT_GET, 'swpm-logout');
             if (!empty($swpm_logout)) {
                 SwpmAuth::get_instance()->logout();
@@ -146,6 +149,28 @@ class SwpmInitTimeTasks {
         if (!empty($swpm_editprofile_submit)) {
             SwpmFrontRegistration::get_instance()->edit_profile_front_end();
             //TODO - allow an option to do a redirect if successful edit profile form submission?
+        }
+    }
+    
+    public function check_and_handle_auto_login() {
+        if(isset($_REQUEST['swpm_auto_login']) && $_REQUEST['swpm_auto_login'] == '1'){
+            //Handle the auto login
+            SwpmLog::log_simple_debug("Handling auto login request...", true);
+            
+            //Check auto login nonce value
+            $auto_login_nonce = isset($_REQUEST['swpm_auto_login_nonce'])? $_REQUEST['swpm_auto_login_nonce'] : '';
+            if (!wp_verify_nonce($auto_login_nonce, 'swpm-auto-login-nonce')) {
+                SwpmLog::log_simple_debug("Error! Auto login nonce verification check failed!", false);
+                wp_die("Auto login nonce verification check failed!");
+            }
+            
+            //Perform the login
+            $auth = SwpmAuth::get_instance();
+            $user = apply_filters('swpm_user_name', filter_input(INPUT_GET, 'swpm_user_name'));
+            $encoded_pass = filter_input(INPUT_GET, 'swpm_encoded_pw');
+            $pass = base64_decode($encoded_pass);
+            $auth->login($user, $pass);
+            SwpmLog::log_simple_debug("Auto login request completed.", true);
         }
     }
 

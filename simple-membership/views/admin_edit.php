@@ -45,21 +45,29 @@
             <td><input class="regular-text"  name="password" type="password" id="pass1" autocomplete="off" /><br />
             <input class="regular-text" name="password_re" type="password" id="pass2" autocomplete="off" />
             <br />
-            <div id="pass-strength-result"><?php echo  SwpmUtils::_('Strength indicator'); ?></div>
-            <p class="description indicator-hint"><?php echo  SwpmUtils::_('Hint: The password should be at least seven characters long. To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ).'); ?></p>
+            <div id="pass-strength-result"><?php echo SwpmUtils::_('Strength indicator'); ?></div>
+            <p class="description indicator-hint"><?php echo SwpmUtils::_('Hint: The password should be at least seven characters long. To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ).'); ?></p>
             </td>
 	</tr> 
 	<tr>
             <th scope="row"><label for="account_state"><?php echo  SwpmUtils::_('Account Status'); ?></label></th>
-            <td><select class="regular-text" name="account_state" id="account_state">
+            <td>
+                <select class="regular-text" name="account_state" id="account_state">
                         <?php echo  SwpmUtils::account_state_dropdown($account_state);?>
-                    </select>
+                </select>
+                <p class="description">
+                    <?php echo SwpmUtils::_("This is the member's account status. If you want to manually activate an expired member's account then read"); ?> 
+                    <a href="https://simple-membership-plugin.com/manually-activating-expired-members-account/" target="_blank"><?php echo SwpmUtils::_("this documentation"); ?></a>
+                    <?php echo SwpmUtils::_(" to learn how to do it."); ?>
+                </p>
             </td>
 	</tr>        
 	<tr>
             <th scope="row"><label for="account_state_change"><?php echo  SwpmUtils::_('Notify User'); ?></label></th>
             <td><input type="checkbox" id="account_status_change" name="account_status_change" />
-                <p class="description indicator-hint">You can use this option to send a quick notification email to this member (the email will be sent when you hit the save button below).</p>
+                <p class="description indicator-hint">
+                    <?php echo SwpmUtils::_("You can use this option to send a quick notification email to this member (the email will be sent when you hit the save button below)."); ?>
+                </p>
             </td>
 	</tr>
     <?php include('admin_member_form_common_part.php');?>

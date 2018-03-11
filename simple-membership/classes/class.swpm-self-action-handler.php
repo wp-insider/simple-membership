@@ -4,7 +4,7 @@ class SwpmSelfActionHandler {
     
     public function __construct() {
         //Register all the self action hooks the plugin needs to handle
-        add_action('swpm_front_end_registration_complete_fb_user_data', array(&$this, 'after_registration_callback'));
+        add_action('swpm_front_end_registration_complete_fb', array(&$this, 'after_registration_callback'));//For the form builder
         add_action('swpm_front_end_registration_complete_user_data', array(&$this, 'after_registration_callback'));
 
     }    

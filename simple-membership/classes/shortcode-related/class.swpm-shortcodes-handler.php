@@ -8,6 +8,8 @@ class SwpmShortcodesHandler {
         add_shortcode('swpm_thank_you_page_registration', array(&$this, 'swpm_ty_page_rego_sc'));
 
         add_shortcode('swpm_show_expiry_date', array(&$this, 'swpm_show_expiry_date_sc'));
+        
+        add_shortcode('swpm_mini_login', array(&$this, 'swpm_show_mini_login_sc'));
     }
 
     public function swpm_payment_button_sc($args) {
@@ -95,4 +97,32 @@ class SwpmShortcodesHandler {
         return $output;
     }
 
+    public function swpm_show_mini_login_sc($args) {
+        
+        $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
+        $join_page_url = SwpmSettings::get_instance()->get_value('join-us-page-url');
+        $profile_page_url = SwpmSettings::get_instance()->get_value('profile-page-url');
+        $logout_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '?swpm-logout=true';
+        
+        $output = '<div class="swpm_mini_login_wrapper">';
+        
+        //Check if the user is logged in or not
+        $auth = SwpmAuth::get_instance();
+        if ($auth->is_logged_in()) {
+            //User is logged in
+            $username = $auth->get('user_name');
+            $output .= '<span class="swpm_mini_login_label">'.SwpmUtils::_('Logged in as: ').'</span>';
+            $output .= '<span class="swpm_mini_login_username">'.$username.'</span>';
+            $output .= '<span class="swpm_mini_login_profile"> | <a href="'.$profile_page_url.'">'.SwpmUtils::_('Profile').'</a></span>';
+            $output .= '<span class="swpm_mini_login_logout"> | <a href="'.$logout_url.'">'.SwpmUtils::_('Logout').'</a></span>';
+        } else {
+            //User not logged in.
+            $output .= '<span class="swpm_mini_login_login_here"><a href="'.$login_page_url.'">'.SwpmUtils::_('Login Here').'</a></span>';
+            $output .= '<span class="swpm_mini_login_no_membership"> | '.SwpmUtils::_('Not a member? ').'</span>';
+            $output .= '<span class="swpm_mini_login_join_now"><a href="'.$join_page_url.'">'.SwpmUtils::_('Join Now').'</a></span>';
+        }
+        
+        $output .= '</div>';
+        return $output;
+    }
 }

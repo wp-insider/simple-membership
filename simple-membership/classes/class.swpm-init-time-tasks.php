@@ -174,10 +174,11 @@ class SwpmInitTimeTasks {
             //Perform the login
             $auth = SwpmAuth::get_instance();
             $user = apply_filters('swpm_user_name', filter_input(INPUT_GET, 'swpm_user_name'));
+            $user = sanitize_user($user);
             $encoded_pass = filter_input(INPUT_GET, 'swpm_encoded_pw');
             $pass = base64_decode($encoded_pass);
             $auth->login($user, $pass);
-            SwpmLog::log_simple_debug("Auto login request completed.", true);
+            SwpmLog::log_simple_debug("Auto login request completed for: " . $user, true);
         }
     }
 

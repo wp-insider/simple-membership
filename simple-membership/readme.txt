@@ -141,6 +141,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.6.5 =
+- Updated the Swedish translation file. Thanks to Andreas Damberg for submitting the translation file.
+
 = 3.6.4 = 
 - Added a new shortcode to show a mini login form. This can be useful to show a mini login form on the sidebar, header or footer area of the site.
 - Fixed an issue with the auto login after registration feature when used with form builder addon.

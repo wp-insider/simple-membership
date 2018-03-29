@@ -34,6 +34,12 @@ You can accept one time membership payment via Braintree payment gateway.
 = Membership Payments Log = 
 All the payments from your members are recorded in the plugin. You can view them anytime by visiting the payments menu from the admin dashboard.
 
+= Developer API =
+
+There are lots of action and filter hooks that a developer can use to customize the plugin.
+
+There is also an API that can be used to query, create, update member accounts.
+
 = Member Login Widget on The Sidebar =
 You can easily add a member login widget on the sidebar of your site. Simply use the login form shortcode in the sidebar widget.
 
@@ -143,6 +149,7 @@ https://simple-membership-plugin.com/
 
 = WIP 3.6.5 =
 - Updated the Swedish translation file. Thanks to Andreas Damberg for submitting the translation file.
+- Developer API to query, update, create member accounts.
 
 = 3.6.4 = 
 - Added a new shortcode to show a mini login form. This can be useful to show a mini login form on the sidebar, header or footer area of the site.

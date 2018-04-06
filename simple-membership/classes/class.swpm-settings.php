@@ -97,7 +97,7 @@ class SwpmSettings {
         $debug_field_help_text = SwpmUtils::_('Check this option to enable debug logging.');
         $debug_field_help_text .= '<br />- View debug log file by clicking <a href="' . SIMPLE_WP_MEMBERSHIP_URL . '/log.txt" target="_blank">here</a>.';
         $debug_field_help_text .= '<br />- Reset debug log file by clicking <a href="admin.php?page=simple_wp_membership_settings&swmp_reset_log=1" target="_blank">here</a>.';
-        add_settings_field('enable-debug', 'Enable Debug', array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings', array('item' => 'enable-debug',
+        add_settings_field('enable-debug', SwpmUtils::_('Enable Debug'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings', array('item' => 'enable-debug',
             'message' => $debug_field_help_text));
         add_settings_field('enable-sandbox-testing', SwpmUtils::_('Enable Sandbox Testing'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings', array('item' => 'enable-sandbox-testing',
             'message' => SwpmUtils::_('Enable this option if you want to do sandbox payment testing.')));

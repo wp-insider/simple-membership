@@ -117,8 +117,12 @@ abstract class SwpmProtectionBase {
         if (empty($this->categories)){
             return false;
         }
-        $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
-        $taxonomies['category'] = 'category';
+        $taxonomies = get_taxonomies(array('public' => true,'_builtin'=>false));
+        if (!is_array($taxonomies) || empty($taxonomies)) {
+        	$taxonomies = 'category';
+        } else {
+        	$taxonomies['category'] = 'category';
+    	}
         $terms = wp_get_post_terms( $post_id, $taxonomies, array('fields'=>'ids'));
         if(!is_array($terms)){
             return false;
@@ -134,8 +138,12 @@ abstract class SwpmProtectionBase {
     if (empty($this->categories)){
             return false;
         }
-        $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
-        $taxonomies['category'] = 'category';
+        $taxonomies = get_taxonomies(array('public' => true,'_builtin'=>false));
+        if (!is_array($taxonomies) || empty($taxonomies)) {
+        	$taxonomies = 'category';
+        } else {
+        	$taxonomies['category'] = 'category';
+    	}
         $terms = get_term($id, $taxonomies);
         if(!is_array($terms)){
             return false;
@@ -153,8 +161,12 @@ abstract class SwpmProtectionBase {
         if (empty($this->categories)){
             return false;
         }
-        $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
-        $taxonomies['category'] = 'category';
+        $taxonomies = get_taxonomies(array('public' => true,'_builtin'=>false));
+        if (!is_array($taxonomies) || empty($taxonomies)) {
+        	$taxonomies = 'category';
+        } else {
+        	$taxonomies['category'] = 'category';
+    	}
         $terms = wp_get_post_terms( $post_id, $taxonomies, array('fields'=>'all'));
         if(!is_array($terms)){
             return false;

@@ -6,6 +6,21 @@
  */
 class SwpmMemberUtils {
 
+    public static function create_swpm_member_entry_from_array_data($fields){
+        global $wpdb;
+        $res = $wpdb->insert( $wpdb->prefix . "swpm_members_tbl", $fields );
+        
+        if ( ! $res ) {
+            //DB error occured
+            $error_msg = 'create_swpm_member_entry_from_array_data() - DB error occured: ' . json_encode( $wpdb->last_result );
+            SwpmLog::log_simple_debug( $error_msg, false );
+        }
+
+        $member_id = $wpdb->insert_id;
+        SwpmLog::log_simple_debug( 'create_swpm_member_entry_from_array_data() - SWPM member entry created successfully. Member ID: '. $member_id, true );
+        return $member_id;
+    }
+    
     public static function is_member_logged_in() {
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {

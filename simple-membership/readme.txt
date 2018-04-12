@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 3.6.4
+Stable tag: 3.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -147,9 +147,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.6.5 =
+= 3.6.5 =
 - Updated the Swedish translation file. Thanks to Andreas Damberg for submitting the translation file.
 - Developer API to query, update, create member accounts.
+- Added a new feature in the advanced settings to allow automatic member creation for WP users that get created by other plugins.
+- Added a couple of utility functions in the membership level class.
 
 = 3.6.4 = 
 - Added a new shortcode to show a mini login form. This can be useful to show a mini login form on the sidebar, header or footer area of the site.

@@ -197,9 +197,6 @@ class SwpmSettings {
         add_settings_field('force-strong-passwords', SwpmUtils::_('Force Strong Password for Members'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'force-strong-passwords',
             'message' => SwpmUtils::_('Enable this if you want the users to be forced to use a strong password for their accounts.')));
         
-        add_settings_field('force-wp-user-sync', SwpmUtils::_('Force WP User Synchronization'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'force-wp-user-sync',
-            'message' => SwpmUtils::_('Enable this option if you want to force the member login to be synchronized with WP user account. This can be useful if you are using another plugin that uses WP user records. For example: bbPress plugin.')));
-        
         add_settings_field('use-wordpress-timezone', SwpmUtils::_('Use WordPress Timezone'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'use-wordpress-timezone',
             'message' => SwpmUtils::_('Use this option if you want to use the timezone value specified in your WordPress General Settings interface.')));
         
@@ -212,6 +209,27 @@ class SwpmSettings {
             'options' => array('manage_options' => 'Admin', 'edit_pages' => 'Editor', 'edit_published_posts' => 'Author', 'edit_posts' => 'Contributor'),
             'default' => 'manage_options',
             'message' => SwpmUtils::_('SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user role to access the SWPM admin dashboard by selecting a value here.')));
+        
+        add_settings_field('force-wp-user-sync', SwpmUtils::_('Force WP User Synchronization'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'force-wp-user-sync',
+            'message' => SwpmUtils::_('Enable this option if you want to force the member login to be synchronized with WP user account. This can be useful if you are using another plugin that uses WP user records. For example: bbPress plugin.')));
+        
+        //Auto create SWPM user related settings section
+        add_settings_section('auto-create-swpm-user-settings', SwpmUtils::_('Create Member Accounts for New WP Users'), array(&$this, 'advanced_settings_auto_create_swpm_uses_settings_callback'), 'simple_wp_membership_settings');
+        
+        add_settings_field('enable-auto-create-swpm-members', SwpmUtils::_('Enable Auto Create Member Accounts'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'auto-create-swpm-user-settings', array('item' => 'enable-auto-create-swpm-members',
+            'message' => SwpmUtils::_('Enable this option to automatically create member accounts for any new WP user that is created by another plugin.')));
+        
+        $levels_array = SwpmMembershipLevelUtils::get_all_membership_levels_in_array();
+        add_settings_field('auto-create-default-membership-level', SwpmUtils::_('Default Membership Level'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'auto-create-swpm-user-settings', array('item' => 'auto-create-default-membership-level',
+            'options' => $levels_array,
+            'default' => '',
+            'message' => SwpmUtils::_('When automatically creating a member account using this feature, the membership level of the user will be set to the one you specify here.')));
+        
+        $status_array = SwpmUtils::get_account_state_options();
+        add_settings_field('auto-create-default-account-status', SwpmUtils::_('Default Account Status'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'auto-create-swpm-user-settings', array('item' => 'auto-create-default-account-status',
+            'options' => $status_array,
+            'default' => '',
+            'message' => SwpmUtils::_('When automatically creating a member account using this feature, the membership account status of the user will be set to the one you specify here.')));
 
     }
 
@@ -378,6 +396,10 @@ class SwpmSettings {
         SwpmUtils::e('This page allows you to configure some advanced features of the plugin.');
     }
 
+    public function advanced_settings_auto_create_swpm_uses_settings_callback() {
+        SwpmUtils::e('This section allows you to configure automatic creation of member accounts when new WP User records are created by another plugin. It can be useful if you are using another plugin that creates WP user records and you want them to be recognized in the membership plugin.');
+    }
+    
     public function sanitize_tab_1($input) {
         if (empty($this->settings)) {
             $this->settings = (array) get_option('swpm-settings');
@@ -443,7 +465,6 @@ class SwpmSettings {
         $output = $this->settings;
         $output['enable-expired-account-login'] = isset($input['enable-expired-account-login']) ? esc_attr($input['enable-expired-account-login']) : "";
         $output['allow-account-deletion'] = isset($input['allow-account-deletion']) ? esc_attr($input['allow-account-deletion']) : "";
-        $output['force-wp-user-sync'] = isset($input['force-wp-user-sync']) ? esc_attr($input['force-wp-user-sync']) : "";
         $output['use-wordpress-timezone'] = isset($input['use-wordpress-timezone']) ? esc_attr($input['use-wordpress-timezone']) : "";
         $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
         $output['admin-dashboard-access-permission'] = isset($input['admin-dashboard-access-permission']) ? esc_attr($input['admin-dashboard-access-permission']) : '';
@@ -451,6 +472,12 @@ class SwpmSettings {
         $output['after-rego-redirect-page-url'] = esc_url($input['after-rego-redirect-page-url']);
         $output['force-strong-passwords'] = isset($input['force-strong-passwords']) ? esc_attr($input['force-strong-passwords']) : "";
         $output['auto-login-after-rego'] = isset($input['auto-login-after-rego']) ? esc_attr($input['auto-login-after-rego']) : "";
+        $output['force-wp-user-sync'] = isset($input['force-wp-user-sync']) ? esc_attr($input['force-wp-user-sync']) : "";
+        
+        //Auto create swpm user related settings
+        $output['enable-auto-create-swpm-members'] = isset($input['enable-auto-create-swpm-members']) ? esc_attr($input['enable-auto-create-swpm-members']) : "";
+        $output['auto-create-default-membership-level'] = isset($input['auto-create-default-membership-level']) ? esc_attr($input['auto-create-default-membership-level']) : "";
+        $output['auto-create-default-account-status'] = isset($input['auto-create-default-account-status']) ? esc_attr($input['auto-create-default-account-status']) : "";
         
         return $output;
     }

@@ -68,6 +68,7 @@ class SimpleWpMembership {
         add_action('wp_logout', array(&$this, 'wp_logout'));
         add_action('wp_authenticate', array(&$this, 'wp_login'), 1, 2);
         add_action('swpm_logout', array(&$this, 'swpm_do_user_logout'));
+        add_action('user_register', array(&$this, 'swpm_handle_wp_user_registration'));
 
         //AJAX hooks
         add_action('wp_ajax_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
@@ -273,6 +274,19 @@ class SimpleWpMembership {
         }
     }
 
+    public function login() {
+        ob_start();
+        $auth = SwpmAuth::get_instance();
+        if ($auth->is_logged_in()) {
+            //Load the template for logged-in member
+            SwpmUtilsTemplate::swpm_load_template('loggedin.php', false);
+        } else {
+            //Load the login widget template
+            SwpmUtilsTemplate::swpm_load_template('login.php', false);
+        }
+        return ob_get_clean();
+    }
+    
     public function wp_logout() {
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
@@ -296,18 +310,41 @@ class SimpleWpMembership {
         $profile['last_name'] = $wp_user_data->user_lastname;
         $wpdb->update($wpdb->prefix . "swpm_members_tbl", $profile, array('member_id' => $profile['member_id']));
     }
+    
+    function swpm_handle_wp_user_registration($user_id) {
+        
+        $swpm_settings_obj = SwpmSettings::get_instance();
+        $enable_auto_create_swpm_members = $swpm_settings_obj->get_value('enable-auto-create-swpm-members');
+        $default_level = $swpm_settings_obj->get_value('auto-create-default-membership-level');
+        $default_ac_status = $swpm_settings_obj->get_value('auto-create-default-account-status');
 
-    public function login() {
-        ob_start();
-        $auth = SwpmAuth::get_instance();
-        if ($auth->is_logged_in()) {
-            //Load the template for logged-in member
-            SwpmUtilsTemplate::swpm_load_template('loggedin.php', false);
-        } else {
-            //Load the login widget template
-            SwpmUtilsTemplate::swpm_load_template('login.php', false);
+        if (empty($enable_auto_create_swpm_members)) {
+            return;
         }
-        return ob_get_clean();
+        if (empty($default_level)){
+            return;
+        }
+        
+        $user_info = get_userdata($user_id);
+        if (SwpmMemberUtils::get_user_by_user_name($user_info->user_login)) {
+            SwpmLog::log_simple_debug("swpm_handle_wp_user_registration() - SWPM member account with this username already exists! No new account will be created for this user.", false);
+            return;
+        }
+        if (SwpmMemberUtils::get_user_by_email($user_info->user_email)) {
+            SwpmLog::log_simple_debug("swpm_handle_wp_user_registration() - SWPM member account with this email already exists! No new account will be created for this user.", false);
+            return;
+        }
+        $fields = array();
+        $fields['user_name'] = $user_info->user_login;
+        $fields['password'] = $user_info->user_pass;
+        $fields['email'] = $user_info->user_email;
+        $fields['first_name'] = $user_info->first_name;
+        $fields['last_name'] = $user_info->last_name;
+        $fields['membership_level'] = $default_level;
+        $fields['member_since'] = date('Y-m-d');
+        $fields['account_state'] = $default_ac_status;
+        $fields['subscription_starts'] = date('Y-m-d');
+        SwpmMemberUtils::create_swpm_member_entry_from_array_data($fields);
     }
 
     public function reset() {

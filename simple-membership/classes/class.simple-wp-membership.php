@@ -265,11 +265,14 @@ class SimpleWpMembership {
     }
 
     public function wp_authenticate_handler($username, $password) {
+        
         $auth = SwpmAuth::get_instance();
         if (($auth->is_logged_in() && ($auth->userData->user_name == $username))) {
+            SwpmLog::log_auth_debug('wp_authenticate action. User with username: '.$username.'is already logged in.', true);
             return;
         }
         if (!empty($username)) {
+            SwpmLog::log_auth_debug('wp_authenticate action. Handling login for username: ' . $username, true);
             $auth->login($username, $password, true);
         }
     }

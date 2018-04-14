@@ -95,8 +95,11 @@ class SwpmSettings {
         add_settings_section('debug-settings', SwpmUtils::_('Test & Debug Settings'), array(&$this, 'testndebug_settings_callback'), 'simple_wp_membership_settings');
 
         $debug_field_help_text = SwpmUtils::_('Check this option to enable debug logging.');
-        $debug_field_help_text .= '<br />- View debug log file by clicking <a href="' . SIMPLE_WP_MEMBERSHIP_URL . '/log.txt" target="_blank">here</a>.';
-        $debug_field_help_text .= '<br />- Reset debug log file by clicking <a href="admin.php?page=simple_wp_membership_settings&swmp_reset_log=1" target="_blank">here</a>.';
+        $debug_field_help_text .= SwpmUtils::_(' This can be useful when troubleshooting an issue. Turn it off and reset the log files after the troubleshooting is complete.');
+        $debug_field_help_text .= '<br />';
+        $debug_field_help_text .= '<br />- '. SwpmUtils::_('View general debug log file by clicking ') . '<a href="' . SIMPLE_WP_MEMBERSHIP_URL . '/log.txt" target="_blank">' . SwpmUtils::_('here') . '</a>.';
+        $debug_field_help_text .= '<br />- '. SwpmUtils::_('View login related debug log file by clicking ') . '<a href="' . SIMPLE_WP_MEMBERSHIP_URL . '/log-auth.txt" target="_blank">' . SwpmUtils::_('here') . '</a>.';
+        $debug_field_help_text .= '<br />- '. SwpmUtils::_('Reset debug log files by clicking ') . '<a href="admin.php?page=simple_wp_membership_settings&swmp_reset_log=1" target="_blank">' . SwpmUtils::_('here') . '</a>.';
         add_settings_field('enable-debug', SwpmUtils::_('Enable Debug'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings', array('item' => 'enable-debug',
             'message' => $debug_field_help_text));
         add_settings_field('enable-sandbox-testing', SwpmUtils::_('Enable Sandbox Testing'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings', array('item' => 'enable-sandbox-testing',

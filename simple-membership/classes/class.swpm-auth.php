@@ -175,7 +175,7 @@ class SwpmAuth {
     }
 
     public function login($user, $pass, $remember = '', $secure = '') {
-        SwpmLog::log_auth_debug("login", true);
+        SwpmLog::log_auth_debug("SwpmAuth::login()", true);
         if ($this->isLoggedIn) {
             return;
         }

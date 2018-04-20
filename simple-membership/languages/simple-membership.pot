@@ -2128,3 +2128,76 @@ msgstr ""
 
 msgid "This content is for members only."
 msgstr ""
+
+#: === Member Directory Listing addon strings ===
+#: swpm-member-directory-admin.php:9
+msgid "Member Directory"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:26
+msgid "Member ID"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:27
+msgid "Username"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:28
+msgid "First Name"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:29
+msgid "Last Name"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:30
+msgid "Level"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:31
+msgid "Account State"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:32
+msgid "Address"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:33
+msgid "Country"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:34
+msgid "Phone"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:35
+msgid "Email"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:36
+msgid "Member Since"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:37
+msgid "Gender"
+msgstr ""
+
+#: includes/swpm_mda_show_profile.php:38
+msgid "Company"
+msgstr ""
+
+#: views/template-1.php:52 views/template-2.php:53
+msgid "Search..."
+msgstr ""
+
+#: views/template-1.php:53 views/template-2.php:54
+msgid "Search"
+msgstr ""
+
+#: views/template-1.php:60 views/template-2.php:62
+msgid "Clear Search"
+msgstr ""
+
+#: views/template-1.php:95 views/template-2.php:97
+msgid "View Profile"
+msgstr ""

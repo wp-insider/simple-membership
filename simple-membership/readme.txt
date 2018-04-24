@@ -147,6 +147,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.6.6 =
+- Fixed a typo in the country name "Colombia".
+
 = 3.6.5 =
 - Updated the Swedish translation file. Thanks to Andreas Damberg for submitting the translation file.
 - Developer API to query, update, create member accounts.

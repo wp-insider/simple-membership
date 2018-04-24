@@ -343,7 +343,7 @@ class SwpmMiscUtils {
             "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
             "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria",
             "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde",
-            "Central African Republic", "Chad", "Chile", "China", "Colombi", "Comoros",
+            "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros",
             "Congo (Brazzaville)", "Congo", "Costa Rica", "Cote d\'Ivoire", "Croatia",
             "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica",
             "Dominican Republic", "East Timor (Timor Timur)", "Ecuador", "Egypt",

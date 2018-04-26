@@ -75,13 +75,13 @@ class SwpmBraintreeBuyNowIpnHandler {
           'merchantAccountId' => $braintree_merc_acc_name,
           ]); 
         } catch (Exception $e) {
-             SwpmLog::log_simple_debug("Braintree library error occured: ".get_class($e).", button ID: ".$button_id, false);
-             wp_die('Braintree library error occured: '.get_class($e));
+             SwpmLog::log_simple_debug("Braintree library error occurred: ".get_class($e).", button ID: ".$button_id, false);
+             wp_die('Braintree library error occurred: '.get_class($e));
         }
 
         if (!$result->success) {
-            SwpmLog::log_simple_debug("Braintree transaction error occured: ".$result->transaction->status.", button ID: ".$button_id, false);
-            wp_die("Braintree transaction error occured: ".$result->transaction->status);
+            SwpmLog::log_simple_debug("Braintree transaction error occurred: ".$result->transaction->status.", button ID: ".$button_id, false);
+            wp_die("Braintree transaction error occurred: ".$result->transaction->status);
         } 
         else {
 

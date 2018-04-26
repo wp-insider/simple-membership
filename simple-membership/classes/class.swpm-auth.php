@@ -355,7 +355,7 @@ class SwpmAuth {
                         $sub = \Stripe\Subscription::retrieve($subscr_id);
                         $sub->cancel();
                     } catch (Exception $e) {
-                        SwpmLog::log_simple_debug("Error occured during Stripe Subscription cancellation. " . $e->getMessage(), false);
+                        SwpmLog::log_simple_debug("Error occurred during Stripe Subscription cancellation. " . $e->getMessage(), false);
                         $body = $e->getJsonBody();
                         $error = $body['error'];
                         $error_string = print_r($error, true);

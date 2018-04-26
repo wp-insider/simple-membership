@@ -100,7 +100,7 @@ class SwpmStripeSubscriptionIpnHandler {
                         'plan' => $plan_id,
             ));
         } catch (Exception $e) {
-            SwpmLog::log_simple_debug("Error occured during Stripe Subscribe. " . $e->getMessage(), false);
+            SwpmLog::log_simple_debug("Error occurred during Stripe Subscribe. " . $e->getMessage(), false);
             $body = $e->getJsonBody();
             $error = $body['error'];
             $error_string = print_r($error, true);
@@ -116,7 +116,7 @@ class SwpmStripeSubscriptionIpnHandler {
         try {
             $customer->save();
         } catch (Exception $e) {
-            SwpmLog::log_simple_debug("Error occured during Stripe customer metadata update. " . $e->getMessage(), false);
+            SwpmLog::log_simple_debug("Error occurred during Stripe customer metadata update. " . $e->getMessage(), false);
             $body = $e->getJsonBody();
             SwpmLog::log_simple_debug("Error details: " . $error_string, false);
         }

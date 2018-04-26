@@ -209,8 +209,8 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
         require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php');
         $result = StripeUtilFunctions::get_stripe_plan_info($secret_key, $plan_id);
         if ($result['success'] === false) {
-            // some error occured, let's display it and stop processing the shortcode further
-            return '<p class="swpm-red-box">Stripe error occured: ' . $result['error_msg'] . '</p>';
+            // some error occurred, let's display it and stop processing the shortcode further
+            return '<p class="swpm-red-box">Stripe error occurred: ' . $result['error_msg'] . '</p>';
         } else {
             // plan data has been successfully retreived
             $plan_data = $result['plan_data'];

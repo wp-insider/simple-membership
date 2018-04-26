@@ -20,7 +20,7 @@ class StripeUtilFunctions{
             $stripe_err = $e->getMessage();
         }
         if (empty($stripe_err)) {
-            //we proceed with getting plan details only if no errors occured
+            //we proceed with getting plan details only if no errors occurred
             $plan_data['name'] = $plan->name;
             $plan_data['amount'] = $plan->amount;
             $plan_data['currency'] = $plan->currency;

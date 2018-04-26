@@ -11,8 +11,8 @@ class SwpmMemberUtils {
         $res = $wpdb->insert( $wpdb->prefix . "swpm_members_tbl", $fields );
         
         if ( ! $res ) {
-            //DB error occured
-            $error_msg = 'create_swpm_member_entry_from_array_data() - DB error occured: ' . json_encode( $wpdb->last_result );
+            //DB error occurred
+            $error_msg = 'create_swpm_member_entry_from_array_data() - DB error occurred: ' . json_encode( $wpdb->last_result );
             SwpmLog::log_simple_debug( $error_msg, false );
         }
 

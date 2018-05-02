@@ -62,7 +62,7 @@ if (!empty($force_strong_pass)) {
                 ?>
                 <tr>
                     <td colspan="2" style="text-align: center;">
-                        <label><input type="checkbox" id="accept_terms" name="accept_terms" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I accept') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
+                        <label><input type="checkbox" id="accept_terms" name="accept_terms" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I accept the ') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
                     </td>
                 </tr>
                 <?php
@@ -74,7 +74,7 @@ if (!empty($force_strong_pass)) {
                 ?>
                 <tr>
                     <td colspan="2" style="text-align: center;">
-                        <label><input type="checkbox" id="accept_pt" name="accept_pp" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I agree with') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
+                        <label><input type="checkbox" id="accept_pt" name="accept_pp" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
                     </td>
                 </tr>
                 <?php

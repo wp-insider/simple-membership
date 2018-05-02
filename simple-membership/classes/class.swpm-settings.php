@@ -238,13 +238,13 @@ class SwpmSettings {
         add_settings_section('terms-and-conditions', SwpmUtils::_('Terms and Conditions'), array(&$this, 'advanced_settings_terms_and_conditions_callback'), 'simple_wp_membership_settings');        
 
         add_settings_field('enable-terms-and-conditions', SwpmUtils::_('Enable Terms and Conditions'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'enable-terms-and-conditions',
-            'message' => SwpmUtils::_('Enable terms and conditions. User must accept those upon registartion.')));
+            'message' => SwpmUtils::_('Users must accept the terms before they can complete the registration.')));
         add_settings_field('terms-and-conditions-page-url', SwpmUtils::_('Terms and Conditions Page URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'terms-and-conditions-page-url',
-            'message' => SwpmUtils::_('Terms and conditions page URL.')) );
+            'message' => SwpmUtils::_('Enter the URL of your terms and conditions page. You can create a WordPress page and specify your terms in there then specify the URL of that page in the above field.')) );
         add_settings_field('enable-privacy-policy', SwpmUtils::_('Enable Privacy Policy'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'enable-privacy-policy',
-            'message' => SwpmUtils::_('Enable privacy policy. User must accept it upon registartion.')));
+            'message' => SwpmUtils::_('Users must accept it before they can complete the registration.')));
         add_settings_field('privacy-policy-page-url', SwpmUtils::_('Privacy Policy Page URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'privacy-policy-page-url',
-            'message' => SwpmUtils::_('Privacy policy page URL.')) );
+            'message' => SwpmUtils::_('Enter the URL of your privacy policy page.')) );
         
     }
 
@@ -416,7 +416,7 @@ class SwpmSettings {
     }
     
     public function advanced_settings_terms_and_conditions_callback() {
-        SwpmUtils::e('This section allows you to configure terms and conditions and privacy policy that users must accept upon registration. It can be useful if you want to comply with GDPR EU law to name an example.');        
+        SwpmUtils::e('This section allows you to configure terms and conditions and privacy policy that users must accept at registration time.');        
     }
     
     public function sanitize_tab_1($input) {

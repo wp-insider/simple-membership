@@ -87,6 +87,8 @@ You can create a free forum user account and ask your questions.
 * Option to configure after login redirection for members.
 * Option to configure after registration redirect for members.
 * Option force the members to use strong password.
+* Option to make the users agree to your terms and conditions before they can register for a member account.
+* Option to make the users agree to your privacy policy before they can register for a member account.
 
 = Language Translations =
 
@@ -149,6 +151,8 @@ https://simple-membership-plugin.com/
 
 = WIP 3.6.6 =
 - Fixed a typo in the country name "Colombia".
+- Added a new feature to show a terms and conditon checkbox. Users must agree to your terms before they can register for an account.
+- Added a new feature to show a privacy policy checkbox. Users must agree to your privacy policy before they can register for an account.
 
 = 3.6.5 =
 - Updated the Swedish translation file. Thanks to Andreas Damberg for submitting the translation file.

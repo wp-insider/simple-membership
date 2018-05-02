@@ -86,7 +86,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         if (!empty($terms_enabled)) {
             //check if user checked "I accept terms" checkbox
             if (empty($_POST['accept_terms'])) {
-                $message = array('succeeded' => false, 'message' => SwpmUtils::_('You must accept Terms and Conditions.'));
+                $message = array('succeeded' => false, 'message' => SwpmUtils::_('You must accept the terms and conditions.'));
                 SwpmTransfer::get_instance()->set('status', $message);
                 return;
             }
@@ -95,9 +95,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
         //Check if Privacy Policy enabled
         $pp_enabled = SwpmSettings::get_instance()->get_value('enable-privacy-policy');
         if (!empty($pp_enabled)) {
-            //check if user checked "I agree with PP" checkbox
+            //check if user checked "I agree with Privacy Policy" checkbox
             if (empty($_POST['accept_pp'])) {
-                $message = array('succeeded' => false, 'message' => SwpmUtils::_('You must agree with Privacy Policy.'));
+                $message = array('succeeded' => false, 'message' => SwpmUtils::_('You must agree to the privacy policy.'));
                 SwpmTransfer::get_instance()->set('status', $message);
                 return;
             }

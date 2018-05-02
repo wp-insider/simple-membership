@@ -1,10 +1,11 @@
-<?php SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData' => '&action=swpm_validate_email&member_id=' . filter_input(INPUT_GET, 'member_id')))); 
-$settings=SwpmSettings::get_instance();
-$force_strong_pass=$settings->get_value('force-strong-passwords');
+<?php
+SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData' => '&action=swpm_validate_email&member_id=' . filter_input(INPUT_GET, 'member_id'))));
+$settings = SwpmSettings::get_instance();
+$force_strong_pass = $settings->get_value('force-strong-passwords');
 if (!empty($force_strong_pass)) {
-    $pass_class="validate[required,custom[strongPass],minSize[8]]";
+    $pass_class = "validate[required,custom[strongPass],minSize[8]]";
 } else {
-    $pass_class="";
+    $pass_class = "";
 }
 ?>
 <div class="swpm-registration-widget-form">
@@ -21,7 +22,7 @@ if (!empty($force_strong_pass)) {
             </tr>
             <tr class="swpm-registration-password-row">
                 <td><label for="password"><?php echo SwpmUtils::_('Password') ?></label></td>
-                <td><input type="password" autocomplete="off" id="password" class="<?php echo $pass_class;?>" value="" size="50" name="password" /></td>
+                <td><input type="password" autocomplete="off" id="password" class="<?php echo $pass_class; ?>" value="" size="50" name="password" /></td>
             </tr>
             <tr class="swpm-registration-password-retype-row">
                 <td><label for="password_re"><?php echo SwpmUtils::_('Repeat Password') ?></label></td>
@@ -52,8 +53,34 @@ if (!empty($force_strong_pass)) {
                     echo '<input type="hidden" name="swpm_level_hash" value="' . $swpm_level_hash . '" />';
                     ?>
                 </td>
-            </tr>           
-        </table>        
+            </tr>
+            <?php
+            //check if we need to display Terms and Conditions checkbox
+            $terms_enabled = $settings->get_value('enable-terms-and-conditions');
+            if (!empty($terms_enabled)) {
+                $terms_page_url = $settings->get_value('terms-and-conditions-page-url');
+                ?>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <label><input type="checkbox" id="accept_terms" name="accept_terms" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I accept') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
+                    </td>
+                </tr>
+                <?php
+            }
+            //check if we need to display Privacy Policy checkbox
+            $pp_enabled = $settings->get_value('enable-privacy-policy');
+            if (!empty($pp_enabled)) {
+                $pp_page_url = $settings->get_value('privacy-policy-page-url');
+                ?>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <label><input type="checkbox" id="accept_pt" name="accept_pp" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I agree with') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
+                    </td>
+                </tr>
+                <?php
+            }
+            ?>
+        </table>
 
         <div class="swpm-before-registration-submit-section" align="center"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
 

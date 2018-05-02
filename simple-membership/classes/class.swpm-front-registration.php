@@ -81,6 +81,28 @@ class SwpmFrontRegistration extends SwpmRegistration {
             return;
         }
 
+        //Check if Terms and Conditions enabled
+        $terms_enabled = SwpmSettings::get_instance()->get_value('enable-terms-and-conditions');
+        if (!empty($terms_enabled)) {
+            //check if user checked "I accept terms" checkbox
+            if (empty($_POST['accept_terms'])) {
+                $message = array('succeeded' => false, 'message' => SwpmUtils::_('You must accept Terms and Conditions.'));
+                SwpmTransfer::get_instance()->set('status', $message);
+                return;
+            }
+        }
+
+        //Check if Privacy Policy enabled
+        $pp_enabled = SwpmSettings::get_instance()->get_value('enable-privacy-policy');
+        if (!empty($pp_enabled)) {
+            //check if user checked "I agree with PP" checkbox
+            if (empty($_POST['accept_pp'])) {
+                $message = array('succeeded' => false, 'message' => SwpmUtils::_('You must agree with Privacy Policy.'));
+                SwpmTransfer::get_instance()->set('status', $message);
+                return;
+            }
+        }
+
         //Validate swpm level hash data.
         $hash_val_posted = sanitize_text_field($_POST['swpm_level_hash']);
         $level_value = sanitize_text_field($_POST['membership_level']);
@@ -101,13 +123,13 @@ class SwpmFrontRegistration extends SwpmRegistration {
             //Check if there is after registration redirect
             $after_rego_url = SwpmSettings::get_instance()->get_value('after-rego-redirect-page-url');
             $after_rego_url = apply_filters('swpm_after_registration_redirect_url', $after_rego_url);
-            if(!empty($after_rego_url)){
+            if (!empty($after_rego_url)) {
                 //Yes. Need to redirect to this after registration page                
                 SwpmLog::log_simple_debug("After registration redirect is configured in settings. Redirecting user to: " . $after_rego_url, true);
                 wp_redirect($after_rego_url);
                 exit(0);
             }
-            
+
             //Set the registration complete message
             $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
             $after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_('Registration Successful. ') . SwpmUtils::_('Please') . ' <a href="' . $login_page_url . '">' . SwpmUtils::_('Login') . '</a></div>';
@@ -239,7 +261,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
                 $msg_str = '<div class="swpm-profile-update-success">' . SwpmUtils::_('Profile updated successfully. You will need to re-login since you changed your password.') . '</div>';
                 $message = array('succeeded' => true, 'message' => $msg_str);
                 unset($member_info['plain_password']);
-                wp_logout();//Log the user out from the WP user session also.
+                wp_logout(); //Log the user out from the WP user session also.
                 SwpmLog::log_simple_debug("Member has updated the password from profile edit page. Logging the user out so he can re-login using the new password.", true);
             }
 
@@ -304,8 +326,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $body = SwpmMiscUtils::replace_dynamic_tags($body, $user->member_id, $additional_args);
         $from = $settings->get_value('email-from');
         $headers = "From: " . $from . "\r\n";
-        $subject=apply_filters('swpm_email_password_reset_subject',$subject);
-        $body=apply_filters('swpm_email_password_reset_body',$body);
+        $subject = apply_filters('swpm_email_password_reset_subject', $subject);
+        $body = apply_filters('swpm_email_password_reset_body', $body);
         wp_mail($email, $subject, $body, $headers);
         SwpmLog::log_simple_debug("Member password has been reset. Password reset email sent to: " . $email, true);
 

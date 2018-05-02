@@ -234,6 +234,18 @@ class SwpmSettings {
             'default' => '',
             'message' => SwpmUtils::_('When automatically creating a member account using this feature, the membership account status of the user will be set to the one you specify here.')));
 
+        //Terms and conditions section
+        add_settings_section('terms-and-conditions', SwpmUtils::_('Terms and Conditions'), array(&$this, 'advanced_settings_terms_and_conditions_callback'), 'simple_wp_membership_settings');        
+
+        add_settings_field('enable-terms-and-conditions', SwpmUtils::_('Enable Terms and Conditions'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'enable-terms-and-conditions',
+            'message' => SwpmUtils::_('Enable terms and conditions. User must accept those upon registartion.')));
+        add_settings_field('terms-and-conditions-page-url', SwpmUtils::_('Terms and Conditions Page URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'terms-and-conditions-page-url',
+            'message' => SwpmUtils::_('Terms and conditions page URL.')) );
+        add_settings_field('enable-privacy-policy', SwpmUtils::_('Enable Privacy Policy'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'enable-privacy-policy',
+            'message' => SwpmUtils::_('Enable privacy policy. User must accept it upon registartion.')));
+        add_settings_field('privacy-policy-page-url', SwpmUtils::_('Privacy Policy Page URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'privacy-policy-page-url',
+            'message' => SwpmUtils::_('Privacy policy page URL.')) );
+        
     }
 
     private function tab_6() {
@@ -403,6 +415,10 @@ class SwpmSettings {
         SwpmUtils::e('This section allows you to configure automatic creation of member accounts when new WP User records are created by another plugin. It can be useful if you are using another plugin that creates WP user records and you want them to be recognized in the membership plugin.');
     }
     
+    public function advanced_settings_terms_and_conditions_callback() {
+        SwpmUtils::e('This section allows you to configure terms and conditions and privacy policy that users must accept upon registration. It can be useful if you want to comply with GDPR EU law to name an example.');        
+    }
+    
     public function sanitize_tab_1($input) {
         if (empty($this->settings)) {
             $this->settings = (array) get_option('swpm-settings');
@@ -481,7 +497,11 @@ class SwpmSettings {
         $output['enable-auto-create-swpm-members'] = isset($input['enable-auto-create-swpm-members']) ? esc_attr($input['enable-auto-create-swpm-members']) : "";
         $output['auto-create-default-membership-level'] = isset($input['auto-create-default-membership-level']) ? esc_attr($input['auto-create-default-membership-level']) : "";
         $output['auto-create-default-account-status'] = isset($input['auto-create-default-account-status']) ? esc_attr($input['auto-create-default-account-status']) : "";
-        
+        //Terms and conditions related settings
+        $output['enable-terms-and-conditions'] = isset($input['enable-terms-and-conditions']) ? esc_attr($input['enable-terms-and-conditions']) : "";
+        $output['terms-and-conditions-page-url'] = esc_url($input['terms-and-conditions-page-url']);
+        $output['enable-privacy-policy'] = isset($input['enable-privacy-policy']) ? esc_attr($input['enable-privacy-policy']) : "";
+        $output['privacy-policy-page-url'] = esc_url($input['privacy-policy-page-url']);
         return $output;
     }
 

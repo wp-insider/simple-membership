@@ -153,6 +153,7 @@ https://simple-membership-plugin.com/
 - Fixed a typo in the country name "Colombia".
 - Added a new feature to show a terms and conditon checkbox. Users must agree to your terms before they can register for an account.
 - Added a new feature to show a privacy policy checkbox. Users must agree to your privacy policy before they can register for an account.
+- Last login date of the members are now shown in the members listing page in the admin dashboard.
 
 = 3.6.5 =
 - Updated the Swedish translation file. Thanks to Andreas Damberg for submitting the translation file.

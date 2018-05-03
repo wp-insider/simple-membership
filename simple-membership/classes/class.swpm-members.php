@@ -24,6 +24,7 @@ class SwpmMembers extends WP_List_Table {
             , 'alias' => SwpmUtils::_('Membership Level')
             , 'subscription_starts' => SwpmUtils::_('Access Starts')
             , 'account_state' => SwpmUtils::_('Account State')
+            , 'last_accessed' => SwpmUtils::_('Last Login Date')
         );
     }
 
@@ -36,6 +37,7 @@ class SwpmMembers extends WP_List_Table {
             'email' => array('email', false),
             'alias' => array('alias', false),
             'account_state' => array('account_state', false),
+            'last_accessed' => array('last_accessed', false),
         );
     }
 

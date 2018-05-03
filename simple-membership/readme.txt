@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 3.6.5
+Stable tag: 3.6.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,12 +149,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.6.6 =
-- Fixed a typo in the country name "Colombia".
-- Added a new feature to show a terms and conditon checkbox. Users must agree to your terms before they can register for an account.
-- Added a new feature to show a privacy policy checkbox. Users must agree to your privacy policy before they can register for an account.
+= 3.6.6 =
+- Added a new feature to show a terms and conditon checkbox. Users must agree to your terms before they can register for an account. Useful for GDPR.
+- Added a new feature to show a privacy policy checkbox. Users must agree to your privacy policy before they can register for an account. Useful for GDPR.
 - Last login date of the members are now shown in the members listing page in the admin dashboard.
 - Added a feature in the tools menu of the plugin to re-create the required pages of the membership plugin.
+- Fixed a typo in the country name "Colombia".
 
 = 3.6.5 =
 - Updated the Swedish translation file. Thanks to Andreas Damberg for submitting the translation file.

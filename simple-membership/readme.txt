@@ -154,6 +154,7 @@ https://simple-membership-plugin.com/
 - Added a new feature to show a terms and conditon checkbox. Users must agree to your terms before they can register for an account.
 - Added a new feature to show a privacy policy checkbox. Users must agree to your privacy policy before they can register for an account.
 - Last login date of the members are now shown in the members listing page in the admin dashboard.
+- Added a feature in the tools menu of the plugin to re-create the required pages of the membership plugin.
 
 = 3.6.5 =
 - Updated the Swedish translation file. Thanks to Andreas Damberg for submitting the translation file.

@@ -206,4 +206,24 @@ class SwpmMemberUtils {
         return false;
     }
     
+    public static function update_wp_user_role_with_level_id($wp_user_id, $level_id){
+        $level_row = SwpmUtils::get_membership_level_row_by_id($level_id);
+        $user_role = $level_row->role;
+        SwpmMemberUtils::update_wp_user_role($wp_user_id, $user_role);
+    }
+    
+    public static function update_wp_user_role($wp_user_id, $role){
+        if (self::is_multisite_install()) {//MS install
+            return; //TODO - don't do this for MS install
+        }
+                
+        $admin_user = SwpmMemberUtils::wp_user_has_admin_role($wp_user_id);
+        if ($admin_user) {
+            SwpmLog::log_simple_debug('This user has admin role. No role modification will be done.', true);
+            return;
+        }
+        
+        //wp_update_user() function will trigger the 'set_user_role' hook.
+        wp_update_user(array('ID' => $wp_user_id, 'role' => $role));
+    }
 }

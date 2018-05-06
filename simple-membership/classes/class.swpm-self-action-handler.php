@@ -6,6 +6,8 @@ class SwpmSelfActionHandler {
         //Register all the self action hooks the plugin needs to handle
         add_action('swpm_front_end_registration_complete_fb', array(&$this, 'after_registration_callback'));//For the form builder
         add_action('swpm_front_end_registration_complete_user_data', array(&$this, 'after_registration_callback'));
+        
+        add_action('swpm_membership_level_changed','handle_membership_level_changed_action');
 
     }    
     
@@ -28,6 +30,39 @@ class SwpmSelfActionHandler {
             wp_redirect($redirect_page);         
             exit(0);
         }
+        
+    }
+    
+    public function handle_membership_level_changed_action($args){
+        $swpm_id = $args['member_id'];
+        $old_level = $args['from_level'];
+        $new_level = $args['to_level'];        
+        SwpmLog::log_simple_debug('swpm_membership_level_changed action triggered. Member ID: '.$swpm_id.', Old Level: '.$old_level.', New Level: '.$new_level, true);
+        
+        //Check to see if the old and the new levels are the same or not.
+        if(trim($old_level) == trim($new_level)){
+            SwpmLog::log_simple_debug('The to (Level ID: '.$new_level.') and from (Level ID: '.$old_level.') values are the same. Nothing to do here.', true);
+            return;
+        }
+
+        //Find record for this user
+        SwpmLog::log_simple_debug('Retrieving user record for member ID: '.$swpm_id, true);
+        $resultset = SwpmMemberUtils::get_user_by_id($swpm_id);
+        if($resultset){
+            //Found a record. Lets do some level update specific changes.
+            //$emailaddress  = $resultset->email;
+            //$account_status = $resultset->account_state;
+
+            //Retrieve the new memberhsip level's details
+            $level_row = SwpmUtils::get_membership_level_row_by_id($new_level);
+
+            //Update the WP user role according to the new level's configuration (if applicable).
+            $user_role = $level_row->role;
+            $user_info = get_user_by('login', $resultset->user_name);
+            $wp_user_id = $user_info->ID;
+            SwpmLog::log_simple_debug('Calling user role update function.', true);
+            SwpmMemberUtils::update_wp_user_role($wp_user_id, $user_role);
+        }        
         
     }
     

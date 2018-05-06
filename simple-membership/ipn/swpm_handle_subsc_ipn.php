@@ -62,8 +62,10 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         //Set account status to active, update level to the newly paid level, update access start date, update subsriber ID (if applicable).
         $updatedb = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s, membership_level=%d,subscription_starts=%s,subscr_id=%s WHERE member_id=%d", $account_state, $membership_level, $subscription_starts, $subscr_id, $swpm_id);
         $results = $wpdb->query($updatedb);
-        do_action('swpm_membership_changed', array('member_id' => $swpm_id, 'member_info' => get_object_vars($resultset), 'from_level' => $old_membership_level, 'to_level' => $membership_level));
 
+        //Trigger level changed/updated action hook
+        do_action('swpm_membership_level_changed', array('member_id' => $swpm_id, 'from_level' => $old_membership_level, 'to_level' => $membership_level));
+        
         //Set Email details for the account upgrade notification
         $email = $ipn_data['payer_email'];
         $subject = $settings->get_value('upgrade-complete-mail-subject');
@@ -79,7 +81,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         $additional_args = array();
         $email_body = SwpmMiscUtils::replace_dynamic_tags($body, $swpm_id, $additional_args);
         $headers = 'From: ' . $from_address . "\r\n";
-    }// End of existing user account upgrade
+    }// End of existing user account upgrade/update
     else {
         // create new member account
         $default_account_status = $settings->get_value('default-account-status', 'active');

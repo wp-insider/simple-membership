@@ -149,6 +149,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.6.7 =
+- Membership level update action will update the member's wp user role (if specified in the membership level).
+
 = 3.6.6 =
 - Added a new feature to show a terms and conditon checkbox. Users must agree to your terms before they can register for an account. Useful for GDPR.
 - Added a new feature to show a privacy policy checkbox. Users must agree to your privacy policy before they can register for an account. Useful for GDPR.

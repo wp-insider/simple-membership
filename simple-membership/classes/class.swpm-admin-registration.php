@@ -112,11 +112,11 @@ class SwpmAdminRegistration extends SwpmRegistration {
             
              //Trigger action hook
             do_action('swpm_admin_end_edit_complete_user_data', $member);
-            
+
             if($member['prev_membership_level'] != $member['membership_level']){
                 do_action('swpm_membership_level_changed', array('member_id' => $id, 'from_level' => $member['prev_membership_level'], 'to_level' => $member['membership_level']));
             }
-            
+
             //Set messages
             $message = array('succeeded' => true, 'message' => '<p>Member profile updated successfully.</p>');
             $error = apply_filters('swpm_admin_edit_custom_fields', array(), $member + array('member_id' => $id));

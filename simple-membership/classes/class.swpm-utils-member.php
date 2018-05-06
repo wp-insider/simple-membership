@@ -213,7 +213,7 @@ class SwpmMemberUtils {
     }
     
     public static function update_wp_user_role($wp_user_id, $role){
-        if (self::is_multisite_install()) {//MS install
+        if (SwpmUtils::is_multisite_install()) {//MS install
             return; //TODO - don't do this for MS install
         }
                 
@@ -225,5 +225,6 @@ class SwpmMemberUtils {
         
         //wp_update_user() function will trigger the 'set_user_role' hook.
         wp_update_user(array('ID' => $wp_user_id, 'role' => $role));
+        SwpmLog::log_simple_debug('User role updated.', true);
     }
 }

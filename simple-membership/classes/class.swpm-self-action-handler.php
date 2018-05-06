@@ -7,7 +7,7 @@ class SwpmSelfActionHandler {
         add_action('swpm_front_end_registration_complete_fb', array(&$this, 'after_registration_callback'));//For the form builder
         add_action('swpm_front_end_registration_complete_user_data', array(&$this, 'after_registration_callback'));
         
-        add_action('swpm_membership_level_changed','handle_membership_level_changed_action');
+        add_action('swpm_membership_level_changed', array(&$this, 'handle_membership_level_changed_action'));
 
     }    
     

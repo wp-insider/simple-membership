@@ -45,9 +45,11 @@ class SwpmAuth {
             //First, lets make sure this user is not already logged into the site as an "Admin" user. We don't want to override that admin login session.
             if (current_user_can('administrator')) {
                 //This user is logged in as ADMIN then trying to do another login as a member. Stop the login request processing (we don't want to override your admin login session).
+                $wp_profile_page = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/wp-admin/profile.php';
                 $error_msg = '';
                 $error_msg .= '<p>' . SwpmUtils::_('Warning! Simple Membership plugin cannot process this login request to prevent you from getting logged out of WP Admin accidentally.') . '</p>';
-                $error_msg .= '<p>' . SwpmUtils::_('You are logged into the site as an ADMIN user in this browser. First, logout from WP Admin then you will be able to log in as a member.') . '</p>';
+                $error_msg .= '<p><a href="'.$wp_profile_page.'" target="_blank">' . SwpmUtils::_('Click here') .'</a>'. SwpmUtils::_(' to see the profile you are currently logged into in this browser.') . '</p>';
+                $error_msg .= '<p>' . SwpmUtils::_('You are logged into the site as an ADMIN user in this browser. First, logout from WP Admin then you will be able to log in as a normal member.') . '</p>';
                 $error_msg .= '<p>' . SwpmUtils::_('Alternatively, you can use a different browser (where you are not logged-in as ADMIN) to test the membership login.') . '</p>';
                 $error_msg .= '<p>' . SwpmUtils::_('Your normal visitors or members will never see this message. This message is ONLY for ADMIN user.') . '</p>';
                 wp_die($error_msg);

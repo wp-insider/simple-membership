@@ -150,6 +150,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 3.6.7 =
+- Fixed rare issue when selected currency for Stripe buttons was ignored.
 - German language translation file updated. Thanks to Herbert Heupke.
 - Membership level update action will update the member's wp user role (if specified in the membership level).
 

@@ -17,7 +17,7 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
 
     //Check new_window parameter
     $window_target = isset($args['new_window']) ? 'target="_blank"' : '';
-    $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Buy Now');
+    $button_text = (isset($args['button_text'])) ? esc_attr($args['button_text']) : SwpmUtils::_('Buy Now');
 
     $item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
@@ -146,7 +146,7 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
 
     //Check new_window parameter
     $window_target = isset($args['new_window']) ? 'target="_blank"' : '';
-    $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Buy Now');
+    $button_text = (isset($args['button_text'])) ? esc_attr($args['button_text']) : SwpmUtils::_('Buy Now');
     $item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
     $settings = SwpmSettings::get_instance();

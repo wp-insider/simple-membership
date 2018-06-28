@@ -338,14 +338,14 @@ class SwpmMiscUtils {
 
     public static function get_countries_dropdown($country = '') {
         $countries = array("Afghanistan", "Albania", "Algeria", "Andorra",
-            "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia",
+            "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia",
             "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados",
-            "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
+            "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bonaire", 
             "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria",
             "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde",
             "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros",
             "Congo (Brazzaville)", "Congo", "Costa Rica", "Cote d\'Ivoire", "Croatia",
-            "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica",
+            "Cuba", "Curacao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica",
             "Dominican Republic", "East Timor (Timor Timur)", "Ecuador", "Egypt",
             "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia",
             "Fiji", "Finland", "France", "Gabon", "Gambia, The", "Georgia", "Germany",

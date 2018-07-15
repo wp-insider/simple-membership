@@ -153,6 +153,7 @@ https://simple-membership-plugin.com/
 - Fixed rare issue when selected currency for Stripe buttons was ignored.
 - German language translation file updated. Thanks to Herbert Heupke.
 - Membership level update action will update the member's wp user role (if specified in the membership level).
+- Captcha addon has the "Light" or "Dark" theme options. It also has the compact captcha option.
 
 = 3.6.6 =
 - Added a new feature to show a terms and conditon checkbox. Users must agree to your terms before they can register for an account. Useful for GDPR.

@@ -97,6 +97,7 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
         data-amount='{$price_in_cents}'
         data-name='{$item_name}'";
     $output .= "data-description='{$payment_amount} {$payment_currency}'";
+    $output .= "data-locale='auto'";
     $output .= "data-label='{$button_text}'"; //Stripe doesn't currenty support button image for their standard checkout.
     $output .= "data-currency='{$payment_currency}'";
     if (!empty($item_logo)) {//Show item logo/thumbnail in the stripe payment window
@@ -265,6 +266,7 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
         data-panel-label='Sign Me Up!'
         data-name='{$item_name}'";
     $output .= "data-description='{$description}'";
+    $output .= "data-locale='auto'";
     $output .= "data-label='{$button_text}'"; //Stripe doesn't currenty support button image for their standard checkout.
     $output .= "data-currency='{$payment_currency}'";
     if (!empty($item_logo)) {//Show item logo/thumbnail in the stripe payment window

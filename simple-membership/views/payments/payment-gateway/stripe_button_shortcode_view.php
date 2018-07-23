@@ -103,7 +103,7 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
         $output .= "data-image='{$item_logo}'";
     }
     if (!empty($billing_address)) {//Show billing address in the stipe payment window
-        $output .= "data-billingAddress='true'";
+        $output .= "data-billing-address='true'";
     }
     $output .= apply_filters('swpm_stripe_additional_checkout_data_parameters', ''); //Filter to allow the addition of extra data parameters for stripe checkout.
     $output .= "></script>";
@@ -271,7 +271,7 @@ function swpm_render_stripe_subscription_button_sc_output($button_code, $args) {
         $output .= "data-image='{$item_logo}'";
     }
     if (!empty($billing_address)) {//Show billing address in the stipe payment window
-        $output .= "data-billingAddress='true'";
+        $output .= "data-billing-address='true'";
     }
     $output .= apply_filters('swpm_stripe_additional_checkout_data_parameters', ''); //Filter to allow the addition of extra data parameters for stripe checkout.
     $output .= "></script>";

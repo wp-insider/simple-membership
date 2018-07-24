@@ -10,8 +10,11 @@ class SwpmLevelForm {
     public function __construct($fields) {
         $this->fields = $fields;
         $this->sanitized = array();
-        foreach ($fields as $key => $value)
+        $this->errors = array();
+        
+        foreach ($fields as $key => $value){
             $this->$key();
+        }
     }
 
     protected function id() {

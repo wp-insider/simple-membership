@@ -10,6 +10,7 @@ class SwpmForm {
     public function __construct($fields) {
         $this->fields = $fields;
         $this->sanitized = array();
+        $this->errors = array();
         $this->validate_wp_user_email();
         if ($this->is_valid()){
             foreach ($fields as $key => $value){
@@ -292,6 +293,12 @@ class SwpmForm {
     }
 
     public function is_valid() {
+        
+        if (!isset($this->errors)){
+            //Errors are not set at all. Return true.
+            return true;
+        }
+        
         return count($this->errors) < 1;
     }
 

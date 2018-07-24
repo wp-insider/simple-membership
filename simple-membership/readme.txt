@@ -156,6 +156,7 @@ https://simple-membership-plugin.com/
 - Fixed rare issue when selected currency for Stripe buttons was ignored.
 - Fixed typo in configuration parameter for Stripe buttons that was producing warning in browser console.
 - Stripe is now tries to detect visitor's language and use it in payment pop-up.
+- Fixed an Warning: count(): Parameter must be an array or an object that implements Countable.
 
 = 3.6.6 =
 - Added a new feature to show a terms and conditon checkbox. Users must agree to your terms before they can register for an account. Useful for GDPR.

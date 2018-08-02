@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 3.6.7
+Stable tag: 3.6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= 3.6.8 =
+- Fixed an Warning: count(): Parameter must be an array or an object that implements Countable.
+
 = 3.6.7 =
 - Captcha addon has the "Light" or "Dark" theme options. It also has the compact captcha option.
 - German language translation file updated. Thanks to Herbert Heupke.
@@ -156,7 +159,6 @@ https://simple-membership-plugin.com/
 - Fixed rare issue when selected currency for Stripe buttons was ignored.
 - Fixed typo in configuration parameter for Stripe buttons that was producing warning in browser console.
 - Stripe is now tries to detect visitor's language and use it in payment pop-up.
-- Fixed an Warning: count(): Parameter must be an array or an object that implements Countable.
 
 = 3.6.6 =
 - Added a new feature to show a terms and conditon checkbox. Users must agree to your terms before they can register for an account. Useful for GDPR.

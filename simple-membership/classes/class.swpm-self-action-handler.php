@@ -9,7 +9,17 @@ class SwpmSelfActionHandler {
         
         add_action('swpm_membership_level_changed', array(&$this, 'handle_membership_level_changed_action'));
 
-    }    
+        add_filter('swpm_after_logout_redirect_url', array(&$this, 'handle_after_logout_redirection'));
+    }
+    
+    public function handle_after_logout_redirection($redirect_url){
+        $after_logout_url = SwpmSettings::get_instance()->get_value('after-logout-redirection-url');
+        if(!empty($after_logout_url)){
+            //After logout URL is being used. Override re-direct URL.
+            $redirect_url = $after_logout_url;
+        }
+        return $redirect_url;
+    }
     
     public function after_registration_callback($user_data){
         

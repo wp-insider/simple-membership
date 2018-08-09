@@ -193,7 +193,10 @@ class SwpmSettings {
         
         add_settings_field('auto-login-after-rego', SwpmUtils::_('Enable Auto Login After Registration'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'auto-login-after-rego',
             'message' => SwpmUtils::_('Use this option if you want the members to be automatically logged into your site right after they complete the registration. Read <a href="https://simple-membership-plugin.com/configure-auto-login-after-registration-members/" target="_blank">this documentation</a> to learn more.')));
-        
+
+        add_settings_field('after-logout-redirection-url', SwpmUtils::_('After Logout Redirect URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'after-logout-redirection-url',
+            'message' => SwpmUtils::_('You can enter an URL here to redirect the members to this page after they click the logout link to logout from your site.')) );
+                
         add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'allow-account-deletion',
             'message' => SwpmUtils::_('Allow users to delete their accounts.')));
         
@@ -489,6 +492,7 @@ class SwpmSettings {
         $output['admin-dashboard-access-permission'] = isset($input['admin-dashboard-access-permission']) ? esc_attr($input['admin-dashboard-access-permission']) : '';
         $output['renewal-page-url'] = esc_url($input['renewal-page-url']);
         $output['after-rego-redirect-page-url'] = esc_url($input['after-rego-redirect-page-url']);
+        $output['after-logout-redirection-url'] = esc_url($input['after-logout-redirection-url']);
         $output['force-strong-passwords'] = isset($input['force-strong-passwords']) ? esc_attr($input['force-strong-passwords']) : "";
         $output['auto-login-after-rego'] = isset($input['auto-login-after-rego']) ? esc_attr($input['auto-login-after-rego']) : "";
         $output['force-wp-user-sync'] = isset($input['force-wp-user-sync']) ? esc_attr($input['force-wp-user-sync']) : "";

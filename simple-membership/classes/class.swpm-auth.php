@@ -211,6 +211,8 @@ class SwpmAuth {
             $expire = $expiration; //The minimum cookie expiration should be at least a few days.
         }
 
+        $expire = apply_filters('swpm_auth_cookie_expiry_value', $expire);
+                
         setcookie("swpm_in_use", "swpm_in_use", $expire, COOKIEPATH, COOKIE_DOMAIN);
 
         $expiration_timestamp = SwpmUtils::get_expiration_timestamp($this->userData);

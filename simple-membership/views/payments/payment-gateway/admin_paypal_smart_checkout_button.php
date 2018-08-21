@@ -64,6 +64,46 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     </tr>
 
                     <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Payment Currency'); ?></th>
+                        <td>
+                            <select id="payment_currency" name="payment_currency">
+                                <option value="USD" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'USD') ? 'selected="selected"' : ''; ?>>US Dollars ($)</option>
+                                <option value="EUR" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'EUR') ? 'selected="selected"' : ''; ?>>Euros (€)</option>
+                                <option value="GBP" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'GBP') ? 'selected="selected"' : ''; ?>>Pounds Sterling (£)</option>
+                                <option value="AUD" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'AUD') ? 'selected="selected"' : ''; ?>>Australian Dollars ($)</option>
+                                <option value="BRL" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'BRL') ? 'selected="selected"' : ''; ?>>Brazilian Real (R$)</option>
+                                <option value="CAD" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'CAD') ? 'selected="selected"' : ''; ?>>Canadian Dollars ($)</option>
+                                <option value="CNY" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'CNY') ? 'selected="selected"' : ''; ?>>Chinese Yuan</option>
+                                <option value="CZK" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'CZK') ? 'selected="selected"' : ''; ?>>Czech Koruna</option>
+                                <option value="DKK" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'DKK') ? 'selected="selected"' : ''; ?>>Danish Krone</option>
+                                <option value="HKD" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'HKD') ? 'selected="selected"' : ''; ?>>Hong Kong Dollar ($)</option>
+                                <option value="HUF" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'HUF') ? 'selected="selected"' : ''; ?>>Hungarian Forint</option>
+                                <option value="INR" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'INR') ? 'selected="selected"' : ''; ?>>Indian Rupee</option>
+                                <option value="IDR" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'IDR') ? 'selected="selected"' : ''; ?>>Indonesia Rupiah</option>
+                                <option value="ILS" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'ILS') ? 'selected="selected"' : ''; ?>>Israeli Shekel</option>
+                                <option value="JPY" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'JPY') ? 'selected="selected"' : ''; ?>>Japanese Yen (¥)</option>
+                                <option value="MYR" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'MYR') ? 'selected="selected"' : ''; ?>>Malaysian Ringgits</option>
+                                <option value="MXN" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'MXN') ? 'selected="selected"' : ''; ?>>Mexican Peso ($)</option>
+                                <option value="NZD" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'NZD') ? 'selected="selected"' : ''; ?>>New Zealand Dollar ($)</option>
+                                <option value="NOK" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'NOK') ? 'selected="selected"' : ''; ?>>Norwegian Krone</option>
+                                <option value="PHP" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'PHP') ? 'selected="selected"' : ''; ?>>Philippine Pesos</option>
+                                <option value="PLN" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'PLN') ? 'selected="selected"' : ''; ?>>Polish Zloty</option>
+                                <option value="RUB" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'RUB') ? 'selected="selected"' : ''; ?>>Russian Ruble</option>
+                                <option value="SGD" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'SGD') ? 'selected="selected"' : ''; ?>>Singapore Dollar ($)</option>
+                                <option value="ZAR" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'ZAR') ? 'selected="selected"' : ''; ?>>South African Rand (R)</option>
+                                <option value="KRW" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'KRW') ? 'selected="selected"' : ''; ?>>South Korean Won</option>
+                                <option value="SEK" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'SEK') ? 'selected="selected"' : ''; ?>>Swedish Krona</option>
+                                <option value="CHF" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'CHF') ? 'selected="selected"' : ''; ?>>Swiss Franc</option>
+                                <option value="TWD" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'TWD') ? 'selected="selected"' : ''; ?>>Taiwan New Dollars</option>
+                                <option value="THB" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'THB') ? 'selected="selected"' : ''; ?>>Thai Baht</option>
+                                <option value="TRY" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'TRY') ? 'selected="selected"' : ''; ?>>Turkish Lira</option>
+                                <option value="VND" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'VND') ? 'selected="selected"' : ''; ?>>Vietnamese Dong</option>
+                            </select>
+                            <p class="description">Select the currency for this payment button.</p>
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('PayPal Smart Checkout and account details. You can get this from your PayPal account.'); ?></div></th>
                     </tr>
 
@@ -159,6 +199,7 @@ function swpm_edit_pp_smart_checkout_button() {
         'button_name' => $button->post_title,
         'membership_level_id' => get_post_meta($button_id, 'membership_level_id', true),
         'payment_amount' => get_post_meta($button_id, 'payment_amount', true),
+        'payment_currency' => get_post_meta($button_id, 'payment_currency', true),
         'pp_smart_checkout_live_id' => get_post_meta($button_id, 'pp_smart_checkout_live_id', true),
         'pp_smart_checkout_live_sec' => get_post_meta($button_id, 'pp_smart_checkout_live_sec', true),
         'pp_smart_checkout_test_id' => get_post_meta($button_id, 'pp_smart_checkout_test_id', true),
@@ -195,6 +236,7 @@ function swpm_save_edit_pp_smart_checkout_button_data() {
         add_post_meta($button_id, 'button_type', $button_type);
         add_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
         add_post_meta($button_id, 'payment_amount', trim(sanitize_text_field($_REQUEST['payment_amount'])));
+        add_post_meta($button_id, 'payment_currency', trim(sanitize_text_field($_REQUEST['payment_currency'])));
 
         add_post_meta($button_id, 'pp_smart_checkout_live_id', trim(sanitize_text_field($_REQUEST['pp_smart_checkout_live_id'])));
         add_post_meta($button_id, 'pp_smart_checkout_live_sec', trim(sanitize_text_field($_REQUEST['pp_smart_checkout_live_sec'])));
@@ -225,6 +267,7 @@ function swpm_save_edit_pp_smart_checkout_button_data() {
         update_post_meta($button_id, 'button_type', $button_type);
         update_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
         update_post_meta($button_id, 'payment_amount', trim(sanitize_text_field($_REQUEST['payment_amount'])));
+        update_post_meta($button_id, 'payment_currency', trim(sanitize_text_field($_REQUEST['payment_currency'])));
 
         update_post_meta($button_id, 'pp_smart_checkout_live_id', trim(sanitize_text_field($_REQUEST['pp_smart_checkout_live_id'])));
         update_post_meta($button_id, 'pp_smart_checkout_live_sec', trim(sanitize_text_field($_REQUEST['pp_smart_checkout_live_sec'])));

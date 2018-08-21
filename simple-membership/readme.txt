@@ -150,6 +150,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.7.0 =
+- Added a new filter hook swpm_edit_profile_form_before_username
+- Added a new filter hook swpm_edit_profile_form_before_submit
+
 = 3.6.9 =
 - Added a new feature that allows you to configure an after logout redirect URL. This new feature is available in the "Advanced Settings" tab of the plugin.
 

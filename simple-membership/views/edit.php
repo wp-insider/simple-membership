@@ -18,6 +18,7 @@ SimpleWpMembership::enqueue_validation_scripts();
     <form id="swpm-editprofile-form" name="swpm-editprofile-form" method="post" action="" class="swpm-validate-form">
         <?php wp_nonce_field('swpm_profile_edit_nonce_action', 'swpm_profile_edit_nonce_val') ?>
         <table>
+            <?php apply_filters('swpm_edit_profile_form_before_username', ''); ?>
             <tr class="swpm-profile-username-row">
                 <td><label for="user_name"><?php echo SwpmUtils::_('Username'); ?></label></td>
                 <td><?php echo $user_name ?></td>
@@ -77,6 +78,7 @@ SimpleWpMembership::enqueue_validation_scripts();
                 </td>
             </tr>
         </table>
+        <?php apply_filters('swpm_edit_profile_form_before_submit', ''); ?>
         <p class="swpm-edit-profile-submit-section">
             <input type="submit" value="<?php echo SwpmUtils::_('Update') ?>" class="swpm-edit-profile-submit" name="swpm_editprofile_submit" />
         </p>

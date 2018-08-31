@@ -26,10 +26,10 @@ class SwpmInitTimeTasks {
         //Do frontend-only init time tasks
         if (!is_admin()) {
             SwpmAuth::get_instance();
-            
+
             $this->check_and_handle_auto_login();
             $this->verify_and_delete_account();
-            
+
             $swpm_logout = filter_input(INPUT_GET, 'swpm-logout');
             if (!empty($swpm_logout)) {
                 SwpmAuth::get_instance()->logout();
@@ -151,26 +151,26 @@ class SwpmInitTimeTasks {
             //TODO - allow an option to do a redirect if successful edit profile form submission?
         }
     }
-    
+
     public function check_and_handle_auto_login() {
-        
-        if(isset($_REQUEST['swpm_auto_login']) && $_REQUEST['swpm_auto_login'] == '1'){
+
+        if (isset($_REQUEST['swpm_auto_login']) && $_REQUEST['swpm_auto_login'] == '1') {
             //Handle the auto login
             SwpmLog::log_simple_debug("Handling auto login request...", true);
-            
+
             $enable_auto_login = SwpmSettings::get_instance()->get_value('auto-login-after-rego');
-            if(empty($enable_auto_login)) {
+            if (empty($enable_auto_login)) {
                 SwpmLog::log_simple_debug("Auto login after registration feature is disabled in settings.", true);
                 return;
             }
-            
+
             //Check auto login nonce value
-            $auto_login_nonce = isset($_REQUEST['swpm_auto_login_nonce'])? $_REQUEST['swpm_auto_login_nonce'] : '';
+            $auto_login_nonce = isset($_REQUEST['swpm_auto_login_nonce']) ? $_REQUEST['swpm_auto_login_nonce'] : '';
             if (!wp_verify_nonce($auto_login_nonce, 'swpm-auto-login-nonce')) {
                 SwpmLog::log_simple_debug("Error! Auto login nonce verification check failed!", false);
                 wp_die("Auto login nonce verification check failed!");
             }
-            
+
             //Perform the login
             $auth = SwpmAuth::get_instance();
             $user = apply_filters('swpm_user_name', filter_input(INPUT_GET, 'swpm_user_name'));
@@ -212,6 +212,13 @@ class SwpmInitTimeTasks {
         if ($swpm_process_braintree_buy_now == '1') {
             include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-braintree-buy-now-ipn.php');
             exit;
+        }
+
+        //Listen and handle Braintree Buy Now IPN
+        if (wp_doing_ajax()) {
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-smart-checkout-ipn.php');
+            add_action('wp_ajax_swpm_process_pp_smart_checkout', 'swpm_pp_smart_checkout_ajax_hanlder');
+            add_action('wp_ajax_nopriv_swpm_process_pp_smart_checkout', 'swpm_pp_smart_checkout_ajax_hanlder');
         }
     }
 

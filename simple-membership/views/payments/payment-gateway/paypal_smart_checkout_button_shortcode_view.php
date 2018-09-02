@@ -66,6 +66,22 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
         $mode = "production";
     }
 
+    $btn_layout = get_post_meta($button_id, 'pp_smart_checkout_btn_layout', true);
+    $btn_layout = empty($btn_layout) ? 'vertical' : $btn_layout;
+    $btn_size = get_post_meta($button_id, 'pp_smart_checkout_btn_size', true);
+    $btn_size = empty($btn_size) ? 'medium' : $btn_size;
+    $btn_shape = get_post_meta($button_id, 'pp_smart_checkout_btn_shape', true);
+    $btn_shape = empty($btn_shape) ? 'rect' : $btn_shape;
+    $btn_color = get_post_meta($button_id, 'pp_smart_checkout_btn_color', true);
+    $btn_color = empty($btn_color) ? 'gold' : $btn_color;
+
+    $pm_str = '';
+
+    $pm_credit = get_post_meta($button_id, 'pp_smart_checkout_payment_method_credit', true);
+    $pm_str .= empty($pm_credit) ? '' : ', paypal.FUNDING.CREDIT';
+    $pm_elv = get_post_meta($button_id, 'pp_smart_checkout_payment_method_elv', true);
+    $pm_str .= empty($pm_elv) ? '' : ', paypal.FUNDING.ELV';
+
     $uniqid = uniqid(); // Get unique ID to ensure several buttons can be added to one page without conflicts
 
     $output = '';
@@ -79,17 +95,13 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
 
                 env: '<?php echo $mode; ?>',
                 style: {
-                    layout: 'vertical', // horizontal | vertical
-                    size: 'medium', // medium | large | responsive
-                    shape: 'rect', // pill | rect
-                    color: 'gold'       // gold | blue | silver | black
+                    layout: '<?php echo esc_js($btn_layout); ?>',
+                    size: '<?php echo esc_js($btn_size); ?>',
+                    shape: '<?php echo esc_js($btn_shape); ?>',
+                    color: '<?php echo esc_js($btn_color); ?>'
                 },
-                // - paypal.FUNDING.CARD
-                // - paypal.FUNDING.CREDIT
-                // - paypal.FUNDING.ELV
-
                 funding: {
-                    allowed: [paypal.FUNDING.CARD, paypal.FUNDING.CREDIT],
+                    allowed: [paypal.FUNDING.CARD<?php echo $pm_str; ?>],
                     disallowed: []
                 },
                 client: {

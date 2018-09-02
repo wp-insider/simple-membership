@@ -140,6 +140,63 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     </tr>
 
                     <tr valign="top">
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Button appearance settings.'); ?></div></th>
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row"><?php _e("Size", "simple-membership"); ?></th>
+                        <td>
+                            <select name="pp_smart_checkout_btn_size">
+                                <option value="medium"<?php echo (isset($bt_opts['pp_smart_checkout_btn_size']) && $bt_opts['pp_smart_checkout_btn_size'] === 'medium') ? ' selected' : ''; ?>><?php _e("Medium", "simple-membership"); ?></option>
+                                <option value="large"<?php echo (isset($bt_opts['pp_smart_checkout_btn_size']) && $bt_opts['pp_smart_checkout_btn_size'] === 'large') ? ' selected' : ''; ?>><?php _e("Large", "simple-membership"); ?></option>
+                                <option value="responsive"<?php echo (isset($bt_opts['pp_smart_checkout_btn_size']) && $bt_opts['pp_smart_checkout_btn_size'] === 'responsive') ? ' selected' : ''; ?>><?php _e("Repsonsive", "simple-membership"); ?></option>
+                            </select>
+                            <p class="description"><?php _e("Select button size.", "simple-membership"); ?></p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row"><?php _e("Color", "simple-membership"); ?></th>
+                        <td>
+                            <select name="pp_smart_checkout_btn_color">
+                                <option value="gold"<?php echo (isset($bt_opts['pp_smart_checkout_btn_color']) && $bt_opts['pp_smart_checkout_btn_color'] === 'gold') ? ' selected' : ''; ?>><?php _e("Gold", "simple-membership"); ?></option>
+                                <option value="blue"<?php echo (isset($bt_opts['pp_smart_checkout_btn_color']) && $bt_opts['pp_smart_checkout_btn_color'] === 'blue') ? ' selected' : ''; ?>><?php _e("Blue", "simple-membership"); ?></option>
+                                <option value="silver"<?php echo (isset($bt_opts['pp_smart_checkout_btn_color']) && $bt_opts['pp_smart_checkout_btn_color'] === 'silver') ? ' selected' : ''; ?>><?php _e("Silver", "simple-membership"); ?></option>
+                                <option value="black"<?php echo (isset($bt_opts['pp_smart_checkout_btn_color']) && $bt_opts['pp_smart_checkout_btn_color'] === 'black') ? ' selected' : ''; ?>><?php _e("Black", "simple-membership"); ?></option>
+                            </select>
+                            <p class="description"><?php _e("Select button color.", "simple-membership"); ?></p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row"><?php _e("Shape", "simple-membership"); ?></th>
+                        <td>
+                            <p><label><input type="radio" name="pp_smart_checkout_btn_shape" value="rect"<?php echo (isset($bt_opts['pp_smart_checkout_btn_shape']) && $bt_opts['pp_smart_checkout_btn_shape'] === 'rect' || empty($bt_opts['pp_smart_checkout_btn_shape'])) ? ' checked' : ''; ?>> <?php _e("Rect", "simple-membership"); ?></label></p>
+                            <p><label><input type="radio" name="pp_smart_checkout_btn_shape" value="pill"<?php echo (isset($bt_opts['pp_smart_checkout_btn_shape']) && $bt_opts['pp_smart_checkout_btn_shape'] === 'pill') ? ' checked' : ''; ?>> <?php _e("Pill", "simple-membership"); ?></label></p>
+                            <p class="description"><?php _e("Select button shape.", "simple-membership"); ?></p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row"><?php _e("Layout", "simple-membership"); ?></th>
+                        <td>
+                            <p><label><input type="radio" name="pp_smart_checkout_btn_layout" value="vertical"<?php echo (isset($bt_opts['pp_smart_checkout_btn_layout']) && $bt_opts['pp_smart_checkout_btn_layout'] === 'vertical' || empty($bt_opts['pp_smart_checkout_btn_layout'])) ? ' checked' : ''; ?>> <?php _e("Vertical", "simple-membership"); ?></label></p>
+                            <p><label><input type="radio" name="pp_smart_checkout_btn_layout" value="horizontal"<?php echo (isset($bt_opts['pp_smart_checkout_btn_layout']) && $bt_opts['pp_smart_checkout_btn_layout'] === 'horizontal') ? ' checked' : ''; ?>> <?php _e("Horizontal", "simple-membership"); ?></label></p>
+                            <p class="description"><?php _e("Select button layout.", "simple-membership"); ?></p>
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Additional settings.'); ?></div></th>
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row"><?php _e("Payment Methods", "simple-membership"); ?></th>
+                        <td>
+                            <p><label><input type="checkbox" name="pp_smart_checkout_payment_method_credit" value="1"<?php echo (!empty($bt_opts['pp_smart_checkout_payment_method_credit']) ) ? ' checked' : ''; ?>> <?php _e("PayPal Credit", "simple-membership"); ?></label></p>
+                            <p><label><input type="checkbox" name="pp_smart_checkout_payment_method_elv" value="1"<?php echo (!empty($bt_opts['pp_smart_checkout_payment_method_elv']) ) ? ' checked' : ''; ?>> <?php _e("ELV", "simple-membership"); ?></label></p>
+                            <p class="description"><?php _e("Select payment methods that could be used by customers. Note that payment with cards is always enabled.", "simple-membership"); ?></p>
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional.'); ?></div></th>
                     </tr>
 
@@ -204,6 +261,12 @@ function swpm_edit_pp_smart_checkout_button() {
         'pp_smart_checkout_live_sec' => get_post_meta($button_id, 'pp_smart_checkout_live_sec', true),
         'pp_smart_checkout_test_id' => get_post_meta($button_id, 'pp_smart_checkout_test_id', true),
         'pp_smart_checkout_test_sec' => get_post_meta($button_id, 'pp_smart_checkout_test_sec', true),
+        'pp_smart_checkout_btn_size' => get_post_meta($button_id, 'pp_smart_checkout_btn_size', true),
+        'pp_smart_checkout_btn_color' => get_post_meta($button_id, 'pp_smart_checkout_btn_color', true),
+        'pp_smart_checkout_btn_shape' => get_post_meta($button_id, 'pp_smart_checkout_btn_shape', true),
+        'pp_smart_checkout_btn_layout' => get_post_meta($button_id, 'pp_smart_checkout_btn_layout', true),
+        'pp_smart_checkout_payment_method_credit' => get_post_meta($button_id, 'pp_smart_checkout_payment_method_credit', true),
+        'pp_smart_checkout_payment_method_elv' => get_post_meta($button_id, 'pp_smart_checkout_payment_method_elv', true),
         'return_url' => get_post_meta($button_id, 'return_url', true),
     );
 
@@ -220,6 +283,14 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_save_edit_pp_sma
 //I've merged two (save and edit events) into one
 
 function swpm_save_edit_pp_smart_checkout_button_data() {
+
+    $btn_size = filter_input(INPUT_POST, 'pp_smart_checkout_btn_size', FILTER_SANITIZE_STRING);
+    $btn_color = filter_input(INPUT_POST, 'pp_smart_checkout_btn_color', FILTER_SANITIZE_STRING);
+    $btn_shape = filter_input(INPUT_POST, 'pp_smart_checkout_btn_shape', FILTER_SANITIZE_STRING);
+    $btn_layout = filter_input(INPUT_POST, 'pp_smart_checkout_btn_layout', FILTER_SANITIZE_STRING);
+    $pm_credit = filter_input(INPUT_POST, 'pp_smart_checkout_payment_method_credit', FILTER_SANITIZE_STRING);
+    $pm_elv = filter_input(INPUT_POST, 'pp_smart_checkout_payment_method_elv', FILTER_SANITIZE_STRING);
+
     if (isset($_REQUEST['swpm_pp_smart_checkout_save_submit'])) {
         //This is a PayPal Smart Checkout button save event.
 
@@ -242,6 +313,14 @@ function swpm_save_edit_pp_smart_checkout_button_data() {
         add_post_meta($button_id, 'pp_smart_checkout_live_sec', trim(sanitize_text_field($_REQUEST['pp_smart_checkout_live_sec'])));
         add_post_meta($button_id, 'pp_smart_checkout_test_id', trim(sanitize_text_field($_REQUEST['pp_smart_checkout_test_id'])));
         add_post_meta($button_id, 'pp_smart_checkout_test_sec', trim(sanitize_text_field($_REQUEST['pp_smart_checkout_test_sec'])));
+
+        add_post_meta($button_id, 'pp_smart_checkout_btn_size', $btn_size);
+        add_post_meta($button_id, 'pp_smart_checkout_btn_color', $btn_color);
+        add_post_meta($button_id, 'pp_smart_checkout_btn_shape', $btn_shape);
+        add_post_meta($button_id, 'pp_smart_checkout_btn_layout', $btn_layout);
+
+        add_post_meta($button_id, 'pp_smart_checkout_payment_method_credit', $pm_credit);
+        add_post_meta($button_id, 'pp_smart_checkout_payment_method_elv', $pm_elv);
 
         add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
 
@@ -273,6 +352,14 @@ function swpm_save_edit_pp_smart_checkout_button_data() {
         update_post_meta($button_id, 'pp_smart_checkout_live_sec', trim(sanitize_text_field($_REQUEST['pp_smart_checkout_live_sec'])));
         update_post_meta($button_id, 'pp_smart_checkout_test_id', trim(sanitize_text_field($_REQUEST['pp_smart_checkout_test_id'])));
         update_post_meta($button_id, 'pp_smart_checkout_test_sec', trim(sanitize_text_field($_REQUEST['pp_smart_checkout_test_sec'])));
+
+        update_post_meta($button_id, 'pp_smart_checkout_btn_size', $btn_size);
+        update_post_meta($button_id, 'pp_smart_checkout_btn_color', $btn_color);
+        update_post_meta($button_id, 'pp_smart_checkout_btn_shape', $btn_shape);
+        update_post_meta($button_id, 'pp_smart_checkout_btn_layout', $btn_layout);
+
+        update_post_meta($button_id, 'pp_smart_checkout_payment_method_credit', $pm_credit);
+        update_post_meta($button_id, 'pp_smart_checkout_payment_method_elv', $pm_elv);
 
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
 

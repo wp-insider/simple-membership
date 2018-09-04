@@ -104,13 +104,13 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('PayPal Smart Checkout and account details. You can get this from your PayPal account.'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('PayPal Smart Checkout API Credentials (you can get this from your PayPal account)'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Live Client ID'); ?></th>
                         <td>
-                            <input type="text" size="50" name="pp_smart_checkout_live_id" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_live_id'] : ''); ?>" required/>
+                            <input type="text" size="100" name="pp_smart_checkout_live_id" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_live_id'] : ''); ?>" required/>
                             <p class="description">Enter your live Client ID.</p>
                         </td>
                     </tr>
@@ -118,7 +118,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Live Secret'); ?></th>
                         <td>
-                            <input type="text" size="50" name="pp_smart_checkout_live_sec" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_live_sec'] : ''); ?>" required/>
+                            <input type="text" size="100" name="pp_smart_checkout_live_sec" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_live_sec'] : ''); ?>" required/>
                             <p class="description">Enter your live Secret.</p>
                         </td>
                     </tr>
@@ -126,7 +126,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Sandbox Client ID'); ?></th>
                         <td>
-                            <input type="text" size="50" name="pp_smart_checkout_test_id" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_test_id'] : ''); ?>" required/>
+                            <input type="text" size="100" name="pp_smart_checkout_test_id" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_test_id'] : ''); ?>" required/>
                             <p class="description">Enter your sandbox Client ID.</p>
                         </td>
                     </tr>
@@ -134,13 +134,13 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Sandbox Secret'); ?></th>
                         <td>
-                            <input type="text" size="50" name="pp_smart_checkout_test_sec" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_test_sec'] : ''); ?>" required/>
+                            <input type="text" size="100" name="pp_smart_checkout_test_sec" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_test_sec'] : ''); ?>" required/>
                             <p class="description">Enter your sandbox Secret.</p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Button appearance settings.'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Button Appearance Settings'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
@@ -169,7 +169,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php _e("Shape", "simple-membership"); ?></th>
                         <td>
-                            <p><label><input type="radio" name="pp_smart_checkout_btn_shape" value="rect"<?php echo (isset($bt_opts['pp_smart_checkout_btn_shape']) && $bt_opts['pp_smart_checkout_btn_shape'] === 'rect' || empty($bt_opts['pp_smart_checkout_btn_shape'])) ? ' checked' : ''; ?>> <?php _e("Rect", "simple-membership"); ?></label></p>
+                            <p><label><input type="radio" name="pp_smart_checkout_btn_shape" value="rect"<?php echo (isset($bt_opts['pp_smart_checkout_btn_shape']) && $bt_opts['pp_smart_checkout_btn_shape'] === 'rect' || empty($bt_opts['pp_smart_checkout_btn_shape'])) ? ' checked' : ''; ?>> <?php _e("Rectangular", "simple-membership"); ?></label></p>
                             <p><label><input type="radio" name="pp_smart_checkout_btn_shape" value="pill"<?php echo (isset($bt_opts['pp_smart_checkout_btn_shape']) && $bt_opts['pp_smart_checkout_btn_shape'] === 'pill') ? ' checked' : ''; ?>> <?php _e("Pill", "simple-membership"); ?></label></p>
                             <p class="description"><?php _e("Select button shape.", "simple-membership"); ?></p>
                         </td>
@@ -184,7 +184,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Additional settings.'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Additional Settings'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
@@ -197,7 +197,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional.'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional'); ?></div></th>
                     </tr>
 
                     <tr valign="top">

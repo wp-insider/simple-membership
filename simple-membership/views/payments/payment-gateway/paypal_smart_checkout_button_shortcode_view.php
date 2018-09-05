@@ -89,7 +89,7 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
     ?>
     <div class="swpm-button-wrapper">
         <div class="swpm-pp-smart-checkout-btn-<?php echo $uniqid; ?>"></div>
-        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
         <script>
             paypal.Button.render({
 
@@ -124,6 +124,7 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
                         meta: {partner_attribution_id: 'TipsandTricks_SP'}
                     });
                 },
+                commit: true,
                 onError: function (error) {
                     console.log(error);
                     alert('<?php echo esc_js(__("Error occured during PayPal Smart Checkout process.", "simple-membership")); ?>\n\n' + error);

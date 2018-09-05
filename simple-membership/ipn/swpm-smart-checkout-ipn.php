@@ -170,12 +170,9 @@ class swpm_smart_checkout_ipn_handler {
                 if (isset($customvariables['swpm_id'])) {
                     $swpm_id = $customvariables['swpm_id'];
                 }
-                if ($transaction_type == "web_accept") {
+                if ($transaction_type == "smart_checkout") {
                     $this->debug_log('Transaction type: web_accept. Creating member account...', true);
                     swpm_handle_subsc_signup_stand_alone($this->ipn_data, $subsc_ref, $this->ipn_data['txn_id'], $swpm_id);
-                } else if ($transaction_type == "subscr_payment") {
-                    $this->debug_log('Transaction type: subscr_payment. Checking if the member profile needed to be updated', true);
-                    swpm_update_member_subscription_start_date_if_applicable($this->ipn_data);
                 }
             } else {
                 $this->debug_log('Membership level ID is missing in the payment notification! Cannot process this notification.', false);
@@ -207,7 +204,7 @@ class swpm_smart_checkout_ipn_handler {
         $ipn['pay_id'] = $data['id'];
         $ipn['create_time'] = $data['create_time'];
         $ipn['txn_id'] = $data['transactions'][0]['related_resources'][0]['sale']['id'];
-        $ipn['txn_type'] = 'cart';
+        $ipn['txn_type'] = 'smart_checkout';
         $ipn['payment_status'] = ucfirst($data['transactions'][0]['related_resources'][0]['sale']['state']);
         $ipn['transaction_subject'] = '';
         $ipn['mc_currency'] = $data['transactions'][0]['amount']['currency'];

@@ -133,7 +133,7 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
                     jQuery(".swpm-pp-smart-checkout-btn-<?php echo $uniqid; ?>").hide();
                     jQuery('.swpm-pp-sc-spinner-cont').css('display', 'inline-block');
                     return actions.payment.execute().then(function (data) {
-                        data.custom_field = '<?php echo esc_js($custom_field_value); ?>';
+                        data.custom_field = '<?php echo $custom_field_value; ?>';
                         data.button_id = '<?php echo esc_js($button_id); ?>';
                         data.item_name = '<?php echo esc_js($item_name); ?>';
                         jQuery.post('<?php echo esc_js(admin_url('admin-ajax.php')); ?>',

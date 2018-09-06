@@ -143,6 +143,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
                 $subject=apply_filters('swpm_email_account_status_change_subject',$subject);
                 $body=apply_filters('swpm_email_account_status_change_body',$body);
                 wp_mail($email_address, $subject, $body, $headers);
+                SwpmLog::log_simple_debug("Notify email sent (after profile edit from admin side). Email sent to: " . $email_address, true);
             }
             wp_redirect('admin.php?page=simple_wp_membership');
             exit(0);

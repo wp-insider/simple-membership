@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 3.6.9
+Stable tag: 3.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,8 @@ You can configure it to have free and/or paid memberships on your site. Paid mem
 Both one time and recurring/subscription payments are supported for PayPal and Stripe.
 
 You can accept one time membership payment via Braintree payment gateway.
+
+There is also option to use PayPal smart button for membership payment.
 
 = Membership Payments Log = 
 All the payments from your members are recorded in the plugin. You can view them anytime by visiting the payments menu from the admin dashboard.
@@ -150,7 +152,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.7.0 =
+= 3.7.0 =
 - Added PayPal smart checkout button option. https://simple-membership-plugin.com/creating-paypal-smart-checkout-buttons-for-membership-payment/
 - Added a new filter hook swpm_edit_profile_form_before_username
 - Added a new filter hook swpm_edit_profile_form_before_submit

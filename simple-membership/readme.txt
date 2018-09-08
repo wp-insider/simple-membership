@@ -151,6 +151,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 3.7.0 =
+- Added PayPal smart checkout button option. https://simple-membership-plugin.com/creating-paypal-smart-checkout-buttons-for-membership-payment/
 - Added a new filter hook swpm_edit_profile_form_before_username
 - Added a new filter hook swpm_edit_profile_form_before_submit
 

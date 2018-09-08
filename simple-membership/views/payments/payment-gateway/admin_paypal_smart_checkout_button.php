@@ -13,7 +13,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
     ?>
 
     <div class="swpm-orange-box">
-        View the <a target="_blank" href="https://simple-membership-plugin.com/create-braintree-buy-now-button-for-membership-payment/">documentation</a>&nbsp;
+        View the <a target="_blank" href="https://simple-membership-plugin.com/creating-paypal-smart-checkout-buttons-for-membership-payment/">documentation</a>&nbsp;
         to learn how to create and use a PayPal Smart Checkout payment button.
     </div>
 

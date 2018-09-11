@@ -104,32 +104,32 @@ function swpm_create_new_stripe_buy_now_button() {
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Stripe API keys. You can get this from your Stripe account.'); ?></div></th>
                     </tr>
 
+                   <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Test Publishable Key'); ?></th>
+                        <td>
+                            <input type="text" size="50" name="stripe_test_publishable_key" value="" required />
+                            <p class="description">Enter your Stripe test publishable key.</p>
+                        </td>
+                    </tr>                    
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Test Secret Key'); ?></th>
                         <td>
                             <input type="text" size="50" name="stripe_test_secret_key" value="" required />
                             <p class="description">Enter your Stripe test secret key.</p>
                         </td>
-                    </tr>                    
-                    <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Test Publishable Key'); ?></th>
-                        <td>
-                            <input type="text" size="50" name="stripe_test_publishable_key" value="" required />
-                            <p class="description">Enter your Stripe test publishable key.</p>
-                        </td>
                     </tr>
-                    <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Live Secret Key'); ?></th>
-                        <td>
-                            <input type="text" size="50" name="stripe_live_secret_key" value="" required />
-                            <p class="description">Enter your Stripe live secret key.</p>
-                        </td>
-                    </tr>                    
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Live Publishable Key'); ?></th>
                         <td>
                             <input type="text" size="50" name="stripe_live_publishable_key" value="" required />
                             <p class="description">Enter your Stripe live publishable key.</p>
+                        </td>
+                    </tr>                    
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Live Secret Key'); ?></th>
+                        <td>
+                            <input type="text" size="50" name="stripe_live_secret_key" value="" required />
+                            <p class="description">Enter your Stripe live secret key.</p>
                         </td>
                     </tr>
 
@@ -329,31 +329,31 @@ function swpm_edit_stripe_buy_now_button() {
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Test Secret Key'); ?></th>
-                        <td>
-                            <input type="text" size="50" name="stripe_test_secret_key" value="<?php echo $stripe_test_secret_key; ?>" required />
-                            <p class="description">Enter your Stripe test secret key.</p>
-                        </td>
-                    </tr>                    
-                    <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Test Publishable Key'); ?></th>
                         <td>
                             <input type="text" size="50" name="stripe_test_publishable_key" value="<?php echo $stripe_test_publishable_key; ?>" required />
                             <p class="description">Enter your Stripe test publishable key.</p>
                         </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Live Secret Key'); ?></th>
-                        <td>
-                            <input type="text" size="50" name="stripe_live_secret_key" value="<?php echo $stripe_live_secret_key; ?>" required />
-                            <p class="description">Enter your Stripe live secret key.</p>
-                        </td>
                     </tr>                    
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Test Secret Key'); ?></th>
+                        <td>
+                            <input type="text" size="50" name="stripe_test_secret_key" value="<?php echo $stripe_test_secret_key; ?>" required />
+                            <p class="description">Enter your Stripe test secret key.</p>
+                        </td>
+                    </tr>
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Live Publishable Key'); ?></th>
                         <td>
                             <input type="text" size="50" name="stripe_live_publishable_key" value="<?php echo $stripe_live_publishable_key; ?>" required />
                             <p class="description">Enter your Stripe live publishable key.</p>
+                        </td>
+                    </tr>                    
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Live Secret Key'); ?></th>
+                        <td>
+                            <input type="text" size="50" name="stripe_live_secret_key" value="<?php echo $stripe_live_secret_key; ?>" required />
+                            <p class="description">Enter your Stripe live secret key.</p>
                         </td>
                     </tr>
 

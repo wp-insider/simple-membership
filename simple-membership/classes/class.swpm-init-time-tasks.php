@@ -48,9 +48,6 @@ class SwpmInitTimeTasks {
                 $this->admin_init();
             }
         }
-
-        //IPN listener
-        $this->swpm_ipn_listener();
     }
 
     public function admin_init() {
@@ -179,46 +176,6 @@ class SwpmInitTimeTasks {
             $pass = base64_decode($encoded_pass);
             $auth->login($user, $pass);
             SwpmLog::log_simple_debug("Auto login request completed for: " . $user, true);
-        }
-    }
-
-    /* Payment Gateway IPN listener */
-
-    public function swpm_ipn_listener() {
-
-        //Listen and handle PayPal IPN
-        $swpm_process_ipn = filter_input(INPUT_GET, 'swpm_process_ipn');
-        if ($swpm_process_ipn == '1') {
-            include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_pp_ipn.php');
-            exit;
-        }
-
-        //Listen and handle Stripe Buy Now IPN
-        $swpm_process_stripe_buy_now = filter_input(INPUT_GET, 'swpm_process_stripe_buy_now');
-        if ($swpm_process_stripe_buy_now == '1') {
-            include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-buy-now-ipn.php');
-            exit;
-        }
-
-        //Listen and handle Stripe Subscription IPN
-        $swpm_process_stripe_subscription = filter_input(INPUT_GET, 'swpm_process_stripe_subscription');
-        if ($swpm_process_stripe_subscription == '1') {
-            include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-subscription-ipn.php');
-            exit;
-        }
-
-        //Listen and handle Braintree Buy Now IPN
-        $swpm_process_braintree_buy_now = filter_input(INPUT_GET, 'swpm_process_braintree_buy_now');
-        if ($swpm_process_braintree_buy_now == '1') {
-            include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-braintree-buy-now-ipn.php');
-            exit;
-        }
-
-        //Listen and handle Braintree Buy Now IPN
-        if (wp_doing_ajax()) {
-            include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-smart-checkout-ipn.php');
-            add_action('wp_ajax_swpm_process_pp_smart_checkout', 'swpm_pp_smart_checkout_ajax_hanlder');
-            add_action('wp_ajax_nopriv_swpm_process_pp_smart_checkout', 'swpm_pp_smart_checkout_ajax_hanlder');
         }
     }
 

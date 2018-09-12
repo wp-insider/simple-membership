@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 3.7.0
+Stable tag: 3.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -152,7 +152,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.7.1 =
+= 3.7.1 =
+- Moved the IPN handling code from "init" hook to "wp_loaded" hook for better compatibility.
 - The configuration fields for "Publishable" and "Secret" keys for Stripe has been swapped. This will align them better with how you get the info from your Stripe account.
 
 = 3.7.0 =

@@ -152,7 +152,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= 3.7.2 =
+= WIP 3.7.2 =
 - Added support for Two-Factor Authentication addon.
 - Added a new utility function.
 

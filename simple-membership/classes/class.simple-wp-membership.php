@@ -248,6 +248,14 @@ class SimpleWpMembership {
             }
         }
         
+        $proceed_after_auth=apply_filters('swpm_login_auth_completed_filter', true);
+
+	if (!$proceed_after_auth) {
+            $auth=SwpmAuth::get_instance();
+            $auth->logout();
+            return;
+	}
+        
         SwpmLog::log_auth_debug("Triggering swpm_after_login hook.", true);
         do_action('swpm_after_login');
         if (!SwpmUtils::is_ajax()) {

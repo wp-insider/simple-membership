@@ -181,6 +181,17 @@ class SwpmMiscUtils {
         return $pageURL;
     }
 
+    /*
+    * Returns just the domain name. Something like example.com
+    */
+    public function get_home_url_without_http_and_www(){
+       $site_url = get_site_url();    
+       $site_url = str_replace ('https://', '', $site_url);
+       $site_url = str_replace ('http://', '', $site_url);
+       $site_url = str_replace ('www.', '', $site_url);
+       return $site_url;
+    }
+
     public static function replace_dynamic_tags($msg_body, $member_id, $additional_args = '') {
         $settings = SwpmSettings::get_instance();
         $user_record = SwpmMemberUtils::get_user_by_id($member_id);

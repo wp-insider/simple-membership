@@ -233,6 +233,10 @@ class SwpmInstallation {
             //Create the mandatory pages (if they are not there)
             SwpmMiscUtils::create_mandatory_wp_pages();
             //End of page creation
+            
+            $example_from_address = 'hello@' . SwpmMiscUtils::get_home_url_without_http_and_www();
+            $senders_email_address = get_bloginfo('name') . " <" . $example_from_address . ">";
+    
             $settings->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
                     ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))
                     ->set_value('reg-prompt-complete-mail-subject', stripslashes($reg_prompt_email_subject))
@@ -243,7 +247,7 @@ class SwpmInstallation {
                     ->set_value('reset-mail-body', stripslashes($reset_email_body))
                     ->set_value('account-change-email-subject', stripslashes($status_change_email_subject))
                     ->set_value('account-change-email-body', stripslashes($status_change_email_body))
-                    ->set_value('email-from', trim(get_option('admin_email')));
+                    ->set_value('email-from', $senders_email_address);
 
             $settings->set_value('reg-complete-mail-subject-admin', stripslashes($reg_email_subject_admin));
             $settings->set_value('reg-complete-mail-body-admin', stripslashes($reg_email_body_admin));

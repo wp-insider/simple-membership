@@ -155,6 +155,7 @@ https://simple-membership-plugin.com/
 = WIP 3.7.2 =
 - Added support for Two-Factor Authentication addon.
 - Added a new utility function.
+- Improved the social login functionality.
 
 = 3.7.1 =
 - Moved the IPN handling code from "init" hook to "wp_loaded" hook for better compatibility.

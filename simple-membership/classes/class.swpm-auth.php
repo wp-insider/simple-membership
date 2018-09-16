@@ -176,19 +176,20 @@ class SwpmAuth {
         return $this->check_password($password, $this->get('password'));
     }
 
-    public function wp_login($user) {
+    public function login_to_swpm_using_wp_user($user) {
         if ($this->isLoggedIn) {
             return false;
         }
         $email = $user->user_email;
         $member = SwpmMemberUtils::get_user_by_email($email);
         if (empty($member)) {
+            //There is no swpm profile with this email.
             return false;
         }
         $this->userData = $member;
         $this->isLoggedIn = true;
         $this->set_cookie();
-        SwpmLog::log_auth_debug('User has been logged in.', true);
+        SwpmLog::log_auth_debug('Member has been logged in using WP User object.', true);
         $this->check_constraints();
         return true;
     }

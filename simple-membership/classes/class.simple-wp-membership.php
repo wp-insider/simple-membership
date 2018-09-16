@@ -273,6 +273,7 @@ class SimpleWpMembership {
         }
     }
 
+    /* This function can be used to authenticate a member using currently logged in wp user. */
     public function set_current_user_handler() {
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
@@ -285,14 +286,14 @@ class SimpleWpMembership {
         SwpmLog::log_auth_debug('set_current_user action. Attempting to login user ' . $user->user_login, true);
         //remove hook in order for it to not be called several times in the process
         remove_action('set_current_user', array($this, 'set_current_user_handler'));
-        $auth->wp_login($user);
+        $auth->login_to_swpm_using_wp_user($user);
     }
 
     public function wp_authenticate_handler($username, $password) {
 
         $auth = SwpmAuth::get_instance();
         if (($auth->is_logged_in() && ($auth->userData->user_name == $username))) {
-            SwpmLog::log_auth_debug('wp_authenticate action. User with username: ' . $username . 'is already logged in.', true);
+            SwpmLog::log_auth_debug('wp_authenticate action. User with username: ' . $username . ' is already logged in.', true);
             return;
         }
         if (!empty($username)) {

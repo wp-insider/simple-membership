@@ -182,13 +182,15 @@ class SwpmAuth {
         }
         $email = $user->user_email;
         $member = SwpmMemberUtils::get_user_by_email($email);
-        if (!empty($member)) {
-            $this->userData = $member;
-            $this->isLoggedIn = true;
-            SwpmLog::log_auth_debug('User has been logged in.', true);
+        if (empty($member)) {
+            return false;
         }
-        $res = $this->check_constraints();
-        return $res;
+        $this->userData = $member;
+        $this->isLoggedIn = true;
+        $this->set_cookie();
+        SwpmLog::log_auth_debug('User has been logged in.', true);
+        $this->check_constraints();
+        return true;
     }
 
     public function login($user, $pass, $remember = '', $secure = '') {

@@ -48,7 +48,7 @@ class SwpmAuth {
                 $wp_profile_page = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/wp-admin/profile.php';
                 $error_msg = '';
                 $error_msg .= '<p>' . SwpmUtils::_('Warning! Simple Membership plugin cannot process this login request to prevent you from getting logged out of WP Admin accidentally.') . '</p>';
-                $error_msg .= '<p><a href="'.$wp_profile_page.'" target="_blank">' . SwpmUtils::_('Click here') .'</a>'. SwpmUtils::_(' to see the profile you are currently logged into in this browser.') . '</p>';
+                $error_msg .= '<p><a href="' . $wp_profile_page . '" target="_blank">' . SwpmUtils::_('Click here') . '</a>' . SwpmUtils::_(' to see the profile you are currently logged into in this browser.') . '</p>';
                 $error_msg .= '<p>' . SwpmUtils::_('You are logged into the site as an ADMIN user in this browser. First, logout from WP Admin then you will be able to log in as a normal member.') . '</p>';
                 $error_msg .= '<p>' . SwpmUtils::_('Alternatively, you can use a different browser (where you are not logged-in as ADMIN) to test the membership login.') . '</p>';
                 $error_msg .= '<p>' . SwpmUtils::_('Your normal visitors or members will never see this message. This message is ONLY for ADMIN user.') . '</p>';
@@ -176,6 +176,21 @@ class SwpmAuth {
         return $this->check_password($password, $this->get('password'));
     }
 
+    public function wp_login($user) {
+        if ($this->isLoggedIn) {
+            return false;
+        }
+        $email = $user->user_email;
+        $member = SwpmMemberUtils::get_user_by_email($email);
+        if (!empty($member)) {
+            $this->userData = $member;
+            $this->isLoggedIn = true;
+            SwpmLog::log_auth_debug('User has been logged in.', true);
+        }
+        $res = $this->check_constraints();
+        return $res;
+    }
+
     public function login($user, $pass, $remember = '', $secure = '') {
         SwpmLog::log_auth_debug("SwpmAuth::login()", true);
         if ($this->isLoggedIn) {
@@ -212,7 +227,7 @@ class SwpmAuth {
         }
 
         $expire = apply_filters('swpm_auth_cookie_expiry_value', $expire);
-                
+
         setcookie("swpm_in_use", "swpm_in_use", $expire, COOKIEPATH, COOKIE_DOMAIN);
 
         $expiration_timestamp = SwpmUtils::get_expiration_timestamp($this->userData);
@@ -270,7 +285,7 @@ class SwpmAuth {
         if ($hmac != $hash) {
             $this->lastStatusMsg = SwpmUtils::_("Please login again.");
             SwpmLog::log_auth_debug("validate() - Bad Hash", true);
-            wp_logout();//Force logout of WP user session to clear the bad hash.
+            wp_logout(); //Force logout of WP user session to clear the bad hash.
             return false;
         }
 

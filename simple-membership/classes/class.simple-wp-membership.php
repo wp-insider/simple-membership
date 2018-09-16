@@ -35,10 +35,10 @@ include_once('shortcode-related/class.swpm-shortcodes-handler.php');
 class SimpleWpMembership {
 
     public function __construct() {
-        
+
         new SwpmShortcodesHandler(); //Tackle the shortcode definitions and implementation.
         new SwpmSelfActionHandler(); //Tackle the self action hook handling.
-        
+
         add_action('admin_menu', array(&$this, 'menu'));
         add_action('init', array(&$this, 'init_hook'));
         add_action('wp_loaded', array(&$this, 'handle_wp_loaded_tasks'));
@@ -219,26 +219,26 @@ class SimpleWpMembership {
     }
 
     public static function swpm_login($username, $pass, $rememberme = true) {
-        if (is_user_logged_in()) {            
+        if (is_user_logged_in()) {
             $current_user = wp_get_current_user();
-            SwpmLog::log_auth_debug("static function swpm_login(). User is logged in. WP Username: ". $current_user->user_login, true);
+            SwpmLog::log_auth_debug("static function swpm_login(). User is logged in. WP Username: " . $current_user->user_login, true);
             if ($current_user->user_login == $username) {
                 return;
             }
         }
-        SwpmLog::log_auth_debug("Trying wp_signon() with username: ". $username, true);
+        SwpmLog::log_auth_debug("Trying wp_signon() with username: " . $username, true);
         $user_obj = wp_signon(array('user_login' => $username, 'user_password' => $pass, 'remember' => $rememberme), is_ssl());
         if ($user_obj instanceof WP_User) {
             wp_set_current_user($user_obj->ID, $user_obj->user_login);
-            SwpmLog::log_auth_debug("Setting current WP user to: ". $user_obj->user_login, true);
+            SwpmLog::log_auth_debug("Setting current WP user to: " . $user_obj->user_login, true);
         } else {
             SwpmLog::log_auth_debug("wp_signon() failed for the corresponding WP user account.", false);
-            if( is_wp_error( $user_obj ) ) {
+            if (is_wp_error($user_obj)) {
                 //SwpmLog::log_auth_debug("Error Message: ". $user_obj->get_error_message(), false);
                 $force_wp_user_sync = SwpmSettings::get_instance()->get_value('force-wp-user-sync');
                 if (!empty($force_wp_user_sync)) {
                     //Force WP user login sync is enabled. Show error and exit out since the WP user login failed.
-                    $error_msg = SwpmUtils::_("Error! This site has the force WP user login feature enabled in the settings. We could not find a WP user record for the given username: "). $username;
+                    $error_msg = SwpmUtils::_("Error! This site has the force WP user login feature enabled in the settings. We could not find a WP user record for the given username: ") . $username;
                     $error_msg .= "<br /><br />" . SwpmUtils::_("This error is triggered when a member account doesn't have a corresponding WP user account. So the plugin fails to log the user into the WP User system.");
                     $error_msg .= "<br /><br />" . SwpmUtils::_("Contact the site admin and request them to check your username in the WP Users menu to see what happened with the WP user entry of your account.");
                     $error_msg .= "<br /><br />" . SwpmUtils::_("The site admin can disable the Force WP User Synchronization feature in the settings to disable this feature and this error will go away.");
@@ -247,15 +247,15 @@ class SimpleWpMembership {
                 }
             }
         }
-        
-        $proceed_after_auth=apply_filters('swpm_login_auth_completed_filter', true);
 
-	if (!$proceed_after_auth) {
-            $auth=SwpmAuth::get_instance();
+        $proceed_after_auth = apply_filters('swpm_login_auth_completed_filter', true);
+
+        if (!$proceed_after_auth) {
+            $auth = SwpmAuth::get_instance();
             $auth->logout();
             return;
-	}
-        
+        }
+
         SwpmLog::log_auth_debug("Triggering swpm_after_login hook.", true);
         do_action('swpm_after_login');
         if (!SwpmUtils::is_ajax()) {
@@ -272,16 +272,36 @@ class SimpleWpMembership {
         }
     }
 
+    public function set_current_user_handler() {
+        $auth = SwpmAuth::get_instance();
+        if ($auth->is_logged_in()) {
+            return;
+        }
+        $user = wp_get_current_user();
+        if (empty($user) || $user->ID === 0) {
+            return false;
+        }
+        SwpmLog::log_auth_debug('set_current_user action. Attempting to login user ' . $user->user_login, true);
+        //remove hook in order for it to not be called several times in the process
+        remove_action('set_current_user', array($this, 'set_current_user_handler'));
+        $auth->wp_login($user);
+    }
+
     public function wp_authenticate_handler($username, $password) {
-        
+
         $auth = SwpmAuth::get_instance();
         if (($auth->is_logged_in() && ($auth->userData->user_name == $username))) {
-            SwpmLog::log_auth_debug('wp_authenticate action. User with username: '.$username.'is already logged in.', true);
+            SwpmLog::log_auth_debug('wp_authenticate action. User with username: ' . $username . 'is already logged in.', true);
             return;
         }
         if (!empty($username)) {
             SwpmLog::log_auth_debug('wp_authenticate action. Handling login for username: ' . $username, true);
             $auth->login($username, $password, true);
+        } else {
+            //empty username can mean some plugin trying to login WP user using its own methods.
+            //Let's add hook for set_current_user action and let it handle the login if needed.
+            SwpmLog::log_auth_debug('wp_authenticate action. Empty username provided. Adding set_current_username hook to catch potential login attempt.', true);
+            add_action('set_current_user', array($this, 'set_current_user_handler'));
         }
     }
 
@@ -297,7 +317,7 @@ class SimpleWpMembership {
         }
         return ob_get_clean();
     }
-    
+
     public function wp_logout() {
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
@@ -321,9 +341,9 @@ class SimpleWpMembership {
         $profile['last_name'] = $wp_user_data->user_lastname;
         $wpdb->update($wpdb->prefix . "swpm_members_tbl", $profile, array('member_id' => $profile['member_id']));
     }
-    
+
     function swpm_handle_wp_user_registration($user_id) {
-        
+
         $swpm_settings_obj = SwpmSettings::get_instance();
         $enable_auto_create_swpm_members = $swpm_settings_obj->get_value('enable-auto-create-swpm-members');
         $default_level = $swpm_settings_obj->get_value('auto-create-default-membership-level');
@@ -332,10 +352,10 @@ class SimpleWpMembership {
         if (empty($enable_auto_create_swpm_members)) {
             return;
         }
-        if (empty($default_level)){
+        if (empty($default_level)) {
             return;
         }
-        
+
         $user_info = get_userdata($user_id);
         if (SwpmMemberUtils::get_user_by_user_name($user_info->user_login)) {
             SwpmLog::log_simple_debug("swpm_handle_wp_user_registration() - SWPM member account with this username already exists! No new account will be created for this user.", false);
@@ -479,8 +499,8 @@ class SimpleWpMembership {
 
         // The actual fields for data entry
         echo '<h4>' . __("Do you want to protect this content?", 'simple-membership') . '</h4>';
-        echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="1" /> '. SwpmUtils::_('No, Do not protect this content.') . '<br/>';
-        echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="2" /> '. SwpmUtils::_('Yes, Protect this content.') . '<br/>';
+        echo '<input type="radio" ' . ((!$is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="1" /> ' . SwpmUtils::_('No, Do not protect this content.') . '<br/>';
+        echo '<input type="radio" ' . (($is_protected) ? 'checked' : "") . '  name="swpm_protect_post" value="2" /> ' . SwpmUtils::_('Yes, Protect this content.') . '<br/>';
         echo $protection_obj->get_last_message();
 
         echo '<h4>' . __("Select the membership level that can access this content:", 'simple-membership') . "</h4>";
@@ -580,11 +600,11 @@ class SimpleWpMembership {
         $init_tasks->do_init_tasks();
     }
 
-    public function handle_wp_loaded_tasks(){
+    public function handle_wp_loaded_tasks() {
         $wp_loaded_tasks = new SwpmWpLoadedTasks();
         $wp_loaded_tasks->do_wp_loaded_tasks();
     }
-    
+
     public function admin_library() {
         //Only loaded on selective swpm admin menu page rendering.
         $this->common_library();

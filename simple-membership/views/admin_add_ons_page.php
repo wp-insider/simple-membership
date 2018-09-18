@@ -210,6 +210,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             );
             array_push($addons_data, $addon_25);
             
+            $addon_26 = array(
+                'name' => '2 Factor Authentication',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/2fa-addon-icon.png',
+                'description' => 'This addon adds the 2 factor authentication for member login to increase login security.',
+                'page_url' => 'https://simple-membership-plugin.com/swpm-two-factor-authentication-addon/',
+            );
+            array_push($addons_data, $addon_26);            
+            
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {
                 $output .= '<div class="swpm_addon_item_canvas">';

@@ -92,6 +92,7 @@ You can create a free forum user account and ask your questions.
 * Option force the members to use strong password.
 * Option to make the users agree to your terms and conditions before they can register for a member account.
 * Option to make the users agree to your privacy policy before they can register for a member account.
+* Option to automatically logout the members when they close the browser.
 
 = Language Translations =
 
@@ -152,7 +153,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.7.2 =
+= 3.7.2 =
 - Added a new feature that allows you to automatically logout the users when they close the browser.
 - Added support for Two-Factor Authentication addon.
 - Added a new utility function.

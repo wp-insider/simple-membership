@@ -10,6 +10,18 @@ class SwpmSelfActionHandler {
         add_action('swpm_membership_level_changed', array(&$this, 'handle_membership_level_changed_action'));
 
         add_filter('swpm_after_logout_redirect_url', array(&$this, 'handle_after_logout_redirection'));
+        add_filter('swpm_auth_cookie_expiry_value', array(&$this, 'handle_auth_cookie_expiry_value'));
+    }
+    
+    public function handle_auth_cookie_expiry_value($expire){
+
+        $logout_member_on_browser_close = SwpmSettings::get_instance()->get_value('logout-member-on-browser-close');
+        if (!empty($logout_member_on_browser_close)) {
+            //This feature is enabled.
+            $expire = 0;
+        }
+        
+        return $expire;
     }
     
     public function handle_after_logout_redirection($redirect_url){

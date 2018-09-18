@@ -196,7 +196,10 @@ class SwpmSettings {
 
         add_settings_field('after-logout-redirection-url', SwpmUtils::_('After Logout Redirect URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'after-logout-redirection-url',
             'message' => SwpmUtils::_('You can enter an URL here to redirect the members to this page after they click the logout link to logout from your site.')) );
-                
+              
+        add_settings_field('logout-member-on-browser-close', SwpmUtils::_('Logout Member on Browser Close'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'logout-member-on-browser-close',
+            'message' => SwpmUtils::_('Enable this option if you want the member to be logged out of the account when he closes the browser.')));
+        
         add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'allow-account-deletion',
             'message' => SwpmUtils::_('Allow users to delete their accounts.')));
         
@@ -486,6 +489,7 @@ class SwpmSettings {
         }
         $output = $this->settings;
         $output['enable-expired-account-login'] = isset($input['enable-expired-account-login']) ? esc_attr($input['enable-expired-account-login']) : "";
+        $output['logout-member-on-browser-close'] = isset($input['logout-member-on-browser-close']) ? esc_attr($input['logout-member-on-browser-close']) : "";
         $output['allow-account-deletion'] = isset($input['allow-account-deletion']) ? esc_attr($input['allow-account-deletion']) : "";
         $output['use-wordpress-timezone'] = isset($input['use-wordpress-timezone']) ? esc_attr($input['use-wordpress-timezone']) : "";
         $output['delete-pending-account'] = isset($input['delete-pending-account']) ? esc_attr($input['delete-pending-account']) : 0;
@@ -495,7 +499,7 @@ class SwpmSettings {
         $output['after-logout-redirection-url'] = esc_url($input['after-logout-redirection-url']);
         $output['force-strong-passwords'] = isset($input['force-strong-passwords']) ? esc_attr($input['force-strong-passwords']) : "";
         $output['auto-login-after-rego'] = isset($input['auto-login-after-rego']) ? esc_attr($input['auto-login-after-rego']) : "";
-        $output['force-wp-user-sync'] = isset($input['force-wp-user-sync']) ? esc_attr($input['force-wp-user-sync']) : "";
+        $output['force-wp-user-sync'] = isset($input['force-wp-user-sync']) ? esc_attr($input['force-wp-user-sync']) : "";        
         
         //Auto create swpm user related settings
         $output['enable-auto-create-swpm-members'] = isset($input['enable-auto-create-swpm-members']) ? esc_attr($input['enable-auto-create-swpm-members']) : "";

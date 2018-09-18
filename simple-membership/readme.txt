@@ -153,6 +153,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 3.7.2 =
+- Added a new feature that allows you to automatically logout the users when they close the browser.
 - Added support for Two-Factor Authentication addon.
 - Added a new utility function.
 - Improved the social login functionality.

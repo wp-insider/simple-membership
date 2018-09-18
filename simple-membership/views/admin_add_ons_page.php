@@ -59,10 +59,10 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             array_push($addons_data, $addon_6);
 
             $addon_7 = array(
-                'name' => 'Protect Older Posts',
-                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-older-posts-protection.png',
-                'description' => 'The protect older posts addon allows you to control protection of posts that were published before a member\'s access start date.',
-                'page_url' => 'https://simple-membership-plugin.com/simple-membership-protect-older-posts-addon/',
+                'name' => 'WooCommerce Payments',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-woocommerce-addon.png',
+                'description' => 'This addon can be used to accept membership payment via the WooCommerce plugin',
+                'page_url' => 'https://simple-membership-plugin.com/woocommerce-simple-membership-plugin-integration/',
             );
             array_push($addons_data, $addon_7);
 
@@ -107,18 +107,18 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             array_push($addons_data, $addon_12);
 
             $addon_13 = array(
-                'name' => 'Show Member Info',
-                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/show-member-info.png',
-                'description' => 'Allows you to show various member info using shortcodes.',
-                'page_url' => 'https://simple-membership-plugin.com/simple-membership-addon-show-member-info/',
+                'name' => 'Full Page Protection',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/full-page-protection-addon.png',
+                'description' => 'Allows you to protect the full post or page (header to footer).',
+                'page_url' => 'https://simple-membership-plugin.com/full-page-protection-addon-simple-membership/',
             );
             array_push($addons_data, $addon_13);
             
             $addon_14 = array(
-                'name' => 'Google First Click Free',
-                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/google-first-click-free-addon.png',
-                'description' => 'Allows you to integrate with the Google First Click Free feature.',
-                'page_url' => 'https://simple-membership-plugin.com/simple-membership-google-first-click-free-integration-addon',
+                'name' => 'Protect Older Posts',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-older-posts-protection.png',
+                'description' => 'The protect older posts addon allows you to control protection of posts that were published before a member\'s access start date.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-protect-older-posts-addon/',
             );
             array_push($addons_data, $addon_14);
             
@@ -137,7 +137,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/apply-partial-section-protection/',
             );
             array_push($addons_data, $addon_16);
-            
+                        
             $addon_17 = array(
                 'name' => 'Member Data Exporter',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-data-exporter-addon.png',
@@ -187,10 +187,10 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             array_push($addons_data, $addon_22);
             
             $addon_23 = array(
-                'name' => 'WooCommerce Payments',
-                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-woocommerce-addon.png',
-                'description' => 'This addon can be used to accept membership payment via the WooCommerce plugin',
-                'page_url' => 'https://simple-membership-plugin.com/woocommerce-simple-membership-plugin-integration/',
+                'name' => 'Google First Click Free',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/google-first-click-free-addon.png',
+                'description' => 'Allows you to integrate with the Google First Click Free feature.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-google-first-click-free-integration-addon',
             );
             array_push($addons_data, $addon_23);
             
@@ -203,20 +203,28 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             array_push($addons_data, $addon_24);
             
             $addon_25 = array(
+                'name' => 'Show Member Info',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/show-member-info.png',
+                'description' => 'Allows you to show various member info using shortcodes.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-addon-show-member-info/',
+            );
+            array_push($addons_data, $addon_25);
+            
+            $addon_26 = array(
                 'name' => 'Expiry Email Notification',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/email-notification-and-broadcast-addon.png',
                 'description' => 'Allows you to configure and send various expiry email notifications for members.',
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-email-notification-broadcast-addon/',
             );
-            array_push($addons_data, $addon_25);
+            array_push($addons_data, $addon_26);
             
-            $addon_26 = array(
+            $addon_27 = array(
                 'name' => '2 Factor Authentication',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/2fa-addon-icon.png',
                 'description' => 'This addon adds the 2 factor authentication for member login to increase login security.',
                 'page_url' => 'https://simple-membership-plugin.com/swpm-two-factor-authentication-addon/',
             );
-            array_push($addons_data, $addon_26);            
+            array_push($addons_data, $addon_27);            
             
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {

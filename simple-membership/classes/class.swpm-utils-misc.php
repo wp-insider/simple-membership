@@ -182,14 +182,19 @@ class SwpmMiscUtils {
     }
 
     /*
-    * Returns just the domain name. Something like example.com
-    */
-    public function get_home_url_without_http_and_www(){
-       $site_url = get_site_url();    
-       $site_url = str_replace ('https://', '', $site_url);
-       $site_url = str_replace ('http://', '', $site_url);
-       $site_url = str_replace ('www.', '', $site_url);
-       return $site_url;
+     * Returns just the domain name. Something like example.com
+     */
+
+    public static function get_home_url_without_http_and_www() {
+        $site_url = get_site_url();
+        $parse = parse_url($site_url);
+        $site_url = $parse['host'];
+        $site_url = str_replace('https://', '', $site_url);
+        $site_url = str_replace('http://', '', $site_url);
+        if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $site_url, $regs)) {
+            $site_url = $regs['domain'];
+        }
+        return $site_url;
     }
 
     public static function replace_dynamic_tags($msg_body, $member_id, $additional_args = '') {
@@ -351,7 +356,7 @@ class SwpmMiscUtils {
         $countries = array("Afghanistan", "Albania", "Algeria", "Andorra",
             "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia",
             "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados",
-            "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bonaire", 
+            "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bonaire",
             "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria",
             "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde",
             "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros",

@@ -153,6 +153,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.7.3 =
+- Created a new free addon to offer full page style protection. https://simple-membership-plugin.com/full-page-protection-addon-simple-membership/
+
 = 3.7.2 =
 - Added a new feature that allows you to automatically logout the users when they close the browser.
 - Added support for Two-Factor Authentication addon.

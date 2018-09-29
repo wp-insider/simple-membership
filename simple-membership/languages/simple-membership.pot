@@ -1387,6 +1387,22 @@ msgstr ""
 msgid "You are not logged-in as a member"
 msgstr ""
 
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:113
+msgid "Logged in as: "
+msgstr ""
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:121
+msgid "Login Here"
+msgstr ""
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:122
+msgid "Not a member? "
+msgstr ""
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:123
+msgid "Join Now"
+msgstr ""
+
 #: views/add.php:15 views/admin_add.php:19 views/admin_edit.php:44
 #: views/edit.php:22 views/login.php:17
 msgid "Password"

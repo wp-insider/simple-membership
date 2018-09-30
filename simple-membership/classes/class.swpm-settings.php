@@ -63,7 +63,7 @@ class SwpmSettings {
         add_settings_field('show-adminbar-admin-only', SwpmUtils::_('Show Adminbar to Admin'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'show-adminbar-admin-only',
             'message' => SwpmUtils::_('Use this option if you want to show the admin toolbar to admin users only. The admin toolbar will be hidden for all other users.')));
         add_settings_field('disable-access-to-wp-dashboard', SwpmUtils::_('Disable Access to WP Dashboard'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'disable-access-to-wp-dashboard',
-            'message' => SwpmUtils::_('WordPress allows a sandard wp user to be able to go to the wp-admin URL and access his profile from the wp dashbaord. Using this option will prevent any non admin users from going to the wp dashboard.')));
+            'message' => SwpmUtils::_('WordPress allows a standard wp user to be able to go to the wp-admin URL and access his profile from the wp dashbaord. Using this option will prevent any non admin users from going to the wp dashboard.')));
 
         add_settings_field('default-account-status', SwpmUtils::_('Default Account Status'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'default-account-status',
             'options' => SwpmUtils::get_account_state_options(),

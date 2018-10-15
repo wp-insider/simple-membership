@@ -86,10 +86,17 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
 
     $output = '';
     ob_start();
+    $ppCheckoutJs = '<script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>';
+    //check if checkout.js was already included
+    //including it several times on one page causes JS fatal error
+    if (!defined('SWPM-PP-SMART-CHECKOUT-SCRIPT-INCLUDED')) {
+        //it wasn't. Let's include it and define an indicator that it is included now
+        define('SWPM-PP-SMART-CHECKOUT-SCRIPT-INCLUDED', 1);
+        echo $ppCheckoutJs;
+    }
     ?>
     <div class="swpm-button-wrapper">
         <div class="swpm-pp-smart-checkout-btn-<?php echo $uniqid; ?>"></div>
-        <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
         <script>
             paypal.Button.render({
 

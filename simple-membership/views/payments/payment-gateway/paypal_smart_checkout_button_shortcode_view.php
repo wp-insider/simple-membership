@@ -137,8 +137,10 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
                     alert('<?php echo esc_js(__("Error occured during PayPal Smart Checkout process.", "simple-membership")); ?>\n\n' + error);
                 },
                 onAuthorize: function (data, actions) {
-                    jQuery(".swpm-pp-smart-checkout-btn-<?php echo $uniqid; ?>").hide();
-                    jQuery('.swpm-pp-sc-spinner-cont').css('display', 'inline-block');
+                    var paymentBtnCont = jQuery('.swpm-pp-smart-checkout-btn-<?php echo $uniqid; ?>');
+                    var paymentBtnSpinner = paymentBtnCont.siblings('.swpm-pp-sc-spinner-cont');
+                    paymentBtnCont.hide();
+                    paymentBtnSpinner.css('display', 'inline-block');
                     return actions.payment.execute().then(function (data) {
                         data.custom_field = '<?php echo $custom_field_value; ?>';
                         data.button_id = '<?php echo esc_js($button_id); ?>';
@@ -151,15 +153,15 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
                                     } else {
                                         console.log(result);
                                         alert(result.errMsg)
-                                        jQuery(".swpm-pp-smart-checkout-btn-<?php echo $uniqid; ?>").show();
-                                        jQuery('.swpm-pp-sc-spinner-cont').hide();
+                                        paymentBtnCont.show();
+                                        paymentBtnSpinner.hide();
                                     }
                                 }
                                 )
                                 .fail(function (result) {
                                     console.log(result);
-                                    jQuery(".swpm-pp-smart-checkout-btn-<?php echo $uniqid; ?>").show();
-                                    jQuery('.swpm-pp-sc-spinner-cont').hide();
+                                    paymentBtnCont.show();
+                                    paymentBtnSpinner.hide();
                                     alert('<?php echo esc_js(__("HTTP error occured during payment process:", "simple-membership")); ?>' + ' ' + result.status + ' ' + result.statusText);
                                 });
                     }
@@ -172,7 +174,6 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
             @keyframes swpm-pp-sc-spinner {
                 to {transform: rotate(360deg);}
             }
-
             .swpm-pp-sc-spinner {
                 margin: 0 auto;
                 text-indent: -9999px;

@@ -42,6 +42,7 @@ class swpm_smart_checkout_ipn_handler {
             if ($payment_status != "Completed" && $payment_status != "Processed" && $payment_status != "Refunded" && $payment_status != "Reversed") {
                 $error_msg .= 'Funds have not been cleared yet. Transaction will be processed when the funds clear!';
                 $this->debug_log($error_msg, false);
+                $this->debug_log(json_encode($this->ipn_data), false);
                 return false;
             }
         }
@@ -204,11 +205,13 @@ class swpm_smart_checkout_ipn_handler {
         $ipn['pay_id'] = $data['id'];
         $ipn['create_time'] = $data['create_time'];
         $ipn['txn_id'] = $data['transactions'][0]['related_resources'][0]['sale']['id'];
+        $ipn['reason_code'] = !empty($data['transactions'][0]['related_resources'][0]['sale']['reason_code']) ? $data['transactions'][0]['related_resources'][0]['sale']['reason_code'] : '';
         $ipn['txn_type'] = 'smart_checkout';
         $ipn['payment_status'] = ucfirst($data['transactions'][0]['related_resources'][0]['sale']['state']);
         $ipn['transaction_subject'] = '';
         $ipn['mc_currency'] = $data['transactions'][0]['amount']['currency'];
         $ipn['mc_gross'] = $data['transactions'][0]['amount']['total'];
+        $ipn['quantity'] = 1;
         $ipn['receiver_email'] = get_option('cart_paypal_email');
         //customer info
         $ipn['first_name'] = $data['payer']['payer_info']['first_name'];
@@ -219,16 +222,7 @@ class swpm_smart_checkout_ipn_handler {
         $ipn['address_state'] = $data['payer']['payer_info']['shipping_address']['state'];
         $ipn['address_zip'] = $data['payer']['payer_info']['shipping_address']['postal_code'];
         $ipn['address_country'] = $data['payer']['payer_info']['shipping_address']['country_code'];
-        //items data
-        $i = 1;
-        foreach ($data['transactions'][0]['item_list']['items'] as $item) {
-            $ipn['item_number' . $i] = '';
-            $ipn['item_name' . $i] = $item['name'];
-            $ipn['quantity' . $i] = $item['quantity'];
-            $ipn['mc_gross_' . $i] = $item['price'] * $item['quantity'];
-            $i ++;
-        }
-        $ipn['num_cart_items'] = $i - 1;
+
         $this->ipn_data = $ipn;
         return true;
     }

@@ -234,8 +234,8 @@ class swpm_smart_checkout_ipn_handler {
             $secret = get_post_meta($this->ipn_data['item_number'], 'pp_smart_checkout_test_sec', true);
             $api_base = 'https://api.sandbox.paypal.com';
         } else {
-            $client_id = get_post_meta($this->ipn_data['button_id'], 'pp_smart_checkout_live_id', true);
-            $secret = get_post_meta($this->ipn_data['button_id'], 'pp_smart_checkout_live_sec', true);
+            $client_id = get_post_meta($this->ipn_data['item_number'], 'pp_smart_checkout_live_id', true);
+            $secret = get_post_meta($this->ipn_data['item_number'], 'pp_smart_checkout_live_sec', true);
             $api_base = 'https://api.paypal.com';
         }
 

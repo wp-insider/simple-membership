@@ -15,7 +15,7 @@
         <?php echo esc_attr($member_id); ?>
     </p>
     <table class="form-table">
-        <tr class="form-field form-required">
+        <tr class="form-field form-required swpm-admin-edit-username">
             <th scope="row"><label for="user_name"><?php echo  SwpmUtils::_('Username'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
             <td>
                 <?php 
@@ -36,11 +36,11 @@
                 ?>
             </td>
         </tr>
-        <tr class="form-required">
+        <tr class="form-required swpm-admin-edit-email">
             <th scope="row"><label for="email"><?php echo  SwpmUtils::_('E-mail'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
             <td><input name="email" autocomplete="off" class="regular-text validate[required,custom[email],ajax[ajaxEmailCall]]" type="text" id="email" value="<?php echo esc_attr($email); ?>" /></td>
         </tr>
-        <tr class="">
+        <tr class="swpm-admin-edit-password">
             <th scope="row"><label for="password"><?php echo  SwpmUtils::_('Password'); ?> <span class="description"><?php /* translators: password input field */_e('(twice, leave empty to retain old password)'); ?></span></label></th>
             <td><input class="regular-text"  name="password" type="password" id="pass1" autocomplete="off" /><br />
             <input class="regular-text" name="password_re" type="password" id="pass2" autocomplete="off" />
@@ -49,7 +49,7 @@
             <p class="description indicator-hint"><?php echo SwpmUtils::_('Hint: The password should be at least seven characters long. To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ).'); ?></p>
             </td>
 	</tr> 
-	<tr>
+	<tr class="swpm-admin-edit-account-state">
             <th scope="row"><label for="account_state"><?php echo  SwpmUtils::_('Account Status'); ?></label></th>
             <td>
                 <select class="regular-text" name="account_state" id="account_state">
@@ -62,7 +62,7 @@
                 </p>
             </td>
 	</tr>        
-	<tr>
+	<tr class="swpm-admin-edit-notify-user">
             <th scope="row"><label for="account_state_change"><?php echo  SwpmUtils::_('Notify User'); ?></label></th>
             <td><input type="checkbox" id="account_status_change" name="account_status_change" />
                 <p class="description indicator-hint">
@@ -71,18 +71,18 @@
             </td>
 	</tr>
     <?php include('admin_member_form_common_part.php');?>
-        <tr>
+        <tr class="swpm-admin-edit-subscriber-id">
 		<th scope="row"><label for="subscr_id"><?php echo  SwpmUtils::_('Subscriber ID/Reference') ?> </label></th>
 		<td><input class="regular-text" name="subscr_id" type="text" id="subscr_id" value="<?php echo esc_attr($subscr_id); ?>" /></td>
 	</tr>
-        <tr>
+        <tr class="swpm-admin-edit-last-accessed">
 		<th scope="row"><label for="last_accessed"><?php echo SwpmUtils::_('Last Accessed Date') ?> </label></th>
 		<td>
                     <?php echo esc_attr($last_accessed); ?>
                     <p class="description indicator-hint"><?php echo SwpmUtils::_('This value gets updated when this member logs into your site.') ?></p>
                 </td>
 	</tr>         
-        <tr>
+        <tr class="swpm-admin-edit-last-accessed-ip">
 		<th scope="row"><label for="last_accessed_from_ip"><?php echo  SwpmUtils::_('Last Accessed From IP') ?> </label></th>
 		<td>
                     <?php echo esc_attr($last_accessed_from_ip); ?>

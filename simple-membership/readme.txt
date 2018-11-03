@@ -154,6 +154,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 3.7.4 =
+- Stripe Subscription now considers plan trial period settings.
 - Added CSS class names to the fields in the admin add/edit members interface.
 
 = 3.7.3 =

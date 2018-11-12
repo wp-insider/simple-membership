@@ -2096,6 +2096,27 @@ msgstr ""
 msgid "Subscribe Now"
 msgstr ""
 
+msgid "Delete Account"
+msgstr ""
+
+msgid "You are about to delete an account. This will delete user data associated with this account. "
+msgstr ""
+
+msgid "It will also delete associated WordPress user account."
+msgstr ""
+
+msgid "(NOTE: for safety, we do not allow deletion of any associated WordPress account with administrator role)."
+msgstr ""
+
+msgid "Continue?"
+msgstr ""
+
+msgid "Password: "
+msgstr ""
+
+msgid "Confirm Account Deletion"
+msgstr ""
+
 #: Translation strings from addons
 
 #: === Form builder addon strings ===

@@ -656,7 +656,7 @@ class SimpleWpMembership {
                 'alertText' => '* ' . SwpmUtils::_('This field is required'),
             ),
             'SWPMUserName' => array(
-                'alertText' => '* ' . SwpmUtils::_('Invalid Username').'<br>'.SwpmUtils::_('Allowed characters are: letters, numbers and .-*@'),
+                'alertText' => '* ' . SwpmUtils::_('Invalid Username').'<br>'.SwpmUtils::_('Usernames can only contain: letters, numbers and .-*@'),
             ),
             'minSize' => array(
                 'alertText' => '* ' . SwpmUtils::_('Minimum '),

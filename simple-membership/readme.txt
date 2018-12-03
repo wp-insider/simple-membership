@@ -153,6 +153,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.7.4.1 =
+- Username can only contain: letters, numbers and .-*@. This is so the username field accepts what is allowed by WordPress for that field.
+
 = 3.7.4 =
 - Stripe Subscription now considers plan trial period settings.
 - Added CSS class names to the fields in the admin add/edit members interface.

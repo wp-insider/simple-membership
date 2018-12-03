@@ -2156,6 +2156,9 @@ msgstr ""
 msgid "You will need to re-login since you changed your password."
 msgstr ""
 
+msgid "Username can only contain: letters, numbers and .-*@"
+msgstr ""
+
 #: === Partial protection addon strings ===
 msgid "You do not have permission to view this content."
 msgstr ""

@@ -1195,7 +1195,7 @@ msgstr ""
 
 #: classes/class.swpm-settings.php:356
 msgid ""
-" You cannot use email marge tags in this email. You can only use generic "
+" You cannot use email merge tags in this email. You can only use generic "
 "text."
 msgstr ""
 

@@ -226,6 +226,12 @@ class SwpmInstallation {
                 "\n\nYour account has been activated!" .
                 "\n\nYou can now login to the member area." .
                 "\n\nThank You";
+        
+        $email_activation_mail_subject = "Confirm Your Account";
+        $email_activation_mail_body = "Dear {first_name} {last_name}".
+                "\n\nTo activate your account, please follow the link below:".
+                "\n\n{activation_link}";
+
                 
         if (empty($installed_version)) {
             //Do fresh install tasks
@@ -254,6 +260,9 @@ class SwpmInstallation {
 
             $settings->set_value('bulk-activate-notify-mail-subject', stripslashes($bulk_activate_email_subject));
             $settings->set_value('bulk-activate-notify-mail-body', stripslashes($bulk_activate_email_body));
+
+            $settings->set_value('email-activation-mail-subject', stripslashes($email_activation_mail_subject));
+            $settings->set_value('email-activation-mail-body', stripslashes($email_activation_mail_body));            
         }
         
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {

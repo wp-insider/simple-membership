@@ -8,6 +8,7 @@
 abstract class SwpmRegistration {
 
     protected $member_info = array();
+    var $email_activation = false;
     protected static $_intance = null;
 
     //public abstract static function get_instance();
@@ -16,10 +17,22 @@ abstract class SwpmRegistration {
         if (empty($this->member_info)) {
             return false;
         }
+                
         $member_info = $this->member_info;
         $settings = SwpmSettings::get_instance();
         $subject = $settings->get_value('reg-complete-mail-subject');
         $body = $settings->get_value('reg-complete-mail-body');
+        
+        if ($this->email_activation) {
+            $swpm_user = SwpmMemberUtils::get_user_by_user_name($member_info['user_name']);
+            $member_id = $swpm_user->member_id;
+            $act_code=md5(uniqid().$member_id);
+            update_option('swpm_email_activation_data_usr_'.$member_id,array('act_code'=>$act_code,'plain_password'=>$member_info['plain_password']),false);
+            $body=$settings->get_value('email-activation-mail-body');
+            $subject=$settings->get_value('email-activation-mail-subject');
+            $member_info['activation_link']=get_home_url().'?swpm_member_id='.$member_id.'&swpm_token='.$act_code;
+        }
+
         $from_address = $settings->get_value('email-from');
         $login_link = $settings->get_value('login-page-url');
         $headers = 'From: ' . $from_address . "\r\n";
@@ -37,6 +50,10 @@ abstract class SwpmRegistration {
         
         $email = sanitize_email(filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW));
         
+        if (empty($email)) {
+            $email=$swpm_user->email;
+        }
+        
         $body = apply_filters('swpm_registration_complete_email_body', $body);//This filter can be used to modify the registration complete email body dynamically.
         
         //Send notification email to the member
@@ -49,7 +66,7 @@ abstract class SwpmRegistration {
             SwpmLog::log_simple_debug('NOTICE: Registration complete email body value is empty. Member registration complete email will NOT be sent.', true);
         }
         
-        if ($settings->get_value('enable-admin-notification-after-reg')) {
+        if ($settings->get_value('enable-admin-notification-after-reg') && !$this->email_activation) {
             //Send notification email to the site admin
             $admin_notification = $settings->get_value('admin-notification-email');
             $admin_notification = empty($admin_notification) ? $from_address : $admin_notification;

@@ -167,7 +167,11 @@ class SwpmSettings {
         add_settings_section('bulk-activate-email-settings', SwpmUtils::_(' Email Settings (Bulk Account Activate Notification)'), array(&$this, 'bulk_activate_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('bulk-activate-notify-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'bulk-activate-email-settings', array('item' => 'bulk-activate-notify-mail-subject', 'message' => ''));
         add_settings_field('bulk-activate-notify-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'bulk-activate-email-settings', array('item' => 'bulk-activate-notify-mail-body', 'message' => ''));
-        
+
+        //Email activation email settings.
+        add_settings_section('email-activation-email-settings', SwpmUtils::_(' Email Settings (Email Activation)'), array(&$this, 'email_activation_email_settings_callback'), 'simple_wp_membership_settings');
+        add_settings_field('email-activation-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-activation-email-settings', array('item' => 'email-activation-mail-subject', 'message' => ''));
+        add_settings_field('email-activation-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'email-activation-email-settings', array('item' => 'email-activation-mail-body', 'message' => ''));        
     }
 
     private function tab_4() {
@@ -402,6 +406,10 @@ class SwpmSettings {
 
     }
     
+    public function email_activation_email_settings_callback() {
+        SwpmUtils::e('This email will be sent if Email Activation is enabled for a Membership Level.');
+    }
+    
     public function reg_prompt_email_settings_callback() {
         SwpmUtils::e('This email will be sent to prompt users to complete registration after the payment.');
     }
@@ -473,6 +481,9 @@ class SwpmSettings {
         $output['bulk-activate-notify-mail-subject'] = sanitize_text_field($input['bulk-activate-notify-mail-subject']);
         $output['bulk-activate-notify-mail-body'] = wp_kses_data(force_balance_tags($input['bulk-activate-notify-mail-body']));
 
+        $output['email-activation-mail-subject'] = sanitize_text_field($input['email-activation-mail-subject']);
+        $output['email-activation-mail-body'] = wp_kses_data(force_balance_tags($input['email-activation-mail-body']));
+        
         $output['reg-prompt-complete-mail-subject'] = sanitize_text_field($input['reg-prompt-complete-mail-subject']);
         $output['reg-prompt-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-prompt-complete-mail-body']));
         $output['email-from'] = trim($input['email-from']);

@@ -59,6 +59,10 @@ class SwpmMembershipLevel {
             $level_info = $form->get_sanitized();
             $wpdb->insert($wpdb->prefix . "swpm_membership_tbl", $level_info);
             $id = $wpdb->insert_id;
+            //save email_activation option
+            $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
+            update_option('swpm_email_activation_lvl_'.$id, $email_activation, false);
+
             $custom = apply_filters('swpm_admin_add_membership_level', array());
             $this->save_custom_fields($id, $custom);
             $message = array('succeeded' => true, 'message' => '<p>' . SwpmUtils::_('Membership Level Creation Successful.') . '</p>');
@@ -87,6 +91,10 @@ class SwpmMembershipLevel {
         if ($form->is_valid()) {
             $wpdb->update($wpdb->prefix . "swpm_membership_tbl", $form->get_sanitized(), array('id' => $id));
             //@todo meta table and collect all relevant info and pass as argument
+            //save email_activation option
+            $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
+            update_option('swpm_email_activation_lvl_'.$id, $email_activation, false);
+
             $custom = apply_filters('swpm_admin_edit_membership_level', array(), $id);
             $this->save_custom_fields($id, $custom);
             $message = array('succeeded' => true, 'message' => '<p>'. SwpmUtils::_('Membership Level Updated Successfully.') . '</p>');

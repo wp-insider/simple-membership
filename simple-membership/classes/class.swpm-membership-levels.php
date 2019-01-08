@@ -158,6 +158,7 @@ class SwpmMembershipLevels extends WP_List_Table {
         $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_membership_tbl WHERE id = %d", absint($id));
         $membership = $wpdb->get_row($query, ARRAY_A);
         extract($membership, EXTR_SKIP);
+        $email_activation = get_option('swpm_email_activation_lvl_'.$id);
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_edit_level.php');
         return false;
     }

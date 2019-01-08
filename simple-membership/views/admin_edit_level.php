@@ -41,6 +41,15 @@
                     <input type="text" class="swpm-date-picker" value="<?php echo  checked(SwpmMembershipLevel::FIXED_DATE,$subscription_duration_type,false)? $subscription_period: "";?>" name="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>" id="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>"> <?php echo  SwpmUtils::_('(Access expires on a fixed date)')?></p>                                
         </td>        
     </tr>
+            <tr>
+            <th scope="row">
+                <label for="email_activation"><?php echo  SwpmUtils::_('Email Activation'); ?></label>
+            </th>
+            <td>
+                <input name="email_activation" type="checkbox" value="1" <?php checked($email_activation);?>>
+                <p class="description"><?php echo  SwpmUtils::_('Enable new user activation via email.');?></p>
+            </td>
+	</tr>
     <?php echo  apply_filters('swpm_admin_edit_membership_level_ui', '', $id);?>
 </tbody>
 </table>

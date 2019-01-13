@@ -233,6 +233,16 @@ class SwpmInstallation {
                 "\n\n{activation_link}" .
                 "\n\nThank You";
 
+        $curr_email_act_mail_subj = $settings->get_value('email-activation-mail-subject', false);
+        if ($curr_email_act_mail_subj === false) {
+            $settings->set_value('email-activation-mail-subject', stripslashes($email_activation_mail_subject));
+        }
+
+        $curr_email_act_mail_body = $settings->get_value('email-activation-mail-body', false);
+        if ($curr_email_act_mail_body === false) {
+            $settings->set_value('email-activation-mail-body', stripslashes($email_activation_mail_body));
+        }
+
         if (empty($installed_version)) {
             //Do fresh install tasks
             //Create the mandatory pages (if they are not there)
@@ -259,9 +269,6 @@ class SwpmInstallation {
 
             $settings->set_value('bulk-activate-notify-mail-subject', stripslashes($bulk_activate_email_subject));
             $settings->set_value('bulk-activate-notify-mail-body', stripslashes($bulk_activate_email_body));
-
-            $settings->set_value('email-activation-mail-subject', stripslashes($email_activation_mail_subject));
-            $settings->set_value('email-activation-mail-body', stripslashes($email_activation_mail_body));
         }
 
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {

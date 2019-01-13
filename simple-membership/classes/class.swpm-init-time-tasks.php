@@ -39,7 +39,7 @@ class SwpmInitTimeTasks {
             }
             $this->process_password_reset();
             $this->register_member();
-            $this->email_activation();
+            $this->check_and_do_email_activation();
             $this->edit_profile();
             SwpmCommentFormRelated::check_and_restrict_comment_posting_to_members();
         } else {
@@ -142,10 +142,10 @@ class SwpmInitTimeTasks {
         }
     }
     
-    private function email_activation() {
-        $email_activation = filter_input(INPUT_GET, 'swpm_member_id', FILTER_SANITIZE_NUMBER_INT);
+    private function check_and_do_email_activation() {
+        $email_activation = filter_input(INPUT_GET, 'swpm_email_activation', FILTER_SANITIZE_NUMBER_INT);
         if (!empty($email_activation)) {
-            SwpmFrontRegistration::get_instance()->email_activation($email_activation);
+            SwpmFrontRegistration::get_instance()->email_activation();
         }
     }
 

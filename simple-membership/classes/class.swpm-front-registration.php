@@ -348,14 +348,16 @@ class SwpmFrontRegistration extends SwpmRegistration {
     }
 
     function dont_send_password_change_email($send = false, $user = '', $userdata = '') {
-        //Stop the WordPress's default password change email notification to site admin  
+        //Stop the WordPress's default password change email notification to site admin
         //Only the simple membership plugin's password reset email will be sent.
         return false;
     }
 
-    public function email_activation($member_id) {
+    public function email_activation() {
         $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
 
+        $member_id = FILTER_INPUT(INPUT_GET, 'swpm_member_id', FILTER_SANITIZE_NUMBER_INT);
+        
         $member = SwpmMemberUtils::get_user_by_id($member_id);
         if (empty($member)) {
             //can't find member

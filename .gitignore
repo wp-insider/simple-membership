@@ -2,3 +2,5 @@ simple-wp-membership/nbproject/
 .project
 nbproject/private/
 .gitignore
+simple-membership/log-auth.txt
+simple-membership/log.txt

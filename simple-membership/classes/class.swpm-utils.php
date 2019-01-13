@@ -9,8 +9,9 @@ abstract class SwpmUtils {
     /*
      * This function handles various initial setup tasks that need to be executed very early on (before other functions of the plugin is called).
      */
-    public static function do_misc_initial_plugin_setup_tasks(){
-        
+
+    public static function do_misc_initial_plugin_setup_tasks() {
+
         //Management role/permission setup
         $admin_dashboard_permission = SwpmSettings::get_instance()->get_value('admin-dashboard-access-permission');
         if (empty($admin_dashboard_permission)) {
@@ -19,18 +20,17 @@ abstract class SwpmUtils {
         } else {
             define("SWPM_MANAGEMENT_PERMISSION", $admin_dashboard_permission);
         }
-        
+
         //Set timezone preference (if enabled in settings)
         $use_wp_timezone = SwpmSettings::get_instance()->get_value('use-wordpress-timezone');
-        if (!empty($use_wp_timezone)){//Set the wp timezone
+        if (!empty($use_wp_timezone)) {//Set the wp timezone
             $wp_timezone_string = get_option('timezone_string');
-            if(!empty($wp_timezone_string)){
+            if (!empty($wp_timezone_string)) {
                 date_default_timezone_set($wp_timezone_string);
             }
         }
-        
     }
-    
+
     public static function subscription_type_dropdown($selected) {
         return '<option ' . (($selected == SwpmMembershipLevel::NO_EXPIRY) ? 'selected="selected"' : "") . ' value="' . SwpmMembershipLevel::NO_EXPIRY . '">No Expiry</option>' .
                 '<option ' . (($selected == SwpmMembershipLevel::DAYS) ? 'selected="selected"' : "") . ' value="' . SwpmMembershipLevel::DAYS . '">Day(s)</option>' .
@@ -78,22 +78,23 @@ abstract class SwpmUtils {
 
     public static function is_subscription_expired($user) {
         $expiration_timestamp = SwpmUtils::get_expiration_timestamp($user);
-        if($expiration_timestamp < time()){
+        if ($expiration_timestamp < time()) {
             //Account expired.
             return true;
         }
-        return false;        
+        return false;
     }
 
     /*
      * Returns a formatted expiry date string (of a member). This can be useful to echo the date value.
      */
+
     public static function get_formatted_expiry_date($start_date, $subscription_duration, $subscription_duration_type) {
-        if ($subscription_duration_type == SwpmMembershipLevel::FIXED_DATE) { 
+        if ($subscription_duration_type == SwpmMembershipLevel::FIXED_DATE) {
             //Membership will expire after a fixed date.
             return SwpmUtils::get_formatted_date_according_to_wp_settings($subscription_duration);
         }
-        
+
         $expires = self::calculate_subscription_period_days($subscription_duration, $subscription_duration_type);
         if ($expires == 'noexpire') {
             //Membership is set to no expiry or until cancelled.
@@ -101,10 +102,10 @@ abstract class SwpmUtils {
         }
 
         //Membership is set to a duration expiry settings.
-        
+
         return date(get_option('date_format'), strtotime($start_date . ' ' . $expires . ' days'));
     }
-    
+
     public static function gender_dropdown($selected = 'not specified') {
         return '<option ' . ((strtolower($selected) == 'male') ? 'selected="selected"' : "") . ' value="male">Male</option>' .
                 '<option ' . ((strtolower($selected) == 'female') ? 'selected="selected"' : "") . ' value="female">Female</option>' .
@@ -143,15 +144,15 @@ abstract class SwpmUtils {
         $query = "SELECT id FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id != 1";
         return $wpdb->get_col($query);
     }
-    
-    public static function get_membership_level_row_by_id($level_id){
+
+    public static function get_membership_level_row_by_id($level_id) {
         global $wpdb;
         $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id=%d", $level_id);
         $level_resultset = $wpdb->get_row($query);
         return $level_resultset;
     }
-    
-    public static function membership_level_id_exists($level_id){
+
+    public static function membership_level_id_exists($level_id) {
         //Returns true if the specified membership level exists in the system. Returns false if the level has been deleted (or doesn't exist).
         $all_level_ids = SwpmUtils::get_all_membership_level_ids();
         if (in_array($level_id, $all_level_ids)) {
@@ -161,7 +162,7 @@ abstract class SwpmUtils {
             return false;
         }
     }
-    
+
     public static function get_registration_complete_prompt_link($for = 'all', $send_email = false, $member_id = '') {
         $members = array();
         global $wpdb;
@@ -188,30 +189,29 @@ abstract class SwpmUtils {
         $links = array();
         foreach ($members as $member) {
             $reg_url = $url . $separator . 'member_id=' . $member->member_id . '&code=' . $member->reg_code;
-            if ( $send_email && empty($member->user_name) ) {
+            if ($send_email && empty($member->user_name)) {
                 $tags = array("{first_name}", "{last_name}", "{reg_link}");
                 $vals = array($member->first_name, $member->last_name, $reg_url);
-                
+
                 $subject = $settings->get_value('reg-prompt-complete-mail-subject');
                 if (empty($subject)) {
                     $subject = "Please complete your registration";
                 }
-        
+
                 $body = $settings->get_value('reg-prompt-complete-mail-body');
                 if (empty($body)) {
                     $body = "Please use the following link to complete your registration. \n {reg_link}";
-                }                
+                }
                 $body = html_entity_decode($body);
                 $email_body = str_replace($tags, $vals, $body);
-                
+
                 $from_address = $settings->get_value('email-from');
                 $headers = 'From: ' . $from_address . "\r\n";
-                
-                $subject = apply_filters('swpm_email_complete_your_registration_subject',$subject);
-                $email_body = apply_filters('swpm_email_complete_your_registration_body',$email_body);
+
+                $subject = apply_filters('swpm_email_complete_your_registration_subject', $subject);
+                $email_body = apply_filters('swpm_email_complete_your_registration_body', $email_body);
                 wp_mail($member->email, $subject, $email_body, $headers);
-                SwpmLog::log_simple_debug('Prompt to complete registration email sent to: '.$member->email.'. From email address value used: '.$from_address, true);
-                
+                SwpmLog::log_simple_debug('Prompt to complete registration email sent to: ' . $member->email . '. From email address value used: ' . $from_address, true);
             }
             $links[] = $reg_url;
         }
@@ -219,10 +219,10 @@ abstract class SwpmUtils {
     }
 
     /* This function is deprecated and will be removed in the future. Use SwpmMemberUtils::update_wp_user_role() instead */
+
     public static function update_wp_user_Role($wp_user_id, $role) {
         // Deprecated function.
         SwpmMemberUtils::update_wp_user_role($wp_user_id, $role);
-
     }
 
     public static function update_wp_user($wp_user_name, $swpm_data) {
@@ -250,24 +250,23 @@ abstract class SwpmUtils {
     }
 
     public static function create_wp_user($wp_user_data) {
-        
+
         //Check if the email belongs to an existing wp user account.
         $wp_user_id = email_exists($wp_user_data['user_email']);
         if ($wp_user_id) {
             //A wp user account exist with this email.
-            
             //Check if the user has admin role.
             $admin_user = SwpmMemberUtils::wp_user_has_admin_role($wp_user_id);
-            if($admin_user){
+            if ($admin_user) {
                 //This email belongs to an admin user. Update is not allowed on admin users. Show error message then exit.
-                $error_msg = '<p>This email address ('.$wp_user_data['user_email'].') belongs to an admin user. This email cannot be used to register a new account on this site.</p>';
-                wp_die($error_msg);            
+                $error_msg = '<p>This email address (' . $wp_user_data['user_email'] . ') belongs to an admin user. This email cannot be used to register a new account on this site.</p>';
+                wp_die($error_msg);
             }
         }
 
         //At this point 1) A WP User with this email doesn't exist. Or 2) The associated wp user doesn't have admin role
         //Lets create a new wp user record or attach the SWPM profile to an existing user accordingly.
-        
+
         if (self::is_multisite_install()) {
             //WP Multi-Sit install
             global $blog_id;
@@ -287,7 +286,7 @@ abstract class SwpmUtils {
             $wp_user_id = wp_create_user($wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email']);
         }
         $wp_user_data['ID'] = $wp_user_id;
-        wp_update_user($wp_user_data);//Core WP function. Updates the user info and role.
+        wp_update_user($wp_user_data); //Core WP function. Updates the user info and role.
 
         return $wp_user_id;
     }
@@ -308,17 +307,17 @@ abstract class SwpmUtils {
         _e($msg, 'simple-membership');
     }
 
-    /* 
+    /*
      * Deprecated. Instead use SwpmUtils::has_admin_management_permission()
      */
+
     public static function is_admin() {
         //This function returns true if the current user has WordPress admin management permission (not to be mistaken with SWPM admin permission.
-        
         //This function is NOT like the WordPress's is_admin() function which determins if we are on the admin end of the site.
         //TODO - rename this function to something like is_admin_user()
         return current_user_can('manage_options');
     }
-    
+
     public static function has_admin_management_permission() {
         if (current_user_can(SWPM_MANAGEMENT_PERMISSION)) {
             return true;
@@ -327,10 +326,11 @@ abstract class SwpmUtils {
         }
     }
 
-    /* 
+    /*
      * Formats the given date value according to the WP date format settings. This function is useful for displaying a human readable date value to the user.
      */
-    public static function get_formatted_date_according_to_wp_settings($date){
+
+    public static function get_formatted_date_according_to_wp_settings($date) {
         $date_format = get_option('date_format');
         if (empty($date_format)) {
             //WordPress's date form settings is not set. Lets set a default format.
@@ -338,10 +338,10 @@ abstract class SwpmUtils {
         }
 
         $date_obj = new DateTime($date);
-        $formatted_date = $date_obj->format($date_format);//Format the date value using date format settings
-        return $formatted_date; 
+        $formatted_date = $date_obj->format($date_format); //Format the date value using date format settings
+        return $formatted_date;
     }
-    
+
     public static function swpm_username_exists($user_name) {
         global $wpdb;
         $member_table = $wpdb->prefix . 'swpm_members_tbl';
@@ -410,8 +410,8 @@ abstract class SwpmUtils {
         }
 
         $account_delete_link = '<div class="swpm-profile-account-delete-section">';
-        $account_delete_link .= '<a href="'.SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL.'/?swpm_delete_account=1"><div class="swpm-account-delete-button">' . SwpmUtils::_("Delete Account") . '</div></a>';
-        $account_delete_link .= '</div>';        
+        $account_delete_link .= '<a href="' . SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_delete_account=1"><div class="swpm-account-delete-button">' . SwpmUtils::_("Delete Account") . '</div></a>';
+        $account_delete_link .= '</div>';
         return $account_delete_link;
     }
 
@@ -454,14 +454,13 @@ abstract class SwpmUtils {
 
         return apply_filters('swpm_get_user_ip_address', $user_ip);
     }
-    
-    public static function is_first_click_free(&$content){        
-        $is_first_click = false;        
-        $args = array($is_first_click, $content );
+
+    public static function is_first_click_free(&$content) {
+        $is_first_click = false;
+        $args = array($is_first_click, $content);
         $filtered = apply_filters('swpm_first_click_free', $args);
         list($is_first_click, $content) = $filtered;
-        return $is_first_click;       
+        return $is_first_click;
     }
 
-    
 }

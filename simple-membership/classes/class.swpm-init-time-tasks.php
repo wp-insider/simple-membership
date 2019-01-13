@@ -141,7 +141,7 @@ class SwpmInitTimeTasks {
             SwpmFrontRegistration::get_instance()->register_front_end();
         }
     }
-    
+
     private function check_and_do_email_activation() {
         $email_activation = filter_input(INPUT_GET, 'swpm_email_activation', FILTER_SANITIZE_NUMBER_INT);
         if (!empty($email_activation)) {

@@ -6,7 +6,7 @@
  * @author nur
  */
 class SwpmFrontRegistration extends SwpmRegistration {
-    
+
     public static function get_instance() {
         self::$_intance = empty(self::$_intance) ? new SwpmFrontRegistration() : self::$_intance;
         return self::$_intance;
@@ -115,8 +115,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
             wp_die($msg);
         }
 
-        $this->email_activation=get_option('swpm_email_activation_lvl_'.$level_value);
-        
+        $this->email_activation = get_option('swpm_email_activation_lvl_' . $level_value);
+
         //Crete the member profile and send notification
         if ($this->create_swpm_user() && $this->prepare_and_create_wp_user_front_end() && $this->send_reg_email()) {
             do_action('swpm_front_end_registration_complete'); //Keep this action hook for people who are using it (so their implementation doesn't break).
@@ -124,16 +124,16 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
             //Check if there is after registration redirect
             if (!$this->email_activation) {
-            $after_rego_url = SwpmSettings::get_instance()->get_value('after-rego-redirect-page-url');
-            $after_rego_url = apply_filters('swpm_after_registration_redirect_url', $after_rego_url);
-            if (!empty($after_rego_url)) {
-                //Yes. Need to redirect to this after registration page                
-                SwpmLog::log_simple_debug("After registration redirect is configured in settings. Redirecting user to: " . $after_rego_url, true);
-                wp_redirect($after_rego_url);
-                exit(0);
+                $after_rego_url = SwpmSettings::get_instance()->get_value('after-rego-redirect-page-url');
+                $after_rego_url = apply_filters('swpm_after_registration_redirect_url', $after_rego_url);
+                if (!empty($after_rego_url)) {
+                    //Yes. Need to redirect to this after registration page
+                    SwpmLog::log_simple_debug("After registration redirect is configured in settings. Redirecting user to: " . $after_rego_url, true);
+                    wp_redirect($after_rego_url);
+                    exit(0);
+                }
             }
-            }
-            
+
             //Set the registration complete message
             $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
             $after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_('Registration Successful. ') . SwpmUtils::_('Please') . ' <a href="' . $login_page_url . '">' . SwpmUtils::_('Login') . '</a></div>';
@@ -178,7 +178,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $member_info['subscription_starts'] = date("Y-m-d");
         $member_info['account_state'] = $account_status;
         if ($this->email_activation) {
-            $member_info['account_state']='pending';
+            $member_info['account_state'] = 'pending';
         }
         $plain_password = $member_info['plain_password'];
         unset($member_info['plain_password']);
@@ -357,30 +357,30 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
 
         $member_id = FILTER_INPUT(INPUT_GET, 'swpm_member_id', FILTER_SANITIZE_NUMBER_INT);
-        
+
         $member = SwpmMemberUtils::get_user_by_id($member_id);
         if (empty($member)) {
             //can't find member
             SwpmUtils::_e("Can't find member account.");
             wp_die();
         }
-        if ($member->account_state!=='pending') {
+        if ($member->account_state !== 'pending') {
             //account already active
-            SwpmUtils::_e('Account already active. <a href="'.$login_page_url.'">Click here</a> to login.');
+            SwpmUtils::_e('Account already active. <a href="' . $login_page_url . '">Click here</a> to login.');
             wp_die();
         }
-        $code=FILTER_INPUT(INPUT_GET,'swpm_token',FILTER_SANITIZE_STRING);
-        $act_data=get_option('swpm_email_activation_data_usr_'.$member_id);
-        if (empty($code) || empty($act_data) || $act_data['act_code']!==$code) {
+        $code = FILTER_INPUT(INPUT_GET, 'swpm_token', FILTER_SANITIZE_STRING);
+        $act_data = get_option('swpm_email_activation_data_usr_' . $member_id);
+        if (empty($code) || empty($act_data) || $act_data['act_code'] !== $code) {
             //code mismatch
             SwpmUtils::_e('Activation code mismatch.');
             wp_die();
         }
         //activation code match
-        delete_option('swpm_email_activation_code_usr_'.$member_id);
+        delete_option('swpm_email_activation_code_usr_' . $member_id);
         SwpmMemberUtils::update_account_state($member_id, 'active');
-        $this->member_info=(array)$member;
-        $this->member_info['plain_password']=$act_data['plain_password'];
+        $this->member_info = (array) $member;
+        $this->member_info['plain_password'] = $act_data['plain_password'];
         $this->send_reg_email();
 
         $after_rego_url = SwpmSettings::get_instance()->get_value('after-rego-redirect-page-url');

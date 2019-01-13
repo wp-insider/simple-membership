@@ -226,23 +226,22 @@ class SwpmInstallation {
                 "\n\nYour account has been activated!" .
                 "\n\nYou can now login to the member area." .
                 "\n\nThank You";
-        
+
         $email_activation_mail_subject = "Action Required to Activate Your Account";
-        $email_activation_mail_body = "Dear {first_name}".
-                "\n\nThank you for registering. To activate your account, please click on the following link (this will confirm your email address):".
+        $email_activation_mail_body = "Dear {first_name}" .
+                "\n\nThank you for registering. To activate your account, please click on the following link (this will confirm your email address):" .
                 "\n\n{activation_link}" .
                 "\n\nThank You";
-                
+
         if (empty($installed_version)) {
             //Do fresh install tasks
-
             //Create the mandatory pages (if they are not there)
             SwpmMiscUtils::create_mandatory_wp_pages();
             //End of page creation
-            
+
             $example_from_address = 'hello@' . SwpmMiscUtils::get_home_url_without_http_and_www();
             $senders_email_address = get_bloginfo('name') . " <" . $example_from_address . ">";
-    
+
             $settings->set_value('reg-complete-mail-subject', stripslashes($reg_email_subject))
                     ->set_value('reg-complete-mail-body', stripslashes($reg_email_body))
                     ->set_value('reg-prompt-complete-mail-subject', stripslashes($reg_prompt_email_subject))
@@ -262,19 +261,17 @@ class SwpmInstallation {
             $settings->set_value('bulk-activate-notify-mail-body', stripslashes($bulk_activate_email_body));
 
             $settings->set_value('email-activation-mail-subject', stripslashes($email_activation_mail_subject));
-            $settings->set_value('email-activation-mail-body', stripslashes($email_activation_mail_body));            
+            $settings->set_value('email-activation-mail-body', stripslashes($email_activation_mail_body));
         }
-        
+
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {
             //Do upgrade tasks
         }
 
         $settings->set_value('swpm-active-version', SIMPLE_WP_MEMBERSHIP_VER)->save(); //save everything.
-        
         //Generate and save a swpm private key for this site
         $unique_id = uniqid('', true);
-        add_option('swpm_private_key_one',$unique_id);
-    
+        add_option('swpm_private_key_one', $unique_id);
     }
 
 }

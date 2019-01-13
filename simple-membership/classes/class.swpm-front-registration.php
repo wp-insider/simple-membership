@@ -398,6 +398,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
             wp_redirect($after_rego_url);
             exit(0);
         }
+
+        //set cookie to show email activation success msg to display on login form
+        setcookie('swpm-login-form-custom-msg', SwpmUtils::_('Your account has been activated successfully.'), time() + 3600, COOKIEPATH, COOKIE_DOMAIN);
         //redirect to login page
         wp_redirect($login_page_url);
         exit(0);

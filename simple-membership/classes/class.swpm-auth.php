@@ -14,7 +14,8 @@ class SwpmAuth {
         $custom_msg = filter_input(INPUT_COOKIE, 'swpm-login-form-custom-msg', FILTER_SANITIZE_STRING);
         if (!empty($custom_msg)) {
             $this->lastStatusMsg = $custom_msg;
-            unset($_COOKIE['swpm-login-form-custom-msg']);
+            //let's 'unset' the cookie
+            setcookie('swpm-login-form-custom-msg', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
         }
         $this->isLoggedIn = false;
         $this->userData = null;

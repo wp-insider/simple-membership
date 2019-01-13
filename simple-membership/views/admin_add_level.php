@@ -39,7 +39,7 @@
             </th>
             <td>
                 <input name="email_activation" type="checkbox" value="1">
-                <p class="description"><?php echo  SwpmUtils::_('Enable new user activation via email.');?></p>
+                <p class="description"><?php echo SwpmUtils::_('Enable new user activation via email. When enabled, members will need to click on an activation link that is sent to their email address to activate the account. Useful for free membership.'); ?></p>
             </td>
 	</tr>
         <?php echo  apply_filters('swpm_admin_add_membership_level_ui', '');?>

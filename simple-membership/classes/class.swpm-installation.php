@@ -227,11 +227,11 @@ class SwpmInstallation {
                 "\n\nYou can now login to the member area." .
                 "\n\nThank You";
         
-        $email_activation_mail_subject = "Confirm Your Account";
-        $email_activation_mail_body = "Dear {first_name} {last_name}".
-                "\n\nTo activate your account, please follow the link below:".
-                "\n\n{activation_link}";
-
+        $email_activation_mail_subject = "Action Required to Activate Your Account";
+        $email_activation_mail_body = "Dear {first_name}".
+                "\n\nThank you for registering. To activate your account, please click on the following link (this will confirm your email address):".
+                "\n\n{activation_link}" .
+                "\n\nThank You";
                 
         if (empty($installed_version)) {
             //Do fresh install tasks

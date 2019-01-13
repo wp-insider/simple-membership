@@ -58,7 +58,7 @@ class SwpmInstallation {
 			member_since date NOT NULL DEFAULT '0000-00-00',
 			membership_level smallint(6) NOT NULL,
 			more_membership_levels VARCHAR(100) DEFAULT NULL,
-			account_state enum('active','inactive','expired','pending','unsubscribed') DEFAULT 'pending',
+			account_state enum('active','inactive','activation_required','expired','pending','unsubscribed') DEFAULT 'pending',
 			last_accessed datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 			last_accessed_from_ip varchar(128) NOT NULL,
 			email varchar(255) DEFAULT NULL,

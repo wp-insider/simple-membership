@@ -185,7 +185,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $member_info['subscription_starts'] = date("Y-m-d");
         $member_info['account_state'] = $account_status;
         if ($this->email_activation) {
-            $member_info['account_state'] = 'pending';
+            $member_info['account_state'] = 'activation_required';
         }
         $plain_password = $member_info['plain_password'];
         unset($member_info['plain_password']);
@@ -368,19 +368,19 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $member = SwpmMemberUtils::get_user_by_id($member_id);
         if (empty($member)) {
             //can't find member
-            SwpmUtils::_e("Can't find member account.");
+            echo SwpmUtils::_("Can't find member account.");
             wp_die();
         }
-        if ($member->account_state !== 'pending') {
+        if ($member->account_state !== 'activation_required') {
             //account already active
-            SwpmUtils::_e('Account already active. <a href="' . $login_page_url . '">Click here</a> to login.');
+            echo SwpmUtils::_('Account already active. <a href="' . $login_page_url . '">Click here</a> to login.');
             wp_die();
         }
         $code = FILTER_INPUT(INPUT_GET, 'swpm_token', FILTER_SANITIZE_STRING);
         $act_data = get_option('swpm_email_activation_data_usr_' . $member_id);
         if (empty($code) || empty($act_data) || $act_data['act_code'] !== $code) {
             //code mismatch
-            SwpmUtils::_e('Activation code mismatch.');
+            echo SwpmUtils::_('Activation code mismatch.');
             wp_die();
         }
         //activation code match

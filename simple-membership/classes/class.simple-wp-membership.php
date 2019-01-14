@@ -416,10 +416,10 @@ class SimpleWpMembership {
             return false;
         }
         if ($message['succeeded']) {
-            echo "<div id='message' class='updated'>";
+            echo "<div id='swpm_message' class='swpm_success'>";
             $succeeded = true;
         } else {
-            echo "<div id='message' class='error'>";
+            echo "<div id='swpm_message' class='swpm_error'>";
         }
         echo $message['message'];
         $extra = isset($message['extra']) ? $message['extra'] : array();

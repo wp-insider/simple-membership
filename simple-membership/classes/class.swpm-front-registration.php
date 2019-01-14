@@ -380,8 +380,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $act_data = get_option('swpm_email_activation_data_usr_' . $member_id);
         if (empty($code) || empty($act_data) || $act_data['act_code'] !== $code) {
             //code mismatch
-            echo SwpmUtils::_('Activation code mismatch.');
-            wp_die();
+            wp_die(SwpmUtils::_('Activation code mismatch. Cannot activate this account. Please contact the site admin.'));
         }
         //activation code match
         delete_option('swpm_email_activation_code_usr_' . $member_id);

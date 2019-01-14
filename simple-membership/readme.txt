@@ -156,6 +156,7 @@ https://simple-membership-plugin.com/
 = WIP 3.7.4.1 =
 - Username can only contain: letters, numbers and .-*@. This is so the username field accepts what is allowed by WordPress for that field.
 - Added a new utility function.
+- Added a function to show formatted expiry date.
 
 = 3.7.4 =
 - Stripe Subscription now considers plan trial period settings.

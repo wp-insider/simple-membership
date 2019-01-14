@@ -73,6 +73,18 @@ class SwpmMemberUtils {
         return apply_filters('swpm_get_member_field_by_id', $default, $id, $field);
     }
     
+    public static function get_formatted_expiry_date_by_user_id($swpm_id){
+        $expiry_timestamp = SwpmMemberUtils::get_expiry_date_timestamp_by_user_id($swpm_id);
+        if($expiry_timestamp == PHP_INT_MAX){
+            //No Expiry Setting
+            $formatted_expiry_date = SwpmUtils::_("No Expiry");
+        } else {
+            $expiry_date = date('Y-m-d', $expiry_timestamp);
+            $formatted_expiry_date = SwpmUtils::get_formatted_date_according_to_wp_settings($expiry_date);
+        }
+        return $formatted_expiry_date;
+    }
+    
     public static function get_expiry_date_timestamp_by_user_id($swpm_id){
         $swpm_user = SwpmMemberUtils::get_user_by_id($swpm_id);
         $expiry_timestamp = SwpmUtils::get_expiration_timestamp($swpm_user);

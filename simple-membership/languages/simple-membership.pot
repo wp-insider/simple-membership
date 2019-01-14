@@ -2117,6 +2117,9 @@ msgstr ""
 msgid "Confirm Account Deletion"
 msgstr ""
 
+msgid "No Expiry"
+msgstr ""
+
 #: Translation strings from addons
 
 #: === Form builder addon strings ===

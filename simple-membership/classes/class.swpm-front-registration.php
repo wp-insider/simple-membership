@@ -389,21 +389,20 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $this->member_info['plain_password'] = $act_data['plain_password'];
         $this->send_reg_email();
 
+        $msg = SwpmUtils::_('Your account has been activated successfully.');
+
         $after_rego_url = SwpmSettings::get_instance()->get_value('after-rego-redirect-page-url');
         $after_rego_url = apply_filters('swpm_after_registration_redirect_url', $after_rego_url);
         if (!empty($after_rego_url)) {
             //Yes. Need to redirect to this after registration page
             SwpmLog::log_simple_debug("After registration redirect is configured in settings. Redirecting user to: " . $after_rego_url, true);
-            wp_redirect($after_rego_url);
+            SwpmMiscUtils::show_temporary_message_then_redirect($msg, $after_rego_url);
             exit(0);
         }
 
-        //set cookie to show email activation success msg to display on login form
-        setcookie('swpm-login-form-custom-msg', SwpmUtils::_('Your account has been activated successfully.'), time() + 3600, COOKIEPATH, COOKIE_DOMAIN);
-        //redirect to login page
-        wp_redirect($login_page_url);
+        //show success message and redirect to login page
+        SwpmMiscUtils::show_temporary_message_then_redirect($msg, $login_page_url);
         exit(0);
-        return true;
     }
 
 }

@@ -162,6 +162,15 @@ class SwpmMiscUtils {
         exit;
     }
 
+    public static function show_temporary_message_then_redirect($msg, $redirect_url, $timeout = 3) {
+        $timeout = absint($timeout);
+        $redirect_html = sprintf('<meta http-equiv="refresh" content="%d; url=\'%s\'" />', $timeout, $redirect_url);
+        $redir_msg = SwpmUtils::_('You will be automatically redirected in few seconds. If not, please %s.');
+        $redir_msg = sprintf($redir_msg, '<a href="' . $redirect_url . '">' . SwpmUtils::_('click here') . '</a>');
+        $msg .= '<br/><br/>' . $redir_msg;
+        wp_die($msg . $redirect_html);
+    }
+
     public static function get_current_page_url() {
         $pageURL = 'http';
 

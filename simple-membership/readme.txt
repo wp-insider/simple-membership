@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.0
-Stable tag: 3.7.4
+Stable tag: 3.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,8 @@ Both one time and recurring/subscription payments are supported for PayPal and S
 You can accept one time membership payment via Braintree payment gateway.
 
 There is also option to use PayPal smart button for membership payment.
+
+You can enable email activation or email confirmation for the free memberships.
 
 = Membership Payments Log = 
 All the payments from your members are recorded in the plugin. You can view them anytime by visiting the payments menu from the admin dashboard.
@@ -153,7 +155,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.7.4.1 =
+= 3.7.5 =
+- Added a new feature to enable email activation/confirmation. Useful if you want to enable this for your free membership level.
 - Username can only contain: letters, numbers and .-*@. This is so the username field accepts what is allowed by WordPress for that field.
 - Added a new utility function.
 - Added a function to show formatted expiry date.

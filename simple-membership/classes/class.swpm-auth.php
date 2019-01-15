@@ -138,6 +138,14 @@ class SwpmAuth {
         } else if ($this->userData->account_state == 'pending') {
             $this->lastStatusMsg = SwpmUtils::_('Account is pending.');
             $can_login = false;
+        } else if ($this->userData->account_state == 'activation_required') {
+            $resend_email_url = add_query_arg(array(
+                'swpm_resend_activation_email' => '1',
+                'swpm_member_id' => $this->userData->member_id,
+                    ), get_home_url());
+            $msg = sprintf(SwpmUtils::_('You need to activate your account. If you didn\'t receive an email then %s to resend activation email.'), '<a href="' . $resend_email_url . '">' . SwpmUtils::_('click here') . '</a>');
+            $this->lastStatusMsg = $msg;
+            $can_login = false;
         }
 
         if (!$can_login) {

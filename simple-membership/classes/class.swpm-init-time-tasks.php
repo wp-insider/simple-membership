@@ -147,6 +147,11 @@ class SwpmInitTimeTasks {
         if (!empty($email_activation)) {
             SwpmFrontRegistration::get_instance()->email_activation();
         }
+        //also check activation email resend request
+        $email_activation_resend = filter_input(INPUT_GET, 'swpm_resend_activation_email', FILTER_SANITIZE_NUMBER_INT);
+        if (!empty($email_activation_resend)) {
+            SwpmFrontRegistration::get_instance()->resend_activation_email();
+        }
     }
 
     private function edit_profile() {

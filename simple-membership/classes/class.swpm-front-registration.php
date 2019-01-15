@@ -405,4 +405,38 @@ class SwpmFrontRegistration extends SwpmRegistration {
         exit(0);
     }
 
+    public function resend_activation_email() {
+        $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
+
+        $member_id = FILTER_INPUT(INPUT_GET, 'swpm_member_id', FILTER_SANITIZE_NUMBER_INT);
+
+        $member = SwpmMemberUtils::get_user_by_id($member_id);
+        if (empty($member)) {
+            //can't find member
+            echo SwpmUtils::_("Can't find member account.");
+            wp_die();
+        }
+        if ($member->account_state !== 'activation_required') {
+            //account already active
+            echo SwpmUtils::_('Account already active. <a href="' . $login_page_url . '">Click here</a> to login.');
+            wp_die();
+        }
+        $act_data = get_option('swpm_email_activation_data_usr_' . $member_id);
+        if (!empty($act_data)) {
+            //looks like activation data has been removed for some reason. We won't be able to have member's plain password in this case
+            $act_data['plain_password'] = '';
+        }
+
+        delete_option('swpm_email_activation_code_usr_' . $member_id);
+
+        $this->member_info = (array) $member;
+        $this->member_info['plain_password'] = $act_data['plain_password'];
+        $this->email_activation = true;
+        $this->send_reg_email();
+
+        $msg = '<div class="swpm_temporary_msg" style="font-weight: bold;">' . SwpmUtils::_('Activation email has been resent. Please check your email and activate your account.') . '</div>';
+        SwpmMiscUtils::show_temporary_message_then_redirect($msg, $login_page_url);
+        wp_die();
+    }
+
 }

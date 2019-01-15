@@ -1,8 +1,9 @@
 <?php
 
 /* Misc Utility Functions for the Stripe Gateway */
-class StripeUtilFunctions{
-    
+
+class StripeUtilFunctions {
+
     public static function get_stripe_plan_info($api_key, $plan_id) {
         require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
 
@@ -21,7 +22,7 @@ class StripeUtilFunctions{
         }
         if (empty($stripe_err)) {
             //we proceed with getting plan details only if no errors occurred
-            $plan_data['name'] = $plan->name;
+            $plan_data['name'] = isset($plan->nickname) ? $plan->nickname : '';
             $plan_data['amount'] = $plan->amount;
             $plan_data['currency'] = $plan->currency;
             $plan_data['interval'] = $plan->interval;
@@ -32,5 +33,5 @@ class StripeUtilFunctions{
             return array('success' => false, 'error_msg' => $stripe_err);
         }
     }
-    
+
 }

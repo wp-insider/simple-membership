@@ -115,6 +115,7 @@ abstract class SwpmUtils {
     public static function get_account_state_options() {
         return array('active' => SwpmUtils::_('Active'),
             'inactive' => SwpmUtils::_('Inactive'),
+            'activation_required' => SwpmUtils::_('Activation Required'),
             'pending' => SwpmUtils::_('Pending'),
             'expired' => SwpmUtils::_('Expired'),);
     }

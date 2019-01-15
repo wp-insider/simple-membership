@@ -204,7 +204,7 @@ class SwpmForm {
     protected function account_state() {
         $account_state = filter_input(INPUT_POST, 'account_state', FILTER_SANITIZE_STRING);
         if(empty($account_state)) {return;}
-        if (in_array($account_state, array('active', 'pending', 'inactive', 'expired'))){
+        if (in_array($account_state, array('active', 'pending', 'activation_required', 'inactive', 'expired'))){
             $this->sanitized['account_state'] = $account_state;
         }
         else{

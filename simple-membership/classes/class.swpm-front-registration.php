@@ -389,7 +389,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $this->member_info['plain_password'] = $act_data['plain_password'];
         $this->send_reg_email();
 
-        $msg = SwpmUtils::_('Your account has been activated successfully.');
+        $msg = '<div class="swpm_temporary_msg" style="font-weight: bold;">' . SwpmUtils::_('Success! Your account has been activated successfully.') . '</div>';
 
         $after_rego_url = SwpmSettings::get_instance()->get_value('after-rego-redirect-page-url');
         $after_rego_url = apply_filters('swpm_after_registration_redirect_url', $after_rego_url);

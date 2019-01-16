@@ -39,7 +39,10 @@
             </th>
             <td>
                 <input name="email_activation" type="checkbox" value="1">
-                <p class="description"><?php echo SwpmUtils::_('Enable new user activation via email. When enabled, members will need to click on an activation link that is sent to their email address to activate the account. Useful for free membership.'); ?></p>
+                <p class="description">
+                    <?php echo SwpmUtils::_('Enable new user activation via email. When enabled, members will need to click on an activation link that is sent to their email address to activate the account. Useful for free membership. '); ?>
+                    <?php echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . SwpmUtils::_('View Documentation') . '.</a>'; ?>
+                </p>
             </td>
 	</tr>
         <?php echo  apply_filters('swpm_admin_add_membership_level_ui', '');?>
@@ -53,4 +56,3 @@ jQuery(document).ready(function($){
     $('.swpm-date-picker').datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: "-100:+100"});
 });
 </script>
-

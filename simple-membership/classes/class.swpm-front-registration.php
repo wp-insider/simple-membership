@@ -413,7 +413,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $member = SwpmMemberUtils::get_user_by_id($member_id);
         if (empty($member)) {
             //can't find member
-            echo SwpmUtils::_("Can't find member account.");
+            echo SwpmUtils::_("Cannot find member account.");
             wp_die();
         }
         if ($member->account_state !== 'activation_required') {
@@ -434,7 +434,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $this->email_activation = true;
         $this->send_reg_email();
 
-        $msg = '<div class="swpm_temporary_msg" style="font-weight: bold;">' . SwpmUtils::_('Activation email has been resent. Please check your email and activate your account.') . '</div>';
+        $msg = '<div class="swpm_temporary_msg" style="font-weight: bold;">' . SwpmUtils::_('Activation email has been sent. Please check your email and activate your account.') . '</div>';
         SwpmMiscUtils::show_temporary_message_then_redirect($msg, $login_page_url);
         wp_die();
     }

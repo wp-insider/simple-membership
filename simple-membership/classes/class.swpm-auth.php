@@ -143,7 +143,7 @@ class SwpmAuth {
                 'swpm_resend_activation_email' => '1',
                 'swpm_member_id' => $this->userData->member_id,
                     ), get_home_url());
-            $msg = sprintf(SwpmUtils::_('You need to activate your account. If you didn\'t receive an email then %s to resend activation email.'), '<a href="' . $resend_email_url . '">' . SwpmUtils::_('click here') . '</a>');
+            $msg = sprintf(SwpmUtils::_('You need to activate your account. If you didn\'t receive an email then %s to resend the activation email.'), '<a href="' . $resend_email_url . '">' . SwpmUtils::_('click here') . '</a>');
             $this->lastStatusMsg = $msg;
             $can_login = false;
         }

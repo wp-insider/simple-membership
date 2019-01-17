@@ -30,7 +30,12 @@ abstract class SwpmRegistration {
             update_option('swpm_email_activation_data_usr_' . $member_id, array('act_code' => $act_code, 'plain_password' => $member_info['plain_password']), false);
             $body = $settings->get_value('email-activation-mail-body');
             $subject = $settings->get_value('email-activation-mail-subject');
-            $member_info['activation_link'] = get_home_url() . '?swpm_email_activation=1&swpm_member_id=' . $member_id . '&swpm_token=' . $act_code;
+            $activation_link = add_query_arg(array(
+                'swpm_email_activation' => '1',
+                'swpm_member_id' => $member_id,
+                'swpm_token' => $act_code,
+                    ), get_home_url());
+            $member_info['activation_link'] = $activation_link;
         }
 
         $from_address = $settings->get_value('email-from');

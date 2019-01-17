@@ -157,7 +157,7 @@ https://simple-membership-plugin.com/
 
 = 3.7.5.1 =
 - Fixed a minor bug with the new email activation feature.
-- Cahnged Stripe plan name to use the nickname.
+- Changed Stripe plan name to use the nickname.
 
 = 3.7.5 =
 - Added a new feature to enable email activation/confirmation. Useful if you want to enable this for your free membership level.

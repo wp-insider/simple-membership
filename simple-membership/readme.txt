@@ -155,6 +155,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= TODO 3.7.6 =
+- Updated the German language file.
+
 = 3.7.5.1 =
 - Fixed a minor bug with the new email activation feature.
 - Changed Stripe plan name to use the nickname.

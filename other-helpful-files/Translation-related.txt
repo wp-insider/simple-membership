@@ -7,10 +7,10 @@ Add the following translation strings to the swpm.pot file AFTER you generate a 
 #: Translation strings from addons
 
 #: === Form builder addon strings ===
-msgid "Type password Here"
+msgid "Type password here"
 msgstr ""
 
-msgid "Retype password Here"
+msgid "Retype password here"
 msgstr ""
 
 msgid "Registration is complete. You can now log into the site."

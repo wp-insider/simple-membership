@@ -384,7 +384,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
         }
         //activation code match
         delete_option('swpm_email_activation_code_usr_' . $member_id);
-        SwpmMemberUtils::update_account_state($member_id, 'active');
+        $activation_account_status = apply_filters('swpm_activation_feature_override_account_status', 'active');
+        SwpmMemberUtils::update_account_state($member_id, $activation_account_status);
         $this->member_info = (array) $member;
         $this->member_info['plain_password'] = $act_data['plain_password'];
         $this->send_reg_email();

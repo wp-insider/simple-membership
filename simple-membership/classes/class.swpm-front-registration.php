@@ -384,6 +384,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
         }
         //activation code match
         delete_option('swpm_email_activation_code_usr_' . $member_id);
+        //store rego form id in constant so FB addon could use it
+        if (!empty($act_data['fb_form_id'])) {
+            define('SWPM_EMAIL_ACTIVATION_FORM_ID', $act_data['fb_form_id']);
+        }
         $activation_account_status = apply_filters('swpm_activation_feature_override_account_status', 'active');
         SwpmMemberUtils::update_account_state($member_id, $activation_account_status);
         $this->member_info = (array) $member;

@@ -156,6 +156,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 3.7.7 =
+- Added email activation support for Form Builder.
 - Added a new filter hook that can be used to override the account status of the email activation feature. swpm_activation_feature_override_account_status
 
 = 3.7.6 =

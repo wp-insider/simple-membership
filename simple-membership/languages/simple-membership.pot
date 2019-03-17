@@ -1784,7 +1784,7 @@ msgid "Remember Me"
 msgstr ""
 
 #: views/login.php:33
-msgid "Forgot Password"
+msgid "Forgot Password?"
 msgstr ""
 
 #: views/payments/admin_all_payment_transactions.php:6

@@ -157,6 +157,7 @@ https://simple-membership-plugin.com/
 
 = WIP 3.7.8 = 
 - Updated some translation strings.
+- The "Forgot Password?" translation string in the login form will allow the "?" character to be translated/customized.
 
 = 3.7.7 =
 - Added a new filter hook that can be used to override the account status of the email activation feature. swpm_activation_feature_override_account_status

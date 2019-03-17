@@ -2159,7 +2159,25 @@ msgstr ""
 msgid "You will need to re-login since you changed your password."
 msgstr ""
 
+msgid "Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
+msgstr ""
+
 msgid "Username can only contain: letters, numbers and .-*@"
+msgstr ""
+
+msgid "Success! Your account has been activated successfully."
+msgstr ""
+
+msgid "You will be automatically redirected in a few seconds. If not, please %s."
+msgstr ""
+
+msgid "Account already active. "
+msgstr ""
+
+msgid "click here"
+msgstr ""
+
+msgid " to login."
 msgstr ""
 
 #: === Partial protection addon strings ===

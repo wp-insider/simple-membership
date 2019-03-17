@@ -423,7 +423,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
         }
         if ($member->account_state !== 'activation_required') {
             //account already active
-            echo SwpmUtils::_('Account already active. <a href="' . $login_page_url . '">Click here</a> to login.');
+            $acc_active_msg = SwpmUtils::_('Account already active. ') . '<a href="' . $login_page_url . '">' . SwpmUtils::_('click here') . '</a>' . SwpmUtils::_(' to login.');
+            echo $acc_active_msg;
             wp_die();
         }
         $act_data = get_option('swpm_email_activation_data_usr_' . $member_id);

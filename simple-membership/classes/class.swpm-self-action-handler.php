@@ -8,6 +8,8 @@ class SwpmSelfActionHandler {
         add_action('swpm_front_end_registration_complete_user_data', array(&$this, 'after_registration_callback'));
         
         add_action('swpm_membership_level_changed', array(&$this, 'handle_membership_level_changed_action'));
+        
+        add_action('swpm_payment_ipn_processed', array(&$this, 'handle_swpm_payment_ipn_processed'));
 
         add_filter('swpm_after_logout_redirect_url', array(&$this, 'handle_after_logout_redirection'));
         add_filter('swpm_auth_cookie_expiry_value', array(&$this, 'handle_auth_cookie_expiry_value'));
@@ -31,6 +33,18 @@ class SwpmSelfActionHandler {
             $redirect_url = $after_logout_url;
         }
         return $redirect_url;
+    }
+    
+    public function handle_swpm_payment_ipn_processed($ipn_data){
+        $ipn_forward_url = SwpmSettings::get_instance()->get_value('payment-notification-forward-url');
+        if(!empty($ipn_forward_url)){
+            SwpmLog::log_simple_debug("Payment Notification Forwarding is Enabled. Posting the payment data to URL: " . $ipn_forward_url, true);
+            $response = wp_remote_post($ipn_forward_url, $ipn_data);
+            if (is_wp_error($response)) {
+                $error_message = $response->get_error_message();
+                SwpmLog::log_simple_debug("There was an error posting the payment data. Error message: " . $error_message, true);
+            }
+        }
     }
     
     public function after_registration_callback($user_data){

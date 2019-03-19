@@ -244,6 +244,9 @@ class SwpmSettings {
             'default' => '',
             'message' => SwpmUtils::_('When automatically creating a member account using this feature, the membership account status of the user will be set to the one you specify here.')));
 
+        add_settings_field('payment-notification-forward-url', SwpmUtils::_('Payment Notification Forward URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'payment-notification-forward-url',
+            'message' => SwpmUtils::_('You can enter an URL here to forward the payment notification after the membership payment has been processed by this plugin. Useful if you want to forward the payment notification to an external script for further processing.')) );
+
         //Terms and conditions section
         add_settings_section('terms-and-conditions', SwpmUtils::_('Terms and Conditions'), array(&$this, 'advanced_settings_terms_and_conditions_callback'), 'simple_wp_membership_settings');        
 
@@ -510,7 +513,8 @@ class SwpmSettings {
         $output['after-logout-redirection-url'] = esc_url($input['after-logout-redirection-url']);
         $output['force-strong-passwords'] = isset($input['force-strong-passwords']) ? esc_attr($input['force-strong-passwords']) : "";
         $output['auto-login-after-rego'] = isset($input['auto-login-after-rego']) ? esc_attr($input['auto-login-after-rego']) : "";
-        $output['force-wp-user-sync'] = isset($input['force-wp-user-sync']) ? esc_attr($input['force-wp-user-sync']) : "";        
+        $output['force-wp-user-sync'] = isset($input['force-wp-user-sync']) ? esc_attr($input['force-wp-user-sync']) : "";
+        $output['payment-notification-forward-url'] = esc_url($input['payment-notification-forward-url']);
         
         //Auto create swpm user related settings
         $output['enable-auto-create-swpm-members'] = isset($input['enable-auto-create-swpm-members']) ? esc_attr($input['enable-auto-create-swpm-members']) : "";

@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.1
-Stable tag: 3.7.7
+Stable tag: 3.7.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +95,7 @@ You can create a free forum user account and ask your questions.
 * Option to make the users agree to your terms and conditions before they can register for a member account.
 * Option to make the users agree to your privacy policy before they can register for a member account.
 * Option to automatically logout the members when they close the browser.
+* Ability to forward the payment notification to an external URL for further processing.
 
 = Language Translations =
 
@@ -155,11 +156,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.7.8 = 
+= 3.7.8 = 
+- Added a new feature to allow forwarding of the payment notification to an external URL. This option can be found in the "Advanced Settings" of the plugin.
+- The "Forgot Password?" translation string in the login form will allow the "?" character to be translated/customized.
 - Fixed a PHP7 related warning.
 - Updated some translation strings.
 - Corrected an spelling mistake.
-- The "Forgot Password?" translation string in the login form will allow the "?" character to be translated/customized.
 
 = 3.7.7 =
 - Added a new filter hook that can be used to override the account status of the email activation feature. swpm_activation_feature_override_account_status

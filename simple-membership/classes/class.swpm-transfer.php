@@ -19,7 +19,7 @@ class SwpmTransfer {
     public static $admin_messages = array();
     private static $_this;
 
-    private function __contruct() {
+    private function __construct() {
         $this->message = get_option('swpm-messages');
     }
 

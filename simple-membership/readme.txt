@@ -156,6 +156,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 3.7.8 = 
+- Fixed a PHP7 related warning.
 - Updated some translation strings.
 - Corrected an spelling mistake.
 - The "Forgot Password?" translation string in the login form will allow the "?" character to be translated/customized.

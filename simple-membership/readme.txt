@@ -157,6 +157,7 @@ https://simple-membership-plugin.com/
 
 = WIP 3.7.8 = 
 - Updated some translation strings.
+- Corrected an spelling mistake.
 - The "Forgot Password?" translation string in the login form will allow the "?" character to be translated/customized.
 
 = 3.7.7 =

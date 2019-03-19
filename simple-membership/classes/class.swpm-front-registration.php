@@ -137,7 +137,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
             //Set the registration complete message
             if ($this->email_activation) {
                 $email_act_msg = '<div class="swpm-registration-success-msg">';
-                $email_act_msg .= SwpmUtils::_('You need to comfirm your email address. Please check your email and follow instructions to complete your registration.');
+                $email_act_msg .= SwpmUtils::_('You need to confirm your email address. Please check your email and follow instructions to complete your registration.');
                 $email_act_msg .= '</div>';
                 $message = array('succeeded' => true, 'message' => $email_act_msg);
             } else {

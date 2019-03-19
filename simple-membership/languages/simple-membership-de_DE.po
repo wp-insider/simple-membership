@@ -648,7 +648,7 @@ msgstr "Sie müssen der Datenschutzerklärung zustimmen."
 
 #: simple-membership/classes/class.swpm-front-registration.php:140
 msgid ""
-"You need to comfirm your email address. Please check your email and follow "
+"You need to confirm your email address. Please check your email and follow "
 "instructions to complete your registration."
 msgstr ""
 "Sie müssen Ihre Email Adresse bestätigen. Bitte prüfen Sie Ihre Email "

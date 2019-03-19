@@ -2180,6 +2180,9 @@ msgstr ""
 msgid " to login."
 msgstr ""
 
+msgid "You need to confirm your email address. Please check your email and follow instructions to complete your registration."
+msgstr ""
+
 #: === Partial protection addon strings ===
 msgid "You do not have permission to view this content."
 msgstr ""

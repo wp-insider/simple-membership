@@ -193,7 +193,7 @@ class swpm_smart_checkout_ipn_handler {
         //Trigger the PayPal IPN processed action hook (so other plugins can can listen for this event).
         do_action('swpm_pp_smart_checkout_ipn_processed', $this->ipn_data);
 
-        do_action('swpm_pp_smart_checkout_ipn_processed', $this->ipn_data);
+        do_action('swpm_payment_ipn_processed', $this->ipn_data);
 
         return true;
     }

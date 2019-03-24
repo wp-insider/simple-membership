@@ -156,6 +156,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.7.9 =
+- Added new shortcode [swpm_show_after_login_page_link] via the swpm misc shortcodes addon.
+
 = 3.7.8 = 
 - Added a new feature to allow forwarding of the payment notification to an external URL. This option can be found in the "Advanced Settings" of the plugin.
 - The "Forgot Password?" translation string in the login form will allow the "?" character to be translated/customized.

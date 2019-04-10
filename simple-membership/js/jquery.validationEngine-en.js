@@ -92,7 +92,7 @@
                   "alertText": "* Password must contain at least:<br />- a digit<br />- an uppercase letter<br />- a lowercase letter"
                 },
                 "SWPMUserName": {
-                    "regex": /^[a-zA-Z0-9.\-*@]+$/,
+                    "regex": /^[a-zA-Z0-9.\-_*@]+$/,
                     "alertText": "* Invalid Username"
                 },
                 "zip": {

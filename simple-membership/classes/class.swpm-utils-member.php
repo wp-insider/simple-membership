@@ -206,7 +206,7 @@ class SwpmMemberUtils {
     }
 
     public static function is_valid_user_name($user_name){
-        return preg_match("/^[a-zA-Z0-9!@#$%&+\/=?^_`{|}~\.-]+$/", $user_name)== 1;
+        return preg_match("/^[a-zA-Z0-9.\-_*@]+$/", $user_name)== 1;
     }
     
     public static function wp_user_has_admin_role($wp_user_id){

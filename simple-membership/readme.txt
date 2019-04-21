@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.1
-Stable tag: 3.7.8
+Stable tag: 3.7.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -156,8 +156,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.7.9 =
+= 3.7.9 =
 - Added new shortcode [swpm_show_after_login_page_link] via the swpm misc shortcodes addon.
+- Fixed a minor bug with the plugin not finding the corresponding member's profile when a subscritpion is canceled.
 
 = 3.7.8 = 
 - Added a new feature to allow forwarding of the payment notification to an external URL. This option can be found in the "Advanced Settings" of the plugin.

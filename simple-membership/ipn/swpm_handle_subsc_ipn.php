@@ -176,11 +176,11 @@ function swpm_handle_subsc_cancel_stand_alone($ipn_data, $refund = false) {
         //This IPN has the subscriber ID. Retrieve the member record using subscr_id.
         $subscr_id = $ipn_data['subscr_id'];
         swpm_debug_log_subsc("Subscriber ID is present. Retrieving member account from the database. Subscr_id: " . $subscr_id, true);
-        $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id LIKE %s",  '%' . $wpdb->esc_like($subscr_id) . '|%'), OBJECT);
+        $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id LIKE %s",  '%' . $wpdb->esc_like($subscr_id) . '%'), OBJECT);
     } else {
         //Refund for a one time transaction. Use the parent transaction ID to retrieve the profile.
         $subscr_id = $ipn_data['parent_txn_id'];
-        $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id LIKE %s", '%' . $wpdb->esc_like($subscr_id) . '|%'), OBJECT);
+        $resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id LIKE %s", '%' . $wpdb->esc_like($subscr_id) . '%'), OBJECT);
     }
 
     if ($resultset) {

@@ -158,6 +158,7 @@ https://simple-membership-plugin.com/
 
 = 3.7.9 =
 - Added new shortcode [swpm_show_after_login_page_link] via the swpm misc shortcodes addon.
+- More characters are now allowed in the "username" field.
 - Fixed a minor bug with the plugin not finding the corresponding member's profile when a subscritpion is canceled.
 
 = 3.7.8 = 

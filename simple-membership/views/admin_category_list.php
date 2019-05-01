@@ -8,7 +8,7 @@
         <?php echo SwpmUtils::_('Next, select an existing membership level from the drop-down box below and then select the categories you want to grant access to (for that particular membership level).'); ?>
     </p>
     <p>
-        Read the <a href="https://simple-membership-plugin.com/use-category-protection-membership-site/" target="_blank">category protection documentation</a> to learn more.
+        <?php echo SwpmUtils::_('Read the '); ?><a href="https://simple-membership-plugin.com/use-category-protection-membership-site/" target="_blank"><?php echo SwpmUtils::_('category protection documentation'); ?></a> to learn more.
     </p>
 </div>
 
@@ -16,7 +16,7 @@
     <p class="swpm-select-box-left">
         <label for="membership_level_id"><?php SwpmUtils::e('Membership Level:'); ?></label>
         <select id="membership_level_id" name="membership_level_id">
-            <option <?php echo $category_list->selected_level_id == 1 ? "selected" : "" ?> value="1">General Protection</option>
+            <option <?php echo $category_list->selected_level_id == 1 ? "selected" : "" ?> value="1"><?php echo SwpmUtils::_('General Protection'); ?></option>
             <?php echo SwpmUtils::membership_level_dropdown($category_list->selected_level_id); ?>
         </select>                
     </p>

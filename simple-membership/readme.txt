@@ -156,6 +156,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.8.0 =
+- Updated some translation strings.
+
 = 3.7.9 =
 - Added new shortcode [swpm_show_after_login_page_link] via the swpm misc shortcodes addon.
 - More characters are now allowed in the "username" field.

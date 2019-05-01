@@ -188,7 +188,7 @@ class SwpmMembers extends WP_List_Table {
     }
 
     function no_items() {
-        _e('No member found.');
+        _e('No member found.', 'simple-membership');
     }
 
     function process_form_request() {

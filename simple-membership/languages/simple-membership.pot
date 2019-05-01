@@ -2193,6 +2193,12 @@ msgstr ""
 msgid "This content is for members only."
 msgstr ""
 
+msgid "You can enter an URL here to forward the payment notification after the membership payment has been processed by this plugin. Useful if you want to forward the payment notification to an external script for further processing."
+msgstr ""
+
+msgid "General Protection"
+msgstr ""
+
 #: === Member Directory Listing addon strings ===
 #: swpm-member-directory-admin.php:9
 msgid "Member Directory"

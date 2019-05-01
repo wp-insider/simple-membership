@@ -16,7 +16,7 @@
                     <td><input name="email" autocomplete="off" class="regular-text validate[required,custom[email],ajax[ajaxEmailCall]]" type="text" id="email" value="<?php echo esc_attr($email); ?>" /></td>
                 </tr>
                 <tr class="form-required swpm-admin-add-password">
-                    <th scope="row"><label for="password"><?php echo SwpmUtils::_('Password'); ?> <span class="description"><?php /* translators: password input field */_e('(twice, required)'); ?></span></label></th>
+                    <th scope="row"><label for="password"><?php echo SwpmUtils::_('Password'); ?> <span class="description"><?php _e('(twice, required)', 'simple-membership'); ?></span></label></th>
                     <td><input class="regular-text"  name="password" type="password" id="pass1" autocomplete="off" />
                         <br />
                         <input class="regular-text" name="password_re" type="password" id="pass2" autocomplete="off" />

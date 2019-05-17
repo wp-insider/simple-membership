@@ -391,7 +391,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         $activation_account_status = apply_filters('swpm_activation_feature_override_account_status', 'active');
         SwpmMemberUtils::update_account_state($member_id, $activation_account_status);
         $this->member_info = (array) $member;
-        $this->member_info['plain_password'] = $act_data['plain_password'];
+        $this->member_info['plain_password'] = SwpmUtils::crypt($act_data['plain_password'], 'd');
         $this->send_reg_email();
 
         $msg = '<div class="swpm_temporary_msg" style="font-weight: bold;">' . SwpmUtils::_('Success! Your account has been activated successfully.') . '</div>';
@@ -436,7 +436,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         delete_option('swpm_email_activation_data_usr_' . $member_id);
 
         $this->member_info = (array) $member;
-        $this->member_info['plain_password'] = $act_data['plain_password'];
+        $this->member_info['plain_password'] = SwpmUtils::crypt($act_data['plain_password'], 'd');
         $this->email_activation = true;
         $this->send_reg_email();
 

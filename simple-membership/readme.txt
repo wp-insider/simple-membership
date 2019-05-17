@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.2
-Stable tag: 3.7.9
+Stable tag: 3.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,6 +157,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 3.8.0 =
+- Sensual temporary data is now stored encrypted.
+- Fixed email activation data leftovers removal in the DB.
 - Updated some translation strings.
 
 = 3.7.9 =
@@ -164,7 +166,7 @@ https://simple-membership-plugin.com/
 - More characters are now allowed in the "username" field.
 - Fixed a minor bug with the plugin not finding the corresponding member's profile when a subscritpion is canceled.
 
-= 3.7.8 = 
+= 3.7.8 =
 - Added a new feature to allow forwarding of the payment notification to an external URL. This option can be found in the "Advanced Settings" of the plugin.
 - The "Forgot Password?" translation string in the login form will allow the "?" character to be translated/customized.
 - Fixed a PHP7 related warning.

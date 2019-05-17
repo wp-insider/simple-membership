@@ -464,4 +464,41 @@ abstract class SwpmUtils {
         return $is_first_click;
     }
 
+    private static function crypt_fallback($string, $action = 'e') {
+        if ($action === 'e') {
+            return base64_encode($string);
+        } else {
+            return base64_decode($string);
+        }
+    }
+
+    public static function crypt($string, $action = 'e') {
+        //check if openssl module is enabled
+        if (!extension_loaded('openssl')) {
+            // no openssl extension loaded. Can't ecnrypt
+            return self::crypt_fallback($string, $action);
+        }
+        //check if encrypt method is supported
+        $encrypt_method = "aes-256-ctr";
+        $available_methods = openssl_get_cipher_methods();
+        if (!in_array($encrypt_method, $available_methods)) {
+            // no ecryption method supported. Can't encrypt
+            return self::crypt_fallback($string, $action);
+        }
+
+        $output = false;
+        $secret_key = wp_salt('auth');
+        $secret_iv = wp_salt('secure_auth');
+        $key = hash('sha256', $secret_key);
+        $iv = substr(hash('sha256', $secret_iv), 0, 16);
+
+        if ($action == 'e') {
+            $output = base64_encode(openssl_encrypt($string, $encrypt_method, $key, 0, $iv));
+        } else if ($action == 'd') {
+            $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+        }
+
+        return $output;
+    }
+
 }

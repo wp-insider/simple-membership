@@ -383,7 +383,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
             wp_die(SwpmUtils::_('Activation code mismatch. Cannot activate this account. Please contact the site admin.'));
         }
         //activation code match
-        delete_option('swpm_email_activation_code_usr_' . $member_id);
+        delete_option('swpm_email_activation_data_usr_' . $member_id);
         //store rego form id in constant so FB addon could use it
         if (!empty($act_data['fb_form_id'])) {
             define('SWPM_EMAIL_ACTIVATION_FORM_ID', $act_data['fb_form_id']);
@@ -433,7 +433,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
             $act_data['plain_password'] = '';
         }
 
-        delete_option('swpm_email_activation_code_usr_' . $member_id);
+        delete_option('swpm_email_activation_data_usr_' . $member_id);
 
         $this->member_info = (array) $member;
         $this->member_info['plain_password'] = $act_data['plain_password'];

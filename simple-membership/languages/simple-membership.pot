@@ -2162,6 +2162,15 @@ msgstr ""
 msgid "Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
 msgstr ""
 
+msgid "Verification"
+msgstr ""
+
+msgid "Please enter any two digits with no spaces (Example: 12)*"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
 msgid "Username can only contain: letters, numbers and .-*@"
 msgstr ""
 

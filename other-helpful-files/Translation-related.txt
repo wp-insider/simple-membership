@@ -46,6 +46,15 @@ msgstr ""
 msgid "Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
 msgstr ""
 
+msgid "Verification"
+msgstr ""
+
+msgid "Please enter any two digits with no spaces (Example: 12)*"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
 #: === Partial protection addon strings ===
 msgid "You do not have permission to view this content."
 msgstr ""

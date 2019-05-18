@@ -156,8 +156,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.8.0 =
-- Sensual temporary data is now stored encrypted.
+= 3.8.0 =
+- Email activation's temporary data is now stored in an encrypted format.
 - Fixed email activation data leftovers removal in the DB.
 - Updated some translation strings.
 

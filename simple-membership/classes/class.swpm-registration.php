@@ -28,7 +28,9 @@ abstract class SwpmRegistration {
             $member_id = $swpm_user->member_id;
             $act_code = md5(uniqid() . $member_id);
             $enc_pass = SwpmUtils::crypt($member_info['plain_password']);
-            update_option('swpm_email_activation_data_usr_' . $member_id, array('timestamp' => time(), 'act_code' => $act_code, 'plain_password' => $enc_pass), false);
+            $user_data = array('timestamp' => time(), 'act_code' => $act_code, 'plain_password' => $enc_pass);
+            $user_data = apply_filters('swpm_email_activation_data', $user_data);
+            update_option('swpm_email_activation_data_usr_' . $member_id, $user_data, false);
             $body = $settings->get_value('email-activation-mail-body');
             $subject = $settings->get_value('email-activation-mail-subject');
             $activation_link = add_query_arg(array(

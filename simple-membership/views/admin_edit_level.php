@@ -50,7 +50,7 @@
                 <p class="description">
                     <?php echo  SwpmUtils::_('Enable new user activation via email. When enabled, members will need to click on an activation link that is sent to their email address to activate the account. Useful for free membership.');?>
                     <?php echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . SwpmUtils::_('View Documentation') . '.</a>'; ?>
-                    <?php echo '<br><strong>'.SwpmUtils::_('Note:').'</strong> '.SwpmUtils::_('If enabled, decryptable member plain text password is temporary stored in database until account is activated.'); ?>
+                    <?php echo '<br><strong>'.SwpmUtils::_('Note:').'</strong> '.SwpmUtils::_('If enabled, decryptable member password is temporarily stored in the database until the account is activated.'); ?>
                 </p>
             </td>
 	</tr>

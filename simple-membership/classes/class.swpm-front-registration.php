@@ -373,7 +373,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
         }
         if ($member->account_state !== 'activation_required') {
             //account already active
-            echo SwpmUtils::_('Account already active. <a href="' . $login_page_url . '">Click here</a> to login.');
+            echo SwpmUtils::_('Account already active. ') . '<a href="' . $login_page_url . '">' . SwpmUtils::_('click here') . '</a>' . SwpmUtils::_(' to login.');
             wp_die();
         }
         $code = FILTER_INPUT(INPUT_GET, 'swpm_token', FILTER_SANITIZE_STRING);

@@ -1,14 +1,15 @@
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Simple Membership\n"
-"POT-Creation-Date: 2019-05-25 22:37+0600\n"
+"POT-Creation-Date: 2019-05-26 13:48+0600\n"
 "PO-Revision-Date: 2019-05-25 22:38+0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 2.2.3\n"
 "X-Poedit-KeywordsList: __;_e;e\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -124,8 +125,8 @@ msgstr ""
 msgid "WP Membership"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:698
-#: classes/class.swpm-members.php:11 classes/class.swpm-members.php:581
+#: classes/class.simple-wp-membership.php:698 classes/class.swpm-members.php:11
+#: classes/class.swpm-members.php:581
 msgid "Members"
 msgstr ""
 
@@ -309,8 +310,7 @@ msgstr ""
 #: classes/class.swpm-membership-levels.php:21
 #: classes/class.swpm-post-list.php:20
 #: classes/admin-includes/class.swpm-payments-list-table.php:85
-#: views/add.php:40 views/admin_member_form_common_part.php:2
-#: views/edit.php:75
+#: views/add.php:40 views/admin_member_form_common_part.php:2 views/edit.php:75
 #: views/payments/payment-gateway/admin_braintree_buy_now_button.php:50
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:34
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:229
@@ -605,33 +605,34 @@ msgstr ""
 
 #: classes/class.swpm-members.php:20 views/add.php:16 views/admin_add.php:11
 #: views/admin_edit.php:19 views/edit.php:23
+#: includes/swpm_mda_show_profile.php:27
 msgid "Username"
 msgstr ""
 
 #: classes/class.swpm-members.php:21
 #: classes/admin-includes/class.swpm-payments-list-table.php:78
 #: views/add.php:32 views/admin_member_form_common_part.php:15
-#: views/edit.php:39
+#: views/edit.php:39 includes/swpm_mda_show_profile.php:28
 msgid "First Name"
 msgstr ""
 
 #: classes/class.swpm-members.php:22
 #: classes/admin-includes/class.swpm-payments-list-table.php:79
 #: views/add.php:36 views/admin_member_form_common_part.php:19
-#: views/edit.php:43
+#: views/edit.php:43 includes/swpm_mda_show_profile.php:29
 msgid "Last Name"
 msgstr ""
 
 #: classes/class.swpm-members.php:23 views/add.php:20 views/edit.php:27
+#: includes/swpm_mda_show_profile.php:35
 msgid "Email"
 msgstr ""
 
-#: classes/class.swpm-members.php:25
-#: views/admin_member_form_common_part.php:11
+#: classes/class.swpm-members.php:25 views/admin_member_form_common_part.php:11
 msgid "Access Starts"
 msgstr ""
 
-#: classes/class.swpm-members.php:26
+#: classes/class.swpm-members.php:26 includes/swpm_mda_show_profile.php:31
 msgid "Account State"
 msgstr ""
 
@@ -777,8 +778,7 @@ msgid "Simple WP Membership::Members"
 msgstr ""
 
 #: classes/class.swpm-members.php:577
-#: classes/class.swpm-membership-levels.php:226
-#: views/admin_members_list.php:44
+#: classes/class.swpm-membership-levels.php:226 views/admin_members_list.php:44
 msgid "Add New"
 msgstr ""
 
@@ -826,9 +826,9 @@ msgid ""
 "Error! Nonce verification failed for membership level delete from admin end."
 msgstr ""
 
-#: classes/class.swpm-membership-levels.php:216
-#: views/admin_members_list.php:31
-#: views/payments/admin_all_payment_transactions.php:16
+#: classes/class.swpm-membership-levels.php:216 views/admin_members_list.php:31
+#: views/payments/admin_all_payment_transactions.php:16 views/template-1.php:53
+#: views/template-2.php:54
 msgid "Search"
 msgstr ""
 
@@ -1622,6 +1622,7 @@ msgid "Create New Button"
 msgstr ""
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:57
+#: views/template-1.php:95 views/template-2.php:97
 msgid "View Profile"
 msgstr ""
 
@@ -2055,10 +2056,12 @@ msgid "Incomplete"
 msgstr ""
 
 #: views/admin_member_form_common_part.php:23
+#: includes/swpm_mda_show_profile.php:37
 msgid "Gender"
 msgstr ""
 
 #: views/admin_member_form_common_part.php:30 views/edit.php:47
+#: includes/swpm_mda_show_profile.php:34
 msgid "Phone"
 msgstr ""
 
@@ -2079,14 +2082,17 @@ msgid "Zipcode"
 msgstr ""
 
 #: views/admin_member_form_common_part.php:50 views/edit.php:67
+#: includes/swpm_mda_show_profile.php:33
 msgid "Country"
 msgstr ""
 
 #: views/admin_member_form_common_part.php:54
+#: includes/swpm_mda_show_profile.php:38
 msgid "Company"
 msgstr ""
 
 #: views/admin_member_form_common_part.php:58
+#: includes/swpm_mda_show_profile.php:36
 msgid "Member Since"
 msgstr ""
 
@@ -2691,9 +2697,7 @@ msgstr ""
 msgid "HTTP error occured during payment process:"
 msgstr ""
 
-#: Translation strings from addons
-
-#: === Form builder addon strings ===
+#: Translation strings from addons === Form builder addon
 msgid "Type password here"
 msgstr ""
 
@@ -2724,13 +2728,16 @@ msgstr ""
 msgid "Postal / Zip Code"
 msgstr ""
 
-msgid "Check this box to delete the image. The image will be deleted when you save the profile."
+msgid ""
+"Check this box to delete the image. The image will be deleted when you save "
+"the profile."
 msgstr ""
 
 msgid "You will need to re-login since you changed your password."
 msgstr ""
 
-msgid "Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
+msgid ""
+"Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
 msgstr ""
 
 msgid "Verification"
@@ -2739,13 +2746,10 @@ msgstr ""
 msgid "Please enter any two digits with no spaces (Example: 12)*"
 msgstr ""
 
-msgid "Submit"
-msgstr ""
-
 msgid "Username can only contain: letters, numbers and .-*@"
 msgstr ""
 
-#: === Partial protection addon strings ===
+#: === Partial protection addon strings
 msgid "You do not have permission to view this content."
 msgstr ""
 
@@ -2755,8 +2759,7 @@ msgstr ""
 msgid "This content is for members only."
 msgstr ""
 
-#: === Member Directory Listing addon strings ===
-#: swpm-member-directory-admin.php:9
+#: === Member Directory Listing addon strings swpm-member-directory-admin.php:9
 msgid "Member Directory"
 msgstr ""
 
@@ -2764,66 +2767,18 @@ msgstr ""
 msgid "Member ID"
 msgstr ""
 
-#: includes/swpm_mda_show_profile.php:27
-msgid "Username"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:28
-msgid "First Name"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:29
-msgid "Last Name"
-msgstr ""
-
 #: includes/swpm_mda_show_profile.php:30
 msgid "Level"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:31
-msgid "Account State"
 msgstr ""
 
 #: includes/swpm_mda_show_profile.php:32
 msgid "Address"
 msgstr ""
 
-#: includes/swpm_mda_show_profile.php:33
-msgid "Country"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:34
-msgid "Phone"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:35
-msgid "Email"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:36
-msgid "Member Since"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:37
-msgid "Gender"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:38
-msgid "Company"
-msgstr ""
-
 #: views/template-1.php:52 views/template-2.php:53
 msgid "Search..."
 msgstr ""
 
-#: views/template-1.php:53 views/template-2.php:54
-msgid "Search"
-msgstr ""
-
 #: views/template-1.php:60 views/template-2.php:62
 msgid "Clear Search"
-msgstr ""
-
-#: views/template-1.php:95 views/template-2.php:97
-msgid "View Profile"
 msgstr ""

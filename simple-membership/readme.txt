@@ -157,7 +157,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = 3.8.1 =
-- Added 3D Secure support for Braintree payment buttons.
+- [Important Note] If you are using the Braintree gateway, please take a backup before updating. Do a test transaction using Braintree gateway on live mode to make sure the new 3D Secure changes are working fine. 
+- Added 3D Secure support for Braintree payment gateway buttons. It automatically tries to detect if 3DS is enabled, then shows the additional steps.
 - Added note for email activation feature regarding temporary passwords storage.
 - Added "swpm_email_activation_data" filter to modify user email activation data.
 

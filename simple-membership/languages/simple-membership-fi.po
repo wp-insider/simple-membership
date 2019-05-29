@@ -22,7 +22,7 @@ msgstr "Ylläpitäjä ei salli hallintapaneelinäkymää."
 
 #: classes/class.simple-wp-membership.php:173
 msgid "Go back to the home page by "
-msgstr "Mene takaisin kotisivulle"
+msgstr "Mene takaisin kotisivulle "
 
 #: classes/class.simple-wp-membership.php:173
 msgid "clicking here"
@@ -87,13 +87,13 @@ msgstr "Lisäosat"
 #: classes/class.swpm-access-control.php:47
 #: classes/class.swpm-access-control.php:120
 msgid "You need to login to view this content. "
-msgstr "Kirjaudu nähdäksesi tämän sisällön."
+msgstr "Kirjaudu sisään nähdäksesi tämän sisällön. "
 
 #: classes/class.swpm-access-control.php:56
 #: classes/class.swpm-access-control.php:128
 #: classes/class.swpm-access-control.php:212
 msgid "Your account has expired. "
-msgstr "Tilisi on vanhentunut."
+msgstr "Tilisi on vanhentunut. "
 
 #: classes/class.swpm-access-control.php:66
 #: classes/class.swpm-access-control.php:138
@@ -109,7 +109,7 @@ msgstr "Tätä sisältöä ei näytetä jäsenyystasollasi."
 
 #: classes/class.swpm-access-control.php:204
 msgid "You need to login to view the rest of the content. "
-msgstr "Kirjaudu nähdäksesi loput sisällöstä."
+msgstr "Kirjaudu sisään nähdäksesi loput sisällöstä. "
 
 #: classes/class.swpm-access-control.php:217
 msgid " The rest of the content is not permitted for your membership level."
@@ -139,7 +139,7 @@ msgstr ""
 "Virhe! Kertakäyttöavaimen varmennus epäonnistui käyttäjän muokkaamisen "
 "yhteydessä."
 
-#: classes/class.swpm-admin-registration.php:117
+#: classes/class.swpm-admin-registration.php:131
 msgid "Your current password"
 msgstr "Nykyinen salasanasi"
 
@@ -159,7 +159,7 @@ msgstr "Nimessä on kelpaamaton merkki"
 msgid "Available"
 msgstr "Käytettävissä"
 
-#: classes/class.swpm-auth.php:46
+#: classes/class.swpm-auth.php:49
 msgid ""
 "Warning! Simple Membership plugin cannot process this login request to "
 "prevent you from getting logged out of WP Admin accidentally."
@@ -167,7 +167,7 @@ msgstr ""
 "Varoitus! Simple Membership lisäosa ei voi käsitellä kirjautumispyyntöä "
 "estääkseen tahattoman uloskirjautumisen WP ylläpidosta. "
 
-#: classes/class.swpm-auth.php:47
+#: classes/class.swpm-auth.php:50
 msgid ""
 "You are logged into the site as an ADMIN user in this browser. First, logout "
 "from WP Admin then you will be able to log in as a member."
@@ -175,7 +175,7 @@ msgstr ""
 "Olet kirjautunut sivustolle tässä selaimessa ylläpitäjänä. Kirjaudu ensin "
 "ulos WP ylläpidosta, jonka jälkeen voit kirjautua jäsenenä."
 
-#: classes/class.swpm-auth.php:48
+#: classes/class.swpm-auth.php:51
 msgid ""
 "Alternatively, you can use a different browser (where you are not logged-in "
 "as ADMIN) to test the membership login."
@@ -183,7 +183,7 @@ msgstr ""
 "Vaihtoehtoisesti voit kirjautua toisella selaimella  (jossa et ole "
 "kirjautuneen ylläpitäjänä) testataksesi jäsenenä kirjautumista."
 
-#: classes/class.swpm-auth.php:49
+#: classes/class.swpm-auth.php:52
 msgid ""
 "Your normal visitors or members will never see this message. This message is "
 "ONLY for ADMIN user."
@@ -191,19 +191,19 @@ msgstr ""
 "Tavalliset vierailijat tai jäsenet eivät näe tätä viestiä. Tämä viesti "
 "näytetään ainoastaan ylläpitäjille."
 
-#: classes/class.swpm-auth.php:56
+#: classes/class.swpm-auth.php:59
 msgid "Captcha validation failed on login form."
-msgstr "Captcha varmennus epäonnistui kirjautumislomakkeella."
+msgstr "CAPTCHA varmennus epäonnistui kirjautumislomakkeella."
 
-#: classes/class.swpm-auth.php:81
+#: classes/class.swpm-auth.php:84
 msgid "User Not Found."
 msgstr "Käyttäjää ei löydy."
 
-#: classes/class.swpm-auth.php:88
+#: classes/class.swpm-auth.php:91
 msgid "Password Empty or Invalid."
 msgstr "Salasana tyhjä tai virheellinen."
 
-#: classes/class.swpm-auth.php:125
+#: classes/class.swpm-auth.php:124
 msgid "Account is inactive."
 msgstr "Tili ei ole käytössä."
 
@@ -213,9 +213,9 @@ msgstr "Tili on vanhentunut."
 
 #: classes/class.swpm-auth.php:131
 msgid "Account is pending."
-msgstr "Tili on laitettu vireille."
+msgstr "Tili odottaa aktivointia."
 
-#: classes/class.swpm-auth.php:154
+#: classes/class.swpm-auth.php:153
 msgid "You are logged in as:"
 msgstr "Olet kirjautunut käyttäjänä:"
 
@@ -295,34 +295,52 @@ msgid ""
 "Wordpress account exists with given username. But given email doesn't match."
 msgstr "Käyttäjätunnukselle löytyy tili, mutta annettu sähköposti ei täsmää."
 
-#: classes/class.swpm-form.php:34
+#: classes/class.swpm-form.php:30
+msgid ""
+" Use a different username to complete the registration. If you want to use "
+"that username then you must enter the correct email address associated with "
+"the existing WP user to connect with that account."
+msgstr ""
+" Käytä eri käyttätunnusta rekisteröinnin tekemiseen. Jos haluat käyttää samaa "
+"käyttäjätunnusta, sinun pitää antaa siihen liitetty oikea sähköpostiosoite. "
+
+#: classes/class.swpm-form.php:36
 msgid ""
 "Wordpress account exists with given email. But given username doesn't match."
 msgstr "Sähköpostille löytyy tili, mutta annettu käyttäjätunnus ei täsmää."
 
-#: classes/class.swpm-form.php:43
+#: classes/class.swpm-form.php:37
+msgid ""
+" Use a different email address to complete the registration. If you want to "
+"use that email then you must enter the correct username associated with the "
+"existing WP user to connect with that account."
+msgstr ""
+" Käytä eri sähköpostiosoitetta rekisteröinnin tekemiseen. Jos haluat käyttää samaa "
+"sähköpostiosoitetta, sinun pitää antaa siihen liitetty oikea käyttäjätunnus. "
+
+#: classes/class.swpm-form.php:47
 msgid "Username is required"
 msgstr "Käyttäjätunnus tarvitaan"
 
-#: classes/class.swpm-form.php:47
+#: classes/class.swpm-form.php:51
 msgid "Username contains invalid character"
 msgstr "Käyttäjätunnuksessa on virheellisiä merkkejä."
 
-#: classes/class.swpm-form.php:55
+#: classes/class.swpm-form.php:59
 msgid "Username already exists."
 msgstr "Käyttäjätunnus on jo käytössä."
 
-#: classes/class.swpm-form.php:78
+#: classes/class.swpm-form.php:82
 msgid "Password is required"
 msgstr "Salasana on pakollinen"
 
-#: classes/class.swpm-form.php:85
+#: classes/class.swpm-form.php:89
 msgid "Password mismatch"
 msgstr "Salasanat eivät täsmää"
 
 #: classes/class.swpm-form.php:96
 msgid "Email is required"
-msgstr "Sähköposti edellytetään"
+msgstr "Sähköposti on pakollinen"
 
 #: classes/class.swpm-form.php:100
 msgid "Email is invalid"
@@ -363,7 +381,11 @@ msgstr ""
 #: classes/class.swpm-front-registration.php:45
 #: classes/class.swpm-utils-misc.php:219 views/login.php:36
 msgid "Join Us"
-msgstr "Liity meihin"
+msgstr "Luo tunnukset täällä"
+
+#: classes/class.swpm-utils-misc.php:394
+msgid "(Please Select)"
+msgstr "(Valitse)"
 
 #: classes/class.swpm-front-registration.php:47
 msgid ""
@@ -386,26 +408,26 @@ msgstr "Turvatarkistus: captcha varmistus epäonnistui."
 
 #: classes/class.swpm-front-registration.php:100
 msgid "Registration Successful. "
-msgstr "Rekisteröinti onnistui."
+msgstr "Rekisteröinti onnistui. "
 
-#: classes/class.swpm-front-registration.php:100
-#: classes/class.swpm-utils-misc.php:218 classes/class.swpm-utils-misc.php:230
+#: classes/class.swpm-front-registration.php:113
+#: classes/class.swpm-utils-misc.php:246 classes/class.swpm-utils-misc.php:258
 msgid "Please"
-msgstr "Ole ystävällinen"
+msgstr ""
 
-#: classes/class.swpm-front-registration.php:100
-#: classes/class.swpm-utils-misc.php:218 views/login.php:30
+#: classes/class.swpm-front-registration.php:113
+#: classes/class.swpm-utils-misc.php:246 views/login.php:30
 msgid "Login"
-msgstr "Kirjaudu"
+msgstr "Kirjaudu sisään tästä"
 
 #: classes/class.swpm-front-registration.php:113
 #: classes/class.swpm-front-registration.php:236
 msgid "Please correct the following"
-msgstr "Korjaathan seuraavat"
+msgstr "Korjaathan seuraavat kohdat:"
 
 #: classes/class.swpm-front-registration.php:158
 msgid "Membership Level Couldn't be found."
-msgstr "Jäsenyys tasoa ei löydy."
+msgstr "Jäsenyystasoa ei löydy."
 
 #: classes/class.swpm-front-registration.php:209
 msgid "Error! Nonce verification failed for front end profile edit."
@@ -436,7 +458,7 @@ msgstr "Kyseiselle sähköpostille ei löydy käyttäjää."
 #: classes/class.swpm-front-registration.php:258
 #: classes/class.swpm-front-registration.php:284
 msgid "Email Address: "
-msgstr "Sähköpostiosoite:"
+msgstr "Sähköpostiosoite: "
 
 #: classes/class.swpm-front-registration.php:283
 msgid "New password has been sent to your email address."
@@ -1132,17 +1154,17 @@ msgstr "Profiili"
 msgid "Password Reset"
 msgstr "Salasanan resetointi"
 
-#: classes/class.swpm-utils-misc.php:219
+#: classes/class.swpm-utils-misc.php:247
 msgid "Not a Member?"
-msgstr "Etkö ole jäsen?"
+msgstr "Eikö sinulla ole tunnuksia?"
 
-#: classes/class.swpm-utils-misc.php:230
+#: classes/class.swpm-utils-misc.php:258
 msgid "renew"
 msgstr "uusi"
 
 #: classes/class.swpm-utils-misc.php:230
 msgid " your account to gain access to this content."
-msgstr "tilisi päästäksesi tähän sisältöön."
+msgstr " tilisi päästäksesi tähän sisältöön."
 
 #: classes/class.swpm-utils-misc.php:272 classes/class.swpm-utils-misc.php:278
 msgid "Error! This action ("
@@ -1156,23 +1178,23 @@ msgstr "Virhe! Valitulle sapluunalle ei löydy polkua (path):"
 msgid "Never"
 msgstr "Ei koskaan"
 
-#: classes/class.swpm-utils.php:115
+#: classes/class.swpm-utils.php:115 views/admin_members_list.php:19
 msgid "Active"
 msgstr "Aktiivinen"
 
-#: classes/class.swpm-utils.php:116
+#: classes/class.swpm-utils.php:116 views/admin_members_list.php:20
 msgid "Inactive"
 msgstr "Inaktiivinen"
 
-#: classes/class.swpm-utils.php:117
+#: classes/class.swpm-utils.php:117 views/admin_members_list.php:21
 msgid "Pending"
 msgstr "Vireillä"
 
-#: classes/class.swpm-utils.php:118
+#: classes/class.swpm-utils.php:118 views/admin_members_list.php:23
 msgid "Expired"
 msgstr "Vanhentunut"
 
-#: classes/class.swpm-utils.php:450
+#: classes/class.swpm-utils.php:459
 msgid "Delete Account"
 msgstr "Poista tili"
 
@@ -1601,9 +1623,13 @@ msgstr ""
 msgid "Registration completion links will appear below"
 msgstr "Rekisteröinnin vahvistuslinkit ilmestyvät alle."
 
-#: views/forgot_password.php:11
+#: views/forgot_password.php:12
 msgid "Reset Password"
 msgstr "Resetoi salasana"
+
+#: views/edit.php:62
+msgid "Company Name"
+msgstr "Yrityksen nimi"
 
 #: views/loggedin.php:6
 msgid "Logged in as"
@@ -1617,9 +1643,13 @@ msgstr "Jäsenyys"
 msgid "Account Expiry"
 msgstr "Tilin vanheneminen"
 
-#: views/loggedin.php:22
+#: views/loggedin.php:31
 msgid "Logout"
-msgstr "Ulos kirjautuminen"
+msgstr "Kirjaudu ulos"
+
+#: views/loggedin.php:26
+msgid "Edit Profile"
+msgstr "Muokkaa profiilia"
 
 #: views/login.php:11
 msgid "Username or Email"

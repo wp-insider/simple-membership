@@ -156,6 +156,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.8.2 =
+- Updated the Polish langauge translation.
+
 = 3.8.1 =
 - [Important Note] If you are using the Braintree gateway, please take a backup before updating. Do a test transaction using Braintree gateway on live mode to make sure the new 3D Secure changes are working fine. 
 - Added 3D Secure support for Braintree payment gateway buttons. It automatically tries to detect if 3DS is enabled, then shows the additional steps.

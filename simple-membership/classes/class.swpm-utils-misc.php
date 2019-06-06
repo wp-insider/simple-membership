@@ -167,28 +167,38 @@ class SwpmMiscUtils {
         $redirect_html = sprintf('<meta http-equiv="refresh" content="%d; url=\'%s\'" />', $timeout, $redirect_url);
         $redir_msg = SwpmUtils::_('You will be automatically redirected in a few seconds. If not, please %s.');
         $redir_msg = sprintf($redir_msg, '<a href="' . $redirect_url . '">' . SwpmUtils::_('click here') . '</a>');
-        
+
         $msg = $msg . '<br/><br/>' . $redir_msg . $redirect_html;
         $title = SwpmUtils::_('Action Status');
         wp_die($msg, $title);
     }
 
     public static function get_current_page_url() {
-        $pageURL = 'http';
+        wp_die();
+        $urlParts = array();
+        $urlParts['proto'] = 'http';
 
         if (isset($_SERVER['SCRIPT_URI']) && !empty($_SERVER['SCRIPT_URI'])) {
             return $_SERVER['SCRIPT_URI'];
         }
 
         if (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on")) {
-            $pageURL .= "s";
+            $urlParts['proto'] = 'https';
         }
-        $pageURL .= "://";
+
+        $urlParts['port'] = '';
         if (isset($_SERVER["SERVER_PORT"]) && ($_SERVER["SERVER_PORT"] != "80") && ($_SERVER["SERVER_PORT"] != "443")) {
-            $pageURL .= ltrim($_SERVER["SERVER_NAME"], ".*") . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
-        } else {
-            $pageURL .= ltrim($_SERVER["SERVER_NAME"], ".*") . $_SERVER["REQUEST_URI"];
+            $urlParts['port'] = $_SERVER["SERVER_PORT"];
         }
+
+        $urlParts['domain'] = ltrim($_SERVER["SERVER_NAME"], ".*");
+
+        $urlParts['uri'] = $_SERVER["REQUEST_URI"];
+
+        $urlParts = apply_filters('swpm_get_current_page_url_filter', $urlParts);
+
+        $pageURL = sprintf('%s://%s%s%s', $urlParts['proto'], $urlParts['domain'], !empty($urlParts['port']) ? ':' . $urlParts['port'] : '', $urlParts['uri']);
+
         return $pageURL;
     }
 

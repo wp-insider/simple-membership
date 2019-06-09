@@ -12,7 +12,24 @@ if (isset($_REQUEST['member_action']) && $_REQUEST['member_action'] == 'delete')
 
 $this->prepare_items();
 $count = $this->get_user_count_by_account_state();
+
+global $wpdb;
+$query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
+$levels = $wpdb->get_results($query, ARRAY_A);
+
+$account_state = filter_input(INPUT_GET, 'status', FILTER_SANITIZE_STRING);
+$membership_level = filter_input(INPUT_GET, 'membership_level', FILTER_SANITIZE_NUMBER_INT);
 ?>
+<style>
+    select.swpm-admin-search-dropdown {
+        padding: 3px 5px;
+        margin: 0px;
+        vertical-align: inherit;
+    }
+    input.button.swpm-admin-search-btn {
+        vertical-align: top;
+    }
+</style>
 <ul class="subsubsub">
     <li class="all"><a href="admin.php?page=simple_wp_membership" <?php echo $status == "" ? "class='current'" : ""; ?> ><?php echo SwpmUtils::_('All') ?> <span class="count">(<?php echo $count['all']; ?>)</span></a> |</li>
     <li class="active"><a href="admin.php?page=simple_wp_membership&status=active" <?php echo $status == "active" ? "class='current'" : ""; ?>><?php echo SwpmUtils::_('Active') ?> <span class="count">(<?php echo isset($count['active']) ? $count['active'] : 0 ?>)</span></a> |</li>
@@ -26,8 +43,19 @@ $count = $this->get_user_count_by_account_state();
 <br />
 <form method="get">
     <p class="search-box">
+        <select name="status" class="swpm-admin-search-dropdown" id="account_state">
+            <option value=""<?php echo empty($account_state) ? ' selected' : ''; ?>> <?php echo SwpmUtils::_('Account State'); ?></option>
+            <?php echo SwpmUtils::account_state_dropdown($account_state); ?>
+            <option value="incomplete"<?php echo $account_state === "incomplete" ? ' selected' : ''; ?>> <?php echo SwpmUtils::_('Incomplete'); ?></option>
+        </select>
+        <select name="membership_level" class="swpm-admin-search-dropdown" id="membership_level">
+            <option value=""<?php echo empty($membership_level) ? ' selected' : ''; ?>> <?php echo SwpmUtils::_('Membership Level'); ?></option>
+            <?php foreach ($levels as $level): ?>
+                <option <?php echo ($level['id'] == $membership_level) ? "selected='selected'" : ""; ?> value="<?php echo $level['id']; ?>"> <?php echo $level['alias'] ?></option>
+            <?php endforeach; ?>
+        </select>
         <input id="search_id-search-input" type="text" name="s" value="<?php echo isset($_REQUEST['s']) ? esc_attr($_REQUEST['s']) : ''; ?>" />
-        <input id="search-submit" class="button" type="submit" name="" value="<?php echo SwpmUtils::_('Search') ?>" />
+        <input id="search-submit" class="button swpm-admin-search-btn" type="submit" name="" value="<?php echo SwpmUtils::_('Search') ?>" />
         <input type="hidden" name="page" value="simple_wp_membership" />
     </p>
 </form>

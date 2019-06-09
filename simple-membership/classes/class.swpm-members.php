@@ -139,7 +139,7 @@ class SwpmMembers extends WP_List_Table {
         $sortable_columns = $this->get_sortable_columns();
         $orderby = SwpmUtils::sanitize_value_by_array($orderby, $sortable_columns);
         $order = SwpmUtils::sanitize_value_by_array($order, array('DESC' => '1', 'ASC' => '1'));
-        $query.=' ORDER BY ' . $orderby . ' ' . $order;
+        $query .= ' ORDER BY ' . $orderby . ' ' . $order;
 
         //Execute the query
         $totalitems = $wpdb->query($query); //return the total number of affected rows
@@ -152,7 +152,7 @@ class SwpmMembers extends WP_List_Table {
         $totalpages = ceil($totalitems / $perpage);
         if (!empty($paged) && !empty($perpage)) {
             $offset = ($paged - 1) * $perpage;
-            $query.=' LIMIT ' . (int) $offset . ',' . (int) $perpage;
+            $query .= ' LIMIT ' . (int) $offset . ',' . (int) $perpage;
         }
         $this->set_pagination_args(array(
             "total_items" => $totalitems,
@@ -319,8 +319,8 @@ class SwpmMembers extends WP_List_Table {
             $to_email_list = implode(',', $emails);
             $headers = 'From: ' . $from_address . "\r\n";
             $headers .= 'bcc: ' . $to_email_list . "\r\n";
-            $subject=apply_filters('swpm_email_bulk_set_status_subject',$subject);
-            $body=apply_filters('swpm_email_bulk_set_status_body',$body);
+            $subject = apply_filters('swpm_email_bulk_set_status_subject', $subject);
+            $body = apply_filters('swpm_email_bulk_set_status_body', $body);
             wp_mail(array()/* $email_list */, $subject, $body, $headers);
             SwpmLog::log_simple_debug("Bulk activation email notification sent. Activation email sent to the following email: " . $to_email_list, true);
         }
@@ -396,7 +396,7 @@ class SwpmMembers extends WP_List_Table {
 
     function bulk_operation_menu() {
         echo '<div id="poststuff"><div id="post-body">';
-        
+
         if (isset($_REQUEST['swpm_bulk_change_level_process'])) {
             $errorMsg = "";
             $from_level_id = sanitize_text_field($_REQUEST["swpm_bulk_change_level_from"]);
@@ -426,8 +426,8 @@ class SwpmMembers extends WP_List_Table {
             echo $message;
             echo '</strong></p></div>';
         }
-    
-        if(isset($_REQUEST['swpm_bulk_user_start_date_change_process'])){
+
+        if (isset($_REQUEST['swpm_bulk_user_start_date_change_process'])) {
             $errorMsg = "";
             $level_id = sanitize_text_field($_REQUEST["swpm_bulk_user_start_date_change_level"]);
             $new_date = sanitize_text_field($_REQUEST['swpm_bulk_user_start_date_change_date']);
@@ -459,52 +459,52 @@ class SwpmMembers extends WP_List_Table {
         ?>
 
         <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php SwpmUtils::e('Bulk Update Membership Level of Members'); ?></label></h3>
-        <div class="inside">
-            <p>
-                <?php SwpmUtils::e('You can manually change the membership level of any member by editing the record from the members menu. '); ?>
-                <?php SwpmUtils::e('You can use the following option to bulk update the membership level of users who belong to the level you select below.'); ?>
-            </p>
-            <form method="post" action="">
-                <table width="100%" border="0" cellspacing="0" cellpadding="6">
-                    <tr valign="top">
-                        <td width="25%" align="left">
-                            <strong><?php SwpmUtils::e('Membership Level: '); ?></strong>
-                        </td>
-                        <td align="left">
-                            <select name="swpm_bulk_change_level_from">
-                                <option value="please_select"><?php SwpmUtils::e('Select Current Level'); ?></option>
-                                <?php echo SwpmUtils::membership_level_dropdown(); ?>
-                            </select>
-                            <p class="description"><?php SwpmUtils::e('Select the current membership level (the membership level of all members who are in this level will be updated).'); ?></p>
-                        </td>
-                    </tr>
+            <h3 class="hndle"><label for="title"><?php SwpmUtils::e('Bulk Update Membership Level of Members'); ?></label></h3>
+            <div class="inside">
+                <p>
+                    <?php SwpmUtils::e('You can manually change the membership level of any member by editing the record from the members menu. '); ?>
+                    <?php SwpmUtils::e('You can use the following option to bulk update the membership level of users who belong to the level you select below.'); ?>
+                </p>
+                <form method="post" action="">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="6">
+                        <tr valign="top">
+                            <td width="25%" align="left">
+                                <strong><?php SwpmUtils::e('Membership Level: '); ?></strong>
+                            </td>
+                            <td align="left">
+                                <select name="swpm_bulk_change_level_from">
+                                    <option value="please_select"><?php SwpmUtils::e('Select Current Level'); ?></option>
+                                    <?php echo SwpmUtils::membership_level_dropdown(); ?>
+                                </select>
+                                <p class="description"><?php SwpmUtils::e('Select the current membership level (the membership level of all members who are in this level will be updated).'); ?></p>
+                            </td>
+                        </tr>
 
-                    <tr valign="top">
-                        <td width="25%" align="left">
-                            <strong><?php SwpmUtils::e('Level to Change to: '); ?></strong>
-                        </td>
-                        <td align="left">
-                            <select name="swpm_bulk_change_level_to">
-                                <option value="please_select"><?php SwpmUtils::e('Select Target Level'); ?></option>
-                                <?php echo SwpmUtils::membership_level_dropdown(); ?>
-                            </select>
-                            <p class="description"><?php SwpmUtils::e('Select the new membership level.'); ?></p>
-                        </td>
-                    </tr>
+                        <tr valign="top">
+                            <td width="25%" align="left">
+                                <strong><?php SwpmUtils::e('Level to Change to: '); ?></strong>
+                            </td>
+                            <td align="left">
+                                <select name="swpm_bulk_change_level_to">
+                                    <option value="please_select"><?php SwpmUtils::e('Select Target Level'); ?></option>
+                                    <?php echo SwpmUtils::membership_level_dropdown(); ?>
+                                </select>
+                                <p class="description"><?php SwpmUtils::e('Select the new membership level.'); ?></p>
+                            </td>
+                        </tr>
 
-                    <tr valign="top">
-                        <td width="25%" align="left">
-                            <input type="submit" class="button" name="swpm_bulk_change_level_process" value="<?php SwpmUtils::e('Bulk Change Membership Level'); ?>" />
-                        </td>
-                        <td align="left"></td>
-                    </tr>
+                        <tr valign="top">
+                            <td width="25%" align="left">
+                                <input type="submit" class="button" name="swpm_bulk_change_level_process" value="<?php SwpmUtils::e('Bulk Change Membership Level'); ?>" />
+                            </td>
+                            <td align="left"></td>
+                        </tr>
 
-                </table>
-            </form>
+                    </table>
+                </form>
             </div></div>
 
-            <div class="postbox">
+        <div class="postbox">
             <h3 class="hndle"><label for="title"><?php SwpmUtils::e('Bulk Update Access Starts Date of Members'); ?></label></h3>
             <div class="inside">
 
@@ -547,11 +547,11 @@ class SwpmMembers extends WP_List_Table {
                 </form>
             </div></div>
 
-            <script>
-            jQuery(document).ready(function($){
+        <script>
+            jQuery(document).ready(function ($) {
                 $('#swpm_bulk_user_start_date_change_date').datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: "-100:+100"});
             });
-            </script>
+        </script>
         <?php
         echo '</div></div>'; //<!-- end of #poststuff #post-body -->
     }
@@ -640,5 +640,4 @@ class SwpmMembers extends WP_List_Table {
         }
 
     }
-
     

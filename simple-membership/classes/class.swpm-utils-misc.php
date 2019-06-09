@@ -174,7 +174,6 @@ class SwpmMiscUtils {
     }
 
     public static function get_current_page_url() {
-        wp_die();
         $urlParts = array();
         $urlParts['proto'] = 'http';
 

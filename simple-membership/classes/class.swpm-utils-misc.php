@@ -174,29 +174,55 @@ class SwpmMiscUtils {
     }
 
     public static function get_current_page_url() {
-        $urlParts = array();
-        $urlParts['proto'] = 'http';
+        $pageURL = 'http';
+
+        if (isset($_SERVER['SCRIPT_URI']) && !empty($_SERVER['SCRIPT_URI'])) {
+            $pageURL = $_SERVER['SCRIPT_URI'];
+            $pageURL = apply_filters('swpm_get_current_page_url_filter', $pageURL);
+            return $pageURL;
+        }
+
+        if (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on")) {
+            $pageURL .= "s";
+        }
+        $pageURL .= "://";
+        if (isset($_SERVER["SERVER_PORT"]) && ($_SERVER["SERVER_PORT"] != "80") && ($_SERVER["SERVER_PORT"] != "443")) {
+            $pageURL .= ltrim($_SERVER["SERVER_NAME"], ".*") . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+        } else {
+            $pageURL .= ltrim($_SERVER["SERVER_NAME"], ".*") . $_SERVER["REQUEST_URI"];
+        }
+        
+        $pageURL = apply_filters('swpm_get_current_page_url_filter', $pageURL);
+        
+        return $pageURL;
+    }
+    
+    /* 
+     * This is an alternative to the get_current_page_url() function. It needs to be tested on many different server conditions before it can be utilized 
+     */
+    public static function get_current_page_url_alt() {
+        $url_parts = array();
+        $url_parts['proto'] = 'http';
 
         if (isset($_SERVER['SCRIPT_URI']) && !empty($_SERVER['SCRIPT_URI'])) {
             return $_SERVER['SCRIPT_URI'];
         }
 
         if (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on")) {
-            $urlParts['proto'] = 'https';
+            $url_parts['proto'] = 'https';
         }
 
-        $urlParts['port'] = '';
+        $url_parts['port'] = '';
         if (isset($_SERVER["SERVER_PORT"]) && ($_SERVER["SERVER_PORT"] != "80") && ($_SERVER["SERVER_PORT"] != "443")) {
-            $urlParts['port'] = $_SERVER["SERVER_PORT"];
+            $url_parts['port'] = $_SERVER["SERVER_PORT"];
         }
 
-        $urlParts['domain'] = ltrim($_SERVER["SERVER_NAME"], ".*");
+        $url_parts['domain'] = ltrim($_SERVER["SERVER_NAME"], ".*");
+        $url_parts['uri'] = $_SERVER["REQUEST_URI"];
+        
+        $url_parts = apply_filters('swpm_get_current_page_url_alt_filter', $url_parts);
 
-        $urlParts['uri'] = $_SERVER["REQUEST_URI"];
-
-        $urlParts = apply_filters('swpm_get_current_page_url_filter', $urlParts);
-
-        $pageURL = sprintf('%s://%s%s%s', $urlParts['proto'], $urlParts['domain'], !empty($urlParts['port']) ? ':' . $urlParts['port'] : '', $urlParts['uri']);
+        $pageURL = sprintf('%s://%s%s%s', $url_parts['proto'], $url_parts['domain'], !empty($url_parts['port']) ? ':' . $url_parts['port'] : '', $url_parts['uri']);
 
         return $pageURL;
     }

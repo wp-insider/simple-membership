@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.2
-Stable tag: 3.8.2t1
+Stable tag: 3.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,7 +75,9 @@ You can create a free forum user account and ask your questions.
 * Membership management side is handled by the plugin.
 * Ability to manually approve your members.
 * Ability to import WordPress users as members.
+* Search for a member's profile in your WP admin dashboard.
 * Filter members list by account status.
+* Filter members list by membership level.
 * Can be translated to any language.
 * Hide the admin toolbar from the frontend of your site.
 * Allow your members to delete their membership accounts.
@@ -156,8 +158,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.8.2 =
-- Updated the Polish langauge translation.
+= 3.8.2 =
+- Added membership level and account status filter in the member search function (Members menu of admin dashboard).
+- Updated the Polish language translation.
+- Added a filter hook in the get_current_page_url() function.
 
 = 3.8.1 =
 - [Important Note] If you are using the Braintree gateway, please take a backup before updating. Do a test transaction using Braintree gateway on live mode to make sure the new 3D Secure changes are working fine. 

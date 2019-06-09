@@ -96,13 +96,13 @@ class SwpmMembers extends WP_List_Table {
         }
 
         $status = filter_input(INPUT_GET, 'status');
-        $filter1 = '';
+        $filters = array();
 
         //Add the search parameter to the query
         if (!empty($s)) {
             $s = sanitize_text_field($s);
             $s = trim($s); //Trim the input
-            $filter1 .= "( user_name LIKE '%" . strip_tags($s) . "%' "
+            $filters[] = "( user_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR first_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR last_name LIKE '%" . strip_tags($s) . "%' "
                     . " OR email LIKE '%" . strip_tags($s) . "%' "
@@ -113,22 +113,28 @@ class SwpmMembers extends WP_List_Table {
         }
 
         //Add account status filtering to the query
-        $filter2 = '';
         if (!empty($status)) {
             if ($status == 'incomplete') {
-                $filter2 .= "user_name = ''";
+                $filters[] = "user_name = ''";
             } else {
-                $filter2 .= "account_state = '" . $status . "'";
+                $filters[] = "account_state = '" . $status . "'";
             }
         }
 
+        //Add membership level filtering
+        $membership_level = filter_input(INPUT_GET, 'membership_level', FILTER_SANITIZE_NUMBER_INT);
+
+        if (!empty($membership_level)) {
+            $filters[] = sprintf("membership_level = '%d'", $membership_level);
+        }
+
         //Build the WHERE clause of the query string
-        if (!empty($filter1) && !empty($filter2)) {
-            $query .= "WHERE " . $filter1 . " AND " . $filter2;
-        } else if (!empty($filter1)) {
-            $query .= "WHERE " . $filter1;
-        } else if (!empty($filter2)) {
-            $query .= "WHERE " . $filter2;
+        if (!empty($filters)) {
+            $filter_str = '';
+            foreach ($filters as $ind => $filter) {
+                $filter_str .= $ind === 0 ? $filter : " AND " . $filter;
+            }
+            $query .= "WHERE " . $filter_str;
         }
 
         //Build the orderby and order query parameters

@@ -158,6 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.8.3 =
+- Compatibility with Wordfence plugin's captcha feature.
+
 = 3.8.2 =
 - Added membership level and account status filter in the member search function (Members menu of admin dashboard).
 - Updated the Polish language translation.

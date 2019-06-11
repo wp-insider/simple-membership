@@ -228,6 +228,9 @@ class SimpleWpMembership {
             }
         }
         SwpmLog::log_auth_debug("Trying wp_signon() with username: " . $username, true);
+        
+        add_filter('wordfence_ls_require_captcha', '__return_false');//For Wordfence plugin's captcha compatibility
+        
         $user_obj = wp_signon(array('user_login' => $username, 'user_password' => $pass, 'remember' => $rememberme), is_ssl());
         if ($user_obj instanceof WP_User) {
             wp_set_current_user($user_obj->ID, $user_obj->user_login);

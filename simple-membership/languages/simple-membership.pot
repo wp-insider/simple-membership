@@ -2697,6 +2697,9 @@ msgstr ""
 msgid "HTTP error occured during payment process:"
 msgstr ""
 
+msgid "You need to confirm your email address. Please check your email and follow instructions to complete your registration."
+msgstr ""
+
 #: Translation strings from addons === Form builder addon
 msgid "Type password here"
 msgstr ""

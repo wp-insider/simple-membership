@@ -2749,6 +2749,9 @@ msgstr ""
 msgid "Username can only contain: letters, numbers and .-*@"
 msgstr ""
 
+msgid "Allowed characters are: letters, numbers and .-_*@"
+msgstr ""
+
 #: === Partial protection addon strings
 msgid "You do not have permission to view this content."
 msgstr ""

@@ -159,6 +159,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 3.8.3 =
+- Updated Braintree PHP SDK to prevent deprecation notice when using PHP 7+.
 - Compatibility with Wordfence plugin's captcha feature.
 - German translation file updated.
 - Japanese translation file updated.

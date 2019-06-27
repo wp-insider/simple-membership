@@ -7,14 +7,13 @@ namespace Braintree;
  *
  *
  * @package    Braintree
- * @copyright  2015 Braintree, a division of PayPal, Inc.
  *
- * @property-read string $settlementAmount
- * @property-read string $settlementCurrencyIsoCode
- * @property-read string $settlementCurrencyExchangeRate
- * @property-read string $fundsHeld
- * @property-read string $success
  * @property-read string $disbursementDate
+ * @property-read boolean $fundsHeld
+ * @property-read string $settlementAmount
+ * @property-read string $settlementCurrencyExchangeRate
+ * @property-read string $settlementCurrencyIsoCode
+ * @property-read string $success
  */
 class DisbursementDetails extends Instance
 {

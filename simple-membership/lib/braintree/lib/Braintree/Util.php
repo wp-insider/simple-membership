@@ -7,8 +7,6 @@ use InvalidArgumentException;
 /**
  * Braintree Utility methods
  * PHP version 5
- *
- * @copyright  2015 Braintree, a division of PayPal, Inc.
  */
 
 class Util
@@ -82,6 +80,48 @@ class Util
     }
 
     /**
+     * throws an exception based on the type of error returned from graphql
+     * @param array $response complete graphql response
+     * @throws Exception multiple types depending on the error
+     * @return void
+     */
+    public static function throwGraphQLResponseException($response)
+    {
+        if(!array_key_exists("errors", $response) || !($errors = $response["errors"])) {
+            return;
+        }
+
+        foreach ($errors as $error) {
+            $message = $error["message"];
+            if ($error["extensions"] == null) {
+                throw new Exception\Unexpected("Unexpected exception:" . $message);
+            }
+
+            $errorClass = $error["extensions"]["errorClass"];
+
+            if ($errorClass == "VALIDATION") {
+                continue;
+            } else if ($errorClass == "AUTHENTICATION") {
+                throw new Exception\Authentication();
+            } else if ($errorClass == "AUTHORIZATION") {
+                throw new Exception\Authorization($message);
+            } else if ($errorClass == "NOT_FOUND") {
+                throw new Exception\NotFound();
+            } else if ($errorClass == "UNSUPPORTED_CLIENT") {
+                throw new Exception\UpgradeRequired();
+            } else if ($errorClass == "RESOURCE_LIMIT") {
+                throw new Exception\TooManyRequests();
+            } else if ($errorClass == "INTERNAL") {
+                throw new Exception\ServerError();
+            } else if ($errorClass == "SERVICE_AVAILABILITY") {
+                throw new Exception\DownForMaintenance();
+            } else {
+                throw new Exception\Unexpected('Unexpected exception ' . $message);
+            }
+        }
+    }
+
+    /**
      *
      * @param string $className
      * @param object $resultObj
@@ -135,6 +175,12 @@ class Util
             'Braintree_Discount' => 'discount',
             'Braintree\DiscountGateway' => 'discount',
             'Braintree_DiscountGateway' => 'discount',
+            'Braintree\Dispute' => 'dispute',
+            'Braintree_Dispute' => 'dispute',
+            'Braintree\Dispute\EvidenceDetails' => 'evidence',
+            'Braintree_Dispute_EvidenceDetails' => 'evidence',
+            'Braintree\DocumentUpload' => 'documentUpload',
+            'Braintree_DocumentUpload' => 'doumentUpload',
             'Braintree\Plan' => 'plan',
             'Braintree_Plan' => 'plan',
             'Braintree\PlanGateway' => 'plan',
@@ -163,6 +209,8 @@ class Util
             'Braintree_PayPalAccount' => 'paypalAccount',
             'Braintree\PayPalAccountGateway' => 'paypalAccount',
             'Braintree_PayPalAccountGateway' => 'paypalAccount',
+            'Braintree\UsBankAccountVerification' => 'usBankAccountVerification',
+            'Braintree_UsBankAccountVerification' => 'usBankAccountVerification',
         ];
 
         return $classNamesToResponseKeys[$name];
@@ -178,6 +226,8 @@ class Util
         $responseKeysToClassNames = [
             'creditCard' => 'Braintree\CreditCard',
             'customer' => 'Braintree\Customer',
+            'dispute' => 'Braintree\Dispute',
+            'documentUpload' => 'Braintree\DocumentUpload',
             'subscription' => 'Braintree\Subscription',
             'transaction' => 'Braintree\Transaction',
             'verification' => 'Braintree\CreditCardVerification',
@@ -202,12 +252,11 @@ class Util
      */
     public static function delimiterToCamelCase($string, $delimiter = '[\-\_]')
     {
-        // php doesn't garbage collect functions created by create_function()
-        // so use a static variable to avoid adding a new function to memory
-        // every time this function is called.
         static $callback = null;
         if ($callback === null) {
-            $callback = create_function('$matches', 'return strtoupper($matches[1]);');
+            $callback = function ($matches) {
+                return strtoupper($matches[1]);
+            };
         }
 
         return preg_replace_callback('/' . $delimiter . '(\w)/', $callback, $string);

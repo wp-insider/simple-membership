@@ -11,22 +11,21 @@ namespace Braintree;
  *
  * @package    Braintree
  * @category   Resources
- * @copyright  2015 Braintree, a division of PayPal, Inc.
  *
- * @property-read string $createdAt
- * @property-read string $default
- * @property-read string $updatedAt
- * @property-read string $customerId
- * @property-read string $cardType
  * @property-read string $bin
  * @property-read string $cardMemberExpiryDate
  * @property-read string $cardMemberNumber
  * @property-read string $cardType
- * @property-read string $sourceDescription
- * @property-read string $token
- * @property-read string $imageUrl
+ * @property-read \DateTime $createdAt
+ * @property-read string $customerId
+ * @property-read boolean $default
  * @property-read string $expirationMonth
  * @property-read string $expirationYear
+ * @property-read string $imageUrl
+ * @property-read string $token
+ * @property-read string $sourceDescription
+ * @property-read \Braintree\Subscription[] $subscriptions
+ * @property-read \DateTime $updatedAt
  */
 class AmexExpressCheckoutCard extends Base
 {

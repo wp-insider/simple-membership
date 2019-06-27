@@ -8,7 +8,6 @@ use Braintree\Instance;
  *
  * @package    Braintree
  * @subpackage Transaction
- * @copyright  2015 Braintree, a division of PayPal, Inc.
  */
 
 /**
@@ -17,16 +16,25 @@ use Braintree\Instance;
  *
  * @package    Braintree
  * @subpackage Transaction
- * @copyright  2015 Braintree, a division of PayPal, Inc.
  *
- * @property-read string $payerEmail
- * @property-read string $paymentId
  * @property-read string $authorizationId
- * @property-read string $token
+ * @property-read string $captureId
+ * @property-read string $customField
+ * @property-read string $description
  * @property-read string $imageUrl
+ * @property-read string $payerEmail
+ * @property-read string $payerFirstName
+ * @property-read string $payerId
+ * @property-read string $payerLastName
+ * @property-read string $payerStatus
+ * @property-read string $paymentId
+ * @property-read string $refundId
+ * @property-read string $sellerProtectionStatus
+ * @property-read string $taxId
+ * @property-read string $taxIdType
+ * @property-read string $token
  * @property-read string $transactionFeeAmount
  * @property-read string $transactionFeeCurrencyIsoCode
- * @property-read string $description
  */
 class PayPalDetails extends Instance
 {

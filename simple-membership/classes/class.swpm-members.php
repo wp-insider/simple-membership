@@ -57,6 +57,11 @@ class SwpmMembers extends WP_List_Table {
         return $item[$column_name];
     }
 
+    function column_account_state($item) {
+        $acc_state_str = ucfirst($item['account_state']);
+        return SwpmUtils::_($acc_state_str);
+    }
+
     function column_member_id($item) {
         $delete_swpmuser_nonce = wp_create_nonce('delete_swpmuser_admin_end');
         $actions = array(

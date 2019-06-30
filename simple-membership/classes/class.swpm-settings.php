@@ -14,26 +14,25 @@ class SwpmSettings {
     public function init_config_hooks() {
         //This function is called from "admin_init"
         //It sets up the various tabs and the fields for the settings admin page.
-        
+
         if (is_admin()) { // for frontend just load settings but dont try to render settings page.
-            
             //Read the value of tab query arg.
-            $tab = isset( $_REQUEST['tab'] ) ? sanitize_text_field($_REQUEST['tab']) : 1;
+            $tab = isset($_REQUEST['tab']) ? sanitize_text_field($_REQUEST['tab']) : 1;
             $this->current_tab = empty($tab) ? 1 : $tab;
-            
+
             //Setup the available settings tabs array.
             $this->tabs = array(
-                1 => SwpmUtils::_('General Settings'), 
+                1 => SwpmUtils::_('General Settings'),
                 2 => SwpmUtils::_('Payment Settings'),
-                3 => SwpmUtils::_('Email Settings'), 
-                4 => SwpmUtils::_('Tools'), 
-                5 => SwpmUtils::_('Advanced Settings'), 
+                3 => SwpmUtils::_('Email Settings'),
+                4 => SwpmUtils::_('Tools'),
+                5 => SwpmUtils::_('Advanced Settings'),
                 6 => SwpmUtils::_('Addons Settings')
             );
-            
+
             //Register the draw tab action hook. It will be triggered using do_action("swpm-draw-settings-nav-tabs")
             add_action('swpm-draw-settings-nav-tabs', array(&$this, 'draw_tabs'));
-            
+
             //Register the various settings fields for the current tab.
             $method = 'tab_' . $this->current_tab;
             if (method_exists($this, $method)) {
@@ -44,7 +43,7 @@ class SwpmSettings {
 
     private function tab_1() {
         //Register settings sections and fileds for the general settings tab.
-        
+
         register_setting('swpm-settings-tab-1', 'swpm-settings', array(&$this, 'sanitize_tab_1'));
 
         //This settings section has no heading
@@ -69,16 +68,16 @@ class SwpmSettings {
             'options' => SwpmUtils::get_account_state_options(),
             'default' => 'active',
             'message' => SwpmUtils::_('Select the default account status for newly registered users. If you want to manually approve the members then you can set the status to "Pending".')));
-        
+
         add_settings_field('members-login-to-comment', SwpmUtils::_('Members Must be Logged in to Comment'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings', array('item' => 'members-login-to-comment',
-            'message' => SwpmUtils::_('Enable this option if you only want the members of the site to be able to post a comment.')));        
-        
-        /* 
-        add_settings_field('protect-everything',  SwpmUtils::_('Protect Everything'),
-            array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
-            array('item' => 'protect-everything',
-            'message'=>SwpmUtils::_('Check this box if you want to protect all posts/pages by default.'))); 
-        */
+            'message' => SwpmUtils::_('Enable this option if you only want the members of the site to be able to post a comment.')));
+
+        /*
+          add_settings_field('protect-everything',  SwpmUtils::_('Protect Everything'),
+          array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
+          array('item' => 'protect-everything',
+          'message'=>SwpmUtils::_('Check this box if you want to protect all posts/pages by default.')));
+         */
 
         add_settings_section('pages-settings', SwpmUtils::_('Pages Settings'), array(&$this, 'pages_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('login-page-url', SwpmUtils::_('Login Page URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'pages-settings', array('item' => 'login-page-url',
@@ -97,9 +96,9 @@ class SwpmSettings {
         $debug_field_help_text = SwpmUtils::_('Check this option to enable debug logging.');
         $debug_field_help_text .= SwpmUtils::_(' This can be useful when troubleshooting an issue. Turn it off and reset the log files after the troubleshooting is complete.');
         $debug_field_help_text .= '<br />';
-        $debug_field_help_text .= '<br />- '. SwpmUtils::_('View general debug log file by clicking ') . '<a href="' . SIMPLE_WP_MEMBERSHIP_URL . '/log.txt" target="_blank">' . SwpmUtils::_('here') . '</a>.';
-        $debug_field_help_text .= '<br />- '. SwpmUtils::_('View login related debug log file by clicking ') . '<a href="' . SIMPLE_WP_MEMBERSHIP_URL . '/log-auth.txt" target="_blank">' . SwpmUtils::_('here') . '</a>.';
-        $debug_field_help_text .= '<br />- '. SwpmUtils::_('Reset debug log files by clicking ') . '<a href="admin.php?page=simple_wp_membership_settings&swmp_reset_log=1" target="_blank">' . SwpmUtils::_('here') . '</a>.';
+        $debug_field_help_text .= '<br />- ' . SwpmUtils::_('View general debug log file by clicking ') . '<a href="' . SIMPLE_WP_MEMBERSHIP_URL . '/log.txt" target="_blank">' . SwpmUtils::_('here') . '</a>.';
+        $debug_field_help_text .= '<br />- ' . SwpmUtils::_('View login related debug log file by clicking ') . '<a href="' . SIMPLE_WP_MEMBERSHIP_URL . '/log-auth.txt" target="_blank">' . SwpmUtils::_('here') . '</a>.';
+        $debug_field_help_text .= '<br />- ' . SwpmUtils::_('Reset debug log files by clicking ') . '<a href="admin.php?page=simple_wp_membership_settings&swmp_reset_log=1" target="_blank">' . SwpmUtils::_('here') . '</a>.';
         add_settings_field('enable-debug', SwpmUtils::_('Enable Debug'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings', array('item' => 'enable-debug',
             'message' => $debug_field_help_text));
         add_settings_field('enable-sandbox-testing', SwpmUtils::_('Enable Sandbox Testing'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'debug-settings', array('item' => 'enable-sandbox-testing',
@@ -108,17 +107,16 @@ class SwpmSettings {
 
     private function tab_2() {
         //Register settings sections and fileds for the payment settings tab.
-
     }
 
     private function tab_3() {
         //Register settings sections and fileds for the email settings tab.
-               
+
         register_setting('swpm-settings-tab-3', 'swpm-settings', array(&$this, 'sanitize_tab_3'));
-        
+
         add_settings_section('email-settings-overview', SwpmUtils::_('Email Settings Overview'), array(&$this, 'email_settings_overview_callback'), 'simple_wp_membership_settings');
         add_settings_section('email-misc-settings', SwpmUtils::_('Email Misc. Settings'), array(&$this, 'email_misc_settings_callback'), 'simple_wp_membership_settings');
-        
+
         add_settings_field('email-misc-from', SwpmUtils::_('From Email Address'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-misc-settings', array('item' => 'email-from',
             'message' => 'This value will be used as the sender\'s address for the emails. Example value: Your Name &lt;sales@your-domain.com&gt;'));
 
@@ -132,10 +130,10 @@ class SwpmSettings {
         //Registration complete email settings
         $msg_for_admin_notify_email_field = SwpmUtils::_('Enter the email address where you want the admin notification email to be sent to.');
         $msg_for_admin_notify_email_field .= SwpmUtils::_(' You can put multiple email addresses separated by comma (,) in the above field to send the notification to multiple email addresses.');
-        
+
         $msg_for_admin_notify_email_subj = SwpmUtils::_('Enter the subject for the admin notification email.');
         $admin_notify_email_body_msg = SwpmUtils::_('This email will be sent to the admin when a new user completes the membership registration. Only works if you have enabled the "Send Notification to Admin" option above.');
-        
+
         add_settings_section('reg-email-settings', SwpmUtils::_('Email Settings (Registration Complete)'), array(&$this, 'reg_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('reg-complete-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-subject',
             'message' => ''));
@@ -146,10 +144,10 @@ class SwpmSettings {
         add_settings_field('admin-notification-email', SwpmUtils::_('Admin Email Address'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'admin-notification-email',
             'message' => $msg_for_admin_notify_email_field));
         add_settings_field('reg-complete-mail-subject-admin', SwpmUtils::_('Admin Notification Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-subject-admin',
-            'message' => $msg_for_admin_notify_email_subj));        
+            'message' => $msg_for_admin_notify_email_subj));
         add_settings_field('reg-complete-mail-body-admin', SwpmUtils::_('Admin Notification Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'reg-complete-mail-body-admin',
-            'message' => $admin_notify_email_body_msg));        
-        
+            'message' => $admin_notify_email_body_msg));
+
         add_settings_field('enable-notification-after-manual-user-add', SwpmUtils::_('Send Email to Member When Added via Admin Dashboard'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'reg-email-settings', array('item' => 'enable-notification-after-manual-user-add',
             'message' => ''));
 
@@ -171,73 +169,72 @@ class SwpmSettings {
         //Email activation email settings.
         add_settings_section('email-activation-email-settings', SwpmUtils::_(' Email Settings (Email Activation)'), array(&$this, 'email_activation_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('email-activation-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'email-activation-email-settings', array('item' => 'email-activation-mail-subject', 'message' => ''));
-        add_settings_field('email-activation-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'email-activation-email-settings', array('item' => 'email-activation-mail-body', 'message' => ''));        
+        add_settings_field('email-activation-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'email-activation-email-settings', array('item' => 'email-activation-mail-body', 'message' => ''));
     }
 
     private function tab_4() {
         //Register settings sections and fileds for the tools tab.
-
     }
 
     private function tab_5() {
         //Register settings sections and fileds for the advanced settings tab.
-              
+
         register_setting('swpm-settings-tab-5', 'swpm-settings', array(&$this, 'sanitize_tab_5'));
 
         add_settings_section('advanced-settings', SwpmUtils::_('Advanced Settings'), array(&$this, 'advanced_settings_callback'), 'simple_wp_membership_settings');
 
         add_settings_field('enable-expired-account-login', SwpmUtils::_('Enable Expired Account Login'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'enable-expired-account-login',
             'message' => SwpmUtils::_("When enabled, expired members will be able to log into the system but won't be able to view any protected content. This allows them to easily renew their account by making another payment.")));
-        
+
         add_settings_field('renewal-page-url', SwpmUtils::_('Membership Renewal URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'renewal-page-url',
-            'message' => SwpmUtils::_('You can create a renewal page for your site. Read <a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">this documentation</a> to learn how to create a renewal page.')) );
-        
+            'message' => SwpmUtils::_('You can create a renewal page for your site. Read <a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">this documentation</a> to learn how to create a renewal page.')));
+
         add_settings_field('after-rego-redirect-page-url', SwpmUtils::_('After Registration Redirect URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'after-rego-redirect-page-url',
-            'message' => SwpmUtils::_('You can enter an URL here to redirect the members to this page after they submit the registration form. Read <a href="https://simple-membership-plugin.com/configure-after-registration-redirect-for-members/" target="_blank">this documentation</a> to learn how to setup after registration redirect.')) );
-        
+            'message' => SwpmUtils::_('You can enter an URL here to redirect the members to this page after they submit the registration form. Read <a href="https://simple-membership-plugin.com/configure-after-registration-redirect-for-members/" target="_blank">this documentation</a> to learn how to setup after registration redirect.')));
+
         add_settings_field('auto-login-after-rego', SwpmUtils::_('Enable Auto Login After Registration'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'auto-login-after-rego',
             'message' => SwpmUtils::_('Use this option if you want the members to be automatically logged into your site right after they complete the registration. This option will override any after registration redirection and instead it will trigger the after login redirection. Read <a href="https://simple-membership-plugin.com/configure-auto-login-after-registration-members/" target="_blank">this documentation</a> to learn more.')));
 
         add_settings_field('after-logout-redirection-url', SwpmUtils::_('After Logout Redirect URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'after-logout-redirection-url',
-            'message' => SwpmUtils::_('You can enter an URL here to redirect the members to this page after they click the logout link to logout from your site.')) );
-              
+            'message' => SwpmUtils::_('You can enter an URL here to redirect the members to this page after they click the logout link to logout from your site.')));
+
         add_settings_field('logout-member-on-browser-close', SwpmUtils::_('Logout Member on Browser Close'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'logout-member-on-browser-close',
             'message' => SwpmUtils::_('Enable this option if you want the member to be logged out of the account when he closes the browser.')));
-        
+
         add_settings_field('allow-account-deletion', SwpmUtils::_('Allow Account Deletion'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'allow-account-deletion',
             'message' => SwpmUtils::_('Allow users to delete their accounts.')));
-        
+
         add_settings_field('force-strong-passwords', SwpmUtils::_('Force Strong Password for Members'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'force-strong-passwords',
             'message' => SwpmUtils::_('Enable this if you want the users to be forced to use a strong password for their accounts.')));
-        
+
         add_settings_field('use-wordpress-timezone', SwpmUtils::_('Use WordPress Timezone'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'use-wordpress-timezone',
             'message' => SwpmUtils::_('Use this option if you want to use the timezone value specified in your WordPress General Settings interface.')));
-        
+
         add_settings_field('delete-pending-account', SwpmUtils::_('Auto Delete Pending Account'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'delete-pending-account',
             'options' => array(0 => 'Do not delete', 1 => 'Older than 1 month', 2 => 'Older than 2 months'),
             'default' => '0',
             'message' => SwpmUtils::_('Select how long you want to keep "pending" account.')));
-        
+
         add_settings_field('admin-dashboard-access-permission', SwpmUtils::_('Admin Dashboard Access Permission'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'admin-dashboard-access-permission',
             'options' => array('manage_options' => 'Admin', 'edit_pages' => 'Editor', 'edit_published_posts' => 'Author', 'edit_posts' => 'Contributor'),
             'default' => 'manage_options',
             'message' => SwpmUtils::_('SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user role to access the SWPM admin dashboard by selecting a value here.')));
-        
+
         add_settings_field('force-wp-user-sync', SwpmUtils::_('Force WP User Synchronization'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'force-wp-user-sync',
             'message' => SwpmUtils::_('Enable this option if you want to force the member login to be synchronized with WP user account. This can be useful if you are using another plugin that uses WP user records. For example: bbPress plugin.')));
-        
+
         //Auto create SWPM user related settings section
         add_settings_section('auto-create-swpm-user-settings', SwpmUtils::_('Create Member Accounts for New WP Users'), array(&$this, 'advanced_settings_auto_create_swpm_uses_settings_callback'), 'simple_wp_membership_settings');
-        
+
         add_settings_field('enable-auto-create-swpm-members', SwpmUtils::_('Enable Auto Create Member Accounts'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'auto-create-swpm-user-settings', array('item' => 'enable-auto-create-swpm-members',
             'message' => SwpmUtils::_('Enable this option to automatically create member accounts for any new WP user that is created by another plugin.')));
-        
+
         $levels_array = SwpmMembershipLevelUtils::get_all_membership_levels_in_array();
         add_settings_field('auto-create-default-membership-level', SwpmUtils::_('Default Membership Level'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'auto-create-swpm-user-settings', array('item' => 'auto-create-default-membership-level',
             'options' => $levels_array,
             'default' => '',
             'message' => SwpmUtils::_('When automatically creating a member account using this feature, the membership level of the user will be set to the one you specify here.')));
-        
+
         $status_array = SwpmUtils::get_account_state_options();
         add_settings_field('auto-create-default-account-status', SwpmUtils::_('Default Account Status'), array(&$this, 'selectbox_callback'), 'simple_wp_membership_settings', 'auto-create-swpm-user-settings', array('item' => 'auto-create-default-account-status',
             'options' => $status_array,
@@ -245,25 +242,23 @@ class SwpmSettings {
             'message' => SwpmUtils::_('When automatically creating a member account using this feature, the membership account status of the user will be set to the one you specify here.')));
 
         add_settings_field('payment-notification-forward-url', SwpmUtils::_('Payment Notification Forward URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'advanced-settings', array('item' => 'payment-notification-forward-url',
-            'message' => SwpmUtils::_('You can enter an URL here to forward the payment notification after the membership payment has been processed by this plugin. Useful if you want to forward the payment notification to an external script for further processing.')) );
+            'message' => SwpmUtils::_('You can enter an URL here to forward the payment notification after the membership payment has been processed by this plugin. Useful if you want to forward the payment notification to an external script for further processing.')));
 
         //Terms and conditions section
-        add_settings_section('terms-and-conditions', SwpmUtils::_('Terms and Conditions'), array(&$this, 'advanced_settings_terms_and_conditions_callback'), 'simple_wp_membership_settings');        
+        add_settings_section('terms-and-conditions', SwpmUtils::_('Terms and Conditions'), array(&$this, 'advanced_settings_terms_and_conditions_callback'), 'simple_wp_membership_settings');
 
         add_settings_field('enable-terms-and-conditions', SwpmUtils::_('Enable Terms and Conditions'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'enable-terms-and-conditions',
             'message' => SwpmUtils::_('Users must accept the terms before they can complete the registration.')));
         add_settings_field('terms-and-conditions-page-url', SwpmUtils::_('Terms and Conditions Page URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'terms-and-conditions-page-url',
-            'message' => SwpmUtils::_('Enter the URL of your terms and conditions page. You can create a WordPress page and specify your terms in there then specify the URL of that page in the above field.')) );
+            'message' => SwpmUtils::_('Enter the URL of your terms and conditions page. You can create a WordPress page and specify your terms in there then specify the URL of that page in the above field.')));
         add_settings_field('enable-privacy-policy', SwpmUtils::_('Enable Privacy Policy'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'enable-privacy-policy',
             'message' => SwpmUtils::_('Users must accept it before they can complete the registration.')));
         add_settings_field('privacy-policy-page-url', SwpmUtils::_('Privacy Policy Page URL'), array(&$this, 'textfield_long_callback'), 'simple_wp_membership_settings', 'terms-and-conditions', array('item' => 'privacy-policy-page-url',
-            'message' => SwpmUtils::_('Enter the URL of your privacy policy page.')) );
-        
+            'message' => SwpmUtils::_('Enter the URL of your privacy policy page.')));
     }
 
     private function tab_6() {
         //Register settings sections and fileds for the addon settings tab.
-
     }
 
     public static function get_instance() {
@@ -329,8 +324,8 @@ class SwpmSettings {
     public function swpm_documentation_callback() {
         ?>
         <div class="swpm-orange-box">
-            Visit the <a target="_blank" href="https://simple-membership-plugin.com/">Simple Membership Plugin Site</a>&nbsp;
-            to read setup and configuration documentation. Please <a href="https://wordpress.org/support/view/plugin-reviews/simple-membership?filter=5" target="_blank">give us a rating</a> if you like the plugin.
+            <?php printf(SwpmUtils::_('Visit the %s to read setup and configuration documentation.', '<a target="_blank" href="https://simple-membership-plugin.com/">' . SwpmUtils::_('Simple Membership Plugin Site') . '</a>')); ?>
+            <?php printf(SwpmUtils::_('Please %s if you like the plugin.'), '<a href="https://wordpress.org/support/view/plugin-reviews/simple-membership?filter=5" target="_blank">' . SwpmUtils::_('give us a rating') . '</a>'); ?>
         </div>
         <?php
     }
@@ -357,7 +352,7 @@ class SwpmSettings {
 
     public function pages_settings_callback() {
         SwpmUtils::e('Page Setup and URL Related settings.');
-        
+
         echo '<p>';
         SwpmUtils::e('The following pages are required for the plugin to function correctly. These pages were automatically created by the plugin at install time.');
         echo '</p>';
@@ -380,22 +375,22 @@ class SwpmSettings {
         echo '<p>';
         SwpmUtils::e('This interface lets you custsomize the various emails that gets sent to your members for various actions. The default settings should be good to get your started.');
         echo '</p>';
-        
+
         echo '<p>';
-        echo '<a href="https://simple-membership-plugin.com/email-merge-tags-email-shortcodes-for-email-customization/" target="_blank">'.SwpmUtils::_('This documentation').'</a>';
+        echo '<a href="https://simple-membership-plugin.com/email-merge-tags-email-shortcodes-for-email-customization/" target="_blank">' . SwpmUtils::_('This documentation') . '</a>';
         SwpmUtils::e(' explains what email merge tags you can use in the email body field to customize it (if you want to).');
         echo '</p>';
         echo '</div>';
     }
-    
+
     public function email_misc_settings_callback() {
-        
+
         //Show settings updated message when it is updated
         if (isset($_REQUEST['settings-updated'])) {
             //This status message need to be in the callback function to prevent header sent warning
             echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_('Settings updated!') . '</p></div>';
         }
-        
+
         SwpmUtils::e('Settings in this section apply to all emails.');
     }
 
@@ -406,36 +401,35 @@ class SwpmSettings {
     public function bulk_activate_email_settings_callback() {
         SwpmUtils::e('This email will be sent to your members when you use the bulk account activate and notify action.');
         SwpmUtils::e(' You cannot use email merge tags in this email. You can only use generic text.');
-
     }
-    
+
     public function email_activation_email_settings_callback() {
         SwpmUtils::e('This email will be sent if Email Activation is enabled for a Membership Level.');
     }
-    
+
     public function reg_prompt_email_settings_callback() {
         SwpmUtils::e('This email will be sent to prompt users to complete registration after the payment.');
     }
 
     public function advanced_settings_callback() {
-        
+
         //Show settings updated message when it is updated
         if (isset($_REQUEST['settings-updated'])) {
             //This status message need to be in the callback function to prevent header sent warning
             echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_('Settings updated!') . '</p></div>';
         }
-        
+
         SwpmUtils::e('This page allows you to configure some advanced features of the plugin.');
     }
 
     public function advanced_settings_auto_create_swpm_uses_settings_callback() {
         SwpmUtils::e('This section allows you to configure automatic creation of member accounts when new WP User records are created by another plugin. It can be useful if you are using another plugin that creates WP user records and you want them to be recognized in the membership plugin.');
     }
-    
+
     public function advanced_settings_terms_and_conditions_callback() {
-        SwpmUtils::e('This section allows you to configure terms and conditions and privacy policy that users must accept at registration time.');        
+        SwpmUtils::e('This section allows you to configure terms and conditions and privacy policy that users must accept at registration time.');
     }
-    
+
     public function sanitize_tab_1($input) {
         if (empty($this->settings)) {
             $this->settings = (array) get_option('swpm-settings');
@@ -446,12 +440,12 @@ class SwpmSettings {
         $output['hide-adminbar'] = isset($input['hide-adminbar']) ? esc_attr($input['hide-adminbar']) : "";
         $output['show-adminbar-admin-only'] = isset($input['show-adminbar-admin-only']) ? esc_attr($input['show-adminbar-admin-only']) : "";
         $output['disable-access-to-wp-dashboard'] = isset($input['disable-access-to-wp-dashboard']) ? esc_attr($input['disable-access-to-wp-dashboard']) : "";
-        
+
         $output['protect-everything'] = isset($input['protect-everything']) ? esc_attr($input['protect-everything']) : "";
         $output['enable-free-membership'] = isset($input['enable-free-membership']) ? esc_attr($input['enable-free-membership']) : "";
         $output['enable-moretag'] = isset($input['enable-moretag']) ? esc_attr($input['enable-moretag']) : "";
         $output['enable-debug'] = isset($input['enable-debug']) ? esc_attr($input['enable-debug']) : "";
-        $output['enable-sandbox-testing'] = isset($input['enable-sandbox-testing']) ? esc_attr($input['enable-sandbox-testing']) : "";        
+        $output['enable-sandbox-testing'] = isset($input['enable-sandbox-testing']) ? esc_attr($input['enable-sandbox-testing']) : "";
 
         $output['free-membership-id'] = ($input['free-membership-id'] != 1) ? absint($input['free-membership-id']) : '';
         $output['login-page-url'] = esc_url($input['login-page-url']);
@@ -461,7 +455,7 @@ class SwpmSettings {
         $output['join-us-page-url'] = esc_url($input['join-us-page-url']);
         $output['default-account-status'] = esc_attr($input['default-account-status']);
         $output['members-login-to-comment'] = isset($input['members-login-to-comment']) ? esc_attr($input['members-login-to-comment']) : "";
-        
+
         return $output;
     }
 
@@ -486,7 +480,7 @@ class SwpmSettings {
 
         $output['email-activation-mail-subject'] = sanitize_text_field($input['email-activation-mail-subject']);
         $output['email-activation-mail-body'] = wp_kses_data(force_balance_tags($input['email-activation-mail-body']));
-        
+
         $output['reg-prompt-complete-mail-subject'] = sanitize_text_field($input['reg-prompt-complete-mail-subject']);
         $output['reg-prompt-complete-mail-body'] = wp_kses_data(force_balance_tags($input['reg-prompt-complete-mail-body']));
         $output['email-from'] = trim($input['email-from']);
@@ -515,7 +509,7 @@ class SwpmSettings {
         $output['auto-login-after-rego'] = isset($input['auto-login-after-rego']) ? esc_attr($input['auto-login-after-rego']) : "";
         $output['force-wp-user-sync'] = isset($input['force-wp-user-sync']) ? esc_attr($input['force-wp-user-sync']) : "";
         $output['payment-notification-forward-url'] = esc_url($input['payment-notification-forward-url']);
-        
+
         //Auto create swpm user related settings
         $output['enable-auto-create-swpm-members'] = isset($input['enable-auto-create-swpm-members']) ? esc_attr($input['enable-auto-create-swpm-members']) : "";
         $output['auto-create-default-membership-level'] = isset($input['auto-create-default-membership-level']) ? esc_attr($input['auto-create-default-membership-level']) : "";
@@ -548,64 +542,62 @@ class SwpmSettings {
         $current = $this->current_tab;
         ?>
         <h2 class="nav-tab-wrapper">
-            <?php foreach ($this->tabs as $id => $label){ ?>
+            <?php foreach ($this->tabs as $id => $label) { ?>
                 <a class="nav-tab <?php echo ($current == $id) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=<?php echo $id ?>"><?php echo $label ?></a>
             <?php } ?>
         </h2>
         <?php
     }
-    
-    public function handle_main_settings_admin_menu(){
 
-        do_action( 'swpm_settings_menu_start' );
-        
+    public function handle_main_settings_admin_menu() {
+
+        do_action('swpm_settings_menu_start');
         ?>
         <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-        <h1><?php echo SwpmUtils::_('Simple WP Membership::Settings') ?></h1><!-- page title -->
-        
-        <!-- start nav menu tabs -->
-        <?php do_action("swpm-draw-settings-nav-tabs"); ?>
-        <!-- end nav menu tabs -->
-        <?php
-        
-        do_action( 'swpm_settings_menu_after_nav_tabs' );
-        
-        //Switch to handle the body of each of the various settings pages based on the currently selected tab
-        $current_tab = $this->current_tab;
-        switch ($current_tab) {
-            case 1:
-                //General settings
-                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
-                break;            
-            case 2:
-                //Payment settings
-                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/admin_payment_settings.php');
-                break;
-            case 3:
-                //Email settings
-                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
-                break;
-            case 4:
-                //Tools
-                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_tools_settings.php');
-                break;
-            case 5:
-                //Advanced settings
-                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
-                break;
-            case 6:
-                //Addon settings
-                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_addon_settings.php');
-                break;            
-            default:
-                //The default fallback (general settings)
-                include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
-                break;
+            <h1><?php echo SwpmUtils::_('Simple WP Membership::Settings') ?></h1><!-- page title -->
+
+            <!-- start nav menu tabs -->
+            <?php do_action("swpm-draw-settings-nav-tabs"); ?>
+            <!-- end nav menu tabs -->
+            <?php
+            do_action('swpm_settings_menu_after_nav_tabs');
+
+            //Switch to handle the body of each of the various settings pages based on the currently selected tab
+            $current_tab = $this->current_tab;
+            switch ($current_tab) {
+                case 1:
+                    //General settings
+                    include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
+                    break;
+                case 2:
+                    //Payment settings
+                    include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/admin_payment_settings.php');
+                    break;
+                case 3:
+                    //Email settings
+                    include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
+                    break;
+                case 4:
+                    //Tools
+                    include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_tools_settings.php');
+                    break;
+                case 5:
+                    //Advanced settings
+                    include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
+                    break;
+                case 6:
+                    //Addon settings
+                    include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_addon_settings.php');
+                    break;
+                default:
+                    //The default fallback (general settings)
+                    include(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php');
+                    break;
+            }
+
+            echo '</div>'; //<!-- end of wrap -->
         }
-        
-        echo '</div>';//<!-- end of wrap -->
-        
+
     }
     
-}

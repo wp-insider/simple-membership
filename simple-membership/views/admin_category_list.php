@@ -8,7 +8,7 @@
         <?php echo SwpmUtils::_('Next, select an existing membership level from the drop-down box below and then select the categories you want to grant access to (for that particular membership level).'); ?>
     </p>
     <p>
-        <?php echo SwpmUtils::_('Read the '); ?><a href="https://simple-membership-plugin.com/use-category-protection-membership-site/" target="_blank"><?php echo SwpmUtils::_('category protection documentation'); ?></a> to learn more.
+        <?php echo SwpmUtils::_('Read the '); ?><a href="https://simple-membership-plugin.com/use-category-protection-membership-site/" target="_blank"><?php echo SwpmUtils::_('category protection documentation'); ?></a> <?php echo SwpmUtils::_('to learn more.'); ?>
     </p>
 </div>
 

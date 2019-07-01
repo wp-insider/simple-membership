@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.2
-Stable tag: 3.8.2
+Stable tag: 3.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,8 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.8.3 =
+= 3.8.3 =
 - Updated Braintree PHP SDK to prevent deprecation notice when using PHP 7+.
+- The "Expiry Date" of a member is now shown in the member's profile of the admin dashboard.
 - Compatibility with Wordfence plugin's captcha feature.
 - German translation file updated.
 - Japanese translation file updated.

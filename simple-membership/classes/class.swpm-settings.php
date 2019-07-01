@@ -324,7 +324,7 @@ class SwpmSettings {
     public function swpm_documentation_callback() {
         ?>
         <div class="swpm-orange-box">
-            <?php printf(SwpmUtils::_('Visit the %s to read setup and configuration documentation.', '<a target="_blank" href="https://simple-membership-plugin.com/">' . SwpmUtils::_('Simple Membership Plugin Site') . '</a>')); ?>
+            <?php printf(SwpmUtils::_('Visit the %s to read setup and configuration documentation.'), '<a target="_blank" href="https://simple-membership-plugin.com/">' . SwpmUtils::_('Simple Membership Plugin Site') . '</a>'); ?>
             <?php printf(SwpmUtils::_('Please %s if you like the plugin.'), '<a href="https://wordpress.org/support/view/plugin-reviews/simple-membership?filter=5" target="_blank">' . SwpmUtils::_('give us a rating') . '</a>'); ?>
         </div>
         <?php

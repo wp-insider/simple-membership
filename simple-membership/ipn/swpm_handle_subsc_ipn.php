@@ -94,11 +94,9 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         $data['last_name'] = $ipn_data['last_name'];
         $data['email'] = $ipn_data['payer_email'];
         $data['membership_level'] = $membership_level;
-        $data['subscr_id'] = $unique_ref;
+        $data['subscr_id'] = $subscr_id;
+        
         $data['gender'] = 'not specified';
-
-        swpm_debug_log_subsc("Creating new member account. Membership level ID: " . $membership_level, true);
-
         $data['address_street'] = $ipn_data['address_street'];
         $data['address_city'] = $ipn_data['address_city'];
         $data['address_state'] = $ipn_data['address_state'];
@@ -110,9 +108,10 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         $md5_code = md5($reg_code);
         $data['reg_code'] = $md5_code;
         $data['referrer'] = $data['extra_info'] = $data['txn_id'] = '';
-        $data['subscr_id'] = $subscr_id;
         $data['last_accessed_from_ip'] = isset($user_ip) ? $user_ip : ''; //Save the users IP address
 
+        swpm_debug_log_subsc("Creating new member account. Membership level ID: " . $membership_level . ", Subscriber ID value: " . $data['subscr_id'], true);
+                
         $data = array_filter($data); //Remove any null values.
         $wpdb->insert($members_table_name, $data); //Create the member record
         $results = $wpdb->get_row($wpdb->prepare("SELECT * FROM $members_table_name where subscr_id=%s and reg_code=%s", $subscr_id, $md5_code), OBJECT);

@@ -282,7 +282,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
             
             //Update the data in the swpm database.
             $swpm_id = $auth->get('member_id');
-            SwpmLog::log_simple_debug("Updating member profile data with SWPM ID: " . $swpm_id, true);
+            //SwpmLog::log_simple_debug("Updating member profile data with SWPM ID: " . $swpm_id, true);
             $wpdb->update($wpdb->prefix . "swpm_members_tbl", $member_info, array('member_id' => $swpm_id));
             $auth->reload_user_data();//Reload user data after update so the profile page reflects the new data.
 

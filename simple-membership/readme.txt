@@ -158,6 +158,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.8.4 =
+- More strings from the settings admin interface of the plugin are translatable.
+- Minor enhancement in the PayPal IPN handling code.
+- Fixed an issue with some profile data not updating when password is also updated at the same time.
+
 = 3.8.3 =
 - Updated Braintree PHP SDK to prevent deprecation notice when using PHP 7+.
 - The "Expiry Date" of a member is now shown in the member's profile of the admin dashboard.

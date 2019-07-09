@@ -658,9 +658,12 @@ class SimpleWpMembership {
             'required' => array(
                 'alertText' => '* ' . SwpmUtils::_('This field is required'),
             ),
+            'strongPass' => array(
+                'alertText' => '* ' . SwpmUtils::_('Password must contain at least:').'<br>'.SwpmUtils::_('- a digit').'<br>'.SwpmUtils::_('- an uppercase letter').'<br>'.SwpmUtils::_('- a lowercase letter'),
+            ),
             'SWPMUserName' => array(
                 'alertText' => '* ' . SwpmUtils::_('Invalid Username').'<br>'.SwpmUtils::_('Usernames can only contain: letters, numbers and .-_*@'),
-            ),
+            ),            
             'minSize' => array(
                 'alertText' => '* ' . SwpmUtils::_('Minimum '),
                 'alertText2' => SwpmUtils::_(' characters required'),

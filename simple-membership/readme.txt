@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.2
-Stable tag: 3.8.3
+Stable tag: 3.8.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,8 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.8.4 =
+= 3.8.4 =
 - More strings from the settings admin interface of the plugin are translatable.
+- The strong password validation error message is now translatable (if you are using this feature).
 - Minor enhancement in the PayPal IPN handling code.
 - Fixed an issue with some profile data not updating when password is also updated at the same time.
 

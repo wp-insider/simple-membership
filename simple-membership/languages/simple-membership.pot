@@ -101,6 +101,18 @@ msgstr ""
 msgid "This field is required"
 msgstr ""
 
+msgid "Password must contain at least:"
+msgstr ""
+
+msgid "- a digit"
+msgstr ""
+
+msgid "- an uppercase letter"
+msgstr ""
+
+msgid "- a lowercase letter"
+msgstr ""
+
 #: classes/class.simple-wp-membership.php:659 classes/class.swpm-auth.php:296
 msgid "Invalid Username"
 msgstr ""

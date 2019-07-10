@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Simple Membership\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-26 13:48+0600\n"
-"PO-Revision-Date: 2019-06-11 15:51+0200\n"
+"POT-Creation-Date: 2019-07-09 12:57+0000\n"
+"PO-Revision-Date: 2019-07-09 15:55+0200\n"
 "Last-Translator: Geo_Writer <information@geoplan-systems.de>\n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -123,6 +123,18 @@ msgstr "Ungültige E-Mail-Adresse"
 msgid "This field is required"
 msgstr "Dieses Feld ist erforderlich"
 
+msgid "Password must contain at least:"
+msgstr "Das Kennwort muss mindestens Folgendes enthalten:"
+
+msgid "- a digit"
+msgstr "- eine Ziffer"
+
+msgid "- an uppercase letter"
+msgstr "- einen Großbuchstaben"
+
+msgid "- a lowercase letter"
+msgstr "- einen Kleinbuchstaben"
+
 #: classes/class.simple-wp-membership.php:659 classes/class.swpm-auth.php:296
 msgid "Invalid Username"
 msgstr "Ungültiger Benutzername"
@@ -137,7 +149,7 @@ msgstr "Minimum "
 
 #: classes/class.simple-wp-membership.php:663
 msgid " characters required"
-msgstr " Buchstaben erforderlich"
+msgstr " Zeichen erforderlich"
 
 #: classes/class.simple-wp-membership.php:666
 msgid "Apostrophe character is not allowed"
@@ -505,7 +517,7 @@ msgstr ""
 #: classes/class.swpm-front-registration.php:45
 #: classes/class.swpm-utils-misc.php:274 views/login.php:36
 msgid "Join Us"
-msgstr "Noch kein Mitglied? Registrieren Sie sich hier"
+msgstr "Registrieren Sie sich hier, wenn Sie noch kein Mitglied sind"
 
 #: classes/class.swpm-front-registration.php:47
 msgid ""
@@ -544,8 +556,9 @@ msgid ""
 "You need to confirm your email address. Please check your email and follow "
 "instructions to complete your registration."
 msgstr ""
-"Sie müssen Ihre Email Adresse bestätigen. Bitte prüfen Sie Ihre Email "
-"Adresse und folgen Sie den Anweisungen, um die Anmeldung abzuschließen."
+"<p><strong>Sie müssen Ihre Email Adresse bestätigen. Bitte sehen Sie in "
+"Ihren Email Posteingang und folgen Sie den Anweisungen in der Ihnen "
+"zugesandten Email, um die Anmeldung abzuschließen.</strong></p>"
 
 #: classes/class.swpm-front-registration.php:145
 msgid "Registration Successful. "
@@ -1926,7 +1939,7 @@ msgstr "Noch kein Mitglied? "
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:123
 msgid "Join Now"
-msgstr "Noch kein Mitglied? Registrieren Sie sich hier"
+msgstr "Registrieren Sie sich hier"
 
 #: ipn/swpm-smart-checkout-ipn.php:260 ipn/swpm-smart-checkout-ipn.php:285
 #, php-format
@@ -1996,11 +2009,11 @@ msgstr "Passwort wiederholen"
 
 #: views/add.php:65
 msgid "I accept the "
-msgstr "Ich akzeptiere "
+msgstr "Ich akzeptiere die "
 
 #: views/add.php:77
 msgid "I agree to the "
-msgstr "Ich akzeptiere "
+msgstr "Ich akzeptiere die "
 
 #: views/add.php:77
 msgid "Privacy Policy"
@@ -3045,6 +3058,9 @@ msgstr "Bitte geben Sie zwei Ziffern ohne Leerzeichen ein (bspw.: 12)"
 
 msgid "Username can only contain: letters, numbers and .-*@"
 msgstr "Mitgliedsname kann nur enthalten: Buchstaben, Zahlen und .-*@"
+
+msgid "Allowed characters are: letters, numbers and .-_*@"
+msgstr "Zulässige Zeichen sind: Buchstaben, Zahlen und .-_*@"
 
 #: === Partial protection addon strings
 msgid "You do not have permission to view this content."

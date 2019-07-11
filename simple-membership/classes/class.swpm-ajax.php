@@ -18,7 +18,7 @@ class SwpmAjax {
         $query = $wpdb->prepare("SELECT member_id FROM $table WHERE email = %s AND user_name != ''", $field_value);
         $db_id = $wpdb->get_var($query) ;
         $exists = ($db_id > 0) && $db_id != $member_id;
-        echo '[ "' . $field_id . (($exists) ? '",false, "&chi;&nbsp;'.SwpmUtils::_('Aready taken').'"]' : '",true, "&radic;&nbsp;Available"]');
+        echo '[ "' . $field_id . (($exists) ? '",false, "&chi;&nbsp;'.SwpmUtils::_('Aready taken').'"]' : '",true, "&radic;&nbsp;'.SwpmUtils::_('Available'). '"]');
         exit;
     }
 

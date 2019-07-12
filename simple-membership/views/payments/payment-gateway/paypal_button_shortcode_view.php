@@ -54,6 +54,13 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
     /* === PayPal Buy Now Button Form === */
     $output = '';
     $output .= '<div class="swpm-button-wrapper swpm-pp-buy-now-wrapper">';
+    $uniqid=uniqid();
+        //add coupon input if needed
+        $coupon_input='';
+        $coupon_input = apply_filters('swpm_output_coupon_input',$button_id,$uniqid);
+        if (!empty($coupon_input)) {
+            $output.=$coupon_input;
+        }
     if ($sandbox_enabled) {
         $output .= '<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" ' . $window_target . '>';
     } else {

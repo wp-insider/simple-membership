@@ -100,6 +100,12 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     $output .= '<p><input type="text" name="first_name" placeholder="First Name" value="' . (isset($member_first_name) ? $member_first_name : '') . '" required></p>';
     $output .= '<p><input type="text" name="last_name" placeholder="Last Name" value="' . (isset($member_last_name) ? $member_last_name : '') . '" required></p>';
     $output .= '<p><input type="text" name="member_email" placeholder="Email" value="' . (isset($member_email) ? $member_email : '') . '" required></p>';
+    //add coupon input if needed
+    $coupon_input='';
+    $coupon_input = apply_filters('swpm_output_coupon_input',$button_id,$uniqid);
+    if (!empty($coupon_input)) {
+        $output.=$coupon_input;
+    }
     $output .= '<div id="swpm-braintree-amount-container-' . $uniqid . '" class="swpm-braintree-amount-container"><p>' . $payment_amount_formatted . ' ' . $payment_currency . '</p></div>';
     $output .= '</div>';
     $output .= '<button id="swpm-show-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-show-form-button-' . $button_id . ' ' . $class . '" type="button" onclick="swpm_braintree_show_form_' . $uniqid . '();"><span>' . $button_text . '</span></button>';

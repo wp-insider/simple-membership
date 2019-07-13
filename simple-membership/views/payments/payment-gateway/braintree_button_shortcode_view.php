@@ -38,8 +38,9 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
         return '<p class="swpm-red-box">Error! The payment amount value of the button must be a numeric number. Example: 49.50 </p>';
     }
     $payment_amount = round($payment_amount, 2); //round the amount to 2 decimal place.
-    $payment_amount_formatted = number_format($payment_amount, 2, '.', '');
     $payment_currency = get_post_meta($button_id, 'currency_code', true);
+
+    $payment_amount_formatted = SwpmMiscUtils::format_money($payment_amount,$payment_currency);
 
     //Return, cancel, notifiy URLs
     $return_url = get_post_meta($button_id, 'return_url', true);
@@ -101,12 +102,12 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     $output .= '<p><input type="text" name="last_name" placeholder="Last Name" value="' . (isset($member_last_name) ? $member_last_name : '') . '" required></p>';
     $output .= '<p><input type="text" name="member_email" placeholder="Email" value="' . (isset($member_email) ? $member_email : '') . '" required></p>';
     //add coupon input if needed
-    $coupon_input='';
-    $coupon_input = apply_filters('swpm_output_coupon_input',$button_id,$uniqid);
+    $coupon_input = '';
+    $coupon_input = apply_filters('swpm_output_coupon_input', $button_id, $uniqid);
     if (!empty($coupon_input)) {
-        $output.=$coupon_input;
+        $output .= $coupon_input;
     }
-    $output .= '<div id="swpm-braintree-amount-container-' . $uniqid . '" class="swpm-braintree-amount-container"><p>' . $payment_amount_formatted . ' ' . $payment_currency . '</p></div>';
+    $output .= '<div id="swpm-braintree-amount-container-' . $uniqid . '" class="swpm-braintree-amount-container"><p>' . $payment_amount_formatted.'</p></div>';
     $output .= '</div>';
     $output .= '<button id="swpm-show-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-show-form-button-' . $button_id . ' ' . $class . '" type="button" onclick="swpm_braintree_show_form_' . $uniqid . '();"><span>' . $button_text . '</span></button>';
     $output .= '<button id="swpm-submit-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-submit-form-button-' . $button_id . ' ' . $class . '" type="submit" style="display: none;"><span>' . $button_text . '</span></button>';
@@ -134,8 +135,10 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
                         document.getElementById('swpm-braintree-payment-form-_uniqid_').submit();
                         return true;
                     }
+                    var form = document.getElementById('swpm-braintree-payment-form-_uniqid_');
+                    var amount = form.querySelector('[name="item_price"]').value;
                     client.verify3DS({
-                        amount: '_amount_',
+                        amount: amount,
                         creditCard: obj.nonce
                     }, function(err, response) {
                         if (!err) {

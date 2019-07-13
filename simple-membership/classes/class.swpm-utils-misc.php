@@ -487,4 +487,13 @@ class SwpmMiscUtils {
         return $button_type_name;
     }
 
+    public static function format_money($amount, $currency = false)
+    {
+        $formatted = number_format($amount, 2);
+        if ($currency) {
+            $formatted .= ' ' . $currency;
+        }
+        return $formatted;
+    }
+
 }

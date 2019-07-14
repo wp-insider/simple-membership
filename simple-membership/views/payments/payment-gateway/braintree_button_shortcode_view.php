@@ -101,9 +101,9 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     $output .= '<p><input type="text" name="first_name" placeholder="First Name" value="' . (isset($member_first_name) ? $member_first_name : '') . '" required></p>';
     $output .= '<p><input type="text" name="last_name" placeholder="Last Name" value="' . (isset($member_last_name) ? $member_last_name : '') . '" required></p>';
     $output .= '<p><input type="text" name="member_email" placeholder="Email" value="' . (isset($member_email) ? $member_email : '') . '" required></p>';
-    //add coupon input if needed
+    //apply filter to output additional form fields
     $coupon_input = '';
-    $coupon_input = apply_filters('swpm_output_coupon_input', $button_id, $uniqid);
+    $coupon_input = apply_filters('swpm_payment_form_additional_fields', $coupon_input, $button_id, $uniqid);
     if (!empty($coupon_input)) {
         $output .= $coupon_input;
     }

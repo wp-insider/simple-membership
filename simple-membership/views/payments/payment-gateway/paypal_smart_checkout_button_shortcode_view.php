@@ -97,9 +97,9 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
     ?>
     <div class="swpm-button-wrapper">
         <?php
-            //add coupon input if needed
+    //apply filter to output additional form fields
     $coupon_input = '';
-    $coupon_input = apply_filters('swpm_output_coupon_input', $button_id, $uniqid);
+    $coupon_input = apply_filters('swpm_payment_form_additional_fields', $coupon_input, $button_id, $uniqid);
     if (!empty($coupon_input)) {
         echo $coupon_input;
     }

@@ -55,9 +55,9 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
     $output = '';
     $output .= '<div class="swpm-button-wrapper swpm-pp-buy-now-wrapper">';
     $uniqid=uniqid();
-        //add coupon input if needed
-        $coupon_input='';
-        $coupon_input = apply_filters('swpm_output_coupon_input',$button_id,$uniqid);
+    //apply filter to output additional form fields
+    $coupon_input='';
+    $coupon_input = apply_filters('swpm_payment_form_additional_fields',$coupon_input,$button_id,$uniqid);
         if (!empty($coupon_input)) {
             $output.=$coupon_input;
         }

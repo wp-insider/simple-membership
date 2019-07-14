@@ -14,8 +14,10 @@ class SwpmStripeBuyNowIpnHandler {
         //SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
         
         //Include the Stripe library.
-        include(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
-        
+        if ( ! class_exists( '\Stripe\Stripe' ) ) {
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
+        }
+
         //Read and sanitize the request parameters.
         $button_id = sanitize_text_field($_REQUEST['item_number']);
         $button_id = absint($button_id);

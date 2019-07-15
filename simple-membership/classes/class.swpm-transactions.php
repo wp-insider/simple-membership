@@ -30,6 +30,25 @@ class SwpmTransactions {
         
         $txn_data = array_filter($txn_data);//Remove any null values.
         $wpdb->insert($wpdb->prefix . "swpm_payments_tbl", $txn_data);
+
+        $db_row_id=$wpdb->insert_id;
+
+        //let's also store transactions data in swpm_transactions CPT
+        $post			 = array();
+	    $post[ 'post_title' ]	 = '';
+	    $post[ 'post_status' ]	 = 'publish';
+	    $post[ 'content' ]	 = '';
+        $post[ 'post_type' ]	 = 'swpm_transactions';
+        
+        $post_id=wp_insert_post($post);
+
+        update_post_meta($post_id,'db_row_id',$db_row_id);
+
+        foreach ($txn_data as $key=>$value) {
+            update_post_meta($post_id,$key,$value);
+        }
+
+        do_action('swpm_txn_record_saved',$txn_data,$db_row_id,$post_id);
         
     }
 

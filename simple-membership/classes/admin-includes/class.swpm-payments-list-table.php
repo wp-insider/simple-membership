@@ -17,9 +17,18 @@ class SWPMPaymentsListTable extends WP_List_Table {
         ));
     }
 
-    function column_default($item, $column_name) {
-        //Just print the data for that column
-        return $item[$column_name];
+    function column_default($item, $column_name)
+    {
+        $val = $item[$column_name];
+        switch ($column_name) {
+            case 'payment_amount':
+                $val=SwpmMiscUtils::format_money($val);
+                $val = apply_filters('swpm_transactions_page_amount_display', $val, $item);
+                break;
+            default:
+                break;
+        }
+        return $val;
     }
 
     function column_id($item) {
@@ -130,6 +139,21 @@ class SWPMPaymentsListTable extends WP_List_Table {
         $payments_table_name = $wpdb->prefix . "swpm_payments_tbl";
         $delete_command = "DELETE FROM " . $payments_table_name . " WHERE id = '$record_id'";
         $result = $wpdb->query($delete_command);
+        //also delete record from swpm_transactions CPT
+        $trans     = get_posts(array(
+			'meta_key'     => 'db_row_id',
+			'meta_value'     => $record_id,
+			'posts_per_page' => 1,
+			'offset'     => 0,
+			'post_type'     => 'swpm_transactions',
+		));
+		wp_reset_postdata();
+		if (empty($trans)) {
+			return;
+		}
+        $trans = $trans[0];
+        wp_delete_post($trans->ID,true);
+
     }
 
     function prepare_items() {

@@ -95,6 +95,20 @@ class SwpmInitTimeTasks {
             'hierarchical' => false,
             'supports' => array('title', 'editor')
         ));
+
+        //Transactions will be stored using this CPT in parallel with swpm_payments_tbl DB table
+        $args = array(
+            'supports'         => array(''),
+            'hierarchical'         => false,
+            'public'         => false,
+            'show_ui'         => false,
+            'can_export'         => false,
+            'has_archive'         => false,
+            'exclude_from_search'     => true,
+            'publicly_queryable'     => false,
+            'capability_type'     => 'post',
+        );
+        register_post_type('swpm_transactions', $args);
     }
 
     private function verify_and_delete_account() {

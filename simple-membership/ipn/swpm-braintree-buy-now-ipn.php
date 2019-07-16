@@ -32,6 +32,7 @@ class SwpmBraintreeBuyNowIpnHandler {
 
         //Validate and verify some of the main values.
         $true_payment_amount = get_post_meta($button_id, 'payment_amount', true);
+        $true_payment_amount = apply_filters('swpm_payment_amount_filter',$true_payment_amount,$button_id);
         if ($payment_amount != $true_payment_amount) {
             //Fatal error. Payment amount may have been tampered with.
             $error_msg = 'Fatal Error! Received payment amount (' . $payment_amount . ') does not match with the original amount (' . $true_payment_amount . ')';

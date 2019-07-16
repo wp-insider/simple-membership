@@ -467,4 +467,33 @@ class SwpmMiscUtils {
         return $countries_dropdown;
     }
 
+    public static function get_button_type_name($button_type)
+    {
+        $btnTypesNames = array(
+            'pp_buy_now' => SwpmUtils::_('PayPal Buy Now'),
+            'pp_subscription' => SwpmUtils::_('PayPal Subscription'),
+            'pp_smart_checkout' => SwpmUtils::_('PayPal Smart Checkout'),
+            'stripe_buy_now' => SwpmUtils::_('Stripe Buy Now'),
+            'stripe_subscription' => SwpmUtils::_('Stripe Subscription'),
+            'braintree_buy_now' => SwpmUtils::_('Braintree Buy Now')
+        );
+
+        $button_type_name = $button_type;
+
+        if (array_key_exists($button_type, $btnTypesNames)) {
+            $button_type_name = $btnTypesNames[$button_type];
+        }
+
+        return $button_type_name;
+    }
+
+    public static function format_money($amount, $currency = false)
+    {
+        $formatted = number_format($amount, 2);
+        if ($currency) {
+            $formatted .= ' ' . $currency;
+        }
+        return $formatted;
+    }
+
 }

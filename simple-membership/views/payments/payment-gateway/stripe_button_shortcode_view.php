@@ -86,10 +86,12 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
         }
     }
 
+    $uniqid=uniqid();
+
     /* === Stripe Buy Now Button Form === */
     $output = '';
     $output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
-    $output .= "<form action='" . $notify_url . "' METHOD='POST'> ";
+    $output .= "<form id='swpm-stripe-payment-form-".$uniqid."' action='" . $notify_url . "' METHOD='POST'> ";
     $output .= "<div style='display: none !important'>";
     $output .= "<script src='https://checkout.stripe.com/checkout.js' class='stripe-button'
         data-key='" . $publishable_key . "'
@@ -109,6 +111,13 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
     $output .= apply_filters('swpm_stripe_additional_checkout_data_parameters', ''); //Filter to allow the addition of extra data parameters for stripe checkout.
     $output .= "></script>";
     $output .= '</div>';
+
+    //apply filter to output additional form fields
+    $coupon_input='';
+    $coupon_input = apply_filters('swpm_payment_form_additional_fields',$coupon_input,$button_id,$uniqid);
+    if (!empty($coupon_input)) {
+        $output.=$coupon_input;
+    }
 
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
     if (!empty($button_image_url)) {

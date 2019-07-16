@@ -33,7 +33,8 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
                 break;
             case 'button_type':
                 $button_type = get_post_meta($item['ID'], 'button_type', true);
-                return $button_type;
+                $button_name=SwpmMiscUtils::get_button_type_name($button_type);
+                return $button_name;
                 break;
             case 'button_shortcode':
                 $level_id = get_post_meta($item['ID'], 'membership_level_id', true);

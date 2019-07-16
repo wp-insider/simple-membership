@@ -14,8 +14,10 @@ class SwpmStripeBuyNowIpnHandler {
         //SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
         
         //Include the Stripe library.
-        include(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
-        
+        if ( ! class_exists( '\Stripe\Stripe' ) ) {
+            include(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
+        }
+
         //Read and sanitize the request parameters.
         $button_id = sanitize_text_field($_REQUEST['item_number']);
         $button_id = absint($button_id);
@@ -44,6 +46,8 @@ class SwpmStripeBuyNowIpnHandler {
         
         //Validate and verify some of the main values.
         $true_payment_amount = get_post_meta($button_id, 'payment_amount', true);
+        $true_payment_amount = apply_filters('swpm_payment_amount_filter',$true_payment_amount,$button_id);
+
         if( $payment_amount != $true_payment_amount ) {
             //Fatal error. Payment amount may have been tampered with.
             $error_msg = 'Fatal Error! Received payment amount ('.$payment_amount.') does not match with the original amount ('.$true_payment_amount.')';

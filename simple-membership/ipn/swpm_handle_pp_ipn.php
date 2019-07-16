@@ -157,6 +157,7 @@ class swpm_paypal_ipn_handler {
                 if ( $button_type == 'pp_buy_now'){//This is a PayPal buy now type button
                     $expected_amount = (get_post_meta($button_id, 'payment_amount', true)) * $cart_item_data_quantity;
                     $expected_amount = round($expected_amount, 2);
+                    $expected_amount = apply_filters('swpm_payment_amount_filter',$expected_amount,$button_id);
                     $received_amount = $cart_item_data_total;
                 } else if ($button_type == 'pp_subscription'){//This is a PayPal subscription type button
                     //Trial payment or recurring payment?

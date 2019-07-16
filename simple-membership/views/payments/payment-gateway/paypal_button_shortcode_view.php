@@ -54,11 +54,20 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
     /* === PayPal Buy Now Button Form === */
     $output = '';
     $output .= '<div class="swpm-button-wrapper swpm-pp-buy-now-wrapper">';
+    $uniqid=uniqid();
+    //apply filter to output additional form fields
+    $coupon_input='';
+    $coupon_input = apply_filters('swpm_payment_form_additional_fields',$coupon_input,$button_id,$uniqid);
+        if (!empty($coupon_input)) {
+            $output.=$coupon_input;
+        }
     if ($sandbox_enabled) {
-        $output .= '<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" ' . $window_target . '>';
+        $action_url='https://www.sandbox.paypal.com/cgi-bin/webscr';
     } else {
-        $output .= '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" ' . $window_target . '>';
+        $action_url='https://www.paypal.com/cgi-bin/webscr';
     }
+
+    $output.=sprintf('<form id="swpm-paypal-payment-form-%s" action="%s" method="post" %s>',$uniqid,$action_url,$window_target);
 
     $output .= '<input type="hidden" name="cmd" value="_xclick" />';
     $output .= '<input type="hidden" name="charset" value="utf-8" />';

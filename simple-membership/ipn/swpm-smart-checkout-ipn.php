@@ -146,6 +146,7 @@ class swpm_smart_checkout_ipn_handler {
                 if ($button_type == 'pp_smart_checkout') {//This is a PayPal Smart Checkout type button
                     $expected_amount = (get_post_meta($button_id, 'payment_amount', true)) * $cart_item_data_quantity;
                     $expected_amount = round($expected_amount, 2);
+                    $expected_amount = apply_filters('swpm_payment_amount_filter',$expected_amount,$button_id);
                     $received_amount = $cart_item_data_total;
                 } else {
                     $this->debug_log('Error! Unexpected button type: ' . $button_type, false);

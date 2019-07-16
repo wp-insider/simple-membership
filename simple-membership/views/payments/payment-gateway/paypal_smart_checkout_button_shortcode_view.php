@@ -96,7 +96,17 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
     }
     ?>
     <div class="swpm-button-wrapper">
+        <?php
+    //apply filter to output additional form fields
+    $coupon_input = '';
+    $coupon_input = apply_filters('swpm_payment_form_additional_fields', $coupon_input, $button_id, $uniqid);
+    if (!empty($coupon_input)) {
+        echo $coupon_input;
+    }
+    ?>
         <div class="swpm-pp-smart-checkout-btn-<?php echo $uniqid; ?>"></div>
+        <input type="hidden" id="swpm-pp-smart-checkout-amount-<?php echo $uniqid; ?>" name="item_price" value="<?php echo $payment_amount;?>">
+        <input type="hidden" id="swpm-pp-smart-checkout-custom-<?php echo $uniqid; ?>" name="custom" value="<?php echo $custom_field_value; ?>">
         <script>
             paypal.Button.render({
 
@@ -122,10 +132,11 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
                 onClick: function () {
                 },
                 payment: function (data, actions) {
+                    var amount = document.getElementById('swpm-pp-smart-checkout-amount-<?php echo $uniqid; ?>').value;
                     return actions.payment.create({
                         payment: {
                             transactions: [{
-                                    amount: {total: '<?php echo $payment_amount; ?>', currency: '<?php echo $payment_currency; ?>'}
+                                    amount: {total: amount, currency: '<?php echo $payment_currency; ?>'}
                                 }]
                         },
                         meta: {partner_attribution_id: 'TipsandTricks_SP'}
@@ -142,11 +153,12 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
                     paymentBtnCont.hide();
                     paymentBtnSpinner.css('display', 'inline-block');
                     return actions.payment.execute().then(function (data) {
-                        data.custom_field = '<?php echo $custom_field_value; ?>';
+                        var custom = document.getElementById('swpm-pp-smart-checkout-custom-<?php echo $uniqid; ?>').value;
+                        data.custom_field = custom;
                         data.button_id = '<?php echo esc_js($button_id); ?>';
                         data.item_name = '<?php echo esc_js($item_name); ?>';
                         jQuery.post('<?php echo esc_js(admin_url('admin-ajax.php')); ?>',
-                                {action: 'swpm_process_pp_smart_checkout', swpm_pp_smart_checkout_payment_data: data})
+                                {action: 'swpm_process_pp_smart_checkout', swpm_pp_smart_checkout_payment_data: data, custom: custom})
                                 .done(function (result) {
                                     if (result.success) {
                                         window.location.href = '<?php echo esc_js($return_url); ?>';

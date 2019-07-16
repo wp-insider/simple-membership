@@ -27,7 +27,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
                     $swpm_id = $query_db->member_id;
                     swpm_debug_log_subsc("Found a match in the member database using unique reference. Member ID: " . $swpm_id, true);
                 } else {
-                    swpm_debug_log_subsc("Did not find a match for an existing member profile for the given reference. This must me a new payment from a new member.", true);
+                    swpm_debug_log_subsc("Did not find a match for an existing member profile for the given reference. This must be a new payment from a new member.", true);
                 }
             } else {
                 swpm_debug_log_subsc("Unique reference is missing in the notification so we have to assume that this is not a payment for an existing member.", true);
@@ -257,6 +257,9 @@ function swpm_update_member_subscription_start_date_if_applicable($ipn_data) {
         $updatedb = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s,subscription_starts=%s WHERE member_id=%d", $account_state, $subscription_starts, $swpm_id);
         $resultset = $wpdb->query($updatedb);
         swpm_debug_log_subsc("Updated the member profile with current date as the subscription start date.", true);
+        //Lets check to see if the subscriber ID and the subscription start date value was updated correctly.
+        $member_record = SwpmMemberUtils::get_user_by_id($swpm_id);
+        swpm_debug_log_subsc("Value after update - Subscriber ID: " . $member_record->subscr_id . ", Start Date: " . $member_record->subscription_starts, true);
     } else {
         swpm_debug_log_subsc("Did not find an existing record in the members table for subscriber ID: " . $subscr_id, true);
         swpm_debug_log_subsc("This is a new subscription payment for a new subscription agreement.", true);

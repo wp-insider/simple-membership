@@ -45,6 +45,7 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
     } else {
         $price_in_cents = $payment_amount * 100; //The amount (in cents). This value is passed to Stripe API.
     }
+    $payment_amount_formatted=SwpmMiscUtils::format_money($payment_amount,$payment_currency);
     //Return, cancel, notifiy URLs
     $notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_buy_now=1'; //We are going to use it to do post payment processing.
     //$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
@@ -98,7 +99,7 @@ function swpm_render_stripe_buy_now_button_sc_output($button_code, $args) {
         data-panel-label='Pay'
         data-amount='{$price_in_cents}'
         data-name='{$item_name}'";
-    $output .= "data-description='{$payment_amount} {$payment_currency}'";
+    $output .= "data-description='{$payment_amount_formatted}'";
     $output .= "data-locale='auto'";
     $output .= "data-label='{$button_text}'"; //Stripe doesn't currenty support button image for their standard checkout.
     $output .= "data-currency='{$payment_currency}'";

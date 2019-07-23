@@ -71,6 +71,13 @@ class SwpmCategoryList extends WP_List_Table {
         //Check we are on the admin end and user has management permission 
         SwpmMiscUtils::check_user_permission_and_is_admin('category protection update');
         
+        //Check nonce
+        $swpm_category_prot_update_nonce = filter_input(INPUT_POST, 'swpm_category_prot_update_nonce');
+        if (!wp_verify_nonce($swpm_category_prot_update_nonce, 'swpm_category_prot_update_nonce_action')) {
+            //Nonce check failed.
+            wp_die(SwpmUtils::_("Error! Nonce security verification failed for Category Protection Update action. Clear cache and try again."));
+        }
+            
         $selected = filter_input(INPUT_POST, 'membership_level_id');
         $selected_level_id = empty($selected) ? 1 : $selected;
         $category = ($selected_level_id == 1) ?
@@ -89,7 +96,7 @@ class SwpmCategoryList extends WP_List_Table {
         $filtered = filter_input_array(INPUT_POST, $args);
         $ids_in_page = $filtered['ids_in_page'];
         $category->remove($ids_in_page, 'category')->apply($ids, 'category')->save();
-        $message = array('succeeded' => true, 'message' => '<p>' . SwpmUtils::_('Category protection updated!') . '</p>');
+        $message = array('succeeded' => true, 'message' => '<p class="swpm-green-box">' . SwpmUtils::_('Category protection updated!') . '</p>');
         SwpmTransfer::get_instance()->set('status', $message);
     }
 

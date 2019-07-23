@@ -22,7 +22,12 @@
     <a class="nav-tab<?php echo $post_list->type == 'page' ? ' nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=post_list&list_type=page"><?php SwpmUtils::e('Pages'); ?></a>
     <a class="nav-tab<?php echo $post_list->type == 'custom_post' ? ' nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=post_list&list_type=custom_post"><?php SwpmUtils::e('Custom Posts'); ?></a>
 </div>
-<p><form id="post_list_form" method="post">    
+
+<br />
+<div class="swpm_post_protection_list_form">
+<form id="post_list_form" method="post">
+    <input type="hidden" name="swpm_post_prot_update_nonce" value="<?php echo wp_create_nonce('swpm_post_prot_update_nonce_action'); ?>" />
+    
     <p class="swpm-select-box-left">
         <label for="membership_level_id"><?php SwpmUtils::e('Membership Level:'); ?></label>
         <select id="membership_level_id" name="membership_level_id">
@@ -30,11 +35,14 @@
             <?php echo SwpmUtils::membership_level_dropdown($post_list->selected_level_id); ?>
         </select>                
     </p>
-    <p class="swpm-select-box-left"><input type="submit" class="button-primary" name="update_post_list" value="<?php SwpmUtils::e('Update'); ?>"></p>
+    <p class="swpm-select-box-left">
+        <input type="submit" class="button-primary" name="update_post_list" value="<?php SwpmUtils::e('Update'); ?>">
+    </p>
         <?php $post_list->prepare_items(); ?>   
         <?php $post_list->display(); ?>
     <input type="hidden" name="list_type" value="<?php echo $post_list->type; ?>">
-</form></p>
+</form>
+</div>
 
 <script type="text/javascript">
     jQuery(document).ready(function ($) {

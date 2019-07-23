@@ -102,6 +102,13 @@ class SwpmPostList extends WP_List_Table {
         //Check we are on the admin end and user has management permission 
         SwpmMiscUtils::check_user_permission_and_is_admin('post protection update');
 
+        //Check nonce
+        $swpm_post_prot_update_nonce = filter_input(INPUT_POST, 'swpm_post_prot_update_nonce');
+        if (!wp_verify_nonce($swpm_post_prot_update_nonce, 'swpm_post_prot_update_nonce_action')) {
+            //Nonce check failed.
+            wp_die(SwpmUtils::_("Error! Nonce security verification failed for Post Protection Update action. Clear cache and try again."));
+        }
+        
         $type = filter_input(INPUT_POST, 'list_type');
 
         $selected = filter_input(INPUT_POST, 'membership_level_id');
@@ -122,7 +129,7 @@ class SwpmPostList extends WP_List_Table {
         $filtered = filter_input_array(INPUT_POST, $args);
         $ids_in_page = $filtered['ids_in_page'];
         $post->remove($ids_in_page, $type)->apply($ids, $type)->save();
-        $message = array('succeeded' => true, 'message' => '<p>' . SwpmUtils::_('Protection settings updated!') . '</p>');
+        $message = array('succeeded' => true, 'message' => '<p class="swpm-green-box">' . SwpmUtils::_('Protection settings updated!') . '</p>');
         SwpmTransfer::get_instance()->set('status', $message);
     }
 

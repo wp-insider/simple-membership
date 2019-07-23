@@ -158,10 +158,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.8.5 =
-- Added Coupons addon support.
+= 3.8.5 =
+- Fixed CSRF issue in the Bulk Operation menu tab.
 - Fixed Braintree payment issue that could occur if customer pays via PayPal.
 - Fixed Stripe library conflict if other Stripe plugin is installed.
+- Added support for the coupons addon.
 
 = 3.8.4 =
 - More strings from the settings admin interface of the plugin are translatable.

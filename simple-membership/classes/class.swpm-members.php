@@ -409,6 +409,13 @@ class SwpmMembers extends WP_List_Table {
         echo '<div id="poststuff"><div id="post-body">';
 
         if (isset($_REQUEST['swpm_bulk_change_level_process'])) {
+            //Check nonce
+            $swpm_bulk_change_level_nonce = filter_input(INPUT_POST, 'swpm_bulk_change_level_nonce');
+            if (!wp_verify_nonce($swpm_bulk_change_level_nonce, 'swpm_bulk_change_level_nonce_action')) {
+                //Nonce check failed.
+                wp_die(SwpmUtils::_("Error! Nonce security verification failed for Bulk Change Membership Level action. Clear cache and try again."));
+            }
+        
             $errorMsg = "";
             $from_level_id = sanitize_text_field($_REQUEST["swpm_bulk_change_level_from"]);
             $to_level_id = sanitize_text_field($_REQUEST['swpm_bulk_change_level_to']);
@@ -439,6 +446,13 @@ class SwpmMembers extends WP_List_Table {
         }
 
         if (isset($_REQUEST['swpm_bulk_user_start_date_change_process'])) {
+            //Check nonce
+            $swpm_bulk_start_date_nonce = filter_input(INPUT_POST, 'swpm_bulk_start_date_nonce');
+            if (!wp_verify_nonce($swpm_bulk_start_date_nonce, 'swpm_bulk_start_date_nonce_action')) {
+                //Nonce check failed.
+                wp_die(SwpmUtils::_("Error! Nonce security verification failed for Bulk Change Access Starts Date action. Clear cache and try again."));
+            }
+            
             $errorMsg = "";
             $level_id = sanitize_text_field($_REQUEST["swpm_bulk_user_start_date_change_level"]);
             $new_date = sanitize_text_field($_REQUEST['swpm_bulk_user_start_date_change_date']);
@@ -477,6 +491,8 @@ class SwpmMembers extends WP_List_Table {
                     <?php SwpmUtils::e('You can use the following option to bulk update the membership level of users who belong to the level you select below.'); ?>
                 </p>
                 <form method="post" action="">
+                    <input type="hidden" name="swpm_bulk_change_level_nonce" value="<?php echo wp_create_nonce('swpm_bulk_change_level_nonce_action'); ?>" />
+                    
                     <table width="100%" border="0" cellspacing="0" cellpadding="6">
                         <tr valign="top">
                             <td width="25%" align="left">
@@ -524,7 +540,8 @@ class SwpmMembers extends WP_List_Table {
                     <?php SwpmUtils::e('You can manually set a specific access starts date value of all members who belong to a particular level using the following option.'); ?>
                 </p>
                 <form method="post" action="">
-
+                    <input type="hidden" name="swpm_bulk_start_date_nonce" value="<?php echo wp_create_nonce('swpm_bulk_start_date_nonce_action'); ?>" />
+                    
                     <table width="100%" border="0" cellspacing="0" cellpadding="6">
                         <tr valign="top">
                             <td width="25%" align="left">

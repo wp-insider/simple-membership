@@ -5,7 +5,9 @@
 class StripeUtilFunctions {
 
     public static function get_stripe_plan_info($api_key, $plan_id) {
-        require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
+        if ( ! class_exists( '\Stripe\Stripe' ) ) {
+            require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
+        }
 
         $stripe_err = '';
 

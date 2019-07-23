@@ -385,8 +385,9 @@ class SwpmAuth {
                         ; //Use live API key
                     }
                     //Include the Stripe library.
-                    include(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
-                    \Stripe\Stripe::setApiKey($secret_key);
+                    if ( ! class_exists( '\Stripe\Stripe' ) ) {
+                        include(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
+                    }                    \Stripe\Stripe::setApiKey($secret_key);
                     // Let's try to cancel subscription
                     try {
                         $sub = \Stripe\Subscription::retrieve($subscr_id);

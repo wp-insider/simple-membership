@@ -640,7 +640,7 @@ class SimpleWpMembership {
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'));
     }
 
-    public static function enqueue_validation_scripts($add_params = false) {
+    public static function enqueue_validation_scripts($add_params = array()) {
         //Localization for jquery.validationEngine
         //This array will be merged with $.validationEngineLanguage.allRules object from jquery.validationEngine-en.js file
         $loc_data = array(
@@ -673,12 +673,21 @@ class SimpleWpMembership {
             ),
         );
 
-        if ($add_params !== false) {
+        $nonce=wp_create_nonce( 'swpm-rego-form-ajax-nonce' );
+
+        if ($add_params) {
             // Additional parameters should be added to the array, replacing existing ones
+            if (isset($add_params['ajaxEmailCall'])) {
+                if (isset($add_params['ajaxEmailCall']['extraData'])) {
+                    $add_params['ajaxEmailCall']['extraData'].='&nonce='.$nonce;
+                }
+            }
             $loc_data = array_replace_recursive($add_params, $loc_data);
         }
 
         wp_localize_script('swpm.validationEngine-localization', 'swpm_validationEngine_localization', $loc_data);
+
+        wp_localize_script('jquery.validationEngine-en', 'swpmRegForm', array('nonce' => $nonce));
 
         wp_enqueue_style('validationEngine.jquery');
         wp_enqueue_script('jquery.validationEngine');

@@ -157,7 +157,7 @@
                 "ajaxUserCall": {
                     "url": "ajaxurl",
                     // you may want to pass extra data on the ajax call
-                    "extraData": "&action=swpm_validate_user_name",
+                    "extraData": "&action=swpm_validate_user_name&nonce="+swpmRegForm.nonce,
                     "alertTextOk": "* This username is available",
                     "alertText": "* This user is already taken",
                     "alertTextLoad": "* Validating, please wait"
@@ -165,7 +165,7 @@
                 "ajaxEmailCall": {
                     "url": "ajaxurl",
                     // you may want to pass extra data on the ajax call
-                    "extraData": "&action=swpm_validate_email",
+                    "extraData": "&action=swpm_validate_email&nonce="+swpmRegForm.nonce,
                     "alertText": "* This email is already taken",
                     "alertTextOk": "* This email is available",
                     "alertTextLoad": "* Validating, please wait"

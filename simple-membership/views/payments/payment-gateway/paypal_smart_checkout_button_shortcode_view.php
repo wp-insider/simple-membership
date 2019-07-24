@@ -103,6 +103,7 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
     if (!empty($coupon_input)) {
         echo $coupon_input;
     }
+    $nonce=wp_create_nonce( 'swpm-pp-smart-checkout-ajax-nonce-'.$uniqid );
     ?>
         <div class="swpm-pp-smart-checkout-btn-<?php echo $uniqid; ?>"></div>
         <input type="hidden" id="swpm-pp-smart-checkout-amount-<?php echo $uniqid; ?>" name="item_price" value="<?php echo $payment_amount;?>">
@@ -158,7 +159,7 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
                         data.button_id = '<?php echo esc_js($button_id); ?>';
                         data.item_name = '<?php echo esc_js($item_name); ?>';
                         jQuery.post('<?php echo esc_js(admin_url('admin-ajax.php')); ?>',
-                                {action: 'swpm_process_pp_smart_checkout', swpm_pp_smart_checkout_payment_data: data, custom: custom})
+                                {action: 'swpm_process_pp_smart_checkout', swpm_pp_smart_checkout_payment_data: data, nonce: '<?php echo $nonce?>', uniqid: '<?php echo $uniqid?>', custom: custom})
                                 .done(function (result) {
                                     if (result.success) {
                                         window.location.href = '<?php echo esc_js($return_url); ?>';

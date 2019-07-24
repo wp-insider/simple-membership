@@ -309,6 +309,14 @@ class swpm_smart_checkout_ipn_handler {
 function swpm_pp_smart_checkout_ajax_hanlder() {
     // Start of IPN handling (script execution)
 
+    //check nonce
+    $uniqid=filter_input(INPUT_POST,'uniqid',FILTER_SANITIZE_STRING);
+
+    if (!check_ajax_referer( 'swpm-pp-smart-checkout-ajax-nonce-'.$uniqid, 'nonce', false )) {
+        wp_send_json(array('success' => false, 'errMsg' => __('Nonce check failed. Please reload page.', "simple-membership")));
+        exit;
+    }
+
     if (isset($_POST['swpm_pp_smart_checkout_payment_data'])) {
         $data = $_POST['swpm_pp_smart_checkout_payment_data'];
     }

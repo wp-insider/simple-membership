@@ -211,6 +211,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                 </table>
 
                 <p class="submit">
+                    <?php wp_nonce_field('swpm_admin_add_edit_pp_smart_checkout_btn','swpm_admin_add_edit_pp_smart_checkout_btn') ?>
                     <input type="submit" name="swpm_pp_smart_checkout_<?php echo ($is_edit_mode ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
                 </p>
 
@@ -294,6 +295,8 @@ function swpm_save_edit_pp_smart_checkout_button_data() {
     if (isset($_REQUEST['swpm_pp_smart_checkout_save_submit'])) {
         //This is a PayPal Smart Checkout button save event.
 
+        check_admin_referer( 'swpm_admin_add_edit_pp_smart_checkout_btn', 'swpm_admin_add_edit_pp_smart_checkout_btn' );
+
         $button_id = wp_insert_post(
                 array(
                     'post_title' => sanitize_text_field($_REQUEST['button_name']),
@@ -331,6 +334,9 @@ function swpm_save_edit_pp_smart_checkout_button_data() {
 
     if (isset($_REQUEST['swpm_pp_smart_checkout_edit_submit'])) {
         //This is a PayPal Smart Checkout button edit event.
+
+        check_admin_referer( 'swpm_admin_add_edit_pp_smart_checkout_btn', 'swpm_admin_add_edit_pp_smart_checkout_btn' );
+
         $button_id = sanitize_text_field($_REQUEST['button_id']);
         $button_id = absint($button_id);
         $button_type = sanitize_text_field($_REQUEST['button_type']);

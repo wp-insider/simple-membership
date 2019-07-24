@@ -197,7 +197,8 @@ function swpm_create_new_pp_subscription_button() {
         </div><!-- end of optional details box -->        
 
         <p class="submit">
-            <input type="submit" name="swpm_pp_subscription_save_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
+        <?php wp_nonce_field('swpm_admin_add_edit_pp_subs_btn','swpm_admin_create_pp_subs_btn') ?>
+        <input type="submit" name="swpm_pp_subscription_save_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
         </p>
 
     </form>
@@ -213,6 +214,8 @@ add_action('swpm_create_new_button_process_submission', 'swpm_save_new_pp_subscr
 function swpm_save_new_pp_subscription_button_data() {
     if (isset($_REQUEST['swpm_pp_subscription_save_submit'])) {
         //This is a PayPal subscription button save event. Process the submission.
+
+        check_admin_referer( 'swpm_admin_add_edit_pp_subs_btn', 'swpm_admin_create_pp_subs_btn' );
 
         $button_id = wp_insert_post(
                 array(
@@ -481,6 +484,7 @@ function swpm_edit_pp_subscription_button() {
         </div><!-- end of optional details box -->        
 
         <p class="submit">
+            <?php wp_nonce_field('swpm_admin_add_edit_pp_subs_btn','swpm_admin_edit_pp_subs_btn') ?>
             <input type="submit" name="swpm_pp_subscription_save_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
         </p>
 
@@ -497,6 +501,9 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_pp_subscrip
 function swpm_edit_pp_subscription_button_data() {
     if (isset($_REQUEST['swpm_pp_subscription_save_submit'])) {
         //This is a PayPal subscription button edit event. Process the submission.
+
+        check_admin_referer( 'swpm_admin_add_edit_pp_subs_btn', 'swpm_admin_edit_pp_subs_btn' );
+
         //Update and Save the edited payment button data
         $button_id = sanitize_text_field($_REQUEST['button_id']);
         $button_id = absint($button_id);

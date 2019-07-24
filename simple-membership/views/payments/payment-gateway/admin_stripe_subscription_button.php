@@ -208,8 +208,8 @@ function swpm_render_new_edit_stripe_subscription_button_interface($opts, $edit 
         </div><!-- end of optional details box -->        
 
         <p class="submit">
-            <input type="submit" name="swpm_stripe_subscription_<?php echo ($edit ? 'edit' : 'save');
-                                ?>_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
+            <?php wp_nonce_field('swpm_admin_add_edit_stripe_subs_btn','swpm_admin_add_edit_stripe_subs_btn') ?>
+            <input type="submit" name="swpm_stripe_subscription_<?php echo ($edit ? 'edit' : 'save') ?>_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
         </p>
 
     </form>
@@ -255,6 +255,7 @@ function swpm_save_edit_stripe_subscription_button_data() {
     }
     if (isset($edit)) {
         //This is a Stripe subscription button save or edit event. Process the submission.
+        check_admin_referer( 'swpm_admin_add_edit_stripe_subs_btn', 'swpm_admin_add_edit_stripe_subs_btn' );
         if ($edit) {
             $button_id = sanitize_text_field($_REQUEST['button_id']);
             $button_id = absint($button_id);

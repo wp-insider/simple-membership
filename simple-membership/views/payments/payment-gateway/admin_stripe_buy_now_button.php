@@ -156,6 +156,7 @@ function swpm_create_new_stripe_buy_now_button() {
                 </table>
 
                 <p class="submit">
+                    <?php wp_nonce_field('swpm_admin_add_edit_stripe_buy_now_btn','swpm_admin_create_stripe_buy_now_btn') ?>
                     <input type="submit" name="swpm_stripe_buy_now_save_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
                 </p>
 
@@ -174,6 +175,8 @@ add_action('swpm_create_new_button_process_submission', 'swpm_save_new_stripe_bu
 function swpm_save_new_stripe_buy_now_button_data() {
     if (isset($_REQUEST['swpm_stripe_buy_now_save_submit'])) {
         //This is a Stripe buy now button save event. Process the submission.
+        check_admin_referer( 'swpm_admin_add_edit_stripe_buy_now_btn', 'swpm_admin_create_stripe_buy_now_btn' );
+
         //Save the button data
         $button_id = wp_insert_post(
                 array(
@@ -380,7 +383,8 @@ function swpm_edit_stripe_buy_now_button() {
                 </table>
 
                 <p class="submit">
-                    <input type="submit" name="swpm_stripe_buy_now_edit_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
+                <?php wp_nonce_field('swpm_admin_add_edit_stripe_buy_now_btn','swpm_admin_edit_stripe_buy_now_btn') ?>
+                <input type="submit" name="swpm_stripe_buy_now_edit_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
                 </p>
 
             </form>
@@ -398,6 +402,7 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_stripe_buy_
 function swpm_edit_stripe_buy_now_button_data() {
     if (isset($_REQUEST['swpm_stripe_buy_now_edit_submit'])) {
         //This is a Stripe buy now button edit event. Process the submission.
+        check_admin_referer( 'swpm_admin_add_edit_stripe_buy_now_btn', 'swpm_admin_edit_stripe_buy_now_btn' );
         //Update and Save the edited payment button data
         $button_id = sanitize_text_field($_REQUEST['button_id']);
         $button_id = absint($button_id);

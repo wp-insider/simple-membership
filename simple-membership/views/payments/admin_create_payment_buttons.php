@@ -37,6 +37,7 @@ if (!isset($_REQUEST['swpm_button_type_selected'])) {
                 <br />
     <?php
     apply_filters('swpm_new_button_select_button_type', '');
+    wp_nonce_field( 'swpm_admin_create_btns', 'swpm_admin_create_btns' );
     ?>
 
                 <br />
@@ -48,6 +49,8 @@ if (!isset($_REQUEST['swpm_button_type_selected'])) {
     <?php
 } else {
     //Button type has been selected. Show the payment button configuration option.
+    //check the nonce first
+    check_admin_referer('swpm_admin_create_btns','swpm_admin_create_btns');
     //Fire the action hook. The addons can render the payment button configuration option as appropriate.
     $button_type = sanitize_text_field($_REQUEST['button_type']);
     do_action('swpm_create_new_button_for_' . $button_type);

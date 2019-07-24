@@ -123,6 +123,7 @@ function swpm_create_new_pp_buy_now_button() {
                 </table>
 
                 <p class="submit">
+                    <?php wp_nonce_field('swpm_admin_add_edit_pp_buy_now_btn','swpm_admin_create_pp_buy_now_btn') ?>
                     <input type="submit" name="swpm_pp_buy_now_save_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
                 </p>
 
@@ -141,6 +142,8 @@ add_action('swpm_create_new_button_process_submission', 'swpm_save_new_pp_buy_no
 function swpm_save_new_pp_buy_now_button_data() {
     if (isset($_REQUEST['swpm_pp_buy_now_save_submit'])) {
         //This is a PayPal buy now button save event. Process the submission.
+        //Check nonce first
+        check_admin_referer( 'swpm_admin_add_edit_pp_buy_now_btn', 'swpm_admin_create_pp_buy_now_btn' );
         //TODO - Do some extra validation check?
         
         //Save the button data
@@ -318,7 +321,8 @@ function swpm_edit_pp_buy_now_button() {
                 </table>
 
                 <p class="submit">
-                    <input type="submit" name="swpm_pp_buy_now_edit_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
+                <?php wp_nonce_field('swpm_admin_add_edit_pp_buy_now_btn','swpm_admin_edit_pp_buy_now_btn') ?>
+                <input type="submit" name="swpm_pp_buy_now_edit_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
                 </p>
 
             </form>
@@ -336,6 +340,8 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_edit_pp_buy_now_
 function swpm_edit_pp_buy_now_button_data() {
     if (isset($_REQUEST['swpm_pp_buy_now_edit_submit'])) {
         //This is a PayPal buy now button edit event. Process the submission.
+        //Check nonce first
+        check_admin_referer( 'swpm_admin_add_edit_pp_buy_now_btn', 'swpm_admin_edit_pp_buy_now_btn' );
         
         //Update and Save the edited payment button data
         $button_id = sanitize_text_field($_REQUEST['button_id']);

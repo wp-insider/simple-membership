@@ -7,8 +7,10 @@ class SwpmPaymentsAdminMenu {
     }
 
     function handle_main_payments_admin_menu() {
-
         do_action('swpm_payments_menu_start');
+        
+        //Check current_user_can() or die.
+        SwpmMiscUtils::check_user_permission_and_is_admin('Main Payments Admin Menu');        
 
         $output = '';
         $tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';

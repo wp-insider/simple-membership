@@ -595,6 +595,9 @@ class SwpmMembers extends WP_List_Table {
     function handle_main_members_admin_menu() {
         do_action('swpm_members_menu_start');
 
+        //Check current_user_can() or die.
+        SwpmMiscUtils::check_user_permission_and_is_admin('Main Members Admin Menu');
+        
         $action = filter_input(INPUT_GET, 'member_action');
         $action = empty($action) ? filter_input(INPUT_POST, 'action') : $action;
         $selected = $action;

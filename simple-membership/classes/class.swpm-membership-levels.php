@@ -246,10 +246,12 @@ class SwpmMembershipLevels extends WP_List_Table {
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_post_list.php');       
     }
     
-    function handle_main_membership_level_admin_menu(){
-        
+    function handle_main_membership_level_admin_menu(){        
         do_action( 'swpm_membership_level_menu_start' );
         
+        //Check current_user_can() or die.
+        SwpmMiscUtils::check_user_permission_and_is_admin('Main Membership Level Admin Menu');
+
         $level_action = filter_input(INPUT_GET, 'level_action');
         $action = $level_action;
         $selected= $action;

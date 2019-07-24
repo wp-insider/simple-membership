@@ -550,8 +550,11 @@ class SwpmSettings {
     }
 
     public function handle_main_settings_admin_menu() {
-
         do_action('swpm_settings_menu_start');
+        
+        //Check current_user_can() or die.
+        SwpmMiscUtils::check_user_permission_and_is_admin('Main Settings Menu');
+
         ?>
         <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 

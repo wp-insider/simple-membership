@@ -163,6 +163,7 @@ https://simple-membership-plugin.com/
 - Fixed Braintree payment issue that could occur if customer pays via PayPal.
 - Fixed Stripe library conflict if other Stripe plugin is installed.
 - Added support for the coupons addon.
+- Added current_user_can() check to the admin menu handling function.
 
 = 3.8.4 =
 - More strings from the settings admin interface of the plugin are translatable.

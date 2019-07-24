@@ -1,4 +1,8 @@
 <?php
+
+//Check current_user_can() or die.
+SwpmMiscUtils::check_user_permission_and_is_admin('Main Addons Listing Menu');
+
 $output = '';
 echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL . '/css/swpm.addons.listing.css" />' . "\n";
 ?>

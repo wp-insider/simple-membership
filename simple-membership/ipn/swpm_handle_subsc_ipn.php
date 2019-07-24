@@ -13,7 +13,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
     }
 
     swpm_debug_log_subsc("swpm_handle_subsc_signup_stand_alone(). Custom value: " . $ipn_data['custom'] . ", Unique reference: " . $unique_ref, true);
-    $custom_vars = parse_str($ipn_data['custom']);
+    parse_str($ipn_data['custom'], $custom_vars);
 
     if (empty($swpm_id)) {
         //Lets try to find an existing user profile for this payment
@@ -108,7 +108,7 @@ function swpm_handle_subsc_signup_stand_alone($ipn_data, $subsc_ref, $unique_ref
         $md5_code = md5($reg_code);
         $data['reg_code'] = $md5_code;
         $data['referrer'] = $data['extra_info'] = $data['txn_id'] = '';
-        $data['last_accessed_from_ip'] = isset($user_ip) ? $user_ip : ''; //Save the users IP address
+        $data['last_accessed_from_ip'] = isset($custom_vars['user_ip']) ? $custom_vars['user_ip'] : ''; //Save the users IP address
 
         swpm_debug_log_subsc("Creating new member account. Membership level ID: " . $membership_level . ", Subscriber ID value: " . $data['subscr_id'], true);
                 

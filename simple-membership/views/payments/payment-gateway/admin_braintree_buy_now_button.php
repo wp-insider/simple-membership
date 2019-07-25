@@ -124,6 +124,7 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
                 </table>
 
                 <p class="submit">
+                    <?php wp_nonce_field('swpm_admin_add_edit_braintree_buy_now_btn','swpm_admin_add_edit_braintree_buy_now_btn') ?>                           
                     <input type="submit" name="swpm_braintree_buy_now_<?php echo ($is_edit_mode ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
                 </p>
 
@@ -230,6 +231,7 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_save_edit_braint
 function swpm_save_edit_braintree_buy_now_button_data() {
     if (isset($_REQUEST['swpm_braintree_buy_now_save_submit'])) {
         //This is a Braintree buy now button save event.
+        check_admin_referer( 'swpm_admin_add_edit_braintree_buy_now_btn', 'swpm_admin_add_edit_braintree_buy_now_btn' );
 
         $button_id = wp_insert_post(
                 array(
@@ -272,6 +274,7 @@ function swpm_save_edit_braintree_buy_now_button_data() {
 
     if (isset($_REQUEST['swpm_braintree_buy_now_edit_submit'])) {
         //This is a Braintree buy now button edit event.
+        check_admin_referer( 'swpm_admin_add_edit_braintree_buy_now_btn', 'swpm_admin_add_edit_braintree_buy_now_btn' );
         $button_id = sanitize_text_field($_REQUEST['button_id']);
         $button_id = absint($button_id);
         $button_type = sanitize_text_field($_REQUEST['button_type']);

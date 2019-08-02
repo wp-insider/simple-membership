@@ -187,7 +187,8 @@ class SimpleWpMembership {
         //Initialize the settings menu hooks.
         $swpm_settings_obj->init_config_hooks();
         $addon_saved = filter_input(INPUT_POST, 'swpm-addon-settings');
-        if (!empty($addon_saved)) {
+        if (!empty($addon_saved) && current_user_can('manage_options')) {
+            check_admin_referer('swpm_addon_settings_section', 'swpm_addon_settings_section_save_settings');
             do_action('swpm_addon_settings_save');
         }
     }

@@ -82,7 +82,7 @@ class swpm_smart_checkout_ipn_handler {
 				// Handle customized subscription signup.
 			}
 			return true;
-		} elseif ( ( $transaction_type == 'subscr_cancel' ) || ( $transaction_type == 'subscr_eot' ) || ( $transaction_type == 'subscr_failed' ) ) {
+		} elseif ( ( 'subscr_cancel' == $transaction_type ) || ( 'subscr_eot' == $transaction_type ) || ( 'subscr_failed' == $transaction_type ) ) {
 			// Code to handle the IPN for subscription cancellation.
 			$this->debug_log( 'Subscription cancellation IPN received... (handled by the subscription IPN handler)', true );
 			swpm_handle_subsc_cancel_stand_alone( $this->ipn_data );
@@ -302,6 +302,7 @@ class swpm_smart_checkout_ipn_handler {
 			return true;
 		} else {
 			// payment is invalid.
+			// translators:  %1$s is expected amount, %2$s is expected currency.
 			return sprintf( __( 'Payment check failed: invalid amount received. Expected %1$s %2$s, got %3$s %4$s.', 'simple-membership' ), $this->ipn_data['mc_gross'], $this->ipn_data['mc_currency'], $body->transactions[0]->amount->total, $body->transactions[0]->amount->currency );
 		}
 	}

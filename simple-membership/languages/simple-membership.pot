@@ -2800,3 +2800,13 @@ msgstr ""
 #: views/template-1.php:60 views/template-2.php:62
 msgid "Clear Search"
 msgstr ""
+
+# === Misc Shortcodes Addon ===
+msgid "You must be logged in to upgrade a membership."
+msgstr ""
+
+msgid "Membership level has been updated."
+msgstr ""
+
+msgid "Already a member of this level."
+msgstr ""

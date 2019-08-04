@@ -143,3 +143,13 @@ msgstr ""
 #: views/template-1.php:95 views/template-2.php:97
 msgid "View Profile"
 msgstr ""
+
+# === Misc Shortcodes Addon ===
+msgid "You must be logged in to upgrade a membership."
+msgstr ""
+
+msgid "Membership level has been updated."
+msgstr ""
+
+msgid "Already a member of this level."
+msgstr ""

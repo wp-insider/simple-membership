@@ -2,24 +2,22 @@
 
 require_once 'swpm_handle_subsc_ipn.php';
 
-class swpm_paypal_ipn_handler {
+class swpm_paypal_ipn_handler { // phpcs:ignore
 
-	var $last_error;                 // holds the last error encountered
-	var $ipn_log = false;                    // bool: log IPN results to text file?
-	var $ipn_log_file;               // filename of the IPN log
-	var $ipn_response;               // holds the IPN response from paypal
-	var $ipn_data     = array();         // array contains the POST values for IPN
-	var $fields       = array();           // array holds the fields to submit to paypal
-	var $sandbox_mode = false;
+	public $ipn_log = false;                    // bool: log IPN results to text file?
+	public $ipn_log_file;               // filename of the IPN log
+	public $ipn_response;               // holds the IPN response from paypal
+	public $ipn_data     = array();         // array contains the POST values for IPN
+	public $fields       = array();           // array holds the fields to submit to paypal
+	public $sandbox_mode = false;
 
-	function __construct() {
+	public function __construct() {
 		$this->paypal_url   = 'https://www.paypal.com/cgi-bin/webscr';
-		$this->last_error   = '';
 		$this->ipn_log_file = 'ipn_handle_debug_swpm.log';
 		$this->ipn_response = '';
 	}
 
-	function swpm_validate_and_create_membership() {
+	public function swpm_validate_and_create_membership() {
 		// Check Product Name , Price , Currency , Receivers email ,
 		$error_msg = '';
 
@@ -31,15 +29,15 @@ class swpm_paypal_ipn_handler {
 
 		// Check payment status
 		if ( ! empty( $payment_status ) ) {
-			if ( $payment_status == 'Denied' ) {
+			if ( 'Denied' == $payment_status ) {
 				$this->debug_log( 'Payment status for this transaction is DENIED. You denied the transaction... most likely a cancellation of an eCheque. Nothing to do here.', false );
 				return false;
 			}
-			if ( $payment_status == 'Canceled_Reversal' ) {
+			if ( 'Canceled_Reversal' === $payment_status ) {
 				$this->debug_log( 'This is a dispute closed notification in your favour. The plugin will not do anyting.', false );
 				return true;
 			}
-			if ( $payment_status != 'Completed' && $payment_status != 'Processed' && $payment_status != 'Refunded' && $payment_status != 'Reversed' ) {
+			if ( 'Completed' !== $payment_status && 'Processed' !== $payment_status && 'Refunded' !== $payment_status && 'Reversed' !== $payment_status ) {
 				$error_msg .= 'Funds have not been cleared yet. Transaction will be processed when the funds clear!';
 				$this->debug_log( $error_msg, false );
 				return false;
@@ -47,7 +45,7 @@ class swpm_paypal_ipn_handler {
 		}
 
 		// Check txn type
-		if ( $transaction_type == 'new_case' ) {
+		if ( 'new_case' === $transaction_type ) {
 			$this->debug_log( 'This is a dispute case. Nothing to do here.', true );
 			return true;
 		}
@@ -63,13 +61,13 @@ class swpm_paypal_ipn_handler {
 			swpm_handle_subsc_cancel_stand_alone( $this->ipn_data, true );
 			return true;
 		}
-		if ( isset( $this->ipn_data['reason_code'] ) && $this->ipn_data['reason_code'] == 'refund' ) {
+		if ( isset( $this->ipn_data['reason_code'] ) && 'refund' === $this->ipn_data['reason_code'] ) {
 			$this->debug_log( 'This is a refund notification. Refund amount: ' . $gross_total, true );
 			swpm_handle_subsc_cancel_stand_alone( $this->ipn_data, true );
 			return true;
 		}
 
-		if ( ( $transaction_type == 'subscr_signup' ) ) {
+		if ( ( 'subscr_signup' === $transaction_type ) ) {
 			$this->debug_log( 'Subscription signup IPN received... (handled by the subscription IPN handler)', true );
 			// Code to handle the signup IPN for subscription
 			$subsc_ref = $customvariables['subsc_ref'];
@@ -208,7 +206,7 @@ class swpm_paypal_ipn_handler {
 		return true;
 	}
 
-	function swpm_validate_ipn() {
+	public function swpm_validate_ipn() {
 		// Generate the post string from the _POST vars aswell as load the _POST vars into an arry
 		$post_string = '';
 		foreach ( $_POST as $field => $value ) {
@@ -229,7 +227,7 @@ class swpm_paypal_ipn_handler {
 
 	}
 
-	function validate_ipn_using_remote_post() {
+	public function validate_ipn_using_remote_post() {
 		$this->debug_log( 'Checking if PayPal IPN response is valid', true );
 
 		// Get received values from post data
@@ -269,7 +267,7 @@ class swpm_paypal_ipn_handler {
 		return false;
 	}
 
-	function debug_log( $message, $success, $end = false ) {
+	public function debug_log( $message, $success, $end = false ) {
 		SwpmLog::log_simple_debug( $message, $success, $end );
 	}
 }
@@ -282,7 +280,7 @@ $settings      = SwpmSettings::get_instance();
 $debug_enabled = $settings->get_value( 'enable-debug' );
 if ( ! empty( $debug_enabled ) ) {
 	$debug_log = 'log.txt'; // Debug log file name
-	echo 'Debug logging is enabled. Check the ' . $debug_log . ' file for debug output.';
+	echo esc_html( sprintf( 'Debug logging is enabled. Check the %s file for debug output.', $debug_log ) );
 	$ipn_handler_instance->ipn_log      = true;
 	$ipn_handler_instance->ipn_log_file = $debug_log;
 	if ( empty( $_POST ) ) {

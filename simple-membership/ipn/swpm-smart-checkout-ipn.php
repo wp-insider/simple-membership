@@ -1,20 +1,18 @@
 <?php
 
 require_once 'swpm_handle_subsc_ipn.php';
+// Ignoring invalid class name PHPCS warning
+class swpm_smart_checkout_ipn_handler { // phpcs:ignore
 
-class swpm_smart_checkout_ipn_handler {
-
-	var $last_error;                 // holds the last error encountered.
-	var $ipn_log = false;                    // bool: log IPN results to text file?
-	var $ipn_log_file;               // filename of the IPN log.
-	var $ipn_response;               // holds the IPN response from paypal.
-	var $ipn_data     = array();         // array contains the POST values for IPN.
-	var $fields       = array();           // array holds the fields to submit to paypal.
-	var $sandbox_mode = false;
+	public $ipn_log = false;                    // bool: log IPN results to text file?
+	public $ipn_log_file;               // filename of the IPN log.
+	public $ipn_response;               // holds the IPN response from paypal.
+	public $ipn_data     = array();         // array contains the POST values for IPN.
+	public $fields       = array();           // array holds the fields to submit to paypal.
+	public $sandbox_mode = false;
 
 	public function __construct() {
 		$this->paypal_url   = 'https://www.paypal.com/cgi-bin/webscr';
-		$this->last_error   = '';
 		$this->ipn_log_file = 'ipn_handle_debug_swpm.log';
 		$this->ipn_response = '';
 	}
@@ -42,7 +40,7 @@ class swpm_smart_checkout_ipn_handler {
 			if ( 'Completed' != $payment_status && 'Processed' != $payment_status && 'Refunded' != $payment_status && 'Reversed' != $payment_status ) {
 				$error_msg .= 'Funds have not been cleared yet. Transaction will be processed when the funds clear!';
 				$this->debug_log( $error_msg, false );
-				$this->debug_log( json_encode( $this->ipn_data ), false );
+				$this->debug_log( wp_json_encode( $this->ipn_data ), false );
 				return false;
 			}
 		}
@@ -244,7 +242,8 @@ class swpm_smart_checkout_ipn_handler {
 
 		$wp_request_headers = array(
 			'Accept'        => 'application/json',
-			'Authorization' => 'Basic ' . base64_encode( $client_id . ':' . $secret ),
+			// Ignoring base64_encode() PHPCS warning as it's being properly used in this case.
+			'Authorization' => 'Basic ' . base64_encode( $client_id . ':' . $secret ), // phpcs:ignore
 		);
 
 		$res = wp_remote_request(

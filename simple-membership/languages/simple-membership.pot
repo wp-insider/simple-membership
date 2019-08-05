@@ -2777,6 +2777,9 @@ msgstr ""
 msgid "This content is for members only."
 msgstr ""
 
+msgid "Please check at least one."
+msgstr ""
+
 #: === Member Directory Listing addon strings swpm-member-directory-admin.php:9
 msgid "Member Directory"
 msgstr ""

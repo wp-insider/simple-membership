@@ -6,7 +6,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 
 class SWPMPaymentsListTable extends WP_List_Table {
 
-	function __construct() {
+	public function __construct() {
 		global $status, $page;
 
 		// Set parent defaults
@@ -46,14 +46,13 @@ class SWPMPaymentsListTable extends WP_List_Table {
 
 	function column_member_profile( $item ) {
 		global $wpdb;
-		$members_table_name = $wpdb->prefix . 'swpm_members_tbl';
-		$member_id          = $item['member_id'];
-		$subscr_id          = $item['subscr_id'];
-		$column_value       = '';
+		$member_id    = $item['member_id'];
+		$subscr_id    = $item['subscr_id'];
+		$column_value = '';
 
 		if ( empty( $member_id ) ) {// Lets try to get the member id using unique reference
 			if ( ! empty( $subscr_id ) ) {
-				$resultset = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $members_table_name where subscr_id=%s", $subscr_id ), OBJECT );
+				$resultset = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl where subscr_id=%s", $subscr_id ), OBJECT );
 				if ( $resultset ) {
 					// Found a record
 					$member_id = $resultset->member_id;
@@ -125,9 +124,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 					wp_die( 'Error! ID must be numeric.' );
 				}
 				global $wpdb;
-				$payments_table_name = $wpdb->prefix . 'swpm_payments_tbl';
-				$query_string        = "DELETE FROM $payments_table_name WHERE id='$record_id'";
-				$results             = $wpdb->query( $query_string );
+				$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'swpm_payments_tbl WHERE id = %d', $record_id ) );
 			}
 			echo '<div id="message" class="updated fade"><p>Selected records deleted successfully!</p></div>';
 		}
@@ -135,9 +132,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 
 	function delete_record( $record_id ) {
 		global $wpdb;
-		$payments_table_name = $wpdb->prefix . 'swpm_payments_tbl';
-		$delete_command      = 'DELETE FROM ' . $payments_table_name . " WHERE id = '$record_id'";
-		$result              = $wpdb->query( $delete_command );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'swpm_payments_tbl WHERE id = %d', $record_id ) );
 		// also delete record from swpm_transactions CPT
 		$trans = get_posts(
 			array(
@@ -159,7 +154,6 @@ class SWPMPaymentsListTable extends WP_List_Table {
 
 	function prepare_items() {
 		global $wpdb;
-		$payments_table_name = $wpdb->prefix . 'swpm_payments_tbl';
 
 		// Lets decide how many records per page to show
 		$per_page = apply_filters( 'swpm_transactions_menu_items_per_page', 50 );
@@ -191,17 +185,21 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		// pagination requirement
 		$current_page = $this->get_pagenum();
 
-		if ( isset( $_POST['swpm_txn_search'] ) ) {// Only load the searched records
-			$search_term   = trim( sanitize_text_field( $_POST['swpm_txn_search'] ) );
-			$prepare_query = $wpdb->prepare( 'SELECT * FROM ' . $payments_table_name . " WHERE `email` LIKE '%%%s%%' OR `txn_id` LIKE '%%%s%%' OR `first_name` LIKE '%%%s%%' OR `last_name` LIKE '%%%s%%'", $search_term, $search_term, $search_term, $search_term );
+		$search_term = filter_input( INPUT_POST, 'swpm_txn_search', FILTER_SANITIZE_STRING );
+		$search_term = trim( $search_term );
+
+		if ( $search_term ) {// Only load the searched records.
+			$like          = $wpdb->esc_like( $search_term );
+			$like          = '%' . $like . '%';
+			$prepare_query = $wpdb->prepare( "SELECT * FROM  {$wpdb->prefix}swpm_payments_tbl WHERE `email` LIKE %s OR `txn_id` LIKE %s OR `first_name` LIKE %s OR `last_name` LIKE %s", $like, $like, $like, $like );
 			$data          = $wpdb->get_results( $prepare_query, ARRAY_A );
 			$total_items   = count( $data );
 		} else { // Load all data in an optimized way (so it is only loading data for the current page)
-			$query       = "SELECT COUNT(*) FROM $payments_table_name";
+			$query       = "SELECT COUNT(*) FROM {$wpdb->prefix}swpm_payments_tbl";
 			$total_items = $wpdb->get_var( $query );
 
 			// pagination requirement
-			$query = "SELECT * FROM $payments_table_name ORDER BY $orderby_column $sort_order";
+			$query = "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl ORDER BY $orderby_column $sort_order";
 
 			$offset = ( $current_page - 1 ) * $per_page;
 			$query .= ' LIMIT ' . (int) $offset . ',' . (int) $per_page;

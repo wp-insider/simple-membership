@@ -1,20 +1,18 @@
 <?php
 
 require_once 'swpm_handle_subsc_ipn.php';
+// Ignoring invalid class name PHPCS warning
+class swpm_smart_checkout_ipn_handler { // phpcs:ignore
 
-class swpm_smart_checkout_ipn_handler {
-
-	var $last_error;                 // holds the last error encountered.
-	var $ipn_log = false;                    // bool: log IPN results to text file?
-	var $ipn_log_file;               // filename of the IPN log.
-	var $ipn_response;               // holds the IPN response from paypal.
-	var $ipn_data     = array();         // array contains the POST values for IPN.
-	var $fields       = array();           // array holds the fields to submit to paypal.
-	var $sandbox_mode = false;
+	public $ipn_log = false;                    // bool: log IPN results to text file?
+	public $ipn_log_file;               // filename of the IPN log.
+	public $ipn_response;               // holds the IPN response from paypal.
+	public $ipn_data     = array();         // array contains the POST values for IPN.
+	public $fields       = array();           // array holds the fields to submit to paypal.
+	public $sandbox_mode = false;
 
 	public function __construct() {
 		$this->paypal_url   = 'https://www.paypal.com/cgi-bin/webscr';
-		$this->last_error   = '';
 		$this->ipn_log_file = 'ipn_handle_debug_swpm.log';
 		$this->ipn_response = '';
 	}
@@ -42,7 +40,7 @@ class swpm_smart_checkout_ipn_handler {
 			if ( 'Completed' != $payment_status && 'Processed' != $payment_status && 'Refunded' != $payment_status && 'Reversed' != $payment_status ) {
 				$error_msg .= 'Funds have not been cleared yet. Transaction will be processed when the funds clear!';
 				$this->debug_log( $error_msg, false );
-				$this->debug_log( json_encode( $this->ipn_data ), false );
+				$this->debug_log( wp_json_encode( $this->ipn_data ), false );
 				return false;
 			}
 		}
@@ -82,7 +80,7 @@ class swpm_smart_checkout_ipn_handler {
 				// Handle customized subscription signup.
 			}
 			return true;
-		} elseif ( ( $transaction_type == 'subscr_cancel' ) || ( $transaction_type == 'subscr_eot' ) || ( $transaction_type == 'subscr_failed' ) ) {
+		} elseif ( ( 'subscr_cancel' == $transaction_type ) || ( 'subscr_eot' == $transaction_type ) || ( 'subscr_failed' == $transaction_type ) ) {
 			// Code to handle the IPN for subscription cancellation.
 			$this->debug_log( 'Subscription cancellation IPN received... (handled by the subscription IPN handler)', true );
 			swpm_handle_subsc_cancel_stand_alone( $this->ipn_data );
@@ -244,7 +242,8 @@ class swpm_smart_checkout_ipn_handler {
 
 		$wp_request_headers = array(
 			'Accept'        => 'application/json',
-			'Authorization' => 'Basic ' . base64_encode( $client_id . ':' . $secret ),
+			// Ignoring base64_encode() PHPCS warning as it's being properly used in this case.
+			'Authorization' => 'Basic ' . base64_encode( $client_id . ':' . $secret ), // phpcs:ignore
 		);
 
 		$res = wp_remote_request(
@@ -302,6 +301,7 @@ class swpm_smart_checkout_ipn_handler {
 			return true;
 		} else {
 			// payment is invalid.
+			// translators:  %1$s is expected amount, %2$s is expected currency.
 			return sprintf( __( 'Payment check failed: invalid amount received. Expected %1$s %2$s, got %3$s %4$s.', 'simple-membership' ), $this->ipn_data['mc_gross'], $this->ipn_data['mc_currency'], $body->transactions[0]->amount->total, $body->transactions[0]->amount->currency );
 		}
 	}

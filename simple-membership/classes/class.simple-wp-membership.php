@@ -93,6 +93,13 @@ class SimpleWpMembership {
 
     function wp_password_reset_hook($user, $pass) {
         $swpm_user = SwpmMemberUtils::get_user_by_user_name($user->user_login);
+        
+        //Check if SWPM user entry exists
+        if (empty($swpm_user)) {
+            SwpmLog::log_auth_debug("wp_password_reset_hook() - SWPM user not found for username: '" . $user->user_login ."'. This is OK, assuming that this user was created directly in WP Users menu (not using SWPM).", true);
+            return;
+        }
+        
         $swpm_id = $swpm_user->member_id;
         if (!empty($swpm_id)) {
             $password_hash = SwpmUtils::encrypt_password($pass);

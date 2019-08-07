@@ -158,6 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.8.7 =
+- Removed a PHP warning in the wp_password_reset_hook(). Thanks to John Wick for pointing this out.
+
 = 3.8.6 =
 - Added nonce check to the "Addons settings" tab.
 

@@ -44,7 +44,7 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		// Upgrade the member account.
 		$account_state = 'active'; // This is renewal or upgrade of a previously active account. So the status should be set to active.
 
-		$resultset = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id=%d", $swpm_id ), OBJECT );
+		$resultset = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = %d", $swpm_id ), OBJECT );
 		if ( ! $resultset ) {
 			swpm_debug_log_subsc( 'ERROR! Could not find a member account record for the given Member ID: ' . $swpm_id, false );
 			return;

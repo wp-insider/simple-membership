@@ -412,7 +412,7 @@ class SwpmMiscUtils {
             "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia",
             "Fiji", "Finland", "France", "Gabon", "Gambia, The", "Georgia", "Germany",
             "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau",
-            "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia",
+            "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia",
             "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
             "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait",
             "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya",

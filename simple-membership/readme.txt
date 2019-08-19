@@ -160,6 +160,7 @@ https://simple-membership-plugin.com/
 
 = WIP 3.8.8 =
 - The expiry date in the login widget now shows the translated date value for Non-English installs.
+- Updated the German language translation files.
 
 = 3.8.7 =
 - Removed a PHP warning in the wp_password_reset_hook(). Thanks to John Wick for pointing this out.

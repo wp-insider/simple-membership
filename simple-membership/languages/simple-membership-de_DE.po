@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Simple Membership\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-09 12:57+0000\n"
-"PO-Revision-Date: 2019-07-09 15:55+0200\n"
+"POT-Creation-Date: 2019-08-18 09:41+0000\n"
+"PO-Revision-Date: 2019-08-18 11:47+0200\n"
 "Last-Translator: Geo_Writer <information@geoplan-systems.de>\n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -3072,6 +3072,9 @@ msgstr "Ihre Mitgliedschaft erlaubt es nicht, diesen Inhalt anzuzeigen."
 msgid "This content is for members only."
 msgstr "Auf diesen Inhalt dürfen nur Mitglieder zugreifen."
 
+msgid "Please check at least one."
+msgstr "Bitte überprüfen Sie mindestens eine."
+
 #: === Member Directory Listing addon strings swpm-member-directory-admin.php:9
 msgid "Member Directory"
 msgstr "Mitglieder Verzeichnis"
@@ -3095,3 +3098,12 @@ msgstr "Suche..."
 #: views/template-1.php:60 views/template-2.php:62
 msgid "Clear Search"
 msgstr "Suche löschen"
+
+msgid "You must be logged in to upgrade a membership."
+msgstr "Sie müssen angemeldet sein, um eine Mitgliedschaft zu ändern."
+
+msgid "Membership level has been updated."
+msgstr "Die Mitgliedschaftsstufe wurde aktualisiert."
+
+msgid "Already a member of this level."
+msgstr "Bereits ein Mitglied dieser Mitgliedschaftsstufe."

@@ -490,9 +490,7 @@ msgid "You must agree to the privacy policy."
 msgstr ""
 
 #: classes/class.swpm-front-registration.php:140
-msgid ""
-"You need to confirm your email address. Please check your email and follow "
-"instructions to complete your registration."
+msgid "You need to confirm your email address. Please check your email and follow instructions to complete your registration."
 msgstr ""
 
 #: classes/class.swpm-front-registration.php:145
@@ -2707,9 +2705,6 @@ msgstr ""
 
 #: views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php:165
 msgid "HTTP error occured during payment process:"
-msgstr ""
-
-msgid "You need to confirm your email address. Please check your email and follow instructions to complete your registration."
 msgstr ""
 
 #: Translation strings from addons === Form builder addon

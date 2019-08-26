@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.2
-Stable tag: 3.8.7
+Stable tag: 3.8.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,9 +158,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.8.8 =
+= 3.8.8 =
 - The expiry date in the login widget now shows the translated date value for Non-English installs.
 - Updated the German language translation files.
+- Integration with the Super Socializer plugin for social login.
+  https://simple-membership-plugin.com/social-login-plugin-simple-membership/
 
 = 3.8.7 =
 - Removed a PHP warning in the wp_password_reset_hook(). Thanks to John Wick for pointing this out.

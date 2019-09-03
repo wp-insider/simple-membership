@@ -5,7 +5,7 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 	$settings         = SwpmSettings::get_instance();
 	$membership_level = $subsc_ref;
 
-	if ( isset( $ipn_data['gateway'] ) && 'stripe' !== $ipn_data['gateway'] && isset( $ipn_data['subscr_id'] ) ) {
+	if ( isset( $ipn_data['subscr_id'] ) && !empty( $ipn_data['subscr_id'] ) ) {
 		$subscr_id = $ipn_data['subscr_id'];
 	} else {
 		$subscr_id = $unique_ref;

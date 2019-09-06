@@ -99,6 +99,17 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		$additional_args = array();
 		$email_body      = SwpmMiscUtils::replace_dynamic_tags( $body, $swpm_id, $additional_args );
 		$headers         = 'From: ' . $from_address . "\r\n";
+                
+                $subject    = apply_filters( 'swpm_email_upgrade_complete_subject', $subject );
+                $email_body = apply_filters( 'swpm_email_upgrade_complete_body', $email_body );
+                
+                if ( $settings->get_value('disable-email-after-upgrade') ) {
+                    swpm_debug_log_subsc( 'The disable upgrade email settings is checked. No account upgrade/update email will be sent.', true );
+                    //Nothing to do.
+                } else {
+                    wp_mail( $email, $subject, $email_body, $headers );
+                    swpm_debug_log_subsc( 'Member upgrade/update completion email successfully sent to: ' . $email, true );
+                }
 		// End of existing user account upgrade/update.
 	} else {
 		// create new member account.
@@ -161,12 +172,13 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		$additional_args = array( 'reg_link' => $reg_url );
 		$email_body      = SwpmMiscUtils::replace_dynamic_tags( $body, $id, $additional_args );
 		$headers         = 'From: ' . $from_address . "\r\n";
+                
+                $subject    = apply_filters( 'swpm_email_complete_registration_subject', $subject );
+                $email_body = apply_filters( 'swpm_email_complete_registration_body', $email_body );
+                wp_mail( $email, $subject, $email_body, $headers );
+                swpm_debug_log_subsc( 'Member signup (prompt to complete registration) email successfully sent to: ' . $email, true );
 	}
 
-	$subject    = apply_filters( 'swpm_email_signup_upgrade_complete_subject', $subject );
-	$email_body = apply_filters( 'swpm_email_signup_upgrade_complete_body', $email_body );
-	wp_mail( $email, $subject, $email_body, $headers );
-	swpm_debug_log_subsc( 'Member signup/upgrade completion email successfully sent to: ' . $email, true );
 }
 
 /*

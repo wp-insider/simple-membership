@@ -160,7 +160,9 @@ class SwpmSettings {
         add_settings_section('upgrade-email-settings', SwpmUtils::_(' Email Settings (Account Upgrade Notification)'), array(&$this, 'upgrade_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('upgrade-complete-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'upgrade-complete-mail-subject', 'message' => ''));
         add_settings_field('upgrade-complete-mail-body', SwpmUtils::_('Email Body'), array(&$this, 'textarea_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'upgrade-complete-mail-body', 'message' => ''));
-
+        add_settings_field('disable-email-after-upgrade', SwpmUtils::_('Disable Email Notification After Upgrade'), array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'upgrade-email-settings', array('item' => 'disable-email-after-upgrade',
+            'message' => SwpmUtils::_('You can use this option to disable the email notification that gets sent to the members when they make a payment for upgrade or renewal.')));
+        
         //Bulk account activate and notify email settings.
         add_settings_section('bulk-activate-email-settings', SwpmUtils::_(' Email Settings (Bulk Account Activate Notification)'), array(&$this, 'bulk_activate_email_settings_callback'), 'simple_wp_membership_settings');
         add_settings_field('bulk-activate-notify-mail-subject', SwpmUtils::_('Email Subject'), array(&$this, 'textfield_callback'), 'simple_wp_membership_settings', 'bulk-activate-email-settings', array('item' => 'bulk-activate-notify-mail-subject', 'message' => ''));
@@ -474,6 +476,7 @@ class SwpmSettings {
 
         $output['upgrade-complete-mail-subject'] = sanitize_text_field($input['upgrade-complete-mail-subject']);
         $output['upgrade-complete-mail-body'] = wp_kses_data(force_balance_tags($input['upgrade-complete-mail-body']));
+        $output['disable-email-after-upgrade'] = isset($input['disable-email-after-upgrade']) ? esc_attr($input['disable-email-after-upgrade']) : "";
 
         $output['bulk-activate-notify-mail-subject'] = sanitize_text_field($input['bulk-activate-notify-mail-subject']);
         $output['bulk-activate-notify-mail-body'] = wp_kses_data(force_balance_tags($input['bulk-activate-notify-mail-body']));

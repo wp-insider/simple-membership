@@ -5,29 +5,22 @@ namespace Stripe;
 /**
  * Class OrderReturn
  *
+ * @property string $id
+ * @property string $object
+ * @property int $amount
+ * @property int $created
+ * @property string $currency
+ * @property OrderItem[] $items
+ * @property bool $livemode
+ * @property string $order
+ * @property string $refund
+ *
  * @package Stripe
  */
 class OrderReturn extends ApiResource
 {
-    /**
-     * @param string $id The ID of the OrderReturn to retrieve.
-     * @param array|string|null $opts
-     *
-     * @return Order
-     */
-    public static function retrieve($id, $opts = null)
-    {
-        return self::_retrieve($id, $opts);
-    }
+    const OBJECT_NAME = "order_return";
 
-    /**
-     * @param array|null $params
-     * @param array|string|null $opts
-     *
-     * @return Collection of OrderReturns
-     */
-    public static function all($params = null, $opts = null)
-    {
-        return self::_all($params, $opts);
-    }
+    use ApiOperations\All;
+    use ApiOperations\Retrieve;
 }

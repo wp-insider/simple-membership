@@ -5,6 +5,7 @@ require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_p
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_smart_checkout_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_buy_now_button.php';
+require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_subscription_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_braintree_buy_now_button.php';
 
@@ -33,7 +34,11 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 				<br />
 				<input type="radio" name="button_type" value="stripe_subscription"><?php SwpmUtils::e( 'Stripe Subscription' ); ?>
 				<br />
-				<input type="radio" name="button_type" value="braintree_buy_now"><?php SwpmUtils::e( 'Braintree Buy Now' ); ?>
+				<input type="radio" name="button_type" value="stripe_sca_buy_now"><?php SwpmUtils::e( 'Stripe SCA Buy Now' ); ?>
+				<br />
+				<input type="radio" name="button_type" value="stripe_sca_subscription"><?php SwpmUtils::e( 'Stripe SCA Subscription' ); ?>
+				<br />
+						<input type="radio" name="button_type" value="braintree_buy_now"><?php SwpmUtils::e( 'Braintree Buy Now' ); ?>
 				<br />
 	<?php
 	apply_filters( 'swpm_new_button_select_button_type', '' );

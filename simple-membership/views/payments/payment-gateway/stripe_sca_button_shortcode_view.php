@@ -182,7 +182,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 
 	$button_id = isset( $args['id'] ) ? $args['id'] : '';
 	if ( empty( $button_id ) ) {
-		return '<p class="swpm-red-box">Error! swpm_render_stripe_sca_subscription_button_sc_output() function requires the button ID value to be passed to it.</p>';
+		return '<p class="swpm-red-box">Error! swpm_render_stripe_sca_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
 	}
 
 	//Get class option for button styling, set Stripe's default if none specified
@@ -191,7 +191,8 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	//Check new_window parameter
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
 	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : SwpmUtils::_( 'Buy Now' );
-	$item_logo     = ''; //Can be used to show an item logo or thumbnail in the checkout form.
+
+	$item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
 	$settings   = SwpmSettings::get_instance();
 	$button_cpt = get_post( $button_id ); //Retrieve the CPT for this button
@@ -199,12 +200,10 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 
 	$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 	//Verify that this membership level exists (to prevent user paying for a level that has been deleted)
-	if ( ! SwpmUtils::membership_level_id_exists( $membership_level_id ) ) {
+	if ( ! \SwpmUtils::membership_level_id_exists( $membership_level_id ) ) {
 		return '<p class="swpm-red-box">Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.</p>';
 	}
 
-	//Return, cancel, notifiy URLs
-	$notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1'; //We are going to use it to do post payment processing.
 	//$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
 	//User's IP address
 	$user_ip                                     = SwpmUtils::get_user_ip_address();
@@ -227,66 +226,13 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$stripe_live_secret_key      = get_post_meta( $button_id, 'stripe_live_secret_key', true );
 	$stripe_live_publishable_key = get_post_meta( $button_id, 'stripe_live_publishable_key', true );
 	if ( $sandbox_enabled ) {
-		$secret_key      = $stripe_test_secret_key;
 		$publishable_key = $stripe_test_publishable_key; //Use sandbox API key
+		$secret_key      = $stripe_test_secret_key;
 	} else {
-		$secret_key      = $stripe_live_secret_key;
 		$publishable_key = $stripe_live_publishable_key; //Use live API key
+		$secret_key      = $stripe_live_secret_key;
 	}
 
-	$plan_id = get_post_meta( $button_id, 'stripe_plan_id', true );
-
-	$plan_data = get_post_meta( $button_id, 'stripe_plan_data', true );
-
-	if ( empty( $plan_data ) ) {
-		//no plan data available, let's try to request one
-
-		if ( version_compare( PHP_VERSION, '5.4.0', '<' ) ) {
-			//This server's PHP version can't handle the library.
-			$error_msg  = '<div class="swpm-red-box">';
-			$error_msg .= '<p>The Stripe Subscription payment gateway library requires at least PHP 5.4.0. Your server is using a very old version of PHP.</p>';
-			$error_msg .= '<p>Request your hosting provider to upgrade your PHP to a more recent version then you will be able to use the Stripe Subscription.<p>';
-			$error_msg .= '</div>';
-			return $error_msg;
-		}
-
-		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php';
-		$result = StripeUtilFunctions::get_stripe_plan_info( $secret_key, $plan_id );
-		if ( $result['success'] === false ) {
-			// some error occurred, let's display it and stop processing the shortcode further
-			return '<p class="swpm-red-box">Stripe error occurred: ' . $result['error_msg'] . '</p>';
-		} else {
-			// plan data has been successfully retreived
-			$plan_data = $result['plan_data'];
-			// Let's update post_meta in order to not re-request the data again on each button display
-			update_post_meta( $button_id, 'stripe_plan_data', $plan_data );
-		}
-	}
-
-	//let's set some vars
-	$price_in_cents   = $plan_data['amount'];
-	$payment_currency = strtoupper( $plan_data['currency'] );
-	$zero_cents       = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
-	if ( in_array( $payment_currency, $zero_cents ) ) {
-		//this is zero-cents currency, amount shouldn't be devided by 100
-		$payment_amount = $price_in_cents;
-	} else {
-		$payment_amount = $price_in_cents / 100;
-	}
-	$interval_count = $plan_data['interval_count'];
-	$interval       = $plan_data['interval'];
-	$trial          = $plan_data['trial_period_days'];
-	$plan_name      = $plan_data['name'];
-	$description    = $payment_amount . ' ' . $payment_currency;
-	if ( $interval_count == 1 ) {
-		$description .= ' / ' . $interval;
-	} else {
-		$description .= ' every ' . $plan_data['interval_count'] . ' ' . $plan_data['interval'] . 's';
-	}
-	// this should add info on trial period if available, but Stripe strips too long strings, so we leave it commented out for now.
-	//        if ($trial != NULL) {
-	//            $description .= '. '.$trial . ' days FREE trial.';
-	//        }
 	//Billing address
 	$billing_address = isset( $args['billing_address'] ) ? '1' : '';
 	//By default don't show the billing address in the checkout form.
@@ -299,28 +245,69 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 		}
 	}
 
+	$uniqid = md5( uniqid() );
+	$ref_id = 'swpm_' . $uniqid . '|' . $button_id;
+
+	//Return, cancel, notifiy URLs
+	$notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_subscription=1&ref_id=' . $ref_id; //We are going to use it to do post payment processing.
+
+	$current_url = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+	$plan_id = get_post_meta( $button_id, 'stripe_plan_id', true );
+
+	if ( ! class_exists( '\Stripe\Stripe' ) ) {
+		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php';
+	}
+
+	try {
+		\Stripe\Stripe::setApiKey( $secret_key );
+
+		$opts = array(
+			'payment_method_types'       => array( 'card' ),
+			'client_reference_id'        => $ref_id,
+			'billing_address_collection' => $billing_address ? 'required' : 'auto',
+			'subscription_data'          => array(
+				'items' => array( array( 'plan' => $plan_id ) ),
+			),
+			'success_url'                => $notify_url,
+			'cancel_url'                 => $current_url,
+		);
+
+		$session = \Stripe\Checkout\Session::create( $opts );
+	} catch ( Exception $e ) {
+		$err = $e->getMessage();
+		return '<p class="swpm-red-box">' . $err . '</p>';
+	}
+
 	/* === Stripe Buy Now Button Form === */
 	$output  = '';
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
-	$output .= "<form action='" . $notify_url . "' METHOD='POST'> ";
+	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
-	$output .= "<script src='https://checkout.stripe.com/checkout.js' class='stripe-button'
-        data-key='" . $publishable_key . "'
-        data-panel-label='Sign Me Up!'
-        data-name='{$item_name}'";
-	$output .= "data-description='{$description}'";
-	$output .= "data-locale='auto'";
-	$output .= "data-label='{$button_text}'"; //Stripe doesn't currenty support button image for their standard checkout.
-	$output .= "data-currency='{$payment_currency}'";
-	if ( ! empty( $item_logo ) ) {//Show item logo/thumbnail in the stripe payment window
-		$output .= "data-image='{$item_logo}'";
-	}
-	if ( ! empty( $billing_address ) ) {//Show billing address in the stipe payment window
-		$output .= "data-billing-address='true'";
-	}
-	$output .= apply_filters( 'swpm_stripe_additional_checkout_data_parameters', '' ); //Filter to allow the addition of extra data parameters for stripe checkout.
-	$output .= '></script>';
+	$output .= '<script src="https://js.stripe.com/v3/"></script>';
+	$output .= "<link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css' type='text/css' media='all' />";
+	ob_start();
+	?>
+	<script>
+		var stripe = Stripe('<?php echo esc_js( $publishable_key ); ?>');
+		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
+			e.preventDefault();
+			stripe.redirectToCheckout({
+				sessionId: '<?php echo esc_js( $session->id ); ?>'
+			}).then(function (result) {
+			});
+		});
+	</script>
+	<?php
+	$output .= ob_get_clean();
 	$output .= '</div>';
+
+	//apply filter to output additional form fields
+	$coupon_input = '';
+	$coupon_input = apply_filters( 'swpm_payment_form_additional_fields', $coupon_input, $button_id, $uniqid );
+	if ( ! empty( $coupon_input ) ) {
+		$output .= $coupon_input;
+	}
 
 	$button_image_url = get_post_meta( $button_id, 'button_image_url', true );
 	if ( ! empty( $button_image_url ) ) {
@@ -329,18 +316,10 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 		$output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
 	}
 
-	$output .= wp_nonce_field( 'stripe_payments', '_wpnonce', true, false );
-	$output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
-	$output .= "<input type='hidden' value='{$item_name}' name='item_name' />";
-	$output .= "<input type='hidden' value='{$payment_amount}' name='item_price' />";
-	$output .= "<input type='hidden' value='{$payment_currency}' name='currency_code' />";
-	$output .= "<input type='hidden' value='{$custom_field_value}' name='custom' />";
-
 	//Filter to add additional payment input fields to the form.
 	$output .= apply_filters( 'swpm_stripe_payment_form_additional_fields', '' );
 
 	$output .= '</form>';
 	$output .= '</div>'; //End .swpm_button_wrapper
 
-	return $output;
-}
+	return $output;}

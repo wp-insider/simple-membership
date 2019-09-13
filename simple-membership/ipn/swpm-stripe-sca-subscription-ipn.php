@@ -2,7 +2,7 @@
 
 require SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php';
 
-class SwpmStripeSCABuyNowIpnHandler {
+class SwpmStripeSCASubscriptionIpnHandler {
 
 	public function __construct() {
 
@@ -10,7 +10,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 	}
 
 	public function handle_stripe_ipn() {
-		SwpmLog::log_simple_debug( 'Stripe SCA Buy Now IPN received. Processing request...', true );
+		SwpmLog::log_simple_debug( 'Stripe SCA Subscription IPN received. Processing request...', true );
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 
 		// Read and sanitize the request parameters.
@@ -81,19 +81,19 @@ class SwpmStripeSCABuyNowIpnHandler {
 				wp_die( esc_html( $error_msg ) );
 			}
 
-			$pi_id = $sess->payment_intent;
+			$sub_id = $sess->subscription;
 
-			$pi = \Stripe\PaymentIntent::retrieve( $pi_id );
+			$sub = \Stripe\Subscription::retrieve( $sub_id );
 		} catch ( Exception $e ) {
-			$err = 'Error occurred: ' . $e->getMessage();
+			$error_msg = 'Error occurred: ' . $e->getMessage();
 			SwpmLog::log_simple_debug( $error_msg, false );
 			wp_die( esc_html( $error_msg ) );
 		}
 
-		$charge = $pi->charges;
+		$pm = \Stripe\PaymentMethod::retrieve( $sub->default_payment_method );
 
 		// Grab the charge ID and set it as the transaction ID.
-		$txn_id = $charge->data[0]->id;
+		$txn_id = $sub->customer;
 		// The charge ID can be used to retrieve the transaction details using hte following call.
 		// \Stripe\Charge::retrieve($charge->$data[0]->id);
 
@@ -119,8 +119,8 @@ class SwpmStripeSCABuyNowIpnHandler {
 			return;
 		}
 
-		$price_in_cents = floatval( $pi->amount_received );
-		$currency_code  = strtoupper( $pi->currency );
+		$price_in_cents = $sub->plan->amount;
+		$currency_code  = strtoupper( $sub->plan->currency );
 
 		$zero_cents = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
 		if ( in_array( $currency_code, $zero_cents, true ) ) {
@@ -131,31 +131,14 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 		$payment_amount = floatval( $payment_amount );
 
-		$stripe_email = $charge->data[0]->billing_details->email;
-
 		$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 
-		// Validate and verify some of the main values.
-		$true_payment_amount = get_post_meta( $button_id, 'payment_amount', true );
-		$true_payment_amount = apply_filters( 'swpm_payment_amount_filter', $true_payment_amount, $button_id );
-		$true_payment_amount = floatval( $true_payment_amount );
-
-		if ( $payment_amount !== $true_payment_amount ) {
-			// Fatal error. Payment amount may have been tampered with.
-			$error_msg = 'Fatal Error! Received payment amount (' . $payment_amount . ') does not match with the original amount (' . $true_payment_amount . ')';
-			SwpmLog::log_simple_debug( $error_msg, false );
-			wp_die( esc_html( $error_msg ) );
-		}
-		$true_currency_code = get_post_meta( $button_id, 'payment_currency', true );
-		if ( $currency_code !== $true_currency_code ) {
-			// Fatal error. Currency code may have been tampered with.
-			$error_msg = 'Fatal Error! Received currency code (' . $currency_code . ') does not match with the original code (' . $true_currency_code . ')';
-			SwpmLog::log_simple_debug( $error_msg, false );
-			wp_die( esc_html( $error_msg ) );
-		}
-
 		// Everything went ahead smoothly with the charge.
-		SwpmLog::log_simple_debug( 'Stripe SCA Buy Now charge successful.', true );
+		SwpmLog::log_simple_debug( 'Stripe SCA Subscription charge successful.', true );
+
+		$customer = \Stripe\Customer::retrieve( $txn_id );
+
+		$stripe_email = $customer->email;
 
 		$user_ip = SwpmUtils::get_user_ip_address();
 
@@ -173,7 +156,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 		$swpm_id    = isset( $custom_var['swpm_id'] ) ? $custom_var['swpm_id'] : '';
 
 		// Let's try to get first_name and last_name from full name
-		$name       = trim( $charge->data[0]->billing_details->name );
+		$name       = $pm->billing_details->name;
 		$last_name  = ( strpos( $name, ' ' ) === false ) ? '' : preg_replace( '#.*\s([\w-]*)$#', '$1', $name );
 		$first_name = trim( preg_replace( '#' . $last_name . '#', '', $name ) );
 
@@ -185,14 +168,14 @@ class SwpmStripeSCABuyNowIpnHandler {
 		$ipn_data['payer_email']      = $stripe_email;
 		$ipn_data['membership_level'] = $membership_level_id;
 		$ipn_data['txn_id']           = $txn_id;
-		$ipn_data['subscr_id']        = '';
+		$ipn_data['subscr_id']        = $sub_id;
 		$ipn_data['swpm_id']          = $swpm_id;
 		$ipn_data['ip']               = $custom_var['user_ip'];
 		$ipn_data['custom']           = $custom;
-		$ipn_data['gateway']          = 'stripe-sca';
+		$ipn_data['gateway']          = 'stripe-sca-subs';
 		$ipn_data['status']           = 'completed';
 
-		$bd_addr = $charge->data[0]->billing_details->address;
+		$bd_addr = $pm->billing_details->address;
 
 		$ipn_data['address_street']  = isset( $bd_addr->line1 ) ? $bd_addr->line1 : '';
 		$ipn_data['address_city']    = isset( $bd_addr->city ) ? $bd_addr->city : '';
@@ -218,10 +201,10 @@ class SwpmStripeSCABuyNowIpnHandler {
 			$return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
 		}
 		SwpmLog::log_simple_debug( 'Redirecting customer to: ' . $return_url, true );
-		SwpmLog::log_simple_debug( 'End of Stripe SCA Buy Now IPN processing.', true, true );
+		SwpmLog::log_simple_debug( 'End of Stripe SCA Subscription IPN processing.', true, true );
 		SwpmMiscUtils::redirect_to_url( $return_url );
 
 	}
 }
 
-new SwpmStripeSCABuyNowIpnHandler();
+new SwpmStripeSCASubscriptionIpnHandler();

@@ -7,6 +7,7 @@ require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_p
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_buy_now_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_subscription_button.php';
+require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_sca_subscription_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_braintree_buy_now_button.php';
 
 do_action( 'swpm_create_new_button_process_submission' ); //Addons can use this hook to save the data after the form submit then redirect to the "edit" interface of that newly created button.

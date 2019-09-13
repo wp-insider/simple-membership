@@ -116,6 +116,14 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 						</td>
 					</tr>
 
+					<tr valign="top">
+						<th scope="row"><?php echo SwpmUtils::_( 'Trial Period' ); ?></th>
+						<td>
+							<input type="number" min="0" name="stripe_trial_period" value="<?php echo $edit ? esc_attr( $opts['stripe_trial_period'][0] ) : ''; ?>" /> days
+							<p class="description">Subscriptions to this plan will automatically start with a free trial of this length.</p>
+						</td>
+					</tr>
+
 				</table>
 
 			</div>
@@ -313,6 +321,7 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 
 		//Subscription billing details
 		update_post_meta( $button_id, 'stripe_plan_id', sanitize_text_field( $_REQUEST['stripe_plan_id'] ) );
+		update_post_meta( $button_id, 'stripe_trial_period', sanitize_text_field( $_REQUEST['stripe_trial_period'] ) );
 		update_post_meta( $button_id, 'stripe_plan_data', ( isset( $plan_data ) ? $plan_data : false ) );
 
 		if ( $edit ) {

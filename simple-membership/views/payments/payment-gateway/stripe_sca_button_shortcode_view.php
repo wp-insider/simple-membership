@@ -273,6 +273,12 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 			'cancel_url'                 => $current_url,
 		);
 
+		$trial_period = get_post_meta( $button_id, 'stripe_trial_period', true );
+		$trial_period = absint( $trial_period );
+		if ( $trial_period ) {
+			$opts['subscription_data']['trial_period_days'] = $trial_period;
+		}
+
 		$session = \Stripe\Checkout\Session::create( $opts );
 	} catch ( Exception $e ) {
 		$err = $e->getMessage();

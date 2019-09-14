@@ -120,7 +120,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 						<th scope="row"><?php echo SwpmUtils::_( 'Trial Period' ); ?></th>
 						<td>
 							<input type="number" min="0" name="stripe_trial_period" value="<?php echo $edit ? esc_attr( $opts['stripe_trial_period'][0] ) : ''; ?>" /> days
-							<p class="description">Subscriptions to this plan will automatically start with a free trial of this length.</p>
+							<p class="description">If you want to use a trial period then enter the number of days in this field. Subscriptions to this plan will automatically start after that. If left blank or 0, trial period is disabled.</p>
 						</td>
 					</tr>
 

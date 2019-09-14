@@ -475,6 +475,8 @@ class SwpmMiscUtils {
             'pp_smart_checkout' => SwpmUtils::_('PayPal Smart Checkout'),
             'stripe_buy_now' => SwpmUtils::_('Stripe Buy Now'),
             'stripe_subscription' => SwpmUtils::_('Stripe Subscription'),
+            'stripe_sca_buy_now' => SwpmUtils::_('Stripe SCA Buy Now'),
+            'stripe_sca_subscription' => SwpmUtils::_('Stripe SCA Subscription'),
             'braintree_buy_now' => SwpmUtils::_('Braintree Buy Now')
         );
 

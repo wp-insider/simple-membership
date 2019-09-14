@@ -96,9 +96,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 
 	$current_url = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
-	if ( ! class_exists( '\Stripe\Stripe' ) ) {
-		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php';
-	}
+	SwpmMiscUtils::load_stripe_lib();
 
 	try {
 		\Stripe\Stripe::setApiKey( $secret_key );
@@ -255,10 +253,8 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 
 	$plan_id = get_post_meta( $button_id, 'stripe_plan_id', true );
 
-	if ( ! class_exists( '\Stripe\Stripe' ) ) {
-		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php';
-	}
-
+	SwpmMiscUtils::load_stripe_lib();
+	
 	try {
 		\Stripe\Stripe::setApiKey( $secret_key );
 

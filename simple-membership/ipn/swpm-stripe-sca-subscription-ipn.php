@@ -48,10 +48,8 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		}
 
 		// Include the Stripe library.
-		if ( ! class_exists( '\Stripe\Stripe' ) ) {
-			include SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php';
-		}
-
+		SwpmMiscUtils::load_stripe_lib();
+		
 		try {
 			\Stripe\Stripe::setApiKey( $secret_key );
 

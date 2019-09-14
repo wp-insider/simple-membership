@@ -498,4 +498,11 @@ class SwpmMiscUtils {
         return $formatted;
     }
 
+    public static function load_stripe_lib() {
+        //this function loads Stripe PHP SDK and ensures only once instance is loaded
+        if ( ! class_exists( '\Stripe\Stripe' ) ) {
+            require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php');
+        }
+    }
+
 }

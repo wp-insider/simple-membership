@@ -30,7 +30,7 @@ class SwpmStripeSubscriptionIpnHandler {
 
 			if ( 'customer.subscription.deleted' === $type || 'charge.refunded' === $type ) {
 				// Subscription expired or refunded event
-				SwpmLog::log_simple_debug( 'Stripe Subscription Webhook received. Processing request...', true );
+				SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );
 				// Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
 				$customer                  = $event_json->data->object->customer;
 				$subscr_id                 = $event_json->data->object->id;

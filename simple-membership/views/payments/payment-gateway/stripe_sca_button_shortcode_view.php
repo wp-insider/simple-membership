@@ -281,7 +281,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 		return '<p class="swpm-red-box">' . $err . '</p>';
 	}
 
-	/* === Stripe Buy Now Button Form === */
+	/* === Stripe SCA Subscription Button Form === */
 	$output  = '';
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";

@@ -74,8 +74,13 @@ class SwpmWpLoadedTasks {
 
 		//Listen and handle Stripe SCA Subscription IPN
 		$swpm_process_stripe_sca_subscription = filter_input( INPUT_GET, 'swpm_process_stripe_sca_subscription' );
+		$hook                                 = filter_input( INPUT_GET, 'hook', FILTER_SANITIZE_NUMBER_INT );
 		if ( $swpm_process_stripe_sca_subscription == '1' ) {
-			include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-subscription-ipn.php';
+			if ( $hook ) {
+				include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-subscription-ipn.php';
+			} else {
+				include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-subscription-ipn.php';
+			}
 			exit;
 		}
 

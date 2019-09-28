@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.2
-Stable tag: 3.9.0
+Stable tag: 3.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,6 +157,10 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 3.9.1 =
+- Fixed excessive debug log output in the log file when the New SCA compatible Stripe subscription button is used.
+- Stripe library is only loaded if another plugin hasn't loaded it already.
 
 = 3.9.0 =
 - Added new Stripe SCA button types. You can now go to the Payments -> Create New Button interface to create SCA compatible Stripe payment buttons.

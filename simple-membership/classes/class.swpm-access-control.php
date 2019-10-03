@@ -63,7 +63,7 @@ class SwpmAccessControl {
         $protect_older_posts = apply_filters('swpm_should_protect_older_post', false, $id);
         if ($protect_older_posts){
             //This post falls under the older post protection condition. No access to it.
-            $text = SwpmUtils::_('This content can only be viewed by members who joined on or before ' . SwpmUtils::get_formatted_and_translated_date_according_to_wp_settings($post->post_date));
+            $text = SwpmUtils::_('This content can only be viewed by members who joined on or before ') . SwpmUtils::get_formatted_and_translated_date_according_to_wp_settings($post->post_date);
             $error_msg = '<div class="swpm-post-older-post-msg">'.$text.'</div>';
             $this->lastError = apply_filters ('swpm_restricted_post_msg_older_post', $error_msg);
             return false;
@@ -135,7 +135,7 @@ class SwpmAccessControl {
         $protect_older_posts = apply_filters('swpm_should_protect_older_post', false, $post_id);
         if ($protect_older_posts){
             //This comment is protected due to the older post protection addon settings configuration.
-            $text = SwpmUtils::_('This content can only be viewed by members who joined on or before ' . SwpmUtils::get_formatted_and_translated_date_according_to_wp_settings($post->post_date));
+            $text = SwpmUtils::_('This content can only be viewed by members who joined on or before ') . SwpmUtils::get_formatted_and_translated_date_according_to_wp_settings($post->post_date);
             $error_msg = '<div class="swpm-comment-older-post-msg">'.$text.'</div>';
             $this->lastError = apply_filters ('swpm_restricted_comment_older_post', $error_msg);
             return false;

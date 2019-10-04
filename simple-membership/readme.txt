@@ -158,6 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.9.2 =
+- Spanish translation language files updated.
+
 = 3.9.1 =
 - Fixed excessive debug log output in the log file when the New SCA compatible Stripe subscription button is used.
 - Stripe library is only loaded if another plugin hasn't loaded it already.

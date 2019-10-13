@@ -175,8 +175,12 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
                 
                 $subject    = apply_filters( 'swpm_email_complete_registration_subject', $subject );
                 $email_body = apply_filters( 'swpm_email_complete_registration_body', $email_body );
-                wp_mail( $email, $subject, $email_body, $headers );
-                swpm_debug_log_subsc( 'Member signup (prompt to complete registration) email successfully sent to: ' . $email, true );
+                if (empty( $email_body )){
+                    swpm_debug_log_subsc( 'Notice: Member signup (prompt to complete registration) email body has been set empty via the filter hook. No email will be sent.', true );
+                } else {
+                    wp_mail( $email, $subject, $email_body, $headers );
+                    swpm_debug_log_subsc( 'Member signup (prompt to complete registration) email successfully sent to: ' . $email, true );
+                }
 	}
 
 }

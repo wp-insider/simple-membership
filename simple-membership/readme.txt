@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.2
-Stable tag: 3.9.1
+Stable tag: 3.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,8 +158,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.9.2 =
+= 3.9.2 =
 - Spanish translation language files updated.
+- Added more debug logging statement in the IPN handling script for easier troubleshooting.
+- Fixed an issue with the new SCA stripe subscription cancellation webhook.
 
 = 3.9.1 =
 - Fixed excessive debug log output in the log file when the New SCA compatible Stripe subscription button is used.

@@ -245,8 +245,10 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		swpm_debug_log_subsc( 'Membership level ID of the member is: ' . $level_id, true );
 		$level_row          = SwpmUtils::get_membership_level_row_by_id( $level_id );
 		$subs_duration_type = $level_row->subscription_duration_type;
-
-		if ( SwpmMembershipLevel::NO_EXPIRY === $subs_duration_type ) {
+                
+                swpm_debug_log_subsc( 'Subscription duration type: ' . $subs_duration_type, true );
+                
+		if ( SwpmMembershipLevel::NO_EXPIRY == $subs_duration_type ) {
 			// This is a level with "no expiry" or "until cancelled" duration.
 			swpm_debug_log_subsc( 'This is a level with "no expiry" or "until cancelled" duration', true );
 
@@ -254,7 +256,7 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 			$account_state = 'inactive';
 			SwpmMemberUtils::update_account_state( $member_id, $account_state );
 			swpm_debug_log_subsc( 'Subscription cancellation or end of term received! Member account deactivated. Member ID: ' . $member_id, true );
-		} elseif ( SwpmMembershipLevel::FIXED_DATE === $subs_duration_type ) {
+		} else if ( SwpmMembershipLevel::FIXED_DATE == $subs_duration_type ) {
 			// This is a level with a "fixed expiry date" duration.
 			swpm_debug_log_subsc( 'This is a level with a "fixed expiry date" duration.', true );
 			swpm_debug_log_subsc( 'Nothing to do here. The account will expire on the fixed set date.', true );

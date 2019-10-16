@@ -360,7 +360,7 @@ class SwpmAuth {
         $q = $wpdb->prepare('SELECT * 
         FROM  `' . $wpdb->prefix . 'swpm_payments_tbl` 
         WHERE email =  %s
-        AND gateway =  "stripe"
+        AND (gateway =  "stripe" OR gateway = "stripe-sca-subs")
         AND subscr_id = %s
         LIMIT 1', array($email, $subscr_id));
 

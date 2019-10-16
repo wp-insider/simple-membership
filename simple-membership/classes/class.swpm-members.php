@@ -365,6 +365,7 @@ class SwpmMembers extends WP_List_Table {
     }
 
     public static function delete_swpm_user_by_id($id) {
+		self::delete_user_subs($id);
         global $wpdb;
         $query = "DELETE FROM " . $wpdb->prefix . "swpm_members_tbl WHERE member_id = $id";
         $wpdb->query($query);
@@ -385,7 +386,87 @@ class SwpmMembers extends WP_List_Table {
             SwpmTransfer::get_instance()->set('status', 'For safety, we do not allow deletion of any associated wordpress account with administrator role.');
             return;
         }
-    }
+	}
+	
+	private static function delete_user_subs( $id ) {
+		$member = SwpmMemberUtils::get_user_by_id( $id );
+		if ( ! $member ) {
+			return false;
+		}
+		// let's check if Stripe subscription needs to be cancelled
+		global $wpdb;
+		$q = $wpdb->prepare(
+			'SELECT * 
+		FROM  `' . $wpdb->prefix . 'swpm_payments_tbl` 
+		WHERE email =  %s
+		AND (gateway =  "stripe" OR gateway = "stripe-sca-subs")
+		AND subscr_id != ""',
+			array( $member->email )
+		);
+
+		$res = $wpdb->get_results( $q, ARRAY_A );
+
+		if ( ! $res ) {
+			return false;
+		}
+
+		foreach ( $res as $sub ) {
+
+			if ( substr( $sub['subscr_id'], 0, 4 ) !== 'sub_' ) {
+				//not Stripe subscription
+				continue;
+			}
+
+			//let's find the payment button
+			$q        = $wpdb->prepare( "SELECT post_id FROM {$wpdb->prefix}postmeta WHERE meta_key='subscr_id' AND meta_value=%s", $sub['subscr_id'] );
+			$res_post = $wpdb->get_row( $q );
+
+			if ( ! $res_post ) {
+				//no button found
+				continue;
+			}
+
+			$button_id = get_post_meta( $res_post->post_id, 'payment_button_id', true );
+
+			$button = get_post($button_id);
+
+			if ( ! $button ) {
+				//no button found
+				continue;
+			}
+
+			SwpmLog::log_simple_debug( 'Attempting to cancel Stripe Subscription ' . $sub['subscr_id'], true );
+
+			$is_live=get_post_meta($button_id,'is_live',true);
+			if ( $is_live ) {
+				SwpmLog::log_simple_debug( 'Payment was made in live mode. Using test API key details.', true );
+				$secret_key = get_post_meta( $button_id, 'stripe_live_secret_key', true ); //Use live API key
+			} else {
+				SwpmLog::log_simple_debug( 'Payment was made in sandbox mode. Using test API key details.', true );
+				$secret_key = get_post_meta( $button_id, 'stripe_test_secret_key', true ); //Use sandbox API key
+			}
+				//Include the Stripe library.
+				SwpmMiscUtils::load_stripe_lib();
+
+				\Stripe\Stripe::setApiKey( $secret_key );
+
+				$error=null;
+			// Let's try to cancel subscription
+			try {
+				$sub = \Stripe\Subscription::retrieve( $sub['subscr_id'] );
+				$sub->cancel();
+			} catch ( Exception $e ) {
+				SwpmLog::log_simple_debug( 'Error occurred during Stripe Subscription cancellation. ' . $e->getMessage(), false );
+				$body         = $e->getJsonBody();
+				$error        = $body['error'];
+				$error_string = print_r( $error, true );
+				SwpmLog::log_simple_debug( 'Error details: ' . $error_string, false );
+			}
+			if ( ! isset( $error ) ) {
+				SwpmLog::log_simple_debug( 'Stripe Subscription has been cancelled.', true );
+			}
+		}
+	}
 
     public static function is_wp_super_user($wp_user_id) {
         $user_data = get_userdata($wp_user_id);

@@ -355,57 +355,6 @@ class SwpmAuth {
         $user_id = $this->get('member_id');
         $subscr_id = $this->get('subscr_id');
         $email = $this->get('email');
-        // let's check if Stripe subscription needs to be cancelled as well
-        global $wpdb;
-        $q = $wpdb->prepare('SELECT * 
-        FROM  `' . $wpdb->prefix . 'swpm_payments_tbl` 
-        WHERE email =  %s
-        AND (gateway =  "stripe" OR gateway = "stripe-sca-subs")
-        AND subscr_id = %s
-        LIMIT 1', array($email, $subscr_id));
-
-        $member = $wpdb->get_row($q, ARRAY_A);
-        if (!is_null($member)) {
-            //looks like we need to cancel Stripe subscription
-            $pieces = explode('|', $subscr_id);
-            if (!empty($pieces)) {
-                $subscr_id = $pieces[0];
-                $button_id = $pieces[1];
-                SwpmLog::log_simple_debug("Attempting to cancel Stripe Subscription #" . $subscr_id, true);
-                //check if button exists
-                if (get_post($button_id)) {
-                    $settings = SwpmSettings::get_instance();
-                    $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
-                    if ($sandbox_enabled) {
-                        SwpmLog::log_simple_debug("Sandbox payment mode is enabled. Using test API key details.", true);
-                        $secret_key = get_post_meta($button_id, 'stripe_test_secret_key', true);
-                        ; //Use sandbox API key
-                    } else {
-                        $secret_key = get_post_meta($button_id, 'stripe_live_secret_key', true);
-                        ; //Use live API key
-                    }
-                    //Include the Stripe library.
-                    SwpmMiscUtils::load_stripe_lib();
-                    
-                    \Stripe\Stripe::setApiKey($secret_key);
-                    // Let's try to cancel subscription
-                    try {
-                        $sub = \Stripe\Subscription::retrieve($subscr_id);
-                        $sub->cancel();
-                    } catch (Exception $e) {
-                        SwpmLog::log_simple_debug("Error occurred during Stripe Subscription cancellation. " . $e->getMessage(), false);
-                        $body = $e->getJsonBody();
-                        $error = $body['error'];
-                        $error_string = print_r($error, true);
-                        SwpmLog::log_simple_debug("Error details: " . $error_string, false);
-                    }
-                    if (!isset($error)) {
-                        SwpmLog::log_simple_debug("Stripe Subscription has been cancelled.", true);
-                    }
-                }
-            }
-        }
-
         wp_clear_auth_cookie();
         $this->logout();
         SwpmMembers::delete_swpm_user_by_id($user_id);

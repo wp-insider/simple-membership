@@ -42,7 +42,15 @@ class SwpmTransactions {
         
         $post_id=wp_insert_post($post);
 
-        update_post_meta($post_id,'db_row_id',$db_row_id);
+		update_post_meta($post_id,'db_row_id',$db_row_id);
+		
+		if (isset($ipn_data['payment_button_id'])) {
+			$txn_data['payment_button_id'] = $ipn_data['payment_button_id'];
+		}
+
+		if (isset($ipn_data['is_live'])) {
+			$txn_data['is_live'] = $ipn_data['is_live'];
+		}
 
         foreach ($txn_data as $key=>$value) {
             update_post_meta($post_id,$key,$value);

@@ -103,7 +103,7 @@ class SwpmStripeSubscriptionIpnHandler {
 			SwpmLog::log_simple_debug( 'Error occurred during Stripe Subscribe. ' . $e->getMessage(), false );
 			$body         = $e->getJsonBody();
 			$error        = $body['error'];
-			$error_string = print_r( $error, true );
+			$error_string = wp_json_encode( $error );
 			SwpmLog::log_simple_debug( 'Error details: ' . $error_string, false );
 			wp_die( esc_html( 'Stripe Subscription Error! ' . $e->getMessage() . $error_string ) );
 		}

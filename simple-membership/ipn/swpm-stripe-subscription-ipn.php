@@ -153,7 +153,7 @@ class SwpmStripeSubscriptionIpnHandler {
 		$ipn_data['country']         = '';
 
 		$ipn_data['payment_button_id'] = $button_id;
-		$ipn_data['is_live'] = ! $sandbox_enabled;
+		$ipn_data['is_live']           = ! $sandbox_enabled;
 
 		// Handle the membership signup related tasks.
 		swpm_handle_subsc_signup_stand_alone( $ipn_data, $membership_level_id, $txn_id, $swpm_id );

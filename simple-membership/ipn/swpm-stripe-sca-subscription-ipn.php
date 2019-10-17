@@ -49,7 +49,7 @@ class SwpmStripeSCASubscriptionIpnHandler {
 
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
-		
+
 		try {
 			\Stripe\Stripe::setApiKey( $secret_key );
 
@@ -182,7 +182,7 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		$ipn_data['address_country'] = isset( $bd_addr->country ) ? $bd_addr->country : '';
 
 		$ipn_data['payment_button_id'] = $button_id;
-		$ipn_data['is_live'] = ! $sandbox_enabled;
+		$ipn_data['is_live']           = ! $sandbox_enabled;
 
 		// Handle the membership signup related tasks.
 		swpm_handle_subsc_signup_stand_alone( $ipn_data, $membership_level_id, $txn_id, $swpm_id );

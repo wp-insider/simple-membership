@@ -1,5 +1,5 @@
-
-<div id="poststuff"><div id="post-body">
+<div id="poststuff">
+	<div id="post-body">
 
 		<?php
 		global $wpdb;
@@ -41,7 +41,14 @@
 					<input type="submit" value="<?php echo SwpmUtils::_( 'Generate Code' ); ?>" class="button-primary" name="swpm_generate_adv_code">
 				</form>
 
-			</div></div>
+			</div>
+		</div>
 
-</div></div><!-- end of poststuff and post-body -->
-
+	</div>
+</div><!-- end of poststuff and post-body -->
+<form action="options.php" method="POST">
+	<input type="hidden" name="tab" value="2" />
+	<?php settings_fields( 'swpm-settings-tab-' . $current_tab ); ?>
+	<?php do_settings_sections( 'simple_wp_membership_settings' ); ?>
+	<?php submit_button(); ?>
+</form>

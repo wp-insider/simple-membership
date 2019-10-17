@@ -242,6 +242,52 @@ class SwpmSettings {
 
 	private function tab_2() {
 		//Register settings sections and fileds for the payment settings tab.
+		register_setting( 'swpm-settings-tab-2', 'swpm-settings', array( $this, 'sanitize_tab_2' ) );
+		add_settings_section( 'stripe-api-keys', SwpmUtils::_( 'Stripe API Keys' ), null, 'simple_wp_membership_settings' );
+		add_settings_field(
+			'stripe-test-public-key',
+			SwpmUtils::_( 'Test Publishable Key' ),
+			array( $this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'stripe-api-keys',
+			array(
+				'item'    => 'stripe-test-public-key',
+				'message' => 'Stripe API Test public key',
+			)
+		);
+		add_settings_field(
+			'stripe-test-secret-key',
+			SwpmUtils::_( 'Test Secret Key' ),
+			array( $this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'stripe-api-keys',
+			array(
+				'item'    => 'stripe-test-secret-key',
+				'message' => 'Stripe API Test secret key',
+			)
+		);
+		add_settings_field(
+			'stripe-live-public-key',
+			SwpmUtils::_( 'Live Publishable Key' ),
+			array( $this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'stripe-api-keys',
+			array(
+				'item'    => 'stripe-live-public-key',
+				'message' => 'Stripe API Live public key',
+			)
+		);
+		add_settings_field(
+			'stripe-live-secret-key',
+			SwpmUtils::_( 'Live Secret Key' ),
+			array( $this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'stripe-api-keys',
+			array(
+				'item'    => 'stripe-live-secret-key',
+				'message' => 'Stripe API Live secret key',
+			)
+		);
 	}
 
 	private function tab_3() {
@@ -961,6 +1007,19 @@ class SwpmSettings {
 		$output['default-account-status']   = esc_attr( $input['default-account-status'] );
 		$output['members-login-to-comment'] = isset( $input['members-login-to-comment'] ) ? esc_attr( $input['members-login-to-comment'] ) : '';
 
+		return $output;
+	}
+
+	public function sanitize_tab_2( $input ) {
+		if ( empty( $this->settings ) ) {
+			$this->settings = (array) get_option( 'swpm-settings' );
+		}
+		$output = $this->settings;
+
+		$output['stripe-test-public-key'] = sanitize_text_field( $input['stripe-test-public-key'] );
+		$output['stripe-test-secret-key'] = sanitize_text_field( $input['stripe-test-secret-key'] );
+		$output['stripe-live-public-key'] = sanitize_text_field( $input['stripe-live-public-key'] );
+		$output['stripe-live-secret-key'] = sanitize_text_field( $input['stripe-live-secret-key'] );
 		return $output;
 	}
 

@@ -74,7 +74,7 @@ abstract class SwpmRegistration {
 		$subject = apply_filters( 'swpm_email_registration_complete_subject', $subject );
 		$body    = apply_filters( 'swpm_email_registration_complete_body', $body ); //You can override the email to empty to disable this email.
 		if ( ! empty( $body ) ) {
-			wp_mail( trim( $email ), $subject, $body, $headers );
+			SwpmMiscUtils::mail( trim( $email ), $subject, $body, $headers );
 			SwpmLog::log_simple_debug( 'Member registration complete email sent to: ' . $email . '. From email address value used: ' . $from_address, true );
 		} else {
 			SwpmLog::log_simple_debug( 'NOTICE: Registration complete email body value is empty. Member registration complete email will NOT be sent.', true );
@@ -109,7 +109,7 @@ abstract class SwpmRegistration {
 				$to_email             = trim( $to_email );
 				$admin_notify_subject = apply_filters( 'swpm_email_admin_notify_subject', $admin_notify_subject );
 				$admin_notify_body    = apply_filters( 'swpm_email_admin_notify_body', $admin_notify_body );
-				wp_mail( $to_email, $admin_notify_subject, $admin_notify_body, $headers );
+				SwpmMiscUtils::mail( $to_email, $admin_notify_subject, $admin_notify_body, $headers );
 				SwpmLog::log_simple_debug( 'Admin notification email sent to: ' . $to_email, true );
 			}
 		}

@@ -708,7 +708,7 @@ class SwpmMiscUtils {
 	}
 
 	public static function format_money( $amount, $currency = false ) {
-		 $formatted = number_format( $amount, 2 );
+		$formatted = number_format( $amount, 2 );
 		if ( $currency ) {
 			$formatted .= ' ' . $currency;
 		}
@@ -720,6 +720,16 @@ class SwpmMiscUtils {
 		if ( ! class_exists( '\Stripe\Stripe' ) ) {
 			require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php';
 		}
+	}
+
+	public static function mail( $email, $subject, $email_body, $headers ) {
+		$settings     = SwpmSettings::get_instance();
+		$html_enabled = $settings->get_value( 'email-enable-html' );
+		if ( ! empty( $html_enabled ) ) {
+			$headers   .= "Content-Type: text/html; charset=UTF-8\r\n";
+			$email_body = nl2br( $email_body );
+		}
+		wp_mail( $email, $subject, $email_body, $headers );
 	}
 
 }

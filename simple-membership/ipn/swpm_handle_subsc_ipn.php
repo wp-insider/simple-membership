@@ -107,7 +107,7 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 			swpm_debug_log_subsc( 'The disable upgrade email settings is checked. No account upgrade/update email will be sent.', true );
 			//Nothing to do.
 		} else {
-			wp_mail( $email, $subject, $email_body, $headers );
+			SwpmMiscUtils::mail( $email, $subject, $email_body, $headers );
 			swpm_debug_log_subsc( 'Member upgrade/update completion email successfully sent to: ' . $email, true );
 		}
 		// End of existing user account upgrade/update.
@@ -178,7 +178,7 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		if ( empty( $email_body ) ) {
 			swpm_debug_log_subsc( 'Notice: Member signup (prompt to complete registration) email body has been set empty via the filter hook. No email will be sent.', true );
 		} else {
-			wp_mail( $email, $subject, $email_body, $headers );
+			SwpmMiscUtils::mail( $email, $subject, $email_body, $headers );
 			swpm_debug_log_subsc( 'Member signup (prompt to complete registration) email successfully sent to: ' . $email, true );
 		}
 	}

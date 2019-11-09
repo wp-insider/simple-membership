@@ -401,7 +401,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$headers         = 'From: ' . $from . "\r\n";
 		$subject         = apply_filters( 'swpm_email_password_reset_subject', $subject );
 		$body            = apply_filters( 'swpm_email_password_reset_body', $body );
-		wp_mail( $email, $subject, $body, $headers );
+		SwpmMiscUtils::mail( $email, $subject, $body, $headers );
 		SwpmLog::log_simple_debug( 'Member password has been reset. Password reset email sent to: ' . $email, true );
 
 		$message  = '<div class="swpm-reset-pw-success-box">';

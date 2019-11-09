@@ -212,7 +212,7 @@ abstract class SwpmUtils {
 
 				$subject    = apply_filters( 'swpm_email_complete_your_registration_subject', $subject );
 				$email_body = apply_filters( 'swpm_email_complete_your_registration_body', $email_body );
-				wp_mail( $member->email, $subject, $email_body, $headers );
+				SwpmMiscUtils::mail( $member->email, $subject, $email_body, $headers );
 				SwpmLog::log_simple_debug( 'Prompt to complete registration email sent to: ' . $member->email . '. From email address value used: ' . $from_address, true );
 			}
 			$links[] = $reg_url;

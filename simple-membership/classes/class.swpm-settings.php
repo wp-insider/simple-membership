@@ -272,7 +272,7 @@ class SwpmSettings {
 			'email-misc-settings',
 			array(
 				'item'    => 'email-enable-html',
-				'message' => 'Enables HTML support in emails.',
+				'message' => 'Enables HTML support in emails. We recommend using plain text (non HTML) email as it has better email delivery rate.',
 			)
 		);
 

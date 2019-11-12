@@ -10,8 +10,16 @@ class SwpmStripeSubscriptionIpnHandler {
 	}
 
 	public function handle_stripe_ipn() {
-		if ( isset( $_GET['hook'] ) ) {
-			// this is Webhook notify from Stripe
+            
+                /*
+                 * [Imp] This comment explains how this script handles both the first time HTTP Post after payment and the webhooks.
+                 * If the "hook" query arg is set then that means it is a webhook notification. It will be used for certain actions like (update, cancel, refund, etc). Others will be ignored.
+                 * The first time payment in browser is handled via HTTP POST (when the "hook" query arg is not set). 
+                 */
+            
+		if ( isset( $_GET['hook'] ) ) {                    
+			// This is Webhook notification from Stripe
+                        
 			// TODO: add Webhook Signing Secret verification
 			// To do this, we need to get customer ID, retreive its details from Stripe, get button_id from metadata
 			// and see if the button has Signing Secret option set. If it is - we need to check signatures
@@ -26,11 +34,12 @@ class SwpmStripeSubscriptionIpnHandler {
 			// SwpmLog::log_simple_debug($input, true);
 			$event_json = json_decode( $input );
 
-			$type = $event_json->type;
-
+			$type = $event_json->type;                        
+                        
 			if ( 'customer.subscription.deleted' === $type || 'charge.refunded' === $type ) {
 				// Subscription expired or refunded event
-				SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );
+                                SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );
+
 				// Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
 				$customer                  = $event_json->data->object->customer;
 				$subscr_id                 = $event_json->data->object->id;
@@ -40,10 +49,14 @@ class SwpmStripeSubscriptionIpnHandler {
 
 				swpm_handle_subsc_cancel_stand_alone( $ipn_data );
 			}
-			http_response_code( 200 ); // tells Stripe we received this notify
+                        
+                        //End of the webhook notification execution.
+			http_response_code( 200 ); // Tells Stripe we received this notification
 			return;
 		}
 
+                //The following will get executed only for DIRECT post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
+                
 		SwpmLog::log_simple_debug( 'Stripe Subscription IPN received. Processing request...', true );
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 		// Include the Stripe library.

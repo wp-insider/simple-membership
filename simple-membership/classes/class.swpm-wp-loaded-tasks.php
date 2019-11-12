@@ -76,6 +76,7 @@ class SwpmWpLoadedTasks {
 		$swpm_process_stripe_sca_subscription = filter_input( INPUT_GET, 'swpm_process_stripe_sca_subscription' );
 		$hook                                 = filter_input( INPUT_GET, 'hook', FILTER_SANITIZE_NUMBER_INT );
 		if ( $swpm_process_stripe_sca_subscription == '1' ) {
+                        //$hook == 1 means it is a background post via webshooks. Otherwise it is direct post to the script after payment (at the time of payment).
 			if ( $hook ) {
 				include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-subscription-ipn.php';
 			} else {

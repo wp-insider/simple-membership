@@ -10,7 +10,10 @@ class SwpmStripeSCASubscriptionIpnHandler {
 	}
 
 	public function handle_stripe_ipn() {
-		SwpmLog::log_simple_debug( 'Stripe SCA Subscription IPN received. Processing request...', true );
+                //This will get executed only for direct post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
+                //The webhooks are handled by the "swpm-stripe-subscription-ipn.php" script.
+            
+		SwpmLog::log_simple_debug( 'Stripe SCA Subscription IPN (HTTP POST) received. Processing request...', true );
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 
 		// Read and sanitize the request parameters.

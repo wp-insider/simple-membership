@@ -291,7 +291,9 @@ function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 	swpm_debug_log_subsc( 'Updating subscription start date if applicable for this subscription payment. Subscriber ID: ' . $subscr_id . ' Email: ' . $email, true );
 
 	// We can also query using the email address or SWPM ID (if present in custom var).
-	$query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s", $subscr_id ), OBJECT );
+        
+        //Try to find the profile with the given subscr_id. It will exact match subscr_id or match subscr_id|123
+        $query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s OR subscr_id LIKE %s", $subscr_id, $subscr_id.'|%' ), OBJECT );
 	if ( $query_db ) {
 		$swpm_id               = $query_db->member_id;
 		$current_primary_level = $query_db->membership_level;

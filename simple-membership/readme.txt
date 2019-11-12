@@ -158,6 +158,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.9.3 =
+- Enable HTML email option in the email settings menu of the plugin.
+- The Stripe subscription updated event is now handled by the plugin.
+
 = 3.9.2 =
 - Spanish translation language files updated.
 - Added more debug logging statement in the IPN handling script for easier troubleshooting.

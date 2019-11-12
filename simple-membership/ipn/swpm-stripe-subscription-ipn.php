@@ -27,18 +27,19 @@ class SwpmStripeSubscriptionIpnHandler {
 
 			$input = @file_get_contents( 'php://input' );
 			if ( empty( $input ) ) {
-				SwpmLog::log_simple_debug( 'Stripe Subscription Webhook sent empty data or page was accessed directly. Aborting.', false );
+				SwpmLog::log_simple_debug( 'Stripe subscription webhook sent empty data or page was accessed directly. Aborting.', false );
 				echo 'Empty Webhook data received.';
 				die;
 			}
 			// SwpmLog::log_simple_debug($input, true);
 			$event_json = json_decode( $input );
 
-			$type = $event_json->type;                        
+			$type = $event_json->type;
+                        SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received: %s. Checking if we need to handle this webhook.', $type ), true );
                         
 			if ( 'customer.subscription.deleted' === $type || 'charge.refunded' === $type ) {
 				// Subscription expired or refunded event
-                                SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );
+                                //SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );
 
 				// Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
 				$customer                  = $event_json->data->object->customer;
@@ -50,6 +51,20 @@ class SwpmStripeSubscriptionIpnHandler {
 				swpm_handle_subsc_cancel_stand_alone( $ipn_data );
 			}
                         
+			if ( $type == 'customer.subscription.updated') {
+				// Subscription updated
+                                //SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );
+
+				// Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
+				$customer                  = $event_json->data->object->customer;
+				$subscr_id                 = $event_json->data->object->id;
+				$ipn_data                  = array();
+				$ipn_data['subscr_id']     = $subscr_id;
+				$ipn_data['parent_txn_id'] = $customer;
+
+				swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
+			}                        
+                        
                         //End of the webhook notification execution.
 			http_response_code( 200 ); // Tells Stripe we received this notification
 			return;
@@ -57,7 +72,7 @@ class SwpmStripeSubscriptionIpnHandler {
 
                 //The following will get executed only for DIRECT post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
                 
-		SwpmLog::log_simple_debug( 'Stripe Subscription IPN received. Processing request...', true );
+		SwpmLog::log_simple_debug( 'Stripe subscription IPN received. Processing request...', true );
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
@@ -118,11 +133,11 @@ class SwpmStripeSubscriptionIpnHandler {
 			$error        = $body['error'];
 			$error_string = print_r( $error, true );
 			SwpmLog::log_simple_debug( 'Error details: ' . $error_string, false );
-			wp_die( esc_html( 'Stripe Subscription Error! ' . $e->getMessage() . $error_string ) );
+			wp_die( esc_html( 'Stripe subscription Error! ' . $e->getMessage() . $error_string ) );
 		}
 
 		// Everything went ahead smoothly with the charge.
-		SwpmLog::log_simple_debug( 'Stripe Subscription successful.', true );
+		SwpmLog::log_simple_debug( 'Stripe subscription successful.', true );
 
 		// let's add button_id to metadata
 		$customer->metadata = array( 'button_id' => $button_id );
@@ -186,7 +201,7 @@ class SwpmStripeSubscriptionIpnHandler {
 			$return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
 		}
 		SwpmLog::log_simple_debug( 'Redirecting customer to: ' . $return_url, true );
-		SwpmLog::log_simple_debug( 'End of Stripe Subscription IPN processing.', true, true );
+		SwpmLog::log_simple_debug( 'End of Stripe subscription IPN processing.', true, true );
 		SwpmMiscUtils::redirect_to_url( $return_url );
 	}
 

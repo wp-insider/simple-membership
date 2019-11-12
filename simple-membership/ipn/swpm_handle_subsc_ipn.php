@@ -193,8 +193,11 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 
 	global $wpdb;
 
-	$customvariables = SwpmTransactions::parse_custom_var( $ipn_data['custom'] );
-	$swpm_id         = $customvariables['swpm_id'];
+        $swpm_id = '';
+        if ( isset( $ipn_data['custom'] ) ){
+            $customvariables = SwpmTransactions::parse_custom_var( $ipn_data['custom'] );
+            $swpm_id         = $customvariables['swpm_id'];
+        }
 
 	swpm_debug_log_subsc( 'Refund/Cancellation check - lets see if a member account needs to be deactivated.', true );
 	// swpm_debug_log_subsc("Parent txn id: " . $ipn_data['parent_txn_id'] . ", Subscr ID: " . $ipn_data['subscr_id'] . ", SWPM ID: " . $swpm_id, true);.
@@ -246,7 +249,7 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		$level_row          = SwpmUtils::get_membership_level_row_by_id( $level_id );
 		$subs_duration_type = $level_row->subscription_duration_type;
 
-				swpm_debug_log_subsc( 'Subscription duration type: ' . $subs_duration_type, true );
+		swpm_debug_log_subsc( 'Subscription duration type: ' . $subs_duration_type, true );
 
 		if ( SwpmMembershipLevel::NO_EXPIRY == $subs_duration_type ) {
 			// This is a level with "no expiry" or "until cancelled" duration.
@@ -282,8 +285,8 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 
 function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 	global $wpdb;
-	$email         = $ipn_data['payer_email'];
-	$subscr_id     = $ipn_data['subscr_id'];
+	$email = isset( $ipn_data['payer_email'] ) ? $ipn_data['payer_email'] : '';
+	$subscr_id = $ipn_data['subscr_id'];
 	$account_state = SwpmSettings::get_instance()->get_value( 'default-account-status', 'active' );
 	swpm_debug_log_subsc( 'Updating subscription start date if applicable for this subscription payment. Subscriber ID: ' . $subscr_id . ' Email: ' . $email, true );
 
@@ -313,7 +316,7 @@ function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 		swpm_debug_log_subsc( 'Value after update - Subscriber ID: ' . $member_record->subscr_id . ', Start Date: ' . $member_record->subscription_starts, true );
 	} else {
 		swpm_debug_log_subsc( 'Did not find an existing record in the members table for subscriber ID: ' . $subscr_id, true );
-		swpm_debug_log_subsc( 'This is a new subscription payment for a new subscription agreement.', true );
+		swpm_debug_log_subsc( 'This could be a new subscription payment for a new subscription agreement.', true );
 	}
 }
 

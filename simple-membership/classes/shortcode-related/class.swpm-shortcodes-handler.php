@@ -10,6 +10,8 @@ class SwpmShortcodesHandler {
         add_shortcode('swpm_show_expiry_date', array(&$this, 'swpm_show_expiry_date_sc'));
         
         add_shortcode('swpm_mini_login', array(&$this, 'swpm_show_mini_login_sc'));
+        
+        add_shortcode('swpm_paypal_subscription_cancel_link', array(&$this, 'swpm_pp_cancel_subs_link_sc'));
     }
 
     public function swpm_payment_button_sc($args) {
@@ -125,6 +127,54 @@ class SwpmShortcodesHandler {
         }
         
         $output .= '</div>';
+        return $output;
+    }
+    
+    public function swpm_pp_cancel_subs_link_sc($args){
+        extract(shortcode_atts(array(
+            'merchant_id' => '',
+            'anchor_text' => '',
+        ), $args));
+
+        if (empty($merchant_id)){
+            return '<p class="swpm-red-box">Error! You need to specify your secure PayPal merchant ID in the shortcode using the "merchant_id" parameter.</p>';
+        }
+
+        $output = '';
+        $settings = SwpmSettings::get_instance();
+        
+        //Check if the member is logged-in
+        if (SwpmMemberUtils::is_member_logged_in()) {
+            $user_id = SwpmMemberUtils::get_logged_in_members_id();
+        }
+
+        if (!empty($user_id)) {
+            //The user is logged-in
+            
+            //Set the default anchor text (if one is provided via teh shortcode).
+            if(empty($anchor_text)){
+                $anchor_text = SwpmUtils::_('Unsubscribe from PayPal');
+            }
+
+            $output .= '<div class="swpm-paypal-subscription-cancel-link">';
+            $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
+            if ( $sandbox_enabled ) {
+                //Sandbox mode
+                $output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '">';
+                $output .= $anchor_text;
+                $output .= '</a>';
+            } else {
+                //Live mode
+                $output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '">';
+                $output .= $anchor_text;
+                $output .= '</a>';
+            }
+            $output .= '</div>';
+            
+        } else {
+            //The user is NOT logged-in
+            $output .= '<p>' . SwpmUtils::_('You are not logged-in as a member') . '</p>';
+        }
         return $output;
     }
 }

@@ -178,7 +178,7 @@ class SwpmMemberUtils {
             //Algorithm - ONLY set the $subscription_starts date to current expiry date if the current expiry date is in the future. 
             //Otherwise set $subscription_starts to TODAY.
             $expiry_timestamp = SwpmMemberUtils::get_expiry_date_timestamp_by_user_id($swpm_id);
-            if($expiry_timestamp > time()){
+            if ($expiry_timestamp > current_time('timestamp', SwpmUtils::use_gmt())) {
                 //Account is not expired. Expiry date is in the future.
                 $level_row = SwpmUtils::get_membership_level_row_by_id($membership_level);
                 $subs_duration_type = $level_row->subscription_duration_type;

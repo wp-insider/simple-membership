@@ -20,15 +20,6 @@ abstract class SwpmUtils {
 		} else {
 			define( 'SWPM_MANAGEMENT_PERMISSION', $admin_dashboard_permission );
 		}
-
-		//Set timezone preference (if enabled in settings)
-		$use_wp_timezone = SwpmSettings::get_instance()->get_value( 'use-wordpress-timezone' );
-		if ( ! empty( $use_wp_timezone ) ) {//Set the wp timezone
-			$wp_timezone_string = get_option( 'timezone_string' );
-			if ( ! empty( $wp_timezone_string ) ) {
-				date_default_timezone_set( $wp_timezone_string );
-			}
-		}
 	}
 
 	public static function subscription_type_dropdown( $selected ) {
@@ -78,7 +69,7 @@ abstract class SwpmUtils {
 
 	public static function is_subscription_expired( $user ) {
 		$expiration_timestamp = self::get_expiration_timestamp( $user );
-		if ( $expiration_timestamp < time() ) {
+		if ( $expiration_timestamp < current_time('timestamp', SwpmUtils::use_gmt()) ) {
 			//Account expired.
 			return true;
 		}
@@ -519,6 +510,15 @@ abstract class SwpmUtils {
 		}
 
 		return $output;
+	}
+
+	public static function use_gmt() {
+		//Set timezone preference (if enabled in settings)
+		$use_wp_timezone = SwpmSettings::get_instance()->get_value( 'use-wordpress-timezone' );
+		if ( ! empty( $use_wp_timezone ) ) {//Set the wp timezone
+			return false;
+		}
+		return true;
 	}
 
 }

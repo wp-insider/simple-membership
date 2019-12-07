@@ -52,7 +52,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			$wp_user_info['user_login']      = $member_info['user_name'];
 			$wp_user_info['password']        = $plain_password;
 			$wp_user_info['role']            = $wpdb->get_var( $query );
-			$wp_user_info['user_registered'] = date( 'Y-m-d H:i:s' );
+			$wp_user_info['user_registered'] = current_time( 'Y-m-d H:i:s', SwpmUtils::use_gmt() );
 			SwpmUtils::create_wp_user( $wp_user_info );
 			//End register to WordPress
 

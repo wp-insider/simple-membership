@@ -397,9 +397,9 @@ class SimpleWpMembership {
         $fields['first_name'] = $user_info->first_name;
         $fields['last_name'] = $user_info->last_name;
         $fields['membership_level'] = $default_level;
-        $fields['member_since'] = date('Y-m-d');
+        $fields['member_since'] = current_time('Y-m-d', SwpmUtils::use_gmt() );
         $fields['account_state'] = $default_ac_status;
-        $fields['subscription_starts'] = date('Y-m-d');
+        $fields['subscription_starts'] = current_time('Y-m-d', SwpmUtils::use_gmt() );
         SwpmMemberUtils::create_swpm_member_entry_from_array_data($fields);
     }
 

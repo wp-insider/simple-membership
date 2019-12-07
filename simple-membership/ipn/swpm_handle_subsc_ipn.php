@@ -131,7 +131,7 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		$data['address_state']         = $ipn_data['address_state'];
 		$data['address_zipcode']       = isset( $ipn_data['address_zip'] ) ? $ipn_data['address_zip'] : '';
 		$data['country']               = isset( $ipn_data['address_country'] ) ? $ipn_data['address_country'] : '';
-		$data['member_since']          = $data['subscription_starts'] = $data['last_accessed'] = date( 'Y-m-d' );
+		$data['member_since']          = $data['subscription_starts'] = $data['last_accessed'] = current_time( 'Y-m-d', SwpmUtils::use_gmt() );
 		$data['account_state']         = $default_account_status;
 		$reg_code                      = uniqid();
 		$md5_code                      = md5( $reg_code );
@@ -302,7 +302,7 @@ function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 		$ipn_data['member_id'] = $swpm_id;
 		do_action( 'swpm_recurring_payment_received', $ipn_data ); // Hook for recurring payment received.
 
-		$subscription_starts = ( date( 'Y-m-d' ) );
+		$subscription_starts = ( current_time('Y-m-d', SwpmUtils::use_gmt() ) );
 
 		$wpdb->query(
 			$wpdb->prepare(

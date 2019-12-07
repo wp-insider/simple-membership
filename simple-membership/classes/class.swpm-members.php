@@ -235,8 +235,8 @@ class SwpmMembers extends WP_List_Table {
 		}
 		global $wpdb;
 		$member                        = SwpmTransfer::$default_fields;
-		$member['member_since']        = date( 'Y-m-d' );
-		$member['subscription_starts'] = date( 'Y-m-d' );
+		$member['member_since']        = current_time( 'Y-m-d', SwpmUtils::use_gmt() );
+		$member['subscription_starts'] = current_time( 'Y-m-d', SwpmUtils::use_gmt() );
 		if ( isset( $_POST['createswpmuser'] ) ) {
 			$member = array_map( 'sanitize_text_field', $_POST );
 		}
@@ -651,7 +651,7 @@ class SwpmMembers extends WP_List_Table {
 							<td width="25%" align="left">
 								<strong>Access Starts Date: </strong>
 							</td><td align="left">
-								<input name="swpm_bulk_user_start_date_change_date" id="swpm_bulk_user_start_date_change_date" class="swpm-select-date" type="text" size="20" value="<?php echo ( date( 'Y-m-d' ) ); ?>" />
+								<input name="swpm_bulk_user_start_date_change_date" id="swpm_bulk_user_start_date_change_date" class="swpm-select-date" type="text" size="20" value="<?php echo ( current_time( 'Y-m-d', SwpmUtils::use_gmt() ) ); ?>" />
 								<p class="description"><?php SwpmUtils::e( 'Specify the access starts date value.' ); ?></p>
 							</td>
 						</tr>

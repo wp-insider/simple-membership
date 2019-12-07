@@ -199,8 +199,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$free_level                           = SwpmUtils::get_free_level();
 		$account_status                       = SwpmSettings::get_instance()->get_value( 'default-account-status', 'active' );
 		$member_info['last_accessed_from_ip'] = SwpmUtils::get_user_ip_address();
-		$member_info['member_since']          = date( 'Y-m-d' );
-		$member_info['subscription_starts']   = date( 'Y-m-d' );
+		$member_info['member_since']          = current_time( 'Y-m-d', SwpmUtils::use_gmt() );
+		$member_info['subscription_starts']   = current_time( 'Y-m-d', SwpmUtils::use_gmt() );
 		$member_info['account_state']         = $account_status;
 		if ( $this->email_activation ) {
 			$member_info['account_state'] = 'activation_required';
@@ -267,7 +267,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$wp_user_info['user_login']      = $member_info['user_name'];
 		$wp_user_info['password']        = $member_info['plain_password'];
 		$wp_user_info['role']            = $user_role;
-		$wp_user_info['user_registered'] = date( 'Y-m-d H:i:s' );
+		$wp_user_info['user_registered'] = current_time( 'Y-m-d H:i:s', SwpmUtils::use_gmt() );
 		SwpmUtils::create_wp_user( $wp_user_info );
 		return true;
 	}

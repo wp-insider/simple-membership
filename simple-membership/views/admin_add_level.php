@@ -30,7 +30,7 @@
                 <p><input type="radio"  value="<?php echo  SwpmMembershipLevel::YEARS?>" name="subscription_duration_type" /> <?php echo  SwpmUtils::_('Expire After')?> 
                     <input type="text" value="" name="subscription_period_<?php echo  SwpmMembershipLevel::YEARS?>"> <?php echo  SwpmUtils::_('Years (Access expires after given number of years)')?></p>                
                 <p><input type="radio" value="<?php echo  SwpmMembershipLevel::FIXED_DATE?>" name="subscription_duration_type" /> <?php echo  SwpmUtils::_('Fixed Date Expiry')?> 
-                    <input type="text" class="swpm-date-picker" value="<?php echo  date('Y-m-d');?>" name="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>"> <?php echo  SwpmUtils::_('(Access expires on a fixed date)')?></p>
+                    <input type="text" class="swpm-date-picker" value="<?php echo current_time( 'Y-m-d', SwpmUtils::use_gmt() );?>" name="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>"> <?php echo  SwpmUtils::_('(Access expires on a fixed date)')?></p>
             </td>        
         </tr>
         <tr>

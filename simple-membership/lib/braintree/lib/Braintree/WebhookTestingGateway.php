@@ -549,10 +549,10 @@ class WebhookTestingGateway
 
     private static function _timestamp()
     {
-        $originalZone = date_default_timezone_get();
-        date_default_timezone_set('UTC');
-        $timestamp = strftime('%Y-%m-%dT%TZ');
-        date_default_timezone_set($originalZone);
+//        $originalZone = date_default_timezone_get();
+//        date_default_timezone_set('UTC');
+    	$timestamp = strftime('%Y-%m-%dT%TZ');
+//        date_default_timezone_set($originalZone);
 
         return $timestamp;
     }

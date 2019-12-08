@@ -69,7 +69,7 @@ abstract class SwpmUtils {
 
 	public static function is_subscription_expired( $user ) {
 		$expiration_timestamp = self::get_expiration_timestamp( $user );
-		if ( $expiration_timestamp < current_time('timestamp', SwpmUtils::use_gmt()) ) {
+		if ( $expiration_timestamp < current_time( 'timestamp', self::use_gmt() ) ) {
 			//Account expired.
 			return true;
 		}
@@ -519,6 +519,14 @@ abstract class SwpmUtils {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	*   Returns current date using WP current_time() function
+	*   Considers "Use WordPress Timezone" option
+	*/
+	public static function c_date( $format ) {
+		return current_time( $format, self::use_gmt() );
 	}
 
 }

@@ -158,6 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.9.4 =
+- Commented out call to date_default_timezone_set() function for WP5.3.
+
 = 3.9.3 =
 - Added the option to enable HTML email in the email settings menu of the plugin.
 - The Stripe subscription updated event is now handled by the plugin.

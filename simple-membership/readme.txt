@@ -160,6 +160,7 @@ https://simple-membership-plugin.com/
 
 = 3.9.4 =
 - Commented out call to date_default_timezone_set() function for WP5.3.
+- Updated some comments in the SwpmAjax class.
 - Added an extra content protection check for post preview URL.
 
 = 3.9.3 =

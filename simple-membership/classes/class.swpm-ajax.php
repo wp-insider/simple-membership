@@ -1,10 +1,10 @@
 <?php
 /**
- * Description of BAjax
- *
- * @author nur
+ * Handles various AJAX calls
  */
+
 class SwpmAjax {
+    
     public static function validate_email_ajax() {
         global $wpdb;
         $field_value = filter_input(INPUT_GET, 'fieldValue');
@@ -45,4 +45,5 @@ class SwpmAjax {
             '",true,"&radic;&nbsp;'.SwpmUtils::_('Available'). '"]');
         exit;
     }
+    
 }

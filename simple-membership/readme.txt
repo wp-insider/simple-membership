@@ -158,6 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.9.5 =
+- Added a new filter (swpm_mini_login_output). It can be used to override the [swpm_mini_login] shortcode's output.
+
 = 3.9.4 =
 - Commented out call to date_default_timezone_set() function for WP5.3.
 - Updated some comments in the SwpmAjax class.

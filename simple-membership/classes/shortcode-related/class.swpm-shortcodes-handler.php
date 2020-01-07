@@ -8,9 +8,9 @@ class SwpmShortcodesHandler {
         add_shortcode('swpm_thank_you_page_registration', array(&$this, 'swpm_ty_page_rego_sc'));
 
         add_shortcode('swpm_show_expiry_date', array(&$this, 'swpm_show_expiry_date_sc'));
-        
+
         add_shortcode('swpm_mini_login', array(&$this, 'swpm_show_mini_login_sc'));
-        
+
         add_shortcode('swpm_paypal_subscription_cancel_link', array(&$this, 'swpm_pp_cancel_subs_link_sc'));
     }
 
@@ -36,7 +36,7 @@ class SwpmShortcodesHandler {
             $error_msg .= '</p>';
             return $error_msg;
         }
-    
+
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_button_shortcode_view.php');
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_button_shortcode_view.php');
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_sca_button_shortcode_view.php');
@@ -102,14 +102,14 @@ class SwpmShortcodesHandler {
     }
 
     public function swpm_show_mini_login_sc($args) {
-        
+
         $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
         $join_page_url = SwpmSettings::get_instance()->get_value('join-us-page-url');
         $profile_page_url = SwpmSettings::get_instance()->get_value('profile-page-url');
         $logout_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '?swpm-logout=true';
-        
+
         $output = '<div class="swpm_mini_login_wrapper">';
-        
+
         //Check if the user is logged in or not
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
@@ -125,11 +125,14 @@ class SwpmShortcodesHandler {
             $output .= '<span class="swpm_mini_login_no_membership"> | '.SwpmUtils::_('Not a member? ').'</span>';
             $output .= '<span class="swpm_mini_login_join_now"><a href="'.$join_page_url.'">'.SwpmUtils::_('Join Now').'</a></span>';
         }
-        
+
         $output .= '</div>';
+
+        $output = apply_filters ('swpm_mini_login_output', $output);
+
         return $output;
     }
-    
+
     public function swpm_pp_cancel_subs_link_sc($args){
         extract(shortcode_atts(array(
             'merchant_id' => '',
@@ -142,7 +145,7 @@ class SwpmShortcodesHandler {
 
         $output = '';
         $settings = SwpmSettings::get_instance();
-        
+
         //Check if the member is logged-in
         if (SwpmMemberUtils::is_member_logged_in()) {
             $user_id = SwpmMemberUtils::get_logged_in_members_id();
@@ -150,7 +153,7 @@ class SwpmShortcodesHandler {
 
         if (!empty($user_id)) {
             //The user is logged-in
-            
+
             //Set the default anchor text (if one is provided via teh shortcode).
             if(empty($anchor_text)){
                 $anchor_text = SwpmUtils::_('Unsubscribe from PayPal');
@@ -170,7 +173,7 @@ class SwpmShortcodesHandler {
                 $output .= '</a>';
             }
             $output .= '</div>';
-            
+
         } else {
             //The user is NOT logged-in
             $output .= '<p>' . SwpmUtils::_('You are not logged-in as a member') . '</p>';

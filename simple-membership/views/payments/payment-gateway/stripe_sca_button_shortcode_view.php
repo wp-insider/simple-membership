@@ -52,14 +52,6 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	$user_ip                                     = SwpmUtils::get_user_ip_address();
 	$_SESSION['swpm_payment_button_interaction'] = $user_ip;
 
-	//Custom field data
-	$custom_field_value  = 'subsc_ref=' . $membership_level_id;
-	$custom_field_value .= '&user_ip=' . $user_ip;
-	if ( SwpmMemberUtils::is_member_logged_in() ) {
-		$custom_field_value .= '&swpm_id=' . SwpmMemberUtils::get_logged_in_members_id();
-	}
-	$custom_field_value = apply_filters( 'swpm_custom_field_value_filter', $custom_field_value );
-
 	//Sandbox settings
 	$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
@@ -76,57 +68,11 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 		$secret_key      = $stripe_live_secret_key;
 	}
 
-	//Billing address
-	$billing_address = isset( $args['billing_address'] ) ? '1' : '';
-	//By default don't show the billing address in the checkout form.
-	//if billing_address parameter is not present in the shortcode, let's check button option
-	if ( $billing_address === '' ) {
-		$collect_address = get_post_meta( $button_id, 'stripe_collect_address', true );
-		if ( $collect_address === '1' ) {
-			//Collect Address enabled in button settings
-			$billing_address = 1;
-		}
-	}
-
 	$uniqid = md5( uniqid() );
 	$ref_id = 'swpm_' . $uniqid . '|' . $button_id;
 
 	//Return, cancel, notifiy URLs
 	$notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_buy_now=1&ref_id=' . $ref_id; //We are going to use it to do post payment processing.
-
-	$current_url = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-	SwpmMiscUtils::load_stripe_lib();
-
-	try {
-		\Stripe\Stripe::setApiKey( $secret_key );
-
-		$opts = array(
-			'payment_method_types'       => array( 'card' ),
-			'client_reference_id'        => $ref_id,
-			'billing_address_collection' => $billing_address ? 'required' : 'auto',
-			'line_items'                 => array(
-				array(
-					'name'        => $item_name,
-					'description' => $payment_amount_formatted,
-					'amount'      => $price_in_cents,
-					'currency'    => $payment_currency,
-					'quantity'    => 1,
-				),
-			),
-			'success_url'                => $notify_url,
-			'cancel_url'                 => $current_url,
-		);
-
-		if ( ! empty( $item_logo ) ) {
-			$opts['line_items'][0]['images'] = array( $item_logo );
-		}
-
-		$session = \Stripe\Checkout\Session::create( $opts );
-	} catch ( Exception $e ) {
-		$err = $e->getMessage();
-		return '<p class="swpm-red-box">' . $err . '</p>';
-	}
 
 	/* === Stripe Buy Now Button Form === */
 	$output  = '';
@@ -141,9 +87,23 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 		var stripe = Stripe('<?php echo esc_js( $publishable_key ); ?>');
 		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
 			e.preventDefault();
-			stripe.redirectToCheckout({
-				sessionId: '<?php echo esc_js( $session->id ); ?>'
-			}).then(function (result) {
+			var btn = jQuery(this).find('button').attr('disabled', true);
+			jQuery.post('<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
+				'action': 'swpm_stripe_sca_buy_now_create_checkout_session',
+				'swpm_button_id': <?php echo esc_js( $button_id ); ?>
+				}).done(function (response) {
+					if (!response.error) {
+						stripe.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
+					});			
+					} else {
+						alert(response.error);
+						btn.attr('disabled', false);
+						return false;
+					}
+			}).fail(function(e) {
+				alert("Error!");
+				btn.attr('disabled', false);
+				return false;
 			});
 		});
 	</script>
@@ -275,7 +235,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 			$opts['subscription_data']['trial_period_days'] = $trial_period;
 		}
 
-		$session = \Stripe\Checkout\Session::create( $opts );
+//		$session = \Stripe\Checkout\Session::create( $opts );
 	} catch ( Exception $e ) {
 		$err = $e->getMessage();
 		return '<p class="swpm-red-box">' . $err . '</p>';

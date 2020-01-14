@@ -1,11 +1,19 @@
 <?php
 
-require SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php';
-
 class SwpmStripeSCABuyNowIpnHandler {
 
 	public function __construct() {
+		//check if this is session create request
+		if ( wp_doing_ajax() ) {
+			$action = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_STRING );
+			if ( 'swpm_stripe_sca_buy_now_create_checkout_session' === $action ) {
+				add_action( 'wp_ajax_swpm_stripe_sca_buy_now_create_checkout_session', array( $this, 'handle_session_create' ) );
+				add_action( 'wp_ajax_nopriv_swpm_stripe_sca_buy_now_create_checkout_session', array( $this, 'handle_session_create' ) );
+				return;
+			}
+		}
 
+		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php';
 		$this->handle_stripe_ipn();
 	}
 
@@ -49,7 +57,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
-		
+
 		try {
 			\Stripe\Stripe::setApiKey( $secret_key );
 
@@ -220,6 +228,116 @@ class SwpmStripeSCABuyNowIpnHandler {
 		SwpmMiscUtils::redirect_to_url( $return_url );
 
 	}
+
+	public function handle_session_create() {
+		$button_id = filter_input( INPUT_POST, 'swpm_button_id', FILTER_SANITIZE_NUMBER_INT );
+		if ( empty( $button_id ) ) {
+			wp_send_json( array( 'error' => 'No button ID provided' ) );
+		}
+
+		$settings   = SwpmSettings::get_instance();
+		$button_cpt = get_post( $button_id ); //Retrieve the CPT for this button
+		$item_name  = htmlspecialchars( $button_cpt->post_title );
+
+		//Payment amount and currency
+		$payment_amount = get_post_meta( $button_id, 'payment_amount', true );
+		if ( ! is_numeric( $payment_amount ) ) {
+			wp_send_json( array( 'error' => 'Error! The payment amount value of the button must be a numeric number. Example: 49.50' ) );
+		}
+
+		$payment_currency = get_post_meta( $button_id, 'payment_currency', true );
+		$payment_amount   = round( $payment_amount, 2 ); //round the amount to 2 decimal place.
+		$zero_cents       = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
+		if ( in_array( $payment_currency, $zero_cents ) ) {
+			//this is zero-cents currency, amount shouldn't be multiplied by 100
+			$price_in_cents = $payment_amount;
+		} else {
+			$price_in_cents = $payment_amount * 100; //The amount (in cents). This value is passed to Stripe API.
+		}
+		$payment_amount_formatted = SwpmMiscUtils::format_money( $payment_amount, $payment_currency );
+
+		//$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
+		//User's IP address
+		$user_ip                                     = SwpmUtils::get_user_ip_address();
+		$_SESSION['swpm_payment_button_interaction'] = $user_ip;
+
+		//Custom field data
+		$custom_field_value  = 'subsc_ref=' . $membership_level_id;
+		$custom_field_value .= '&user_ip=' . $user_ip;
+		if ( SwpmMemberUtils::is_member_logged_in() ) {
+			$custom_field_value .= '&swpm_id=' . SwpmMemberUtils::get_logged_in_members_id();
+		}
+		$custom_field_value = apply_filters( 'swpm_custom_field_value_filter', $custom_field_value );
+
+		//Sandbox settings
+		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
+
+		//API keys
+		$stripe_test_secret_key      = get_post_meta( $button_id, 'stripe_test_secret_key', true );
+		$stripe_test_publishable_key = get_post_meta( $button_id, 'stripe_test_publishable_key', true );
+		$stripe_live_secret_key      = get_post_meta( $button_id, 'stripe_live_secret_key', true );
+		$stripe_live_publishable_key = get_post_meta( $button_id, 'stripe_live_publishable_key', true );
+		if ( $sandbox_enabled ) {
+			$publishable_key = $stripe_test_publishable_key; //Use sandbox API key
+			$secret_key      = $stripe_test_secret_key;
+		} else {
+			$publishable_key = $stripe_live_publishable_key; //Use live API key
+			$secret_key      = $stripe_live_secret_key;
+		}
+
+		//Billing address
+		$billing_address = isset( $args['billing_address'] ) ? '1' : '';
+		//By default don't show the billing address in the checkout form.
+		//if billing_address parameter is not present in the shortcode, let's check button option
+		if ( $billing_address === '' ) {
+			$collect_address = get_post_meta( $button_id, 'stripe_collect_address', true );
+			if ( $collect_address === '1' ) {
+				//Collect Address enabled in button settings
+				$billing_address = 1;
+			}
+		}
+
+		$ref_id = 'swpm_' . $uniqid . '|' . $button_id;
+
+		//Return, cancel, notifiy URLs
+		$notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_buy_now=1&ref_id=' . $ref_id; //We are going to use it to do post payment processing.
+
+		$current_url = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+		SwpmMiscUtils::load_stripe_lib();
+
+		try {
+			\Stripe\Stripe::setApiKey( $secret_key );
+
+			$opts = array(
+				'payment_method_types'       => array( 'card' ),
+				'client_reference_id'        => $ref_id,
+				'billing_address_collection' => $billing_address ? 'required' : 'auto',
+				'line_items'                 => array(
+					array(
+						'name'        => $item_name,
+						'description' => $payment_amount_formatted,
+						'amount'      => $price_in_cents,
+						'currency'    => $payment_currency,
+						'quantity'    => 1,
+					),
+				),
+				'success_url'                => $notify_url,
+				'cancel_url'                 => $current_url,
+			);
+
+			if ( ! empty( $item_logo ) ) {
+				$opts['line_items'][0]['images'] = array( $item_logo );
+			}
+
+			$session = \Stripe\Checkout\Session::create( $opts );
+		} catch ( Exception $e ) {
+			$err = $e->getMessage();
+			wp_send_json( array( 'error' => 'Error occurred: ' . $err ) );
+		}
+		wp_send_json( array( 'session_id' => $session->id ) );
+	}
+
 }
 
 new SwpmStripeSCABuyNowIpnHandler();

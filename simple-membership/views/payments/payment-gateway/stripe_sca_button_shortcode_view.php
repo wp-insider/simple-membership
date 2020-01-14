@@ -103,7 +103,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 						return false;
 					}
 			}).fail(function(e) {
-				alert("Error!");
+				alert("HTTP error occurred during AJAX request. Error code: "+e.status);
 				btn.attr('disabled', false);
 				return false;
 			});
@@ -270,7 +270,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 						return false;
 					}
 			}).fail(function(e) {
-				alert("Error!");
+				alert("HTTP error occurred during AJAX request. Error code: "+e.status);
 				btn.attr('disabled', false);
 				return false;
 			});

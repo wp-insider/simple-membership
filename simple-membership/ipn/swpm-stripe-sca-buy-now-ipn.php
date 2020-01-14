@@ -9,8 +9,8 @@ class SwpmStripeSCABuyNowIpnHandler {
 			if ( 'swpm_stripe_sca_create_checkout_session' === $action ) {
 				add_action( 'wp_ajax_swpm_stripe_sca_create_checkout_session', array( $this, 'handle_session_create' ) );
 				add_action( 'wp_ajax_nopriv_swpm_stripe_sca_create_checkout_session', array( $this, 'handle_session_create' ) );
-				return;
 			}
+			return;
 		}
 
 		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php';

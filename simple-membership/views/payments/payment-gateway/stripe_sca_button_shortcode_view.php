@@ -79,8 +79,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
-	$output .= '<script src="https://js.stripe.com/v3/"></script>';
-	$output .= "<link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css' type='text/css' media='all' />";
+	$output .= SwpmMiscUtils::output_stripe_sca_frontend_scripts_once();
 	ob_start();
 	?>
 	<script>
@@ -214,7 +213,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$plan_id = get_post_meta( $button_id, 'stripe_plan_id', true );
 
 	SwpmMiscUtils::load_stripe_lib();
-	
+
 	try {
 		\Stripe\Stripe::setApiKey( $secret_key );
 
@@ -235,7 +234,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 			$opts['subscription_data']['trial_period_days'] = $trial_period;
 		}
 
-//		$session = \Stripe\Checkout\Session::create( $opts );
+		//      $session = \Stripe\Checkout\Session::create( $opts );
 	} catch ( Exception $e ) {
 		$err = $e->getMessage();
 		return '<p class="swpm-red-box">' . $err . '</p>';
@@ -246,8 +245,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
-	$output .= '<script src="https://js.stripe.com/v3/"></script>';
-	$output .= "<link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css' type='text/css' media='all' />";
+	$output .= SwpmMiscUtils::output_stripe_sca_frontend_scripts_once();
 	ob_start();
 	?>
 	<script>

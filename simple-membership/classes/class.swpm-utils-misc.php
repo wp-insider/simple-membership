@@ -739,10 +739,9 @@ class SwpmMiscUtils {
 	*/
 	public static function output_stripe_sca_frontend_scripts_once() {
 		$out = '';
-		if ( !self::$stripe_sca_frontend_scripts_printed ) {
+		if ( ! self::$stripe_sca_frontend_scripts_printed ) {
 			$out .= '<script src="https://js.stripe.com/v3/"></script>';
 			$out .= "<link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css' type='text/css' media='all' />";
-
 			self::$stripe_sca_frontend_scripts_printed = true;
 		}
 		return $out;

@@ -74,6 +74,8 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	//Return, cancel, notifiy URLs
 	$notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_buy_now=1&ref_id=' . $ref_id; //We are going to use it to do post payment processing.
 
+	$current_url = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
 	/* === Stripe Buy Now Button Form === */
 	$output  = '';
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
@@ -88,8 +90,9 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 			e.preventDefault();
 			var btn = jQuery(this).find('button').attr('disabled', true);
 			jQuery.post('<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
-				'action': 'swpm_stripe_sca_buy_now_create_checkout_session',
-				'swpm_button_id': <?php echo esc_js( $button_id ); ?>
+				'action': 'swpm_stripe_sca_create_checkout_session',
+				'swpm_button_id': <?php echo esc_js( $button_id ); ?>,
+				'swpm_page_url': '<?php echo esc_js( $current_url ); ?>'
 				}).done(function (response) {
 					if (!response.error) {
 						stripe.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
@@ -252,9 +255,24 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 		var stripe = Stripe('<?php echo esc_js( $publishable_key ); ?>');
 		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
 			e.preventDefault();
-			stripe.redirectToCheckout({
-				sessionId: '<?php echo esc_js( $session->id ); ?>'
-			}).then(function (result) {
+			var btn = jQuery(this).find('button').attr('disabled', true);
+			jQuery.post('<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
+				'action': 'swpm_stripe_sca_create_checkout_session',
+				'swpm_button_id': <?php echo esc_js( $button_id ); ?>,
+				'swpm_page_url': '<?php echo esc_js( $current_url ); ?>'
+				}).done(function (response) {
+					if (!response.error) {
+						stripe.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
+					});			
+					} else {
+						alert(response.error);
+						btn.attr('disabled', false);
+						return false;
+					}
+			}).fail(function(e) {
+				alert("Error!");
+				btn.attr('disabled', false);
+				return false;
 			});
 		});
 	</script>

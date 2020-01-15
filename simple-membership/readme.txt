@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.3
-Stable tag: 3.9.4
+Stable tag: 3.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,9 +158,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.9.5 =
+= 3.9.5 =
 - Added a new filter (swpm_mini_login_output). It can be used to override the [swpm_mini_login] shortcode's output.
+- The "Edit" link in the members menu has been renamed to "Edit/View" to make it more user-friendly.
 - Updated the German language file.
+- The members listing in the members menu can now be sorted by the "Access Starts" column.
+- Fixed an issue with Stripe SCA buttons whereby duplicate "incomplete" entries were being created. This started happening recently from a new change that Stripe made.
 
 = 3.9.4 =
 - Commented out call to date_default_timezone_set() function for WP5.3.

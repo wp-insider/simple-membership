@@ -17,7 +17,7 @@ class SwpmInitTimeTasks {
 		if ( ! isset( $_COOKIE['swpm_session'] ) ) { // give a unique ID to current session.
 			$uid                     = md5( microtime() );
 			$_COOKIE['swpm_session'] = $uid; // fake it for current session/
-			if ( headers_sent() ) {
+			if ( ! headers_sent() ) {
 				setcookie( 'swpm_session', $uid, 0, '/' );
 			}
 		}

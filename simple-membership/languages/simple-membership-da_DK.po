@@ -49,7 +49,7 @@ msgstr "Korriger venligst følgende:"
 
 #: simple-membership/classes/class.bAjax.php:17
 #: simple-membership/classes/class.bAjax.php:28
-msgid "Aready taken"
+msgid "Already taken"
 msgstr "Anvendes allerede af en anden."
 
 #: simple-membership/classes/class.bAjax.php:29

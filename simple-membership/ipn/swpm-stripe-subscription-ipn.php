@@ -18,7 +18,8 @@ class SwpmStripeSubscriptionIpnHandler {
 		*/
 
 		if ( isset( $_GET['hook'] ) ) {
-			// This is Webhook notification from Stripe
+			// This is Webhook notification from Stripe.
+                        // This webhook is used for all recurring payment notification (Legacy and SCA ones).
 
 			// TODO: add Webhook Signing Secret verification
 			// To do this, we need to get customer ID, retreive its details from Stripe, get button_id from metadata
@@ -35,7 +36,7 @@ class SwpmStripeSubscriptionIpnHandler {
 			$event_json = json_decode( $input );
 
 			$type = $event_json->type;
-						SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received: %s. Checking if we need to handle this webhook.', $type ), true );
+			SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received: %s. Checking if we need to handle this webhook.', $type ), true );
 
 			if ( 'customer.subscription.deleted' === $type || 'charge.refunded' === $type ) {
 				// Subscription expired or refunded event
@@ -55,7 +56,7 @@ class SwpmStripeSubscriptionIpnHandler {
 				// Subscription updated
 				//SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );
 
-				// Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
+				// Let's form minimal ipn_data array
 				$customer                  = $event_json->data->object->customer;
 				$subscr_id                 = $event_json->data->object->id;
 				$ipn_data                  = array();
@@ -65,12 +66,12 @@ class SwpmStripeSubscriptionIpnHandler {
 				swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
 			}
 
-						//End of the webhook notification execution.
+			//End of the webhook notification execution.
 			http_response_code( 200 ); // Tells Stripe we received this notification
 			return;
 		}
 
-				//The following will get executed only for DIRECT post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
+		//The following will get executed only for DIRECT post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
 
 		SwpmLog::log_simple_debug( 'Stripe subscription IPN received. Processing request...', true );
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose

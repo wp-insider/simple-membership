@@ -158,6 +158,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.9.6 =
+- [[TODO]] - Stripe Subscription doc needs to add the "invoice.payment_succeeded" to the webhook events monitoring. 
+
+- Added a new filter to allow customization of the email activation message (if the email activation feature is enabled).
+
 = 3.9.5 =
 - Added a new filter (swpm_mini_login_output). It can be used to override the [swpm_mini_login] shortcode's output.
 - The "Edit" link in the members menu has been renamed to "Edit/View" to make it more user-friendly.

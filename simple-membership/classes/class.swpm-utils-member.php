@@ -9,7 +9,7 @@ class SwpmMemberUtils {
     public static function create_swpm_member_entry_from_array_data($fields){
         global $wpdb;
         $res = $wpdb->insert( $wpdb->prefix . "swpm_members_tbl", $fields );
-        
+
         if ( ! $res ) {
             //DB error occurred
             $error_msg = 'create_swpm_member_entry_from_array_data() - DB error occurred: ' . json_encode( $wpdb->last_result );
@@ -20,7 +20,7 @@ class SwpmMemberUtils {
         SwpmLog::log_simple_debug( 'create_swpm_member_entry_from_array_data() - SWPM member entry created successfully. Member ID: '. $member_id, true );
         return $member_id;
     }
-    
+
     public static function is_member_logged_in() {
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
@@ -72,7 +72,7 @@ class SwpmMemberUtils {
 
         return apply_filters('swpm_get_member_field_by_id', $default, $id, $field);
     }
-    
+
     public static function get_formatted_expiry_date_by_user_id($swpm_id){
         $expiry_timestamp = SwpmMemberUtils::get_expiry_date_timestamp_by_user_id($swpm_id);
         if($expiry_timestamp == PHP_INT_MAX){
@@ -84,13 +84,13 @@ class SwpmMemberUtils {
         }
         return $formatted_expiry_date;
     }
-    
+
     public static function get_expiry_date_timestamp_by_user_id($swpm_id){
         $swpm_user = SwpmMemberUtils::get_user_by_id($swpm_id);
         $expiry_timestamp = SwpmUtils::get_expiration_timestamp($swpm_user);
         return $expiry_timestamp;
     }
-    
+
     public static function get_user_by_id($swpm_id) {
         //Retrieves the SWPM user record for the given member ID
         global $wpdb;
@@ -98,7 +98,7 @@ class SwpmMemberUtils {
         $result = $wpdb->get_row($query);
         return $result;
     }
-  
+
     public static function get_user_by_user_name($swpm_user_name) {
         //Retrieves the SWPM user record for the given member username
         global $wpdb;
@@ -114,7 +114,15 @@ class SwpmMemberUtils {
         $result = $wpdb->get_row($query);
         return $result;
     }
-    
+
+    public static function get_user_by_subsriber_id($subsc_id) {
+        //Retrieves the SWPM user record for the given member ID
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s", $subsc_id);
+        $result = $wpdb->get_row($query);
+        return $result;
+    }
+
     public static function get_wp_user_from_swpm_user_id($swpm_id) {
         //Retrieves the WP user record for the given SWPM member ID.
         $swpm_user_row = SwpmMemberUtils::get_user_by_id($swpm_id);
@@ -122,7 +130,7 @@ class SwpmMemberUtils {
         $wp_user = get_user_by('login', $username);
         return $wp_user;
     }
-    
+
     public static function get_all_members_of_a_level($level_id) {
         //Retrieves all the SWPM user records for the given membership level
         global $wpdb;
@@ -130,7 +138,7 @@ class SwpmMemberUtils {
         $result = $wpdb->get_results($query);
         return $result;
     }
-    
+
     /*
      * Use this function to update or set membership level of a member easily.
      */
@@ -140,14 +148,14 @@ class SwpmMemberUtils {
         $query = $wpdb->prepare("UPDATE $members_table_name SET membership_level=%s WHERE member_id=%s", $target_membership_level, $member_id);
         $resultset = $wpdb->query($query);
     }
-    
+
     /*
      * Use this function to update or set account status of a member easily.
      */
     public static function update_account_state($member_id, $new_status = 'active') {
         global $wpdb;
         $members_table_name = $wpdb->prefix . "swpm_members_tbl";
-        
+
         SwpmLog::log_simple_debug("Updating the account status value of member (" . $member_id . ") to: " . $new_status, true);
         $query = $wpdb->prepare("UPDATE $members_table_name SET account_state=%s WHERE member_id=%s", $new_status, $member_id);
         $resultset = $wpdb->query($query);
@@ -162,7 +170,7 @@ class SwpmMemberUtils {
         $query = $wpdb->prepare("UPDATE $members_table_name SET subscription_starts=%s WHERE member_id=%s", $new_date, $member_id);
         $resultset = $wpdb->query($query);
     }
-    
+
     /*
      * Calculates the Access Starts date value considering the level and current expiry. Useful for after payment member profile update.
      */
@@ -175,7 +183,7 @@ class SwpmMemberUtils {
         if($membership_level == $old_membership_level){
             //Payment for the same membership level (renewal).
 
-            //Algorithm - ONLY set the $subscription_starts date to current expiry date if the current expiry date is in the future. 
+            //Algorithm - ONLY set the $subscription_starts date to current expiry date if the current expiry date is in the future.
             //Otherwise set $subscription_starts to TODAY.
             $expiry_timestamp = SwpmMemberUtils::get_expiry_date_timestamp_by_user_id($swpm_id);
             if($expiry_timestamp > time()){
@@ -201,14 +209,14 @@ class SwpmMemberUtils {
             //Payment for a NEW membership level (upgrade).
             //Use todays date for $subscription_starts date parameter.
         }
-        
+
         return $subscription_starts;
     }
 
     public static function is_valid_user_name($user_name){
         return preg_match("/^[a-zA-Z0-9.\-_*@]+$/", $user_name)== 1;
     }
-    
+
     public static function wp_user_has_admin_role($wp_user_id){
         $caps = get_user_meta($wp_user_id, 'wp_capabilities', true);
         if (is_array($caps) && in_array('administrator', array_keys((array) $caps))){
@@ -217,24 +225,24 @@ class SwpmMemberUtils {
         }
         return false;
     }
-    
+
     public static function update_wp_user_role_with_level_id($wp_user_id, $level_id){
         $level_row = SwpmUtils::get_membership_level_row_by_id($level_id);
         $user_role = $level_row->role;
         SwpmMemberUtils::update_wp_user_role($wp_user_id, $user_role);
     }
-    
+
     public static function update_wp_user_role($wp_user_id, $role){
         if (SwpmUtils::is_multisite_install()) {//MS install
             return; //TODO - don't do this for MS install
         }
-                
+
         $admin_user = SwpmMemberUtils::wp_user_has_admin_role($wp_user_id);
         if ($admin_user) {
             SwpmLog::log_simple_debug('This user has admin role. No role modification will be done.', true);
             return;
         }
-        
+
         //wp_update_user() function will trigger the 'set_user_role' hook.
         wp_update_user(array('ID' => $wp_user_id, 'role' => $role));
         SwpmLog::log_simple_debug('User role updated.', true);

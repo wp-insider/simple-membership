@@ -100,6 +100,12 @@ class SwpmStripeSubscriptionIpnHandler {
                                     // Found a member record
                                     $member_id = $member_record->member_id;
                                     $membership_level_id = $member_record->membership_level;
+                                    if(empty($first_name)){
+                                        $first_name = $member_record->first_name;
+                                    }
+                                    if(empty($last_name)){
+                                        $last_name = $member_record->last_name;
+                                    }
 				} else {
                                     SwpmLog::log_simple_debug( 'Could not find an existing member record for the given subscriber ID: ' . $sub_id . '. This user profile may have been deleted.', false );
                                     $member_id = '';

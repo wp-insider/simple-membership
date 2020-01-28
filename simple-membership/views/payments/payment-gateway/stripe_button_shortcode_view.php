@@ -65,14 +65,14 @@ function swpm_render_stripe_buy_now_button_sc_output( $button_code, $args ) {
 	$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
 	//API keys
-	$stripe_test_secret_key      = get_post_meta( $button_id, 'stripe_test_secret_key', true );
-	$stripe_test_publishable_key = get_post_meta( $button_id, 'stripe_test_publishable_key', true );
-	$stripe_live_secret_key      = get_post_meta( $button_id, 'stripe_live_secret_key', true );
-	$stripe_live_publishable_key = get_post_meta( $button_id, 'stripe_live_publishable_key', true );
-	if ( $sandbox_enabled ) {
-		$publishable_key = $stripe_test_publishable_key; //Use sandbox API key
-	} else {
-		$publishable_key = $stripe_live_publishable_key; //Use live API key
+	$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, ! $sandbox_enabled );
+
+	//prefill member email
+	$prefill_member_email = $settings->get_value( 'stripe-prefill-member-email' );
+
+	if ( $prefill_member_email ) {
+		$auth         = SwpmAuth::get_instance();
+		$member_email = $auth->get( 'email' );
 	}
 
 	//Billing address
@@ -95,10 +95,11 @@ function swpm_render_stripe_buy_now_button_sc_output( $button_code, $args ) {
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
 	$output .= "<script src='https://checkout.stripe.com/checkout.js' class='stripe-button'
-        data-key='" . $publishable_key . "'
+        data-key='" . $api_keys['public'] . "'
         data-panel-label='Pay'
         data-amount='{$price_in_cents}'
-        data-name='{$item_name}'";
+		data-name='{$item_name}'";
+	$output .= isset( $member_email ) ? sprintf( 'data-email="%s"', $member_email ) : '';
 	$output .= "data-description='{$payment_amount_formatted}'";
 	$output .= "data-locale='auto'";
 	$output .= "data-label='{$button_text}'"; //Stripe doesn't currenty support button image for their standard checkout.
@@ -189,16 +190,14 @@ function swpm_render_stripe_subscription_button_sc_output( $button_code, $args )
 	$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
 	//API keys
-	$stripe_test_secret_key      = get_post_meta( $button_id, 'stripe_test_secret_key', true );
-	$stripe_test_publishable_key = get_post_meta( $button_id, 'stripe_test_publishable_key', true );
-	$stripe_live_secret_key      = get_post_meta( $button_id, 'stripe_live_secret_key', true );
-	$stripe_live_publishable_key = get_post_meta( $button_id, 'stripe_live_publishable_key', true );
-	if ( $sandbox_enabled ) {
-		$secret_key      = $stripe_test_secret_key;
-		$publishable_key = $stripe_test_publishable_key; //Use sandbox API key
-	} else {
-		$secret_key      = $stripe_live_secret_key;
-		$publishable_key = $stripe_live_publishable_key; //Use live API key
+	$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, ! $sandbox_enabled );
+
+	//prefill member email
+	$prefill_member_email = $settings->get_value( 'stripe-prefill-member-email' );
+
+	if ( $prefill_member_email ) {
+		$auth         = SwpmAuth::get_instance();
+		$member_email = $auth->get( 'email' );
 	}
 
 	$plan_id = get_post_meta( $button_id, 'stripe_plan_id', true );
@@ -218,7 +217,7 @@ function swpm_render_stripe_subscription_button_sc_output( $button_code, $args )
 		}
 
 		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php';
-		$result = StripeUtilFunctions::get_stripe_plan_info( $secret_key, $plan_id );
+		$result = StripeUtilFunctions::get_stripe_plan_info( $api_keys['secret'], $plan_id );
 		if ( $result['success'] === false ) {
 			// some error occurred, let's display it and stop processing the shortcode further
 			return '<p class="swpm-red-box">Stripe error occurred: ' . $result['error_msg'] . '</p>';
@@ -272,9 +271,10 @@ function swpm_render_stripe_subscription_button_sc_output( $button_code, $args )
 	$output .= "<form action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
 	$output .= "<script src='https://checkout.stripe.com/checkout.js' class='stripe-button'
-        data-key='" . $publishable_key . "'
+        data-key='" . $api_keys['public'] . "'
         data-panel-label='Sign Me Up!'
-        data-name='{$item_name}'";
+		data-name='{$item_name}'";
+	$output .= isset( $member_email ) ? sprintf( 'data-email="%s"', $member_email ) : '';
 	$output .= "data-description='{$description}'";
 	$output .= "data-locale='auto'";
 	$output .= "data-label='{$button_text}'"; //Stripe doesn't currenty support button image for their standard checkout.

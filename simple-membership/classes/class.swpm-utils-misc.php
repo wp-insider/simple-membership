@@ -724,6 +724,43 @@ class SwpmMiscUtils {
 		}
 	}
 
+	public static function get_stripe_api_keys_from_payment_button( $button_id, $live = false ) {
+		$keys   = array(
+			'public' => '',
+			'secret' => '',
+		);
+		$button = get_post( $button_id );
+		if ( $button ) {
+			$opts            = get_option( 'swpm-settings' );
+			$use_global_keys = get_post_meta( $button_id, 'stripe_use_global_keys', true );
+
+			if ( $use_global_keys ) {
+				if ( $live ) {
+					$keys['public'] = isset( $opts['stripe-live-public-key'] ) ? $opts['stripe-live-public-key'] : '';
+					$keys['secret'] = isset( $opts['stripe-live-secret-key'] ) ? $opts['stripe-live-secret-key'] : '';
+				} else {
+					$keys['public'] = isset( $opts['stripe-test-public-key'] ) ? $opts['stripe-test-public-key'] : '';
+					$keys['secret'] = isset( $opts['stripe-test-secret-key'] ) ? $opts['stripe-test-secret-key'] : '';
+				}
+			} else {
+				if ( $live ) {
+					$stripe_live_secret_key      = get_post_meta( $button_id, 'stripe_live_secret_key', true );
+					$stripe_live_publishable_key = get_post_meta( $button_id, 'stripe_live_publishable_key', true );
+
+					$keys['public'] = $stripe_live_publishable_key;
+					$keys['secret'] = $stripe_live_secret_key;
+				} else {
+					$stripe_test_secret_key      = get_post_meta( $button_id, 'stripe_test_secret_key', true );
+					$stripe_test_publishable_key = get_post_meta( $button_id, 'stripe_test_publishable_key', true );
+
+					$keys['public'] = $stripe_test_publishable_key;
+					$keys['secret'] = $stripe_test_secret_key;
+				}
+			}
+		}
+		return $keys;
+	}
+
 	public static function mail( $email, $subject, $email_body, $headers ) {
 		$settings     = SwpmSettings::get_instance();
 		$html_enabled = $settings->get_value( 'email-enable-html' );
@@ -740,8 +777,8 @@ class SwpmMiscUtils {
 	public static function output_stripe_sca_frontend_scripts_once() {
 		$out = '';
 		if ( ! self::$stripe_sca_frontend_scripts_printed ) {
-			$out .= '<script src="https://js.stripe.com/v3/"></script>';
-			$out .= "<link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css' type='text/css' media='all' />";
+			$out                                      .= '<script src="https://js.stripe.com/v3/"></script>';
+			$out                                      .= "<link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css' type='text/css' media='all' />";
 			self::$stripe_sca_frontend_scripts_printed = true;
 		}
 		return $out;

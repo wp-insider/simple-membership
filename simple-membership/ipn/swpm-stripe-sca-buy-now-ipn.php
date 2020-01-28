@@ -46,20 +46,14 @@ class SwpmStripeSCABuyNowIpnHandler {
 		$settings        = SwpmSettings::get_instance();
 		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
-		if ( $sandbox_enabled ) {
-			SwpmLog::log_simple_debug( 'Sandbox payment mode is enabled. Using test API key details.', true );
-			$secret_key = get_post_meta( $button_id, 'stripe_test_secret_key', true );
-			// Use sandbox API key
-		} else {
-			$secret_key = get_post_meta( $button_id, 'stripe_live_secret_key', true );
-			// Use live API key
-		}
+		//API keys
+		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, ! $sandbox_enabled );
 
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
 
 		try {
-			\Stripe\Stripe::setApiKey( $secret_key );
+			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
 
 			$events = \Stripe\Event::all(
 				array(
@@ -277,17 +271,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
 		//API keys
-		$stripe_test_secret_key      = get_post_meta( $button_id, 'stripe_test_secret_key', true );
-		$stripe_test_publishable_key = get_post_meta( $button_id, 'stripe_test_publishable_key', true );
-		$stripe_live_secret_key      = get_post_meta( $button_id, 'stripe_live_secret_key', true );
-		$stripe_live_publishable_key = get_post_meta( $button_id, 'stripe_live_publishable_key', true );
-		if ( $sandbox_enabled ) {
-			$publishable_key = $stripe_test_publishable_key; //Use sandbox API key
-			$secret_key      = $stripe_test_secret_key;
-		} else {
-			$publishable_key = $stripe_live_publishable_key; //Use live API key
-			$secret_key      = $stripe_live_secret_key;
-		}
+		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, ! $sandbox_enabled );
 
 		//Billing address
 		$billing_address = isset( $args['billing_address'] ) ? '1' : '';
@@ -314,10 +298,18 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 		$current_url = ! empty( $current_url_posted ) ? $current_url_posted : SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
 
+		//prefill member email
+		$prefill_member_email = $settings->get_value( 'stripe-prefill-member-email' );
+
+		if ( $prefill_member_email ) {
+			$auth         = SwpmAuth::get_instance();
+			$member_email = $auth->get( 'email' );
+		}
+
 		SwpmMiscUtils::load_stripe_lib();
 
 		try {
-			\Stripe\Stripe::setApiKey( $secret_key );
+			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
 
 			if ( empty( $plan_id ) ) {
 				//this is one-off payment
@@ -359,6 +351,10 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 			if ( ! empty( $item_logo ) ) {
 				$opts['line_items'][0]['images'] = array( $item_logo );
+			}
+
+			if ( ! empty( $member_email ) ) {
+				$opts['customer_email'] = $member_email;
 			}
 
 			$session = \Stripe\Checkout\Session::create( $opts );

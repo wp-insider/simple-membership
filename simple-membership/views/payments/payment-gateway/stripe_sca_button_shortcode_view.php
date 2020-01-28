@@ -56,17 +56,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
 	//API keys
-	$stripe_test_secret_key      = get_post_meta( $button_id, 'stripe_test_secret_key', true );
-	$stripe_test_publishable_key = get_post_meta( $button_id, 'stripe_test_publishable_key', true );
-	$stripe_live_secret_key      = get_post_meta( $button_id, 'stripe_live_secret_key', true );
-	$stripe_live_publishable_key = get_post_meta( $button_id, 'stripe_live_publishable_key', true );
-	if ( $sandbox_enabled ) {
-		$publishable_key = $stripe_test_publishable_key; //Use sandbox API key
-		$secret_key      = $stripe_test_secret_key;
-	} else {
-		$publishable_key = $stripe_live_publishable_key; //Use live API key
-		$secret_key      = $stripe_live_secret_key;
-	}
+	$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, ! $sandbox_enabled );
 
 	$uniqid = md5( uniqid() );
 	$ref_id = 'swpm_' . $uniqid . '|' . $button_id;
@@ -85,7 +75,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	ob_start();
 	?>
 	<script>
-		var stripe = Stripe('<?php echo esc_js( $publishable_key ); ?>');
+		var stripe = Stripe('<?php echo esc_js( $api_keys['public'] ); ?>');
 		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
 			e.preventDefault();
 			var btn = jQuery(this).find('button').attr('disabled', true);
@@ -181,17 +171,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
 	//API keys
-	$stripe_test_secret_key      = get_post_meta( $button_id, 'stripe_test_secret_key', true );
-	$stripe_test_publishable_key = get_post_meta( $button_id, 'stripe_test_publishable_key', true );
-	$stripe_live_secret_key      = get_post_meta( $button_id, 'stripe_live_secret_key', true );
-	$stripe_live_publishable_key = get_post_meta( $button_id, 'stripe_live_publishable_key', true );
-	if ( $sandbox_enabled ) {
-		$publishable_key = $stripe_test_publishable_key; //Use sandbox API key
-		$secret_key      = $stripe_test_secret_key;
-	} else {
-		$publishable_key = $stripe_live_publishable_key; //Use live API key
-		$secret_key      = $stripe_live_secret_key;
-	}
+	$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, ! $sandbox_enabled );
 
 	//Billing address
 	$billing_address = isset( $args['billing_address'] ) ? '1' : '';
@@ -215,34 +195,6 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 
 	$plan_id = get_post_meta( $button_id, 'stripe_plan_id', true );
 
-	SwpmMiscUtils::load_stripe_lib();
-
-	try {
-		\Stripe\Stripe::setApiKey( $secret_key );
-
-		$opts = array(
-			'payment_method_types'       => array( 'card' ),
-			'client_reference_id'        => $ref_id,
-			'billing_address_collection' => $billing_address ? 'required' : 'auto',
-			'subscription_data'          => array(
-				'items' => array( array( 'plan' => $plan_id ) ),
-			),
-			'success_url'                => $notify_url,
-			'cancel_url'                 => $current_url,
-		);
-
-		$trial_period = get_post_meta( $button_id, 'stripe_trial_period', true );
-		$trial_period = absint( $trial_period );
-		if ( $trial_period ) {
-			$opts['subscription_data']['trial_period_days'] = $trial_period;
-		}
-
-		//      $session = \Stripe\Checkout\Session::create( $opts );
-	} catch ( Exception $e ) {
-		$err = $e->getMessage();
-		return '<p class="swpm-red-box">' . $err . '</p>';
-	}
-
 	/* === Stripe SCA Subscription Button Form === */
 	$output  = '';
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
@@ -252,7 +204,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	ob_start();
 	?>
 	<script>
-		var stripe = Stripe('<?php echo esc_js( $publishable_key ); ?>');
+		var stripe = Stripe('<?php echo esc_js( $api_keys['public'] ); ?>');
 		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
 			e.preventDefault();
 			var btn = jQuery(this).find('button').attr('disabled', true);

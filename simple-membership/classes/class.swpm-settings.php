@@ -243,16 +243,27 @@ class SwpmSettings {
 	private function tab_2() {
 		//Register settings sections and fileds for the payment settings tab.
 		register_setting( 'swpm-settings-tab-2', 'swpm-settings', array( $this, 'sanitize_tab_2' ) );
-		add_settings_section( 'stripe-api-keys', SwpmUtils::_( 'Stripe API Keys' ), null, 'simple_wp_membership_settings' );
+		add_settings_section( 'stripe-global-settings', SwpmUtils::_( 'Stripe Global Settings' ), null, 'simple_wp_membership_settings' );
+		add_settings_field(
+			'stripe-prefill-member-email',
+			SwpmUtils::_( 'Prefill Member Email' ),
+			array( $this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'stripe-global-settings',
+			array(
+				'item'    => 'stripe-prefill-member-email',
+				'message' => SwpmUtils::_( 'Prefills logged in member email on Stripe Checkout form when possible' ),
+			)
+		);
 		add_settings_field(
 			'stripe-test-public-key',
 			SwpmUtils::_( 'Test Publishable Key' ),
 			array( $this, 'textfield_callback' ),
 			'simple_wp_membership_settings',
-			'stripe-api-keys',
+			'stripe-global-settings',
 			array(
 				'item'    => 'stripe-test-public-key',
-				'message' => 'Stripe API Test public key',
+				'message' => SwpmUtils::_( 'Stripe API Test publishable key' ),
 			)
 		);
 		add_settings_field(
@@ -260,10 +271,10 @@ class SwpmSettings {
 			SwpmUtils::_( 'Test Secret Key' ),
 			array( $this, 'textfield_callback' ),
 			'simple_wp_membership_settings',
-			'stripe-api-keys',
+			'stripe-global-settings',
 			array(
 				'item'    => 'stripe-test-secret-key',
-				'message' => 'Stripe API Test secret key',
+				'message' => SwpmUtils::_( 'Stripe API Test secret key' ),
 			)
 		);
 		add_settings_field(
@@ -271,10 +282,10 @@ class SwpmSettings {
 			SwpmUtils::_( 'Live Publishable Key' ),
 			array( $this, 'textfield_callback' ),
 			'simple_wp_membership_settings',
-			'stripe-api-keys',
+			'stripe-global-settings',
 			array(
 				'item'    => 'stripe-live-public-key',
-				'message' => 'Stripe API Live public key',
+				'message' => SwpmUtils::_( 'Stripe API Live publishable key' ),
 			)
 		);
 		add_settings_field(
@@ -282,10 +293,10 @@ class SwpmSettings {
 			SwpmUtils::_( 'Live Secret Key' ),
 			array( $this, 'textfield_callback' ),
 			'simple_wp_membership_settings',
-			'stripe-api-keys',
+			'stripe-global-settings',
 			array(
 				'item'    => 'stripe-live-secret-key',
-				'message' => 'Stripe API Live secret key',
+				'message' => SwpmUtils::_( 'Stripe API Live secret key' ),
 			)
 		);
 	}
@@ -834,7 +845,7 @@ class SwpmSettings {
 		$options  = $args['options'];
 		$default  = $args['default'];
 		$msg      = isset( $args['message'] ) ? $args['message'] : '';
-		$selected = esc_attr( $this->get_value( $item ), $default );
+		$selected = esc_attr( $this->get_value( $item, $default ) );
 		echo "<select name='swpm-settings[" . $item . "]' >";
 		foreach ( $options as $key => $value ) {
 			$is_selected = ( $key == $selected ) ? 'selected="selected"' : '';
@@ -871,9 +882,9 @@ class SwpmSettings {
 	public function textfield_callback( $args ) {
 		$item = $args['item'];
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
-		$text = esc_attr( $this->get_value( $item ) );
-		echo "<input type='text' name='swpm-settings[" . $item . "]'  size='50' value='" . $text . "' />";
-		echo '<br/><i>' . $msg . '</i>';
+		$text = $this->get_value( $item );
+		echo sprintf( '<input type="text" name="swpm-settings[%s]" size="50" value="%s" />', esc_attr( $item ), esc_attr( $text ) );
+		echo sprintf( '<p class="description">%s</p>', $msg );
 	}
 
 	public function textfield_long_callback( $args ) {
@@ -909,7 +920,7 @@ class SwpmSettings {
 		remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
 		echo "<p class=\"description\">{$msg}</p>";
 	}
-  
+
 	public function swpm_documentation_callback() {
 		?>
 		<div class="swpm-orange-box">
@@ -1058,6 +1069,9 @@ class SwpmSettings {
 		$output['stripe-test-secret-key'] = sanitize_text_field( $input['stripe-test-secret-key'] );
 		$output['stripe-live-public-key'] = sanitize_text_field( $input['stripe-live-public-key'] );
 		$output['stripe-live-secret-key'] = sanitize_text_field( $input['stripe-live-secret-key'] );
+
+		$output['stripe-prefill-member-email'] = isset( $input['stripe-prefill-member-email'] ) ? esc_attr( $input['stripe-prefill-member-email'] ) : 0;
+
 		return $output;
 	}
 
@@ -1065,8 +1079,8 @@ class SwpmSettings {
 		if ( empty( $this->settings ) ) {
 			$this->settings = (array) get_option( 'swpm-settings' );
 		}
-		$output                                    = $this->settings;
-		$output['reg-complete-mail-subject']       = sanitize_text_field( $input['reg-complete-mail-subject'] );
+		$output                              = $this->settings;
+		$output['reg-complete-mail-subject'] = sanitize_text_field( $input['reg-complete-mail-subject'] );
 
 		$output['reg-complete-mail-body']          = $input['reg-complete-mail-body'];
 		$output['reg-complete-mail-subject-admin'] = sanitize_text_field( $input['reg-complete-mail-subject-admin'] );
@@ -1085,10 +1099,10 @@ class SwpmSettings {
 		$output['email-activation-mail-subject'] = sanitize_text_field( $input['email-activation-mail-subject'] );
 		$output['email-activation-mail-body']    = $input['email-activation-mail-body'];
 
-		$output['reg-prompt-complete-mail-subject']          = sanitize_text_field( $input['reg-prompt-complete-mail-subject'] );
-		$output['reg-prompt-complete-mail-body']             = $input['reg-prompt-complete-mail-body'];
-		$output['email-from']                                = trim( $input['email-from'] );
-		$output['email-enable-html']                         = isset( $input['email-enable-html'] ) ? esc_attr( $input['email-enable-html'] ) : '';
+		$output['reg-prompt-complete-mail-subject'] = sanitize_text_field( $input['reg-prompt-complete-mail-subject'] );
+		$output['reg-prompt-complete-mail-body']    = $input['reg-prompt-complete-mail-body'];
+		$output['email-from']                       = trim( $input['email-from'] );
+		$output['email-enable-html']                = isset( $input['email-enable-html'] ) ? esc_attr( $input['email-enable-html'] ) : '';
 
 		$output['enable-admin-notification-after-reg']       = isset( $input['enable-admin-notification-after-reg'] ) ? esc_attr( $input['enable-admin-notification-after-reg'] ) : '';
 		$output['admin-notification-email']                  = sanitize_text_field( $input['admin-notification-email'] );

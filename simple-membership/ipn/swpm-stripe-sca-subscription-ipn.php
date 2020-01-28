@@ -41,20 +41,14 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		$settings        = SwpmSettings::get_instance();
 		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
-		if ( $sandbox_enabled ) {
-			SwpmLog::log_simple_debug( 'Sandbox payment mode is enabled. Using test API key details.', true );
-			$secret_key = get_post_meta( $button_id, 'stripe_test_secret_key', true );
-			// Use sandbox API key
-		} else {
-			$secret_key = get_post_meta( $button_id, 'stripe_live_secret_key', true );
-			// Use live API key
-		}
+		//API keys
+		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, ! $sandbox_enabled );
 
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
 
 		try {
-			\Stripe\Stripe::setApiKey( $secret_key );
+			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
 
 			$events = \Stripe\Event::all(
 				array(

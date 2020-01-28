@@ -19,7 +19,7 @@ class SwpmStripeSubscriptionIpnHandler {
 
 		if ( isset( $_GET['hook'] ) ) {
 			// This is Webhook notification from Stripe.
-                        // This webhook is used for all recurring payment notification (Legacy and SCA ones).
+						// This webhook is used for all recurring payment notification (Legacy and SCA ones).
 
 			// TODO: add Webhook Signing Secret verification
 			// To do this, we need to get customer ID, retreive its details from Stripe, get button_id from metadata
@@ -65,83 +65,83 @@ class SwpmStripeSubscriptionIpnHandler {
 				swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
 			}
 
-                        if ( $type === 'invoice.payment_succeeded' ) {
+			if ( $type === 'invoice.payment_succeeded' ) {
 
-                            $billing_reason = isset($event_json->data->object->billing_reason)? $event_json->data->object->billing_reason : '';
-                            if ( $billing_reason == 'subscription_cycle') {
-                                //This is recurring/subscription payment invoice
-                                SwpmLog::log_simple_debug( sprintf( 'Stripe invoice.payment_succeeded webhook for subscription_cycle. This is a successful subscription charge. Capturing payment data.'), true );
+				$billing_reason = isset( $event_json->data->object->billing_reason ) ? $event_json->data->object->billing_reason : '';
+				if ( $billing_reason == 'subscription_cycle' ) {
+					//This is recurring/subscription payment invoice
+					SwpmLog::log_simple_debug( sprintf( 'Stripe invoice.payment_succeeded webhook for subscription_cycle. This is a successful subscription charge. Capturing payment data.' ), true );
 
-                                $sub_id = $event_json->data->object->subscription;
-                                //$cust_id = $event_json->data->object->billing_reason;
-                                //$date = $event_json->data->object->date;
-                                $price_in_cents = $event_json->data->object->amount_paid; //amount in cents
-                                $currency_code = $event_json->data->object->currency;
+					$sub_id = $event_json->data->object->subscription;
+					//$cust_id = $event_json->data->object->billing_reason;
+					//$date = $event_json->data->object->date;
+					$price_in_cents = $event_json->data->object->amount_paid; //amount in cents
+					$currency_code  = $event_json->data->object->currency;
 
-                                $zero_cents = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
-                                if ( in_array( $currency_code, $zero_cents, true ) ) {
-                                        $payment_amount = $price_in_cents;
-                                } else {
-                                        $payment_amount = $price_in_cents / 100;// The amount (in cents). This value is used in Stripe API.
-                                }
-                                $payment_amount = floatval( $payment_amount );
+					$zero_cents = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
+					if ( in_array( $currency_code, $zero_cents, true ) ) {
+							$payment_amount = $price_in_cents;
+					} else {
+							$payment_amount = $price_in_cents / 100;// The amount (in cents). This value is used in Stripe API.
+					}
+					$payment_amount = floatval( $payment_amount );
 
-                                // Let's try to get first_name and last_name from full name
-                                $full_name = $event_json->data->object->customer_name;
-                                $name_pieces = explode(' ', $full_name, 2);
-                                $first_name = $name_pieces[0];
-                                if (!empty($name_pieces[1])) {
-                                    $last_name = $name_pieces[1];
-                                }
+					// Let's try to get first_name and last_name from full name
+					$full_name   = $event_json->data->object->customer_name;
+					$name_pieces = explode( ' ', $full_name, 2 );
+					$first_name  = $name_pieces[0];
+					if ( ! empty( $name_pieces[1] ) ) {
+						$last_name = $name_pieces[1];
+					}
 
-                                //Retrieve the member record for this subscription
-                                $member_record = SwpmMemberUtils::get_user_by_subsriber_id($sub_id);
-				if ( $member_record ) {
-                                    // Found a member record
-                                    $member_id = $member_record->member_id;
-                                    $membership_level_id = $member_record->membership_level;
-                                    if(empty($first_name)){
-                                        $first_name = $member_record->first_name;
-                                    }
-                                    if(empty($last_name)){
-                                        $last_name = $member_record->last_name;
-                                    }
-				} else {
-                                    SwpmLog::log_simple_debug( 'Could not find an existing member record for the given subscriber ID: ' . $sub_id . '. This user profile may have been deleted.', false );
-                                    $member_id = '';
-                                    $membership_level_id = '';
-                                }
+					//Retrieve the member record for this subscription
+					$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $sub_id );
+					if ( $member_record ) {
+									// Found a member record
+									$member_id           = $member_record->member_id;
+									$membership_level_id = $member_record->membership_level;
+						if ( empty( $first_name ) ) {
+							$first_name = $member_record->first_name;
+						}
+						if ( empty( $last_name ) ) {
+							$last_name = $member_record->last_name;
+						}
+					} else {
+									SwpmLog::log_simple_debug( 'Could not find an existing member record for the given subscriber ID: ' . $sub_id . '. This user profile may have been deleted.', false );
+									$member_id           = '';
+									$membership_level_id = '';
+					}
 
-                                //Create the custom field
-                                $custom_field_value  = 'subsc_ref=' . $membership_level_id;
-                                $custom_field_value .= '&swpm_id=' . $member_id;
+					//Create the custom field
+					$custom_field_value  = 'subsc_ref=' . $membership_level_id;
+					$custom_field_value .= '&swpm_id=' . $member_id;
 
-                                // Create the $ipn_data array.
-                                $ipn_data                     = array();
-                                $ipn_data['mc_gross']         = $payment_amount;
-                                $ipn_data['first_name']       = $first_name;
-                                $ipn_data['last_name']        = $last_name;
-                                $ipn_data['payer_email']      = $event_json->data->object->customer_email;
-                                $ipn_data['membership_level'] = $membership_level_id;
-                                $ipn_data['txn_id']           = $event_json->data->object->charge;
-                                $ipn_data['subscr_id']        = $sub_id;
-                                $ipn_data['swpm_id']          = $member_id;
-                                $ipn_data['ip']               = '';
-                                $ipn_data['custom']           = $custom_field_value;
-                                $ipn_data['gateway']          = 'stripe-sca-subs';
-                                $ipn_data['status']           = 'subscription';
+					// Create the $ipn_data array.
+					$ipn_data                     = array();
+					$ipn_data['mc_gross']         = $payment_amount;
+					$ipn_data['first_name']       = $first_name;
+					$ipn_data['last_name']        = $last_name;
+					$ipn_data['payer_email']      = $event_json->data->object->customer_email;
+					$ipn_data['membership_level'] = $membership_level_id;
+					$ipn_data['txn_id']           = $event_json->data->object->charge;
+					$ipn_data['subscr_id']        = $sub_id;
+					$ipn_data['swpm_id']          = $member_id;
+					$ipn_data['ip']               = '';
+					$ipn_data['custom']           = $custom_field_value;
+					$ipn_data['gateway']          = 'stripe-sca-subs';
+					$ipn_data['status']           = 'subscription';
 
-                                //TODO - Maybe handle the user access start date updating here (instead of "customer.subscription.updated" hook).
-                                //swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
+					//TODO - Maybe handle the user access start date updating here (instead of "customer.subscription.updated" hook).
+					//swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
 
-                                // Save the transaction record
-                                SwpmTransactions::save_txn_record( $ipn_data );
-                                SwpmLog::log_simple_debug( 'Transaction data saved for Stripe subscription notification.', true );
-                            }
-                        }
+					// Save the transaction record
+					SwpmTransactions::save_txn_record( $ipn_data );
+					SwpmLog::log_simple_debug( 'Transaction data saved for Stripe subscription notification.', true );
+				}
+			}
 
 			//End of the webhook notification execution.
-                        //Give 200 status then exit out.
+						//Give 200 status then exit out.
 			http_response_code( 200 ); // Tells Stripe we received this notification
 			return;
 		}
@@ -179,15 +179,12 @@ class SwpmStripeSubscriptionIpnHandler {
 		// Sandbox and other settings
 		$settings        = SwpmSettings::get_instance();
 		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
-		if ( $sandbox_enabled ) {
-			SwpmLog::log_simple_debug( 'Sandbox payment mode is enabled. Using test API key details.', true );
-			$secret_key = get_post_meta( $button_id, 'stripe_test_secret_key', true ); // Use sandbox API key
-		} else {
-			$secret_key = get_post_meta( $button_id, 'stripe_live_secret_key', true ); // Use live API key
-		}
+
+		//API keys
+		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, ! $sandbox_enabled );
 
 		// Set secret API key in the Stripe library
-		\Stripe\Stripe::setApiKey( $secret_key );
+		\Stripe\Stripe::setApiKey( $api_keys['secret'] );
 
 		// Get the credit card details submitted by the form
 		$token = $stripe_token;

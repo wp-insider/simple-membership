@@ -24,6 +24,12 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 		$use_global_keys = $edit ? false : true;
 	}
 
+	$stripe_test_publishable_key = isset( $opts['stripe_test_publishable_key'][0] ) ? $opts['stripe_test_publishable_key'][0] : '';
+	$stripe_test_secret_key      = isset( $opts['stripe_test_secret_key'][0] ) ? $opts['stripe_test_secret_key'][0] : '';
+
+	$stripe_live_publishable_key = isset( $opts['stripe_live_publishable_key'][0] ) ? $opts['stripe_live_publishable_key'][0] : '';
+	$stripe_live_secret_key      = isset( $opts['stripe_live_secret_key'][0] ) ? $opts['stripe_live_secret_key'][0] : '';
+
 	function swpm_stripe_subscr_gen_curr_opts( $selected = false ) {
 		$curr_arr = array(
 			'USD' => 'US Dollars ($)',
@@ -144,7 +150,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Test Publishable Key' ); ?></th>
 					<td>
-						<input type="text" size="100" name="stripe_test_publishable_key" value="<?php echo ( $edit ? $opts['stripe_test_publishable_key'][0] : '' ); ?>" />
+						<input type="text" size="100" name="stripe_test_publishable_key" value="<?php echo esc_attr( $edit ? $stripe_test_publishable_key : '' ); ?>" />
 						<p class="description">Enter your Stripe test publishable key.</p>
 					</td>
 				</tr>
@@ -152,7 +158,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Test Secret Key' ); ?></th>
 					<td>
-						<input type="text" size="100" name="stripe_test_secret_key" value="<?php echo ( $edit ? $opts['stripe_test_secret_key'][0] : '' ); ?>" />
+						<input type="text" size="100" name="stripe_test_secret_key" value="<?php echo esc_attr( $edit ? $stripe_test_secret_key : '' ); ?>" />
 						<p class="description">Enter your Stripe test secret key.</p>
 					</td>
 				</tr>
@@ -160,7 +166,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Live Publishable Key' ); ?></th>
 					<td>
-						<input type="text" size="100" name="stripe_live_publishable_key" value="<?php echo ( $edit ? $opts['stripe_live_publishable_key'][0] : '' ); ?>" />
+						<input type="text" size="100" name="stripe_live_publishable_key" value="<?php echo esc_attr( $edit ? $stripe_live_publishable_key : '' ); ?>" />
 						<p class="description">Enter your Stripe live publishable key.</p>
 					</td>
 				</tr>
@@ -168,7 +174,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Live Secret Key' ); ?></th>
 					<td>
-						<input type="text" size="100" name="stripe_live_secret_key" value="<?php echo ( $edit ? $opts['stripe_live_secret_key'][0] : '' ); ?>" />
+						<input type="text" size="100" name="stripe_live_secret_key" value="<?php echo esc_attr( $edit ? $stripe_live_secret_key : '' ); ?>" />
 						<p class="description">Enter your Stripe live secret key.</p>
 					</td>
 				</tr>

@@ -450,17 +450,14 @@ class SwpmMembers extends WP_List_Table {
 			SwpmLog::log_simple_debug( 'Attempting to cancel Stripe Subscription ' . $sub['subscr_id'], true );
 
 			$is_live = get_post_meta( $button_id, 'is_live', true );
-			if ( $is_live ) {
-				SwpmLog::log_simple_debug( 'Payment was made in live mode. Using test API key details.', true );
-				$secret_key = get_post_meta( $button_id, 'stripe_live_secret_key', true ); //Use live API key
-			} else {
-				SwpmLog::log_simple_debug( 'Payment was made in sandbox mode. Using test API key details.', true );
-				$secret_key = get_post_meta( $button_id, 'stripe_test_secret_key', true ); //Use sandbox API key
-			}
+
+			//API Keys
+			$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, $is_live );
+
 			//Include the Stripe library.
 			SwpmMiscUtils::load_stripe_lib();
 
-			\Stripe\Stripe::setApiKey( $secret_key );
+			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
 
 			$error = null;
 			// Let's try to cancel subscription

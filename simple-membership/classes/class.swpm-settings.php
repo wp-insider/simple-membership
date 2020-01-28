@@ -882,9 +882,9 @@ class SwpmSettings {
 	public function textfield_callback( $args ) {
 		$item = $args['item'];
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
-		$text = esc_attr( $this->get_value( $item ) );
-		echo "<input type='text' name='swpm-settings[" . $item . "]'  size='50' value='" . $text . "' />";
-		echo '<br/><i>' . $msg . '</i>';
+		$text = $this->get_value( $item );
+		echo sprintf( '<input type="text" name="swpm-settings[%s]" size="50" value="%s" />', esc_attr( $item ), esc_attr( $text ) );
+		echo sprintf( '<p class="description">%s</p>', $msg );
 	}
 
 	public function textfield_long_callback( $args ) {

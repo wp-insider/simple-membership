@@ -24,6 +24,12 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 		$use_global_keys = $edit ? false : true;
 	}
 
+	$stripe_test_publishable_key = isset( $opts['stripe_test_publishable_key'][0] ) ? $opts['stripe_test_publishable_key'][0] : '';
+	$stripe_test_secret_key      = isset( $opts['stripe_test_secret_key'][0] ) ? $opts['stripe_test_secret_key'][0] : '';
+
+	$stripe_live_publishable_key = isset( $opts['stripe_live_publishable_key'][0] ) ? $opts['stripe_live_publishable_key'][0] : '';
+	$stripe_live_secret_key      = isset( $opts['stripe_live_secret_key'][0] ) ? $opts['stripe_live_secret_key'][0] : '';
+
 	function swpm_stripe_sca_subscr_gen_curr_opts( $selected = false ) {
 		$curr_arr = array(
 			'USD' => 'US Dollars ($)',
@@ -144,7 +150,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Use Global API Keys Settings' ); ?></th>
 					<td>
-						<input type="checkbox" name="stripe_use_global_keys" value="1" <?php echo $use_global_keys ? ' checked' : ''; ?> />
+						<input type="checkbox" name="stripe_use_global_keys" value="1" <?php echo $edit ? ( $use_global_keys ? ' checked' : '' ) : ' checked'; ?> />
 						<p class="description"><?php echo SwpmUtils::_( 'Use keys from <a href="admin.php?page=simple_wp_membership_settings&tab=2" target="_blank">Payment Settings</a> tab.' ); ?></p>
 					</td>
 				</tr>
@@ -152,7 +158,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Test Publishable Key' ); ?></th>
 					<td>
-						<input type="text" size="100" name="stripe_test_publishable_key" value="<?php echo ( $edit ? $opts['stripe_test_publishable_key'][0] : '' ); ?>" />
+						<input type="text" size="100" name="stripe_test_publishable_key" value="<?php echo esc_attr( $edit ? $stripe_test_publishable_key : '' ); ?>" />
 						<p class="description">Enter your Stripe test publishable key.</p>
 					</td>
 				</tr>
@@ -160,7 +166,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Test Secret Key' ); ?></th>
 					<td>
-						<input type="text" size="100" name="stripe_test_secret_key" value="<?php echo ( $edit ? $opts['stripe_test_secret_key'][0] : '' ); ?>" />
+						<input type="text" size="100" name="stripe_test_secret_key" value="<?php echo esc_attr( $edit ? $stripe_test_secret_key : '' ); ?>" />
 						<p class="description">Enter your Stripe test secret key.</p>
 					</td>
 				</tr>
@@ -168,7 +174,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Live Publishable Key' ); ?></th>
 					<td>
-						<input type="text" size="100" name="stripe_live_publishable_key" value="<?php echo ( $edit ? $opts['stripe_live_publishable_key'][0] : '' ); ?>" />
+						<input type="text" size="100" name="stripe_live_publishable_key" value="<?php echo esc_attr( $edit ? $stripe_live_publishable_key : '' ); ?>" />
 						<p class="description">Enter your Stripe live publishable key.</p>
 					</td>
 				</tr>
@@ -176,13 +182,13 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Live Secret Key' ); ?></th>
 					<td>
-						<input type="text" size="100" name="stripe_live_secret_key" value="<?php echo ( $edit ? $opts['stripe_live_secret_key'][0] : '' ); ?>" />
+						<input type="text" size="100" name="stripe_live_secret_key" value="<?php echo esc_attr( $edit ? $stripe_live_secret_key : '' ); ?>" />
 						<p class="description">Enter your Stripe live secret key.</p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Webook Endpoint URL' ); ?></th>
+					<th scope="row"><?php echo SwpmUtils::_( 'Webhook Endpoint URL' ); ?></th>
 					<td>
 						<kbd><?php echo SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1&hook=1'; ?></kbd>
 						<p class="description">You should create a new Webhook in your Stripe account and put this URL there if you want the plugin to handle subscription expiration automatically.<br />
@@ -247,7 +253,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 
 </form>
 
-<?php
+	<?php
 }
 
 add_action( 'swpm_create_new_button_for_stripe_sca_subscription', 'swpm_create_new_stripe_sca_subscription_button' );

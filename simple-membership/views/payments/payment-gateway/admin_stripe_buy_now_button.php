@@ -107,6 +107,14 @@ function swpm_create_new_stripe_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
+					<th scope="row"><?php echo SwpmUtils::_( 'Use Global API Keys Settings' ); ?></th>
+					<td>
+						<input type="checkbox" name="stripe_use_global_keys" value="1" checked />
+						<p class="description"><?php echo SwpmUtils::_( 'Use keys from <a href="admin.php?page=simple_wp_membership_settings&tab=2" target="_blank">Payment Settings</a> tab.' ); ?></p>
+					</td>
+				</tr>
+
+				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Test Publishable Key' ); ?></th>
 					<td>
 						<input type="text" size="50" name="stripe_test_publishable_key" value="" required />
@@ -159,6 +167,17 @@ function swpm_create_new_stripe_buy_now_button() {
 
 			</table>
 
+			<script>
+			var swpmInputsArr = ['stripe_test_publishable_key', 'stripe_test_secret_key', 'stripe_live_publishable_key', 'stripe_live_secret_key'];
+			jQuery('input[name="stripe_use_global_keys"').change(function() {
+				var checked = jQuery(this).prop('checked');
+				jQuery.each(swpmInputsArr, function(index, el) {
+					jQuery('input[name="' + el + '"]').prop('disabled', checked);
+				});
+			});
+			jQuery('input[name="stripe_use_global_keys"').trigger('change');
+			</script>
+
 			<p class="submit">
 				<?php wp_nonce_field( 'swpm_admin_add_edit_stripe_buy_now_btn', 'swpm_admin_create_stripe_buy_now_btn' ); ?>
 				<input type="submit" name="swpm_stripe_buy_now_save_submit" class="button-primary" value="<?php echo SwpmUtils::_( 'Save Payment Data' ); ?>">
@@ -197,10 +216,32 @@ function swpm_save_new_stripe_buy_now_button_data() {
 		add_post_meta( $button_id, 'payment_amount', trim( sanitize_text_field( $_REQUEST['payment_amount'] ) ) );
 		add_post_meta( $button_id, 'payment_currency', sanitize_text_field( $_REQUEST['payment_currency'] ) );
 
-		add_post_meta( $button_id, 'stripe_test_secret_key', trim( sanitize_text_field( $_REQUEST['stripe_test_secret_key'] ) ) );
-		add_post_meta( $button_id, 'stripe_test_publishable_key', trim( sanitize_text_field( $_REQUEST['stripe_test_publishable_key'] ) ) );
-		add_post_meta( $button_id, 'stripe_live_secret_key', trim( sanitize_text_field( $_REQUEST['stripe_live_secret_key'] ) ) );
-		add_post_meta( $button_id, 'stripe_live_publishable_key', trim( sanitize_text_field( $_REQUEST['stripe_live_publishable_key'] ) ) );
+		$stripe_test_secret_key      = filter_input( INPUT_POST, 'stripe_test_secret_key', FILTER_SANITIZE_STRING );
+		$stripe_test_publishable_key = filter_input( INPUT_POST, 'stripe_test_publishable_key', FILTER_SANITIZE_STRING );
+
+		if ( ! is_null( $stripe_test_secret_key ) ) {
+			update_post_meta( $button_id, 'stripe_test_secret_key', trim( $stripe_test_secret_key ) );
+		}
+
+		if ( ! is_null( $stripe_test_publishable_key ) ) {
+			update_post_meta( $button_id, 'stripe_test_publishable_key', trim( $stripe_test_publishable_key ) );
+		}
+
+		$stripe_live_secret_key      = filter_input( INPUT_POST, 'stripe_live_secret_key', FILTER_SANITIZE_STRING );
+		$stripe_live_publishable_key = filter_input( INPUT_POST, 'stripe_live_publishable_key', FILTER_SANITIZE_STRING );
+
+		if ( ! is_null( $stripe_live_secret_key ) ) {
+			update_post_meta( $button_id, 'stripe_live_secret_key', trim( $stripe_live_secret_key ) );
+		}
+
+		if ( ! is_null( $stripe_live_publishable_key ) ) {
+			update_post_meta( $button_id, 'stripe_live_publishable_key', trim( $stripe_live_publishable_key ) );
+		}
+
+		$stripe_use_global_keys = filter_input( INPUT_POST, 'stripe_use_global_keys', FILTER_SANITIZE_NUMBER_INT );
+		$stripe_use_global_keys = $stripe_use_global_keys ? true : false;
+
+		update_post_meta( $button_id, 'stripe_use_global_keys', $stripe_use_global_keys );
 
 		add_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
 
@@ -249,6 +290,10 @@ function swpm_edit_stripe_buy_now_button() {
 	} else {
 		$collect_address = '';
 	}
+
+	$use_global_keys = get_post_meta( $button_id, 'stripe_use_global_keys', true );
+
+	$use_global_keys = empty( $use_global_keys ) ? false : true;
 
 	$return_url = get_post_meta( $button_id, 'return_url', true );
 	//$button_image_url = get_post_meta($button_id, 'button_image_url', true);
@@ -338,6 +383,14 @@ function swpm_edit_stripe_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
+					<th scope="row"><?php echo SwpmUtils::_( 'Use Global API Keys Settings' ); ?></th>
+					<td>
+						<input type="checkbox" name="stripe_use_global_keys" value="1" <?php echo $use_global_keys ? ' checked' : ''; ?> />
+						<p class="description"><?php echo SwpmUtils::_( 'Use keys from <a href="admin.php?page=simple_wp_membership_settings&tab=2" target="_blank">Payment Settings</a> tab.' ); ?></p>
+					</td>
+				</tr>
+
+				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Test Publishable Key' ); ?></th>
 					<td>
 						<input type="text" size="50" name="stripe_test_publishable_key" value="<?php echo $stripe_test_publishable_key; ?>" required />
@@ -390,6 +443,17 @@ function swpm_edit_stripe_buy_now_button() {
 
 			</table>
 
+			<script>
+			var swpmInputsArr = ['stripe_test_publishable_key', 'stripe_test_secret_key', 'stripe_live_publishable_key', 'stripe_live_secret_key'];
+			jQuery('input[name="stripe_use_global_keys"').change(function() {
+				var checked = jQuery(this).prop('checked');
+				jQuery.each(swpmInputsArr, function(index, el) {
+					jQuery('input[name="' + el + '"]').prop('disabled', checked);
+				});
+			});
+			jQuery('input[name="stripe_use_global_keys"').trigger('change');
+			</script>
+
 			<p class="submit">
 				<?php wp_nonce_field( 'swpm_admin_add_edit_stripe_buy_now_btn', 'swpm_admin_edit_stripe_buy_now_btn' ); ?>
 				<input type="submit" name="swpm_stripe_buy_now_edit_submit" class="button-primary" value="<?php echo SwpmUtils::_( 'Save Payment Data' ); ?>">
@@ -429,10 +493,34 @@ function swpm_edit_stripe_buy_now_button_data() {
 		update_post_meta( $button_id, 'payment_amount', trim( sanitize_text_field( $_REQUEST['payment_amount'] ) ) );
 		update_post_meta( $button_id, 'payment_currency', sanitize_text_field( $_REQUEST['payment_currency'] ) );
 
-		update_post_meta( $button_id, 'stripe_test_secret_key', trim( sanitize_text_field( $_REQUEST['stripe_test_secret_key'] ) ) );
-		update_post_meta( $button_id, 'stripe_test_publishable_key', trim( sanitize_text_field( $_REQUEST['stripe_test_publishable_key'] ) ) );
-		update_post_meta( $button_id, 'stripe_live_secret_key', trim( sanitize_text_field( $_REQUEST['stripe_live_secret_key'] ) ) );
-		update_post_meta( $button_id, 'stripe_live_publishable_key', trim( sanitize_text_field( $_REQUEST['stripe_live_publishable_key'] ) ) );
+		$stripe_test_secret_key      = filter_input( INPUT_POST, 'stripe_test_secret_key', FILTER_SANITIZE_STRING );
+		$stripe_test_publishable_key = filter_input( INPUT_POST, 'stripe_test_publishable_key', FILTER_SANITIZE_STRING );
+
+		if ( ! is_null( $stripe_test_secret_key ) ) {
+			update_post_meta( $button_id, 'stripe_test_secret_key', trim( $stripe_test_secret_key ) );
+		}
+
+		if ( ! is_null( $stripe_test_publishable_key ) ) {
+			update_post_meta( $button_id, 'stripe_test_publishable_key', trim( $stripe_test_publishable_key ) );
+		}
+
+		$stripe_live_secret_key      = filter_input( INPUT_POST, 'stripe_live_secret_key', FILTER_SANITIZE_STRING );
+		$stripe_live_publishable_key = filter_input( INPUT_POST, 'stripe_live_publishable_key', FILTER_SANITIZE_STRING );
+
+		if ( ! is_null( $stripe_live_secret_key ) ) {
+			update_post_meta( $button_id, 'stripe_live_secret_key', trim( $stripe_live_secret_key ) );
+		}
+
+		if ( ! is_null( $stripe_live_publishable_key ) ) {
+			update_post_meta( $button_id, 'stripe_live_publishable_key', trim( $stripe_live_publishable_key ) );
+		}
+
+		update_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
+
+		$stripe_use_global_keys = filter_input( INPUT_POST, 'stripe_use_global_keys', FILTER_SANITIZE_NUMBER_INT );
+		$stripe_use_global_keys = $stripe_use_global_keys ? true : false;
+
+		update_post_meta( $button_id, 'stripe_use_global_keys', $stripe_use_global_keys );
 
 		update_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
 

@@ -17,8 +17,8 @@ class SwpmTransactions {
 		$txn_data['first_name']       = $ipn_data['first_name'];
 		$txn_data['last_name']        = $ipn_data['last_name'];
 		$txn_data['ip_address']       = $ipn_data['ip'];
-		$txn_data['member_id']        = $custom_var['swpm_id'];
-		$txn_data['membership_level'] = $custom_var['subsc_ref'];
+		$txn_data['member_id']        = isset ( $custom_var['swpm_id'] ) ? $custom_var['swpm_id'] : '';
+		$txn_data['membership_level'] = isset ( $custom_var['subsc_ref'] ) ? $custom_var['subsc_ref'] : '';
 
 		$txn_data['txn_date']       = $current_date;
 		$txn_data['txn_id']         = $ipn_data['txn_id'];

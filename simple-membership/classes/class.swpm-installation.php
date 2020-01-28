@@ -164,7 +164,7 @@ class SwpmInstallation {
                     reference varchar(255) NOT NULL default '',
                     payment_amount varchar(32) NOT NULL default '',
                     gateway varchar(32) DEFAULT '',
-                    status varchar(16) DEFAULT '',
+                    status varchar(255) DEFAULT '',
                     ip_address varchar(128) default ''
                     )" . $charset_collate . ";";
         dbDelta($sql);

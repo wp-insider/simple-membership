@@ -310,6 +310,18 @@ class SwpmSettings {
 			)
 		);
 
+		add_settings_field(
+			'email-enable-html',
+			SwpmUtils::_( 'Allow HTML in Emails' ),
+			array( $this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'email-misc-settings',
+			array(
+				'item'    => 'email-enable-html',
+				'message' => 'Enables HTML support in emails. We recommend using plain text (non HTML) email as it has better email delivery rate.',
+			)
+		);
+
 		//Prompt to complete registration email settings
 		add_settings_section( 'reg-prompt-email-settings', SwpmUtils::_( 'Email Settings (Prompt to Complete Registration )' ), array( &$this, 'reg_prompt_email_settings_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
@@ -326,7 +338,7 @@ class SwpmSettings {
 		add_settings_field(
 			'reg-prompt-complete-mail-body',
 			SwpmUtils::_( 'Email Body' ),
-			array( &$this, 'textarea_callback' ),
+			array( &$this, 'wp_editor_callback' ),
 			'simple_wp_membership_settings',
 			'reg-prompt-email-settings',
 			array(
@@ -357,7 +369,7 @@ class SwpmSettings {
 		add_settings_field(
 			'reg-complete-mail-body',
 			SwpmUtils::_( 'Email Body' ),
-			array( &$this, 'textarea_callback' ),
+			array( &$this, 'wp_editor_callback' ),
 			'simple_wp_membership_settings',
 			'reg-email-settings',
 			array(
@@ -401,7 +413,7 @@ class SwpmSettings {
 		add_settings_field(
 			'reg-complete-mail-body-admin',
 			SwpmUtils::_( 'Admin Notification Email Body' ),
-			array( &$this, 'textarea_callback' ),
+			array( &$this, 'wp_editor_callback' ),
 			'simple_wp_membership_settings',
 			'reg-email-settings',
 			array(
@@ -438,7 +450,7 @@ class SwpmSettings {
 		add_settings_field(
 			'reset-mail-body',
 			SwpmUtils::_( 'Email Body' ),
-			array( &$this, 'textarea_callback' ),
+			array( &$this, 'wp_editor_callback' ),
 			'simple_wp_membership_settings',
 			'reset-password-settings',
 			array(
@@ -463,7 +475,7 @@ class SwpmSettings {
 		add_settings_field(
 			'upgrade-complete-mail-body',
 			SwpmUtils::_( 'Email Body' ),
-			array( &$this, 'textarea_callback' ),
+			array( &$this, 'wp_editor_callback' ),
 			'simple_wp_membership_settings',
 			'upgrade-email-settings',
 			array(
@@ -499,7 +511,7 @@ class SwpmSettings {
 		add_settings_field(
 			'bulk-activate-notify-mail-body',
 			SwpmUtils::_( 'Email Body' ),
-			array( &$this, 'textarea_callback' ),
+			array( &$this, 'wp_editor_callback' ),
 			'simple_wp_membership_settings',
 			'bulk-activate-email-settings',
 			array(
@@ -524,7 +536,7 @@ class SwpmSettings {
 		add_settings_field(
 			'email-activation-mail-body',
 			SwpmUtils::_( 'Email Body' ),
-			array( &$this, 'textarea_callback' ),
+			array( &$this, 'wp_editor_callback' ),
 			'simple_wp_membership_settings',
 			'email-activation-email-settings',
 			array(
@@ -872,6 +884,32 @@ class SwpmSettings {
 		echo '<br/><i>' . $msg . '</i>';
 	}
 
+	public function set_default_editor( $r ) {
+		$r = 'html';
+		return $r;
+	}
+
+	public function wp_editor_callback( $args ) {
+		$item         = $args['item'];
+		$msg          = isset( $args['message'] ) ? $args['message'] : '';
+		$text         = $this->get_value( $item );
+		$html_enabled = $this->get_value( 'email-enable-html' );
+		add_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
+		echo '<style>#wp-' . esc_attr( sprintf( '%s', $item ) ) . '-wrap{max-width:40em;}</style>';
+		wp_editor(
+			html_entity_decode( $text ),
+			$item,
+			array(
+				'textarea_name'  => 'swpm-settings[' . $item . ']',
+				'teeny'          => true,
+				'default_editor' => ! empty( $html_enabled ) ? 'QuickTags' : '',
+				'textarea_rows'  => 15,
+			)
+		);
+		remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
+		echo "<p class=\"description\">{$msg}</p>";
+	}
+  
 	public function swpm_documentation_callback() {
 		?>
 		<div class="swpm-orange-box">
@@ -1029,26 +1067,29 @@ class SwpmSettings {
 		}
 		$output                                    = $this->settings;
 		$output['reg-complete-mail-subject']       = sanitize_text_field( $input['reg-complete-mail-subject'] );
-		$output['reg-complete-mail-body']          = wp_kses_data( force_balance_tags( $input['reg-complete-mail-body'] ) );
+
+		$output['reg-complete-mail-body']          = $input['reg-complete-mail-body'];
 		$output['reg-complete-mail-subject-admin'] = sanitize_text_field( $input['reg-complete-mail-subject-admin'] );
-		$output['reg-complete-mail-body-admin']    = wp_kses_data( force_balance_tags( $input['reg-complete-mail-body-admin'] ) );
+		$output['reg-complete-mail-body-admin']    = $input['reg-complete-mail-body-admin'];
 
 		$output['reset-mail-subject'] = sanitize_text_field( $input['reset-mail-subject'] );
-		$output['reset-mail-body']    = wp_kses_data( force_balance_tags( $input['reset-mail-body'] ) );
+		$output['reset-mail-body']    = $input['reset-mail-body'];
 
 		$output['upgrade-complete-mail-subject'] = sanitize_text_field( $input['upgrade-complete-mail-subject'] );
-		$output['upgrade-complete-mail-body']    = wp_kses_data( force_balance_tags( $input['upgrade-complete-mail-body'] ) );
+		$output['upgrade-complete-mail-body']    = $input['upgrade-complete-mail-body'];
 		$output['disable-email-after-upgrade']   = isset( $input['disable-email-after-upgrade'] ) ? esc_attr( $input['disable-email-after-upgrade'] ) : '';
 
 		$output['bulk-activate-notify-mail-subject'] = sanitize_text_field( $input['bulk-activate-notify-mail-subject'] );
-		$output['bulk-activate-notify-mail-body']    = wp_kses_data( force_balance_tags( $input['bulk-activate-notify-mail-body'] ) );
+		$output['bulk-activate-notify-mail-body']    = $input['bulk-activate-notify-mail-body'];
 
 		$output['email-activation-mail-subject'] = sanitize_text_field( $input['email-activation-mail-subject'] );
-		$output['email-activation-mail-body']    = wp_kses_data( force_balance_tags( $input['email-activation-mail-body'] ) );
+		$output['email-activation-mail-body']    = $input['email-activation-mail-body'];
 
 		$output['reg-prompt-complete-mail-subject']          = sanitize_text_field( $input['reg-prompt-complete-mail-subject'] );
-		$output['reg-prompt-complete-mail-body']             = wp_kses_data( force_balance_tags( $input['reg-prompt-complete-mail-body'] ) );
+		$output['reg-prompt-complete-mail-body']             = $input['reg-prompt-complete-mail-body'];
 		$output['email-from']                                = trim( $input['email-from'] );
+		$output['email-enable-html']                         = isset( $input['email-enable-html'] ) ? esc_attr( $input['email-enable-html'] ) : '';
+
 		$output['enable-admin-notification-after-reg']       = isset( $input['enable-admin-notification-after-reg'] ) ? esc_attr( $input['enable-admin-notification-after-reg'] ) : '';
 		$output['admin-notification-email']                  = sanitize_text_field( $input['admin-notification-email'] );
 		$output['enable-notification-after-manual-user-add'] = isset( $input['enable-notification-after-manual-user-add'] ) ? esc_attr( $input['enable-notification-after-manual-user-add'] ) : '';

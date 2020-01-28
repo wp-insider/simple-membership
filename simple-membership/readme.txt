@@ -3,8 +3,8 @@ Contributors: smp7, wp.insider
 Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
-Tested up to: 5.2
-Stable tag: 3.9.2
+Tested up to: 5.3
+Stable tag: 3.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,6 +157,28 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= WIP 3.9.6 =
+- [[TODO]] - Stripe Subscription doc needs to add the "invoice.payment_succeeded" to the webhook events monitoring. 
+
+- Added a new filter to allow customization of the email activation message (if the email activation feature is enabled).
+
+= 3.9.5 =
+- Added a new filter (swpm_mini_login_output). It can be used to override the [swpm_mini_login] shortcode's output.
+- The "Edit" link in the members menu has been renamed to "Edit/View" to make it more user-friendly.
+- Updated the German language file.
+- The members listing in the members menu can now be sorted by the "Access Starts" column.
+- Fixed an issue with Stripe SCA buttons whereby duplicate "incomplete" entries were being created. This started happening recently from a new change that Stripe made.
+
+= 3.9.4 =
+- Commented out call to date_default_timezone_set() function for WP5.3.
+- Updated some comments in the SwpmAjax class.
+- Added an extra content protection check for post preview URL.
+
+= 3.9.3 =
+- Added the option to enable HTML email in the email settings menu of the plugin.
+- The Stripe subscription updated event is now handled by the plugin.
+- A new shortcode to create a PayPal subscription cancellation link that a member can use to view the subscription from their account and cancel.
 
 = 3.9.2 =
 - Spanish translation language files updated.

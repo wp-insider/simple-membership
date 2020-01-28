@@ -116,7 +116,7 @@ msgid "Invalid Email Address"
 msgstr "Nepravilna Email Adresa"
 
 #: classes/class.swpm-ajax.php:21 classes/class.swpm-ajax.php:36
-msgid "Aready taken"
+msgid "Already taken"
 msgstr "Zauzeto"
 
 #: classes/class.swpm-ajax.php:30

@@ -76,6 +76,7 @@ class SwpmWpLoadedTasks {
 		$swpm_process_stripe_sca_subscription = filter_input( INPUT_GET, 'swpm_process_stripe_sca_subscription' );
 		$hook                                 = filter_input( INPUT_GET, 'hook', FILTER_SANITIZE_NUMBER_INT );
 		if ( $swpm_process_stripe_sca_subscription == '1' ) {
+						//$hook == 1 means it is a background post via webshooks. Otherwise it is direct post to the script after payment (at the time of payment).
 			if ( $hook ) {
 				include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-subscription-ipn.php';
 			} else {
@@ -91,11 +92,14 @@ class SwpmWpLoadedTasks {
 			exit;
 		}
 
-		//Listen and handle smart paypal checkout IPN
 		if ( wp_doing_ajax() ) {
+			//Listen and handle smart paypal checkout IPN
 			include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-smart-checkout-ipn.php';
 			add_action( 'wp_ajax_swpm_process_pp_smart_checkout', 'swpm_pp_smart_checkout_ajax_hanlder' );
 			add_action( 'wp_ajax_nopriv_swpm_process_pp_smart_checkout', 'swpm_pp_smart_checkout_ajax_hanlder' );
+
+			//Listed and handle Stripe SCA checkout session create requests
+			require_once SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-buy-now-ipn.php';
 		}
 	}
 

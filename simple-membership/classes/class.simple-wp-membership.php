@@ -612,8 +612,11 @@ class SimpleWpMembership {
 
     public function filter_content($content) {
         if (is_preview() || is_admin()) {
-            //Do not apply filtering for admin side viewing or preview page viewing.
-            return $content;
+            //If the user is logged-in as an admin user then do not apply filtering for admin side viewing or preview page viewing.
+            if ( current_user_can('administrator') ){
+                //The user is logged in as admin in this browser.
+                return $content;
+            }
         }
         $acl = SwpmAccessControl::get_instance();
         global $post;

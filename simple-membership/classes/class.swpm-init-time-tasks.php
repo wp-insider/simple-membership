@@ -17,7 +17,9 @@ class SwpmInitTimeTasks {
 		if ( ! isset( $_COOKIE['swpm_session'] ) ) { // give a unique ID to current session.
 			$uid                     = md5( microtime() );
 			$_COOKIE['swpm_session'] = $uid; // fake it for current session/
-			setcookie( 'swpm_session', $uid, 0, '/' );
+			if ( ! headers_sent() ) {
+				setcookie( 'swpm_session', $uid, 0, '/' );
+			}
 		}
 
 		//Crete the custom post types

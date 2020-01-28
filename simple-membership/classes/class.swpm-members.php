@@ -38,6 +38,7 @@ class SwpmMembers extends WP_List_Table {
 			'last_name'     => array( 'last_name', false ),
 			'email'         => array( 'email', false ),
 			'alias'         => array( 'alias', false ),
+                        'subscription_starts' => array( 'subscription_starts', false ),
 			'account_state' => array( 'account_state', false ),
 			'last_accessed' => array( 'last_accessed', false ),
 		);
@@ -67,7 +68,7 @@ class SwpmMembers extends WP_List_Table {
 	function column_member_id( $item ) {
 		$delete_swpmuser_nonce = wp_create_nonce( 'delete_swpmuser_admin_end' );
 		$actions               = array(
-			'edit'   => sprintf( '<a href="admin.php?page=simple_wp_membership&member_action=edit&member_id=%s">Edit</a>', $item['member_id'] ),
+			'edit'   => sprintf( '<a href="admin.php?page=simple_wp_membership&member_action=edit&member_id=%s">Edit/View</a>', $item['member_id'] ),
 			'delete' => sprintf( '<a href="admin.php?page=simple_wp_membership&member_action=delete&member_id=%s&delete_swpmuser_nonce=%s" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>', $item['member_id'], $delete_swpmuser_nonce ),
 		);
 		return $item['member_id'] . $this->row_actions( $actions );
@@ -343,7 +344,7 @@ class SwpmMembers extends WP_List_Table {
 			$headers      .= 'bcc: ' . $to_email_list . "\r\n";
 			$subject       = apply_filters( 'swpm_email_bulk_set_status_subject', $subject );
 			$body          = apply_filters( 'swpm_email_bulk_set_status_body', $body );
-			wp_mail( array()/* $email_list */, $subject, $body, $headers );
+			SwpmMiscUtils::mail( array()/* $email_list */, $subject, $body, $headers );
 			SwpmLog::log_simple_debug( 'Bulk activation email notification sent. Activation email sent to the following email: ' . $to_email_list, true );
 		}
 	}
@@ -407,8 +408,8 @@ class SwpmMembers extends WP_List_Table {
 		// let's check if Stripe subscription needs to be cancelled
 		global $wpdb;
 		$q = $wpdb->prepare(
-			'SELECT * 
-		FROM  `' . $wpdb->prefix . 'swpm_payments_tbl` 
+			'SELECT *
+		FROM  `' . $wpdb->prefix . 'swpm_payments_tbl`
 		WHERE email =  %s
 		AND (gateway =  "stripe" OR gateway = "stripe-sca-subs")
 		AND subscr_id != ""',
@@ -584,7 +585,7 @@ class SwpmMembers extends WP_List_Table {
 				</p>
 				<form method="post" action="">
 					<input type="hidden" name="swpm_bulk_change_level_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_change_level_nonce_action' ); ?>" />
-					
+
 					<table width="100%" border="0" cellspacing="0" cellpadding="6">
 						<tr valign="top">
 							<td width="25%" align="left">
@@ -633,7 +634,7 @@ class SwpmMembers extends WP_List_Table {
 				</p>
 				<form method="post" action="">
 					<input type="hidden" name="swpm_bulk_start_date_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_start_date_nonce_action' ); ?>" />
-					
+
 					<table width="100%" border="0" cellspacing="0" cellpadding="6">
 						<tr valign="top">
 							<td width="25%" align="left">

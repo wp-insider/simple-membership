@@ -50,7 +50,7 @@ msgstr "الرجاء تصحيح ما يلي:"
 
 #: simple-membership/classes/class.bAjax.php:17
 #: simple-membership/classes/class.bAjax.php:28
-msgid "Aready taken"
+msgid "Already taken"
 msgstr "حٌجز بالفعل"
 
 #: simple-membership/classes/class.bAjax.php:29

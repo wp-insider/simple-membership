@@ -90,6 +90,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 			'subscr_id'        => SwpmUtils::_( 'Subscriber ID' ),
 			'payment_amount'   => SwpmUtils::_( 'Amount' ),
 			'membership_level' => SwpmUtils::_( 'Membership Level' ),
+                        'status' => SwpmUtils::_( 'Status/Note' ),
 		);
 		return $columns;
 	}

@@ -1,10 +1,10 @@
 <?php
 /**
- * Description of BAjax
- *
- * @author nur
+ * Handles various AJAX calls
  */
+
 class SwpmAjax {
+
     public static function validate_email_ajax() {
         global $wpdb;
         $field_value = filter_input(INPUT_GET, 'fieldValue');
@@ -22,12 +22,12 @@ class SwpmAjax {
         $query = $wpdb->prepare("SELECT member_id FROM $table WHERE email = %s AND user_name != ''", $field_value);
         $db_id = $wpdb->get_var($query) ;
         $exists = ($db_id > 0) && $db_id != $member_id;
-        echo '[ "' . $field_id . (($exists) ? '",false, "&chi;&nbsp;'.SwpmUtils::_('Aready taken').'"]' : '",true, "&radic;&nbsp;'.SwpmUtils::_('Available'). '"]');
+        echo '[ "' . $field_id . (($exists) ? '",false, "&chi;&nbsp;'.SwpmUtils::_('Already taken').'"]' : '",true, "&radic;&nbsp;'.SwpmUtils::_('Available'). '"]');
         exit;
     }
 
     public static function validate_user_name_ajax() {
-        global $wpdb;        
+        global $wpdb;
         $field_value = filter_input(INPUT_GET, 'fieldValue');
         $field_id = filter_input(INPUT_GET, 'fieldId');
         if (!check_ajax_referer( 'swpm-rego-form-ajax-nonce', 'nonce', false )) {
@@ -41,8 +41,9 @@ class SwpmAjax {
         $table = $wpdb->prefix . "swpm_members_tbl";
         $query = $wpdb->prepare("SELECT COUNT(*) FROM $table WHERE user_name = %s", $field_value);
         $exists = $wpdb->get_var($query) > 0;
-        echo '[ "' . $field_id . (($exists) ? '",false,"&chi;&nbsp;'. SwpmUtils::_('Aready taken'). '"]' :
+        echo '[ "' . $field_id . (($exists) ? '",false,"&chi;&nbsp;'. SwpmUtils::_('Already taken'). '"]' :
             '",true,"&radic;&nbsp;'.SwpmUtils::_('Available'). '"]');
         exit;
     }
+
 }

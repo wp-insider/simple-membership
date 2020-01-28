@@ -10,8 +10,17 @@ class SwpmStripeSubscriptionIpnHandler {
 	}
 
 	public function handle_stripe_ipn() {
+
+		/*
+		* [Imp] This comment explains how this script handles both the first time HTTP Post after payment and the webhooks.
+		* If the "hook" query arg is set then that means it is a webhook notification. It will be used for certain actions like (update, cancel, refund, etc). Others will be ignored.
+		* The first time payment in browser is handled via HTTP POST (when the "hook" query arg is not set).
+		*/
+
 		if ( isset( $_GET['hook'] ) ) {
-			// this is Webhook notify from Stripe
+			// This is Webhook notification from Stripe.
+                        // This webhook is used for all recurring payment notification (Legacy and SCA ones).
+
 			// TODO: add Webhook Signing Secret verification
 			// To do this, we need to get customer ID, retreive its details from Stripe, get button_id from metadata
 			// and see if the button has Signing Secret option set. If it is - we need to check signatures
@@ -19,7 +28,7 @@ class SwpmStripeSubscriptionIpnHandler {
 
 			$input = @file_get_contents( 'php://input' );
 			if ( empty( $input ) ) {
-				SwpmLog::log_simple_debug( 'Stripe Subscription Webhook sent empty data or page was accessed directly. Aborting.', false );
+				SwpmLog::log_simple_debug( 'Stripe subscription webhook sent empty data or page was accessed directly. Aborting.', false );
 				echo 'Empty Webhook data received.';
 				die;
 			}
@@ -27,10 +36,12 @@ class SwpmStripeSubscriptionIpnHandler {
 			$event_json = json_decode( $input );
 
 			$type = $event_json->type;
+			SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received: %s. Checking if we need to handle this webhook.', $type ), true );
 
 			if ( 'customer.subscription.deleted' === $type || 'charge.refunded' === $type ) {
 				// Subscription expired or refunded event
-				SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );
+				//SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );
+
 				// Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
 				$customer                  = $event_json->data->object->customer;
 				$subscr_id                 = $event_json->data->object->id;
@@ -40,11 +51,104 @@ class SwpmStripeSubscriptionIpnHandler {
 
 				swpm_handle_subsc_cancel_stand_alone( $ipn_data );
 			}
-			http_response_code( 200 ); // tells Stripe we received this notify
+
+			if ( $type == 'customer.subscription.updated' ) {
+				// Subscription updated webhook
+
+				// Let's form minimal ipn_data array
+				$customer                  = $event_json->data->object->customer;
+				$subscr_id                 = $event_json->data->object->id;
+				$ipn_data                  = array();
+				$ipn_data['subscr_id']     = $subscr_id;
+				$ipn_data['parent_txn_id'] = $customer;
+
+				swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
+			}
+
+                        if ( $type === 'invoice.payment_succeeded' ) {
+
+                            $billing_reason = isset($event_json->data->object->billing_reason)? $event_json->data->object->billing_reason : '';
+                            if ( $billing_reason == 'subscription_cycle') {
+                                //This is recurring/subscription payment invoice
+                                SwpmLog::log_simple_debug( sprintf( 'Stripe invoice.payment_succeeded webhook for subscription_cycle. This is a successful subscription charge. Capturing payment data.'), true );
+
+                                $sub_id = $event_json->data->object->subscription;
+                                //$cust_id = $event_json->data->object->billing_reason;
+                                //$date = $event_json->data->object->date;
+                                $price_in_cents = $event_json->data->object->amount_paid; //amount in cents
+                                $currency_code = $event_json->data->object->currency;
+
+                                $zero_cents = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
+                                if ( in_array( $currency_code, $zero_cents, true ) ) {
+                                        $payment_amount = $price_in_cents;
+                                } else {
+                                        $payment_amount = $price_in_cents / 100;// The amount (in cents). This value is used in Stripe API.
+                                }
+                                $payment_amount = floatval( $payment_amount );
+
+                                // Let's try to get first_name and last_name from full name
+                                $full_name = $event_json->data->object->customer_name;
+                                $name_pieces = explode(' ', $full_name, 2);
+                                $first_name = $name_pieces[0];
+                                if (!empty($name_pieces[1])) {
+                                    $last_name = $name_pieces[1];
+                                }
+
+                                //Retrieve the member record for this subscription
+                                $member_record = SwpmMemberUtils::get_user_by_subsriber_id($sub_id);
+				if ( $member_record ) {
+                                    // Found a member record
+                                    $member_id = $member_record->member_id;
+                                    $membership_level_id = $member_record->membership_level;
+                                    if(empty($first_name)){
+                                        $first_name = $member_record->first_name;
+                                    }
+                                    if(empty($last_name)){
+                                        $last_name = $member_record->last_name;
+                                    }
+				} else {
+                                    SwpmLog::log_simple_debug( 'Could not find an existing member record for the given subscriber ID: ' . $sub_id . '. This user profile may have been deleted.', false );
+                                    $member_id = '';
+                                    $membership_level_id = '';
+                                }
+
+                                //Create the custom field
+                                $custom_field_value  = 'subsc_ref=' . $membership_level_id;
+                                $custom_field_value .= '&swpm_id=' . $member_id;
+
+                                // Create the $ipn_data array.
+                                $ipn_data                     = array();
+                                $ipn_data['mc_gross']         = $payment_amount;
+                                $ipn_data['first_name']       = $first_name;
+                                $ipn_data['last_name']        = $last_name;
+                                $ipn_data['payer_email']      = $event_json->data->object->customer_email;
+                                $ipn_data['membership_level'] = $membership_level_id;
+                                $ipn_data['txn_id']           = $event_json->data->object->charge;
+                                $ipn_data['subscr_id']        = $sub_id;
+                                $ipn_data['swpm_id']          = $member_id;
+                                $ipn_data['ip']               = '';
+                                $ipn_data['custom']           = $custom_field_value;
+                                $ipn_data['gateway']          = 'stripe-sca-subs';
+                                $ipn_data['status']           = 'subscription';
+
+                                //TODO - Maybe handle the user access start date updating here (instead of "customer.subscription.updated" hook).
+                                //swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
+
+                                // Save the transaction record
+                                SwpmTransactions::save_txn_record( $ipn_data );
+                                SwpmLog::log_simple_debug( 'Transaction data saved for Stripe subscription notification.', true );
+                            }
+                        }
+
+			//End of the webhook notification execution.
+                        //Give 200 status then exit out.
+			http_response_code( 200 ); // Tells Stripe we received this notification
 			return;
 		}
 
-		SwpmLog::log_simple_debug( 'Stripe Subscription IPN received. Processing request...', true );
+		//The following will get executed only for DIRECT post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
+
+		SwpmLog::log_simple_debug( 'Stripe subscription IPN received. Processing request...', true );
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
@@ -105,11 +209,11 @@ class SwpmStripeSubscriptionIpnHandler {
 			$error        = $body['error'];
 			$error_string = wp_json_encode( $error );
 			SwpmLog::log_simple_debug( 'Error details: ' . $error_string, false );
-			wp_die( esc_html( 'Stripe Subscription Error! ' . $e->getMessage() . $error_string ) );
+			wp_die( esc_html( 'Stripe subscription Error! ' . $e->getMessage() . $error_string ) );
 		}
 
 		// Everything went ahead smoothly with the charge.
-		SwpmLog::log_simple_debug( 'Stripe Subscription successful.', true );
+		SwpmLog::log_simple_debug( 'Stripe subscription successful.', true );
 
 		// let's add button_id to metadata
 		$customer->metadata = array( 'button_id' => $button_id );
@@ -173,7 +277,7 @@ class SwpmStripeSubscriptionIpnHandler {
 			$return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
 		}
 		SwpmLog::log_simple_debug( 'Redirecting customer to: ' . $return_url, true );
-		SwpmLog::log_simple_debug( 'End of Stripe Subscription IPN processing.', true, true );
+		SwpmLog::log_simple_debug( 'End of Stripe subscription IPN processing.', true, true );
 		SwpmMiscUtils::redirect_to_url( $return_url );
 	}
 

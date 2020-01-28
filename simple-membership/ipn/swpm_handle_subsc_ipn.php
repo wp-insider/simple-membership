@@ -5,7 +5,7 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 	$settings         = SwpmSettings::get_instance();
 	$membership_level = $subsc_ref;
 
-	if ( isset( $ipn_data['subscr_id'] ) && !empty( $ipn_data['subscr_id'] ) ) {
+	if ( isset( $ipn_data['subscr_id'] ) && ! empty( $ipn_data['subscr_id'] ) ) {
 		$subscr_id = $ipn_data['subscr_id'];
 	} else {
 		$subscr_id = $unique_ref;
@@ -99,17 +99,17 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		$additional_args = array();
 		$email_body      = SwpmMiscUtils::replace_dynamic_tags( $body, $swpm_id, $additional_args );
 		$headers         = 'From: ' . $from_address . "\r\n";
-                
-                $subject    = apply_filters( 'swpm_email_upgrade_complete_subject', $subject );
-                $email_body = apply_filters( 'swpm_email_upgrade_complete_body', $email_body );
-                
-                if ( $settings->get_value('disable-email-after-upgrade') ) {
-                    swpm_debug_log_subsc( 'The disable upgrade email settings is checked. No account upgrade/update email will be sent.', true );
-                    //Nothing to do.
-                } else {
-                    wp_mail( $email, $subject, $email_body, $headers );
-                    swpm_debug_log_subsc( 'Member upgrade/update completion email successfully sent to: ' . $email, true );
-                }
+
+				$subject    = apply_filters( 'swpm_email_upgrade_complete_subject', $subject );
+				$email_body = apply_filters( 'swpm_email_upgrade_complete_body', $email_body );
+
+		if ( $settings->get_value( 'disable-email-after-upgrade' ) ) {
+			swpm_debug_log_subsc( 'The disable upgrade email settings is checked. No account upgrade/update email will be sent.', true );
+			//Nothing to do.
+		} else {
+			SwpmMiscUtils::mail( $email, $subject, $email_body, $headers );
+			swpm_debug_log_subsc( 'Member upgrade/update completion email successfully sent to: ' . $email, true );
+		}
 		// End of existing user account upgrade/update.
 	} else {
 		// create new member account.
@@ -172,15 +172,15 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		$additional_args = array( 'reg_link' => $reg_url );
 		$email_body      = SwpmMiscUtils::replace_dynamic_tags( $body, $id, $additional_args );
 		$headers         = 'From: ' . $from_address . "\r\n";
-                
-                $subject    = apply_filters( 'swpm_email_complete_registration_subject', $subject );
-                $email_body = apply_filters( 'swpm_email_complete_registration_body', $email_body );
-                if (empty( $email_body )){
-                    swpm_debug_log_subsc( 'Notice: Member signup (prompt to complete registration) email body has been set empty via the filter hook. No email will be sent.', true );
-                } else {
-                    wp_mail( $email, $subject, $email_body, $headers );
-                    swpm_debug_log_subsc( 'Member signup (prompt to complete registration) email successfully sent to: ' . $email, true );
-                }
+
+				$subject    = apply_filters( 'swpm_email_complete_registration_subject', $subject );
+				$email_body = apply_filters( 'swpm_email_complete_registration_body', $email_body );
+		if ( empty( $email_body ) ) {
+			swpm_debug_log_subsc( 'Notice: Member signup (prompt to complete registration) email body has been set empty via the filter hook. No email will be sent.', true );
+		} else {
+			SwpmMiscUtils::mail( $email, $subject, $email_body, $headers );
+			swpm_debug_log_subsc( 'Member signup (prompt to complete registration) email successfully sent to: ' . $email, true );
+		}
 	}
 
 }
@@ -193,8 +193,11 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 
 	global $wpdb;
 
-	$customvariables = SwpmTransactions::parse_custom_var( $ipn_data['custom'] );
-	$swpm_id         = $customvariables['swpm_id'];
+        $swpm_id = '';
+        if ( isset( $ipn_data['custom'] ) ){
+            $customvariables = SwpmTransactions::parse_custom_var( $ipn_data['custom'] );
+            $swpm_id         = $customvariables['swpm_id'];
+        }
 
 	swpm_debug_log_subsc( 'Refund/Cancellation check - lets see if a member account needs to be deactivated.', true );
 	// swpm_debug_log_subsc("Parent txn id: " . $ipn_data['parent_txn_id'] . ", Subscr ID: " . $ipn_data['subscr_id'] . ", SWPM ID: " . $swpm_id, true);.
@@ -245,9 +248,9 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		swpm_debug_log_subsc( 'Membership level ID of the member is: ' . $level_id, true );
 		$level_row          = SwpmUtils::get_membership_level_row_by_id( $level_id );
 		$subs_duration_type = $level_row->subscription_duration_type;
-                
-                swpm_debug_log_subsc( 'Subscription duration type: ' . $subs_duration_type, true );
-                
+
+		swpm_debug_log_subsc( 'Subscription duration type: ' . $subs_duration_type, true );
+
 		if ( SwpmMembershipLevel::NO_EXPIRY == $subs_duration_type ) {
 			// This is a level with "no expiry" or "until cancelled" duration.
 			swpm_debug_log_subsc( 'This is a level with "no expiry" or "until cancelled" duration', true );
@@ -256,7 +259,7 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 			$account_state = 'inactive';
 			SwpmMemberUtils::update_account_state( $member_id, $account_state );
 			swpm_debug_log_subsc( 'Subscription cancellation or end of term received! Member account deactivated. Member ID: ' . $member_id, true );
-		} else if ( SwpmMembershipLevel::FIXED_DATE == $subs_duration_type ) {
+		} elseif ( SwpmMembershipLevel::FIXED_DATE == $subs_duration_type ) {
 			// This is a level with a "fixed expiry date" duration.
 			swpm_debug_log_subsc( 'This is a level with a "fixed expiry date" duration.', true );
 			swpm_debug_log_subsc( 'Nothing to do here. The account will expire on the fixed set date.', true );
@@ -282,13 +285,15 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 
 function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 	global $wpdb;
-	$email         = $ipn_data['payer_email'];
-	$subscr_id     = $ipn_data['subscr_id'];
+	$email = isset( $ipn_data['payer_email'] ) ? $ipn_data['payer_email'] : '';
+	$subscr_id = $ipn_data['subscr_id'];
 	$account_state = SwpmSettings::get_instance()->get_value( 'default-account-status', 'active' );
 	swpm_debug_log_subsc( 'Updating subscription start date if applicable for this subscription payment. Subscriber ID: ' . $subscr_id . ' Email: ' . $email, true );
 
 	// We can also query using the email address or SWPM ID (if present in custom var).
-	$query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s", $subscr_id ), OBJECT );
+        
+        //Try to find the profile with the given subscr_id. It will exact match subscr_id or match subscr_id|123
+        $query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s OR subscr_id LIKE %s", $subscr_id, $subscr_id.'|%' ), OBJECT );
 	if ( $query_db ) {
 		$swpm_id               = $query_db->member_id;
 		$current_primary_level = $query_db->membership_level;
@@ -313,7 +318,7 @@ function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 		swpm_debug_log_subsc( 'Value after update - Subscriber ID: ' . $member_record->subscr_id . ', Start Date: ' . $member_record->subscription_starts, true );
 	} else {
 		swpm_debug_log_subsc( 'Did not find an existing record in the members table for subscriber ID: ' . $subscr_id, true );
-		swpm_debug_log_subsc( 'This is a new subscription payment for a new subscription agreement.', true );
+		swpm_debug_log_subsc( 'This could be a new subscription payment for a new subscription agreement.', true );
 	}
 }
 

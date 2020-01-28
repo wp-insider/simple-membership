@@ -252,7 +252,7 @@ class SwpmSettings {
 			'stripe-global-settings',
 			array(
 				'item'    => 'stripe-prefill-member-email',
-				'message' => SwpmUtils::_( 'Prefills member email on Stripe Checkout when possible' ),
+				'message' => SwpmUtils::_( 'Prefills logged in member email on Stripe Checkout form when possible' ),
 			)
 		);
 		add_settings_field(
@@ -263,7 +263,7 @@ class SwpmSettings {
 			'stripe-global-settings',
 			array(
 				'item'    => 'stripe-test-public-key',
-				'message' => SwpmUtils::_( 'Stripe API Test public key' ),
+				'message' => SwpmUtils::_( 'Stripe API Test publishable key' ),
 			)
 		);
 		add_settings_field(
@@ -285,7 +285,7 @@ class SwpmSettings {
 			'stripe-global-settings',
 			array(
 				'item'    => 'stripe-live-public-key',
-				'message' => SwpmUtils::_( 'Stripe API Live public key' ),
+				'message' => SwpmUtils::_( 'Stripe API Live publishable key' ),
 			)
 		);
 		add_settings_field(

@@ -242,6 +242,52 @@ class SwpmSettings {
 
 	private function tab_2() {
 		//Register settings sections and fileds for the payment settings tab.
+		register_setting( 'swpm-settings-tab-2', 'swpm-settings', array( $this, 'sanitize_tab_2' ) );
+		add_settings_section( 'stripe-api-keys', SwpmUtils::_( 'Stripe API Keys' ), null, 'simple_wp_membership_settings' );
+		add_settings_field(
+			'stripe-test-public-key',
+			SwpmUtils::_( 'Test Publishable Key' ),
+			array( $this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'stripe-api-keys',
+			array(
+				'item'    => 'stripe-test-public-key',
+				'message' => 'Stripe API Test public key',
+			)
+		);
+		add_settings_field(
+			'stripe-test-secret-key',
+			SwpmUtils::_( 'Test Secret Key' ),
+			array( $this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'stripe-api-keys',
+			array(
+				'item'    => 'stripe-test-secret-key',
+				'message' => 'Stripe API Test secret key',
+			)
+		);
+		add_settings_field(
+			'stripe-live-public-key',
+			SwpmUtils::_( 'Live Publishable Key' ),
+			array( $this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'stripe-api-keys',
+			array(
+				'item'    => 'stripe-live-public-key',
+				'message' => 'Stripe API Live public key',
+			)
+		);
+		add_settings_field(
+			'stripe-live-secret-key',
+			SwpmUtils::_( 'Live Secret Key' ),
+			array( $this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'stripe-api-keys',
+			array(
+				'item'    => 'stripe-live-secret-key',
+				'message' => 'Stripe API Live secret key',
+			)
+		);
 	}
 
 	private function tab_3() {
@@ -863,7 +909,7 @@ class SwpmSettings {
 		remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
 		echo "<p class=\"description\">{$msg}</p>";
 	}
-
+  
 	public function swpm_documentation_callback() {
 		?>
 		<div class="swpm-orange-box">
@@ -1002,12 +1048,26 @@ class SwpmSettings {
 		return $output;
 	}
 
+	public function sanitize_tab_2( $input ) {
+		if ( empty( $this->settings ) ) {
+			$this->settings = (array) get_option( 'swpm-settings' );
+		}
+		$output = $this->settings;
+
+		$output['stripe-test-public-key'] = sanitize_text_field( $input['stripe-test-public-key'] );
+		$output['stripe-test-secret-key'] = sanitize_text_field( $input['stripe-test-secret-key'] );
+		$output['stripe-live-public-key'] = sanitize_text_field( $input['stripe-live-public-key'] );
+		$output['stripe-live-secret-key'] = sanitize_text_field( $input['stripe-live-secret-key'] );
+		return $output;
+	}
+
 	public function sanitize_tab_3( $input ) {
 		if ( empty( $this->settings ) ) {
 			$this->settings = (array) get_option( 'swpm-settings' );
 		}
 		$output                                    = $this->settings;
 		$output['reg-complete-mail-subject']       = sanitize_text_field( $input['reg-complete-mail-subject'] );
+
 		$output['reg-complete-mail-body']          = $input['reg-complete-mail-body'];
 		$output['reg-complete-mail-subject-admin'] = sanitize_text_field( $input['reg-complete-mail-subject-admin'] );
 		$output['reg-complete-mail-body-admin']    = $input['reg-complete-mail-body-admin'];
@@ -1029,6 +1089,7 @@ class SwpmSettings {
 		$output['reg-prompt-complete-mail-body']             = $input['reg-prompt-complete-mail-body'];
 		$output['email-from']                                = trim( $input['email-from'] );
 		$output['email-enable-html']                         = isset( $input['email-enable-html'] ) ? esc_attr( $input['email-enable-html'] ) : '';
+
 		$output['enable-admin-notification-after-reg']       = isset( $input['enable-admin-notification-after-reg'] ) ? esc_attr( $input['enable-admin-notification-after-reg'] ) : '';
 		$output['admin-notification-email']                  = sanitize_text_field( $input['admin-notification-email'] );
 		$output['enable-notification-after-manual-user-add'] = isset( $input['enable-notification-after-manual-user-add'] ) ? esc_attr( $input['enable-notification-after-manual-user-add'] ) : '';

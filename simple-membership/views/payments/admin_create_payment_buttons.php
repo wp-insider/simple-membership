@@ -35,15 +35,15 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 				<br />
 				<label><input type="radio" name="button_type" value="pp_smart_checkout" /> <?php SwpmUtils::e( 'PayPal Smart Checkout' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_buy_now" /> <?php SwpmUtils::e( 'Stripe Buy Now' ); ?></label>
-				<br />
-				<label><input type="radio" name="button_type" value="stripe_subscription" /> <?php SwpmUtils::e( 'Stripe Subscription' ); ?></label>
+				<label><input type="radio" name="button_type" value="braintree_buy_now" /> <?php SwpmUtils::e( 'Braintree Buy Now' ); ?></label>
 				<br />
 				<label><input type="radio" name="button_type" value="stripe_sca_buy_now" /> <?php SwpmUtils::e( 'Stripe SCA Buy Now' ); ?></label>
 				<br />
 				<label><input type="radio" name="button_type" value="stripe_sca_subscription" /> <?php SwpmUtils::e( 'Stripe SCA Subscription' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="braintree_buy_now" /> <?php SwpmUtils::e( 'Braintree Buy Now' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_buy_now" /> <?php SwpmUtils::e( 'Stripe Legacy Buy Now (deprecated)' ); ?></label>
+				<br />
+				<label><input type="radio" name="button_type" value="stripe_subscription" /> <?php SwpmUtils::e( 'Stripe Legacy Subscription (deprecated)' ); ?></label>
 				<br />
 			</fieldset>
 			</td>

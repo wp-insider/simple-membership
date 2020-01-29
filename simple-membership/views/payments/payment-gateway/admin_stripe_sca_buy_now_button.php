@@ -21,7 +21,7 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 	?>
 
 <div class="swpm-orange-box">
-	View the <a target="_blank" href="https://simple-membership-plugin.com/create-stripe-buy-now-button-for-membership-payment/">documentation</a>&nbsp;
+	View the <a target="_blank" href="https://simple-membership-plugin.com/sca-compliant-stripe-buy-now-button/">documentation</a>&nbsp;
 	to learn how to create a Stripe Buy Now payment button and use it.
 </div>
 

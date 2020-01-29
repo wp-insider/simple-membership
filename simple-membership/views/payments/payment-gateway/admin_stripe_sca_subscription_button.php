@@ -77,7 +77,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 	?>
 
 <div class="swpm-orange-box">
-	View the <a target="_blank" href="https://simple-membership-plugin.com/create-stripe-subscription-button-membership-payment/">documentation</a>&nbsp;
+	View the <a target="_blank" href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/">documentation</a>&nbsp;
 	to learn how to create a Stripe Subscription payment button and use it.
 </div>
 

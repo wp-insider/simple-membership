@@ -721,6 +721,7 @@ class SwpmMiscUtils {
 		//this function loads Stripe PHP SDK and ensures only once instance is loaded
 		if ( ! class_exists( '\Stripe\Stripe' ) ) {
 			require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-gateway/init.php';
+			\Stripe\Stripe::setAppInfo( 'Simple Membership', SIMPLE_WP_MEMBERSHIP_VER, 'https://simple-membership-plugin.com/', 'pp_partner_Fvas9OJ0jQ2oNQ' );
 		}
 	}
 

@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.3
-Stable tag: 3.9.5
+Stable tag: 3.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,11 +158,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.9.6 =
-- [[TODO]] - Stripe Subscription doc needs to add the "invoice.payment_succeeded" to the webhook events monitoring. 
-
-- Added a new filter to allow customization of the email activation message (if the email activation feature is enabled).
+= 3.9.6 =
 - Added a new global settings for Stripe API keys in the "Payment Settings" tab. It can be used to enter your API keys (instead of individual buttons each time).
+- Added a new filter to allow customization of the email activation message (if the email activation feature is enabled).
+- The subsequent payments for stripe subscription will also be captured in the payments menu. Need to add the "invoice.payment_succeeded" to the webhook events monitoring. 
 
 = 3.9.5 =
 - Added a new filter (swpm_mini_login_output). It can be used to override the [swpm_mini_login] shortcode's output.

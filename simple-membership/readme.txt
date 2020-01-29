@@ -162,6 +162,7 @@ https://simple-membership-plugin.com/
 - [[TODO]] - Stripe Subscription doc needs to add the "invoice.payment_succeeded" to the webhook events monitoring. 
 
 - Added a new filter to allow customization of the email activation message (if the email activation feature is enabled).
+- Added a new global settings for Stripe API keys in the "Payment Settings" tab. It can be used to enter your API keys (instead of individual buttons each time).
 
 = 3.9.5 =
 - Added a new filter (swpm_mini_login_output). It can be used to override the [swpm_mini_login] shortcode's output.

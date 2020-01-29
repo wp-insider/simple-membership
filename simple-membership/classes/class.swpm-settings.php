@@ -246,13 +246,13 @@ class SwpmSettings {
 		add_settings_section( 'stripe-global-settings', SwpmUtils::_( 'Stripe Global Settings' ), null, 'simple_wp_membership_settings' );
 		add_settings_field(
 			'stripe-prefill-member-email',
-			SwpmUtils::_( 'Prefill Member Email' ),
+			SwpmUtils::_( 'Pre-fill Member Email Address' ),
 			array( $this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
 			'stripe-global-settings',
 			array(
 				'item'    => 'stripe-prefill-member-email',
-				'message' => SwpmUtils::_( 'Prefills logged in member email on Stripe Checkout form when possible' ),
+				'message' => SwpmUtils::_( 'Pre-fills the email address of the logged-in member on the Stripe checkout form when possible' ),
 			)
 		);
 		add_settings_field(

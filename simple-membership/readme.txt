@@ -158,6 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.9.7 =
+- Added minor improvements to the get_current_page_url() function to increase compatibility with some servers.
+
 = 3.9.6 =
 - Added a new global settings for Stripe API keys in the "Payment Settings" tab. It can be used to enter your API keys (instead of individual buttons each time).
 - Added a new filter to allow customization of the email activation message (if the email activation feature is enabled).

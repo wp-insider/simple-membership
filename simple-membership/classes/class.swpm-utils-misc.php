@@ -203,8 +203,9 @@ class SwpmMiscUtils {
 	public static function get_current_page_url() {
 		$pageURL = 'http';
 
-		if ( isset( $_SERVER['SCRIPT_URI'] ) && ! empty( $_SERVER['SCRIPT_URI'] ) ) {
+                if ( isset( $_SERVER['SCRIPT_URI'] ) && ! empty( $_SERVER['SCRIPT_URI'] ) ) {
 			$pageURL = $_SERVER['SCRIPT_URI'];
+                        $pageURL = str_replace(':443', '', $pageURL);//remove any port number from the URL value (some hosts include the port number with this).
 			$pageURL = apply_filters( 'swpm_get_current_page_url_filter', $pageURL );
 			return $pageURL;
 		}

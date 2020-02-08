@@ -286,6 +286,7 @@ add_action( 'swpm_create_new_button_process_submission', 'swpm_save_edit_stripe_
 add_action( 'swpm_edit_payment_button_process_submission', 'swpm_save_edit_stripe_sca_subscription_button_data' );
 
 function swpm_save_edit_stripe_sca_subscription_button_data() {
+
 	if ( isset( $_REQUEST['swpm_stripe_sca_subscription_save_submit'] ) ) {
 		$edit = false;
 	}
@@ -381,7 +382,7 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 			}
 		} else {
 			//Redirect to the edit interface of this button with $button_id
-			$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
+			$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=payment_buttons';
 			SwpmMiscUtils::redirect_to_url( $url );
 		}
 	}

@@ -229,6 +229,9 @@ class SwpmStripeSCABuyNowIpnHandler {
 			wp_send_json( array( 'error' => 'No button ID provided' ) );
 		}
 
+		$uniqid = filter_input( INPUT_POST, 'swpm_uniqid', FILTER_SANITIZE_STRING );
+		$uniqid = ! empty( $uniqid ) ? $uniqid : '';
+
 		$settings   = SwpmSettings::get_instance();
 		$button_cpt = get_post( $button_id ); //Retrieve the CPT for this button
 		$item_name  = htmlspecialchars( $button_cpt->post_title );
@@ -244,7 +247,10 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 			$payment_currency = get_post_meta( $button_id, 'payment_currency', true );
 			$payment_amount   = round( $payment_amount, 2 ); //round the amount to 2 decimal place.
-			$zero_cents       = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
+
+			$payment_amount = apply_filters( 'swpm_payment_amount_filter', $payment_amount, $button_id );
+
+			$zero_cents = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
 			if ( in_array( $payment_currency, $zero_cents ) ) {
 				//this is zero-cents currency, amount shouldn't be multiplied by 100
 				$price_in_cents = $payment_amount;
@@ -356,6 +362,8 @@ class SwpmStripeSCABuyNowIpnHandler {
 			if ( ! empty( $member_email ) ) {
 				$opts['customer_email'] = $member_email;
 			}
+
+			$opts = apply_filters( 'swpm_stripe_sca_session_opts', $opts, $button_id );
 
 			$session = \Stripe\Checkout\Session::create( $opts );
 		} catch ( Exception $e ) {

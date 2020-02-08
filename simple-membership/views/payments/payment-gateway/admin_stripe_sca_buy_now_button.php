@@ -223,6 +223,10 @@ function swpm_save_new_stripe_sca_buy_now_button_data() {
 
 		add_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
 
+		$stripe_use_global_keys = filter_input( INPUT_POST, 'stripe_use_global_keys', FILTER_SANITIZE_NUMBER_INT );
+		$stripe_use_global_keys = $stripe_use_global_keys ? true : false;
+		add_post_meta( $button_id, 'stripe_use_global_keys', $stripe_use_global_keys );
+
 		add_post_meta( $button_id, 'return_url', trim( sanitize_text_field( $_REQUEST['return_url'] ) ) );
 		//add_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
 		//Redirect to the edit interface of this button with $button_id

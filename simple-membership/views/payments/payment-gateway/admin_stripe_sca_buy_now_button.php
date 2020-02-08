@@ -109,7 +109,7 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Use Global API Keys Settings' ); ?></th>
 					<td>
-						<input type="checkbox" name="stripe_use_global_keys" value="1" />
+						<input type="checkbox" name="stripe_use_global_keys" value="1" checked/>
 						<p class="description"><?php echo SwpmUtils::_( 'Use API keys from <a href="admin.php?page=simple_wp_membership_settings&tab=2" target="_blank">Payment Settings</a> tab.' ); ?></p>
 					</td>
 				</tr>

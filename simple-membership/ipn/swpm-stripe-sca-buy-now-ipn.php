@@ -85,7 +85,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 			$pi = \Stripe\PaymentIntent::retrieve( $pi_id );
 		} catch ( Exception $e ) {
-			$err = 'Error occurred: ' . $e->getMessage();
+			$error_msg = 'Error occurred: ' . $e->getMessage();
 			SwpmLog::log_simple_debug( $error_msg, false );
 			wp_die( esc_html( $error_msg ) );
 		}

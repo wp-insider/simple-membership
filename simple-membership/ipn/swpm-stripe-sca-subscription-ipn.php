@@ -10,9 +10,9 @@ class SwpmStripeSCASubscriptionIpnHandler {
 	}
 
 	public function handle_stripe_ipn() {
-                //This will get executed only for direct post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
-                //The webhooks are handled by the "swpm-stripe-subscription-ipn.php" script.
-            
+				//This will get executed only for direct post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
+				//The webhooks are handled by the "swpm-stripe-subscription-ipn.php" script.
+
 		SwpmLog::log_simple_debug( 'Stripe SCA Subscription IPN (HTTP POST) received. Processing request...', true );
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 
@@ -125,6 +125,8 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		}
 
 		$payment_amount = floatval( $payment_amount );
+
+		$payment_amount = apply_filters( 'swpm_payment_amount_filter', $payment_amount, $button_id );
 
 		$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 

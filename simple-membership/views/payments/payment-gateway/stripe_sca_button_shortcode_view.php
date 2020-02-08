@@ -82,7 +82,8 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 			jQuery.post('<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
 				'action': 'swpm_stripe_sca_create_checkout_session',
 				'swpm_button_id': <?php echo esc_js( $button_id ); ?>,
-				'swpm_page_url': '<?php echo esc_js( $current_url ); ?>'
+				'swpm_page_url': '<?php echo esc_js( $current_url ); ?>',
+				'swpm_uniqid': '<?php echo esc_js( $uniqid ); ?>'
 				}).done(function (response) {
 					if (!response.error) {
 						stripe.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
@@ -211,7 +212,8 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 			jQuery.post('<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
 				'action': 'swpm_stripe_sca_create_checkout_session',
 				'swpm_button_id': <?php echo esc_js( $button_id ); ?>,
-				'swpm_page_url': '<?php echo esc_js( $current_url ); ?>'
+				'swpm_page_url': '<?php echo esc_js( $current_url ); ?>',
+				'swpm_uniqid': '<?php echo esc_js( $uniqid ); ?>'
 				}).done(function (response) {
 					if (!response.error) {
 						stripe.redirectToCheckout({sessionId: response.session_id}).then(function (result) {

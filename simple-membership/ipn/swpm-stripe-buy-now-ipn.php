@@ -15,7 +15,7 @@ class SwpmStripeBuyNowIpnHandler {
 
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
-		
+
 		// Read and sanitize the request parameters.
 		$button_id      = sanitize_text_field( $_REQUEST['item_number'] );
 		$button_id      = absint( $button_id );
@@ -115,7 +115,7 @@ class SwpmStripeBuyNowIpnHandler {
 		$ipn_data['payer_email']      = $stripe_email;
 		$ipn_data['membership_level'] = $membership_level_id;
 		$ipn_data['txn_id']           = $txn_id;
-		$ipn_data['subscr_id']        = '';
+		$ipn_data['subscr_id']        = $txn_id;/* Set the txn_id as subscriber_id so it is similar to PayPal buy now. Also, it can connect to the profile in the "payments" menu. */
 		$ipn_data['swpm_id']          = $swpm_id;
 		$ipn_data['ip']               = $custom_var['user_ip'];
 		$ipn_data['custom']           = $custom;

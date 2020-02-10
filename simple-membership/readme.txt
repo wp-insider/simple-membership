@@ -162,6 +162,7 @@ https://simple-membership-plugin.com/
 - Added minor improvements to the get_current_page_url() function to increase compatibility with some servers.
 - Updated the Japanese language translation file.
 - Minor Stripe SCA button related enhancements (added filter).
+- Stripe buy now transactions (One-time payments) will now have a link to the user "profile" in the "payments" menu.
 
 = 3.9.6 =
 - Added a new global settings for Stripe API keys in the "Payment Settings" tab. It can be used to enter your API keys (instead of individual buttons each time).

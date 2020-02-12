@@ -381,8 +381,8 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 				echo '<div id="message" class="error"><p>' . $stripe_error_msg . '</p></div>';
 			}
 		} else {
-			//Redirect to the edit interface of this button with $button_id
-                        $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
+			//Redirect to the manage payment buttons interface
+                        $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=payment_buttons';
                         SwpmMiscUtils::redirect_to_url( $url );
 		}
 	}

@@ -17,7 +17,10 @@ class SwpmCronJob {
         global $wpdb;
         for ($counter = 0;; $counter += 100) {
             $query = $wpdb->prepare("SELECT member_id, membership_level, subscription_starts, account_state
-                    FROM {$wpdb->prefix}swpm_members_tbl LIMIT %d, 100", $counter);
+                    FROM {$wpdb->prefix}swpm_members_tbl 
+                    WHERE membership_level NOT IN ( SELECT id FROM {$wpdb->prefix}swpm_membership_tbl 
+                                                WHERE subscription_period = '' OR subscription_period = '0' )
+                    LIMIT %d, 100", $counter);
             $results = $wpdb->get_results($query);
             if (empty($results)) {
                 break;

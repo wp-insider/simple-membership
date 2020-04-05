@@ -163,6 +163,7 @@ https://simple-membership-plugin.com/
 - Updated the Japanese language translation file.
 - Minor Stripe SCA button related enhancements (added filter).
 - Stripe buy now transactions (One-time payments) will now have a link to the user "profile" in the "payments" menu.
+- Chinese language file name changed from zh_Hans to zh_HK.
 
 = 3.9.6 =
 - Added a new global settings for Stripe API keys in the "Payment Settings" tab. It can be used to enter your API keys (instead of individual buttons each time).

@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.4
-Stable tag: 3.9.6
+Stable tag: 3.9.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,8 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.9.7 =
+= 3.9.7 =
 - Added minor improvements to the get_current_page_url() function to increase compatibility with some servers.
+- The mini login shortcode will also work with the "Enable Redirect to Last Page" feature from the after login redirection addon.
 - Updated the Japanese language translation file.
 - Minor Stripe SCA button related enhancements (added filter).
 - Stripe buy now transactions (One-time payments) will now have a link to the user "profile" in the "payments" menu.

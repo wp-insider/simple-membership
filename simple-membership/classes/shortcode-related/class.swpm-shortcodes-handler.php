@@ -107,6 +107,8 @@ class SwpmShortcodesHandler {
         $join_page_url = SwpmSettings::get_instance()->get_value('join-us-page-url');
         $profile_page_url = SwpmSettings::get_instance()->get_value('profile-page-url');
         $logout_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '?swpm-logout=true';
+        
+        $filtered_login_url = apply_filters( 'swpm_get_login_link_url', $login_page_url ); //Addons can override the login URL value using this filter.
 
         $output = '<div class="swpm_mini_login_wrapper">';
 
@@ -121,7 +123,7 @@ class SwpmShortcodesHandler {
             $output .= '<span class="swpm_mini_login_logout"> | <a href="'.$logout_url.'">'.SwpmUtils::_('Logout').'</a></span>';
         } else {
             //User not logged in.
-            $output .= '<span class="swpm_mini_login_login_here"><a href="'.$login_page_url.'">'.SwpmUtils::_('Login Here').'</a></span>';
+            $output .= '<span class="swpm_mini_login_login_here"><a href="'.$filtered_login_url.'">'.SwpmUtils::_('Login Here').'</a></span>';
             $output .= '<span class="swpm_mini_login_no_membership"> | '.SwpmUtils::_('Not a member? ').'</span>';
             $output .= '<span class="swpm_mini_login_join_now"><a href="'.$join_page_url.'">'.SwpmUtils::_('Join Now').'</a></span>';
         }

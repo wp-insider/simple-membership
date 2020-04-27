@@ -32,15 +32,15 @@ class SwpmMembers extends WP_List_Table {
 
 	function get_sortable_columns() {
 		return array(
-			'member_id'     => array( 'member_id', true ), //True means already sorted
-			'user_name'     => array( 'user_name', false ),
-			'first_name'    => array( 'first_name', false ),
-			'last_name'     => array( 'last_name', false ),
-			'email'         => array( 'email', false ),
-			'alias'         => array( 'alias', false ),
-                        'subscription_starts' => array( 'subscription_starts', false ),
-			'account_state' => array( 'account_state', false ),
-			'last_accessed' => array( 'last_accessed', false ),
+			'member_id'           => array( 'member_id', true ), //True means already sorted
+			'user_name'           => array( 'user_name', false ),
+			'first_name'          => array( 'first_name', false ),
+			'last_name'           => array( 'last_name', false ),
+			'email'               => array( 'email', false ),
+			'alias'               => array( 'alias', false ),
+			'subscription_starts' => array( 'subscription_starts', false ),
+			'account_state'       => array( 'account_state', false ),
+			'last_accessed'       => array( 'last_accessed', false ),
 		);
 	}
 
@@ -94,7 +94,11 @@ class SwpmMembers extends WP_List_Table {
 
 		$this->process_bulk_action();
 
-		$query  = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl';
+		$records_query_head = 'SELECT member_id,user_name,first_name,last_name,email,alias,subscription_starts,account_state,last_accessed';
+		$count_query_head   = 'SELECT COUNT(member_id)';
+
+		$query  = ' ';
+		$query .= ' FROM ' . $wpdb->prefix . 'swpm_members_tbl';
 		$query .= ' LEFT JOIN ' . $wpdb->prefix . 'swpm_membership_tbl';
 		$query .= ' ON ( membership_level = id ) ';
 
@@ -163,7 +167,7 @@ class SwpmMembers extends WP_List_Table {
 		$query           .= ' ORDER BY ' . $orderby . ' ' . $order;
 
 		//Execute the query
-		$totalitems = $wpdb->query( $query ); //return the total number of affected rows
+		$totalitems = $wpdb->get_var( $count_query_head . $query );
 		//Pagination setup
 		$perpage = apply_filters( 'swpm_members_menu_items_per_page', 50 );
 		$paged   = filter_input( INPUT_GET, 'paged' );
@@ -188,7 +192,7 @@ class SwpmMembers extends WP_List_Table {
 		$sortable = $this->get_sortable_columns();
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
-		$this->items           = $wpdb->get_results( $query, ARRAY_A );
+		$this->items           = $wpdb->get_results( $records_query_head . $query, ARRAY_A );
 	}
 
 	function get_user_count_by_account_state() {

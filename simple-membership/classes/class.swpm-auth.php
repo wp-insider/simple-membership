@@ -317,6 +317,7 @@ class SwpmAuth {
 		if ( $hmac != $hash ) {
 			$this->lastStatusMsg = SwpmUtils::_( 'Please login again.' );
 			SwpmLog::log_auth_debug( 'validate() - Bad Hash', true );
+                        do_action('swpm_validate_login_hash_mismatch');
 			wp_logout(); //Force logout of WP user session to clear the bad hash.
 			return false;
 		}

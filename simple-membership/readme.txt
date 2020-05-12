@@ -158,6 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 3.9.8 = 
+- Added a new action hook 'swpm_validate_login_hash_mismatch'
+
 = 3.9.7 =
 - Added minor improvements to the get_current_page_url() function to increase compatibility with some servers.
 - The mini login shortcode will also work with the "Enable Redirect to Last Page" feature from the after login redirection addon.

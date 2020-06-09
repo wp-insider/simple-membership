@@ -70,4 +70,3 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 	do_action( 'swpm_create_new_button_for_' . $button_type );
 	//The payment addons will create the button from then redirect to the "edit" interface of that button after save.
 }
-?>

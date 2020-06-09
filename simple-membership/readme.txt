@@ -160,6 +160,7 @@ https://simple-membership-plugin.com/
 
 = WIP 3.9.8 = 
 - Added a new action hook 'swpm_validate_login_hash_mismatch'
+- Ability to manually add a transaction record in the Payments menu of the plugin
 
 = 3.9.7 =
 - Added minor improvements to the get_current_page_url() function to increase compatibility with some servers.

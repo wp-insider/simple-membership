@@ -44,3 +44,7 @@ $payments_list_table->prepare_items();
     <!-- Now we can render the completed list table -->
     <?php $payments_list_table->display(); ?>
 </form>
+
+<p class="submit">
+    <a href="admin.php?page=simple_wp_membership_payments&tab=add_new_txn" class="button"><?php echo SwpmUtils::_('Add a Transaction Manually'); ?></a>
+</p>

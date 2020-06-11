@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.4
-Stable tag: 3.9.7
+Stable tag: 3.9.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,9 +158,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 3.9.8 = 
+= 3.9.8 = 
 - Added a new action hook 'swpm_validate_login_hash_mismatch'
 - Ability to manually add a transaction record in the Payments menu of the plugin
+- Added a new feature to hide the registration from to logged-in members. The new option is available in the Advanced settings menu.
 
 = 3.9.7 =
 - Added minor improvements to the get_current_page_url() function to increase compatibility with some servers.

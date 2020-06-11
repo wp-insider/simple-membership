@@ -14,6 +14,21 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 	public function regigstration_ui( $level ) {
 
+		$settings_configs = SwpmSettings::get_instance();
+
+                //Check if the hide rego from logged-in users feature is enabled before rendering the registration form.
+                $hide_rego_to_logged_users = $settings_configs->get_value( 'hide-rego-form-to-logged-users' );
+                if ( ! empty( $hide_rego_to_logged_users ) ){
+                    //Hide registration form to logged-in users feature is enabled. Check if the form should be hidden.
+                    if ( SwpmMemberUtils::is_member_logged_in() ) {
+
+                        $rego_hidden_to_logged_users_msg = '<div class="registration_hidden_to_logged_users_msg">';
+                        $rego_hidden_to_logged_users_msg .= SwpmUtils::_( "You are already logged in. You don't need to create another account. So the registration form is hidden." );
+                        $rego_hidden_to_logged_users_msg .= '</div>';
+                        return $rego_hidden_to_logged_users_msg;
+                    }
+                }
+
 		//Trigger the filter to override the registration form (the form builder addon uses this filter)
 		$form = apply_filters( 'swpm_registration_form_override', '', $level ); //The $level value could be empty also so the code handling the filter need to check for it.
 		if ( ! empty( $form ) ) {
@@ -21,8 +36,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			return $form;
 		}
 
-		$settings_configs = SwpmSettings::get_instance();
-		$joinuspage_url   = $settings_configs->get_value( 'join-us-page-url' );
+		$joinuspage_url = $settings_configs->get_value( 'join-us-page-url' );
 		$membership_level = '';
 		global $wpdb;
 

@@ -617,6 +617,18 @@ class SwpmSettings {
 		);
 
 		add_settings_field(
+			'hide-rego-form-to-logged-users',
+			SwpmUtils::_( 'Hide Registration Form to Logged Users' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'hide-rego-form-to-logged-users',
+				'message' => SwpmUtils::_( 'Use this option if you want to hide the registration form to the logged-in members. If logged-in members visit the registration page, they will see a message instead of the registration form.' ),
+			)
+		);
+
+		add_settings_field(
 			'after-logout-redirection-url',
 			SwpmUtils::_( 'After Logout Redirect URL' ),
 			array( &$this, 'textfield_long_callback' ),
@@ -1127,6 +1139,7 @@ class SwpmSettings {
 		$output['after-logout-redirection-url']      = esc_url( $input['after-logout-redirection-url'] );
 		$output['force-strong-passwords']            = isset( $input['force-strong-passwords'] ) ? esc_attr( $input['force-strong-passwords'] ) : '';
 		$output['auto-login-after-rego']             = isset( $input['auto-login-after-rego'] ) ? esc_attr( $input['auto-login-after-rego'] ) : '';
+                $output['hide-rego-form-to-logged-users']    = isset( $input['hide-rego-form-to-logged-users'] ) ? esc_attr( $input['hide-rego-form-to-logged-users'] ) : '';
 		$output['force-wp-user-sync']                = isset( $input['force-wp-user-sync'] ) ? esc_attr( $input['force-wp-user-sync'] ) : '';
 		$output['payment-notification-forward-url']  = esc_url( $input['payment-notification-forward-url'] );
 

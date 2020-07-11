@@ -79,4 +79,9 @@ class SwpmTransactions {
 		return $customvariables;
 	}
 
+        static function get_transaction_row_by_subscr_id ($subscr_id) {
+                global $wpdb;
+                $query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE subscr_id = %s", $subscr_id ), OBJECT );
+                return $query_db;
+        }
 }

@@ -291,7 +291,7 @@ function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 	swpm_debug_log_subsc( 'Updating subscription start date if applicable for this subscription payment. Subscriber ID: ' . $subscr_id . ' Email: ' . $email, true );
 
 	// We can also query using the email address or SWPM ID (if present in custom var).
-        
+
         //Try to find the profile with the given subscr_id. It will exact match subscr_id or match subscr_id|123
         $query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s OR subscr_id LIKE %s", $subscr_id, $subscr_id.'|%' ), OBJECT );
 	if ( $query_db ) {
@@ -320,6 +320,31 @@ function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 		swpm_debug_log_subsc( 'Did not find an existing record in the members table for subscriber ID: ' . $subscr_id, true );
 		swpm_debug_log_subsc( 'This could be a new subscription payment for a new subscription agreement.', true );
 	}
+}
+
+function swpm_is_paypal_recurring_payment($payment_data){
+    $recurring_payment = false;
+    $transaction_type = $payment_data['txn_type'];
+
+    if ($transaction_type == "recurring_payment") {
+        $recurring_payment = true;
+
+    } else if ($transaction_type == "subscr_payment") {
+        $item_number = $payment_data['item_number'];
+        $subscr_id = $payment_data['subscr_id'];
+        swpm_debug_log_subsc('Is recurring payment check debug data: ' . $item_number . "|" . $subscr_id, true);
+
+        $result = SwpmTransactions::get_transaction_row_by_subscr_id($subscr_id);
+        if (isset($result)) {
+            swpm_debug_log_subsc('This subscr_id exists in the transactions db. Recurring payment check flag value is true.', true);
+            $recurring_payment = true;
+            return $recurring_payment;
+        }
+    }
+    if ($recurring_payment) {
+        swpm_debug_log_subsc('Recurring payment check flag value is true.', true);
+    }
+    return $recurring_payment;
 }
 
 function swpm_debug_log_subsc( $message, $success, $end = false ) {

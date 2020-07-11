@@ -145,23 +145,50 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 					$expected_amount = round( $expected_amount, 2 );
 					$expected_amount = apply_filters( 'swpm_payment_amount_filter', $expected_amount, $button_id );
 					$received_amount = $cart_item_data_total;
+
+                                        if ( $received_amount < $expected_amount ) {
+                                                // Error! amount received is less than expected. This is invalid.
+                                                $this->debug_log( 'Expected amount: ' . $expected_amount, true );
+                                                $this->debug_log( 'Received amount: ' . $received_amount, true );
+                                                $this->debug_log( 'Price check failed. Amount received is less than the amount expected. This payment will not be processed.', false );
+                                                return false;
+                                        }
+
 				} elseif ( $button_type == 'pp_subscription' ) {// This is a PayPal subscription type button
-					// Trial payment or recurring payment?
-					// TODO - is_recurring_payment() check to determine if it is a recurring payment
+                                        //This is a "subscr_payment" type payment notification. The "subscr_signup" type gets handled before.
+                                        $trial_billing_cycle = get_post_meta( $button_id, 'trial_billing_cycle', true );
 					$trial_billing_amount = get_post_meta( $button_id, 'trial_billing_amount', true );
-					$billing_amount       = get_post_meta( $button_id, 'billing_amount', true );
-					$expected_amount      = 0;
-					$received_amount      = $cart_item_data_total;
+					$billing_amount = get_post_meta( $button_id, 'billing_amount', true );
+
+                                        if ( empty( $trial_billing_cycle ) ){
+                                            //No trial billing. Check main billing amount. Only need to check "mc_gross" which should cointain the "amount3" value.
+                                            $this->debug_log( 'Trial billing is not enabled for this button.', true );
+                                            $expected_amount = round( $billing_amount, 2 );
+
+                                        } else {
+                                            //Trial billing is specified for this button
+                                            $this->debug_log( 'Trial billing is enabled for this button.', true );
+                                            if ( swpm_is_paypal_recurring_payment($this->ipn_data) ){
+                                                //This is a recurring payment of a subscription.
+                                                $expected_amount = round( $billing_amount, 2 );
+                                            } else {
+                                                //This is a trial payment of a subscription
+                                                $expected_amount = round( $trial_billing_amount, 2 );
+                                            }
+
+                                        }
+					$received_amount = $cart_item_data_total;
+
+                                        if ( $received_amount < $expected_amount ) {
+                                                // Error! amount received is less than expected. This is invalid.
+                                                $this->debug_log( 'Expected amount: ' . $expected_amount, true );
+                                                $this->debug_log( 'Received amount: ' . $received_amount, true );
+                                                $this->debug_log( 'Price check failed. Amount received is less than the amount expected. This payment will not be processed.', false );
+                                                return false;
+                                        }
+
 				} else {
 					$this->debug_log( 'Error! Unexpected button type: ' . $button_type, false );
-					return false;
-				}
-
-				if ( $received_amount < $expected_amount ) {
-					// Error! amount received is less than expected. This is invalid.
-					$this->debug_log( 'Expected amount: ' . $expected_amount, true );
-					$this->debug_log( 'Received amount: ' . $received_amount, true );
-					$this->debug_log( 'Price check failed. Amount received is less than the amount expected. This payment will not be processed.', false );
 					return false;
 				}
 			}

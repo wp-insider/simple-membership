@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.4
-Stable tag: 3.9.8
+Stable tag: 3.9.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,6 +157,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 3.9.9 =
+- Added an enhancement to accept empty address value and force updating (when admin updates the address of a member profile from admin interface).
 
 = 3.9.8 = 
 - Added a new action hook 'swpm_validate_login_hash_mismatch'

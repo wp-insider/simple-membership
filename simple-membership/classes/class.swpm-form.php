@@ -24,7 +24,7 @@ class SwpmForm {
         if (empty($user_name)) {
             return;
         }
-        
+
         $user = get_user_by('login', $user_name);
         if ($user && ($user->user_email != $email)){
             $error_msg = SwpmUtils::_("Wordpress account exists with given username. But given email doesn't match.");
@@ -39,7 +39,7 @@ class SwpmForm {
             $this->errors['wp_user'] = $error_msg;
         }
     }
-    
+
     protected function user_name() {
         global $wpdb;
         if (!empty($this->fields['user_name'])){return;}
@@ -66,13 +66,11 @@ class SwpmForm {
 
     protected function first_name() {
         $first_name = filter_input(INPUT_POST, 'first_name', FILTER_SANITIZE_STRING);
-        if (empty($first_name)) {return;}
         $this->sanitized['first_name'] = sanitize_text_field($first_name);
     }
 
     protected function last_name() {
         $last_name = filter_input(INPUT_POST, 'last_name', FILTER_SANITIZE_STRING);
-        if (empty($last_name)) {return;}
         $this->sanitized['last_name'] = sanitize_text_field($last_name);
     }
 
@@ -107,16 +105,16 @@ class SwpmForm {
         }
         $saned = sanitize_email($email);
         $query = "SELECT count(member_id) FROM {$wpdb->prefix}swpm_members_tbl WHERE email= %s";
-        $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT); 
+        $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
         if (!empty($member_id)) {
             $query .= ' AND member_id !=%d';
             $result = $wpdb->get_var($wpdb->prepare($query, strip_tags($saned), $member_id));
         }
-        else{            
+        else{
             $result = $wpdb->get_var($wpdb->prepare($query, strip_tags($saned)));
         }
-        
-        if ($result > 0) {            
+
+        if ($result > 0) {
             if ($saned != $this->fields['email']) {
                 $error_msg = SwpmUtils::_('Email is already used.') . " (" . $saned .")";
                 $this->errors['email'] = $error_msg;
@@ -128,39 +126,33 @@ class SwpmForm {
 
     protected function phone() {
         $phone = filter_input(INPUT_POST, 'phone', FILTER_UNSAFE_RAW);
-        if (empty($phone)) {return;}
         $saned = wp_kses($phone, array());
-        $this->sanitized['phone'] = $saned;        
+        $this->sanitized['phone'] = $saned;
         return;
     }
 
     protected function address_street() {
         $address_street = filter_input(INPUT_POST, 'address_street', FILTER_SANITIZE_STRING);
-        if (empty($address_street)) { return;}
         $this->sanitized['address_street'] = wp_kses($address_street, array());
     }
 
     protected function address_city() {
         $address_city = filter_input(INPUT_POST, 'address_city', FILTER_SANITIZE_STRING);
-        if (empty($address_city)){ return; }
         $this->sanitized['address_city'] = wp_kses($address_city, array());
     }
 
     protected function address_state() {
         $address_state = filter_input(INPUT_POST, 'address_state', FILTER_SANITIZE_STRING);
-        if (empty($address_state))  {return;}
         $this->sanitized['address_state'] = wp_kses($address_state, array());
     }
 
     protected function address_zipcode() {
         $address_zipcode = filter_input(INPUT_POST, 'address_zipcode', FILTER_UNSAFE_RAW);
-        if (empty($address_zipcode)){ return;}
         $this->sanitized['address_zipcode'] = wp_kses($address_zipcode, array());
     }
 
     protected function country() {
         $country = filter_input(INPUT_POST, 'country', FILTER_SANITIZE_STRING);
-        if (empty($country)){ return;}
         $this->sanitized['country'] = wp_kses($country, array());
     }
 
@@ -218,7 +210,7 @@ class SwpmForm {
             $this->errors['membership_level'] = SwpmUtils::_('Invalid membership level');
             return;
         }
-        
+
         if (empty($membership_level)) {return;}
         $this->sanitized['membership_level'] = $membership_level;
     }
@@ -293,12 +285,12 @@ class SwpmForm {
     }
 
     public function is_valid() {
-        
+
         if (!isset($this->errors)){
             //Errors are not set at all. Return true.
             return true;
         }
-        
+
         return count($this->errors) < 1;
     }
 

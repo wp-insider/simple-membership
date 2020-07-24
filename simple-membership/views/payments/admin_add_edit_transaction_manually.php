@@ -15,7 +15,7 @@ function swpm_handle_add_new_txn_manually(){
         //Check nonce first
         check_admin_referer( 'swpm_admin_add_new_txn_form_action', 'swpm_admin_add_new_txn_form_field' );
 
-        $current_date = date( 'Y-m-d' );
+        $current_date = SwpmUtils::get_current_date_in_wp_zone();
 
         $txn_data = array();
         $txn_data['email'] = sanitize_text_field( $_POST['email_address'] );

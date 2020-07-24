@@ -333,6 +333,16 @@ abstract class SwpmUtils {
 		}
 	}
 
+        /*
+         * Returns the current date value in (Y-m-d) format in the timzeone set for this WordPress install.
+         */
+        public static function get_current_date_in_wp_zone(){
+            $current_wp_time = current_time('mysql');
+            $dt = new DateTime($current_wp_time);
+            $current_date = $dt->format('Y-m-d');
+            return $current_date;
+        }
+
 	/*
 	 * Formats the given date value according to the WP date format settings. This function is useful for displaying a human readable date value to the user.
 	 */

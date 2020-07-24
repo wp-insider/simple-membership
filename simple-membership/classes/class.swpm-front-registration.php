@@ -214,8 +214,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$free_level                           = SwpmUtils::get_free_level();
 		$account_status                       = SwpmSettings::get_instance()->get_value( 'default-account-status', 'active' );
 		$member_info['last_accessed_from_ip'] = SwpmUtils::get_user_ip_address();
-		$member_info['member_since']          = date( 'Y-m-d' );
-		$member_info['subscription_starts']   = date( 'Y-m-d' );
+		$member_info['member_since']          = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
+		$member_info['subscription_starts']   = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
 		$member_info['account_state']         = $account_status;
 		if ( $this->email_activation ) {
 			$member_info['account_state'] = 'activation_required';

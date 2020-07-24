@@ -9,7 +9,7 @@ class SwpmTransactions {
 	static function save_txn_record( $ipn_data, $items = array() ) {
 		global $wpdb;
 
-		$current_date = date( 'Y-m-d' );
+		$current_date = SwpmUtils::get_current_date_in_wp_zone();//date( 'Y-m-d' );
 		$custom_var   = self::parse_custom_var( $ipn_data['custom'] );
 
 		$txn_data                     = array();

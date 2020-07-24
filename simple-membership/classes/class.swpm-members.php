@@ -240,8 +240,8 @@ class SwpmMembers extends WP_List_Table {
 		}
 		global $wpdb;
 		$member                        = SwpmTransfer::$default_fields;
-		$member['member_since']        = date( 'Y-m-d' );
-		$member['subscription_starts'] = date( 'Y-m-d' );
+		$member['member_since']        = SwpmUtils::get_current_date_in_wp_zone();//date( 'Y-m-d' );
+		$member['subscription_starts'] = SwpmUtils::get_current_date_in_wp_zone();//date( 'Y-m-d' );
 		if ( isset( $_POST['createswpmuser'] ) ) {
 			$member = array_map( 'sanitize_text_field', $_POST );
 		}

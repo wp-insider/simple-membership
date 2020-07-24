@@ -179,7 +179,7 @@ class SwpmMemberUtils {
 		$membership_level     = $args['membership_level'];
 		$old_membership_level = $args['old_membership_level'];
 
-		$subscription_starts = ( date( 'Y-m-d' ) );
+		$subscription_starts = SwpmUtils::get_current_date_in_wp_zone();//( date( 'Y-m-d' ) );
 		if ( $membership_level == $old_membership_level ) {
 			//Payment for the same membership level (renewal).
 

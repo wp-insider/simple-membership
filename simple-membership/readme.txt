@@ -161,6 +161,7 @@ https://simple-membership-plugin.com/
 = WIP 4.0.1 =
 - Removed the "Use WordPress Timezone" settings option from the advanced settings menu. This option can conflict with some events management type plugins.
 - The plugin will now record the date values according to your WordPress timezone settings (by default).
+- The debug log file will record timestamp values in the format ['Y/m/d H:i:s']. Example Value: [2020/07/24 11:58:39]
 
 = 3.9.9 =
 - Added an enhancement to accept empty address value and force updating (when admin updates the address of a member profile from admin interface).

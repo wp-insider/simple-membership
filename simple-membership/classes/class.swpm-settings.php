@@ -677,18 +677,6 @@ class SwpmSettings {
 		);
 
 		add_settings_field(
-			'use-wordpress-timezone',
-			SwpmUtils::_( 'Use WordPress Timezone' ),
-			array( &$this, 'checkbox_callback' ),
-			'simple_wp_membership_settings',
-			'advanced-settings',
-			array(
-				'item'    => 'use-wordpress-timezone',
-				'message' => SwpmUtils::_( 'Use this option if you want to use the timezone value specified in your WordPress General Settings interface.' ),
-			)
-		);
-
-		add_settings_field(
 			'delete-pending-account',
 			SwpmUtils::_( 'Auto Delete Pending Account' ),
 			array( &$this, 'selectbox_callback' ),
@@ -1131,7 +1119,6 @@ class SwpmSettings {
 		$output['enable-expired-account-login']      = isset( $input['enable-expired-account-login'] ) ? esc_attr( $input['enable-expired-account-login'] ) : '';
 		$output['logout-member-on-browser-close']    = isset( $input['logout-member-on-browser-close'] ) ? esc_attr( $input['logout-member-on-browser-close'] ) : '';
 		$output['allow-account-deletion']            = isset( $input['allow-account-deletion'] ) ? esc_attr( $input['allow-account-deletion'] ) : '';
-		$output['use-wordpress-timezone']            = isset( $input['use-wordpress-timezone'] ) ? esc_attr( $input['use-wordpress-timezone'] ) : '';
 		$output['delete-pending-account']            = isset( $input['delete-pending-account'] ) ? esc_attr( $input['delete-pending-account'] ) : 0;
 		$output['admin-dashboard-access-permission'] = isset( $input['admin-dashboard-access-permission'] ) ? esc_attr( $input['admin-dashboard-access-permission'] ) : '';
 		$output['renewal-page-url']                  = esc_url( $input['renewal-page-url'] );

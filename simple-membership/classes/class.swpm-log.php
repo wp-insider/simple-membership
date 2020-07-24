@@ -42,7 +42,7 @@ class SwpmLog {
     public static function writeall($path = ''){
         if (empty($path)) {$path = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';}
         $fp = fopen($path, 'a');
-        $date = date("Y-m-d H:i:s");
+        $date = current_time('mysql');
         fwrite($fp, strtoupper($date) . ":\n");
         fwrite($fp, str_repeat('-=', (strlen($date)+1.0)/2.0) . "\n");
         foreach (self::$intance as $context=>$intance){
@@ -64,7 +64,8 @@ class SwpmLog {
         $debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
 
         // Timestamp
-        $text = '[' . date('m/d/Y g:i A') . '] - ' . (($success) ? 'SUCCESS: ' : 'FAILURE: ') . $message . "\n";
+        $log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
+        $text = '[' . $log_timestamp . '] - ' . (($success) ? 'SUCCESS: ' : 'FAILURE: ') . $message . "\n";
         if ($end) {
             $text .= "\n------------------------------------------------------------------\n\n";
         }
@@ -73,7 +74,7 @@ class SwpmLog {
         fwrite($fp, $text);
         fclose($fp);  // close file
     }
-    
+
     public static function log_array_data_to_debug($array_to_write, $success, $end = false) {
         $settings = SwpmSettings::get_instance();
         $debug_enabled = $settings->get_value('enable-debug');
@@ -85,13 +86,14 @@ class SwpmLog {
         $debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
 
         // Timestamp
-        $text = '[' . date('m/d/Y g:i A') . '] - ' . (($success) ? 'SUCCESS: ' : 'FAILURE: ') . "\n";
+        $log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
+        $text = '[' . $log_timestamp . '] - ' . (($success) ? 'SUCCESS: ' : 'FAILURE: ') . "\n";
         ob_start();
         print_r($array_to_write);
         $var = ob_get_contents();
         ob_end_clean();
         $text .= $var;
-    
+
         if ($end) {
             $text .= "\n------------------------------------------------------------------\n\n";
         }
@@ -100,7 +102,7 @@ class SwpmLog {
         fwrite($fp, $text);
         fclose($fp);  // close file
     }
-    
+
     public static function log_auth_debug($message, $success, $end = false) {
         $settings = SwpmSettings::get_instance();
         $debug_enabled = $settings->get_value('enable-debug');
@@ -112,7 +114,8 @@ class SwpmLog {
         $debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log-auth.txt';
 
         // Timestamp
-        $text = '[' . date('m/d/Y g:i A') . '] - ' . (($success) ? 'SUCCESS: ' : 'FAILURE: ') . $message . "\n";
+        $log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
+        $text = '[' . $log_timestamp . '] - ' . (($success) ? 'SUCCESS: ' : 'FAILURE: ') . $message . "\n";
         if ($end) {
             $text .= "\n------------------------------------------------------------------\n\n";
         }
@@ -120,8 +123,8 @@ class SwpmLog {
         $fp = fopen($debug_log_file_name, 'a');
         fwrite($fp, $text);
         fclose($fp);  // close file
-    }  
-    
+    }
+
     public static function reset_swmp_log_files() {
         $log_reset = true;
         $logfile_list = array(
@@ -134,7 +137,8 @@ class SwpmLog {
                 continue;
             }
 
-            $text = '[' . date('m/d/Y g:i A') . '] - SUCCESS: Log file reset';
+            $log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
+            $text = '[' . $log_timestamp . '] - SUCCESS: Log file reset';
             $text .= "\n------------------------------------------------------------------\n\n";
             $fp = fopen($logfile, 'w');
             if ($fp != FALSE) {
@@ -145,6 +149,6 @@ class SwpmLog {
             }
         }
         return $log_reset;
-    }    
+    }
 
 }

@@ -20,15 +20,6 @@ abstract class SwpmUtils {
 		} else {
 			define( 'SWPM_MANAGEMENT_PERMISSION', $admin_dashboard_permission );
 		}
-
-		//Set timezone preference (if enabled in settings)
-		$use_wp_timezone = SwpmSettings::get_instance()->get_value( 'use-wordpress-timezone' );
-		if ( ! empty( $use_wp_timezone ) ) {//Set the wp timezone
-			$wp_timezone_string = get_option( 'timezone_string' );
-			if ( ! empty( $wp_timezone_string ) ) {
-				date_default_timezone_set( $wp_timezone_string );
-			}
-		}
 	}
 
 	public static function subscription_type_dropdown( $selected ) {
@@ -332,6 +323,16 @@ abstract class SwpmUtils {
 			return false;
 		}
 	}
+
+        /*
+         * Returns the current date timestamp value suitable for debug log file.
+         */
+        public static function get_current_timestamp_for_debug_log(){
+            $current_wp_time = current_time('mysql');
+            $dt = new DateTime($current_wp_time);
+            $current_date = $dt->format('Y/m/d H:i:s');
+            return $current_date;
+        }
 
         /*
          * Returns the current date value in (Y-m-d) format in the timzeone set for this WordPress install.

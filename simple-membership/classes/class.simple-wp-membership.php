@@ -94,13 +94,13 @@ class SimpleWpMembership {
 
     function wp_password_reset_hook($user, $pass) {
         $swpm_user = SwpmMemberUtils::get_user_by_user_name($user->user_login);
-        
+
         //Check if SWPM user entry exists
         if (empty($swpm_user)) {
             SwpmLog::log_auth_debug("wp_password_reset_hook() - SWPM user not found for username: '" . $user->user_login ."'. This is OK, assuming that this user was created directly in WP Users menu (not using SWPM).", true);
             return;
         }
-        
+
         $swpm_id = $swpm_user->member_id;
         if (!empty($swpm_id)) {
             $password_hash = SwpmUtils::encrypt_password($pass);
@@ -237,9 +237,9 @@ class SimpleWpMembership {
             }
         }
         SwpmLog::log_auth_debug("Trying wp_signon() with username: " . $username, true);
-        
+
         add_filter('wordfence_ls_require_captcha', '__return_false');//For Wordfence plugin's captcha compatibility
-        
+
         $user_obj = wp_signon(array('user_login' => $username, 'user_password' => $pass, 'remember' => $rememberme), is_ssl());
         if ($user_obj instanceof WP_User) {
             wp_set_current_user($user_obj->ID, $user_obj->user_login);
@@ -308,10 +308,10 @@ class SimpleWpMembership {
         if ($auth->is_logged_in()) {
             //User is already logged-in. Nothing to do.
             return;
-        }        
+        }
         $auth->login_to_swpm_using_wp_user($user);
     }
-    
+
     public function wp_authenticate_handler($username, $password) {
 
         $auth = SwpmAuth::get_instance();
@@ -397,9 +397,9 @@ class SimpleWpMembership {
         $fields['first_name'] = $user_info->first_name;
         $fields['last_name'] = $user_info->last_name;
         $fields['membership_level'] = $default_level;
-        $fields['member_since'] = date('Y-m-d');
+        $fields['member_since'] = SwpmUtils::get_current_date_in_wp_zone();
         $fields['account_state'] = $default_ac_status;
-        $fields['subscription_starts'] = date('Y-m-d');
+        $fields['subscription_starts'] = SwpmUtils::get_current_date_in_wp_zone();
         SwpmMemberUtils::create_swpm_member_entry_from_array_data($fields);
     }
 
@@ -463,7 +463,7 @@ class SimpleWpMembership {
     }
 
     /*
-     * This function is hooked to WordPress's admin_notices action hook 
+     * This function is hooked to WordPress's admin_notices action hook
      * It is used to show any plugin specific notices/warnings in the admin interface
      */
 
@@ -686,7 +686,7 @@ class SimpleWpMembership {
             ),
             'SWPMUserName' => array(
                 'alertText' => '* ' . SwpmUtils::_('Invalid Username').'<br>'.SwpmUtils::_('Usernames can only contain: letters, numbers and .-_*@'),
-            ),            
+            ),
             'minSize' => array(
                 'alertText' => '* ' . SwpmUtils::_('Minimum '),
                 'alertText2' => SwpmUtils::_(' characters required'),

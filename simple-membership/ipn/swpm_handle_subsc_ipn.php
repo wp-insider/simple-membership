@@ -357,7 +357,8 @@ function swpm_debug_log_subsc( $message, $success, $end = false ) {
 	$debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
 
 	// Timestamp.
-	$text = '[' . date( 'm/d/Y g:i A' ) . '] - ' . ( ( $success ) ? 'SUCCESS: ' : 'FAILURE: ' ) . $message . "\n";
+        $log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
+	$text = '[' . $log_timestamp . '] - ' . ( ( $success ) ? 'SUCCESS: ' : 'FAILURE: ' ) . $message . "\n";
 	if ( $end ) {
 		$text .= "\n------------------------------------------------------------------\n\n";
 	}

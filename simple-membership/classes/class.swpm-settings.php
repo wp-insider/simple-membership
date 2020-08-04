@@ -1017,6 +1017,25 @@ class SwpmSettings {
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
 			//This status message need to be in the callback function to prevent header sent warning
 			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
+
+                        /* Check if any conflicting setting options have been enabled together. */
+                        $disable_wp_dashboard_for_non_admins = $this->get_value('disable-access-to-wp-dashboard');
+                        if ($disable_wp_dashboard_for_non_admins) {
+                            //The disable wp dashboard option is enabled.
+                            //Check to make sure the "Admin Dashboard Access Permission" option is not being used for other roles.
+                            $admin_dashboard_permission = $this->get_value( 'admin-dashboard-access-permission' );
+                            if ( empty( $admin_dashboard_permission ) || $admin_dashboard_permission == 'manage_options' ) {
+                                //This is fine.
+                            } else {
+                                //Conflicting options enabled.
+                                //Show warning and reset the option value to default.
+                                $this->set_value('admin-dashboard-access-permission', 'manage_options');
+                                $this->save();
+                                echo '<div id="message" class="error"><p>' . SwpmUtils::_( 'Note: You cannot enable both the "Disable Access to WP Dashboard" and "Admin Dashboard Access Permission" options at the same time. Only use one of those options.' ) . '</p></div>';
+                            }
+                        }
+                        /* End of conflicting options check */
+
 		}
 
 		SwpmUtils::e( 'This page allows you to configure some advanced features of the plugin.' );

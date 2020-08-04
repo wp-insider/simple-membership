@@ -3,8 +3,8 @@ Contributors: smp7, wp.insider
 Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
-Tested up to: 5.4
-Stable tag: 3.9.9
+Tested up to: 5.5
+Stable tag: 4.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,10 +158,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.0.1 =
+= 4.0.0 =
 - Removed the "Use WordPress Timezone" settings option from the advanced settings menu. This option can conflict with some events management type plugins.
 - The plugin will now record the date values according to your WordPress timezone settings (by default).
 - The debug log file will record timestamp values in the format ['Y/m/d H:i:s']. Example Value: [2020/07/24 11:58:39]
+- Added help text to the "Admin Dashboard Access Permission" field to explain that it should not be used with the "Disable Access to WP Dashboard" option. 
+- Added a note for when a user enables conflicting options in the advanced settings.
+- Completed testing on WP 5.5 version.
 
 = 3.9.9 =
 - Added an enhancement to accept empty address value and force updating (when admin updates the address of a member profile from admin interface).

@@ -709,7 +709,7 @@ class SwpmSettings {
 					'edit_posts'           => 'Contributor',
 				),
 				'default' => 'manage_options',
-				'message' => SwpmUtils::_( 'SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user role to access the SWPM admin dashboard by selecting a value here.' ),
+				'message' => SwpmUtils::_( 'SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user role to access the SWPM admin dashboard by selecting a value here. Note that this option cannot work if you enabled the "Disable Access to WP Dashboard" option in General Settings.' ),
 			)
 		);
 

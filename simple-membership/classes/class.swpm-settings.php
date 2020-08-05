@@ -703,10 +703,10 @@ class SwpmSettings {
 			array(
 				'item'    => 'admin-dashboard-access-permission',
 				'options' => array(
-					'manage_options'       => 'Admin',
-					'edit_pages'           => 'Editor',
-					'edit_published_posts' => 'Author',
-					'edit_posts'           => 'Contributor',
+					'manage_options'       => translate_user_role( 'Administrator' ),
+					'edit_pages'           => translate_user_role( 'Editor' ),
+					'edit_published_posts' => translate_user_role( 'Author' ),
+					'edit_posts'           => translate_user_role( 'Contributor' ),
 				),
 				'default' => 'manage_options',
 				'message' => SwpmUtils::_( 'SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user role to access the SWPM admin dashboard by selecting a value here. Note that this option cannot work if you enabled the "Disable Access to WP Dashboard" option in General Settings.' ),

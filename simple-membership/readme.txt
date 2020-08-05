@@ -158,6 +158,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.0.1 =
+- The user role options for the "Admin Dashboard Access Permission" settings field will show the translated values.
+
 = 4.0.0 =
 - Removed the "Use WordPress Timezone" settings option from the advanced settings menu. This option can conflict with some events management type plugins.
 - The plugin will now record the date values according to your WordPress timezone settings (by default).

@@ -160,6 +160,7 @@ https://simple-membership-plugin.com/
 
 = WIP 4.0.1 =
 - The user role options for the "Admin Dashboard Access Permission" settings field will show the translated values.
+- The settings menu update capability will also respect the "Role" permission set in the "Admin Dashboard Access Permission" settings.
 
 = 4.0.0 =
 - Removed the "Use WordPress Timezone" settings option from the advanced settings menu. This option can conflict with some events management type plugins.

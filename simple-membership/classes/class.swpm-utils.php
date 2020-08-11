@@ -270,17 +270,32 @@ abstract class SwpmUtils {
 			//Check if the user has admin role.
 			$admin_user = SwpmMemberUtils::wp_user_has_admin_role( $wp_user_id );
 			if ( $admin_user ) {
-				//This email belongs to an admin user. Update is not allowed on admin users. Show error message then exit.
-				$error_msg = '<p>This email address (' . $wp_user_data['user_email'] . ') belongs to an admin user. This email cannot be used to register a new account on this site.</p>';
+				//This email belongs to an admin user. Cannot modify/override/use/register using an admin user's email from front-end. Show error message then exit.
+				$error_msg = '<p>This email address (' . $wp_user_data['user_email'] . ') belongs to an admin user. This email cannot be used to register a new account on this site for security reasons. Contact site admin.</p>';
 				wp_die( $error_msg );
 			}
-		}
+		} else {
+                    //Check if the username belongs to an existing wp user account.
+                    $wp_user_id = username_exists( $wp_user_data['user_login'] );
+                    if ( $wp_user_id ) {
+                        //A wp user account exist with this username.
+                        //Check if the user has admin role.
+                        $admin_user = SwpmMemberUtils::wp_user_has_admin_role( $wp_user_id );
+                        if ( $admin_user ) {
+                            //This Username belongs to an admin user. Cannot modify/override/use/register using an existing admin user's username from front-end. Show error message then exit.
+                            $error_msg = '<p>This username (' . $wp_user_data['user_login'] . ') belongs to an admin user. It cannot be used to register a new account on this site for security reasons. Contact site admin.</p>';
+                            wp_die( $error_msg );
+                        }
+                    } else {
+                        //All clear. No user exists with the provided username or email.
+                    }
+                }
 
-		//At this point 1) A WP User with this email doesn't exist. Or 2) The associated wp user doesn't have admin role
+		//At this point 1) A WP User with this email or username doesn't exist. Or 2) The associated wp user doesn't have admin role
 		//Lets create a new wp user record or attach the SWPM profile to an existing user accordingly.
 
 		if ( self::is_multisite_install() ) {
-			//WP Multi-Sit install
+			//WP Multi-Site install
 			global $blog_id;
 			if ( $wp_user_id ) {
 				//If user exists then just add him to current blog.
@@ -295,15 +310,23 @@ abstract class SwpmUtils {
 			$wp_user_id = wpmu_create_user( $wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email'] );
 			$role       = 'subscriber'; //TODO - add user as a subscriber first. The subsequent update user role function to update the role to the correct one
 			add_user_to_blog( $blog_id, $wp_user_id, $role );
+                        //End of WPMU
 		} else {
-			//WP Single site install
+			//This is a WP Single site install.
+
+                        //Lets see if an existing WP user exist from the email_exists() or username_exists() check earlier.
 			if ( $wp_user_id ) {
 				return $wp_user_id;
 			}
+
+                        //Try to create a brand new WP user entry.
 			$wp_user_id = wp_create_user( $wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email'] );
+
+                        //Update that newly created user's profile with additional data.
+                        $wp_user_data['ID'] = $wp_user_id;
+                        wp_update_user( $wp_user_data ); //Core WP function. Updates/Syncs the user info and role.
+
 		}
-		$wp_user_data['ID'] = $wp_user_id;
-		wp_update_user( $wp_user_data ); //Core WP function. Updates the user info and role.
 
 		return $wp_user_id;
 	}

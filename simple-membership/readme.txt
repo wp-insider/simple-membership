@@ -159,8 +159,9 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 4.0.1 =
+- Added the "Button Image URL" field for the Stripe Buy Now type buttons (to allow button image customization).
 - The user role options for the "Admin Dashboard Access Permission" settings field will show the translated values.
-- The settings menu update capability will also respect the "Role" permission set in the "Admin Dashboard Access Permission" settings.
+- The settings menu update capability will also respects the "Role" permission set in the "Admin Dashboard Access Permission" settings.
 - Added a check to see if an username exists in the create_wp_user() function.
 
 = 4.0.0 =

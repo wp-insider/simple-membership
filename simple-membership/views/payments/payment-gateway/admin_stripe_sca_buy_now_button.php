@@ -165,6 +165,14 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 					</td>
 				</tr>
 
+				<tr valign="top">
+					<th scope="row"><?php echo SwpmUtils::_( 'Button Image URL' ); ?></th>
+					<td>
+						<input type="text" size="100" name="button_image_url" value="" />
+						<p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
+					</td>
+				</tr>
+
 			</table>
 
 			<script>
@@ -228,7 +236,7 @@ function swpm_save_new_stripe_sca_buy_now_button_data() {
 		add_post_meta( $button_id, 'stripe_use_global_keys', $stripe_use_global_keys );
 
 		add_post_meta( $button_id, 'return_url', trim( sanitize_text_field( $_REQUEST['return_url'] ) ) );
-		//add_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
+		add_post_meta( $button_id, 'button_image_url', esc_url( $_REQUEST['button_image_url'] ) );
 		//Redirect to the edit interface of this button with $button_id
 		//$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
 		//Redirect to the manage payment buttons interface
@@ -277,8 +285,8 @@ function swpm_edit_stripe_sca_buy_now_button() {
 
 	$use_global_keys = empty( $use_global_keys ) ? false : true;
 
-	$return_url = get_post_meta( $button_id, 'return_url', true );
-	//$button_image_url = get_post_meta($button_id, 'button_image_url', true);
+	$return_url       = get_post_meta( $button_id, 'return_url', true );
+	$button_image_url = get_post_meta( $button_id, 'button_image_url', true );
 	?>
 <div class="postbox">
 	<h3 class="hndle"><label for="title"><?php echo SwpmUtils::_( 'Stripe Buy Now Button Configuration' ); ?></label></h3>
@@ -423,6 +431,14 @@ function swpm_edit_stripe_sca_buy_now_button() {
 					</td>
 				</tr>
 
+				<tr valign="top">
+					<th scope="row"><?php echo SwpmUtils::_( 'Button Image URL' ); ?></th>
+					<td>
+						<input type="text" size="100" name="button_image_url" value="<?php echo $button_image_url; ?>" />
+						<p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
+					</td>
+				</tr>
+
 			</table>
 
 			<script>
@@ -505,7 +521,7 @@ function swpm_edit_stripe_sca_buy_now_button_data() {
 		update_post_meta( $button_id, 'stripe_use_global_keys', $stripe_use_global_keys );
 
 		update_post_meta( $button_id, 'return_url', trim( sanitize_text_field( $_REQUEST['return_url'] ) ) );
-		//update_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
+		update_post_meta( $button_id, 'button_image_url', esc_url( $_REQUEST['button_image_url'] ) );
 
 		echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
 	}

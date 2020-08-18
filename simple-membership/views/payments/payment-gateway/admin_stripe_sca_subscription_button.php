@@ -123,7 +123,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 						<input type="text" name="stripe_plan_id" value="<?php echo ( $edit ? $opts['stripe_plan_id'][0] : '' ); ?>" required />
 						<p class="description">
 							ID of the plan that you want subscribers to be assigned to. You can get more details in the
-							<a href="https://simple-membership-plugin.com/create-stripe-subscription-button-membership-payment/" target="_blank">documentation</a>.
+							<a href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/" target="_blank">documentation</a>.
 						</p>
 					</td>
 				</tr>

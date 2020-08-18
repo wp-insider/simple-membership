@@ -118,7 +118,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Stripe Plan ID' ); ?></th>
+					<th scope="row"><?php echo SwpmUtils::_( 'Stripe API ID' ); ?></th>
 					<td>
 						<input type="text" name="stripe_plan_id" value="<?php echo ( $edit ? $opts['stripe_plan_id'][0] : '' ); ?>" required />
 						<p class="description">

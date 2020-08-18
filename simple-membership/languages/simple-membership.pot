@@ -2674,7 +2674,7 @@ msgid "Stripe Subscription Button Configuration"
 msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:109
-msgid "Stripe Plan ID"
+msgid "Stripe API ID"
 msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:125

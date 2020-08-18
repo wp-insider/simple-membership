@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 4.0
 Tested up to: 5.5
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,11 +158,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.0.1 =
+= 4.0.1 =
 - Added the "Button Image URL" field for the Stripe Buy Now type buttons (to allow button image customization).
 - The user role options for the "Admin Dashboard Access Permission" settings field will show the translated values.
 - The settings menu update capability will also respects the "Role" permission set in the "Admin Dashboard Access Permission" settings.
 - Added a check to see if an username exists in the create_wp_user() function.
+- Stripe SCA Subscription button configuration interface - renamed the label from "Stripe Plan ID" to "Stripe API ID" (to match with Stripe's recent interface changes).
 
 = 4.0.0 =
 - Removed the "Use WordPress Timezone" settings option from the advanced settings menu. This option can conflict with some events management type plugins.

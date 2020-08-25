@@ -158,6 +158,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Added a new filter "swpm_admin_registration_add_user_template_path"
+- Added a new filter "swpm_admin_registration_edit_user_template_path"
+
 = 4.0.1 =
 - Added the "Button Image URL" field for the Stripe Buy Now type buttons (to allow button image customization).
 - The user role options for the "Admin Dashboard Access Permission" settings field will show the translated values.

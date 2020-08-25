@@ -248,7 +248,10 @@ class SwpmMembers extends WP_List_Table {
 		extract( $member, EXTR_SKIP );
 		$query  = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE  id !=1 ';
 		$levels = $wpdb->get_results( $query, ARRAY_A );
-		include_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_add.php';
+
+                $add_user_template_path = apply_filters('swpm_admin_registration_add_user_template_path', SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_add.php');
+		include_once $add_user_template_path;
+
 		return false;
 	}
 
@@ -272,7 +275,10 @@ class SwpmMembers extends WP_List_Table {
 		extract( $member, EXTR_SKIP );
 		$query  = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE  id !=1 ';
 		$levels = $wpdb->get_results( $query, ARRAY_A );
-		include_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_edit.php';
+
+                $edit_user_template_path = apply_filters('swpm_admin_registration_edit_user_template_path', SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_edit.php');
+		include_once $edit_user_template_path;
+
 		return false;
 	}
 

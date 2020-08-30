@@ -163,6 +163,7 @@ https://simple-membership-plugin.com/
 - Added a new filter "swpm_admin_registration_edit_user_template_path"
 - Added an option to auto downgrade expired members to a free level. This feature is handled via the following addon:
 https://simple-membership-plugin.com/simple-membership-miscellaneous-shortcodes-addon/
+- Fixed a typo in a variable name.
 
 = 4.0.1 =
 - Added the "Button Image URL" field for the Stripe Buy Now type buttons (to allow button image customization).

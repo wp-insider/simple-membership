@@ -68,13 +68,13 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		}
 
 		//Handle the registration form in core plugin
-		$mebership_info   = SwpmPermission::get_instance( $membership_level );
-		$membership_level = $mebership_info->get( 'id' );
+		$membership_info = SwpmPermission::get_instance( $membership_level );
+		$membership_level = $membership_info->get( 'id' );
 		if ( empty( $membership_level ) ) {
 			return 'Error! Failed to retrieve membership level ID from the membership info object.';
 		}
-		$level_identifier         = md5( $membership_level );
-		$membership_level_alias   = $mebership_info->get( 'alias' );
+		$level_identifier = md5( $membership_level );
+		$membership_level_alias = $membership_info->get( 'alias' );
 		$swpm_registration_submit = filter_input( INPUT_POST, 'swpm_registration_submit' );
 		if ( ! empty( $swpm_registration_submit ) ) {
 			$member = array_map( 'sanitize_text_field', $_POST );

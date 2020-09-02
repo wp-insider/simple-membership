@@ -116,9 +116,9 @@ abstract class SwpmUtils {
 	}
 
 	public static function gender_dropdown( $selected = 'not specified' ) {
-		return '<option ' . ( ( strtolower( $selected ) == 'male' ) ? 'selected="selected"' : '' ) . ' value="male">Male</option>' .
-				'<option ' . ( ( strtolower( $selected ) == 'female' ) ? 'selected="selected"' : '' ) . ' value="female">Female</option>' .
-				'<option ' . ( ( strtolower( $selected ) == 'not specified' ) ? 'selected="selected"' : '' ) . ' value="not specified">Not Specified</option>';
+		return '<option ' . ( ( strtolower( $selected ) == 'male' ) ? 'selected="selected"' : '' ) . ' value="male">' . SwpmUtils::_('Male') . '</option>' .
+				'<option ' . ( ( strtolower( $selected ) == 'female' ) ? 'selected="selected"' : '' ) . ' value="female">' . SwpmUtils::_('Female') . '</option>' .
+				'<option ' . ( ( strtolower( $selected ) == 'not specified' ) ? 'selected="selected"' : '' ) . ' value="not specified">' . SwpmUtils::_('Not Specified') . '</option>';
 	}
 
 	public static function get_account_state_options() {

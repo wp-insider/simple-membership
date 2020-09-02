@@ -8,14 +8,10 @@ if (!empty($force_strong_pass)) {
     $pass_class = "";
 }
 
-// Get value of use-automatic-username to detect if we want to generate usernames automatically and hide the username field or not
-$use_automatic_username = $settings->get_value('use-automatic-username');
-// If the option is enabled, generate the username automatically and enable the hidden attribute (so it will hide the username field)
-if (!empty($use_automatic_username)) {
+// If the option use-automatic-usernam is enabled, generate the username automatically and set the attribute to hidden (so it will hide the username field)
+if (!empty($settings->get_value('use-automatic-username'))) {
     $user_name=date('ymdHi').mt_rand(1000, 9999);
     $hidden_username_attribute="hidden";
-} else { // If the option is not enabled, do not enable the hidden attribute (so it will show the username field)
-    $hidden_username_attribute="";
 }
 ?>
 <div class="swpm-registration-widget-form">

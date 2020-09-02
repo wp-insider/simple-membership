@@ -1160,7 +1160,7 @@ class SwpmSettings {
 		$output['hide-rego-form-to-logged-users']    = isset( $input['hide-rego-form-to-logged-users'] ) ? esc_attr( $input['hide-rego-form-to-logged-users'] ) : '';
 		$output['force-wp-user-sync']                = isset( $input['force-wp-user-sync'] ) ? esc_attr( $input['force-wp-user-sync'] ) : '';
 		$output['payment-notification-forward-url']  = esc_url( $input['payment-notification-forward-url'] );
-		$output['use-automatic-username']            = esc_url( $input['use-automatic-username'] );
+		$output['use-automatic-username']            = isset( $input['use-automatic-username'] ) ? esc_attr( $input['use-automatic-username'] ) : '';
 
 		//Auto create swpm user related settings
 		$output['enable-auto-create-swpm-members']      = isset( $input['enable-auto-create-swpm-members'] ) ? esc_attr( $input['enable-auto-create-swpm-members'] ) : '';

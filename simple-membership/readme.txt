@@ -164,6 +164,9 @@ https://simple-membership-plugin.com/
 - Added an option to auto downgrade expired members to a free level. This feature is handled via the following addon:
 https://simple-membership-plugin.com/simple-membership-miscellaneous-shortcodes-addon/
 - Fixed a typo in a variable name.
+- The "Gender" value in the members menu is translatable. Thanks to @Th0masL for making this improvement.
+- Updated the French language translation file.
+- The "Bulk Account Activate & Notify" option now sends the email one by one to all the selected members (instead of a batch email). To prevent email issue when used with SMTP solution.
 
 = 4.0.1 =
 - Added the "Button Image URL" field for the Stripe Buy Now type buttons (to allow button image customization).

@@ -341,21 +341,24 @@ class SwpmMembers extends WP_List_Table {
 
 			$subject = $settings->get_value( 'bulk-activate-notify-mail-subject' );
 			if ( empty( $subject ) ) {
-				$subject = 'Account Activated!';
+                            $subject = 'Account Activated!';
 			}
 			$body = $settings->get_value( 'bulk-activate-notify-mail-body' );
 			if ( empty( $body ) ) {
-				$body = 'Hi, Your account has been activated successfully!';
+                            $body = 'Hi, Your account has been activated successfully!';
 			}
 
-			$from_address  = $settings->get_value( 'email-from' );
-			$to_email_list = implode( ',', $emails );
-			$headers       = 'From: ' . $from_address . "\r\n";
-			$headers      .= 'bcc: ' . $to_email_list . "\r\n";
-			$subject       = apply_filters( 'swpm_email_bulk_set_status_subject', $subject );
-			$body          = apply_filters( 'swpm_email_bulk_set_status_body', $body );
-			SwpmMiscUtils::mail( array()/* $email_list */, $subject, $body, $headers );
-			SwpmLog::log_simple_debug( 'Bulk activation email notification sent. Activation email sent to the following email: ' . $to_email_list, true );
+			$from_address = $settings->get_value( 'email-from' );
+			$headers = 'From: ' . $from_address . "\r\n";
+
+                        foreach ($emails as $to_email) {
+                            //Send the activation email one by one to all the selected members.
+                            $subject = apply_filters( 'swpm_email_bulk_set_status_subject', $subject );
+                            $body = apply_filters( 'swpm_email_bulk_set_status_body', $body );
+                            $to_email = trim($to_email);
+                            SwpmMiscUtils::mail( $to_email, $subject, $body, $headers );
+                            SwpmLog::log_simple_debug( 'Bulk activation email notification sent. Activation email sent to the following email: ' . $to_email, true );
+                        }
 		}
 	}
 

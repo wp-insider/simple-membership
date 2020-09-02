@@ -8,7 +8,7 @@ if (!empty($force_strong_pass)) {
     $pass_class = "";
 }
 
-// If the option use-automatic-usernam is enabled, generate the username automatically and set the attribute to hidden (so it will hide the username field)
+// If the option use-automatic-username is enabled, generate the username automatically and set the attribute to hidden (so it will hide the username field)
 if (!empty($settings->get_value('use-automatic-username'))) {
     $user_name=date('ymdHi').mt_rand(1000, 9999);
     $hidden_username_attribute="hidden";

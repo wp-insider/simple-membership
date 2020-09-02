@@ -2042,7 +2042,7 @@ msgid ""
 "resend the activation email."
 msgstr ""
 "Vous devez activer votre compte. Si vous n'avez pas reçu d'email, alors %s pour "
-"un nouvel email d'activation"
+"envoyer un nouvel email d'activation"
 
 #: classes/class.swpm-auth.php:146
 #: classes/class.swpm-front-registration.php:376

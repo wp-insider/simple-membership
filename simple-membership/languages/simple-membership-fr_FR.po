@@ -2203,6 +2203,18 @@ msgstr "(Veuillez sélectionner)"
 msgid "Activation Required"
 msgstr "Activation requise"
 
+#: classes/class.swpm-utils.php:119
+msgid "Male"
+msgstr "Homme"
+
+#: classes/class.swpm-utils.php:120
+msgid "Female"
+msgstr "Femme"
+
+#: classes/class.swpm-utils.php:121
+msgid "Not Specified"
+msgstr "Ne se prononce pas"
+
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:115
 msgid "Logged in as: "
 msgstr "Connecté en tant que:"

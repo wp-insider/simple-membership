@@ -11,14 +11,8 @@ if (!empty($force_strong_pass)) {
     $pass_class="";
 }
 
-// Get value of use-automatic-username to detect if we want to hide the username field or not
-$use_automatic_username = $settings->get_value('use-automatic-username');
-// If the option is enabled, enable the hidden attribute (so it will hide the username field)
-if (!empty($use_automatic_username)) {
-    $hidden_username_attribute="hidden";
-} else { // If the option is not enabled, do not enable the hidden attribute (so it will show the username field)
-    $hidden_username_attribute="";
-}
+// If the option use-automatic-username is enabled, set the attribute to hidden (so it will hide the username field)
+$hidden_username_attribute  = !empty($settings->get_value('use-automatic-username')) ? 'hidden' : '';
 
 SimpleWpMembership::enqueue_validation_scripts();
 //The admin ajax causes an issue with the JS validation if done on form submission. The edit profile doesn't need JS validation on email. There is PHP validation which will catch any email error.

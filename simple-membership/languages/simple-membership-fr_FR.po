@@ -1981,3 +1981,464 @@ msgstr ""
 
 msgid "This content is for members only."
 msgstr "Ce contenu est réservé aux abonnés."
+
+#: classes/class.simple-wp-membership.php:646
+#: classes/class.simple-wp-membership.php:650
+msgid "Validating, please wait"
+msgstr "Validation en cours, veuillez patienter"
+
+#: classes/class.simple-wp-membership.php:653
+msgid "Invalid email address"
+msgstr "Addresse email invalide"
+
+#: classes/class.simple-wp-membership.php:656
+msgid "This field is required"
+msgstr "Ce champ est requis"
+
+msgid "Password must contain at least:"
+msgstr "Le mot de passe doit contenir au minimum:"
+
+msgid "- a digit"
+msgstr "- un chiffre"
+
+msgid "- an uppercase letter"
+msgstr "- une majuscule"
+
+msgid "- a lowercase letter"
+msgstr "- une minuscule"
+
+#: classes/class.simple-wp-membership.php:659
+msgid "Usernames can only contain: letters, numbers and .-_*@"
+msgstr "Le nom d'utilisateur ne peut contenir que: lettres, chiffres et .-_*@"
+
+#: classes/class.simple-wp-membership.php:662
+msgid "Minimum "
+msgstr "Au moins "
+
+#: classes/class.simple-wp-membership.php:663
+msgid " characters required"
+msgstr " caractères sont requis"
+
+#: classes/class.simple-wp-membership.php:666
+msgid "Apostrophe character is not allowed"
+msgstr "Le caractere Apostrophe n'est pas autorisé"
+
+#: classes/class.swpm-ajax.php:21 classes/class.swpm-ajax.php:36
+msgid "Already taken"
+msgstr "Déjà utilisé"
+
+#: classes/class.swpm-auth.php:58
+msgid "Click here"
+msgstr "Cliquez ici"
+
+#: classes/class.swpm-auth.php:58
+msgid " to see the profile you are currently logged into in this browser."
+msgstr " pour voir le profil avec lequel vous êtes actuellement connecté"
+
+#: classes/class.swpm-auth.php:146
+#, php-format
+msgid ""
+"You need to activate your account. If you didn't receive an email then %s to "
+"resend the activation email."
+msgstr ""
+"Vous devez activer votre compte. Si vous n'avez pas reçu d'email, alors %s pour "
+"envoyer un nouvel email d'activation"
+
+#: classes/class.swpm-auth.php:146
+#: classes/class.swpm-front-registration.php:376
+#: classes/class.swpm-front-registration.php:426
+#: classes/class.swpm-utils-misc.php:169
+msgid "click here"
+msgstr "cliquez ici"
+
+#: classes/class.swpm-form.php:31
+msgid ""
+" Use a different username to complete the registration. If you want to use "
+"that username then you must enter the correct email address associated with "
+"the existing WP user to connect with that account."
+msgstr ""
+"Utilisez un nom d'utilisateur différent pour terminer l'enregistrement. Si vous souhaitez "
+"utiliser ce nom d'utilisateur, vous devez entrer l'adresse email correcte associé à "
+"l'utilisateur WP existant pour vous connecter à ce compte."
+
+#: classes/class.swpm-form.php:38
+msgid ""
+" Use a different email address to complete the registration. If you want to "
+"use that email then you must enter the correct username associated with the "
+"existing WP user to connect with that account."
+msgstr ""
+"Utilisez une adresse e-mail différente pour terminer l'enregistrement. Si vous souhaitez "
+"utiliser cet e-mail, vous devez entrer le nom d'utilisateur correct associé à "
+"l'utilisateur WP existant pour vous connecter à ce compte."
+
+#: classes/class.swpm-front-registration.php:49
+msgid " page to pay for a premium membership."
+msgstr " page pour acheter un abonnement premium"
+
+#: classes/class.swpm-front-registration.php:89
+msgid "You must accept the terms and conditions."
+msgstr "Vous devez accepter les termes et conditions."
+
+#: classes/class.swpm-front-registration.php:100
+msgid "You must agree to the privacy policy."
+msgstr "Vous devez accepter la politique de confidentialité"
+
+#: classes/class.swpm-front-registration.php:140
+msgid "You need to confirm your email address. Please check your email and follow instructions to complete your registration."
+msgstr "Vous devez confirmer votre adresse e-mail. Veuillez vérifier vos emails et suivre les instructions pour terminer votre inscription."
+
+#: classes/class.swpm-front-registration.php:301
+msgid "Captcha validation failed."
+msgstr "La validation du captcha a échoué."
+
+#: classes/class.swpm-front-registration.php:371
+msgid "Can't find member account."
+msgstr "Impossible de trouver le compte membre."
+
+#: classes/class.swpm-front-registration.php:376
+#: classes/class.swpm-front-registration.php:426
+msgid "Account already active. "
+msgstr "Compte déjà actif. "
+
+#: classes/class.swpm-front-registration.php:376
+#: classes/class.swpm-front-registration.php:426
+msgid " to login."
+msgstr " pour se connecter."
+
+#: classes/class.swpm-front-registration.php:383
+msgid ""
+"Activation code mismatch. Cannot activate this account. Please contact the "
+"site admin."
+msgstr ""
+"Incompatibilité du code d'activation. Impossible d'activer ce compte. Veuillez contacter"
+"l'administrateur du site."
+
+#: classes/class.swpm-front-registration.php:397
+msgid "Success! Your account has been activated successfully."
+msgstr "Succès! Votre compte a été activé avec succès."
+
+#: classes/class.swpm-front-registration.php:421
+msgid "Cannot find member account."
+msgstr "Impossible de trouver le compte membre."
+
+#: classes/class.swpm-front-registration.php:443
+msgid ""
+"Activation email has been sent. Please check your email and activate your "
+"account."
+msgstr ""
+"Un e-mail d'activation a été envoyé. Veuillez vérifier votre messagerie et activer "
+"votre compte."
+
+#: classes/class.swpm-members.php:27
+msgid "Last Login Date"
+msgstr "Date de la dernière connexion"
+
+#: classes/class.swpm-membership-levels.php:269
+msgid "Post and Page Protection"
+msgstr "Protection des publications et des pages"
+
+#: classes/class.swpm-post-list.php:44 classes/class.swpm-post-list.php:53
+#: classes/class.swpm-post-list.php:63
+msgid "Title"
+msgstr "Titre"
+
+#: classes/class.swpm-post-list.php:45 classes/class.swpm-post-list.php:54
+#: classes/class.swpm-post-list.php:64
+msgid "Author"
+msgstr "Auteur"
+
+#: classes/class.swpm-post-list.php:46 classes/class.swpm-post-list.php:56
+#: classes/class.swpm-post-list.php:66
+msgid "Status"
+msgstr "Statut"
+
+#: classes/class.swpm-post-list.php:55
+msgid "Categories"
+msgstr "Catégories"
+
+#: classes/class.swpm-post-list.php:65
+msgid "Type"
+msgstr "Type"
+
+#: classes/class.swpm-post-list.php:125
+msgid "Protection settings updated!"
+msgstr "Paramètres de protection mis à jour!"
+
+#: classes/class.swpm-post-list.php:230
+msgid "No items found."
+msgstr "Aucun élément trouvé."
+
+#: classes/class.swpm-protection.php:22
+msgid ""
+"The category or parent category of this post is protected. You can change "
+"the category protection settings from the "
+msgstr ""
+"La catégorie ou la catégorie parent de ce message est protégée. Vous pouvez "
+"modifier les paramètres de protection de catégorie à partir du "
+
+#: classes/class.swpm-protection.php:23
+msgid "category protection menu"
+msgstr "menu de protection de catégorie"
+
+#: classes/class.swpm-utils-member.php:80
+msgid "No Expiry"
+msgstr "Pas d'expiration"
+
+#: classes/class.swpm-utils-misc.php:168
+#, php-format
+msgid ""
+"You will be automatically redirected in a few seconds. If not, please %s."
+msgstr ""
+"Vous serez automatiquement redirigé dans quelques secondes. Sinon, veuillez %s."
+
+#: classes/class.swpm-utils-misc.php:172
+msgid "Action Status"
+msgstr "État de l'action"
+
+#: classes/class.swpm-utils-misc.php:421
+msgid "(Please Select)"
+msgstr "(Veuillez sélectionner)"
+
+#: classes/class.swpm-utils.php:118 views/admin_members_list.php:21
+msgid "Activation Required"
+msgstr "Activation requise"
+
+#: classes/class.swpm-utils.php:119
+msgid "Male"
+msgstr "Homme"
+
+#: classes/class.swpm-utils.php:120
+msgid "Female"
+msgstr "Femme"
+
+#: classes/class.swpm-utils.php:121
+msgid "Not Specified"
+msgstr "Ne se prononce pas"
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:115
+msgid "Logged in as: "
+msgstr "Connecté en tant que:"
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:121
+msgid "Login Here"
+msgstr "Connectez-vous ici"
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:122
+msgid "Not a member? "
+msgstr "Pas un membre?"
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:123
+msgid "Join Now"
+msgstr "Créer un compte maintenant"
+
+#: ipn/swpm-smart-checkout-ipn.php:260 ipn/swpm-smart-checkout-ipn.php:285
+#, php-format
+msgid "Error occured during payment verification. Error code: %d. Message: %s"
+msgstr "Une erreur s'est produite lors de la vérification du paiement. Code d'erreur: %d. Messages :%s"
+
+#: ipn/swpm-smart-checkout-ipn.php:298
+#, php-format
+msgid ""
+"Payment check failed: invalid amount received. Expected %s %s, got %s %s."
+msgstr ""
+"Le chèque de paiement a échoué: montant non valide reçu. Attendu %s %s, obtenu %s %s."
+
+#: ipn/swpm-smart-checkout-ipn.php:315
+msgid "Empty payment data received."
+msgstr "Données de paiement vides reçues."
+
+#: ipn/swpm-smart-checkout-ipn.php:355
+msgid "IPN product validation failed. Check debug log for more details."
+msgstr "La validation du produit IPN a échoué. Consultez le journal de débogage pour plus de détails."
+
+#: views/account_delete_warning.php:7
+msgid ""
+"You are about to delete an account. This will delete user data associated "
+"with this account. "
+msgstr ""
+"Vous êtes sur le point de supprimer un compte. Cela supprimera les données "
+"utilisateur associées à ce compte."
+
+#: views/account_delete_warning.php:8
+msgid "It will also delete associated WordPress user account."
+msgstr "Cela supprimera également le compte d'utilisateur WordPress associé."
+
+#: views/account_delete_warning.php:9
+msgid ""
+"(NOTE: for safety, we do not allow deletion of any associated WordPress "
+"account with administrator role)."
+msgstr ""
+"(REMARQUE: pour des raisons de sécurité, nous n'autorisons pas la suppression "
+"de tout compte WordPress associé avec le rôle d'administrateur)."
+
+#: views/account_delete_warning.php:10
+msgid "Continue?"
+msgstr "Continuer?"
+
+#: views/account_delete_warning.php:13
+msgid "Password: "
+msgstr "Mot de passe:"
+
+#: views/account_delete_warning.php:14
+msgid "Confirm Account Deletion"
+msgstr "Confirmer la suppression du compte"
+
+#: views/add.php:65
+msgid "I accept the "
+msgstr "J'accepte les"
+
+#: views/add.php:77
+msgid "I agree to the "
+msgstr "Je suis d'accord avec la"
+
+#: views/add.php:77
+msgid "Privacy Policy"
+msgstr "Politique de confidentialité"
+
+#: views/edit.php:71
+msgid "Company Name"
+msgstr "Nom de l'entreprise"
+
+#: views/loggedin.php:26
+msgid "Edit Profile"
+msgstr "Editer le profil"
+
+#: views/login.php:33
+msgid "Forgot Password?"
+msgstr "Mot de passe oublié?"
+
+#: views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php:137
+msgid "Error occured during PayPal Smart Checkout process."
+msgstr "Une erreur s'est produite lors du processus de paiement PayPal Smart Checkout."
+
+#: views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php:165
+msgid "HTTP error occured during payment process:"
+msgstr "Une erreur HTTP s'est produite lors du processus de paiement:"
+
+#: Translation strings from addons === Form builder addon
+msgid "Type password here"
+msgstr "Tapez le mot de passe ici"
+
+msgid "Retype password here"
+msgstr "Retapez le mot de passe ici"
+
+msgid ""
+"Check this box to delete the image. The image will be deleted when you save "
+"the profile."
+msgstr ""
+"Cochez cette case pour supprimer l'image. L'image sera supprimée lorsque vous "
+"enregistrez le profil."
+
+msgid "You will need to re-login since you changed your password."
+msgstr "Vous allez devoir vous reconnecter car vous avez changé votre mot de passe."
+
+msgid ""
+"Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
+msgstr ""
+"Veuillez saisir deux chiffres avec <strong>aucun</strong> espace (Exemple: 12)"
+
+msgid "Verification"
+msgstr "Vérification"
+
+msgid "Please enter any two digits with no spaces (Example: 12)*"
+msgstr "Veuillez saisir deux chiffres sans espace (Exemple: 12)*"
+
+msgid "Username can only contain: letters, numbers and .-*@"
+msgstr "Le nom d'utilisateur ne peut contenir que: des lettres, des chiffres et .-*@"
+
+msgid "Allowed characters are: letters, numbers and .-_*@"
+msgstr "Les caractères autorisés sont: lettres, chiffres et .-_*@"
+
+msgid "Please check at least one."
+msgstr "Veuillez en cocher au moins un."
+
+#: === Member Directory Listing addon strings swpm-member-directory-admin.php:9
+msgid "Member Directory"
+msgstr "Annuaire des membres"
+
+#: includes/swpm_mda_show_profile.php:26
+msgid "Member ID"
+msgstr "ID Membre"
+
+#: includes/swpm_mda_show_profile.php:30
+msgid "Level"
+msgstr "Niveau"
+
+#: includes/swpm_mda_show_profile.php:32
+msgid "Address"
+msgstr "Adresse"
+
+#: views/template-1.php:52 views/template-2.php:53
+msgid "Search..."
+msgstr "Chercher..."
+
+#: views/template-1.php:60 views/template-2.php:62
+msgid "Clear Search"
+msgstr "Effacer la recherche"
+
+# === Misc Shortcodes Addon ===
+msgid "You must be logged in to upgrade a membership."
+msgstr "Vous devez être connecté pour mettre à niveau un abonnement."
+
+msgid "Membership level has been updated."
+msgstr "Le niveau d'adhésion a été mis à jour."
+
+msgid "Already a member of this level."
+msgstr "Déjà membre de ce niveau."
+
+#: classes/class.simple-wp-membership.php:242
+msgid ""
+"Error! This site has the force WP user login feature enabled in the "
+"settings. We could not find a WP user record for the given username: "
+msgstr ""
+"Erreur! Ce site a la fonction de connexion utilisateur de force WP activée "
+"dans les paramètres. Nous n'avons pas pu trouver d'enregistrement "
+"d'utilisateur WP pour le nom d'utilisateur donné: "
+
+#: classes/class.simple-wp-membership.php:243
+msgid ""
+"This error is triggered when a member account doesn't have a corresponding "
+"WP user account. So the plugin fails to log the user into the WP User system."
+msgstr ""
+"Cette erreur est déclenchée lorsqu'un compte membre n'a pas de compte utilisateur WP correspondant."
+" Le plugin ne parvient donc pas à connecter l'utilisateur au système WP User."
+
+#: classes/class.simple-wp-membership.php:244
+msgid ""
+"Contact the site admin and request them to check your username in the WP "
+"Users menu to see what happened with the WP user entry of your account."
+msgstr ""
+"Contactez l'administrateur du site et demandez-lui de vérifier votre nom d'utilisateur dans le "
+"menu Utilisateurs WP pour voir ce qui s'est passé avec votre utilisateur WP."
+
+#: classes/class.simple-wp-membership.php:245
+msgid ""
+"The site admin can disable the Force WP User Synchronization feature in the "
+"settings to disable this feature and this error will go away."
+msgstr ""
+"L'administrateur du site peut désactiver la fonctionnalité Force WP User Synchronization "
+"dans les paramètres pour désactiver cette fonctionnalité et cette erreur disparaîtra."
+
+#: classes/class.simple-wp-membership.php:246
+msgid "You can use the back button of your browser to go back to the site."
+msgstr "Vous pouvez utiliser le bouton retour de votre navigateur pour revenir sur le site."
+
+#: classes/class.simple-wp-membership.php:504
+msgid "No, Do not protect this content."
+msgstr "Non, ne pas protéger ce contenu."
+
+#: classes/class.simple-wp-membership.php:505
+msgid "Yes, Protect this content."
+msgstr "Oui, protéger ce contenu."
+
+#: classes/class.swpm-auth.php:59
+msgid ""
+"You are logged into the site as an ADMIN user in this browser. First, logout "
+"from WP Admin then you will be able to log in as a normal member."
+msgstr ""
+"Vous êtes connecté au site en tant qu'utilisateur ADMIN dans ce navigateur. Tout d'abord, "
+"déconnectez-vous de WP Admin, puis vous pourrez vous connecter en tant que membre normal."
+
+#: classes/class.swpm-settings.php:251 views/add.php:65
+msgid "Terms and Conditions"
+msgstr "Termes et Conditions"

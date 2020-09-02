@@ -2439,7 +2439,6 @@ msgstr ""
 "Vous êtes connecté au site en tant qu'utilisateur ADMIN dans ce navigateur. Tout d'abord, "
 "déconnectez-vous de WP Admin, puis vous pourrez vous connecter en tant que membre normal."
 
-
 #: classes/class.swpm-settings.php:251 views/add.php:65
 msgid "Terms and Conditions"
 msgstr "Termes et Conditions"

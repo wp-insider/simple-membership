@@ -725,6 +725,18 @@ class SwpmSettings {
 			)
 		);
 
+		add_settings_field(
+			'use-automatic-username',
+			SwpmUtils::_( 'Use Automatic Usernames' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'use-automatic-username',
+				'message' => SwpmUtils::_( 'Enable this option if you want to automatically generate the Usernames and therefore hide the Username field from users. Since the Usernames have to be unique, the plugin will use the current date+time to generate a unique number. The automatic Username will be YYMMDDHHmmXXXX, with XXXX being a 4-digit long random number. Example for an user creating an account on July 25th 2020 at 8:55 AM : 20072508551234.' ),
+			)
+		);
+
 		//Auto create SWPM user related settings section
 		add_settings_section( 'auto-create-swpm-user-settings', SwpmUtils::_( 'Create Member Accounts for New WP Users' ), array( &$this, 'advanced_settings_auto_create_swpm_uses_settings_callback' ), 'simple_wp_membership_settings' );
 
@@ -1145,9 +1157,10 @@ class SwpmSettings {
 		$output['after-logout-redirection-url']      = esc_url( $input['after-logout-redirection-url'] );
 		$output['force-strong-passwords']            = isset( $input['force-strong-passwords'] ) ? esc_attr( $input['force-strong-passwords'] ) : '';
 		$output['auto-login-after-rego']             = isset( $input['auto-login-after-rego'] ) ? esc_attr( $input['auto-login-after-rego'] ) : '';
-                $output['hide-rego-form-to-logged-users']    = isset( $input['hide-rego-form-to-logged-users'] ) ? esc_attr( $input['hide-rego-form-to-logged-users'] ) : '';
+		$output['hide-rego-form-to-logged-users']    = isset( $input['hide-rego-form-to-logged-users'] ) ? esc_attr( $input['hide-rego-form-to-logged-users'] ) : '';
 		$output['force-wp-user-sync']                = isset( $input['force-wp-user-sync'] ) ? esc_attr( $input['force-wp-user-sync'] ) : '';
 		$output['payment-notification-forward-url']  = esc_url( $input['payment-notification-forward-url'] );
+		$output['use-automatic-username']            = esc_url( $input['use-automatic-username'] );
 
 		//Auto create swpm user related settings
 		$output['enable-auto-create-swpm-members']      = isset( $input['enable-auto-create-swpm-members'] ) ? esc_attr( $input['enable-auto-create-swpm-members'] ) : '';

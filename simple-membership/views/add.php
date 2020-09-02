@@ -7,12 +7,22 @@ if (!empty($force_strong_pass)) {
 } else {
     $pass_class = "";
 }
+
+// Get value of use-automatic-username to detect if we want to generate usernames automatically and hide the username field or not
+$use_automatic_username = $settings->get_value('use-automatic-username');
+// If the option is enabled, generate the username automatically and enable the hidden attribute (so it will hide the username field)
+if (!empty($use_automatic_username)) {
+    $user_name=date('ymdHi').mt_rand(1000, 9999);
+    $hidden_username_attribute="hidden";
+} else { // If the option is not enabled, do not enable the hidden attribute (so it will show the username field)
+    $hidden_username_attribute="";
+}
 ?>
 <div class="swpm-registration-widget-form">
     <form id="swpm-registration-form" class="swpm-validate-form" name="swpm-registration-form" method="post" action="">
         <input type ="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
         <table>
-            <tr class="swpm-registration-username-row">
+            <tr class="swpm-registration-username-row" <?php echo $hidden_username_attribute ?>>
                 <td><label for="user_name"><?php echo SwpmUtils::_('Username') ?></label></td>
                 <td><input type="text" id="user_name" class="validate[required,custom[noapostrophe],custom[SWPMUserName],minSize[4],ajax[ajaxUserCall]]" value="<?php echo esc_attr($user_name); ?>" size="50" name="user_name" /></td>
             </tr>

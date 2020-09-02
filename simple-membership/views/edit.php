@@ -10,6 +10,16 @@ if (!empty($force_strong_pass)) {
 } else {
     $pass_class="";
 }
+
+// Get value of use-automatic-username to detect if we want to hide the username field or not
+$use_automatic_username = $settings->get_value('use-automatic-username');
+// If the option is enabled, enable the hidden attribute (so it will hide the username field)
+if (!empty($use_automatic_username)) {
+    $hidden_username_attribute="hidden";
+} else { // If the option is not enabled, do not enable the hidden attribute (so it will show the username field)
+    $hidden_username_attribute="";
+}
+
 SimpleWpMembership::enqueue_validation_scripts();
 //The admin ajax causes an issue with the JS validation if done on form submission. The edit profile doesn't need JS validation on email. There is PHP validation which will catch any email error.
 //SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.SwpmAuth::get_instance()->get('member_id'))));
@@ -19,7 +29,7 @@ SimpleWpMembership::enqueue_validation_scripts();
         <?php wp_nonce_field('swpm_profile_edit_nonce_action', 'swpm_profile_edit_nonce_val') ?>
         <table>
             <?php apply_filters('swpm_edit_profile_form_before_username', ''); ?>
-            <tr class="swpm-profile-username-row">
+            <tr class="swpm-profile-username-row" <?php echo $hidden_username_attribute ?>>
                 <td><label for="user_name"><?php echo SwpmUtils::_('Username'); ?></label></td>
                 <td><?php echo $user_name ?></td>
             </tr>
@@ -70,7 +80,7 @@ SimpleWpMembership::enqueue_validation_scripts();
             <tr class="swpm-profile-company-row">
                 <td><label for="company_name"><?php echo SwpmUtils::_('Company Name'); ?></label></td>
                 <td><input type="text" id="company_name" value="<?php echo $company_name; ?>" size="50" name="company_name" /></td>
-            </tr>            
+            </tr>
             <tr class="swpm-profile-membership-level-row">
                 <td><label for="membership_level"><?php echo SwpmUtils::_('Membership Level'); ?></label></td>
                 <td>

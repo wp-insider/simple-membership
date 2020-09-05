@@ -12,6 +12,8 @@ class SwpmShortcodesHandler {
 		add_shortcode( 'swpm_mini_login', array( &$this, 'swpm_show_mini_login_sc' ) );
 
 		add_shortcode( 'swpm_paypal_subscription_cancel_link', array( &$this, 'swpm_pp_cancel_subs_link_sc' ) );
+
+		add_shortcode( 'swpm_subscription_cancel_link', array( $this, 'subscription_cancel_link' ) );
 	}
 
 	public function swpm_payment_button_sc( $args ) {
@@ -144,6 +146,23 @@ class SwpmShortcodesHandler {
 		$output = apply_filters( 'swpm_mini_login_output', $output );
 
 		return $output;
+	}
+
+	public function subscription_cancel_link( $args ) {
+		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
+			//member not logged in
+			return 'Not logged in';
+		}
+		$member_id = SwpmMemberUtils::get_logged_in_members_id();
+
+		$subs = new SWPM_Member_Subscriptions( $member_id );
+
+		if ( empty( $subs->get_active_subs_count() ) ) {
+			//no active subscriptions found
+			return '';
+		}
+
+		return $subs->get_cancel_url();
 	}
 
 	public function swpm_pp_cancel_subs_link_sc( $args ) {

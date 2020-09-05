@@ -111,22 +111,34 @@ class SwpmWpLoadedTasks {
 	}
 
 	private function do_cancel_sub() {
+
+		function msg( $msg, $is_error = true ) {
+			echo $msg;
+			echo '<br><br>';
+			echo 'You will automatically return to previous page in few seconds. If not, please <a href="">click here</a>.';
+			echo '<script>function toPrevPage(){window.location = window.location.href;}setTimeout(toPrevPage,5000);</script>';
+			if ( ! $is_error ) {
+				wp_die( '', 'Success!', array( 'response' => 200 ) );
+			}
+			wp_die();
+		}
+
 		$token = filter_input( INPUT_POST, 'swpm_cancel_sub_token', FILTER_SANITIZE_STRING );
 		if ( empty( $token ) ) {
-			//no token provided
-			return false;
+			//no token
+			msg( 'No token provided.' );
 		}
 
 		//check nonce
 		$nonce = filter_input( INPUT_POST, 'swpm_cancel_sub_nonce', FILTER_SANITIZE_STRING );
 		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, $token ) ) {
 			//nonce check failed
-			return false;
+			msg( 'Nonce check failed.' );
 		}
 
 		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
 			//member not logged in
-			return false;
+			msg( 'You are not logged in.' );
 		}
 
 		$member_id = SwpmMemberUtils::get_logged_in_members_id();
@@ -141,6 +153,8 @@ class SwpmWpLoadedTasks {
 		}
 
 		$subs->cancel( $sub['sub_id'] );
+
+		msg( 'Subscription has been cancelled.', false );
 
 	}
 

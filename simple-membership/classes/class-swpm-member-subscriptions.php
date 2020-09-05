@@ -125,9 +125,9 @@ class SWPM_Member_Subscriptions {
 
 		$token = $sub['cancel_token'];
 
-		$nonce = wp_nonce_field( $token, 'swpm_cancel_sub_nonce', true, false );
+		$nonce = wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );
 
-		return sprintf( '<form method="POST">%s<input type="hidden" name="swpm_cancel_sub_token" value="%s"></input><button type="submit" name="swpm_do_cancel_sub" value="1">Cancel</button></form>', $nonce, $token );
+		return sprintf( '<form method="POST">%s<input type="hidden" name="swpm_cancel_sub_token" value="%s"></input><button type="submit" name="swpm_do_cancel_sub" value="1" onclick="return confirm(\'Sure?\');">Cancel</button></form>', $nonce, $token );
 	}
 
 	public function find_by_token( $token ) {

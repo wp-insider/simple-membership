@@ -159,7 +159,7 @@ class SwpmShortcodesHandler {
 
 		if ( empty( $subs->get_active_subs_count() ) ) {
 			//no active subscriptions found
-			return '';
+			return '-';
 		}
 
 		return $subs->get_cancel_url();

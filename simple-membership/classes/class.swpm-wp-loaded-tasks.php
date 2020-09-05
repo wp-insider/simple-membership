@@ -16,6 +16,13 @@ class SwpmWpLoadedTasks {
 		//IPN listener
 		$this->swpm_ipn_listener();
 
+		//Cancel subscirption action listener
+		$cancel_sub_action = filter_input( INPUT_POST, 'swpm_do_cancel_sub', FILTER_SANITIZE_NUMBER_INT );
+
+		if ( ! empty( $cancel_sub_action ) ) {
+			$this->do_cancel_sub();
+		}
+
 	}
 
 	/*
@@ -101,6 +108,40 @@ class SwpmWpLoadedTasks {
 			//Listed and handle Stripe SCA checkout session create requests
 			require_once SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-buy-now-ipn.php';
 		}
+	}
+
+	private function do_cancel_sub() {
+		$token = filter_input( INPUT_POST, 'swpm_cancel_sub_token', FILTER_SANITIZE_STRING );
+		if ( empty( $token ) ) {
+			//no token provided
+			return false;
+		}
+
+		//check nonce
+		$nonce = filter_input( INPUT_POST, 'swpm_cancel_sub_nonce', FILTER_SANITIZE_STRING );
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, $token ) ) {
+			//nonce check failed
+			return false;
+		}
+
+		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
+			//member not logged in
+			return false;
+		}
+
+		$member_id = SwpmMemberUtils::get_logged_in_members_id();
+
+		$subs = new SWPM_Member_Subscriptions( $member_id );
+
+		$sub = $subs->find_by_token( $token );
+
+		if ( empty( $sub ) ) {
+			//no subscription found
+			return false;
+		}
+
+		$subs->cancel( $sub['sub_id'] );
+
 	}
 
 }

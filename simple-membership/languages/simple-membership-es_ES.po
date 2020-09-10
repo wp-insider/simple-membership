@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - Simple Membership - Development (trunk)\n"
 "POT-Creation-Date: 2019-05-26 13:48+0600\n"
-"PO-Revision-Date: 2019-10-04 08:32+1000\n"
+"PO-Revision-Date: 2020-09-09 14:14+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: classes/class.simple-wp-membership.php:180
 msgid "The admin of this site does not allow users to access the wp dashboard."
@@ -243,7 +243,7 @@ msgid "Invalid Email Address"
 msgstr "Dirección de correo electrónico no válido"
 
 #: classes/class.swpm-ajax.php:21 classes/class.swpm-ajax.php:36
-msgid "Aready taken"
+msgid "Already taken"
 msgstr "Ya está cogido"
 
 #: classes/class.swpm-ajax.php:30
@@ -1453,12 +1453,16 @@ msgstr "Permiso de acceso al escritorio de administración"
 msgid ""
 "SWPM admin dashboard is accessible to admin users only (just like any other "
 "plugin). You can allow users with other WP user role to access the SWPM "
-"admin dashboard by selecting a value here."
+"admin dashboard by selecting a value here. Note that this option cannot work "
+"if you enabled the \"Disable Access to WP Dashboard\" option in General "
+"Settings."
 msgstr ""
-"El escritorio de administración de SWPM sólo es accesible para usuarios de "
-"administración (como cualquier otro plugin). Puedes permitir los usuarios "
-"con otro perfil de usuario de WP acceder al escritorio de administración de "
-"SWPM seleccionando un valor aquí."
+"El escritorio de administración de SWPM es accesible solo para usuarios "
+"administrativos (como cualquier otro plugin). Puedes permitir que los "
+"usuarios con otro perfil de usuario de WP accedan al escritorio de "
+"administración de SWPM seleccionando un valor aquí. Ten en cuenta que esta "
+"opción no puede funcionar si activas la opción «Desactivar el acceso al "
+"escritorio de WP» en ajustes generales."
 
 #: classes/class.swpm-settings.php:226
 msgid "Force WP User Synchronization"
@@ -2967,8 +2971,8 @@ msgid "Stripe Subscription Button Configuration"
 msgstr "Ajustes del botón de Suscripción de Stripe"
 
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:109
-msgid "Stripe Plan ID"
-msgstr "ID del plan de Stripe"
+msgid "Stripe API ID"
+msgstr "Id. de API de Stripe"
 
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:125
 msgid "Stripe API Settings"
@@ -3104,6 +3108,9 @@ msgstr "El nivel de membresía ha sido actualizado."
 
 msgid "Already a member of this level."
 msgstr "Ya eres miembro de este nivel."
+
+#~ msgid "Aready taken"
+#~ msgstr "Ya está cogido"
 
 #~ msgid "Account already active. <a href=\""
 #~ msgstr "La cuenta ya está activa. <a href=\""

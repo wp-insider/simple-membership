@@ -3,12 +3,14 @@ $auth = SwpmAuth::get_instance();
 $setting = SwpmSettings::get_instance();
 $password_reset_url = $setting->get_value('reset-page-url');
 $join_url = $setting->get_value('join-us-page-url');
+// Filter allowing to change the default value of username label
+$swpm_username_label = apply_filters('swpm_login_form_set_username_label', 'Username or Email');
 ?>
 <div class="swpm-login-widget-form">
     <form id="swpm-login-form" name="swpm-login-form" method="post" action="">
         <div class="swpm-login-form-inner">
             <div class="swpm-username-label">
-                <label for="swpm_user_name" class="swpm-label"><?php echo SwpmUtils::_('Username or Email') ?></label>
+                <label for="swpm_user_name" class="swpm-label"><?php echo SwpmUtils::_($swpm_username_label) ?></label>
             </div>
             <div class="swpm-username-input">
                 <input type="text" class="swpm-text-field swpm-username-field" id="swpm_user_name" value="" size="25" name="swpm_user_name" />

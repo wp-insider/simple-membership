@@ -130,7 +130,7 @@ class SWPM_Member_Subscriptions {
 		$nonce = wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );
 
 		$out = '<form method="POST">%s<input type="hidden" name="swpm_cancel_sub_token" value="%s"></input>
-		<button type="submit" name="swpm_do_cancel_sub" value="1" onclick="return confirm(\'' . esc_js( SwpmUtils::_( 'Are you sure want to cacncel subscription?' ) ) . '\');">' . SwpmUtils::_( 'Cancel' ) . '</button></form>';
+		<button type="submit" name="swpm_do_cancel_sub" value="1" onclick="return confirm(\'' . esc_js( SwpmUtils::_( 'Are you sure want to cancel subscription?' ) ) . '\');">' . SwpmUtils::_( 'Cancel' ) . '</button></form>';
 
 		$out = sprintf( $out, $nonce, $token );
 

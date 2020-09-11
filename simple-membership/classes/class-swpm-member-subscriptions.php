@@ -94,29 +94,31 @@ class SWPM_Member_Subscriptions {
 			if ( ! empty( $sub['status'] ) ) {
 				continue;
 			}
+			try {
+				$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $sub['payment_button_id'], $sub['is_live'] );
 
-			$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $sub['payment_button_id'], $sub['is_live'] );
+				SwpmMiscUtils::load_stripe_lib();
 
-			SwpmMiscUtils::load_stripe_lib();
+				\Stripe\Stripe::setApiKey( $api_keys['secret'] );
 
-			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
+				$stripe_sub = \Stripe\Subscription::retrieve( $sub_id );
 
-			$stripe_sub = \Stripe\Subscription::retrieve( $sub_id );
+				$this->subs[ $sub_id ]['status'] = $stripe_sub['status'];
 
-			$this->subs[ $sub_id ]['status'] = $stripe_sub['status'];
+				if ( $this->is_active( $stripe_sub['status'] ) ) {
+					$this->active_subs_count++;
+				}
 
-			if ( $this->is_active( $stripe_sub['status'] ) ) {
-				$this->active_subs_count++;
+				update_post_meta( $sub['post_id'], 'subscr_status', $stripe_sub['status'] );
+			} catch ( \Exception $e ) {
+				return false;
 			}
-
-			update_post_meta( $sub['post_id'], 'subscr_status', $stripe_sub['status'] );
-
 		}
 	}
 
 	public function get_cancel_url( $sub_id = false ) {
 		if ( empty( $this->active_subs_count ) ) {
-			return '-';
+			return SwpmUtils::_( 'No active subscriptions' );
 		}
 		if ( false === $sub_id ) {
 			$sub_id = array_key_first( $this->subs );
@@ -127,7 +129,12 @@ class SWPM_Member_Subscriptions {
 
 		$nonce = wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );
 
-		return sprintf( '<form method="POST">%s<input type="hidden" name="swpm_cancel_sub_token" value="%s"></input><button type="submit" name="swpm_do_cancel_sub" value="1" onclick="return confirm(\'Sure?\');">Cancel</button></form>', $nonce, $token );
+		$out = '<form method="POST">%s<input type="hidden" name="swpm_cancel_sub_token" value="%s"></input>
+		<button type="submit" name="swpm_do_cancel_sub" value="1" onclick="return confirm(\'' . esc_js( SwpmUtils::_( 'Are you sure want to cacncel subscription?' ) ) . '\');">' . SwpmUtils::_( 'Cancel' ) . '</button></form>';
+
+		$out = sprintf( $out, $nonce, $token );
+
+		return $out;
 	}
 
 	public function find_by_token( $token ) {
@@ -141,20 +148,23 @@ class SWPM_Member_Subscriptions {
 	public function cancel( $sub_id ) {
 		$sub = $this->subs[ $sub_id ];
 
-		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $sub['payment_button_id'], $sub['is_live'] );
+		try {
+			$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $sub['payment_button_id'], $sub['is_live'] );
 
-		SwpmMiscUtils::load_stripe_lib();
+			SwpmMiscUtils::load_stripe_lib();
 
-		\Stripe\Stripe::setApiKey( $api_keys['secret'] );
+			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
 
-		$stripe_sub = \Stripe\Subscription::retrieve( $sub_id );
+			$stripe_sub = \Stripe\Subscription::retrieve( $sub_id );
 
-		if ( $this->is_active( $stripe_sub['status'] ) ) {
-			$stripe_sub->cancel();
+			if ( $this->is_active( $stripe_sub['status'] ) ) {
+				$stripe_sub->cancel();
+			}
+
+			update_post_meta( $sub['post_id'], 'subscr_status', $stripe_sub['status'] );
+		} catch ( \Exception $e ) {
+			return $e->getMessage();
 		}
-
-		update_post_meta( $sub['post_id'], 'subscr_status', $stripe_sub['status'] );
-
 		return true;
 	}
 

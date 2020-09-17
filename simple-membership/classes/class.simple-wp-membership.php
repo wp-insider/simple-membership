@@ -31,6 +31,7 @@ include_once('class.swpm-permission-collection.php');
 include_once('class.swpm-auth-permission-collection.php');
 include_once('class.swpm-transactions.php');
 include_once('shortcode-related/class.swpm-shortcodes-handler.php');
+include_once('class-swpm-member-subscriptions.php');
 
 class SimpleWpMembership {
 

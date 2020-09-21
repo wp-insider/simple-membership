@@ -151,7 +151,7 @@ class SwpmShortcodesHandler {
 	public function subscription_cancel_link( $args ) {
 		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
 			//member not logged in
-			return SwpmUtils::_( 'Not logged in' );
+			return SwpmUtils::_( 'You are not logged-in as a member' );
 		}
 		$member_id = SwpmMemberUtils::get_logged_in_members_id();
 

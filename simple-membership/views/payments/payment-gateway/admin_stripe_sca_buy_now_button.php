@@ -6,14 +6,11 @@ add_action( 'swpm_create_new_button_for_stripe_sca_buy_now', 'swpm_create_new_st
 
 function swpm_create_new_stripe_sca_buy_now_button() {
 
-	//Test for PHP v5.3.3 or show error and don't show the remaining interface.
-	if ( version_compare( PHP_VERSION, '5.4.0' ) >= 0 ) {
-		//The server is using at least PHP version 5.4.0
-		//Can use Stripe gateway library
-	} else {
+	//Test for PHP v5.6.0 or show error and don't show the remaining interface.
+	if ( version_compare( PHP_VERSION, '5.6.0' ) < 0 ) {
 		//This server can't handle Stripe library
 		echo '<div class="swpm-red-box">';
-		echo '<p>The Stripe payment gateway libary requires at least PHP 5.4.0. Your server is using a very old version of PHP that Stripe does not support.</p>';
+		echo '<p>The Stripe payment gateway libary requires at least PHP 5.6.0. Your server is using a very old version of PHP that Stripe does not support.</p>';
 		echo '<p>Request your hosting provider to upgrade your PHP to a more recent version then you will be able to use the Stripe gateway.<p>';
 		echo '</div>';
 		return;

@@ -2,7 +2,8 @@
 Contributors: smp7, wp.insider
 Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
-Requires at least: 4.0
+Requires at least: 5.0
+Requires PHP: 5.6
 Tested up to: 5.5
 Stable tag: 4.0.1
 License: GPLv2 or later
@@ -168,6 +169,7 @@ https://simple-membership-plugin.com/simple-membership-miscellaneous-shortcodes-
 - Updated the French language translation file.
 - The "Bulk Account Activate & Notify" option now sends the email one by one to all the selected members (instead of a batch email). To prevent email issue when used with SMTP solution.
 - Added more filters in the registration, edit profile and login forms.
+- The Stripe SDK library has been updated to latest. Minimum PHP version required for it is PHP5.6
 
 = 4.0.1 =
 - Added the "Button Image URL" field for the Stripe Buy Now type buttons (to allow button image customization).

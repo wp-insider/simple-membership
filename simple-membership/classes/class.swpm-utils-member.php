@@ -62,6 +62,14 @@ class SwpmMemberUtils {
 		return SwpmUtils::_( 'User is not logged in.' );
 	}
 
+	public static function get_logged_in_members_email() {
+		$auth = SwpmAuth::get_instance();
+		if ( ! $auth->is_logged_in() ) {
+			return SwpmUtils::_( 'User is not logged in.' );
+		}
+		return $auth->get( 'email' );
+	}
+
 	public static function get_member_field_by_id( $id, $field, $default = '' ) {
 		global $wpdb;
 		$query    = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id = %d';

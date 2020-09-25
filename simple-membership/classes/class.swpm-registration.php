@@ -37,11 +37,14 @@ abstract class SwpmRegistration {
 			update_option( 'swpm_email_activation_data_usr_' . $member_id, $user_data, false );
 			$body                           = $settings->get_value( 'email-activation-mail-body' );
 			$subject                        = $settings->get_value( 'email-activation-mail-subject' );
+			// If exist, get the swpm_redirect_to parameter, and add it to the activation_link variable to allow future redirections
+			$swpm_redirect_to               = !empty($_GET['swpm_redirect_to']) ? filter_input(INPUT_GET, 'swpm_redirect_to', FILTER_SANITIZE_ENCODED) : false;
 			$activation_link                = add_query_arg(
 				array(
 					'swpm_email_activation' => '1',
 					'swpm_member_id'        => $member_id,
 					'swpm_token'            => $act_code,
+					'swpm_redirect_to'      => $swpm_redirect_to,
 				),
 				get_home_url()
 			);

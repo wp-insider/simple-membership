@@ -169,6 +169,17 @@ class SwpmFrontRegistration extends SwpmRegistration {
 				);
 			} else {
 				$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );
+
+				// If exist, get the swpm_redirect_to parameter, and add it to the login_page_url variable to allow future redirections
+				$swpm_redirect_to = !empty($_GET['swpm_redirect_to']) ? filter_input(INPUT_GET, 'swpm_redirect_to', FILTER_SANITIZE_ENCODED) : false;
+
+				$login_page_url = add_query_arg(
+					array(
+					    'swpm_redirect_to' => $swpm_redirect_to,
+					),
+				$login_page_url
+				);
+
 				$after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_( 'Registration Successful. ' ) . SwpmUtils::_( 'Please' ) . ' <a href="' . $login_page_url . '">' . SwpmUtils::_( 'Login' ) . '</a></div>';
 				$after_rego_msg = apply_filters( 'swpm_registration_success_msg', $after_rego_msg );
 				$message        = array(
@@ -441,6 +452,16 @@ class SwpmFrontRegistration extends SwpmRegistration {
 	public function email_activation() {
 		$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );
 
+		// If exist, get the swpm_redirect_to parameter, and add it to the login_page_url variable to allow future redirections
+		$swpm_redirect_to = !empty($_GET['swpm_redirect_to']) ? filter_input(INPUT_GET, 'swpm_redirect_to', FILTER_SANITIZE_ENCODED) : false;
+
+		$login_page_url = add_query_arg(
+			array(
+				'swpm_redirect_to' => $swpm_redirect_to,
+			),
+			$login_page_url
+		);
+
 		$member_id = FILTER_INPUT( INPUT_GET, 'swpm_member_id', FILTER_SANITIZE_NUMBER_INT );
 
 		$member = SwpmMemberUtils::get_user_by_id( $member_id );
@@ -476,7 +497,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 		$after_rego_url = SwpmSettings::get_instance()->get_value( 'after-rego-redirect-page-url' );
 		$after_rego_url = apply_filters( 'swpm_after_registration_redirect_url', $after_rego_url );
-		if ( ! empty( $after_rego_url ) ) {
+		if ( ! empty( $after_rego_url ) && empty($swpm_redirect_to) ) {
 			//Yes. Need to redirect to this after registration page
 			SwpmLog::log_simple_debug( 'After registration redirect is configured in settings. Redirecting user to: ' . $after_rego_url, true );
 			SwpmMiscUtils::show_temporary_message_then_redirect( $msg, $after_rego_url );
@@ -490,6 +511,16 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 	public function resend_activation_email() {
 		$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );
+
+		// If exist, get the swpm_redirect_to parameter, and add it to the login_page_url variable to allow future redirections
+		$swpm_redirect_to = !empty($_GET['swpm_redirect_to']) ? filter_input(INPUT_GET, 'swpm_redirect_to', FILTER_SANITIZE_ENCODED) : false;
+
+		$login_page_url = add_query_arg(
+			array(
+				'swpm_redirect_to' => $swpm_redirect_to,
+			),
+			$login_page_url
+		);
 
 		$member_id = FILTER_INPUT( INPUT_GET, 'swpm_member_id', FILTER_SANITIZE_NUMBER_INT );
 

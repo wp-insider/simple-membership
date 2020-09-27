@@ -45,6 +45,10 @@ abstract class SwpmRegistration {
 				),
 				get_home_url()
 			);
+
+			// Allow hooks to change the value of activation_link
+			$activation_link = apply_filters('swpm_send_reg_email_activation_link', $activation_link);
+
 			$member_info['activation_link'] = $activation_link;
 		}
 

@@ -8,6 +8,7 @@ Author URI: https://simple-membership-plugin.com/
 Description: A flexible, well-supported, and easy-to-use WordPress membership plugin for offering free and premium content from your WordPress site.
 Text Domain: simple-membership
 Domain Path: /languages/
+Requires PHP: 5.6
 */
 
 //Direct access to this file is not permitted

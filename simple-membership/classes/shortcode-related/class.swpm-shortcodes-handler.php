@@ -13,7 +13,7 @@ class SwpmShortcodesHandler {
 
 		add_shortcode( 'swpm_paypal_subscription_cancel_link', array( &$this, 'swpm_pp_cancel_subs_link_sc' ) );
 
-		add_shortcode( 'swpm_subscription_cancel_link', array( $this, 'subscription_cancel_link' ) );
+		add_shortcode( 'swpm_stripe_subscription_cancel_link', array( $this, 'swpm_stripe_cancel_subs_link_sc' ) );
 	}
 
 	public function swpm_payment_button_sc( $args ) {
@@ -148,7 +148,9 @@ class SwpmShortcodesHandler {
 		return $output;
 	}
 
-	public function subscription_cancel_link( $args ) {
+	public function swpm_stripe_cancel_subs_link_sc( $args ) {
+                //Shortcode parameters: ['anchor_text']
+
 		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
 			//member not logged in
 			return SwpmUtils::_( 'You are not logged-in as a member' );
@@ -162,10 +164,14 @@ class SwpmShortcodesHandler {
 			return SwpmUtils::_( 'No active subscriptions' );
 		}
 
-		return $subs->get_cancel_url();
+                $output = $subs->get_stripe_subs_cancel_url($args, false);
+
+		return $output;
 	}
 
 	public function swpm_pp_cancel_subs_link_sc( $args ) {
+                //Shortcode parameters: ['anchor_text'], ['merchant_id']
+
 		extract(
 			shortcode_atts(
 				array(

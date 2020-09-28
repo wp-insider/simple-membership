@@ -115,7 +115,7 @@ class SwpmWpLoadedTasks {
 		function msg( $msg, $is_error = true ) {
 			echo $msg;
 			echo '<br><br>';
-			echo SwpmUtils::_( 'You will automatically return to previous page in few seconds. If not, please <a href="">click here</a>.' );
+			echo SwpmUtils::_( 'You will be redirected to the previous page in a few seconds. If not, please <a href="">click here</a>.' );
 			echo '<script>function toPrevPage(){window.location = window.location.href;}setTimeout(toPrevPage,5000);</script>';
 			if ( ! $is_error ) {
 				wp_die( '', SwpmUtils::_( 'Success!' ), array( 'response' => 200 ) );

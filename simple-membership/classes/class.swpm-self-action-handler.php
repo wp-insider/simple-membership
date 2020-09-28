@@ -54,6 +54,10 @@ class SwpmSelfActionHandler {
         if (!empty($enable_auto_login)){
             SwpmLog::log_simple_debug("Auto login after registration feature is enabled in settings. Performing auto login for user: " . $user_data['user_name'], true);
             $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
+
+            // Allow hooks to change the value of login_page_url
+            $login_page_url = apply_filters('swpm_after_reg_callback_login_page_url', $login_page_url);
+
             $encoded_pass = base64_encode($user_data['plain_password']);
             $swpm_auto_login_nonce = wp_create_nonce('swpm-auto-login-nonce');
             $arr_params = array(

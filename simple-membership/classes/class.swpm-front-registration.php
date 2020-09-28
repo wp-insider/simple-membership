@@ -169,6 +169,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
 				);
 			} else {
 				$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );
+
+				// Allow hooks to change the value of login_page_url
+				$login_page_url = apply_filters('swpm_register_front_end_login_page_url', $login_page_url);
+
 				$after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_( 'Registration Successful. ' ) . SwpmUtils::_( 'Please' ) . ' <a href="' . $login_page_url . '">' . SwpmUtils::_( 'Login' ) . '</a></div>';
 				$after_rego_msg = apply_filters( 'swpm_registration_success_msg', $after_rego_msg );
 				$message        = array(
@@ -441,6 +445,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 	public function email_activation() {
 		$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );
 
+		// Allow hooks to change the value of login_page_url
+		$login_page_url = apply_filters('swpm_email_activation_login_page_url', $login_page_url);
+
 		$member_id = FILTER_INPUT( INPUT_GET, 'swpm_member_id', FILTER_SANITIZE_NUMBER_INT );
 
 		$member = SwpmMemberUtils::get_user_by_id( $member_id );
@@ -490,6 +497,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 	public function resend_activation_email() {
 		$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );
+
+		// Allow hooks to change the value of login_page_url
+		$login_page_url = apply_filters('swpm_resend_activation_email_login_page_url', $login_page_url);
 
 		$member_id = FILTER_INPUT( INPUT_GET, 'swpm_member_id', FILTER_SANITIZE_NUMBER_INT );
 

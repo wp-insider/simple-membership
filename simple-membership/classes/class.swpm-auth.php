@@ -370,8 +370,10 @@ class SwpmAuth {
 		$user_id   = $this->get( 'member_id' );
 		$subscr_id = $this->get( 'subscr_id' );
 		$email     = $this->get( 'email' );
-		wp_clear_auth_cookie();
+
 		$this->logout();
+                wp_clear_auth_cookie();
+
 		SwpmMembers::delete_swpm_user_by_id( $user_id );
 		SwpmMembers::delete_wp_user( $user_name );
 	}

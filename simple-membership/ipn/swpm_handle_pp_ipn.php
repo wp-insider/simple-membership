@@ -222,6 +222,12 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		$this->debug_log( 'Saving transaction data to the database table.', true );
 		$this->ipn_data['gateway'] = 'paypal';
 		$this->ipn_data['status']  = $this->ipn_data['payment_status'];
+
+		// If the value ipn_data['ip'] is empty, try to detect the customer IP address using the variable custom['user_ip']
+		if (empty($this->ipn_data['ip']) && filter_var($customvariables['user_ip'], FILTER_VALIDATE_IP)) {
+			$this->ipn_data['ip'] = $customvariables['user_ip'];
+		}
+
 		SwpmTransactions::save_txn_record( $this->ipn_data, $cart_items );
 		$this->debug_log( 'Transaction data saved.', true );
 

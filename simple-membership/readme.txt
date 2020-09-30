@@ -171,6 +171,7 @@ https://simple-membership-plugin.com/simple-membership-miscellaneous-shortcodes-
 - Added more filters in the registration, edit profile and login forms.
 - The Stripe SDK library has been updated to latest. Minimum PHP version required for it is PHP5.6
 - Added new shortcode for Stripe subscription cancellation. The new shortcode is: [swpm_stripe_subscription_cancel_link]
+- Added a check to prevent duplicate IPN notifiation creating duplicate entries. Thanks to @Th0masL for making this improvement.
 
 = 4.0.1 =
 - Added the "Button Image URL" field for the Stripe Buy Now type buttons (to allow button image customization).

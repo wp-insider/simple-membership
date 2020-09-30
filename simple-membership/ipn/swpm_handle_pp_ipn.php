@@ -104,6 +104,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			array_push( $cart_items, $current_item );
 		}
 
+                /*** Duplicate IPN check ***/
 		// Query the DB to check if we have already processed this transaction or not
 		global $wpdb;
 		$txn_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE txn_id = %s", $txn_id ), OBJECT );
@@ -113,6 +114,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			$this->debug_log( "This transaction has already been processed (".$txn_id."). Nothing to do here.", true );
 			return true;
 		}
+                /*** End of duplicate IPN check ***/
 
 		$counter = 0;
 		foreach ( $cart_items as $current_cart_item ) {

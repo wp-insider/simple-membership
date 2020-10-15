@@ -29,16 +29,22 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		$member = SwpmTransfer::$default_fields;
 		$form   = new SwpmForm( $member );
 		if ( $form->is_valid() ) {
-			$member_info                  = $form->get_sanitized_member_form_data();
-			$account_status               = SwpmSettings::get_instance()->get_value( 'default-account-status', 'active' );
+			$member_info = $form->get_sanitized_member_form_data();
+
+                        //First, check if email or username belongs to an existing admin user. Bail if it does.
+                        SwpmMemberUtils::check_and_die_if_email_belongs_to_admin_user($member_info['email']);
+                        SwpmMemberUtils::check_and_die_if_username_belongs_to_admin_user($member_info['user_name']);
+
+			$account_status = SwpmSettings::get_instance()->get_value( 'default-account-status', 'active' );
 			$member_info['account_state'] = $account_status;
-			$plain_password               = $member_info['plain_password'];
+			$plain_password = $member_info['plain_password'];
 			unset( $member_info['plain_password'] );
+                        //Create SWPM member entry
 			$wpdb->insert( $wpdb->prefix . 'swpm_members_tbl', $member_info );
 
 			//Register to WordPress
-			$query                         = $wpdb->prepare( 'SELECT role FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id = %d', $member_info['membership_level'] );
-			$wp_user_info                  = array();
+			$query = $wpdb->prepare( 'SELECT role FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id = %d', $member_info['membership_level'] );
+			$wp_user_info = array();
 			$wp_user_info['user_nicename'] = implode( '-', explode( ' ', $member_info['user_name'] ) );
 			$wp_user_info['display_name']  = $member_info['user_name'];
 			$wp_user_info['user_email']    = $member_info['email'];

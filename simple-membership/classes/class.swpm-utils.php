@@ -263,31 +263,24 @@ abstract class SwpmUtils {
 
 	public static function create_wp_user( $wp_user_data ) {
 
+                //First, check if email or username belongs to an existing admin user.
+                SwpmMemberUtils::check_and_die_if_email_belongs_to_admin_user($wp_user_data['user_email']);
+                SwpmMemberUtils::check_and_die_if_username_belongs_to_admin_user($wp_user_data['user_login']);
+
+                //At this point, the username or the email is not taken by any existing wp user with admin role.
+                //Lets continue the normal registration process.
+
 		//Check if the email belongs to an existing wp user account.
 		$wp_user_id = email_exists( $wp_user_data['user_email'] );
 		if ( $wp_user_id ) {
 			//A wp user account exist with this email.
-			//Check if the user has admin role.
-			$admin_user = SwpmMemberUtils::wp_user_has_admin_role( $wp_user_id );
-			if ( $admin_user ) {
-				//This email belongs to an admin user. Cannot modify/override/use/register using an admin user's email from front-end. Show error message then exit.
-				$error_msg = '<p>This email address (' . $wp_user_data['user_email'] . ') belongs to an admin user. This email cannot be used to register a new account on this site for security reasons. Contact site admin.</p>';
-				wp_die( $error_msg );
-			}
+                        //For signle site WP install, no new user will be created. The existing user ID will be returned.
 		} else {
                     //Check if the username belongs to an existing wp user account.
                     $wp_user_id = username_exists( $wp_user_data['user_login'] );
                     if ( $wp_user_id ) {
                         //A wp user account exist with this username.
-                        //Check if the user has admin role.
-                        $admin_user = SwpmMemberUtils::wp_user_has_admin_role( $wp_user_id );
-                        if ( $admin_user ) {
-                            //This Username belongs to an admin user. Cannot modify/override/use/register using an existing admin user's username from front-end. Show error message then exit.
-                            $error_msg = '<p>This username (' . $wp_user_data['user_login'] . ') belongs to an admin user. It cannot be used to register a new account on this site for security reasons. Contact site admin.</p>';
-                            wp_die( $error_msg );
-                        }
-                    } else {
-                        //All clear. No user exists with the provided username or email.
+                        //For signle site WP install, no new user will be created. The existing user ID will be returned.
                     }
                 }
 
@@ -307,19 +300,20 @@ abstract class SwpmUtils {
 				);
 				return $wp_user_id;
 			}
+                        //No existing user. Create a new one.
 			$wp_user_id = wpmu_create_user( $wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email'] );
 			$role       = 'subscriber'; //TODO - add user as a subscriber first. The subsequent update user role function to update the role to the correct one
 			add_user_to_blog( $blog_id, $wp_user_id, $role );
-                        //End of WPMU
+                        //End of WPMS
 		} else {
-			//This is a WP Single site install.
+			//This is a WP Single Site install.
 
                         //Lets see if an existing WP user exist from the email_exists() or username_exists() check earlier.
 			if ( $wp_user_id ) {
-				return $wp_user_id;
+                            return $wp_user_id;
 			}
 
-                        //Try to create a brand new WP user entry.
+                        //No existing user. Try to create a brand new WP user entry.
 			$wp_user_id = wp_create_user( $wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email'] );
 
                         //Update that newly created user's profile with additional data.

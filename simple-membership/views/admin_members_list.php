@@ -22,8 +22,6 @@ $membership_level = filter_input(INPUT_GET, 'membership_level', FILTER_SANITIZE_
 ?>
 <style>
     select.swpm-admin-search-dropdown {
-        padding: 3px 5px;
-        margin: 0px;
         vertical-align: inherit;
     }
     input.button.swpm-admin-search-btn {

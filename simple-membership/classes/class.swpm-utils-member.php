@@ -235,7 +235,7 @@ class SwpmMemberUtils {
                     if ( $admin_user ) {
                         //This email belongs to an admin user. Cannot use/register using an admin user's email from front-end. Show error message then exit.
                         $error_msg = '<p>This email address (' . $email_to_check . ') belongs to an admin user. This email cannot be used to register a new account on this site for security reasons. Contact site admin.</p>';
-                        $error_msg = '<p>For testing purpose, you can create another user account that is completely separate from the admin user account of this site.</p>';
+                        $error_msg .= '<p>For testing purpose, you can create another user account that is completely separate from the admin user account of this site.</p>';
                         wp_die( $error_msg );
                     }
 		}
@@ -251,6 +251,7 @@ class SwpmMemberUtils {
                     if ( $admin_user ) {
                         //This Username belongs to an admin user. Cannot use/register using an existing admin user's username from front-end. Show error message then exit.
                         $error_msg = '<p>This username (' . $username_to_check . ') belongs to an admin user. It cannot be used to register a new account on this site for security reasons. Contact site admin.</p>';
+                        $error_msg .= '<p>For testing purpose, you can create another user account that is completely separate from the admin user account of this site.</p>';
                         wp_die( $error_msg );
                     }
                 }

@@ -592,6 +592,7 @@ class SwpmMiscUtils {
 			'Oman',
 			'Pakistan',
 			'Palau',
+                        'Palestine',
 			'Panama',
 			'Papua New Guinea',
 			'Paraguay',

@@ -128,6 +128,7 @@
 
 .swpm-registration-widget-form input[type="text"], .swpm-registration-widget-form input[type="password"]{
     width: 95%;
+    position: relative;
 }
 
 /* Edit profile form CSS */

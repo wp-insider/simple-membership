@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 5.6
-Stable tag: 4.0.2
+Stable tag: 4.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,6 +158,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 4.0.3 =
+- WP 5.6 compatibility update with jQuery script. This will fix an issue whereby error messages on registration form weren't showing correctly.
 
 = 4.0.2 =
 - Added a new filter "swpm_admin_registration_add_user_template_path"

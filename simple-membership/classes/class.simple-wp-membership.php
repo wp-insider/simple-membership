@@ -638,9 +638,9 @@ class SimpleWpMembership {
         //Only loaded on selective swpm admin menu page rendering.
         $this->common_library();
         wp_enqueue_script('password-strength-meter');
-        wp_enqueue_script('swpm.password-meter', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-meter.js', array('jquery'));
+        wp_enqueue_script('swpm.password-meter', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-meter.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         //jQuery UI style
-        wp_register_style('swpm-jquery-ui', SIMPLE_WP_MEMBERSHIP_URL . '/css/jquery-ui.min.css');
+        wp_register_style('swpm-jquery-ui', SIMPLE_WP_MEMBERSHIP_URL . '/css/jquery-ui.min.css', array(), SIMPLE_WP_MEMBERSHIP_VER);
         wp_enqueue_style('swpm-jquery-ui');
         wp_enqueue_script('jquery-ui-datepicker');
         $settings = array('statusChangeEmailHead' => SwpmSettings::get_instance()->get_value('account-change-email-subject'),
@@ -654,14 +654,14 @@ class SimpleWpMembership {
 
     private function common_library() {
         wp_enqueue_script('jquery');
-        wp_enqueue_style('swpm.common', SIMPLE_WP_MEMBERSHIP_URL . '/css/swpm.common.css');
+        wp_enqueue_style('swpm.common', SIMPLE_WP_MEMBERSHIP_URL . '/css/swpm.common.css', array(), SIMPLE_WP_MEMBERSHIP_VER);
 
         //In order to not clog WP with scripts and styles we're only using with forms, let's just register those for now
         //Scripts will be queued when forms are actually displayed
-        wp_register_style('validationEngine.jquery', SIMPLE_WP_MEMBERSHIP_URL . '/css/validationEngine.jquery.css');
-        wp_register_script('jquery.validationEngine', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine.js', array('jquery'));
-        wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'));
-        wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'));
+        wp_register_style('validationEngine.jquery', SIMPLE_WP_MEMBERSHIP_URL . '/css/validationEngine.jquery.css', array(), SIMPLE_WP_MEMBERSHIP_VER);
+        wp_register_script('jquery.validationEngine', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
+        wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
+        wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
     }
 
     public static function enqueue_validation_scripts($add_params = array()) {

@@ -1,4 +1,5 @@
 
+
 Add the following translation strings to the swpm.pot file AFTER you generate a new .pot file. These are for the language strings from the addons.
 =================================
 

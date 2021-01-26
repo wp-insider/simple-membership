@@ -515,6 +515,7 @@ class SwpmMiscUtils {
 			'Equatorial Guinea',
 			'Eritrea',
 			'Estonia',
+                        'Eswatini',
 			'Ethiopia',
 			'Fiji',
 			'Finland',

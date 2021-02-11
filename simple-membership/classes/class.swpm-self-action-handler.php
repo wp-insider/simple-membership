@@ -1,31 +1,32 @@
 <?php
 
 class SwpmSelfActionHandler {
-    
+
     public function __construct() {
         //Register all the self action hooks the plugin needs to handle
         add_action('swpm_front_end_registration_complete_fb', array(&$this, 'after_registration_callback'));//For the form builder
         add_action('swpm_front_end_registration_complete_user_data', array(&$this, 'after_registration_callback'));
-        
+
         add_action('swpm_membership_level_changed', array(&$this, 'handle_membership_level_changed_action'));
-        
+
         add_action('swpm_payment_ipn_processed', array(&$this, 'handle_swpm_payment_ipn_processed'));
 
         add_filter('swpm_after_logout_redirect_url', array(&$this, 'handle_after_logout_redirection'));
         add_filter('swpm_auth_cookie_expiry_value', array(&$this, 'handle_auth_cookie_expiry_value'));
     }
-    
+
     public function handle_auth_cookie_expiry_value($expire){
 
         $logout_member_on_browser_close = SwpmSettings::get_instance()->get_value('logout-member-on-browser-close');
         if (!empty($logout_member_on_browser_close)) {
             //This feature is enabled.
-            $expire = 0;
+            //Setting auth cookie expiry value to 0.
+            $expire = apply_filters( 'swpm_logout_on_close_auth_cookie_expiry_value', 0 );
         }
-        
+
         return $expire;
     }
-    
+
     public function handle_after_logout_redirection($redirect_url){
         $after_logout_url = SwpmSettings::get_instance()->get_value('after-logout-redirection-url');
         if(!empty($after_logout_url)){
@@ -34,7 +35,7 @@ class SwpmSelfActionHandler {
         }
         return $redirect_url;
     }
-    
+
     public function handle_swpm_payment_ipn_processed($ipn_data){
         $ipn_forward_url = SwpmSettings::get_instance()->get_value('payment-notification-forward-url');
         if(!empty($ipn_forward_url)){
@@ -46,9 +47,9 @@ class SwpmSelfActionHandler {
             }
         }
     }
-    
+
     public function after_registration_callback($user_data){
-        
+
         //Handle auto login after registration if enabled
         $enable_auto_login = SwpmSettings::get_instance()->get_value('auto-login-after-rego');
         if (!empty($enable_auto_login)){
@@ -67,18 +68,18 @@ class SwpmSelfActionHandler {
                 'swpm_auto_login_nonce' => $swpm_auto_login_nonce,
             );
             $redirect_page = add_query_arg($arr_params, $login_page_url);
-            wp_redirect($redirect_page);         
+            wp_redirect($redirect_page);
             exit(0);
         }
-        
+
     }
-    
+
     public function handle_membership_level_changed_action($args){
         $swpm_id = $args['member_id'];
         $old_level = $args['from_level'];
-        $new_level = $args['to_level'];        
+        $new_level = $args['to_level'];
         SwpmLog::log_simple_debug('swpm_membership_level_changed action triggered. Member ID: '.$swpm_id.', Old Level: '.$old_level.', New Level: '.$new_level, true);
-        
+
         //Check to see if the old and the new levels are the same or not.
         if(trim($old_level) == trim($new_level)){
             SwpmLog::log_simple_debug('The to (Level ID: '.$new_level.') and from (Level ID: '.$old_level.') values are the same. Nothing to do here.', true);
@@ -102,8 +103,8 @@ class SwpmSelfActionHandler {
             $wp_user_id = $user_info->ID;
             SwpmLog::log_simple_debug('Calling user role update function.', true);
             SwpmMemberUtils::update_wp_user_role($wp_user_id, $user_role);
-        }        
-        
+        }
+
     }
-    
+
 }

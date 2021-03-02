@@ -161,6 +161,7 @@ https://simple-membership-plugin.com/
 
 = WIP 4.0.3 = 
 - Added a new filter to allow overriding the auth cookie value for when the "Logout Member on Browser Close" feature is enabled.
+- Updated the Swedish translation file.
 
 = 4.0.3 =
 - WP 5.6 compatibility update with jQuery script. This will fix an issue whereby error messages on registration form weren't showing correctly.

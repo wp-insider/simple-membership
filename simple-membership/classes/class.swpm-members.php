@@ -108,13 +108,16 @@ class SwpmMembers extends WP_List_Table {
 			$s = filter_input( INPUT_POST, 's' );
 		}
 
-		$status  = filter_input( INPUT_GET, 'status' );
+		$status = filter_input( INPUT_GET, 'status' );
+                $status = esc_attr( $status );//Escape value
+
 		$filters = array();
 
 		//Add the search parameter to the query
 		if ( ! empty( $s ) ) {
-			$s         = sanitize_text_field( $s );
-			$s         = trim( $s ); //Trim the input
+			$s = sanitize_text_field( $s );
+			$s = trim( $s ); //Trim the input
+                        $s = esc_attr( $s );
 			$filters[] = "( user_name LIKE '%" . strip_tags( $s ) . "%' "
 					. " OR first_name LIKE '%" . strip_tags( $s ) . "%' "
 					. " OR last_name LIKE '%" . strip_tags( $s ) . "%' "

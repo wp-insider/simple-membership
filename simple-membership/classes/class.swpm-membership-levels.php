@@ -68,7 +68,7 @@ class SwpmMembershipLevels extends WP_List_Table {
 
     function column_id($item) {
         $delete_swpmlevel_nonce = wp_create_nonce( 'nonce_delete_swpmlevel_admin_end' );
-        
+
         $actions = array(
             'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_levels&level_action=edit&id=%s">Edit</a>', $item['id']),
             'delete' => sprintf('<a href="admin.php?page=simple_wp_membership_levels&level_action=delete&id=%s&delete_swpmlevel_nonce=%s" onclick="return confirm(\'Are you sure you want to delete this entry?\')">Delete</a>', $item['id'],$delete_swpmlevel_nonce),
@@ -89,9 +89,11 @@ class SwpmMembershipLevels extends WP_List_Table {
 
         $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
         if (isset($_POST['s'])){
-            $query .= " AND alias LIKE '%" . sanitize_text_field($_POST['s']) . "%' ";
+            $search_keyword = sanitize_text_field($_POST['s']);
+            $search_keyword = esc_attr ($search_keyword);
+            $query .= " AND alias LIKE '%" . $search_keyword . "%' ";
         }
-        
+
         //Read and sanitize the sort inputs.
         $orderby = !empty($_GET["orderby"]) ? esc_sql($_GET["orderby"]) : 'id';
         $order = !empty($_GET["order"]) ? esc_sql($_GET["order"]) : 'DESC';
@@ -139,10 +141,10 @@ class SwpmMembershipLevels extends WP_List_Table {
             $record_id = sanitize_text_field($_REQUEST['id']);
             if(!is_numeric($record_id)){
                 wp_die('Error! ID must be numeric.');
-            }            
+            }
             return $this->edit($record_id);
         }
-        
+
         //Level add action
         return $this->add();
     }
@@ -187,16 +189,16 @@ class SwpmMembershipLevels extends WP_List_Table {
     function delete_level() {
         global $wpdb;
         if (isset($_REQUEST['id'])) {
-            
-            //Check we are on the admin end and user has management permission 
+
+            //Check we are on the admin end and user has management permission
             SwpmMiscUtils::check_user_permission_and_is_admin('membership level delete');
-        
+
             //Check nonce
             if ( !isset($_REQUEST['delete_swpmlevel_nonce']) || !wp_verify_nonce($_REQUEST['delete_swpmlevel_nonce'], 'nonce_delete_swpmlevel_admin_end' )){
                 //Nonce check failed.
                 wp_die(SwpmUtils::_("Error! Nonce verification failed for membership level delete from admin end."));
             }
-            
+
             $id = sanitize_text_field($_REQUEST['id']);
             $id = absint($id);
             $query = $wpdb->prepare("DELETE FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $id);
@@ -243,25 +245,25 @@ class SwpmMembershipLevels extends WP_List_Table {
         $selected = "post_list";
         include_once('class.swpm-post-list.php');
         $post_list = new SwpmPostList();
-        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_post_list.php');       
+        include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_post_list.php');
     }
-    
-    function handle_main_membership_level_admin_menu(){        
+
+    function handle_main_membership_level_admin_menu(){
         do_action( 'swpm_membership_level_menu_start' );
-        
+
         //Check current_user_can() or die.
         SwpmMiscUtils::check_user_permission_and_is_admin('Main Membership Level Admin Menu');
 
         $level_action = filter_input(INPUT_GET, 'level_action');
         $action = $level_action;
         $selected= $action;
-        
+
         ?>
         <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
         <!-- page title -->
         <h1><?php echo  SwpmUtils::_('Simple WP Membership::Membership Levels') ?></h1>
-            
+
         <!-- start nav menu tabs -->
         <h2 class="nav-tab-wrapper">
             <a class="nav-tab <?php echo ($selected == "") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels"><?php echo SwpmUtils::_('Membership Levels') ?></a>
@@ -270,28 +272,28 @@ class SwpmMembershipLevels extends WP_List_Table {
             <a class="nav-tab <?php echo ($selected == "category_list") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=category_list"><?php echo SwpmUtils::_('Category Protection') ?></a>
             <a class="nav-tab <?php echo ($selected == "post_list") ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=post_list"><?php echo SwpmUtils::_('Post and Page Protection') ?></a>
             <?php
-            
+
             //Trigger hooks that allows an extension to add extra nav tabs in the membership levels menu.
             do_action ('swpm_membership_levels_menu_nav_tabs', $selected);
-            
+
             $menu_tabs = apply_filters('swpm_membership_levels_additional_menu_tabs_array', array());
             foreach ($menu_tabs as $level_action => $title){
                 ?>
                 <a class="nav-tab <?php echo ($selected == $member_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=<?php echo $level_action; ?>" ><?php SwpmUtils::e($title); ?></a>
                 <?php
             }
-            
-            ?>            
+
+            ?>
         </h2>
         <!-- end nav menu tabs -->
-        
+
         <?php
-        
+
         do_action( 'swpm_membership_level_menu_after_nav_tabs' );
-        
+
         //Trigger hook so anyone listening for this particular action can handle the output.
         do_action( 'swpm_membership_level_menu_body_' . $action );
-        
+
         //Allows an addon to completely override the body section of the membership level admin menu for a given action.
         $output = apply_filters('swpm_membership_level_menu_body_override', '', $action);
         if (!empty($output)) {
@@ -300,7 +302,7 @@ class SwpmMembershipLevels extends WP_List_Table {
             echo '</div>';//<!-- end of wrap -->
             return;
         }
-        
+
         //Switch case for the various different actions handled by the core plugin.
         switch ($action) {
             case 'add':
@@ -323,7 +325,7 @@ class SwpmMembershipLevels extends WP_List_Table {
                 break;
         }
 
-        echo '</div>';//<!-- end of wrap --> 
+        echo '</div>';//<!-- end of wrap -->
     }
-    
+
 }

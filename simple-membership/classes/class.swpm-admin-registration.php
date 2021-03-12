@@ -46,7 +46,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			$query = $wpdb->prepare( 'SELECT role FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id = %d', $member_info['membership_level'] );
 			$wp_user_info = array();
 			$wp_user_info['user_nicename'] = implode( '-', explode( ' ', $member_info['user_name'] ) );
-			if ( isset( $member_info['first_name']) && isset( $member_info['last_name']) ) {
+			if ( !empty( $member_info['first_name']) && !empty( $member_info['last_name']) ) {
 			$wp_user_info['display_name']  = $member_info['first_name'] . ' ' . $member_info['last_name'];
 			}
 			else{

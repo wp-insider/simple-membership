@@ -159,6 +159,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.0.5 =
+- Added a new filter hook to allow overriding of the display_name field when adding a member via the admin interface.
+
 = 4.0.4 = 
 - Added a new filter to allow overriding the auth cookie value for when the "Logout Member on Browser Close" feature is enabled.
 - Updated the Swedish translation file.

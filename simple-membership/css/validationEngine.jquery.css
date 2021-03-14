@@ -10,7 +10,9 @@
     .ui-dialog .formError .formErrorArrow { z-index: 5006; }
 
 
-
+.swpm-validate-form .form-table td{
+    position: relative
+}
 
 .inputContainer {
 	position: relative;

@@ -166,7 +166,7 @@ https://simple-membership-plugin.com/
 = 4.0.4 = 
 - Added a new filter to allow overriding the auth cookie value for when the "Logout Member on Browser Close" feature is enabled.
 - Updated the Swedish translation file.
-- Added more sanitization to the search query of members and membership level menu in the admin interface. Thanks to @Robert Foggia for pointing it out.
+- Added more sanitization to the search query of members and membership level menu in the admin interface. Thanks to @Martin Vierula for pointing it out.
 
 = 4.0.3 =
 - WP 5.6 compatibility update with jQuery script. This will fix an issue whereby error messages on registration form weren't showing correctly.

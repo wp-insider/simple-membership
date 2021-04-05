@@ -121,7 +121,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', $member, array( 'member_id' => $id ) );
 			// set previous membership level
 			$member['prev_membership_level'] = $prev_level;
-			$member['member_id']             = $id;
+			$member['member_id'] = $id;
 
 			 //Trigger action hook
 			do_action( 'swpm_admin_end_edit_complete_user_data', $member );
@@ -162,13 +162,20 @@ class SwpmAdminRegistration extends SwpmRegistration {
 				$body         = filter_input( INPUT_POST, 'notificationmailbody' );
 				$settings->set_value( 'account-change-email-body', $body )->set_value( 'account-change-email-subject', $subject )->save();
 				$member['login_link'] = $settings->get_value( 'login-page-url' );
-				$member['user_name']  = $user_name;
-				$member['password']   = empty( $plain_password ) ? SwpmUtils::_( 'Your current password' ) : $plain_password;
-				$values               = array_values( $member );
-				$keys                 = array_map( 'swpm_enclose_var', array_keys( $member ) );
-				$body                 = html_entity_decode( str_replace( $keys, $values, $body ) );
-				$subject              = apply_filters( 'swpm_email_account_status_change_subject', $subject );
-				$body                 = apply_filters( 'swpm_email_account_status_change_body', $body );
+				$member['user_name'] = $user_name;
+				$member['password'] = empty( $plain_password ) ? SwpmUtils::_( 'Your current password' ) : $plain_password;
+				$values = array_values( $member );
+				$keys = array_map( 'swpm_enclose_var', array_keys( $member ) );
+				$body = html_entity_decode( str_replace( $keys, $values, $body ) );
+
+                                //Do the standard email merge tag replacement.
+                                $body = SwpmMiscUtils::replace_dynamic_tags( $body, $id );
+
+                                //Trigger the filter hooks
+				$subject = apply_filters( 'swpm_email_account_status_change_subject', $subject );
+				$body = apply_filters( 'swpm_email_account_status_change_body', $body );
+
+                                //Send the email
 				SwpmMiscUtils::mail( $email_address, $subject, $body, $headers );
 				SwpmLog::log_simple_debug( 'Notify email sent (after profile edit from admin side). Email sent to: ' . $email_address, true );
 			}

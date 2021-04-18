@@ -164,6 +164,7 @@ https://simple-membership-plugin.com/
 - Added a new filter hook to allow overriding of the account status value when a subscription renewal payment comes in. The filter name is: swpm_account_status_for_subscription_start_date_update
 - Added slovenian language translation file to the plugin.
 - The {membership_level_name} email merge tag will now work for the "Notify User" feature that can be used when editing a member's profile (from the admin dashboard).
+- Updated the Dutch translation file.
 
 = 4.0.4 = 
 - Added a new filter to allow overriding the auth cookie value for when the "Logout Member on Browser Close" feature is enabled.

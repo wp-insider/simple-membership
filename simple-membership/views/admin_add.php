@@ -1,5 +1,6 @@
 <?php SimpleWpMembership::enqueue_validation_scripts(); ?>
 <div class="wrap" id="swpm-profile-page" type="add">
+<style>#swpm-create-user input {position: relative;}</style>
     <form action="" method="post" name="swpm-create-user" id="swpm-create-user" class="validate swpm-validate-form"<?php do_action('user_new_form_tag'); ?>>
         <input name="action" type="hidden" value="createuser" />
         <?php wp_nonce_field('create_swpmuser_admin_end', '_wpnonce_create_swpmuser_admin_end') ?>

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 5.7
-Stable tag: 4.0.4
+Stable tag: 4.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -159,12 +159,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.0.5 =
+= 4.0.5 =
 - Added a new filter hook to allow overriding of the display_name field when adding a member via the admin interface.
 - Added a new filter hook to allow overriding of the account status value when a subscription renewal payment comes in. The filter name is: swpm_account_status_for_subscription_start_date_update
 - Added slovenian language translation file to the plugin.
 - The {membership_level_name} email merge tag will now work for the "Notify User" feature that can be used when editing a member's profile (from the admin dashboard).
 - Updated the Dutch translation file.
+- Fixed the positioning of the validation result message for the username field in the "Add New Member" interface.
 
 = 4.0.4 = 
 - Added a new filter to allow overriding the auth cookie value for when the "Logout Member on Browser Close" feature is enabled.

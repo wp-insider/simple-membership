@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - Simple Membership - Development (trunk)\n"
 "POT-Creation-Date: 2019-05-26 13:48+0600\n"
-"PO-Revision-Date: 2020-09-09 14:14+1000\n"
+"PO-Revision-Date: 2021-04-25 11:35+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: classes/class.simple-wp-membership.php:180
 msgid "The admin of this site does not allow users to access the wp dashboard."
@@ -1798,6 +1798,18 @@ msgstr "Inactivo"
 #: classes/class.swpm-utils.php:118 views/admin_members_list.php:21
 msgid "Activation Required"
 msgstr "Activación obligatoria"
+
+#: classes/class.swpm-utils.php:119
+msgid "Male"
+msgstr "Masculino"
+
+#: classes/class.swpm-utils.php:120
+msgid "Female"
+msgstr "Femenino"
+
+#: classes/class.swpm-utils.php:121
+msgid "Not Specified"
+msgstr "No especificado"
 
 #: classes/class.swpm-utils.php:119 views/admin_members_list.php:22
 msgid "Pending"

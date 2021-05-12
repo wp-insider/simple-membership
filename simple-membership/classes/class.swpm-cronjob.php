@@ -17,8 +17,8 @@ class SwpmCronJob {
         global $wpdb;
         for ($counter = 0;; $counter += 100) {
             $query = $wpdb->prepare("SELECT member_id, membership_level, subscription_starts, account_state
-                    FROM {$wpdb->prefix}swpm_members_tbl 
-                    WHERE membership_level NOT IN ( SELECT id FROM {$wpdb->prefix}swpm_membership_tbl 
+                    FROM {$wpdb->prefix}swpm_members_tbl
+                    WHERE membership_level NOT IN ( SELECT id FROM {$wpdb->prefix}swpm_membership_tbl
                                                 WHERE subscription_period = '' OR subscription_period = '0' )
                     LIMIT %d, 100", $counter);
             $results = $wpdb->get_results($query);
@@ -33,7 +33,7 @@ class SwpmCronJob {
                 }
             }
             if (count($expired) > 0) {
-                $query = "UPDATE {$wpdb->prefix}swpm_members_tbl 
+                $query = "UPDATE {$wpdb->prefix}swpm_members_tbl
                 SET account_state='expired'  WHERE member_id IN (" . implode(',', $expired) . ")";
                 $wpdb->query($query);
             }
@@ -48,9 +48,9 @@ class SwpmCronJob {
         }
         for ($counter = 0;; $counter += 100) {
             $query = $wpdb->prepare("SELECT member_id
-                                     FROM 
-                                        {$wpdb->prefix}swpm_members_tbl 
-                                    WHERE account_state='pending' 
+                                     FROM
+                                        {$wpdb->prefix}swpm_members_tbl
+                                    WHERE account_state='pending'
                                          AND subscription_starts < DATE_SUB(NOW(), INTERVAL %d MONTH) LIMIT %d, 100", $interval, $counter);
             $results = $wpdb->get_results($query);
             if (empty($results)) {
@@ -62,7 +62,7 @@ class SwpmCronJob {
             }
             if (count($to_delete) > 0) {
                 SwpmLog::log_simple_debug("Auto deleting pending account.", true);
-                $query = "DELETE FROM {$wpdb->prefix}swpm_members_tbl 
+                $query = "DELETE FROM {$wpdb->prefix}swpm_members_tbl
                           WHERE member_id IN (" . implode(',', $to_delete) . ")";
                 $wpdb->query($query);
             }
@@ -70,6 +70,7 @@ class SwpmCronJob {
     }
 
     public function delete_pending_email_activation_data() {
+        //Delete pending email activation data after 1 day (24 hours).
         global $wpdb;
         $q = "SELECT * FROM {$wpdb->prefix}options WHERE option_name LIKE '%swpm_email_activation_data_usr_%'";
         $res = $wpdb->get_results($q);
@@ -80,7 +81,7 @@ class SwpmCronJob {
             $value = unserialize($data->option_value);
             $timestamp = isset($value['timestamp']) ? $value['timestamp'] : 0;
             $now = time();
-            if ($now > $timestamp * 60 * 60 * 24) {
+            if ($now > $timestamp + (60 * 60 * 24) ) {
                 delete_option($data->option_name);
             }
         }

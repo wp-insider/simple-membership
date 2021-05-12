@@ -159,6 +159,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.0.6 =
+- Fixed a calculation in the auto delete pending email activation data function. Thanks to @satoshi for pointing it out.
+
 = 4.0.5 =
 - Added a new filter hook to allow overriding of the display_name field when adding a member via the admin interface.
 - Added a new filter hook to allow overriding of the account status value when a subscription renewal payment comes in. The filter name is: swpm_account_status_for_subscription_start_date_update

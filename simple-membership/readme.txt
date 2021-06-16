@@ -160,6 +160,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 4.0.6 =
+- Added an option in the [swpm_paypal_subscription_cancel_link] shortcode to allow opening the window in a new tab.
+- Added an option in the [swpm_paypal_subscription_cancel_link] shortcode to add CSS class for customization purpose.
 - Fixed a calculation in the auto delete pending email activation data function. Thanks to @satoshi for pointing it out.
 
 = 4.0.5 =

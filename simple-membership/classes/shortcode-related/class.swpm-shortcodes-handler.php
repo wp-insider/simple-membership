@@ -177,6 +177,8 @@ class SwpmShortcodesHandler {
 				array(
 					'merchant_id' => '',
 					'anchor_text' => '',
+                                        'new_window' => '',
+                                        'css_class' => '',
 				),
 				$args
 			)
@@ -197,21 +199,35 @@ class SwpmShortcodesHandler {
 		if ( ! empty( $user_id ) ) {
 			//The user is logged-in
 
-			//Set the default anchor text (if one is provided via teh shortcode).
+                        //Set the default window target (if it is set via the shortcode).
+                        if ( empty( $new_window ) ) {
+                            $window_target = '';
+                        } else {
+                            $window_target = ' target="_blank"';
+                        }
+
+                        //Set the CSS class (if it is set via the shortcode).
+                        if ( empty( $css_class ) ) {
+                            $link_css_class = '';
+                        } else {
+                            $link_css_class = ' class="' . $css_class . '"';
+                        }
+
+			//Set the default anchor text (if one is provided via the shortcode).
 			if ( empty( $anchor_text ) ) {
 				$anchor_text = SwpmUtils::_( 'Unsubscribe from PayPal' );
 			}
 
-			$output         .= '<div class="swpm-paypal-subscription-cancel-link">';
+			$output .= '<div class="swpm-paypal-subscription-cancel-link">';
 			$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 			if ( $sandbox_enabled ) {
 				//Sandbox mode
-				$output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '">';
+				$output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" '. $window_target . $link_css_class .'>';
 				$output .= $anchor_text;
 				$output .= '</a>';
 			} else {
 				//Live mode
-				$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '">';
+				$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" '.$window_target . $link_css_class .'>';
 				$output .= $anchor_text;
 				$output .= '</a>';
 			}

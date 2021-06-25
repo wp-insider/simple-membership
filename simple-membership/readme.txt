@@ -164,6 +164,7 @@ https://simple-membership-plugin.com/
 - Added an option in the [swpm_paypal_subscription_cancel_link] shortcode to add CSS class for customization purpose.
 - Fixed a calculation in the auto delete pending email activation data function. Thanks to @satoshi for pointing it out.
 - Updated the Spanish language file.
+- Updated the Czech language file.
 
 = 4.0.5 =
 - Added a new filter hook to allow overriding of the display_name field when adding a member via the admin interface.

@@ -146,7 +146,7 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
                 commit: true,
                 onError: function (error) {
                     console.log(error);
-                    alert('<?php echo esc_js(__("Error occured during PayPal Smart Checkout process.", "simple-membership")); ?>\n\n' + error);
+                    alert('<?php echo esc_js(__("Error occurred during PayPal Smart Checkout process.", "simple-membership")); ?>\n\n' + error);
                 },
                 onAuthorize: function (data, actions) {
                     var paymentBtnCont = jQuery('.swpm-pp-smart-checkout-btn-<?php echo $uniqid; ?>');
@@ -175,7 +175,7 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
                                     console.log(result);
                                     paymentBtnCont.show();
                                     paymentBtnSpinner.hide();
-                                    alert('<?php echo esc_js(__("HTTP error occured during payment process:", "simple-membership")); ?>' + ' ' + result.status + ' ' + result.statusText);
+                                    alert('<?php echo esc_js(__("HTTP error occurred during payment process:", "simple-membership")); ?>' + ' ' + result.status + ' ' + result.statusText);
                                 });
                     }
                     );

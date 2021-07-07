@@ -1,8 +1,8 @@
-<?php 
+<?php
 //This file is used to edit member's profile from the admin dashboard of the plugin.
 
 //The admin ajax causes an issue with the JS validation if done on form submission. The edit profile doesn't need JS validation on email. There is PHP validation which will catch any email error.
-//SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.$member_id))); 
+//SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.$member_id)));
 ?>
 <div class="wrap" id="swpm-profile-page" type="edit">
     <form action="" method="post" name="swpm-edit-user" id="swpm-edit-user" enctype="multipart/form-data" class="validate swpm-validate-form"<?php do_action('user_new_form_tag');?>>
@@ -11,14 +11,14 @@
     <h3><?php echo  SwpmUtils::_('Edit Member') ?></h3>
     <p>
         <?php echo  SwpmUtils::_('Edit existing member details.'); ?>
-        <?php echo  SwpmUtils::_(' You are currenty editing member with member ID: '); ?>
+        <?php echo  SwpmUtils::_(' You are currently editing member with member ID: '); ?>
         <?php echo esc_attr($member_id); ?>
     </p>
     <table class="form-table">
         <tr class="form-field form-required swpm-admin-edit-username">
             <th scope="row"><label for="user_name"><?php echo  SwpmUtils::_('Username'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
             <td>
-                <?php 
+                <?php
                 if (empty($user_name)) {
                     //This is a record with incomplete registration. The member need to complete the registration by clicking on the unique link sent to them
                     ?>
@@ -30,8 +30,8 @@
                         <p>If you suspect that this user has lost interest in becoming a member then you can delete this member record.</p>
                     </div>
                     <?php
-                } else {               
-                    echo esc_attr($user_name); 
+                } else {
+                    echo esc_attr($user_name);
                 }
                 ?>
             </td>
@@ -48,7 +48,7 @@
             <div id="pass-strength-result"><?php echo SwpmUtils::_('Strength indicator'); ?></div>
             <p class="description indicator-hint"><?php echo SwpmUtils::_('Hint: The password should be at least seven characters long. To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ).'); ?></p>
             </td>
-	</tr> 
+	</tr>
 	<tr class="swpm-admin-edit-account-state">
             <th scope="row"><label for="account_state"><?php echo  SwpmUtils::_('Account Status'); ?></label></th>
             <td>
@@ -56,12 +56,12 @@
                         <?php echo  SwpmUtils::account_state_dropdown($account_state);?>
                 </select>
                 <p class="description">
-                    <?php echo SwpmUtils::_("This is the member's account status. If you want to manually activate an expired member's account then read"); ?> 
+                    <?php echo SwpmUtils::_("This is the member's account status. If you want to manually activate an expired member's account then read"); ?>
                     <a href="https://simple-membership-plugin.com/manually-activating-expired-members-account/" target="_blank"><?php echo SwpmUtils::_("this documentation"); ?></a>
                     <?php echo SwpmUtils::_(" to learn how to do it."); ?>
                 </p>
             </td>
-	</tr>        
+	</tr>
 	<tr class="swpm-admin-edit-notify-user">
             <th scope="row"><label for="account_state_change"><?php echo  SwpmUtils::_('Notify User'); ?></label></th>
             <td><input type="checkbox" id="account_status_change" name="account_status_change" />
@@ -78,7 +78,7 @@
         <tr class="swpm-admin-edit-expiry-date">
 		<th scope="row"><label for="member_expiry_date"><?php echo SwpmUtils::_('Expiry Date') ?> </label></th>
 		<td>
-                    <?php 
+                    <?php
                     $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user_id($member_id);
                     echo esc_attr($member_current_expiry_date);
                     ?>
@@ -86,7 +86,7 @@
                         <?php echo SwpmUtils::_('This is calculated based on the current membership level assigned to this member and the expiry condition that you have set for that membership level.') ?>
                     </p>
                 </td>
-	</tr>        
+	</tr>
         <tr class="swpm-admin-edit-last-accessed">
 		<th scope="row"><label for="last_accessed"><?php echo SwpmUtils::_('Last Accessed Date') ?> </label></th>
 		<td>
@@ -100,10 +100,10 @@
                     <?php echo esc_attr($last_accessed_from_ip); ?>
                     <p class="description indicator-hint"><?php echo SwpmUtils::_('This value gets updated when this member logs into your site.') ?></p>
                 </td>
-	</tr>       
-        
+	</tr>
+
     </table>
-    
+
     <?php include('admin_member_form_common_js.php'); ?>
     <?php echo apply_filters('swpm_admin_custom_fields', '',$membership_level); ?>
     <?php submit_button( SwpmUtils::_('Save Data'), 'primary', 'editswpmuser', true, array( 'id' => 'createswpmusersub' ) ); ?>
@@ -117,7 +117,7 @@
 </form>
 </div>
 <script>
-jQuery(document).ready(function($){    
+jQuery(document).ready(function($){
     $('#account_status_change').change(function(){
         var target = $(this).closest('tr');
         var $body = '<textarea rows="5" cols="60" id="notificationmailbody" name="notificationmailbody">' + SwpmSettings.statusChangeEmailBody + '</textarea>';

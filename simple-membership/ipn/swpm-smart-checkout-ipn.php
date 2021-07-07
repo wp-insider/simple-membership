@@ -323,7 +323,7 @@ function swpm_pp_smart_checkout_ajax_hanlder() {
 			array(
 				'success' => false,
 				'errMsg'  => __(
-					'Nonce check failed. Please reload page.',
+					'Nonce check failed. Please reload the page.',
 					'simple-membership'
 				),
 			)
@@ -397,7 +397,7 @@ function swpm_pp_smart_checkout_ajax_hanlder() {
 			array(
 				'success' => false,
 				'errMsg'  => __(
-					'IPN product validation failed. Check debug log for more details.',
+					'IPN product validation failed. Check the debug log for more details.',
 					'simple-membership'
 				),
 			)

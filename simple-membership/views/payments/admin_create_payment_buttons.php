@@ -14,7 +14,7 @@ do_action( 'swpm_create_new_button_process_submission' ); //Addons can use this 
 ?>
 
 <div class="swpm-grey-box">
-<?php echo SwpmUtils::_( 'You can create new payment button for your memberships using this interface.' ); ?>
+<?php echo SwpmUtils::_( 'You can create a new payment button for your memberships using this interface.' ); ?>
 </div>
 
 <?php

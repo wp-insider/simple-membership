@@ -666,7 +666,7 @@ class SwpmMembers extends WP_List_Table {
 								<strong>Access Starts Date: </strong>
 							</td><td align="left">
 								<input name="swpm_bulk_user_start_date_change_date" id="swpm_bulk_user_start_date_change_date" class="swpm-select-date" type="text" size="20" value="<?php echo ( date( 'Y-m-d' ) ); ?>" />
-								<p class="description"><?php SwpmUtils::e( 'Specify the access starts date value.' ); ?></p>
+								<p class="description"><?php SwpmUtils::e( 'Specify the Access Starts date value.' ); ?></p>
 							</td>
 						</tr>
 

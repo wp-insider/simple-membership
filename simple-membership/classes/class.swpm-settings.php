@@ -114,7 +114,7 @@ class SwpmSettings {
 			'general-settings',
 			array(
 				'item'    => 'disable-access-to-wp-dashboard',
-				'message' => SwpmUtils::_( 'WordPress allows a standard wp user to be able to go to the wp-admin URL and access his profile from the wp dashbaord. Using this option will prevent any non admin users from going to the wp dashboard.' ),
+				'message' => SwpmUtils::_( 'WordPress allows a standard wp user to be able to go to the wp-admin URL and access his profile from the wp dashboard. Using this option will prevent any non-admin users from going to the wp dashboard.' ),
 			)
 		);
 
@@ -709,7 +709,7 @@ class SwpmSettings {
 					'edit_posts'           => translate_user_role( 'Contributor' ),
 				),
 				'default' => 'manage_options',
-				'message' => SwpmUtils::_( 'SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user role to access the SWPM admin dashboard by selecting a value here. Note that this option cannot work if you enabled the "Disable Access to WP Dashboard" option in General Settings.' ),
+				'message' => SwpmUtils::_( 'SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user roles to access the SWPM admin dashboard by selecting a value here. Note that this option cannot work if you enabled the "Disable Access to WP Dashboard" option in General Settings.' ),
 			)
 		);
 
@@ -973,7 +973,7 @@ class SwpmSettings {
 	public function email_settings_overview_callback() {
 		echo '<div class="swpm-grey-box">';
 		echo '<p>';
-		SwpmUtils::e( 'This interface lets you custsomize the various emails that gets sent to your members for various actions. The default settings should be good to get your started.' );
+		SwpmUtils::e( 'This interface lets you customize the various emails that get sent to your members for various actions. The default settings should be good to get your started.' );
 		echo '</p>';
 
 		echo '<p>';

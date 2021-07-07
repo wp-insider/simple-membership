@@ -5,7 +5,7 @@
 <?php if (!empty($msg)) echo '<p>' . $msg . '</p>'; ?>
 <p style="color:red;">
     <?php echo  SwpmUtils::_('You are about to delete an account. This will delete user data associated with this account. '); ?>
-    <?php echo  SwpmUtils::_('It will also delete associated WordPress user account.'); ?>
+    <?php echo  SwpmUtils::_('It will also delete the associated WordPress user account.'); ?>
     <?php echo  SwpmUtils::_('(NOTE: for safety, we do not allow deletion of any associated WordPress account with administrator role).'); ?>
     <?php echo  SwpmUtils::_('Continue?'); ?>
 </p>

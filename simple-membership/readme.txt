@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 5.7
-Stable tag: 4.0.5
+Stable tag: 4.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,6 +163,7 @@ https://simple-membership-plugin.com/
 - Added an option in the [swpm_paypal_subscription_cancel_link] shortcode to allow opening the window in a new tab.
 - Added an option in the [swpm_paypal_subscription_cancel_link] shortcode to add CSS class for customization purpose.
 - Fixed a calculation in the auto delete pending email activation data function. Thanks to @satoshi for pointing it out.
+- Spelling fixes for some of the description field and error messages. Thanks to @Ronaldo for pointing it out.
 - Updated the Spanish language file.
 - Updated the Czech language file.
 

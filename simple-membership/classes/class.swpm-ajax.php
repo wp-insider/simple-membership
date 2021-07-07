@@ -11,7 +11,7 @@ class SwpmAjax {
         $field_id = filter_input(INPUT_GET, 'fieldId');
         $member_id = filter_input(INPUT_GET, 'member_id');
         if (!check_ajax_referer( 'swpm-rego-form-ajax-nonce', 'nonce', false )) {
-            echo '[ "' . $field_id .  '",false, "'.SwpmUtils::_('Nonce check failed. Please reload page.').'" ]' ;
+            echo '[ "' . $field_id .  '",false, "'.SwpmUtils::_('Nonce check failed. Please reload the page.').'" ]' ;
             exit;
         }
         if (!is_email($field_value)){
@@ -31,7 +31,7 @@ class SwpmAjax {
         $field_value = filter_input(INPUT_GET, 'fieldValue');
         $field_id = filter_input(INPUT_GET, 'fieldId');
         if (!check_ajax_referer( 'swpm-rego-form-ajax-nonce', 'nonce', false )) {
-            echo '[ "' . $field_id .  '",false, "'.SwpmUtils::_('Nonce check failed. Please reload page.').'" ]' ;
+            echo '[ "' . $field_id .  '",false, "'.SwpmUtils::_('Nonce check failed. Please reload the page.').'" ]' ;
             exit;
         }
         if (!SwpmMemberUtils::is_valid_user_name($field_value)){

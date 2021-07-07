@@ -162,6 +162,7 @@ https://simple-membership-plugin.com/
 = 4.0.6 =
 - Added an option in the [swpm_paypal_subscription_cancel_link] shortcode to allow opening the window in a new tab.
 - Added an option in the [swpm_paypal_subscription_cancel_link] shortcode to add CSS class for customization purpose.
+- Added a new shortcode to display the total number of members (just display the total number). This shortcode is available in the free Miscellaneous Shortcodes addon.
 - Fixed a calculation in the auto delete pending email activation data function. Thanks to @satoshi for pointing it out.
 - Spelling fixes for some of the description field and error messages. Thanks to @Ronaldo for pointing it out.
 - Regenerated the language translation POT file.

@@ -55,6 +55,11 @@ class SwpmTransactions {
 			$txn_data['is_live'] = $ipn_data['is_live'];
 		}
 
+                //Add the custom value to the txn_data array so it can be saved to the swpm_transactions CPT.
+		if ( isset( $ipn_data['custom'] ) ) {
+			$txn_data['custom'] = $ipn_data['custom'];
+		}
+
                 //Save the $txn_data to the swpm_transactions CPT as post meta.
 		foreach ( $txn_data as $key => $value ) {
 			update_post_meta( $post_id, $key, $value );

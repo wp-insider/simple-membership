@@ -33,7 +33,8 @@ class SwpmTransactions {
 
 		$db_row_id = $wpdb->insert_id;
 
-		//let's also store transactions data in swpm_transactions CPT
+                /*** Save to the swpm_transactions CPT also ***/
+		//Let's also store the transactions data in swpm_transactions CPT.
 		$post                = array();
 		$post['post_title']  = '';
 		$post['post_status'] = 'publish';
@@ -44,18 +45,22 @@ class SwpmTransactions {
 
 		update_post_meta( $post_id, 'db_row_id', $db_row_id );
 
+                //Add the payment_button_id to the txn_data array so it can be saved to the swpm_transactions CPT.
 		if ( isset( $ipn_data['payment_button_id'] ) ) {
 			$txn_data['payment_button_id'] = $ipn_data['payment_button_id'];
 		}
 
+                //Add the is_live to the txn_data array so it can be saved to the swpm_transactions CPT.
 		if ( isset( $ipn_data['is_live'] ) ) {
 			$txn_data['is_live'] = $ipn_data['is_live'];
 		}
 
+                //Save the $txn_data to the swpm_transactions CPT as post meta.
 		foreach ( $txn_data as $key => $value ) {
 			update_post_meta( $post_id, $key, $value );
 		}
 
+                //Trigger the action hook.
 		do_action( 'swpm_txn_record_saved', $txn_data, $db_row_id, $post_id );
 
 	}

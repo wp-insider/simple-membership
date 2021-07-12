@@ -94,4 +94,39 @@ class SwpmTransactions {
                 $query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE subscr_id = %s", $subscr_id ), OBJECT );
                 return $query_db;
         }
+
+        static function get_original_custom_value_for_subscription_payment ( $subscr_id ) {
+            if ( isset ( $subscr_id )){
+                //Lets check if a proper custom field value is already saved in the CPT for this stripe subscription.
+                $txn_cpt_qry_args = array(
+                        'post_type'  => 'swpm_transactions',
+                        'orderby'    => 'post_id',
+                        'order'      => 'ASC',
+                        'meta_query' => array(
+                                array(
+                                        'key' => 'subscr_id',
+                                        'value' => $subscr_id
+                                ),
+                        )
+                );
+                $txn_cpt_qry = new WP_Query( $txn_cpt_qry_args );
+
+                $found_posts = $txn_cpt_qry->found_posts;
+                if ( $found_posts ) {
+                    //Found a match so this is a subscription payment notification.
+                    //Read the posts array.
+                    $posts = $txn_cpt_qry->posts;
+
+                    //The fist post entry will be the original stripe webhook notification.
+                    $first_entry = array_shift($posts);
+                    //Get the ID of the post.
+                    $cpt_post_id = $first_entry->ID;
+                    //Retrieve the original custom value saved for this post.
+                    $orig_custom_value = get_post_meta( $cpt_post_id, 'custom', true );
+                    return $orig_custom_value;
+                }
+            }
+            return '';
+        }
+
 }

@@ -149,6 +149,17 @@ class SwpmStripeSCASubscriptionIpnHandler {
 
 		$custom = $custom_field_value;
 
+                //Override custom value if necessary (for subscription webhooks)
+                if ( isset ( $sub_id )){
+                    //This is a subscription payment notificataion. Lets check if the original custom field value is already saved in the CPT for this stripe subscription.
+                    $orig_custom_value = SwpmTransactions::get_original_custom_value_for_subscription_payment($sub_id);
+                    if ( !empty ($orig_custom_value)){
+                        //Override the custom field value with the original transactions value that can contain additional cookie and session info.
+                        $custom = $orig_custom_value;
+                        SwpmLog::log_simple_debug( 'Custom field value overriden with original value. Custom: ' . $custom, true );
+                    }
+                }
+
 		$custom_var = SwpmTransactions::parse_custom_var( $custom );
 		$swpm_id    = isset( $custom_var['swpm_id'] ) ? $custom_var['swpm_id'] : '';
 

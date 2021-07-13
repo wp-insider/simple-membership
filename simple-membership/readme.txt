@@ -162,6 +162,7 @@ https://simple-membership-plugin.com/
 = WIP 4.0.7 =
 - Custom fields data (if available) is also saved in the swpm_transactions custom post type after a transaction.
 - Stripe sca subscriptions enhancement: restore the custom field value from the original webhook notification (when available).
+- Updated the Dutch language file.
 
 = 4.0.6 =
 - Added an option in the [swpm_paypal_subscription_cancel_link] shortcode to allow opening the window in a new tab.

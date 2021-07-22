@@ -71,21 +71,21 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             array_push($addons_data, $addon_7);
 
             $addon_8 = array(
+                'name' => 'WP Express Checkout',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/wp-express-checkout-integration.png',
+                'description' => 'Allows you to integrate with the Express Checkout plugin to accept membership payments.',
+                'page_url' => 'https://simple-membership-plugin.com/wp-express-checkout-plugin-integration-for-membership-payment/',
+            );
+            array_push($addons_data, $addon_8);
+
+            $addon_9 = array(
                 'name' => 'Affiliates Manager',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/affiliates-manager-integration.png',
                 'description' => 'Allows you to integrate with the Affiliates Manager plugin so you can reward affiliates for sending paid members your way.',
                 'page_url' => 'https://wpaffiliatemanager.com/affiliates-manager-and-simple-membership-integration/',
             );
-            array_push($addons_data, $addon_8);
-
-            $addon_9 = array(
-                'name' => 'iDevAffiliate',
-                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/idevaffiliate-integration.png',
-                'description' => 'Allows you to integrate with iDevAffiliates so you can reward affiliates for sending paid members your way.',
-                'page_url' => 'https://simple-membership-plugin.com/simple-membership-and-idevaffiliate-integration/',
-            );
             array_push($addons_data, $addon_9);
-            
+
             $addon_10 = array(
                 'name' => 'Affiliate Platform',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/affiliate-platform-integration.png',
@@ -117,7 +117,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/full-page-protection-addon-simple-membership/',
             );
             array_push($addons_data, $addon_13);
-            
+
             $addon_14 = array(
                 'name' => 'Protect Older Posts',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-older-posts-protection.png',
@@ -125,7 +125,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-protect-older-posts-addon/',
             );
             array_push($addons_data, $addon_14);
-            
+
             $addon_15 = array(
                 'name' => 'Custom Post Protection',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/custom-post-type-protection-enhanced.png',
@@ -133,7 +133,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-addon-better-custom-post-type-protection/',
             );
             array_push($addons_data, $addon_15);
-            
+
             $addon_16 = array(
                 'name' => 'Partial Protection',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-partial-protection-addon.png',
@@ -141,7 +141,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/apply-partial-section-protection/',
             );
             array_push($addons_data, $addon_16);
-                        
+
             $addon_17 = array(
                 'name' => 'Member Data Exporter',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-data-exporter-addon.png',
@@ -157,7 +157,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-bulk-import-member-data-csv-file/',
             );
             array_push($addons_data, $addon_18);
-            
+
             $addon_19 = array(
                 'name' => 'Display Member Payments',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-member-payments-addon.png',
@@ -165,7 +165,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-member-payments-listing-addon/',
             );
             array_push($addons_data, $addon_19);
-            
+
             $addon_20 = array(
                 'name' => 'AWeber Integration',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-aweber-integration-addon.png',
@@ -173,7 +173,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-aweber-integration-addon/',
             );
             array_push($addons_data, $addon_20);
-            
+
             $addon_21 = array(
                 'name' => 'WP User Import',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/wp-user-import.png',
@@ -181,7 +181,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/import-existing-wordpress-users-simple-membership-plugin/',
             );
             array_push($addons_data, $addon_21);
-            
+
             $addon_22 = array(
                 'name' => 'ConvertKit Integration',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-convertkit-integration-addon.png',
@@ -189,7 +189,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-convertkit-integration-addon/',
             );
             array_push($addons_data, $addon_22);
-            
+
             $addon_23 = array(
                 'name' => 'Google First Click Free',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/google-first-click-free-addon.png',
@@ -197,7 +197,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-google-first-click-free-integration-addon',
             );
             array_push($addons_data, $addon_23);
-            
+
             $addon_24 = array(
                 'name' => 'Miscellaneous Shortcodes',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-misc-shortcodes-addon.png',
@@ -205,7 +205,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-miscellaneous-shortcodes-addon/',
             );
             array_push($addons_data, $addon_24);
-            
+
             $addon_25 = array(
                 'name' => 'Show Member Info',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/show-member-info.png',
@@ -213,23 +213,31 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-addon-show-member-info/',
             );
             array_push($addons_data, $addon_25);
-            
+
             $addon_26 = array(
+                'name' => 'iDevAffiliate',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/idevaffiliate-integration.png',
+                'description' => 'Allows you to integrate with iDevAffiliates so you can reward affiliates for sending paid members your way.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-and-idevaffiliate-integration/',
+            );
+            array_push($addons_data, $addon_26);
+
+            $addon_27 = array(
                 'name' => 'Expiry Email Notification',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/email-notification-and-broadcast-addon.png',
                 'description' => 'Allows you to configure and send various expiry email notifications for members.',
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-email-notification-broadcast-addon/',
             );
-            array_push($addons_data, $addon_26);
-            
-            $addon_27 = array(
+            array_push($addons_data, $addon_27);
+
+            $addon_28 = array(
                 'name' => '2 Factor Authentication',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/2fa-addon-icon.png',
                 'description' => 'This addon adds the 2 factor authentication for member login to increase login security.',
                 'page_url' => 'https://simple-membership-plugin.com/swpm-two-factor-authentication-addon/',
             );
-            array_push($addons_data, $addon_27);            
-            
+            array_push($addons_data, $addon_28);
+
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {
                 $output .= '<div class="swpm_addon_item_canvas">';
@@ -250,7 +258,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
 
                 $output .='<div class="swpm_addon_item_details_link">';
                 $output .='<a href="' . $addon['page_url'] . '" class="swpm_addon_view_details" target="_blank">View Details</a>';
-                $output .='</div>'; //end detils link      
+                $output .='</div>'; //end detils link
                 $output .='</div>'; //end body
 
                 $output .= '</div>'; //end canvas
@@ -259,5 +267,5 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             echo $output;
             ?>
 
-        </div></div><!-- end of poststuff and post-body -->        
+        </div></div><!-- end of poststuff and post-body -->
 </div><!-- end of .wrap -->

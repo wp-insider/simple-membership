@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 5.8
-Stable tag: 4.0.6
+Stable tag: 4.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -159,10 +159,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.0.7 =
-- Custom fields data (if available) is also saved in the swpm_transactions custom post type after a transaction.
+= 4.0.7 =
 - Stripe sca subscriptions enhancement: restore the custom field value from the original webhook notification (when available).
+- Custom fields data (if available) is also saved in the swpm_transactions custom post type after a transaction.
 - Updated the Dutch language file.
+- Integration with the [WP Express Checkout plugin](https://wordpress.org/plugins/wp-express-checkout/).
+- WordPress 5.8 compatibility.
 
 = 4.0.6 =
 - Added an option in the [swpm_paypal_subscription_cancel_link] shortcode to allow opening the window in a new tab.

@@ -159,6 +159,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Added a check to prevent an extra empty line output with a notice/message.
+
 = 4.0.7 =
 - Stripe sca subscriptions enhancement: restore the custom field value from the original webhook notification (when available).
 - Custom fields data (if available) is also saved in the swpm_transactions custom post type after a transaction.

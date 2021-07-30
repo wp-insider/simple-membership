@@ -449,7 +449,7 @@ class SimpleWpMembership {
         $extra = isset($message['extra']) ? $message['extra'] : array();
         if (is_string($extra)) {
             echo $extra;
-        } else if (is_array($extra)) {
+        } else if (is_array($extra) && !empty($extra)) {
             echo '<ul>';
             foreach ($extra as $key => $value) {
                 echo '<li>' . $value . '</li>';

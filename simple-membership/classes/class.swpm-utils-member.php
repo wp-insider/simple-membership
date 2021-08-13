@@ -257,12 +257,46 @@ class SwpmMemberUtils {
                 }
         }
 
+        /**
+         * Get wp user roles by user ID.
+         *
+         * @param int $id
+         * @return array
+         */
+        public static function get_wp_user_roles_by_id( $wp_user_id )
+        {
+            $user = new WP_User( $wp_user_id );
+            if ( empty ( $user->roles ) or ! is_array( $user->roles ) ){
+                return array ();
+            }
+            $wp_roles = new WP_Roles;
+            $names = $wp_roles->get_names();
+            $out = array ();
+            foreach ( $user->roles as $role ) {
+                if ( isset ( $names[ $role ] ) ){
+                    $out[ $role ] = $names[ $role ];
+                }
+            }
+
+            return $out;
+        }
+
 	public static function wp_user_has_admin_role( $wp_user_id ) {
 		$caps = get_user_meta( $wp_user_id, 'wp_capabilities', true );
 		if ( is_array( $caps ) && in_array( 'administrator', array_keys( (array) $caps ) ) ) {
-			//This wp user has "administrator" role.
-			return true;
+                    //This wp user has "administrator" role.
+                    return true;
 		}
+                //Check if $caps was empty (It can happen on sites with customized roles and capbilities). If yes, then perform an additional role check.
+                if ( empty ( $caps ) ){
+                    //Try to retrieve roles from the user object.
+                    $roles = self::get_wp_user_roles_by_id($wp_user_id);
+                    if ( is_array( $roles ) && in_array( 'administrator', array_keys( (array) $roles ) ) ) {
+                        //This wp user has "administrator" role.
+                        return true;
+                    }
+                }
+
 		return false;
 	}
 

@@ -290,6 +290,7 @@ class SwpmMemberUtils {
                 //Check if $caps was empty (It can happen on sites with customized roles and capbilities). If yes, then perform an additional role check.
                 if ( empty ( $caps ) ){
                     //Try to retrieve roles from the user object.
+                    SwpmLog::log_simple_debug( 'Empty caps. Calling get_wp_user_roles_by_id() to retrieve role.', true );
                     $roles = self::get_wp_user_roles_by_id($wp_user_id);
                     if ( is_array( $roles ) && in_array( 'administrator', array_keys( (array) $roles ) ) ) {
                         //This wp user has "administrator" role.

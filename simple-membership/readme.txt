@@ -162,6 +162,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - Added a check to prevent an extra empty line output with a notice/message.
 - Added a new utility function in the plugin to retrieve wp user roles by ID.
+- Added French (Canadian) language translation file to the plugin. Thank you to Ariane Larivière.
 
 = 4.0.7 =
 - Stripe sca subscriptions enhancement: restore the custom field value from the original webhook notification (when available).

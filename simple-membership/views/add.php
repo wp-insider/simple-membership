@@ -77,7 +77,7 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                 ?>
                 <tr>
                     <td colspan="2" style="text-align: center;">
-                        <label><input type="checkbox" id="accept_pt" name="accept_pp" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
+                        <label><input type="checkbox" id="accept_pp" name="accept_pp" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
                     </td>
                 </tr>
                 <?php

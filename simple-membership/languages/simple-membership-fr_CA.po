@@ -1,15 +1,13 @@
 msgid ""
 msgstr ""
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: Simple WordPress Membership\n"
-"POT-Creation-Date: 2021-08-29 15:04-0400\n"
-"PO-Revision-Date: 2021-08-29 15:08-0400\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2021-07-07 13:25+1000\n"
+"PO-Revision-Date: 2021-09-13 17:46-0400\n"
 "Language-Team: \n"
-"Language: fr_CA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.0\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
@@ -18,6 +16,8 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
 "_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Last-Translator: \n"
+"Language: fr_CA\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
@@ -52,13 +52,14 @@ msgstr "Supprimer"
 #: views/admin_members_list.php:8
 #: views/payments/admin_all_payment_transactions.php:32
 msgid "The selected entry was deleted!"
-msgstr ""
+msgstr "L’entrée sélectionnée a été supprimée!"
 
 #: classes/admin-includes/class.swpm-payments-admin-menu.php:23
 msgid "Simple Membership::Payments"
 msgstr ""
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:65
+#: views/template-1.php:95 views/template-2.php:97
 msgid "View Profile"
 msgstr "Voir ton profil"
 
@@ -76,6 +77,7 @@ msgstr "Adresse email"
 #: classes/class.swpm-members.php:23 views/add.php:34
 #: views/admin_member_form_common_part.php:15 views/edit.php:39
 #: views/payments/admin_add_edit_transaction_manually.php:83
+#: includes/swpm_mda_show_profile.php:28
 msgid "First Name"
 msgstr "Prénom"
 
@@ -83,6 +85,7 @@ msgstr "Prénom"
 #: classes/class.swpm-members.php:24 views/add.php:38
 #: views/admin_member_form_common_part.php:19 views/edit.php:43
 #: views/payments/admin_add_edit_transaction_manually.php:91
+#: includes/swpm_mda_show_profile.php:29
 msgid "Last Name"
 msgstr "Nom"
 
@@ -110,7 +113,7 @@ msgstr ""
 #: classes/admin-includes/class.swpm-payments-list-table.php:91
 #: views/payments/admin_add_edit_transaction_manually.php:117
 msgid "Amount"
-msgstr ""
+msgstr "Montant"
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:92
 #: classes/class.swpm-category-list.php:19 classes/class.swpm-members.php:26
@@ -142,33 +145,38 @@ msgstr ""
 #: classes/class-swpm-member-subscriptions.php:121
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:164
 msgid "No active subscriptions"
-msgstr ""
+msgstr "Aucun abonnement actif"
 
 #: classes/class-swpm-member-subscriptions.php:132
 msgid "Cancel Subscription"
-msgstr ""
+msgstr "Annuler l'Abonnement"
 
 #: classes/class-swpm-member-subscriptions.php:134
 msgid "Are you sure that you want to cancel the subscription?"
-msgstr ""
+msgstr "Es-tu sûre de vouloir annuler ton abonnement?"
 
 #: classes/class.simple-wp-membership.php:189
 msgid "The admin of this site does not allow users to access the wp dashboard."
 msgstr ""
+"L’administrateur de ce site ne permet pas aux utilisateurs d’accéder au "
+"tableau de bord wp."
 
 #: classes/class.simple-wp-membership.php:190
 msgid "Go back to the home page by "
-msgstr "Retourne sur la page d’accueil en"
+msgstr "Retourne sur la page d’accueil en "
 
 #: classes/class.simple-wp-membership.php:190
 msgid "clicking here"
-msgstr "Cliquant ici"
+msgstr "cliquant ici"
 
 #: classes/class.simple-wp-membership.php:255
 msgid ""
 "Error! This site has the force WP user login feature enabled in the "
 "settings. We could not find a WP user record for the given username: "
 msgstr ""
+"Erreur! Ce site a la fonction de connexion d’utilisateur de force WP activée "
+"dans les paramètres. Nous n’avons pas pu trouver d’enregistrement "
+"d’utilisateur WP pour le nom d’utilisateur donné "
 
 #: classes/class.simple-wp-membership.php:256
 msgid ""
@@ -181,6 +189,9 @@ msgid ""
 "Contact the site admin and request them to check your username in the WP "
 "Users menu to see what happened with the WP user entry of your account."
 msgstr ""
+"Contactez l’administrateur du site et demandez-leur de vérifier votre nom "
+"d’utilisateur dans le menu des utilisateurs WP pour voir ce qui s’est passé "
+"avec l’entrée utilisateur WP de votre compte."
 
 #: classes/class.simple-wp-membership.php:258
 msgid ""
@@ -191,6 +202,7 @@ msgstr ""
 #: classes/class.simple-wp-membership.php:259
 msgid "You can use the back button of your browser to go back to the site."
 msgstr ""
+"Tu peux utiliser le bouton retour de ton navigateur pour revenir sur le site."
 
 #: classes/class.simple-wp-membership.php:431
 #: classes/class.swpm-wp-loaded-tasks.php:141
@@ -238,7 +250,7 @@ msgstr "Adresse email invalide"
 
 #: classes/class.simple-wp-membership.php:683
 msgid "This field is required"
-msgstr "Ce champ est requis."
+msgstr "Ce champ est requis"
 
 #: classes/class.simple-wp-membership.php:686
 msgid "Password must contain at least:"
@@ -262,7 +274,7 @@ msgstr "Nom d’utilisateur invalide"
 
 #: classes/class.simple-wp-membership.php:689
 msgid "Usernames can only contain: letters, numbers and .-_*@"
-msgstr ""
+msgstr "Le nom d’utilisateur peut seulement contenir: lettres, nombres et .-*@"
 
 #: classes/class.simple-wp-membership.php:692
 msgid "Minimum "
@@ -270,11 +282,11 @@ msgstr ""
 
 #: classes/class.simple-wp-membership.php:693
 msgid " characters required"
-msgstr ""
+msgstr " caractères requis"
 
 #: classes/class.simple-wp-membership.php:696
 msgid "Apostrophe character is not allowed"
-msgstr ""
+msgstr "L’apostrophe n’est pas autorisée"
 
 #: classes/class.simple-wp-membership.php:736
 msgid "WP Membership"
@@ -303,18 +315,18 @@ msgstr "Paiements"
 
 #: classes/class.simple-wp-membership.php:741
 msgid "Add-ons"
-msgstr ""
+msgstr "Modules complémentaires"
 
 #: classes/class.swpm-access-control.php:47
 #: classes/class.swpm-access-control.php:120
 msgid "You need to login to view this content. "
-msgstr "Tu dois te connecter pour voir ce contenu."
+msgstr "Tu dois te connecter pour voir ce contenu "
 
 #: classes/class.swpm-access-control.php:56
 #: classes/class.swpm-access-control.php:128
 #: classes/class.swpm-access-control.php:212
 msgid "Your account has expired. "
-msgstr ""
+msgstr "Ton compte est expiré "
 
 #: classes/class.swpm-access-control.php:66
 #: classes/class.swpm-access-control.php:138
@@ -324,15 +336,15 @@ msgstr ""
 #: classes/class.swpm-access-control.php:79
 #: classes/class.swpm-access-control.php:148
 msgid "This content is not permitted for your membership level."
-msgstr ""
+msgstr "Ce contenu n’est pas autorisé pour ton niveau d’adhésion."
 
 #: classes/class.swpm-access-control.php:204
 msgid "You need to login to view the rest of the content. "
-msgstr ""
+msgstr "Tu dois te vous connecter pour voir le reste du contenu "
 
 #: classes/class.swpm-access-control.php:217
 msgid " The rest of the content is not permitted for your membership level."
-msgstr ""
+msgstr " Le reste du contenu n’est pas autorisé pour ton niveau d’adhésion."
 
 #: classes/class.swpm-admin-registration.php:25
 msgid "Error! Nonce verification failed for user registration from admin end."
@@ -348,7 +360,7 @@ msgstr ""
 #: classes/class.swpm-membership-level.php:73
 #: classes/class.swpm-membership-level.php:105
 msgid "Please correct the following:"
-msgstr ""
+msgstr "SVP corriger les éléments suivants:"
 
 #: classes/class.swpm-admin-registration.php:100
 msgid "Error! Nonce verification failed for user edit from admin end."
@@ -356,7 +368,7 @@ msgstr ""
 
 #: classes/class.swpm-admin-registration.php:166
 msgid "Your current password"
-msgstr ""
+msgstr "Ton mot de passe actuel"
 
 #: classes/class.swpm-ajax.php:14 classes/class.swpm-ajax.php:34
 #: ipn/swpm-smart-checkout-ipn.php:326
@@ -365,11 +377,11 @@ msgstr ""
 
 #: classes/class.swpm-ajax.php:18
 msgid "Invalid Email Address"
-msgstr ""
+msgstr "Adresse email invalide"
 
 #: classes/class.swpm-ajax.php:25 classes/class.swpm-ajax.php:44
 msgid "Already taken"
-msgstr ""
+msgstr "Déjà pris"
 
 #: classes/class.swpm-ajax.php:25 classes/class.swpm-ajax.php:45
 msgid "Available"
@@ -377,7 +389,7 @@ msgstr "Disponible"
 
 #: classes/class.swpm-ajax.php:38
 msgid "Name contains invalid character"
-msgstr ""
+msgstr "Le nom contient des caractères invalides"
 
 #: classes/class.swpm-auth.php:60
 msgid ""
@@ -387,7 +399,7 @@ msgstr ""
 
 #: classes/class.swpm-auth.php:61
 msgid "Click here"
-msgstr ""
+msgstr "Clique ici"
 
 #: classes/class.swpm-auth.php:61
 msgid " to see the profile you are currently logged into in this browser."
@@ -417,23 +429,23 @@ msgstr ""
 
 #: classes/class.swpm-auth.php:96
 msgid "User Not Found."
-msgstr ""
+msgstr "Utilisateur non trouvé."
 
 #: classes/class.swpm-auth.php:103
 msgid "Password Empty or Invalid."
-msgstr ""
+msgstr "Mot de passe vide ou invalide."
 
 #: classes/class.swpm-auth.php:144
 msgid "Account is inactive."
-msgstr ""
+msgstr "Compte est inactif."
 
 #: classes/class.swpm-auth.php:147 classes/class.swpm-auth.php:176
 msgid "Account has expired."
-msgstr ""
+msgstr "Compte est expiré."
 
 #: classes/class.swpm-auth.php:150
 msgid "Account is pending."
-msgstr ""
+msgstr "Compte est en attente."
 
 #: classes/class.swpm-auth.php:160
 #, php-format
@@ -441,13 +453,15 @@ msgid ""
 "You need to activate your account. If you didn't receive an email then %s to "
 "resend the activation email."
 msgstr ""
+"Tu dois activer ton compte. Si tu n’as pas reçu un email, %s pour envoyer un "
+"nouveau email d’activation."
 
 #: classes/class.swpm-auth.php:160
 #: classes/class.swpm-front-registration.php:451
 #: classes/class.swpm-front-registration.php:504
 #: classes/class.swpm-utils-misc.php:196
 msgid "click here"
-msgstr ""
+msgstr "clique ici"
 
 #: classes/class.swpm-auth.php:184
 msgid "You are logged in as:"
@@ -512,6 +526,8 @@ msgid ""
 "Wordpress account exists with given username. But the given email doesn't "
 "match."
 msgstr ""
+"Un compte WordPress existe avec ce nom d’utilisateur. Mais le email indiqué "
+"ne correspond pas."
 
 #: classes/class.swpm-form.php:31
 msgid ""
@@ -519,12 +535,17 @@ msgid ""
 "that username then you must enter the correct email address associated with "
 "the existing WP user to connect with that account."
 msgstr ""
+" Utilise un autre nom d’utilisateur pour terminer l’enregistrement. Si tu "
+"souhaites utiliser ce nom d’utilisateur, tu dois entrer l’adresse e-mail "
+"correcte associée à l’utilisateur WP existant pour te connecter à ce compte."
 
 #: classes/class.swpm-form.php:37
 msgid ""
 "Wordpress account exists with given email. But the given username doesn't "
 "match."
 msgstr ""
+"Le compte Wordpress existe avec ce email. Mais le nom d’utilisateur donné ne "
+"correspond pas."
 
 #: classes/class.swpm-form.php:38
 msgid ""
@@ -532,6 +553,9 @@ msgid ""
 "use that email then you must enter the correct username associated with the "
 "existing WP user to connect with that account."
 msgstr ""
+" Utilise une autre adresse email pour terminer l’inscription. Si tu "
+"souhaites utiliser ce email, tu dois entrer le nom d’utilisateur correct "
+"associé à l’utilisateur WP existant pour te connecter à ce compte."
 
 #: classes/class.swpm-form.php:48
 msgid "Username is required"
@@ -539,11 +563,11 @@ msgstr "Nom d’utilisateur requis"
 
 #: classes/class.swpm-form.php:52
 msgid "Username contains invalid character"
-msgstr ""
+msgstr "Le nom d’utilisateur contient un caractère invalide"
 
 #: classes/class.swpm-form.php:60
 msgid "Username already exists."
-msgstr ""
+msgstr "Le nom d’utilisateur existe déjà."
 
 #: classes/class.swpm-form.php:81
 msgid "Password is required"
@@ -755,10 +779,12 @@ msgstr ""
 
 #: classes/class.swpm-members.php:22 views/add.php:18 views/admin_add.php:12
 #: views/admin_edit.php:19 views/edit.php:23
+#: includes/swpm_mda_show_profile.php:27
 msgid "Username"
 msgstr "Nom d’utilisateur"
 
 #: classes/class.swpm-members.php:25 views/add.php:22 views/edit.php:27
+#: includes/swpm_mda_show_profile.php:35
 msgid "Email"
 msgstr ""
 
@@ -767,6 +793,7 @@ msgid "Access Starts"
 msgstr ""
 
 #: classes/class.swpm-members.php:28 views/admin_members_list.php:45
+#: includes/swpm_mda_show_profile.php:31
 msgid "Account State"
 msgstr ""
 
@@ -879,7 +906,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-membership-levels.php:218 views/admin_members_list.php:56
-#: views/payments/admin_all_payment_transactions.php:16
+#: views/payments/admin_all_payment_transactions.php:16 views/template-1.php:53
+#: views/template-2.php:54
 msgid "Search"
 msgstr ""
 
@@ -1586,6 +1614,7 @@ msgstr "Réinitialisation du mot de passe"
 msgid ""
 "You will be automatically redirected in a few seconds. If not, please %s."
 msgstr ""
+"Tu vas être automatiquement redirigé dans quelques secondes. Sinon, %s svp."
 
 #: classes/class.swpm-utils-misc.php:199
 msgid "Action Status"
@@ -1649,7 +1678,7 @@ msgstr ""
 
 #: classes/class.swpm-utils.php:111
 msgid "Never"
-msgstr ""
+msgstr "Jamais"
 
 #: classes/class.swpm-utils.php:119
 msgid "Male"
@@ -1692,6 +1721,8 @@ msgid ""
 "You will be redirected to the previous page in a few seconds. If not, please "
 "<a href=\"\">click here</a>."
 msgstr ""
+"Tu vas être redirigé vers la page précédente dans quelques secondes. Sinon, "
+"<a href=“”>clique ici</a> svp."
 
 #: classes/class.swpm-wp-loaded-tasks.php:121
 msgid "Success!"
@@ -1715,7 +1746,7 @@ msgstr ""
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:71
 msgid "Your profile username: "
-msgstr "Ton nom d’utilisateur:"
+msgstr "Ton nom d’utilisateur "
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:89
 msgid "Click on the following link to complete the registration."
@@ -1723,7 +1754,7 @@ msgstr ""
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:90
 msgid "Click here to complete your paid registration"
-msgstr ""
+msgstr "Clique ici pour compléter ton inscription"
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:95
 msgid ""
@@ -1744,7 +1775,7 @@ msgstr ""
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:133
 msgid "Logged in as: "
-msgstr "Connecté en tant que:"
+msgstr "Connecté en tant que "
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:136
 #: views/loggedin.php:31
@@ -1757,7 +1788,7 @@ msgstr "Se connecter"
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:140
 msgid "Not a member? "
-msgstr "Pas encore membre?"
+msgstr "Pas encore membre "
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:141
 msgid "Join Now"
@@ -1812,7 +1843,7 @@ msgstr ""
 
 #: views/account_delete_warning.php:13
 msgid "Password: "
-msgstr "Mot de passe:"
+msgstr "Mot de passe "
 
 #: views/account_delete_warning.php:14
 msgid "Confirm Account Deletion"
@@ -2123,10 +2154,12 @@ msgid "Save Membership Level "
 msgstr ""
 
 #: views/admin_member_form_common_part.php:23
+#: includes/swpm_mda_show_profile.php:37
 msgid "Gender"
 msgstr "Genre"
 
 #: views/admin_member_form_common_part.php:30 views/edit.php:47
+#: includes/swpm_mda_show_profile.php:34
 msgid "Phone"
 msgstr "Téléphone"
 
@@ -2147,14 +2180,17 @@ msgid "Zipcode"
 msgstr "Code postal"
 
 #: views/admin_member_form_common_part.php:50 views/edit.php:67
+#: includes/swpm_mda_show_profile.php:33
 msgid "Country"
 msgstr "Pays"
 
 #: views/admin_member_form_common_part.php:54
+#: includes/swpm_mda_show_profile.php:38
 msgid "Company"
 msgstr "Companie"
 
 #: views/admin_member_form_common_part.php:58
+#: includes/swpm_mda_show_profile.php:36
 msgid "Member Since"
 msgstr "Membre depuis"
 
@@ -2273,7 +2309,7 @@ msgstr "Réinitialisation du mot de passe"
 
 #: views/loggedin.php:6
 msgid "Logged in as"
-msgstr "Connecté en tant que:"
+msgstr "Connecté en tant que"
 
 #: views/loggedin.php:14
 msgid "Membership"
@@ -2293,13 +2329,14 @@ msgstr "Se souvenir de moi"
 
 #: views/login.php:35
 msgid "Forgot Password?"
-msgstr "J’ai oublié mon mot de passe"
+msgstr "Tu as oublié ton mot de passe?"
 
 #: views/payments/admin_add_edit_transaction_manually.php:68
 msgid "Add New Transaction"
 msgstr ""
 
 #: views/payments/admin_add_edit_transaction_manually.php:99
+#: includes/swpm_mda_show_profile.php:26
 msgid "Member ID"
 msgstr "ID membre"
 
@@ -2781,68 +2818,101 @@ msgstr ""
 msgid "HTTP error occurred during payment process:"
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "Simple WordPress Membership"
+#: Translation strings from addons === Form builder addon
+msgid "Type password here"
+msgstr "Écrire le mot de passe ici"
+
+msgid "Retype password here"
+msgstr "Ré-écrire le mot de passe ici"
+
+msgid "Registration is complete. You can now log into the site."
+msgstr "Ton inscription est complète. Tu peux maintenant te connecter au site."
+
+msgid " Field has invalid character"
+msgstr " Caractères invalides"
+
+msgid " Password does not match"
+msgstr " Les mots de passe sont différents"
+
+msgid "Already taken."
+msgstr "Déjà pris."
+
+msgid "Street Address"
+msgstr "Rue"
+
+msgid "Apt, Suite, Bldg. (optional)"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-#. Author URI of the plugin/theme
-msgid "https://simple-membership-plugin.com/"
+msgid "State / Province / Region"
 msgstr ""
 
-#. Description of the plugin/theme
+msgid "Postal / Zip Code"
+msgstr ""
+
 msgid ""
-"A flexible, well-supported, and easy-to-use WordPress membership plugin for "
-"offering free and premium content from your WordPress site."
+"Check this box to delete the image. The image will be deleted when you save "
+"the profile."
 msgstr ""
 
-#. Author of the plugin/theme
-msgid "smp7, wp.insider"
+msgid "You will need to re-login since you changed your password."
+msgstr "Tu vas devoir te re-connecter puisque tu as changé ton mot de passe."
+
+msgid ""
+"Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
 msgstr ""
 
-#~ msgid "Type password here"
-#~ msgstr "Écrire le mot de passe ici"
+msgid "Verification"
+msgstr "Vérification"
 
-#~ msgid "Retype password here"
-#~ msgstr "Ré-écrire le mot de passe ici"
+msgid "Please enter any two digits with no spaces (Example: 12)*"
+msgstr ""
 
-#~ msgid "Registration is complete. You can now log into the site."
-#~ msgstr ""
-#~ "Ton inscription est complète. Tu peux maintenant te connecter au site."
+msgid "Username can only contain: letters, numbers and .-*@"
+msgstr "Le nom d’utilisateur peut seulement contenir: lettres, nombres et .-*@"
 
-#~ msgid " Password does not match"
-#~ msgstr "Les mots de passe sont différents."
+msgid "Allowed characters are: letters, numbers and .-_*@"
+msgstr "Les caractères permis sont: lettres, nombres et .-*@"
 
-#~ msgid "Already taken."
-#~ msgstr "Déjà pris."
+msgid "Please check at least one."
+msgstr "SVP en cocher au moins un."
 
-#~ msgid "Street Address"
-#~ msgstr "Rue"
+#: === Partial protection addon strings
+msgid "You do not have permission to view this content."
+msgstr "Tu n’as pas la permission de voir ce contenu."
 
-#~ msgid "You do not have permission to view this content."
-#~ msgstr "Tu n’as pas la permission de voir ce contenu."
+msgid "Your membership level does not have permission to view this content."
+msgstr ""
+"Ton niveau d’inscription ne te donne pas la permission de voir ce contenu."
 
-#~ msgid "This content is for members only."
-#~ msgstr "Ce contenu est pour les membres seulement."
+msgid "This content is for members only."
+msgstr "Ce contenu est pour les membres seulement."
 
-#~ msgid "Level"
-#~ msgstr "Niveau"
+#: === Member Directory Listing addon strings swpm-member-directory-admin.php:9
+msgid "Member Directory"
+msgstr ""
 
-#~ msgid "Address"
-#~ msgstr "Adresse"
+#: includes/swpm_mda_show_profile.php:30
+msgid "Level"
+msgstr "Niveau"
 
-#~ msgid "Search..."
-#~ msgstr "Rechercher…"
+#: includes/swpm_mda_show_profile.php:32
+msgid "Address"
+msgstr "Adresse"
 
-#~ msgid "Clear Search"
-#~ msgstr "Recherche d’effacement"
+#: views/template-1.php:52 views/template-2.php:53
+msgid "Search..."
+msgstr "Rechercher…"
+
+#: views/template-1.php:60 views/template-2.php:62
+msgid "Clear Search"
+msgstr "Recherche d’effacement"
 
 # === Misc Shortcodes Addon ===
-#~ msgid "You must be logged in to upgrade a membership."
-#~ msgstr "Vous devez être connecté pour mettre à niveau un abonnement."
+msgid "You must be logged in to upgrade a membership."
+msgstr "Vous devez être connecté pour mettre à niveau un abonnement."
 
-#~ msgid "Membership level has been updated."
-#~ msgstr "Le niveau d’adhésion a été mis à jour."
+msgid "Membership level has been updated."
+msgstr "Le niveau d’adhésion a été mis à jour."
 
-#~ msgid "Already a member of this level."
-#~ msgstr "Déjà membre de ce niveau."
+msgid "Already a member of this level."
+msgstr "Déjà membre de ce niveau."

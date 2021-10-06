@@ -16,6 +16,23 @@ class SwpmSettings {
 		//It sets up the various tabs and the fields for the settings admin page.
 
 		if ( is_admin() ) { // for frontend just load settings but dont try to render settings page.
+			//Handle view log request
+			$view_log_type = filter_input( INPUT_GET, 'swpm_view_log', FILTER_SANITIZE_STRING );
+			if ( ! empty( $view_log_type ) ) {
+				switch ( $view_log_type ) {
+					case 'd':
+						check_admin_referer( 'swpm_view_debug_log' );
+						break;
+					case 'a':
+						check_admin_referer( 'swpm_view_auth_log' );
+						break;
+					default:
+						break;
+				}
+
+				SwpmLog::output_log( $view_log_type );
+			}
+
 			//Read the value of tab query arg.
 			$tab               = isset( $_REQUEST['tab'] ) ? sanitize_text_field( $_REQUEST['tab'] ) : 1;
 			$this->current_tab = empty( $tab ) ? 1 : $tab;
@@ -210,11 +227,29 @@ class SwpmSettings {
 
 		add_settings_section( 'debug-settings', SwpmUtils::_( 'Test & Debug Settings' ), array( &$this, 'testndebug_settings_callback' ), 'simple_wp_membership_settings' );
 
+		$debug_log_url = add_query_arg(
+			array(
+				'page'          => 'simple_wp_membership_settings',
+				'swpm_view_log' => 'd',
+				'_wpnonce'         => wp_create_nonce( 'swpm_view_debug_log' ),
+			),
+			admin_url( 'admin.php' )
+		);
+
+		$auth_log_url = add_query_arg(
+			array(
+				'page'          => 'simple_wp_membership_settings',
+				'swpm_view_log' => 'a',
+				'_wpnonce'         => wp_create_nonce( 'swpm_view_auth_log' ),
+			),
+			admin_url( 'admin.php' )
+		);
+
 		$debug_field_help_text  = SwpmUtils::_( 'Check this option to enable debug logging.' );
 		$debug_field_help_text .= SwpmUtils::_( ' This can be useful when troubleshooting an issue. Turn it off and reset the log files after the troubleshooting is complete.' );
 		$debug_field_help_text .= '<br />';
-		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'View general debug log file by clicking ' ) . '<a href="' . SIMPLE_WP_MEMBERSHIP_URL . '/log.txt" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
-		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'View login related debug log file by clicking ' ) . '<a href="' . SIMPLE_WP_MEMBERSHIP_URL . '/log-auth.txt" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
+		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'View general debug log file by clicking ' ) . '<a href="' . $debug_log_url . '" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
+		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'View login related debug log file by clicking ' ) . '<a href="' . $auth_log_url . '" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
 		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'Reset debug log files by clicking ' ) . '<a href="admin.php?page=simple_wp_membership_settings&swmp_reset_log=1" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
 		add_settings_field(
 			'enable-debug',

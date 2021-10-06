@@ -5,11 +5,41 @@ class SwpmLog {
 	private $warn;
 	private $notice;
 	private static $intance;
+	private static $log_file;
+	private static $log_auth_file;
 	private function __construct() {
 		$this->error  = array();
 		$this->warn   = array();
 		$this->notice = array();
 	}
+	private static function gen_log_file_names() {
+		if ( ! empty( self::$log_file ) && ! empty( self::$log_auth_file ) ) {
+			return;
+		}
+		$settings = SwpmSettings::get_instance();
+		$suffix   = $settings->get_value( 'log-file-suffix' );
+		if ( empty( $suffix ) ) {
+			$suffix = uniqid();
+			$settings->set_value( 'log-file-suffix', $suffix );
+			$settings->save();
+		}
+		self::$log_file      = "log-{$suffix}.txt";
+		self::$log_auth_file = "log-auth-{$suffix}.txt";
+	}
+
+	public static function output_log( $type = 'd' ) {
+		if ( 'd' !== $type && 'a' !== $type ) {
+			return;
+		}
+		self::gen_log_file_names();
+		$log_file = 'd' === $type ? self::$log_file : self::$log_auth_file;
+
+		$fp = fopen( SIMPLE_WP_MEMBERSHIP_PATH . $log_file, 'r' );
+		header( 'Content-Type: text/plain' );
+		fpassthru( $fp );
+		die;
+	}
+
 	public static function get_logger( $context = '' ) {
 		$context = empty( $context ) ? 'default' : $context;
 		if ( ! isset( self::$intance[ $context ] ) ) {
@@ -41,7 +71,8 @@ class SwpmLog {
 	}
 	public static function writeall( $path = '' ) {
 		if ( empty( $path ) ) {
-			$path = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';}
+			self::gen_log_file_names();
+			$path = SIMPLE_WP_MEMBERSHIP_PATH . self::$log_file;}
 		$fp   = fopen( $path, 'a' );
 		$date = current_time( 'mysql' );
 		fwrite( $fp, strtoupper( $date ) . ":\n" );
@@ -62,7 +93,8 @@ class SwpmLog {
 		}
 
 		//Lets write to the log file
-		$debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
+		self::gen_log_file_names();
+		$debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . self::$log_file;
 
 		// Timestamp
 		$log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
@@ -84,7 +116,8 @@ class SwpmLog {
 		}
 
 		//Lets write to the log file
-		$debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
+		self::gen_log_file_names();
+		$debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . self::$log_file;
 
 		// Timestamp
 		$log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
@@ -112,7 +145,8 @@ class SwpmLog {
 		}
 
 		//Lets write to the log file
-		$debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log-auth.txt';
+		self::gen_log_file_names();
+		$debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . self::$log_auth_file;
 
 		// Timestamp
 		$log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
@@ -127,10 +161,11 @@ class SwpmLog {
 	}
 
 	public static function reset_swmp_log_files() {
-		$log_reset    = true;
+		$log_reset = true;
+		self::gen_log_file_names();
 		$logfile_list = array(
-			SIMPLE_WP_MEMBERSHIP_PATH . '/log.txt',
-			SIMPLE_WP_MEMBERSHIP_PATH . '/log-auth.txt',
+			SIMPLE_WP_MEMBERSHIP_PATH . self::$log_file,
+			SIMPLE_WP_MEMBERSHIP_PATH . self::$log_auth_file,
 		);
 
 		foreach ( $logfile_list as $logfile ) {

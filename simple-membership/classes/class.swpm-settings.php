@@ -245,12 +245,21 @@ class SwpmSettings {
 			admin_url( 'admin.php' )
 		);
 
+		$reset_log_url = add_query_arg(
+			array(
+				'page'           => 'simple_wp_membership_settings',
+				'swpm_reset_log' => '1',
+				'_wpnonce'       => wp_create_nonce( 'swpm_reset_log' ),
+			),
+			admin_url( 'admin.php' )
+		);
+
 		$debug_field_help_text  = SwpmUtils::_( 'Check this option to enable debug logging.' );
 		$debug_field_help_text .= SwpmUtils::_( ' This can be useful when troubleshooting an issue. Turn it off and reset the log files after the troubleshooting is complete.' );
 		$debug_field_help_text .= '<br />';
 		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'View general debug log file by clicking ' ) . '<a href="' . $debug_log_url . '" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
 		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'View login related debug log file by clicking ' ) . '<a href="' . $auth_log_url . '" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
-		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'Reset debug log files by clicking ' ) . '<a href="admin.php?page=simple_wp_membership_settings&swmp_reset_log=1" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
+		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'Reset debug log files by clicking ' ) . '<a href="' . $reset_log_url . '" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
 		add_settings_field(
 			'enable-debug',
 			SwpmUtils::_( 'Enable Debug' ),
@@ -967,7 +976,8 @@ class SwpmSettings {
 
 	public function swpm_general_post_submit_check_callback() {
 		//Log file reset handler
-		if ( isset( $_REQUEST['swmp_reset_log'] ) ) {
+		if ( isset( $_REQUEST['swpm_reset_log'] ) ) {
+			check_admin_referer( 'swpm_reset_log' );
 			if ( SwpmLog::reset_swmp_log_files() ) {
 				echo '<div id="message" class="updated fade"><p>Debug log files have been reset!</p></div>';
 			} else {

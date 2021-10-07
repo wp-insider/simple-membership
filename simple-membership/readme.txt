@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 5.8
-Stable tag: 4.0.7
+Stable tag: 4.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -159,11 +159,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
-- Added a check to prevent an extra empty line output with a notice/message.
+= 4.0.8 =
 - Added a new utility function in the plugin to retrieve wp user roles by ID.
 - Added French (Canadian) language translation file to the plugin. Thank you to Ariane Larivière.
-- Updated the HTML id value for the privacy policy checkbox item.
+- Added a check to prevent an extra empty line output with a notice/message.
+- Updated the HTML ID value for the privacy policy checkbox item.
+- The debug log file names are uniquely generated on per install.
+- Added nonce check to the debug log file reset action.
 
 = 4.0.7 =
 - Stripe sca subscriptions enhancement: restore the custom field value from the original webhook notification (when available).

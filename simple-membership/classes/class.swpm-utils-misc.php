@@ -449,6 +449,9 @@ class SwpmMiscUtils {
 		$formatted_content = prepend_attachment( $formatted_content );
 		$formatted_content = capital_P_dangit( $formatted_content );
 		$formatted_content = do_shortcode( $formatted_content );
+                $formatted_content = do_blocks( $formatted_content );
+
+                $formatted_content = apply_filters('swpm_format_raw_content_for_front_end_display', $formatted_content);
 
 		return $formatted_content;
 	}

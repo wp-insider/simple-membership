@@ -3,6 +3,7 @@
 Add the following translation strings to the swpm.pot file AFTER you generate a new .pot file. These are for the language strings from the addons.
 =================================
 
+
 #: Translation strings from addons
 
 #: === Form builder addon strings ===
@@ -154,4 +155,9 @@ msgid "Membership level has been updated."
 msgstr ""
 
 msgid "Already a member of this level."
+msgstr ""
+
+# === Special Translation Strings ===
+
+msgid "Username or Email"
 msgstr ""

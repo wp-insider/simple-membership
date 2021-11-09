@@ -2929,3 +2929,8 @@ msgstr ""
 
 msgid "Already a member of this level."
 msgstr ""
+
+# === Special Translation Strings ===
+
+msgid "Username or Email"
+msgstr ""

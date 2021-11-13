@@ -25,9 +25,9 @@ $swpm_username_label = apply_filters('swpm_login_form_set_username_label', 'User
                 <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" value="checked='checked'"></span>
                 <span class="swpm-rember-label"> <?php echo SwpmUtils::_('Remember Me') ?></span>
             </div>
-            
+
             <div class="swpm-before-login-submit-section"><?php echo apply_filters('swpm_before_login_form_submit_button', ''); ?></div>
-            
+
             <div class="swpm-login-submit">
                 <input type="submit" class="swpm-login-form-submit" name="swpm-login" value="<?php echo SwpmUtils::_('Login') ?>"/>
             </div>
@@ -38,7 +38,7 @@ $swpm_username_label = apply_filters('swpm_login_form_set_username_label', 'User
                 <a id="register" class="swpm-login-form-register-link" href="<?php echo $join_url; ?>"><?php echo SwpmUtils::_('Join Us') ?></a>
             </div>
             <div class="swpm-login-action-msg">
-                <span class="swpm-login-widget-action-msg"><?php echo $auth->get_message(); ?></span>
+                <span class="swpm-login-widget-action-msg"><?php echo apply_filters( 'swpm_login_form_action_msg', $auth->get_message() ); ?></span>
             </div>
         </div>
     </form>

@@ -23,7 +23,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
                     if ( SwpmMemberUtils::is_member_logged_in() ) {
 
                         $rego_hidden_to_logged_users_msg = '<div class="registration_hidden_to_logged_users_msg">';
-                        $rego_hidden_to_logged_users_msg .= SwpmUtils::_( "You are already logged in. You don't need to create another account. So the registration form is hidden." );
+                        $rego_hidden_to_logged_users_msg .= '<div class="hide-rego-form-msg">' . SwpmUtils::_( "You are already logged in. You don't need to create another account. So the registration form is hidden." ) . '</div>';
+                        $rego_hidden_to_logged_users_msg .= apply_filters('swpm_below_registration_form_hidden_message','');
                         $rego_hidden_to_logged_users_msg .= '</div>';
                         return $rego_hidden_to_logged_users_msg;
                     }

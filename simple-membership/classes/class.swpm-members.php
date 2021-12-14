@@ -16,7 +16,7 @@ class SwpmMembers extends WP_List_Table {
 	}
 
 	function get_columns() {
-		return array(
+		$columns = array(
 			'cb'                  => '<input type="checkbox" />',
 			'member_id'           => SwpmUtils::_( 'ID' ),
 			'user_name'           => SwpmUtils::_( 'Username' ),
@@ -28,10 +28,11 @@ class SwpmMembers extends WP_List_Table {
 			'account_state'       => SwpmUtils::_( 'Account State' ),
 			'last_accessed'       => SwpmUtils::_( 'Last Login Date' ),
 		);
+		return apply_filters( 'swpm_admin_members_table_columns', $columns );
 	}
 
 	function get_sortable_columns() {
-		return array(
+		$sortable_columns = array(
 			'member_id'           => array( 'member_id', true ), //True means already sorted
 			'user_name'           => array( 'user_name', false ),
 			'first_name'          => array( 'first_name', false ),
@@ -42,6 +43,7 @@ class SwpmMembers extends WP_List_Table {
 			'account_state'       => array( 'account_state', false ),
 			'last_accessed'       => array( 'last_accessed', false ),
 		);
+		return apply_filters( 'swpm_admin_members_table_sortable_columns', $sortable_columns );
 	}
 
 	function get_bulk_actions() {
@@ -57,7 +59,8 @@ class SwpmMembers extends WP_List_Table {
 	}
 
 	function column_default( $item, $column_name ) {
-		return $item[ $column_name ];
+		$column_data = apply_filters( 'swpm_admin_members_table_column_' . $column_name, $item[ $column_name ], $item );
+		return $column_data;
 	}
 
 	function column_account_state( $item ) {
@@ -155,6 +158,7 @@ class SwpmMembers extends WP_List_Table {
 
 		//Build the orderby and order query parameters
 		$orderby          = filter_input( INPUT_GET, 'orderby' );
+		$orderby          = apply_filters( 'swpm_admin_members_table_orderby', $orderby );
 		$orderby          = empty( $orderby ) ? 'member_id' : $orderby;
 		$order            = filter_input( INPUT_GET, 'order' );
 		$order            = empty( $order ) ? 'DESC' : $order;
@@ -196,6 +200,7 @@ class SwpmMembers extends WP_List_Table {
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 		$this->items           = $wpdb->get_results( $records_query_head . $query, ARRAY_A );
+		$this->items           = apply_filters( 'swpm_admin_members_table_items', $this->items );
 	}
 
 	function get_user_count_by_account_state() {

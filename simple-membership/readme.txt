@@ -160,11 +160,12 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 4.0.9 =
-- Added a new filter for the more tag protection feature (swpm_format_raw_content_for_front_end_display).
 - Added do_blocks() to the more tag protection feature's content formatting to improve compatibility with the link preview plugin. Thanks to @brechtvds for providing the code adjustment.
+- Added a new filter for the more tag protection feature (swpm_format_raw_content_for_front_end_display).
 - Added a new filter for the login form action message output (swpm_login_form_action_msg).
 - Added a new filter for the "Hide Registration Form to Logged Users" feature. It will allow additional content to be added below the message.
 - Added a new filter for the user delete action.
+- Updated the Norwegian language file.
 
 = 4.0.8 =
 - Added a new utility function in the plugin to retrieve wp user roles by ID.

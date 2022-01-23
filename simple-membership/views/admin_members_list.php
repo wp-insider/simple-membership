@@ -63,6 +63,7 @@ $membership_level = filter_input(INPUT_GET, 'membership_level', FILTER_SANITIZE_
     <input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']); ?>" />
     <!-- Now we can render the completed list table -->
     <?php $this->display(); ?>
+    <?php wp_nonce_field( 'swpm_bulk_action', 'swpm_bulk_action_nonce' ); ?>
 </form>
 
 <p>

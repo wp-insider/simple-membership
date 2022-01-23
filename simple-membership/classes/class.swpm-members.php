@@ -307,6 +307,8 @@ class SwpmMembers extends WP_List_Table {
 			return;
 		}
 
+		check_admin_referer( 'swpm_bulk_action', 'swpm_bulk_action_nonce' );
+
 		//perform the bulk operation according to the selection
 		if ( 'bulk_delete' === $current_action ) {
 			foreach ( $members as $record_id ) {

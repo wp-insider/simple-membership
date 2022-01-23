@@ -175,6 +175,10 @@ class SwpmMembershipLevels extends WP_List_Table {
                 echo '<div id="message" class="updated fade"><p>Error! You need to select multiple records to perform a bulk action!</p></div>';
                 return;
             }
+
+            $action = 'bulk-' . $this->_args['plural'];
+            check_admin_referer( $action );
+
             foreach ($records_to_delete as $record_id) {
                 if( !is_numeric( $record_id )){
                     wp_die('Error! ID must be numeric.');

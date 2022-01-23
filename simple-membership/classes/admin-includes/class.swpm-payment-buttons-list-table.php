@@ -106,6 +106,9 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
                 return;
             }
 
+			$action = 'bulk-' . $this->_args['plural'];
+			check_admin_referer( $action );
+
             foreach ($records_to_delete as $record_id) {
                 if(!is_numeric($record_id)){
                     wp_die('Error! ID must be a numeric number.');

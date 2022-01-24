@@ -4,8 +4,8 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 5.0
 Requires PHP: 5.6
-Tested up to: 5.8
-Stable tag: 4.0.8
+Tested up to: 5.9
+Stable tag: 4.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -159,13 +159,14 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.0.9 =
+= 4.0.9 =
 - Added do_blocks() to the more tag protection feature's content formatting to improve compatibility with the link preview plugin. Thanks to @brechtvds for providing the code adjustment.
 - Added a new filter for the more tag protection feature (swpm_format_raw_content_for_front_end_display).
 - Added a new filter for the login form action message output (swpm_login_form_action_msg).
 - Added a new filter for the "Hide Registration Form to Logged Users" feature. It will allow additional content to be added below the message.
 - Added a new filter for the user delete action.
 - Updated the Norwegian language file.
+- Added nonce check to the bulk delete feature of the members menu.
 
 = 4.0.8 =
 - Added a new utility function in the plugin to retrieve wp user roles by ID.

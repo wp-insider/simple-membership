@@ -2283,6 +2283,10 @@ msgstr ""
 msgid "Edit Profile"
 msgstr ""
 
+#: views/login.php:7
+msgid "Username or Email"
+msgstr ""
+
 #: views/login.php:26
 msgid "Remember Me"
 msgstr ""
@@ -2928,9 +2932,4 @@ msgid "Membership level has been updated."
 msgstr ""
 
 msgid "Already a member of this level."
-msgstr ""
-
-# === Special Translation Strings ===
-
-msgid "Username or Email"
 msgstr ""

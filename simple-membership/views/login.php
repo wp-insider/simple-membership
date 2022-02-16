@@ -3,8 +3,9 @@ $auth = SwpmAuth::get_instance();
 $setting = SwpmSettings::get_instance();
 $password_reset_url = $setting->get_value('reset-page-url');
 $join_url = $setting->get_value('join-us-page-url');
-// Filter allowing to change the default value of username label
-$swpm_username_label = apply_filters('swpm_login_form_set_username_label', 'Username or Email');
+// Filter that allows changing of the default value of the username label on login form.
+$label_username_or_email = __( 'Username or Email', 'simple-membership' );
+$swpm_username_label = apply_filters('swpm_login_form_set_username_label', $label_username_or_email);
 ?>
 <div class="swpm-login-widget-form">
     <form id="swpm-login-form" name="swpm-login-form" method="post" action="">

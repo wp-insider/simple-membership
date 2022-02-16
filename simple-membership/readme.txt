@@ -159,6 +159,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Added the text 'Username or Email' to the language translation POT file.
+
 = 4.0.9 =
 - Added do_blocks() to the more tag protection feature's content formatting to improve compatibility with the link preview plugin. Thanks to @brechtvds for providing the code adjustment.
 - Added a new filter for the more tag protection feature (swpm_format_raw_content_for_front_end_display).

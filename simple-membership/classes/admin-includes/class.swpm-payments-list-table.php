@@ -37,7 +37,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		// Build row actions
 		$actions = array(
 			/* 'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&edit_txn=%s">Edit</a>', $item['id']),//TODO - Will be implemented in a future date */
-			'delete' => sprintf( '<a href="admin.php?page=simple_wp_membership_payments&action=delete_txn&id=%s" onclick="return confirm(\'Are you sure you want to delete this record?\')">Delete</a>', $item['id'] ),
+			'delete' => sprintf( '<a href="admin.php?page=simple_wp_membership_payments&action=delete_txn&id=%s&_wpnonce=%s" onclick="return confirm(\'Are you sure you want to delete this record?\')">Delete</a>', $item['id'], wp_create_nonce( 'swpm_delete_txn_' . $item['id'] ) ),
 		);
 
 		// Return the refid column contents
@@ -90,7 +90,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 			'subscr_id'        => SwpmUtils::_( 'Subscriber ID' ),
 			'payment_amount'   => SwpmUtils::_( 'Amount' ),
 			'membership_level' => SwpmUtils::_( 'Membership Level' ),
-                        'status' => SwpmUtils::_( 'Status/Note' ),
+			'status'           => SwpmUtils::_( 'Status/Note' ),
 		);
 		return $columns;
 	}

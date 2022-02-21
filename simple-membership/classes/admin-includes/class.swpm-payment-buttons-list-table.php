@@ -55,7 +55,7 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
         //Build row actions
         $actions = array(
             'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=%s&button_type=%s">Edit</a>', $item['ID'], $button_type),
-            'delete' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons&action=delete_payment_btn&button_id=%s" onclick="return confirm(\'Are you sure you want to delete this record?\')">Delete</a>', $item['ID']),
+            'delete' => sprintf( '<a href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons&action=delete_payment_btn&button_id=%s&_wpnonce=%s" onclick="return confirm(\'Are you sure you want to delete this record?\')">Delete</a>', $item['ID'], wp_create_nonce( 'swpm_delete_payment_btn_' . $item['ID'] ) ),
         );
 
         //Return the refid column contents
@@ -126,6 +126,7 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
             if(!is_numeric($record_id)){
                 wp_die('Error! ID must be a numeric number.');
             }
+            check_admin_referer( 'swpm_delete_payment_btn_' . $record_id );
             wp_delete_post( $record_id );
             $success_msg = '<div id="message" class="updated"><p>';
             $success_msg .= SwpmUtils::_('The selected entry was deleted!');

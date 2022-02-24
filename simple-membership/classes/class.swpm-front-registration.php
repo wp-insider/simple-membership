@@ -87,6 +87,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 	}
 
 	public function register_front_end() {
+                //Trigger action hook
+                do_action( 'swpm_front_end_registration_form_submitted' );
 
 		//If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
 		$captcha_validation_output = apply_filters( 'swpm_validate_registration_form_submission', '' );

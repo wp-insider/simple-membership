@@ -285,12 +285,12 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_save_edit_pp_sma
 
 function swpm_save_edit_pp_smart_checkout_button_data() {
 
-    $btn_size = filter_input(INPUT_POST, 'pp_smart_checkout_btn_size', FILTER_SANITIZE_STRING);
-    $btn_color = filter_input(INPUT_POST, 'pp_smart_checkout_btn_color', FILTER_SANITIZE_STRING);
-    $btn_shape = filter_input(INPUT_POST, 'pp_smart_checkout_btn_shape', FILTER_SANITIZE_STRING);
-    $btn_layout = filter_input(INPUT_POST, 'pp_smart_checkout_btn_layout', FILTER_SANITIZE_STRING);
-    $pm_credit = filter_input(INPUT_POST, 'pp_smart_checkout_payment_method_credit', FILTER_SANITIZE_STRING);
-    $pm_elv = filter_input(INPUT_POST, 'pp_smart_checkout_payment_method_elv', FILTER_SANITIZE_STRING);
+    $btn_size = sanitize_text_field($_POST['pp_smart_checkout_btn_size']);
+    $btn_color = sanitize_text_field($_POST['pp_smart_checkout_btn_color']);
+    $btn_shape = sanitize_text_field($_POST['pp_smart_checkout_btn_shape']);
+    $btn_layout = sanitize_text_field($_POST['pp_smart_checkout_btn_layout']);
+    $pm_credit = sanitize_text_field($_POST['pp_smart_checkout_payment_method_credit']);
+    $pm_elv = sanitize_text_field($_POST['pp_smart_checkout_payment_method_elv']);
 
     if (isset($_REQUEST['swpm_pp_smart_checkout_save_submit'])) {
         //This is a PayPal Smart Checkout button save event.

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.0
-Stable tag: 4.1.0
+Stable tag: 4.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -164,6 +164,7 @@ https://simple-membership-plugin.com/
 - Added output escaping to the email validation ajax request.
 - Added output escaping to the username validation ajax request.
 - Added sanitization to the account status field of the member listing page.
+- Removed some use of the FILTER_SANITIZE_STRING flag to be compatible with PHP8.1.
 
 = 4.1.0 =
 - Added the text 'Username or Email' to the language translation POT file.

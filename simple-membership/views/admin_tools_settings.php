@@ -2,7 +2,7 @@
 $links = array();
 if(isset($_REQUEST['swpm_link_for'])){
     //Rego complete link feature
-    $link_for = sanitize_text_field($_POST['swpm_link_for']);
+    $link_for = isset($_POST['swpm_link_for']) ? sanitize_text_field($_POST['swpm_link_for']) : '';
     $member_id = filter_input(INPUT_POST, 'member_id', FILTER_SANITIZE_NUMBER_INT);
     $send_email = isset($_REQUEST['swpm_reminder_email']) ? true : false;
     $links = SwpmUtils::get_registration_complete_prompt_link($link_for, $send_email, $member_id);

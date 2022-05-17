@@ -19,7 +19,7 @@ class SwpmForm {
         }
     }
     protected function validate_wp_user_email(){
-        $user_name = sanitize_text_field($_POST['user_name']);
+        $user_name = isset($_POST['user_name']) ? sanitize_text_field($_POST['user_name']) : '';
         $email = filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
         if (empty($user_name)) {
             return;
@@ -43,7 +43,7 @@ class SwpmForm {
     protected function user_name() {
         global $wpdb;
         if (!empty($this->fields['user_name'])){return;}
-        $user_name = sanitize_text_field($_POST['user_name']);
+        $user_name = isset($_POST['user_name']) ? sanitize_text_field($_POST['user_name']) : '';
         if (empty($user_name)) {
             $this->errors['user_name'] = SwpmUtils::_('Username is required');
             return;
@@ -65,12 +65,12 @@ class SwpmForm {
     }
 
     protected function first_name() {
-        $first_name = sanitize_text_field($_POST['first_name']);
+        $first_name = isset($_POST['first_name']) ? sanitize_text_field($_POST['first_name']) : '';
         $this->sanitized['first_name'] = sanitize_text_field($first_name);
     }
 
     protected function last_name() {
-        $last_name = sanitize_text_field($_POST['last_name']);
+        $last_name = isset($_POST['last_name']) ? sanitize_text_field($_POST['last_name']) : '';
         $this->sanitized['last_name'] = sanitize_text_field($last_name);
     }
 
@@ -132,32 +132,32 @@ class SwpmForm {
     }
 
     protected function address_street() {
-        $address_street = sanitize_text_field($_POST['address_street']);
+        $address_street = isset($_POST['address_street']) ? sanitize_text_field($_POST['address_street']) : '';
         $this->sanitized['address_street'] = wp_kses($address_street, array());
     }
 
     protected function address_city() {
-        $address_city = sanitize_text_field($_POST['address_city']);
+        $address_city = isset($_POST['address_city']) ? sanitize_text_field($_POST['address_city']) : '';
         $this->sanitized['address_city'] = wp_kses($address_city, array());
     }
 
     protected function address_state() {
-        $address_state = sanitize_text_field($_POST['address_state']);
+        $address_state = isset($_POST['address_state']) ? sanitize_text_field($_POST['address_state']) : '';
         $this->sanitized['address_state'] = wp_kses($address_state, array());
     }
 
     protected function address_zipcode() {
-        $address_zipcode = sanitize_text_field($_POST['address_zipcode']);
+        $address_zipcode = isset($_POST['address_zipcode']) ? sanitize_text_field($_POST['address_zipcode']) : '';
         $this->sanitized['address_zipcode'] = wp_kses($address_zipcode, array());
     }
 
     protected function country() {
-        $country = sanitize_text_field($_POST['country']);
+        $country = isset($_POST['country']) ? sanitize_text_field($_POST['country']) : '';
         $this->sanitized['country'] = wp_kses($country, array());
     }
 
     protected function company_name() {
-        $company_name = sanitize_text_field($_POST['company_name']);
+        $company_name = isset($_POST['company_name']) ? sanitize_text_field($_POST['company_name']) : '';
         $this->sanitized['company_name'] = $company_name;
     }
 
@@ -173,7 +173,7 @@ class SwpmForm {
     }
 
     protected function subscription_starts() {
-        $subscription_starts = sanitize_text_field($_POST['subscription_starts']);
+        $subscription_starts = isset($_POST['subscription_starts']) ? sanitize_text_field($_POST['subscription_starts']) : '';
         if(empty($subscription_starts)) {return ;}
         if (preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $subscription_starts)){
             $this->sanitized['subscription_starts'] =  sanitize_text_field($subscription_starts);
@@ -183,7 +183,7 @@ class SwpmForm {
     }
 
     protected function gender() {
-        $gender = sanitize_text_field($_POST['gender']);
+        $gender = isset($_POST['gender']) ? sanitize_text_field($_POST['gender']) : '';
         if(empty($gender)) {return;}
         if (in_array($gender, array('male', 'female', 'not specified'))){
             $this->sanitized['gender'] = $gender;
@@ -194,7 +194,7 @@ class SwpmForm {
     }
 
     protected function account_state() {
-        $account_state = sanitize_text_field($_POST['account_state']);
+        $account_state = isset($_POST['account_state']) ? sanitize_text_field($_POST['account_state']) : '';
         if(empty($account_state)) {return;}
         if (in_array($account_state, array('active', 'pending', 'activation_required', 'inactive', 'expired'))){
             $this->sanitized['account_state'] = $account_state;
@@ -244,7 +244,7 @@ class SwpmForm {
     }
 
     protected function subscr_id() {
-        $subscr_id = sanitize_text_field($_POST['subscr_id']);
+        $subscr_id = isset($_POST['subscr_id']) ? sanitize_text_field($_POST['subscr_id']) : '';
         $this->sanitized['subscr_id'] = $subscr_id;
     }
 

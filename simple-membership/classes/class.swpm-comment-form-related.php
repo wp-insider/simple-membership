@@ -69,7 +69,7 @@ class SwpmCommentFormRelated {
             return;
         }
 
-        $comment_id = sanitize_text_field($_POST['comment_post_ID']);
+        $comment_id = isset($_POST['comment_post_ID']) ? sanitize_text_field($_POST['comment_post_ID']) : '';
         if (empty($comment_id)) {
             return;
         }

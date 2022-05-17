@@ -21,7 +21,7 @@ class SwpmPostList extends WP_List_Table {
             'plural' => SwpmUtils::_('Membership Levels'),
             'ajax' => false
         ));
-        $selected = sanitize_text_field($_POST['membership_level_id']);
+        $selected = isset($_POST['membership_level_id']) ? sanitize_text_field($_POST['membership_level_id']) : '';
         $this->selected_level_id = empty($selected) ? 1 : $selected;
         $this->post = ($this->selected_level_id == 1) ?
                 SwpmProtection::get_instance() :
@@ -109,7 +109,7 @@ class SwpmPostList extends WP_List_Table {
             wp_die(SwpmUtils::_("Error! Nonce security verification failed for Post Protection Update action. Clear cache and try again."));
         }
 
-        $type = sanitize_text_field($_POST['list_type']);
+        $type = isset($_POST['list_type']) ? sanitize_text_field($_POST['list_type']) : '';
 
         $selected = filter_input(INPUT_POST, 'membership_level_id');
         $selected_level_id = empty($selected) ? 1 : $selected;

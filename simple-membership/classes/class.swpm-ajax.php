@@ -7,9 +7,9 @@ class SwpmAjax {
 
     public static function validate_email_ajax() {
         global $wpdb;
-        $field_value = sanitize_text_field($_GET['fieldValue']);
-        $field_id = sanitize_text_field($_GET['fieldId']);
-        $member_id = sanitize_text_field($_GET['member_id']);
+        $field_value = isset($_GET['fieldValue']) ? sanitize_text_field($_GET['fieldValue']) : '';
+        $field_id = isset($_GET['fieldId']) ? sanitize_text_field($_GET['fieldId']) : '';
+        $member_id = isset($_GET['member_id']) ? sanitize_text_field($_GET['member_id']) : '';
         if (!check_ajax_referer( 'swpm-rego-form-ajax-nonce', 'nonce', false )) {
             echo '[ "' . esc_attr($field_id) .  '",false, "'.SwpmUtils::_('Nonce check failed. Please reload the page.').'" ]' ;
             exit;
@@ -28,8 +28,8 @@ class SwpmAjax {
 
     public static function validate_user_name_ajax() {
         global $wpdb;
-        $field_value = sanitize_text_field($_GET['fieldValue']);
-        $field_id = sanitize_text_field($_GET['fieldId']);
+        $field_value = isset($_GET['fieldValue']) ? sanitize_text_field($_GET['fieldValue']) : '';
+        $field_id = isset($_GET['fieldId']) ? sanitize_text_field($_GET['fieldId']) : '';
         if (!check_ajax_referer( 'swpm-rego-form-ajax-nonce', 'nonce', false )) {
             echo '[ "' . esc_attr($field_id) .  '",false, "'.SwpmUtils::_('Nonce check failed. Please reload the page.').'" ]' ;
             exit;

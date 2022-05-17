@@ -258,7 +258,7 @@ class SwpmMembershipLevels extends WP_List_Table {
         //Check current_user_can() or die.
         SwpmMiscUtils::check_user_permission_and_is_admin('Main Membership Level Admin Menu');
 
-        $level_action = sanitize_text_field($_GET['level_action']);
+        $level_action = isset($_GET['level_action']) ? sanitize_text_field($_GET['level_action']) : '';
         $action = $level_action;
         $selected= $action;
 

@@ -36,7 +36,7 @@ class SwpmLevelForm {
     }
 
     protected function subscription_period() {
-        $subscript_duration_type = sanitize_text_field($_POST['subscription_duration_type']);
+        $subscript_duration_type = isset($_POST['subscription_duration_type']) ? sanitize_text_field($_POST['subscription_duration_type']) : '';
 
         if ($subscript_duration_type == SwpmMembershipLevel::NO_EXPIRY) {
             $this->sanitized['subscription_period'] = "";
@@ -62,7 +62,7 @@ class SwpmLevelForm {
     }
 
     protected function subscription_duration_type(){
-        $subscription_duration_type = sanitize_text_field($_POST['subscription_duration_type']);
+        $subscription_duration_type = isset($_POST['subscription_duration_type']) ? sanitize_text_field($_POST['subscription_duration_type']) : '';
         $this->sanitized['subscription_duration_type'] = $subscription_duration_type;
         return;
     }
@@ -110,7 +110,7 @@ class SwpmLevelForm {
     }
 
     protected function protect_older_posts() {
-        $checked = sanitize_text_field($_POST['protect_older_posts']);
+        $checked = isset($_POST['protect_older_posts']) ? sanitize_text_field($_POST['protect_older_posts']) : '';
         $this->sanitized['protect_older_posts'] = empty($checked) ? 0 : 1;
     }
 

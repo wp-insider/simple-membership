@@ -195,7 +195,7 @@ class SimpleWpMembership {
 
         //Initialize the settings menu hooks.
         $swpm_settings_obj->init_config_hooks();
-        $addon_saved = sanitize_text_field($_POST['swpm-addon-settings']);
+        $addon_saved = isset($_POST['swpm-addon-settings']) ? sanitize_text_field($_POST['swpm-addon-settings']) : '';
         if (!empty($addon_saved) && current_user_can('manage_options')) {
             check_admin_referer('swpm_addon_settings_section', 'swpm_addon_settings_section_save_settings');
             do_action('swpm_addon_settings_save');
@@ -540,8 +540,8 @@ class SimpleWpMembership {
 
     public function save_postdata($post_id) {
         global $wpdb;
-        $post_type = sanitize_text_field($_POST['post_type']);
-        $swpm_protect_post = sanitize_text_field($_POST['swpm_protect_post']);
+        $post_type = isset($_POST['post_type']) ? sanitize_text_field($_POST['post_type']) : '';
+        $swpm_protect_post = isset($_POST['swpm_protect_post']) ? sanitize_text_field($_POST['swpm_protect_post']) : '';
 
         if (wp_is_post_revision($post_id)) {
             return;

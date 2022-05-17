@@ -1,5 +1,5 @@
 <?php
-SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData' => '&action=swpm_validate_email&member_id=' . filter_input(INPUT_GET, 'member_id'))));
+SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData' => '&action=swpm_validate_email&member_id=' . filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT))));
 $settings = SwpmSettings::get_instance();
 $force_strong_pass = $settings->get_value('force-strong-passwords');
 if (!empty($force_strong_pass)) {

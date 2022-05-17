@@ -17,8 +17,8 @@ class SwpmBraintreeBuyNowIpnHandler {
 
         //Read and sanitize the request parameters.
         $button_id = filter_input(INPUT_POST, 'item_number', FILTER_SANITIZE_NUMBER_INT);
-        $button_title = filter_input(INPUT_POST, 'item_name', FILTER_SANITIZE_STRING);
-        $payment_amount = filter_input(INPUT_POST, 'item_price', FILTER_SANITIZE_STRING);
+        $button_title = sanitize_text_field($_POST['item_name']);
+        $payment_amount = sanitize_text_field($_POST['item_price']);
 
         //Retrieve the CPT for this button
         $button_cpt = get_post($button_id);
@@ -63,7 +63,7 @@ class SwpmBraintreeBuyNowIpnHandler {
 
             // Create the charge on Braintree's servers - this will charge the user's card
 
-            $nonce = filter_input(INPUT_POST, 'payment_method_nonce', FILTER_SANITIZE_STRING);
+            $nonce = sanitize_text_field($_POST['payment_method_nonce']);
 
             $result = Braintree_Transaction::sale([
                         'amount' => $payment_amount,
@@ -90,15 +90,15 @@ class SwpmBraintreeBuyNowIpnHandler {
             //Grab the transaction ID.
             $txn_id = $result->transaction->id; //$charge->balance_transaction;
 
-            $custom = filter_input(INPUT_POST, 'custom', FILTER_SANITIZE_STRING);
+            $custom = sanitize_text_field($_POST['custom']);
             $custom_var = SwpmTransactions::parse_custom_var($custom);
             $swpm_id = isset($custom_var['swpm_id']) ? $custom_var['swpm_id'] : '';
 
             //Create the $ipn_data array.
             $ipn_data = array();
             $ipn_data['mc_gross'] = $payment_amount;
-            $ipn_data['first_name'] = filter_input(INPUT_POST, 'first_name', FILTER_SANITIZE_STRING);
-            $ipn_data['last_name'] = filter_input(INPUT_POST, 'last_name', FILTER_SANITIZE_STRING);
+            $ipn_data['first_name'] = sanitize_text_field($_POST['first_name']);
+            $ipn_data['last_name'] = sanitize_text_field($_POST['last_name']);
             $ipn_data['payer_email'] = filter_input(INPUT_POST, 'member_email', FILTER_SANITIZE_EMAIL);
             $ipn_data['membership_level'] = $membership_level_id;
             $ipn_data['txn_id'] = $txn_id;

@@ -258,7 +258,7 @@ class SwpmMembershipLevels extends WP_List_Table {
         //Check current_user_can() or die.
         SwpmMiscUtils::check_user_permission_and_is_admin('Main Membership Level Admin Menu');
 
-        $level_action = filter_input(INPUT_GET, 'level_action');
+        $level_action = sanitize_text_field($_GET['level_action']);
         $action = $level_action;
         $selected= $action;
 
@@ -283,7 +283,7 @@ class SwpmMembershipLevels extends WP_List_Table {
             $menu_tabs = apply_filters('swpm_membership_levels_additional_menu_tabs_array', array());
             foreach ($menu_tabs as $level_action => $title){
                 ?>
-                <a class="nav-tab <?php echo ($selected == $member_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=<?php echo $level_action; ?>" ><?php SwpmUtils::e($title); ?></a>
+                <a class="nav-tab <?php echo ($selected == $member_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=<?php echo esc_attr($level_action); ?>" ><?php SwpmUtils::e($title); ?></a>
                 <?php
             }
 

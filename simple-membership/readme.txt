@@ -4,7 +4,7 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 5.0
 Requires PHP: 5.6
-Tested up to: 5.9
+Tested up to: 6.0
 Stable tag: 4.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -158,6 +158,12 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 4.1.1 =
+- Tested on WordPress 6.0.
+- Added output escaping to the email validation ajax request.
+- Added output escaping to the username validation ajax request.
+- Added sanitization to the account status field of the member listing page.
 
 = 4.1.0 =
 - Added the text 'Username or Email' to the language translation POT file.

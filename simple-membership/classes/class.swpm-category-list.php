@@ -20,7 +20,7 @@ class SwpmCategoryList extends WP_List_Table {
             'plural' => SwpmUtils::_('Membership Levels'),
             'ajax' => false
         ));
-        $selected = filter_input(INPUT_POST, 'membership_level_id');
+        $selected = filter_input(INPUT_POST, 'membership_level_id', FILTER_SANITIZE_NUMBER_INT);
         $this->selected_level_id = empty($selected) ? 1 : $selected;
         $this->category = ($this->selected_level_id == 1) ?
                 SwpmProtection::get_instance() :
@@ -59,7 +59,7 @@ class SwpmCategoryList extends WP_List_Table {
         }
         return $taxonomy;
     }
-    
+
     function column_cb($item) {
         return sprintf(
                 '<input type="hidden" name="ids_in_page[]" value="%s">
@@ -68,17 +68,17 @@ class SwpmCategoryList extends WP_List_Table {
     }
 
     public static function update_category_list() {
-        //Check we are on the admin end and user has management permission 
+        //Check we are on the admin end and user has management permission
         SwpmMiscUtils::check_user_permission_and_is_admin('category protection update');
-        
+
         //Check nonce
         $swpm_category_prot_update_nonce = filter_input(INPUT_POST, 'swpm_category_prot_update_nonce');
         if (!wp_verify_nonce($swpm_category_prot_update_nonce, 'swpm_category_prot_update_nonce_action')) {
             //Nonce check failed.
             wp_die(SwpmUtils::_("Error! Nonce security verification failed for Category Protection Update action. Clear cache and try again."));
         }
-            
-        $selected = filter_input(INPUT_POST, 'membership_level_id');
+
+        $selected = filter_input(INPUT_POST, 'membership_level_id', FILTER_SANITIZE_NUMBER_INT);
         $selected_level_id = empty($selected) ? 1 : $selected;
         $category = ($selected_level_id == 1) ?
                 SwpmProtection::get_instance() :
@@ -104,7 +104,7 @@ class SwpmCategoryList extends WP_List_Table {
         $all_categories = array();
         $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
         $taxonomies['category'] = 'category';
-        $all_terms = get_terms( $taxonomies, 'orderby=count&hide_empty=0&order=DESC');        
+        $all_terms = get_terms( $taxonomies, 'orderby=count&hide_empty=0&order=DESC');
         $totalitems = count($all_terms);
         $perpage = 100;
         $paged = !empty($_GET["paged"]) ? sanitize_text_field($_GET["paged"]) : '';

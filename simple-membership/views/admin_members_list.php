@@ -17,7 +17,7 @@ global $wpdb;
 $query = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE  id !=1 ";
 $levels = $wpdb->get_results($query, ARRAY_A);
 
-$account_state = filter_input(INPUT_GET, 'status', FILTER_SANITIZE_STRING);
+$account_state = sanitize_text_field($_GET['status']);
 $membership_level = filter_input(INPUT_GET, 'membership_level', FILTER_SANITIZE_NUMBER_INT);
 ?>
 <style>

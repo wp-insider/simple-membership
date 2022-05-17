@@ -2,7 +2,7 @@
 $links = array();
 if(isset($_REQUEST['swpm_link_for'])){
     //Rego complete link feature
-    $link_for = filter_input(INPUT_POST, 'swpm_link_for', FILTER_SANITIZE_STRING);
+    $link_for = sanitize_text_field($_POST['swpm_link_for']);
     $member_id = filter_input(INPUT_POST, 'member_id', FILTER_SANITIZE_NUMBER_INT);
     $send_email = isset($_REQUEST['swpm_reminder_email']) ? true : false;
     $links = SwpmUtils::get_registration_complete_prompt_link($link_for, $send_email, $member_id);
@@ -54,12 +54,12 @@ if(isset($_REQUEST['recreate-required-pages-submit'])){
                                 } else {
                                     echo '<div class="swpm-grey-box">' . SwpmUtils::_('Registration completion links will appear below') . '</div>';
                                 }
-                                ?>                                    
+                                ?>
                                 <div class="swpm-margin-top-10"></div>
                                 <?php foreach ($links as $key => $link) { ?>
                                     <input type="text" size="120" readonly="readonly" name="link[<?php echo $key ?>]" value="<?php echo $link; ?>"/><br/>
                                 <?php } ?>
-                                    
+
                                 <?php
                                 if (isset($_REQUEST['swpm_reminder_email'])) {
                                     echo '<div class="swpm-green-box">' . SwpmUtils::_('A prompt to complete registration email was also sent.') . '</div>';
@@ -93,7 +93,7 @@ if(isset($_REQUEST['recreate-required-pages-submit'])){
 
             </div>
         </div>
-        
+
     </div><!-- end of post-body -->
 </div><!-- end of poststuff -->
 

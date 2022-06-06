@@ -159,6 +159,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Added a warning in the edit member interface for situation when a member account is created without a membership level value.
+
 = 4.1.2 =
 - Fixed a minor Undefined array key warning.
 

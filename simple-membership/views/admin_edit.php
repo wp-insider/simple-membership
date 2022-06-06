@@ -72,7 +72,26 @@
 	</tr>
         <tr class="swpm-admin-edit-membership-level">
             <th scope="row"><label for="membership_level"><?php echo SwpmUtils::_('Membership Level'); ?></label></th>
-            <td><select class="regular-text" name="membership_level" id="membership_level">
+            <td>
+                <?php
+                //This is an edit member record view. Check that the membershp level is set.
+                if ( !isset( $membership_level ) || empty( $membership_level ) ){
+                    //The member's membership level is not set. Show an error message.
+                    echo '<div class="swpm-yellow-box" style="max-width:450px;">';
+                    echo '<p>' . 'Error! This user\'s membership level is not set. Please select a membership level and save the record.' . '</p>';
+                    echo '<p>';
+                    echo 'If member accounts are created without a level, that indicates a problem in your setup. Please review your ';
+                    echo '<a href="https://simple-membership-plugin.com/membership-registration-process-overview/" target="_blank">registration setup</a>.';
+                    echo '</p>';
+                    echo '</div>';
+                }
+                ?>
+                <select class="regular-text" name="membership_level" id="membership_level">
+                    <?php
+                    if ( !isset( $membership_level ) || empty( $membership_level ) ){
+                        echo '<option value="2">--</option>';//Show select prompt and set the action value to the default level ID.
+                    }
+                    ?>
                     <?php foreach ($levels as $level): ?>
                         <option <?php echo ($level['id'] == $membership_level) ? "selected='selected'" : ""; ?> value="<?php echo $level['id']; ?>"> <?php echo $level['alias'] ?></option>
                     <?php endforeach; ?>

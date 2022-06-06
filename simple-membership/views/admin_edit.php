@@ -70,6 +70,15 @@
                 </p>
             </td>
 	</tr>
+        <tr class="swpm-admin-edit-membership-level">
+            <th scope="row"><label for="membership_level"><?php echo SwpmUtils::_('Membership Level'); ?></label></th>
+            <td><select class="regular-text" name="membership_level" id="membership_level">
+                    <?php foreach ($levels as $level): ?>
+                        <option <?php echo ($level['id'] == $membership_level) ? "selected='selected'" : ""; ?> value="<?php echo $level['id']; ?>"> <?php echo $level['alias'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+        </tr>
     <?php include('admin_member_form_common_part.php');?>
         <tr class="swpm-admin-edit-subscriber-id">
 		<th scope="row"><label for="subscr_id"><?php echo  SwpmUtils::_('Subscriber ID/Reference') ?> </label></th>

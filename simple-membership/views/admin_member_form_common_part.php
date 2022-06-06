@@ -1,16 +1,7 @@
-<tr class="swpm-admin-edit-membership-level">
-    <th scope="row"><label for="membership_level"><?php echo SwpmUtils::_('Membership Level'); ?></label></th>
-    <td><select class="regular-text" name="membership_level" id="membership_level">
-            <?php foreach ($levels as $level): ?>
-                <option <?php echo ($level['id'] == $membership_level) ? "selected='selected'" : ""; ?> value="<?php echo $level['id']; ?>"> <?php echo $level['alias'] ?></option>
-            <?php endforeach; ?>
-        </select>
-    </td>
-</tr>
 <tr class="swpm-admin-edit-access-starts">
     <th scope="row"><label for="subscription_starts"><?php echo SwpmUtils::_('Access Starts') ?> </label></th>
     <td><input class="regular-text" name="subscription_starts" type="text" id="subscription_starts" value="<?php echo esc_attr($subscription_starts); ?>" /></td>
-</tr>  
+</tr>
 <tr class="swpm-admin-edit-first-name">
     <th scope="row"><label for="first_name"><?php echo SwpmUtils::_('First Name') ?> </label></th>
     <td><input class="regular-text" name="first_name" type="text" id="first_name" value="<?php echo esc_attr($first_name); ?>" /></td>
@@ -53,7 +44,7 @@
 <tr class="swpm-admin-edit-company">
     <th scope="row"><label for="company_name"><?php echo SwpmUtils::_('Company') ?></label></th>
     <td><input name="company_name" type="text" id="company_name" class="regular-text" value="<?php echo esc_attr($company_name); ?>" /></td>
-</tr>      
+</tr>
 <tr class="swpm-admin-edit-member-since">
     <th scope="row"><label for="member_since"><?php echo SwpmUtils::_('Member Since') ?> </label></th>
     <td><input class="regular-text" name="member_since" type="text" id="member_since" value="<?php echo esc_attr($member_since); ?>" /></td>

@@ -25,18 +25,27 @@
                         <div id="pass-strength-result"><?php echo SwpmUtils::_('Strength indicator'); ?></div>
                         <p class="description indicator-hint"><?php echo SwpmUtils::_('Hint: The password should be at least seven characters long. To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ).'); ?></p>
                     </td>
-                </tr> 
+                </tr>
                 <tr class="swpm-admin-add-account-state">
                     <th scope="row"><label for="account_state"><?php echo SwpmUtils::_('Account Status'); ?></label></th>
                     <td><select class="regular-text" name="account_state" id="account_state">
                             <?php echo SwpmUtils::account_state_dropdown('active'); ?>
                         </select>
                     </td>
-                </tr>        
+                </tr>
+                <tr class="swpm-admin-edit-membership-level">
+                    <th scope="row"><label for="membership_level"><?php echo SwpmUtils::_('Membership Level'); ?></label></th>
+                    <td><select class="regular-text" name="membership_level" id="membership_level">
+                            <?php foreach ($levels as $level): ?>
+                                <option <?php echo ($level['id'] == $membership_level) ? "selected='selected'" : ""; ?> value="<?php echo $level['id']; ?>"> <?php echo $level['alias'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                </tr>
                 <?php include('admin_member_form_common_part.php'); ?>
             </tbody>
-        </table>        
-        <?php include('admin_member_form_common_js.php'); ?>        
+        </table>
+        <?php include('admin_member_form_common_js.php'); ?>
         <?php submit_button(SwpmUtils::_('Add New Member '), 'primary', 'createswpmuser', true, array('id' => 'createswpmusersub')); ?>
     </form>
 </div>

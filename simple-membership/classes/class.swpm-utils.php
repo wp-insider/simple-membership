@@ -418,9 +418,22 @@ abstract class SwpmUtils {
 	}
 
 	public static function get_free_level() {
-		$encrypted = filter_input( INPUT_POST, 'level_identifier' );
+		$encrypted = sanitize_text_field( $_POST['level_identifier'] );
 		if ( ! empty( $encrypted ) ) {
-			return SwpmPermission::get_instance( $encrypted )->get( 'id' );
+                    //We already checked using hash that the membership_level value is authentic. Now check the level_identifier against the membership_level.
+                    $level_value = sanitize_text_field( $_POST['membership_level'] );
+                    $hash_val = md5( $level_value );
+                    if ( $hash_val != $encrypted ) {//level_identifier validation failed.
+                            $msg  = '<p>Error! Security check failed for membership level identifier validation.</p>';
+                            $msg .= '<p>The submitted membership level data does not match.</p>';
+                            $msg .= '<p>If you are using caching please empty the cache data and try again.</p>';
+                            if ( isset ( $_POST['swpm-fb-submit'] ) ){//Form builder submission potentially
+                                $msg .= '<p>If you are using the Form Builder addon, please update the addon and try again.</p>';
+                            }
+                            wp_die( $msg );
+                    }
+
+                    return SwpmPermission::get_instance( $encrypted )->get( 'id' );
 		}
 
 		$is_free    = SwpmSettings::get_instance()->get_value( 'enable-free-membership' );

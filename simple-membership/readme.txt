@@ -161,6 +161,7 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - Added a warning in the edit member interface for situation when a member account is created without a membership level value.
+- Removes the membership_level data (if posted) from the edit profile update operation (since this data is not needed for this operation).
 
 = 4.1.2 =
 - Fixed a minor Undefined array key warning.

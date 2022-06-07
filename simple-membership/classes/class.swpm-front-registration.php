@@ -310,6 +310,13 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			);
 
 			$member_info = $form->get_sanitized_member_form_data();
+
+                        //Check if membrship_level value has been posted.
+                        if ( isset( $member_info['membership_level'] ) ){
+                            //For edit profile, remove the membership level from the array (because we don't allow level updating in profile edit)
+                            unset( $member_info['membership_level'] );
+                        }
+
 			SwpmUtils::update_wp_user( $auth->get( 'user_name' ), $member_info ); //Update corresponding wp user record.
 
 			//Lets check if password was also changed.

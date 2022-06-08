@@ -523,6 +523,7 @@ class SwpmMiscUtils {
 			'Fiji',
 			'Finland',
 			'France',
+                        'French Polynesia',
 			'Gabon',
 			'Gambia, The',
 			'Georgia',

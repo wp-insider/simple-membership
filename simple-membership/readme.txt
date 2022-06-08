@@ -162,6 +162,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - Added a warning in the edit member interface for situation when a member account is created without a membership level value.
 - Small user edit interface improvement.
+- Added 'French Polynesia' country to the countries dropdown list.
 - Removes the membership_level data (if posted) from the edit profile update operation (since this data is not needed for this operation).
 - Added an additional hash check for the level_identified on registration form.
 

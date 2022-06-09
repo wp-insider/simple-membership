@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.0
-Stable tag: 4.1.2
+Stable tag: 4.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -159,11 +159,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= 4.1.3 =
 - Added a warning in the edit member interface for situation when a member account is created without a membership level value.
 - Small user edit interface improvement.
 - Added 'French Polynesia' country to the countries dropdown list.
-- Removes the membership_level data (if posted) from the edit profile update operation (since this data is not needed for this operation).
+- Removes the membership_level data (if posted) from the edit profile update operation (since this data is not needed for this operation). Thanks to Vladimir for pointing this out.
 - Added an additional hash check for the level_identified on registration form.
 
 = 4.1.2 =

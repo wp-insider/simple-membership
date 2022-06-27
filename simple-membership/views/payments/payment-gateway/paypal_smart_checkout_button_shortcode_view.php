@@ -36,6 +36,9 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
     $payment_amount_formatted = number_format($payment_amount, 2, '.', '');
     $payment_currency = get_post_meta($button_id, 'payment_currency', true);
 
+    //Create the items_list for passing to PayPal API
+    $items_list = "{name: '".$item_name."', quantity: '1', price: '".$payment_amount."', currency: '".$payment_currency."'}";
+    
     //Return, cancel, notifiy URLs
     $return_url = get_post_meta($button_id, 'return_url', true);
     if (empty($return_url)) {
@@ -96,7 +99,7 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
     }
     ?>
     <div class="swpm-button-wrapper">
-        <?php
+    <?php
     //apply filter to output additional form fields
     $coupon_input = '';
     $coupon_input = apply_filters('swpm_payment_form_additional_fields', $coupon_input, $button_id, $uniqid);
@@ -137,7 +140,10 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
                     return actions.payment.create({
                         payment: {
                             transactions: [{
-                                    amount: {total: amount, currency: '<?php echo $payment_currency; ?>'}
+                                    amount: {total: amount, currency: '<?php echo $payment_currency; ?>'},
+                                    item_list: {
+                                        items: [<?php echo $items_list; ?>]
+                                    }
                                 }]
                         },
                         meta: {partner_attribution_id: 'TipsandTricks_SP'}

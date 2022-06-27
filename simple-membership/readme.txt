@@ -159,6 +159,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP = 
+- PayPal smart checkout will pass the item name set in the payment button to PayPal's API.
+
+
 = 4.1.3 =
 - Added a warning in the edit member interface for situation when a member account is created without a membership level value.
 - Small user edit interface improvement.

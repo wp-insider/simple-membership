@@ -162,6 +162,7 @@ https://simple-membership-plugin.com/
 = WIP = 
 - PayPal smart checkout will pass the item name set in the payment button to PayPal's API.
 - The PayPal smart checkout transactions will try to find a member profile using the Transaction ID and show it in the Transactions tab (if found).
+- WooCommerce checkout integration will add the collected billing address to SWPM member record when available.
 
 = 4.1.3 =
 - Added a warning in the edit member interface for situation when a member account is created without a membership level value.

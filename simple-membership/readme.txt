@@ -159,10 +159,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.1.4 = 
+= 4.1.4 = 
 - PayPal smart checkout will pass the item name set in the payment button to PayPal's API.
 - The PayPal smart checkout transactions will try to find a member profile using the Transaction ID and show it in the Transactions tab (if found).
-- REST API call for media will check if the parent post/page is protected and give an error (if protected).
 - WooCommerce checkout integration will add the collected billing address to SWPM member record when available.
 
 = 4.1.3 =

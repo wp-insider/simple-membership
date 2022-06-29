@@ -52,6 +52,7 @@ class SimpleWpMembership {
         add_filter('wp_get_attachment_url', array(&$this, 'filter_attachment_url'), 10, 2);
         add_filter('wp_get_attachment_metadata', array(&$this, 'filter_attachment'), 10, 2);
         add_filter('attachment_fields_to_save', array(&$this, 'save_attachment_extra'), 10, 2);
+        add_filter('rest_request_before_callbacks', array(&$this, 'filter_media_rest_request_before_callbacks'), 10, 3);//For filtering REST API calls for media.
 
         //TODO - refactor these shortcodes into the shortcodes handler class
         add_shortcode("swpm_registration_form", array(&$this, 'registration_form'));
@@ -115,6 +116,53 @@ class SimpleWpMembership {
         return $post;
     }
 
+    public function filter_media_rest_request_before_callbacks( $response, $handler, $request ) {
+        //Trigger a filter to override this feature from custom code.
+        $overridden = apply_filters('swpm_override_filter_media_rest_request_before_callbacks', "");
+        if ( ! empty ( $overridden )){
+            //This filter has been overridden in a custom code/plugin.
+            return $response;
+        }
+        
+        if ( is_admin() ) {
+            //No need to filter on the admin dashboard side
+            return $response;
+        }
+        
+        //Check if this is a WP REST API query for media.
+        $req_route = $request->get_route();
+        //SwpmLog::log_simple_debug($req_route, true);
+        if ( stripos($req_route, 'media') === false ){
+            //Not a media request.
+            //SwpmLog::log_simple_debug('Not a media request.', true);
+            return $response;
+        }
+        
+        //Check if the media belongs to a post/page that is protected.
+        $req_qry_params = $request->get_query_params();
+        if ( isset ( $req_qry_params['parent'] ) ){
+            //The media has a parent post/page. Lets check if that parent is protected.
+            $acl = SwpmAccessControl::get_instance();
+
+            $post_ids = $req_qry_params['parent'];
+            foreach ( $post_ids as $post_id){
+                //SwpmLog::log_simple_debug('Post ID: ' . $post_id, true);
+                //Check access control
+                $post = get_post($post_id);
+                if ($acl->can_i_read_post($post)) {
+                    //I have permission read this post
+                    return $response;
+                } else {
+                    //No permission. Throw an error.
+                    return new WP_Error( 'forbidden', 'Access forbidden! The post or page that this media belongs to is protected.', array( 'status' => 403 ) );
+                }
+            }
+        } else {
+            //Not for any post/page. Return the normal respose.
+            return $response;
+        }
+    }
+    
     public function filter_attachment($content, $post_id) {
         if (is_admin()) {//No need to filter on the admin side
             return $content;

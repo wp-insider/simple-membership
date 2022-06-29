@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.0
-Stable tag: 4.1.3
+Stable tag: 4.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -159,9 +159,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP = 
+= WIP 4.1.4 = 
 - PayPal smart checkout will pass the item name set in the payment button to PayPal's API.
 - The PayPal smart checkout transactions will try to find a member profile using the Transaction ID and show it in the Transactions tab (if found).
+- REST API call for media will check if the parent post/page is protected and give an error (if protected).
 - WooCommerce checkout integration will add the collected billing address to SWPM member record when available.
 
 = 4.1.3 =

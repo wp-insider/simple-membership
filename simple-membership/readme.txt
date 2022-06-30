@@ -159,6 +159,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Updated the Dutch language translation files.
+
 = 4.1.4 = 
 - PayPal smart checkout will pass the item name set in the payment button to PayPal's API.
 - The PayPal smart checkout transactions will try to find a member profile using the Transaction ID and show it in the Transactions tab (if found).

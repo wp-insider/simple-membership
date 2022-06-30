@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: simple membership\n"
 "POT-Creation-Date: 2019-05-26 13:48+0600\n"
-"PO-Revision-Date: 2021-07-06 12:14+0200\n"
+"PO-Revision-Date: 2022-06-29 20:33+0200\n"
 "Last-Translator: WEN Kunst <info@wenkunst.nl>\n"
 "Language-Team: \n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 2.3\n"
 "X-Poedit-KeywordsList: __;_e;_\n"
 "X-Poedit-Basepath: ../classes\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -96,7 +96,7 @@ msgstr "Controleren, even geduld"
 
 #: classes/class.simple-wp-membership.php:653
 msgid "Invalid email address"
-msgstr "Ongeldig E-mailadres"
+msgstr "Ongeldig e-mailadres"
 
 #: classes/class.simple-wp-membership.php:656
 msgid "This field is required"
@@ -172,10 +172,8 @@ msgstr "Je moet inloggen om deze inhoud te bekijken. "
 #: classes/class.swpm-access-control.php:56
 #: classes/class.swpm-access-control.php:128
 #: classes/class.swpm-access-control.php:212
-#, fuzzy
-#| msgid "Account has expired."
 msgid "Your account has expired. "
-msgstr "Account is verlopen."
+msgstr "Jouw account is verlopen. "
 
 #: classes/class.swpm-access-control.php:66
 #: classes/class.swpm-access-control.php:138
@@ -229,10 +227,8 @@ msgid "Invalid Email Address"
 msgstr "Ongeldig e-mailadres"
 
 #: classes/class.swpm-ajax.php:21 classes/class.swpm-ajax.php:36
-#, fuzzy
-#| msgid "Aready taken"
 msgid "Already taken"
-msgstr "Al bezet"
+msgstr "Reeds bezet"
 
 #: classes/class.swpm-ajax.php:30
 msgid "Name contains invalid character"
@@ -247,10 +243,12 @@ msgid ""
 "Warning! Simple Membership plugin cannot process this login request to "
 "prevent you from getting logged out of WP Admin accidentally."
 msgstr ""
+"Waarschuwing! Simple Membership plugin kan dit inlogverzoek niet verwerken "
+"om te voorkomen dat u per ongeluk wordt uitgelogd bij WP Admin."
 
 #: classes/class.swpm-auth.php:58
 msgid "Click here"
-msgstr ""
+msgstr "Klik hier"
 
 #: classes/class.swpm-auth.php:58
 msgid " to see the profile you are currently logged into in this browser."
@@ -275,10 +273,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-auth.php:68
-#, fuzzy
-#| msgid "Security check: captcha validation failed."
 msgid "Captcha validation failed on login form."
-msgstr "Security check: captcha validatie mislukt."
+msgstr "Captcha validatie mislukt bij login formulier."
 
 #: classes/class.swpm-auth.php:93
 msgid "User Not Found."
@@ -312,7 +308,7 @@ msgstr ""
 #: classes/class.swpm-front-registration.php:426
 #: classes/class.swpm-utils-misc.php:169
 msgid "click here"
-msgstr ""
+msgstr "klik hier"
 
 #: classes/class.swpm-auth.php:170
 msgid "You are logged in as:"
@@ -349,16 +345,12 @@ msgid "Membership Level"
 msgstr "Lidmaatschap niveau"
 
 #: classes/class.swpm-category-list.php:33
-#, fuzzy
-#| msgid "Category Protection"
 msgid "Category ID"
-msgstr "Categorie Afscherming"
+msgstr "Categorie ID"
 
 #: classes/class.swpm-category-list.php:34
-#, fuzzy
-#| msgid "Company Name"
 msgid "Category Name"
-msgstr "Bedrijfsnaam"
+msgstr "Categorienaam"
 
 #: classes/class.swpm-category-list.php:35
 msgid "Category Type (Taxonomy)"
@@ -377,35 +369,27 @@ msgid "Category protection updated!"
 msgstr "Categorie afscherming bijgewerkt!"
 
 #: classes/class.swpm-category-list.php:130
-#, fuzzy
-#| msgid "No items found."
 msgid "No category found."
-msgstr "Geen items gevonden."
+msgstr "Geen categorie gevonden."
 
 #: classes/class.swpm-comment-form-related.php:15
-#, fuzzy
-#| msgid "Please login again."
 msgid "Please login to comment."
-msgstr "Opnieuw inloggen alsjeblieft."
+msgstr "Log in om te reageren."
 
 #: classes/class.swpm-comment-form-related.php:40
-#, fuzzy
-#| msgid "Please login again."
 msgid "Please Login to Comment."
-msgstr "Opnieuw inloggen alsjeblieft."
+msgstr "Log opnieuw in om te reageren."
 
 #: classes/class.swpm-comment-form-related.php:79
-#, fuzzy
-#| msgid "You are not logged-in as a member"
 msgid "Comments not allowed by a non-member."
-msgstr "Je bent niet ingelogd als lid"
+msgstr "Je bent niet ingelogd als lid."
 
 #: classes/class.swpm-form.php:30
 msgid ""
 "Wordpress account exists with given username. But given email doesn't match."
 msgstr ""
-"Wordpress account met gebruikersnaam bestaat. Maar het email adres komt niet "
-"overeen."
+"Wordpress-account met gebruikersnaam bestaat al, maar het e-mailadres komt "
+"niet overeen."
 
 #: classes/class.swpm-form.php:31
 msgid ""
@@ -418,8 +402,8 @@ msgstr ""
 msgid ""
 "Wordpress account exists with given email. But given username doesn't match."
 msgstr ""
-"Wordpress account met email adres bestaat, Maar gebruikersnaam komt niet "
-"overeen."
+"Wordpress-account met e-mailadres bestaat al, maar de gebruikersnaam komt "
+"niet overeen."
 
 #: classes/class.swpm-form.php:38
 msgid ""
@@ -446,19 +430,19 @@ msgstr "Wachtwoord is vereist"
 
 #: classes/class.swpm-form.php:90
 msgid "Password mismatch"
-msgstr "Wachtwoorden komen niet overeen"
+msgstr "Wachtwoord komt niet overeen"
 
 #: classes/class.swpm-form.php:101
 msgid "Email is required"
-msgstr "Email is vereist"
+msgstr "E-mailadres is vereist"
 
 #: classes/class.swpm-form.php:105
 msgid "Email is invalid"
-msgstr "Email is niet geldig"
+msgstr "E-mailadres is niet geldig"
 
 #: classes/class.swpm-form.php:121
 msgid "Email is already used."
-msgstr "Email is al in gebruik."
+msgstr "E-mailadres is al in gebruik."
 
 #: classes/class.swpm-form.php:179
 msgid "Member since field is invalid"
@@ -474,11 +458,11 @@ msgstr "Geslacht veld is ongeldig"
 
 #: classes/class.swpm-form.php:211
 msgid "Account state field is invalid"
-msgstr "Account status veld is ongeldig"
+msgstr "Accountstatusveld is ongeldig"
 
 #: classes/class.swpm-form.php:218
 msgid "Invalid membership level"
-msgstr "Ongeldige lidmaatschap niveau"
+msgstr "Ongeldige lidmaatschapniveau"
 
 #: classes/class.swpm-front-registration.php:33
 msgid ""
@@ -565,16 +549,12 @@ msgstr ""
 "veranderd is."
 
 #: classes/class.swpm-front-registration.php:289
-#, fuzzy
-#| msgid "Please correct the following"
 msgid "Please correct the following."
-msgstr "Corrigeer het volgende:"
+msgstr "Corrigeer het volgende."
 
 #: classes/class.swpm-front-registration.php:301
-#, fuzzy
-#| msgid "Security check: captcha validation failed."
 msgid "Captcha validation failed."
-msgstr "Security check: captcha validatie mislukt."
+msgstr "Captcha validatie mislukt."
 
 #: classes/class.swpm-front-registration.php:309
 msgid "Email address not valid."
@@ -591,7 +571,7 @@ msgstr "E-mailadres: "
 
 #: classes/class.swpm-front-registration.php:349
 msgid "New password has been sent to your email address."
-msgstr "Een nieuw wachtwoord is naar je email adres verzonden."
+msgstr "Een nieuw wachtwoord is naar je e-mailadres verzonden."
 
 #: classes/class.swpm-front-registration.php:371
 msgid "Can't find member account."
@@ -599,10 +579,8 @@ msgstr ""
 
 #: classes/class.swpm-front-registration.php:376
 #: classes/class.swpm-front-registration.php:426
-#, fuzzy
-#| msgid "Account is inactive."
 msgid "Account already active. "
-msgstr "Dit account is niet actief."
+msgstr "Dit account is reeds actief. "
 
 #: classes/class.swpm-front-registration.php:376
 #: classes/class.swpm-front-registration.php:426
@@ -677,7 +655,7 @@ msgstr "Achternaam"
 #: classes/class.swpm-members.php:23 views/add.php:20 views/edit.php:27
 #: includes/swpm_mda_show_profile.php:35
 msgid "Email"
-msgstr "Email adres"
+msgstr "E-mail"
 
 #: classes/class.swpm-members.php:25 views/admin_member_form_common_part.php:11
 msgid "Access Starts"
@@ -703,10 +681,8 @@ msgid "Set Status to Active"
 msgstr "Status instellen op actief"
 
 #: classes/class.swpm-members.php:48
-#, fuzzy
-#| msgid "Set Status to Active"
 msgid "Set Status to Active and Notify"
-msgstr "Status instellen op actief"
+msgstr "Status instellen op actief en geef een melding"
 
 #: classes/class.swpm-members.php:49
 msgid "Set Status to Inactive"
@@ -722,39 +698,31 @@ msgstr "Status instellen op verlopen"
 
 #: classes/class.swpm-members.php:72
 msgid "incomplete"
-msgstr ""
+msgstr "incompleet"
 
 #: classes/class.swpm-members.php:191
-#, fuzzy
-#| msgid "No Member found."
 msgid "No member found."
-msgstr "Geen leden gevonden."
+msgstr "Geen lid gevonden."
 
 #: classes/class.swpm-members.php:337
 msgid "Error! Nonce verification failed for user delete from admin end."
 msgstr ""
 
 #: classes/class.swpm-members.php:406 classes/class.swpm-members.php:436
-#, fuzzy
-#| msgid "Create new membership level."
 msgid "Error! Please select a membership level first."
-msgstr "Maak een nieuw Lidmaatschap niveau."
+msgstr "Fout! Selecteer eerst een lidmaatschapsniveau."
 
 #: classes/class.swpm-members.php:423
-#, fuzzy
-#| msgid "Membership Level Creation Successful."
 msgid "Membership level change operation completed successfully."
-msgstr "Lidmaatschap niveau met succes aangemaakt."
+msgstr "Lidmaatschapsniveau met succes aangemaakt."
 
 #: classes/class.swpm-members.php:453
 msgid "Access starts date change operation successfully completed."
 msgstr ""
 
 #: classes/class.swpm-members.php:462
-#, fuzzy
-#| msgid "Edit Membership Level "
 msgid "Bulk Update Membership Level of Members"
-msgstr "Wijzig  lidmaatschap niveau "
+msgstr "Bulk-update voor lidmaatschapsniveau van leden"
 
 #: classes/class.swpm-members.php:465
 msgid ""
@@ -769,10 +737,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-members.php:472 classes/class.swpm-members.php:520
-#, fuzzy
-#| msgid "Membership Level"
 msgid "Membership Level: "
-msgstr "Lidmaatschap niveau"
+msgstr "Lidmaatschapsniveau "
 
 #: classes/class.swpm-members.php:476
 msgid "Select Current Level"
@@ -789,22 +755,16 @@ msgid "Level to Change to: "
 msgstr ""
 
 #: classes/class.swpm-members.php:489
-#, fuzzy
-#| msgid "Select Page"
 msgid "Select Target Level"
-msgstr "Selecteer pagina"
+msgstr "Selecteer doelniveau"
 
 #: classes/class.swpm-members.php:492
-#, fuzzy
-#| msgid "Create new membership level."
 msgid "Select the new membership level."
-msgstr "Maak een nieuw Lidmaatschap niveau."
+msgstr "Selecteer het nieuwe lidmaatschapsniveau."
 
 #: classes/class.swpm-members.php:498
-#, fuzzy
-#| msgid "Membership Level"
 msgid "Bulk Change Membership Level"
-msgstr "Lidmaatschap niveau"
+msgstr "Verander lidmaatschapsniveau in bulk"
 
 #: classes/class.swpm-members.php:508
 msgid "Bulk Update Access Starts Date of Members"
@@ -825,10 +785,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-members.php:523
-#, fuzzy
-#| msgid "Select All"
 msgid "Select Level"
-msgstr "Alles Selecteren"
+msgstr "Selecteer Niveau"
 
 #: classes/class.swpm-members.php:526
 msgid ""
@@ -841,10 +799,8 @@ msgid "Specify the access starts date value."
 msgstr ""
 
 #: classes/class.swpm-members.php:541
-#, fuzzy
-#| msgid "Access Starts"
 msgid "Bulk Change Access Starts Date"
-msgstr "Toegang begint"
+msgstr "Verander startdatum voor toegang in bulk"
 
 #: classes/class.swpm-members.php:576
 msgid "Simple WP Membership::Members"
@@ -860,10 +816,8 @@ msgid "Add Member"
 msgstr "Lid toevoegen"
 
 #: classes/class.swpm-members.php:583
-#, fuzzy
-#| msgid "Bulk Actions"
 msgid "Bulk Operation"
-msgstr "Bulk acties"
+msgstr "Bulkacties"
 
 #: classes/class.swpm-membership-level.php:52
 msgid ""
@@ -881,10 +835,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-membership-level.php:100
-#, fuzzy
-#| msgid "Membership Level Creation Successful."
 msgid "Membership Level Updated Successfully."
-msgstr "Lidmaatschap niveau met succes aangemaakt."
+msgstr "Lidmaatschapsniveau met succes bijgewerkt."
 
 #: classes/class.swpm-membership-levels.php:22
 msgid "Role"
@@ -895,10 +847,8 @@ msgid "Access Valid For/Until"
 msgstr "Toegang geldig voor/tot"
 
 #: classes/class.swpm-membership-levels.php:133
-#, fuzzy
-#| msgid "Edit membership level."
 msgid "No membership levels found."
-msgstr "Wijzig  lidmaatschap niveau."
+msgstr "Geen lidmaatschapsniveau gevonden."
 
 #: classes/class.swpm-membership-levels.php:197
 msgid ""
@@ -916,26 +866,20 @@ msgid "Simple WP Membership::Membership Levels"
 msgstr "Simple WP Membership::Lidmaatschap niveaus"
 
 #: classes/class.swpm-membership-levels.php:266
-#, fuzzy
-#| msgid "Add Member"
 msgid "Add Level"
-msgstr "Lid toevoegen"
+msgstr "Voeg niveau toe"
 
 #: classes/class.swpm-membership-levels.php:267
-#, fuzzy
-#| msgid "Manage Content Production"
 msgid "Manage Content Protection"
-msgstr "Beheer Inhoud Afscherming"
+msgstr "Beheer Inhoudsafscherming"
 
 #: classes/class.swpm-membership-levels.php:268
 msgid "Category Protection"
 msgstr "Categorie Afscherming"
 
 #: classes/class.swpm-membership-levels.php:269
-#, fuzzy
-#| msgid "Category Protection"
 msgid "Post and Page Protection"
-msgstr "Categorie Afscherming"
+msgstr "Bericht en pagina afscherming"
 
 #: classes/class.swpm-post-list.php:43 classes/class.swpm-post-list.php:52
 #: classes/class.swpm-post-list.php:62
@@ -945,35 +889,30 @@ msgstr "Datum"
 
 #: classes/class.swpm-post-list.php:44 classes/class.swpm-post-list.php:53
 #: classes/class.swpm-post-list.php:63
-#, fuzzy
 msgid "Title"
-msgstr "Betaalknop titel"
+msgstr "Titel"
 
 #: classes/class.swpm-post-list.php:45 classes/class.swpm-post-list.php:54
 #: classes/class.swpm-post-list.php:64
 msgid "Author"
-msgstr ""
+msgstr "Auteur"
 
 #: classes/class.swpm-post-list.php:46 classes/class.swpm-post-list.php:56
 #: classes/class.swpm-post-list.php:66
-#, fuzzy
-#| msgid "State"
 msgid "Status"
-msgstr "Status instellen op actief"
+msgstr "Status"
 
 #: classes/class.swpm-post-list.php:55
 msgid "Categories"
-msgstr ""
+msgstr "Categorieën"
 
 #: classes/class.swpm-post-list.php:65
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: classes/class.swpm-post-list.php:125
-#, fuzzy
-#| msgid "Settings updated!"
 msgid "Protection settings updated!"
-msgstr "Instellingen bijgewerkt!"
+msgstr "Beveiligingsinstellingen bijgewerkt!"
 
 #: classes/class.swpm-post-list.php:230
 msgid "No items found."
@@ -984,12 +923,12 @@ msgid ""
 "The category or parent category of this post is protected. You can change "
 "the category protection settings from the "
 msgstr ""
+"De categorie of bovenliggende categorie van dit bericht is beschermd. U kunt "
+"de instellingen voor categoriebeveiliging wijzigen via de "
 
 #: classes/class.swpm-protection.php:23
-#, fuzzy
-#| msgid "Category Protection"
 msgid "category protection menu"
-msgstr "Categorie Afscherming"
+msgstr "categorie afschermingsmenu"
 
 #: classes/class.swpm-settings.php:26 classes/class.swpm-settings.php:54
 msgid "General Settings"
@@ -1058,11 +997,6 @@ msgid "Hide Adminbar"
 msgstr "Verberg de adminbalk"
 
 #: classes/class.swpm-settings.php:62
-#, fuzzy
-#| msgid ""
-#| "WordPress shows an admin toolbar to the logged in users of the site. "
-#| "Check this box if you want to hide that admin toolbar in the fronend of "
-#| "your site."
 msgid ""
 "WordPress shows an admin toolbar to the logged in users of the site. Check "
 "this if you want to hide that admin toolbar in the frontend of your site."
@@ -1072,7 +1006,7 @@ msgstr ""
 
 #: classes/class.swpm-settings.php:63
 msgid "Show Adminbar to Admin"
-msgstr ""
+msgstr "Toon Adminbalk aan Admin"
 
 #: classes/class.swpm-settings.php:64
 msgid ""
@@ -1109,12 +1043,12 @@ msgid "Members Must be Logged in to Comment"
 msgstr ""
 
 #: classes/class.swpm-settings.php:74
-#, fuzzy
-#| msgid "Enable this option if you want to do sandbox payment testing."
 msgid ""
 "Enable this option if you only want the members of the site to be able to "
 "post a comment."
-msgstr "Schakel deze optie in als je sandbox testbetalingen wilt uitvoeren."
+msgstr ""
+"Schakel deze optie in als je allen de leden van deze site wilt kunnen laten "
+"reageren."
 
 #: classes/class.swpm-settings.php:83
 msgid "Pages Settings"
@@ -1160,9 +1094,8 @@ msgstr ""
 
 #: classes/class.swpm-settings.php:100 classes/class.swpm-settings.php:101
 #: classes/class.swpm-settings.php:102
-#, fuzzy
 msgid "here"
-msgstr "Alle lidmaatschap knoppen die je hebt gemaakt staan hier."
+msgstr "hier"
 
 #: classes/class.swpm-settings.php:101
 msgid "View login related debug log file by clicking "
@@ -1185,14 +1118,12 @@ msgid "Enable this option if you want to do sandbox payment testing."
 msgstr "Schakel deze optie in als je sandbox testbetalingen wilt uitvoeren."
 
 #: classes/class.swpm-settings.php:119
-#, fuzzy
-#| msgid "Email Settings"
 msgid "Email Settings Overview"
-msgstr "E-mail instellingen"
+msgstr "Overzicht e-mail instellingen"
 
 #: classes/class.swpm-settings.php:120
 msgid "Email Misc. Settings"
-msgstr "Diverse email instellingen"
+msgstr "Diverse e-mail instellingen"
 
 #: classes/class.swpm-settings.php:122
 msgid "From Email Address"
@@ -1200,19 +1131,19 @@ msgstr "E-mailadres afzender"
 
 #: classes/class.swpm-settings.php:126
 msgid "Email Settings (Prompt to Complete Registration )"
-msgstr "Email instellingen (herinnering om registratie te voltooien)"
+msgstr "E-mail instellingen (herinnering om registratie te voltooien)"
 
 #: classes/class.swpm-settings.php:127 classes/class.swpm-settings.php:140
 #: classes/class.swpm-settings.php:158 classes/class.swpm-settings.php:163
 #: classes/class.swpm-settings.php:168 classes/class.swpm-settings.php:173
 msgid "Email Subject"
-msgstr "Email onderwerp"
+msgstr "E-mail onderwerp"
 
 #: classes/class.swpm-settings.php:129 classes/class.swpm-settings.php:142
 #: classes/class.swpm-settings.php:159 classes/class.swpm-settings.php:164
 #: classes/class.swpm-settings.php:169 classes/class.swpm-settings.php:174
 msgid "Email Body"
-msgstr "Email inhoud"
+msgstr "E-mail inhoud"
 
 #: classes/class.swpm-settings.php:133
 msgid ""
@@ -1247,7 +1178,7 @@ msgstr ""
 
 #: classes/class.swpm-settings.php:139
 msgid "Email Settings (Registration Complete)"
-msgstr "Email instellingen (Registratie voltooid)"
+msgstr "E-mail instellingen (Registratie voltooid)"
 
 #: classes/class.swpm-settings.php:144
 msgid "Send Notification to Admin"
@@ -1263,17 +1194,15 @@ msgstr ""
 
 #: classes/class.swpm-settings.php:146
 msgid "Admin Email Address"
-msgstr "Beheerder Emailadres"
+msgstr "E-mailadres beheerder"
 
 #: classes/class.swpm-settings.php:148
 msgid "Admin Notification Email Subject"
-msgstr ""
+msgstr "Beheerders notificatie e-mail onderwerp"
 
 #: classes/class.swpm-settings.php:150
-#, fuzzy
-#| msgid "Send Notification to Admin"
 msgid "Admin Notification Email Body"
-msgstr "Stuur een bericht naar de beheerder"
+msgstr "Beheerders notificatie e-mail bericht"
 
 #: classes/class.swpm-settings.php:153
 msgid "Send Email to Member When Added via Admin Dashboard"
@@ -1286,19 +1215,15 @@ msgstr "E-mail Instellingen (Wachtwoord herstel)"
 
 #: classes/class.swpm-settings.php:162
 msgid " Email Settings (Account Upgrade Notification)"
-msgstr " Email instellingen (Bericht Account Upgrade)"
+msgstr " E-mail instellingen (Bericht Account Upgrade)"
 
 #: classes/class.swpm-settings.php:167
-#, fuzzy
-#| msgid " Email Settings (Account Upgrade Notification)"
 msgid " Email Settings (Bulk Account Activate Notification)"
-msgstr " Email instellingen (Bericht Account Upgrade)"
+msgstr " E-mail instellingen (Bericht Account Upgrade)"
 
 #: classes/class.swpm-settings.php:172
-#, fuzzy
-#| msgid " Email Settings (Account Upgrade Notification)"
 msgid " Email Settings (Email Activation)"
-msgstr " Email instellingen (Bericht Account Upgrade)"
+msgstr " E-mail instellingen (Bericht Account Upgrade)"
 
 #: classes/class.swpm-settings.php:189
 msgid "Enable Expired Account Login"
@@ -1315,10 +1240,8 @@ msgstr ""
 "gemakkelijk hun account vernieuwen door een betaling te maken."
 
 #: classes/class.swpm-settings.php:192
-#, fuzzy
-#| msgid "Membership Level"
 msgid "Membership Renewal URL"
-msgstr "Lidmaatschap niveau"
+msgstr "Lidmaatschap vernieuwings-URL"
 
 #: classes/class.swpm-settings.php:193
 msgid ""
@@ -1328,10 +1251,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-settings.php:195
-#, fuzzy
-#| msgid "Registration Page URL"
 msgid "After Registration Redirect URL"
-msgstr "Registratie pagina URL"
+msgstr "Omleidings-URL na registratie"
 
 #: classes/class.swpm-settings.php:196
 msgid ""
@@ -1401,10 +1322,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-settings.php:213
-#, fuzzy
-#| msgid "Default WordPress Role"
 msgid "Use WordPress Timezone"
-msgstr "Standaard WordPress Rol"
+msgstr "Gebruik de WordPress Tijdzone"
 
 #: classes/class.swpm-settings.php:214
 msgid ""
@@ -1450,10 +1369,8 @@ msgid "Create Member Accounts for New WP Users"
 msgstr ""
 
 #: classes/class.swpm-settings.php:232
-#, fuzzy
-#| msgid "Enable Free Membership"
 msgid "Enable Auto Create Member Accounts"
-msgstr "Gratis Lidmaatschap Inschakelen"
+msgstr "Zet het automatisch maken van lidmaatschapaccounts aan"
 
 #: classes/class.swpm-settings.php:233
 msgid ""
@@ -1462,10 +1379,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-settings.php:236
-#, fuzzy
-#| msgid "Membership Level"
 msgid "Default Membership Level"
-msgstr "Lidmaatschap niveau"
+msgstr "Standaard lidmaatschapsniveau"
 
 #: classes/class.swpm-settings.php:239
 msgid ""
@@ -1481,10 +1396,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-settings.php:247
-#, fuzzy
-#| msgid "Send Notification to Admin"
 msgid "Payment Notification Forward URL"
-msgstr "Stuur een bericht naar de beheerder"
+msgstr "Betalingsmelding doorstuur URL"
 
 #: classes/class.swpm-settings.php:248
 msgid ""
@@ -1499,20 +1412,16 @@ msgid "Terms and Conditions"
 msgstr ""
 
 #: classes/class.swpm-settings.php:253
-#, fuzzy
-#| msgid "Enable More Tag Protection"
 msgid "Enable Terms and Conditions"
-msgstr "Inschakelen Meer Tag Afscherming"
+msgstr "Algemene voorwaarden inschakelen"
 
 #: classes/class.swpm-settings.php:254
 msgid "Users must accept the terms before they can complete the registration."
 msgstr ""
 
 #: classes/class.swpm-settings.php:255
-#, fuzzy
-#| msgid "Registration Page URL"
 msgid "Terms and Conditions Page URL"
-msgstr "Registratie pagina URL"
+msgstr "Algemene voorwaarden pagina URL"
 
 #: classes/class.swpm-settings.php:256
 msgid ""
@@ -1526,20 +1435,17 @@ msgid "Enable Privacy Policy"
 msgstr ""
 
 #: classes/class.swpm-settings.php:258
-#, fuzzy
-#| msgid "Click on the following link to complete the registration."
 msgid "Users must accept it before they can complete the registration."
-msgstr "Klik op de volgende link om je inschrijving te voltooien."
+msgstr ""
+"Gebruikers moeten dit accepteren voordat ze de registratie kunnen afronden."
 
 #: classes/class.swpm-settings.php:259
-#, fuzzy
-#| msgid "Edit Profile Page URL"
 msgid "Privacy Policy Page URL"
-msgstr "Wijzig Profiel pagina URL"
+msgstr "Privacy beleidspagina URL"
 
 #: classes/class.swpm-settings.php:260
 msgid "Enter the URL of your privacy policy page."
-msgstr ""
+msgstr "Voer de URL van je privacy beleidspagina in."
 
 #: classes/class.swpm-settings.php:350 classes/class.swpm-settings.php:396
 #: classes/class.swpm-settings.php:425
@@ -1547,10 +1453,8 @@ msgid "Settings updated!"
 msgstr "Instellingen bijgewerkt!"
 
 #: classes/class.swpm-settings.php:355
-#, fuzzy
-#| msgid "General Settings"
 msgid "General Plugin Settings."
-msgstr "Algemene instellingen"
+msgstr "Algemene Plugin-instellingen."
 
 #: classes/class.swpm-settings.php:359
 msgid "Page Setup and URL Related settings."
@@ -1563,10 +1467,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-settings.php:367
-#, fuzzy
-#| msgid "Test & Debug Settings"
 msgid "Testing and Debug Related Settings."
-msgstr "Test & Debug instellingen"
+msgstr "Test en Debug gerelateerde instellingen."
 
 #: classes/class.swpm-settings.php:371
 msgid ""
@@ -1588,10 +1490,8 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-settings.php:385 views/admin_tools_settings.php:82
-#, fuzzy
-#| msgid "Plugin Documentation"
 msgid "This documentation"
-msgstr "Plugin Documentatie"
+msgstr "Deze documentatie"
 
 #: classes/class.swpm-settings.php:386
 msgid ""
@@ -1663,10 +1563,8 @@ msgid "User is not logged in."
 msgstr "Gebruiker is niet ingelogd."
 
 #: classes/class.swpm-utils-member.php:80
-#, fuzzy
-#| msgid "Expiry: "
 msgid "No Expiry"
-msgstr "Vervaldatum: "
+msgstr "Geen vervaldatum"
 
 #: classes/class.swpm-utils-misc.php:50
 msgid "Registration"
@@ -1689,13 +1587,11 @@ msgstr "Wachtwoord herstel"
 #, php-format
 msgid ""
 "You will be automatically redirected in a few seconds. If not, please %s."
-msgstr ""
+msgstr "Je wordt automatisch doorverwezen in een paar seconden. Zo niet, %s."
 
 #: classes/class.swpm-utils-misc.php:172
-#, fuzzy
-#| msgid "Account Status"
 msgid "Action Status"
-msgstr "Account Status"
+msgstr "Actiestatus"
 
 #: classes/class.swpm-utils-misc.php:274
 msgid "Not a Member?"
@@ -1706,18 +1602,12 @@ msgid "renew"
 msgstr ""
 
 #: classes/class.swpm-utils-misc.php:285
-#, fuzzy
-#| msgid ""
-#| "Your account has expired. Please renew your account to gain access to "
-#| "this content."
 msgid " your account to gain access to this content."
-msgstr ""
-"Je account is verlopen. Vernieuw je account om toegang tot deze inhoud te "
-"krijgen."
+msgstr " jouw account om toegang te krijgen tot deze inhoud."
 
 #: classes/class.swpm-utils-misc.php:343 classes/class.swpm-utils-misc.php:349
 msgid "Error! This action ("
-msgstr ""
+msgstr "Fout! Deze actie ("
 
 #: classes/class.swpm-utils-misc.php:421
 msgid "(Please Select)"
@@ -1725,7 +1615,7 @@ msgstr "(Maak een keuze)"
 
 #: classes/class.swpm-utils-template.php:38
 msgid "Error! Failed to find a template path for the specified template: "
-msgstr ""
+msgstr "Fout! Geen template-pad gevonden voor de volgende template: "
 
 #: classes/class.swpm-utils.php:101
 msgid "Never"
@@ -1741,19 +1631,19 @@ msgstr "Niet Actief"
 
 #: classes/class.swpm-utils.php:118 views/admin_members_list.php:21
 msgid "Activation Required"
-msgstr ""
+msgstr "Activatie is vereist"
 
 #: classes/class.swpm-utils.php:119
 msgid "Male"
-msgstr ""
+msgstr "Man"
 
 #: classes/class.swpm-utils.php:120
 msgid "Female"
-msgstr ""
+msgstr "Vrouw"
 
 #: classes/class.swpm-utils.php:121
 msgid "Not Specified"
-msgstr ""
+msgstr "Niet gespecificeerd"
 
 #: classes/class.swpm-utils.php:119 views/admin_members_list.php:22
 msgid "Pending"
@@ -1780,10 +1670,8 @@ msgid "Membership Level ID"
 msgstr "Lidmaatschap niveau ID"
 
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:78
-#, fuzzy
-#| msgid "Button Title"
 msgid "Button Type"
-msgstr "Knop titel"
+msgstr "Knop type"
 
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:79
 msgid "Button Shortcode"
@@ -1800,21 +1688,17 @@ msgid "Simple Membership::Payments"
 msgstr "Simple WP Membership::Betalingen"
 
 #: classes/admin-includes/class.swpm-payments-admin-menu.php:25
-#, fuzzy
-#| msgid "Transaction ID"
 msgid "Transactions"
-msgstr "Transactie ID"
+msgstr "Transacties"
 
 #: classes/admin-includes/class.swpm-payments-admin-menu.php:26
-#, fuzzy
-#| msgid "Payment Button ID"
 msgid "Manage Payment Buttons"
-msgstr "Betaalknop ID"
+msgstr "Beheer Betaalknoppen"
 
 #: classes/admin-includes/class.swpm-payments-admin-menu.php:27
 #: views/payments/admin_payment_buttons.php:27
 msgid "Create New Button"
-msgstr ""
+msgstr "Maak een nieuwe knop"
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:57
 #: views/template-1.php:95 views/template-2.php:97
@@ -1828,7 +1712,7 @@ msgstr "Rij ID"
 #: classes/admin-includes/class.swpm-payments-list-table.php:77
 #: views/forgot_password.php:5
 msgid "Email Address"
-msgstr "Email Adres"
+msgstr "E-mailadres"
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:80
 msgid "Member Profile"
@@ -1839,10 +1723,8 @@ msgid "Transaction ID"
 msgstr "Transactie ID"
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:83
-#, fuzzy
-#| msgid "Subscribe Now"
 msgid "Subscriber ID"
-msgstr "Nu inschrijven"
+msgstr "Abonnee ID"
 
 #: classes/admin-includes/class.swpm-payments-list-table.php:84
 msgid "Amount"
@@ -1883,10 +1765,8 @@ msgid "You are not logged-in as a member"
 msgstr "Je bent niet ingelogd als lid"
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:115
-#, fuzzy
-#| msgid "Logged in as"
 msgid "Logged in as: "
-msgstr "Ingelogd als"
+msgstr "Ingelogd als: "
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:118
 #: views/loggedin.php:31
@@ -1900,10 +1780,8 @@ msgid "Login Here"
 msgstr "Inloggen"
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:122
-#, fuzzy
-#| msgid "Not a Member?"
 msgid "Not a member? "
-msgstr "Nog geen lid?"
+msgstr "Nog geen lid? "
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:123
 #, fuzzy
@@ -1951,16 +1829,12 @@ msgid "Continue?"
 msgstr ""
 
 #: views/account_delete_warning.php:13
-#, fuzzy
-#| msgid "Password"
 msgid "Password: "
-msgstr "Wachtwoord"
+msgstr "Wachtwoord: "
 
 #: views/account_delete_warning.php:14
-#, fuzzy
-#| msgid "Allow Account Deletion"
 msgid "Confirm Account Deletion"
-msgstr "Lidmaatschap verwijderen toestaan"
+msgstr "Bevestig verwijdering van account"
 
 #: views/add.php:24 views/admin_add.php:19 views/admin_edit.php:44
 #: views/edit.php:31 views/login.php:17
@@ -1973,15 +1847,15 @@ msgstr "Herhaal Wachtwoord"
 
 #: views/add.php:65
 msgid "I accept the "
-msgstr ""
+msgstr "Ik accepteer de "
 
 #: views/add.php:77
 msgid "I agree to the "
-msgstr ""
+msgstr "Ik ga akkoord met "
 
 #: views/add.php:77
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Privacy beleid"
 
 #: views/add.php:88
 msgid "Register"
@@ -2001,7 +1875,7 @@ msgstr "(vereist)"
 
 #: views/admin_add.php:15 views/admin_edit.php:40
 msgid "E-mail"
-msgstr "Email"
+msgstr "E-mail"
 
 #: views/admin_add.php:19
 msgid "(twice, required)"
@@ -2042,10 +1916,8 @@ msgid "Save Changes"
 msgstr "Opslaan"
 
 #: views/admin_add_level.php:6
-#, fuzzy
-#| msgid "Add New Membership Level "
 msgid "Add Membership Level"
-msgstr "Voeg een nieuw lidmaatschap niveau toe "
+msgstr "Voeg een  lidmaatschapsniveau toe"
 
 #: views/admin_add_level.php:7
 msgid "Create new membership level."
@@ -2061,7 +1933,7 @@ msgstr "Standaard WordPress Rol"
 
 #: views/admin_add_level.php:20 views/admin_edit_level.php:24
 msgid "Access Duration"
-msgstr "Duur toegang"
+msgstr "Toegangsduur"
 
 #: views/admin_add_level.php:23
 msgid "No Expiry (Access for this level will not expire until cancelled"
@@ -2100,10 +1972,8 @@ msgid "(Access expires on a fixed date)"
 msgstr "(Toegang vervalt op een vaste datum)"
 
 #: views/admin_add_level.php:38 views/admin_edit_level.php:46
-#, fuzzy
-#| msgid "Email Settings"
 msgid "Email Activation"
-msgstr "E-mail instellingen"
+msgstr "E-mail activatie"
 
 #: views/admin_add_level.php:43
 msgid ""
@@ -2113,10 +1983,8 @@ msgid ""
 msgstr ""
 
 #: views/admin_add_level.php:44 views/admin_edit_level.php:52
-#, fuzzy
-#| msgid "Plugin Documentation"
 msgid "View Documentation"
-msgstr "Plugin Documentatie"
+msgstr "Bekijk Documentatie"
 
 #: views/admin_add_level.php:45 views/admin_edit_level.php:53
 msgid "Note:"
@@ -2161,22 +2029,16 @@ msgid "Read the "
 msgstr ""
 
 #: views/admin_category_list.php:11
-#, fuzzy
-#| msgid "Category protection updated!"
 msgid "category protection documentation"
-msgstr "Categorie afscherming bijgewerkt!"
+msgstr "categorie afscherming bijgewerkt"
 
 #: views/admin_category_list.php:17 views/admin_post_list.php:27
-#, fuzzy
-#| msgid "Membership Level"
 msgid "Membership Level:"
-msgstr "Lidmaatschap niveau"
+msgstr "Lidmaatschap niveau:"
 
 #: views/admin_category_list.php:19 views/admin_post_list.php:29
-#, fuzzy
-#| msgid "General Settings"
 msgid "General Protection"
-msgstr "Algemene instellingen"
+msgstr "Algemene bescherming"
 
 #: views/admin_category_list.php:23 views/admin_post_list.php:33
 #: views/edit.php:83
@@ -2206,10 +2068,8 @@ msgid ""
 msgstr ""
 
 #: views/admin_edit.php:60
-#, fuzzy
-#| msgid "Plugin Documentation"
 msgid "this documentation"
-msgstr "Plugin Documentatie"
+msgstr "plug-in Documentatie"
 
 #: views/admin_edit.php:61
 msgid " to learn how to do it."
@@ -2230,10 +2090,8 @@ msgid "Subscriber ID/Reference"
 msgstr "Abonnee ID/Referentie"
 
 #: views/admin_edit.php:79
-#, fuzzy
-#| msgid "Last Accessed From IP"
 msgid "Last Accessed Date"
-msgstr "Laatst ingelogd via IP"
+msgstr "Laatste toegangsdatum"
 
 #: views/admin_edit.php:82 views/admin_edit.php:89
 msgid "This value gets updated when this member logs into your site."
@@ -2244,33 +2102,25 @@ msgid "Last Accessed From IP"
 msgstr "Laatst ingelogd via IP"
 
 #: views/admin_edit.php:97
-#, fuzzy
-#| msgid "Save Payment Data"
 msgid "Save Data"
-msgstr "Betalingsgegevens Opslaan"
+msgstr "Gegevens opslaan"
 
 #: views/admin_edit.php:102
-#, fuzzy
-#| msgid "Member Profile"
 msgid "Delete User Profile"
-msgstr "Profiel Lid"
+msgstr "Verwijder gebruikersprofiel"
 
 #: views/admin_edit_level.php:6
 msgid "Edit membership level"
 msgstr "Wijzig  lidmaatschap niveau"
 
 #: views/admin_edit_level.php:9
-#, fuzzy
-#| msgid "You can edit a payment button using this interface."
 msgid ""
 "You can edit details of a selected membership level from this interface. "
-msgstr "Je kunt een betaling knop bewerken met deze interface."
+msgstr "Je kunt een betaling knop bewerken met deze interface "
 
 #: views/admin_edit_level.php:10
-#, fuzzy
-#| msgid "You are not logged in."
 msgid "You are currently editing: "
-msgstr "Je bent niet ingelogd."
+msgstr "Je bewerkt momenteel: "
 
 #: views/admin_edit_level.php:27
 msgid "No Expiry (Access for this level will not expire until cancelled)"
@@ -2289,23 +2139,20 @@ msgid ""
 msgstr ""
 
 #: views/admin_edit_level.php:60
-#, fuzzy
-#| msgid "Membership Level"
 msgid "Save Membership Level "
-msgstr "Lidmaatschap niveau"
+msgstr "Bewaar Lidmaatschapsniveau "
 
 #: views/admin_membership_manage.php:18
 msgid "Example Content Protection Settings"
-msgstr "Voorbeeld inhoud afscherm instellingen"
+msgstr "Voorbeeld inhoudsbeveiligingsinstellingen"
 
 #: views/admin_members_list.php:18
-#, fuzzy
 msgid "All"
-msgstr "Voor alle registraties in behandeling"
+msgstr "Alles"
 
 #: views/admin_members_list.php:23
 msgid "Incomplete"
-msgstr ""
+msgstr "Incompleet"
 
 #: views/admin_member_form_common_part.php:23
 #: includes/swpm_mda_show_profile.php:37
@@ -2435,10 +2282,8 @@ msgid "For All Incomplete Registrations"
 msgstr "Voor alle registraties in behandeling"
 
 #: views/admin_tools_settings.php:38
-#, fuzzy
-#| msgid "Send Registration Reminder Email too"
 msgid "Send Registration Reminder Email Too"
-msgstr "Stuur ook een Registratie herinnering email"
+msgstr "Stuur ook een Registratie herinnerings e-mail"
 
 #: views/admin_tools_settings.php:44
 msgid "Submit"
@@ -2453,10 +2298,8 @@ msgid ""
 msgstr "Klik op de volgende link om je inschrijving te voltooien."
 
 #: views/admin_tools_settings.php:55
-#, fuzzy
-#| msgid "Registration Completion Links Will Appear Below:"
 msgid "Registration completion links will appear below"
-msgstr "Registratie voltooid links verschijnen hieronder:"
+msgstr "Registratie voltooid links verschijnen hieronder"
 
 #: views/admin_tools_settings.php:65
 msgid "A prompt to complete registration email was also sent."
@@ -2581,10 +2424,8 @@ msgid ""
 msgstr "Alle lidmaatschap knoppen die je hebt gemaakt staan hier."
 
 #: views/payments/admin_payment_settings.php:21
-#, fuzzy
-#| msgid "Enter the Membership Level ID"
 msgid "Error! The membership level ID ("
-msgstr "Voer het lidmaatschapsniveau-ID in"
+msgstr "Fout! Het lidmaadschapsniveau ID ("
 
 #: views/payments/admin_payment_settings.php:28
 msgid ""
@@ -2652,21 +2493,19 @@ msgstr ""
 
 #: views/payments/payment-gateway/admin_braintree_buy_now_button.php:72
 msgid "Merchant ID"
-msgstr ""
+msgstr "Verkopers-ID"
 
 #: views/payments/payment-gateway/admin_braintree_buy_now_button.php:80
 msgid "Public Key"
-msgstr ""
+msgstr "Publieke sleutel"
 
 #: views/payments/payment-gateway/admin_braintree_buy_now_button.php:87
 msgid "Private Key"
-msgstr ""
+msgstr "Privé sleutel"
 
 #: views/payments/payment-gateway/admin_braintree_buy_now_button.php:95
-#, fuzzy
-#| msgid "Delete Account"
 msgid "Merchant Account ID"
-msgstr "Verwijder Account"
+msgstr "Verkopersaccount-ID"
 
 #: views/payments/payment-gateway/admin_braintree_buy_now_button.php:113
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:137
@@ -2718,7 +2557,7 @@ msgstr "Betalingsvaluta"
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:85
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:367
 msgid "PayPal Email"
-msgstr "PayPal Email"
+msgstr "PayPal E-mail"
 
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:108
 #: views/payments/payment-gateway/admin_paypal_buy_now_button.php:303
@@ -2736,10 +2575,8 @@ msgid "Custom Checkout Page Logo Image"
 msgstr ""
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:21
-#, fuzzy
-#| msgid "PayPal Subscription Button Configuration"
 msgid "PayPal Smart Checkout Button Configuration"
-msgstr "PayPal Subscription Knop Configuratie"
+msgstr "PayPal Smart betalingsknop configuratie"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:107
 msgid ""
@@ -2749,127 +2586,111 @@ msgstr ""
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:111
 msgid "Live Client ID"
-msgstr ""
+msgstr "Live Client ID"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:119
 msgid "Live Secret"
-msgstr ""
+msgstr "Live Secret"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:127
 msgid "Sandbox Client ID"
-msgstr ""
+msgstr "Sandbox Client ID"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:135
 msgid "Sandbox Secret"
-msgstr ""
+msgstr "Sandbox Secret"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:143
-#, fuzzy
-#| msgid "Advanced Settings"
 msgid "Button Appearance Settings"
-msgstr "Geavanceerde instellingen"
+msgstr "Instellingen weergave knop"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:147
 msgid "Size"
-msgstr ""
+msgstr "Grootte"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:150
 msgid "Medium"
-msgstr ""
+msgstr "Medium"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:151
 msgid "Large"
-msgstr ""
+msgstr "Groot"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:152
 msgid "Repsonsive"
-msgstr ""
+msgstr "Responsive"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:154
-#, fuzzy
-#| msgid "Select bulk action"
 msgid "Select button size."
-msgstr "Kies bulk actie"
+msgstr "Selecteer grootte van knop."
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:158
 msgid "Color"
-msgstr ""
+msgstr "Kleur"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:161
 msgid "Gold"
-msgstr ""
+msgstr "Goud"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:162
 msgid "Blue"
-msgstr ""
+msgstr "Blauw"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:163
 msgid "Silver"
-msgstr ""
+msgstr "Zilver"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:164
 msgid "Black"
-msgstr ""
+msgstr "Zwart"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:166
-#, fuzzy
-#| msgid "Select bulk action"
 msgid "Select button color."
-msgstr "Kies bulk actie"
+msgstr "Selecteer kleur van knop."
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:170
 msgid "Shape"
-msgstr ""
+msgstr "Vorm"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:172
 msgid "Rectangular"
-msgstr ""
+msgstr "Rechthoekig"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:173
 msgid "Pill"
-msgstr ""
+msgstr "Ovaal"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:174
-#, fuzzy
-#| msgid "Select Payment Button Type"
 msgid "Select button shape."
-msgstr "Selecteer Type Betaal-knop"
+msgstr "Selecteer de vorm van de knop."
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:178
 msgid "Layout"
-msgstr ""
+msgstr "Lay-out"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:180
 msgid "Vertical"
-msgstr ""
+msgstr "Vertikaal"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:181
 msgid "Horizontal"
-msgstr ""
+msgstr "Horizontaal"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:182
-#, fuzzy
-#| msgid "Select bulk action"
 msgid "Select button layout."
-msgstr "Kies bulk actie"
+msgstr "Kies knop lay-out."
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:187
-#, fuzzy
-#| msgid "Addons Settings"
 msgid "Additional Settings"
-msgstr "Addon Instellingen"
+msgstr "Aanvullende instellingen"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:191
-#, fuzzy
-#| msgid "Payment Settings"
 msgid "Payment Methods"
-msgstr "Betaling instellingen"
+msgstr "Betalingsmethoden"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:193
-#, fuzzy
-#| msgid "PayPal Email"
 msgid "PayPal Credit"
-msgstr "PayPal Email"
+msgstr "PayPal-tegoed"
 
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:194
 msgid "ELV"
@@ -2935,10 +2756,8 @@ msgstr "Optionele Details"
 
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:29
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:250
-#, fuzzy
-#| msgid "PayPal Buy Now Button Configuration"
 msgid "Stripe Buy Now Button Configuration"
-msgstr "PayPal Buy Now Knop Configuratie"
+msgstr "Stripe Koop Nu-knop configuratie"
 
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:104
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:328
@@ -2976,20 +2795,16 @@ msgid "Collect Customer Address"
 msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:75
-#, fuzzy
-#| msgid "PayPal Subscription Button Configuration"
 msgid "Stripe Subscription Button Configuration"
-msgstr "PayPal Subscription Knop Configuratie"
+msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:109
 msgid "Stripe API ID"
 msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:125
-#, fuzzy
-#| msgid "Simple WP Membership::Settings"
 msgid "Stripe API Settings"
-msgstr "Simple WP Membership::Instellingen"
+msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:163
 msgid "Webook Endpoint URL"
@@ -3011,43 +2826,31 @@ msgstr "Nu inschrijven"
 
 #: views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php:137
 msgid "Error occured during PayPal Smart Checkout process."
-msgstr ""
+msgstr "Er is een fout opgetreden tijdens PayPal Smart betaling."
 
 #: views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php:165
 msgid "HTTP error occured during payment process:"
-msgstr ""
+msgstr "Er is een HTTPS-fout opgetreden tijdens betaling:"
 
 #: Translation strings from addons === Form builder addon
-#, fuzzy
-#| msgid "Password Reset"
 msgid "Type password here"
-msgstr "Wachtwoord herstel"
+msgstr "Voer hier het wachtwoord in"
 
-#, fuzzy
-#| msgid "Repeat Password"
 msgid "Retype password here"
-msgstr "Herhaal Wachtwoord"
+msgstr "Voer hier wachtwoord nogmaals in"
 
 msgid "Registration is complete. You can now log into the site."
-msgstr ""
+msgstr "De registratie is afgerond. Je kunt nu bij de site inloggen."
 
-#, fuzzy
-#| msgid "Name contains invalid character"
 msgid " Field has invalid character"
-msgstr "Naam bevat ongeldig teken"
+msgstr " De invoer bevat een ongeldig teken"
 
-#, fuzzy
-#| msgid "Password mismatch"
 msgid " Password does not match"
-msgstr "Wachtwoorden komen niet overeen"
+msgstr " Wachtwoord komt niet overeen"
 
-#, fuzzy
-#| msgid "Aready taken"
 msgid "Already taken."
-msgstr "Al bezet"
+msgstr "Al bezet."
 
-#, fuzzy
-#| msgid "Street"
 msgid "Street Address"
 msgstr "Straat"
 
@@ -3055,117 +2858,86 @@ msgid "Apt, Suite, Bldg. (optional)"
 msgstr ""
 
 msgid "State / Province / Region"
-msgstr ""
+msgstr "Provincie"
 
 msgid "Postal / Zip Code"
-msgstr ""
+msgstr "Postcode"
 
 msgid ""
 "Check this box to delete the image. The image will be deleted when you save "
 "the profile."
 msgstr ""
+"Vink aan om de afbeelding te verwijderen. De afbeelding wordt verwijderd "
+"nadat je je profiel hebt opgeslagen."
 
-#, fuzzy
-#| msgid ""
-#| "Profile updated successfully. You will need to re-login since you changed "
-#| "your password."
 msgid "You will need to re-login since you changed your password."
-msgstr ""
-"Profiel succesvol bijgewerkt. Je moet opnieuw inloggen omdat je wachtwoord "
-"veranderd is."
+msgstr "Je wachtwoord is gewijzigd en daarom moet je opnieuw inloggen."
 
 msgid ""
 "Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
 msgstr ""
+"Voer twee willekeurige cijfers in  <strong>zonder</strong> spaties "
+"(Bijvoorbeeld: 12)"
 
-#, fuzzy
-#| msgid "Description"
 msgid "Verification"
-msgstr "Omschijving"
+msgstr "Controle"
 
 msgid "Please enter any two digits with no spaces (Example: 12)*"
-msgstr ""
+msgstr "Voer twee willekeurige cijfers in zonder spaties (Bijvoorbeeld: 12)*"
 
-#, fuzzy
-#| msgid "Usernames can only contain: letters, numbers and .-_*@"
 msgid "Username can only contain: letters, numbers and .-*@"
 msgstr ""
-"Gebruikersnamen mogen alleen bestaan uit: letters, nummers en de tekens .-_*@"
+"De gebruikersnaam mag alleen het volgende bevatten:  letters, cijfers en de "
+"tekens .-_*@"
 
-#, fuzzy
-#| msgid "Usernames can only contain: letters, numbers and .-_*@"
 msgid "Allowed characters are: letters, numbers and .-_*@"
-msgstr ""
-"Gebruikersnamen mogen alleen bestaan uit: letters, nummers en de tekens .-_*@"
+msgstr "Toegestane tekens zijn: letters, getallen en  .-_*@"
 
 #: === Partial protection addon strings
-#, fuzzy
-#| msgid "You need to login to view this content. "
 msgid "You do not have permission to view this content."
-msgstr "Je moet inloggen om deze inhoud te bekijken. "
+msgstr "Je hebt geen toestemming om de inhoud te bekijken."
 
-#, fuzzy
-#| msgid "You need to login to view this content. "
 msgid "Your membership level does not have permission to view this content."
-msgstr "Je moet inloggen om deze inhoud te bekijken. "
+msgstr "Jouw lidmaatschapsniveau geeft je geen toegang tot deze inhoud."
 
-#, fuzzy
-#| msgid "This content is not permitted for your membership level."
 msgid "This content is for members only."
-msgstr "Deze inhoud is niet toegankelijk voor jouw lidmaatschap."
+msgstr "Deze inhoud is alleen toegankelijk voor leden."
 
 msgid "Please check at least one."
-msgstr ""
+msgstr "Controleer er ten minste één."
 
 #: === Member Directory Listing addon strings swpm-member-directory-admin.php:9
-#, fuzzy
-#| msgid "Member Since"
 msgid "Member Directory"
-msgstr "Lid sinds"
+msgstr "Ledenlijst"
 
 #: includes/swpm_mda_show_profile.php:26
-#, fuzzy
-#| msgid "Member"
 msgid "Member ID"
-msgstr "Lid"
+msgstr "Lidnummer"
 
 #: includes/swpm_mda_show_profile.php:30
-#, fuzzy
 msgid "Level"
-msgstr "Ongeldige lidmaatschap niveau"
+msgstr "Niveau"
 
 #: includes/swpm_mda_show_profile.php:32
-#, fuzzy
-#| msgid "Email Address"
 msgid "Address"
-msgstr "Ongeldig E-mailadres"
+msgstr "Adres"
 
 #: views/template-1.php:52 views/template-2.php:53
-#, fuzzy
-#| msgid "Search"
 msgid "Search..."
-msgstr "zoeken"
+msgstr "Zoeken..."
 
 #: views/template-1.php:60 views/template-2.php:62
-#, fuzzy
-#| msgid "Search"
 msgid "Clear Search"
-msgstr "﻿Zoeken"
+msgstr "﻿Zoekterm verwijderen"
 
-#, fuzzy
-#| msgid "You are not logged-in as a member"
 msgid "You must be logged in to upgrade a membership."
-msgstr "Je bent niet ingelogd als lid"
+msgstr "Je moet ingelogd zijn op je lidmaatschap te upgraden."
 
-#, fuzzy
-#| msgid "Membership Level Couldn't be found."
 msgid "Membership level has been updated."
-msgstr "Lidmaatschap niveau kon niet worden gevonden."
+msgstr "Lidmaatschapsniveau is bijgewerkt."
 
-#, fuzzy
-#| msgid "Create new membership level."
 msgid "Already a member of this level."
-msgstr "Maak een nieuw Lidmaatschap niveau."
+msgstr "Je bent al lid op dit lidmaatschapsniveau."
 
 #~ msgid "Name"
 #~ msgstr "Naam"
@@ -3188,11 +2960,9 @@ msgstr "Maak een nieuw Lidmaatschap niveau."
 #~ msgid "All dates"
 #~ msgstr "Alle data"
 
-#, php-format
 #~ msgid "%1$s %2$d"
 #~ msgstr "%1$s %2$d"
 
-#, php-format
 #~ msgid "%s pending"
 #~ msgstr "%s (In behandeling)"
 

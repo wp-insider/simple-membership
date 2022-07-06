@@ -6,6 +6,14 @@ $join_url = $setting->get_value('join-us-page-url');
 // Filter that allows changing of the default value of the username label on login form.
 $label_username_or_email = __( 'Username or Email', 'simple-membership' );
 $swpm_username_label = apply_filters('swpm_login_form_set_username_label', $label_username_or_email);
+
+$is_display_password_toggle = SwpmSettings::get_instance()->get_value('password-visibility-login-form');
+        if (empty($is_display_password_toggle)){
+            $is_display_password_toggle=false;
+        }
+        else{
+            $is_display_password_toggle=true;
+        }
 ?>
 <div class="swpm-login-widget-form">
     <form id="swpm-login-form" name="swpm-login-form" method="post" action="">
@@ -20,7 +28,18 @@ $swpm_username_label = apply_filters('swpm_login_form_set_username_label', $labe
                 <label for="swpm_password" class="swpm-label"><?php echo SwpmUtils::_('Password') ?></label>
             </div>
             <div class="swpm-password-input">
-                <input type="password" class="swpm-text-field swpm-password-field" id="swpm_password" value="" size="25" name="swpm_password" />
+                <?php if($is_display_password_toggle==false): ?>
+                    <input type="password" class="swpm-text-field swpm-password-field swpm-password-padding-right" id="swpm_password" value="" size="25" name="swpm_password" />
+                <?php endif; ?>
+                <?php if($is_display_password_toggle==true): ?>
+                    <div class="swpm-password-input-visibility-group">
+                    <input type="password" class="swpm-text-field swpm-password-field swpm-password-padding-right" id="swpm_password" value="" size="25" name="swpm_password" />
+                    <button id="swpm-toggle-password-visiblity" data-state="password-hidden">
+                        <span id="swpm-password-hidden"><img src="<?php echo SIMPLE_WP_MEMBERSHIP_URL?>/images/display-eye.png"/></span>
+                        <span style="display:none" id="swpm-password-visible"><img src="<?php echo SIMPLE_WP_MEMBERSHIP_URL?>/images/hidden-eye.png"/></span>
+                    </button>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="swpm-remember-me">
                 <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" value="checked='checked'"></span>

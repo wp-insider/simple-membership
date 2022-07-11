@@ -27,20 +27,15 @@ $is_display_password_toggle = SwpmSettings::get_instance()->get_value('password-
             <div class="swpm-password-label">
                 <label for="swpm_password" class="swpm-label"><?php echo SwpmUtils::_('Password') ?></label>
             </div>
-            <div class="swpm-password-input">
-                <?php if($is_display_password_toggle==false): ?>
-                    <input type="password" class="swpm-text-field swpm-password-field swpm-password-padding-right" id="swpm_password" value="" size="25" name="swpm_password" />
-                <?php endif; ?>
-                <?php if($is_display_password_toggle==true): ?>
-                    <div class="swpm-password-input-visibility-group">
-                    <input type="password" class="swpm-text-field swpm-password-field swpm-password-padding-right" id="swpm_password" value="" size="25" name="swpm_password" />
-                    <button id="swpm-toggle-password-visiblity" data-state="password-hidden">
-                        <span id="swpm-password-hidden"><img src="<?php echo SIMPLE_WP_MEMBERSHIP_URL?>/images/display-eye.png"/></span>
-                        <span style="display:none" id="swpm-password-visible"><img src="<?php echo SIMPLE_WP_MEMBERSHIP_URL?>/images/hidden-eye.png"/></span>
-                    </button>
+            <div class="swpm-password-input">                
+                <input type="password" class="swpm-text-field swpm-password-field swpm-password-padding-right" id="swpm_password" value="" size="25" name="swpm_password" />                
+            </div>
+            <?php if($is_display_password_toggle==true): ?>
+                    <div class="swpm-password-input-visibility">                                        
+                        <span class="swpm-password-toggle-checkbox"><input type="checkbox" id="swpm-password-toggle-checkbox" data-state="password-hidden" > </span>
+                        <span class="swpm-password-toggle-label"> <?php echo SwpmUtils::_('Show password') ?></span>
                     </div>
                 <?php endif; ?>
-            </div>
             <div class="swpm-remember-me">
                 <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" value="checked='checked'"></span>
                 <span class="swpm-rember-label"> <?php echo SwpmUtils::_('Remember Me') ?></span>

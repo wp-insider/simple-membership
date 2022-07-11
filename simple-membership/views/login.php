@@ -7,13 +7,13 @@ $join_url = $setting->get_value('join-us-page-url');
 $label_username_or_email = __( 'Username or Email', 'simple-membership' );
 $swpm_username_label = apply_filters('swpm_login_form_set_username_label', $label_username_or_email);
 
-$is_display_password_toggle = SwpmSettings::get_instance()->get_value('password-visibility-login-form');
-        if (empty($is_display_password_toggle)){
-            $is_display_password_toggle=false;
-        }
-        else{
-            $is_display_password_toggle=true;
-        }
+$display_password_toggle = $setting->get_value('password-visibility-login-form');
+if ( empty( $display_password_toggle ) ){
+    $display_password_toggle = false;
+}
+else{
+    $display_password_toggle = true;
+}
 ?>
 <div class="swpm-login-widget-form">
     <form id="swpm-login-form" name="swpm-login-form" method="post" action="">
@@ -28,14 +28,14 @@ $is_display_password_toggle = SwpmSettings::get_instance()->get_value('password-
                 <label for="swpm_password" class="swpm-label"><?php echo SwpmUtils::_('Password') ?></label>
             </div>
             <div class="swpm-password-input">                
-                <input type="password" class="swpm-text-field swpm-password-field swpm-password-padding-right" id="swpm_password" value="" size="25" name="swpm_password" />                
+                <input type="password" class="swpm-text-field swpm-password-field" id="swpm_password" value="" size="25" name="swpm_password" />                
             </div>
-            <?php if($is_display_password_toggle==true): ?>
-                    <div class="swpm-password-input-visibility">                                        
-                        <span class="swpm-password-toggle-checkbox"><input type="checkbox" id="swpm-password-toggle-checkbox" data-state="password-hidden" > </span>
-                        <span class="swpm-password-toggle-label"> <?php echo SwpmUtils::_('Show password') ?></span>
-                    </div>
-                <?php endif; ?>
+            <?php if( $display_password_toggle ){ ?>
+                <div class="swpm-password-input-visibility">                                        
+                    <span class="swpm-password-toggle-checkbox"><input type="checkbox" id="swpm-password-toggle-checkbox" data-state="password-hidden" > </span>
+                    <span class="swpm-password-toggle-label"> <?php echo SwpmUtils::_('Show password') ?></span>
+                </div>
+            <?php } ?>
             <div class="swpm-remember-me">
                 <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" value="checked='checked'"></span>
                 <span class="swpm-rember-label"> <?php echo SwpmUtils::_('Remember Me') ?></span>

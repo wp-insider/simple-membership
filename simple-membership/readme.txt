@@ -159,7 +159,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= WIP 4.1.5 =
+- Added a new feature to toggle password visibility option in the login form.
 - Updated the Dutch language translation files.
 
 = 4.1.4 = 

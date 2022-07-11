@@ -169,7 +169,7 @@ class SwpmSettings {
 			'general-settings',
 			array(
 				'item'    => 'password-visibility-login-form',
-				'message' => SwpmUtils::_( 'Enable this option if you to view toggle password visibility in login page' ),
+				'message' => SwpmUtils::_( 'You can use it to show a toggle password visibility option in the login form. It will add a Show Password checkbox.' ),
 			)
 		);
 

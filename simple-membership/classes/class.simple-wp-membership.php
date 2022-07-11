@@ -386,12 +386,11 @@ class SimpleWpMembership {
             //Load the template for logged-in member
             SwpmUtilsTemplate::swpm_load_template('loggedin.php', false);
         } else {
-
-        //load js only if option is set
-        $is_display_password_toggle = SwpmSettings::get_instance()->get_value('password-visibility-login-form');
-        if (!empty($is_display_password_toggle)){
-            wp_enqueue_script('swpm.password-toggle');
-        }            
+            //Load JS only if option is set
+            $display_password_toggle = SwpmSettings::get_instance()->get_value('password-visibility-login-form');
+            if ( !empty( $display_password_toggle ) ){
+                wp_enqueue_script('swpm.password-toggle');
+            }
             //Load the login widget template
             SwpmUtilsTemplate::swpm_load_template('login.php', false);
         }

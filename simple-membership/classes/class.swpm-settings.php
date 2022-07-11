@@ -160,6 +160,18 @@ class SwpmSettings {
 				'message' => SwpmUtils::_( 'Enable this option if you only want the members of the site to be able to post a comment.' ),
 			)
 		);
+		
+		add_settings_field(
+			'password-visibility-login-form',
+			SwpmUtils::_( 'Enable Toggle Password Visibility in Login Form' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'general-settings',
+			array(
+				'item'    => 'password-visibility-login-form',
+				'message' => SwpmUtils::_( 'Enable this option if you to view toggle password visibility in login page' ),
+			)
+		);
 
 		/*
 		  add_settings_field('protect-everything',  SwpmUtils::_('Protect Everything'),
@@ -1119,6 +1131,7 @@ class SwpmSettings {
 		$output['join-us-page-url']         = esc_url( $input['join-us-page-url'] );
 		$output['default-account-status']   = esc_attr( $input['default-account-status'] );
 		$output['members-login-to-comment'] = isset( $input['members-login-to-comment'] ) ? esc_attr( $input['members-login-to-comment'] ) : '';
+		$output['password-visibility-login-form'] = isset( $input['password-visibility-login-form'] ) ? esc_attr( $input['password-visibility-login-form'] ) : '';
 
 		return $output;
 	}

@@ -386,6 +386,12 @@ class SimpleWpMembership {
             //Load the template for logged-in member
             SwpmUtilsTemplate::swpm_load_template('loggedin.php', false);
         } else {
+
+        //load js only if option is set
+        $is_display_password_toggle = SwpmSettings::get_instance()->get_value('password-visibility-login-form');
+        if (!empty($is_display_password_toggle)){
+            wp_enqueue_script('swpm.password-toggle');
+        }            
             //Load the login widget template
             SwpmUtilsTemplate::swpm_load_template('login.php', false);
         }
@@ -710,6 +716,8 @@ class SimpleWpMembership {
         wp_register_script('jquery.validationEngine', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
+        wp_register_script('swpm.password-toggle', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-toggle.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
+        
     }
 
     public static function enqueue_validation_scripts($add_params = array()) {

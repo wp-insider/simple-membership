@@ -162,6 +162,7 @@ https://simple-membership-plugin.com/
 = WIP 4.1.5 =
 - Added a new feature to toggle password visibility option in the login form.
 - Updated the Dutch language translation files.
+- Fixed a minor PHP notice with PayPal smart checkout button configuration.
 
 = 4.1.4 = 
 - PayPal smart checkout will pass the item name set in the payment button to PayPal's API.

@@ -185,11 +185,11 @@ class SimpleWpMembership {
         }
 
         if (isset($content['sizes'])) {
-            if ($content['sizes']['thumbnail']) {
+            if (isset($content['sizes']['thumbnail'])) {
                 $content['sizes']['thumbnail']['file'] = 'restricted-icon.png';
                 $content['sizes']['thumbnail']['mime-type'] = 'image/png';
             }
-            if ($content['sizes']['medium']) {
+            if (isset($content['sizes']['medium'])) {
                 $content['sizes']['medium']['file'] = 'restricted-icon.png';
                 $content['sizes']['medium']['mime-type'] = 'image/png';
             }

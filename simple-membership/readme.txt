@@ -161,6 +161,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Translation POT file has been regenerated.
+
 = 4.1.5 =
 - Added a new feature to toggle password visibility option in the login form. [Password toggle documentation](https://simple-membership-plugin.com/show-password-option-in-the-login-form-toggle-password-visibility/)
 - Updated the Dutch language translation files.

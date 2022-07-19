@@ -297,7 +297,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			//Nonce check failed.
 			wp_die( SwpmUtils::_( 'Error! Nonce verification failed for front end profile edit.' ) );
 		}
-
+                
+                //Trigger action hook
+                do_action( 'swpm_front_end_edit_profile_form_submitted' );
+                
 		$user_data = (array) $auth->userData;
 		unset( $user_data['permitted'] );
 		$form = new SwpmForm( $user_data );

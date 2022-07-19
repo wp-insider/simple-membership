@@ -163,6 +163,7 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - Translation POT file has been regenerated.
+- Added a new action hook - swpm_front_end_edit_profile_form_submitted
 
 = 4.1.5 =
 - Added a new feature to toggle password visibility option in the login form. [Password toggle documentation](https://simple-membership-plugin.com/show-password-option-in-the-login-form-toggle-password-visibility/)

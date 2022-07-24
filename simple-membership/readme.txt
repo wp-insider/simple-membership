@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.0
-Stable tag: 4.1.4
+Stable tag: 4.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,8 @@ There is also an API that can be used to query, create, update member accounts.
 You can easily add a member login widget on the sidebar of your site. Simply use the login form shortcode in the sidebar widget.
 
 You can also customize the member login widget by creating a custom template file in your theme (or child theme) folder.
+
+Option to show a password visibility toggle option in the login form.
 
 = Documentation =
 
@@ -160,7 +162,13 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
+- Translation POT file has been regenerated.
+- Added a new action hook - swpm_front_end_edit_profile_form_submitted
+
+= 4.1.5 =
+- Added a new feature to toggle password visibility option in the login form. [Password toggle documentation](https://simple-membership-plugin.com/show-password-option-in-the-login-form-toggle-password-visibility/)
 - Updated the Dutch language translation files.
+- Fixed a minor PHP notice with PayPal smart checkout button configuration.
 
 = 4.1.4 = 
 - PayPal smart checkout will pass the item name set in the payment button to PayPal's API.

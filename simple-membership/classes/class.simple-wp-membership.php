@@ -185,11 +185,11 @@ class SimpleWpMembership {
         }
 
         if (isset($content['sizes'])) {
-            if ($content['sizes']['thumbnail']) {
+            if (isset($content['sizes']['thumbnail'])) {
                 $content['sizes']['thumbnail']['file'] = 'restricted-icon.png';
                 $content['sizes']['thumbnail']['mime-type'] = 'image/png';
             }
-            if ($content['sizes']['medium']) {
+            if (isset($content['sizes']['medium'])) {
                 $content['sizes']['medium']['file'] = 'restricted-icon.png';
                 $content['sizes']['medium']['mime-type'] = 'image/png';
             }
@@ -386,12 +386,11 @@ class SimpleWpMembership {
             //Load the template for logged-in member
             SwpmUtilsTemplate::swpm_load_template('loggedin.php', false);
         } else {
-
-        //load js only if option is set
-        $is_display_password_toggle = SwpmSettings::get_instance()->get_value('password-visibility-login-form');
-        if (!empty($is_display_password_toggle)){
-            wp_enqueue_script('swpm.password-toggle');
-        }            
+            //Load JS only if option is set
+            $display_password_toggle = SwpmSettings::get_instance()->get_value('password-visibility-login-form');
+            if ( !empty( $display_password_toggle ) ){
+                wp_enqueue_script('swpm.password-toggle');
+            }
             //Load the login widget template
             SwpmUtilsTemplate::swpm_load_template('login.php', false);
         }

@@ -158,7 +158,5 @@ msgid "Already a member of this level."
 msgstr ""
 
 # === Special Translation Strings ===
-#This one is not needed here anymore since it has been added in the core plugin now
-#msgid "Username or Email"
-#msgstr ""
+
 

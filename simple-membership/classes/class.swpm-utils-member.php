@@ -327,4 +327,21 @@ class SwpmMemberUtils {
 		);
 		SwpmLog::log_simple_debug( 'User role updated.', true );
 	}
+
+	public static function get_sanitized_username_or_email($username_or_email_address)
+	{
+		$user_name = "";
+		if(is_email($username_or_email_address))
+		{
+			$user_name=sanitize_email($username_or_email_address);
+		}
+		else{
+			$user_name=sanitize_user($username_or_email_address);
+		}
+
+		return $user_name;
+	}
+
+
+
 }

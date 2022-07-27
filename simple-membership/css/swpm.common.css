@@ -134,6 +134,7 @@
 /* Edit profile form CSS */
 .swpm-edit-profile-form input[type="text"], .swpm-edit-profile-form input[type="password"] {
     width: 95%;
+    position: relative; /* needed for the validation message positioning */
 }
 .swpm-edit-profile-form select {
     width: 95%;

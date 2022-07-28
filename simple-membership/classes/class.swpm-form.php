@@ -19,7 +19,7 @@ class SwpmForm {
         }
     }
     protected function validate_wp_user_email(){
-        $user_name = isset($_POST['user_name']) ? sanitize_text_field($_POST['user_name']) : '';
+        $user_name = isset($_POST['user_name']) ? sanitize_text_field(stripslashes($_POST['user_name'])) : '';
         $email = filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
         if (empty($user_name)) {
             return;
@@ -43,7 +43,7 @@ class SwpmForm {
     protected function user_name() {
         global $wpdb;
         if (!empty($this->fields['user_name'])){return;}
-        $user_name = isset($_POST['user_name']) ? sanitize_text_field($_POST['user_name']) : '';
+        $user_name = isset($_POST['user_name']) ? sanitize_text_field(stripslashes($_POST['user_name'])) : '';
         if (empty($user_name)) {
             $this->errors['user_name'] = SwpmUtils::_('Username is required');
             return;
@@ -65,12 +65,12 @@ class SwpmForm {
     }
 
     protected function first_name() {
-        $first_name = isset($_POST['first_name']) ? sanitize_text_field($_POST['first_name']) : '';
+        $first_name = isset($_POST['first_name']) ? sanitize_text_field(stripslashes($_POST['first_name'])) : '';
         $this->sanitized['first_name'] = sanitize_text_field($first_name);
     }
 
     protected function last_name() {
-        $last_name = isset($_POST['last_name']) ? sanitize_text_field($_POST['last_name']) : '';
+        $last_name = isset($_POST['last_name']) ? sanitize_text_field(stripslashes($_POST['last_name'])) : '';
         $this->sanitized['last_name'] = sanitize_text_field($last_name);
     }
 
@@ -132,32 +132,32 @@ class SwpmForm {
     }
 
     protected function address_street() {
-        $address_street = isset($_POST['address_street']) ? sanitize_text_field($_POST['address_street']) : '';
+        $address_street = isset($_POST['address_street']) ? sanitize_text_field(stripslashes($_POST['address_street'])) : '';
         $this->sanitized['address_street'] = wp_kses($address_street, array());
     }
 
     protected function address_city() {
-        $address_city = isset($_POST['address_city']) ? sanitize_text_field($_POST['address_city']) : '';
+        $address_city = isset($_POST['address_city']) ? sanitize_text_field(stripslashes($_POST['address_city'])) : '';
         $this->sanitized['address_city'] = wp_kses($address_city, array());
     }
 
     protected function address_state() {
-        $address_state = isset($_POST['address_state']) ? sanitize_text_field($_POST['address_state']) : '';
+        $address_state = isset($_POST['address_state']) ? sanitize_text_field(stripslashes($_POST['address_state'])) : '';
         $this->sanitized['address_state'] = wp_kses($address_state, array());
     }
 
     protected function address_zipcode() {
-        $address_zipcode = isset($_POST['address_zipcode']) ? sanitize_text_field($_POST['address_zipcode']) : '';
+        $address_zipcode = isset($_POST['address_zipcode']) ? sanitize_text_field(stripslashes($_POST['address_zipcode'])) : '';
         $this->sanitized['address_zipcode'] = wp_kses($address_zipcode, array());
     }
 
     protected function country() {
-        $country = isset($_POST['country']) ? sanitize_text_field($_POST['country']) : '';
+        $country = isset($_POST['country']) ? sanitize_text_field(stripslashes($_POST['country'])) : '';
         $this->sanitized['country'] = wp_kses($country, array());
     }
 
     protected function company_name() {
-        $company_name = isset($_POST['company_name']) ? sanitize_text_field($_POST['company_name']) : '';
+        $company_name = isset($_POST['company_name']) ? sanitize_text_field(stripslashes($_POST['company_name'])) : '';
         $this->sanitized['company_name'] = $company_name;
     }
 

@@ -161,10 +161,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= WIP 4.1.6 =
+- Added a new action hook - swpm_front_end_edit_profile_form_submitted.
 - Translation POT file has been regenerated.
-- Added a new action hook - swpm_front_end_edit_profile_form_submitted
 - Fixed the validation error message positioning in the edit profile form when Force Strong Password option is enabled.
+- Apostrophe characters will now be accepted in the name and address fields.
 
 = 4.1.5 =
 - Added a new feature to toggle password visibility option in the login form. [Password toggle documentation](https://simple-membership-plugin.com/show-password-option-in-the-login-form-toggle-password-visibility/)

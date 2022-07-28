@@ -27,6 +27,9 @@ class SwpmInitTimeTasks {
 
 		//Do frontend-only init time tasks
 		if ( ! is_admin() ) {
+                        //Trigger an action hook 
+                        do_action('swpm_do_init_time_tasks_front_end');
+                        
 			SwpmAuth::get_instance();
 
 			$this->check_and_handle_auto_login();

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.0
-Stable tag: 4.1.5
+Stable tag: 4.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -161,11 +161,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.1.6 =
+= 4.1.6 =
 - Added a new action hook - swpm_front_end_edit_profile_form_submitted.
+- Added a new action hook - swpm_do_init_time_tasks_front_end.
 - Translation POT file has been regenerated.
-- Fixed the validation error message positioning in the edit profile form when Force Strong Password option is enabled.
 - Apostrophe characters will now be accepted in the name and address fields.
+- Fixed the validation error message positioning in the edit profile form when Force Strong Password option is enabled.
 
 = 4.1.5 =
 - Added a new feature to toggle password visibility option in the login form. [Password toggle documentation](https://simple-membership-plugin.com/show-password-option-in-the-login-form-toggle-password-visibility/)

@@ -581,4 +581,38 @@ abstract class SwpmUtils {
 		return $output;
 	}
 
+	public static function csv_equal_match( $needle, $haystack_csv ) {
+		
+		//converting to lowercase
+		if($haystack_csv && strlen($haystack_csv)>0)
+		{
+			$haystack_csv = strtolower($haystack_csv);
+			$haystack_csv_array = explode(",",$haystack_csv);
+	
+			foreach($haystack_csv_array as $value)
+			{
+				if(trim($needle)==trim($value))
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	
+	public static function csv_pattern_match( $needle, $haystack_csv ) {
+		
+		if($haystack_csv && strlen($haystack_csv)>0)
+		{
+			if(stripos($needle,$haystack_csv)!==false)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
 }

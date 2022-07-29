@@ -45,6 +45,7 @@ class SwpmSettings {
 				4 => SwpmUtils::_( 'Tools' ),
 				5 => SwpmUtils::_( 'Advanced Settings' ),
 				6 => SwpmUtils::_( 'Addons Settings' ),
+				7 => SwpmUtils::_( 'Blacklisting & Whitelisting' )
 			);
 
 			//Register the draw tab action hook. It will be triggered using do_action("swpm-draw-settings-nav-tabs")
@@ -891,6 +892,104 @@ class SwpmSettings {
 		//Register settings sections and fileds for the addon settings tab.
 	}
 
+	private function tab_7() {
+		//Register settings sections and fileds for the advanced settings tab.
+
+		register_setting( 'swpm-settings-tab-7', 'swpm-settings', array( &$this, 'sanitize_tab_7' ) );
+
+		add_settings_section( 'whitelist-settings', SwpmUtils::_( 'Whitelisting' ), array( &$this, 'whitelist_settings_callback' ), 'simple_wp_membership_settings' );
+
+		add_settings_field(
+			'enable-whitelisting',
+			SwpmUtils::_( 'Enable Whitelisting Feature' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'whitelist-settings',
+			array(
+				'item'    => 'enable-whitelisting',
+				'message' => SwpmUtils::_( "When enabled, whitelisting feature will be activated." ),
+			)
+		);
+
+		add_settings_field(
+			'whitelist-email-address',
+			SwpmUtils::_( 'Email Address Whitelisting' ),
+			array( &$this, 'textarea_callback' ),
+			'simple_wp_membership_settings',
+			'whitelist-settings',
+			array(
+				'item'    => 'whitelist-email-address',
+				'message' => SwpmUtils::_( 'Following is a list (comma separated) of whitelisted email addresses.' ),
+			)
+		);
+
+		add_settings_field(
+			'whitelist-email-address-pattern',
+			SwpmUtils::_( 'Email Address Pattern Whitelisting' ),
+			array( &$this, 'textarea_callback' ),
+			'simple_wp_membership_settings',
+			'whitelist-settings',
+			array(
+				'item'    => 'whitelist-email-address-pattern',
+				'message' => SwpmUtils::_( 'Following is a list (comma separated) of whitelisted email addresses pattern e.g. @gooddomain.com, @gmail.com' ),
+			)
+		);
+
+		/** BLACLIST SETTINGS **/
+		add_settings_section( 'blacklist-settings', SwpmUtils::_( 'Blacklisting' ), array( &$this, 'blacklist_settings_callback' ), 'simple_wp_membership_settings' );
+
+		add_settings_field(
+			'enable-blacklisting',
+			SwpmUtils::_( 'Enable Blacklisting Feature' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'blacklist-settings',
+			array(
+				'item'    => 'enable-blacklisting',
+				'message' => SwpmUtils::_( "When enabled, blacklisting feature will be activated." ),
+			)
+		);
+
+		add_settings_field(
+			'blacklist-email-address',
+			SwpmUtils::_( 'Email Address Blacklisting' ),
+			array( &$this, 'textarea_callback' ),
+			'simple_wp_membership_settings',
+			'blacklist-settings',
+			array(
+				'item'    => 'blacklist-email-address',
+				'message' => SwpmUtils::_( 'Following is a list (comma separated) of blacklisted email addresses.' ),
+			)
+		);
+
+		add_settings_field(
+			'blacklist-email-address-pattern',
+			SwpmUtils::_( 'Email Address Pattern Blacklisting' ),
+			array( &$this, 'textarea_callback' ),
+			'simple_wp_membership_settings',
+			'blacklist-settings',
+			array(
+				'item'    => 'blacklist-email-address-pattern',
+				'message' => SwpmUtils::_( 'Following is a list (comma separated) of blacklisted email addresses pattern e.g. @gooddomain.com, @gmail.com' ),
+			)
+		);
+
+
+		add_settings_field(
+			'blacklist-block-message',
+			SwpmUtils::_( 'Blacklist Block Message' ),
+			array( &$this, 'textarea_callback' ),
+			'simple_wp_membership_settings',
+			'blacklist-settings',
+			array(
+				'item'    => 'blacklist-block-message',
+				'message' => SwpmUtils::_( 'Enter the message you want to display for blacklist users' ),
+			)
+		);
+
+		
+	}
+
 	public static function get_instance() {
 		self::$_this = empty( self::$_this ) ? new SwpmSettings() : self::$_this;
 		return self::$_this;
@@ -1098,6 +1197,22 @@ class SwpmSettings {
 		SwpmUtils::e( 'This page allows you to configure some advanced features of the plugin.' );
 	}
 
+	public function whitelist_settings_callback() {
+
+		//Show settings updated message when it is updated
+		if ( isset( $_REQUEST['settings-updated'] ) ) {
+
+			//This status message need to be in the callback function to prevent header sent warning
+			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
+		}
+
+		SwpmUtils::e( 'This section allows you to configure whitelisting settings.' );
+	}
+
+	public function blacklist_settings_callback() {
+		SwpmUtils::e( 'This section allows you to configure blacklisting settings.' );
+	}
+
 	public function advanced_settings_auto_create_swpm_uses_settings_callback() {
 		SwpmUtils::e( 'This section allows you to configure automatic creation of member accounts when new WP User records are created by another plugin. It can be useful if you are using another plugin that creates WP user records and you want them to be recognized in the membership plugin.' );
 	}
@@ -1219,6 +1334,25 @@ class SwpmSettings {
 		return $output;
 	}
 
+	public function sanitize_tab_7( $input ) {
+		if ( empty( $this->settings ) ) {
+			$this->settings = (array) get_option( 'swpm-settings' );
+		}
+		$output                                      = $this->settings;
+		$output['enable-whitelisting']      = isset( $input['enable-whitelisting'] ) ? esc_attr( $input['enable-whitelisting'] ) : '';		
+		$output['whitelist-email-address']      = isset( $input['whitelist-email-address'] ) ? esc_attr( $input['whitelist-email-address'] ) : '';		
+		$output['whitelist-email-address-pattern']      = isset( $input['whitelist-email-address-pattern'] ) ? esc_attr( $input['whitelist-email-address-pattern'] ) : '';		
+
+		$output['enable-blacklisting']      = isset( $input['enable-blacklisting'] ) ? esc_attr( $input['enable-blacklisting'] ) : '';		
+		$output['blacklist-email-address']      = isset( $input['blacklist-email-address'] ) ? esc_attr( $input['blacklist-email-address'] ) : '';		
+		$output['blacklist-email-address-pattern']      = isset( $input['blacklist-email-address-pattern'] ) ? esc_attr( $input['blacklist-email-address-pattern'] ) : '';		
+		$output['blacklist-block-message']      = isset( $input['blacklist-block-message'] ) ? esc_attr( $input['blacklist-block-message'] ) : '';		
+
+		
+
+		return $output;
+	}
+
 	public function get_value( $key, $default = '' ) {
 		if ( isset( $this->settings[ $key ] ) ) {
 			return $this->settings[ $key ];
@@ -1290,6 +1424,10 @@ class SwpmSettings {
 					//Addon settings
 					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_addon_settings.php';
 					break;
+				case 7:
+						//blacklist white list settings
+						include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';
+						break;
 				default:
 					//The default fallback (general settings)
 					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';

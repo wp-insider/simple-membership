@@ -327,4 +327,26 @@ class SwpmMemberUtils {
 		);
 		SwpmLog::log_simple_debug( 'User role updated.', true );
 	}
+
+	//if a username is provided, it will return sanitized email of the user
+	//if no username is found, empty is returned
+	public static function get_sanitized_email($username_or_email_address)
+	{		
+		if(is_email($username_or_email_address))
+		{
+			return sanitize_email($username_or_email_address);
+		}
+		else{
+			$user_row = SwpmMemberUtils::get_user_by_user_name( $username_or_email_address );
+						
+			if ( $user_row ) {				
+				//found a profile
+				return $user_row->email;
+			} 
+		}
+		return "";
+	}
+
+
+
 }

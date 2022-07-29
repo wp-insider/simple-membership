@@ -52,7 +52,7 @@ $membership_level = filter_input(INPUT_GET, 'membership_level', FILTER_SANITIZE_
                 <option <?php echo ($level['id'] == $membership_level) ? "selected='selected'" : ""; ?> value="<?php echo $level['id']; ?>"> <?php echo $level['alias'] ?></option>
             <?php endforeach; ?>
         </select>
-        <input id="search_id-search-input" type="text" name="s" value="<?php echo isset($_REQUEST['s']) ? esc_attr($_REQUEST['s']) : ''; ?>" />
+        <input id="search_id-search-input" type="text" name="s" value="<?php echo isset($_REQUEST['s']) ? esc_attr(stripslashes($_REQUEST['s'])) : ''; ?>" />
         <input id="search-submit" class="button swpm-admin-search-btn" type="submit" name="" value="<?php echo SwpmUtils::_('Search') ?>" />
         <input type="hidden" name="page" value="simple_wp_membership" />
     </p>

@@ -520,6 +520,14 @@ abstract class SwpmUtils {
 		return reset( $keys ); //Return he first element from the valid values
 	}
 
+        public static function swpm_sanitize_text( $text ) {
+                $text = htmlspecialchars( $text );
+                $text = strip_tags( $text );
+                $text = sanitize_text_field( $text );
+                $text = esc_attr( $text );
+                return $text;
+        }
+
 	public static function get_user_ip_address() {
 		$user_ip = '';
 		if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) && ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {

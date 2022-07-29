@@ -120,7 +120,7 @@ class SwpmMembers extends WP_List_Table {
 		if ( ! empty( $s ) ) {
 			$s = sanitize_text_field( $s );
 			$s = trim( $s ); //Trim the input
-                        $s = esc_attr( $s );
+                        $s = esc_sql( $s );
 			$filters[] = "( user_name LIKE '%" . strip_tags( $s ) . "%' "
 					. " OR first_name LIKE '%" . strip_tags( $s ) . "%' "
 					. " OR last_name LIKE '%" . strip_tags( $s ) . "%' "

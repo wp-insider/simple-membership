@@ -164,6 +164,7 @@ https://simple-membership-plugin.com/
 = WIP 4.1.7 =
 - [TODO-more] Blacklisting & Whitelisting feaure.
 - The member search option in the members interface will now work correctly with names containing apostrophe character.
+- Added a new filter hook in the password reset function: swpm_password_reset_generated_pass
 
 = 4.1.6 =
 - Added a new action hook - swpm_front_end_edit_profile_form_submitted.

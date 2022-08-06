@@ -44,8 +44,8 @@ class SwpmSettings {
 				3 => SwpmUtils::_( 'Email Settings' ),
 				4 => SwpmUtils::_( 'Tools' ),
 				5 => SwpmUtils::_( 'Advanced Settings' ),
-				6 => SwpmUtils::_( 'Addons Settings' ),
-				7 => SwpmUtils::_( 'Blacklisting & Whitelisting' )
+                                6 => SwpmUtils::_( 'Blacklisting & Whitelisting' ),
+				7 => SwpmUtils::_( 'Addons Settings' ),
 			);
 
 			//Register the draw tab action hook. It will be triggered using do_action("swpm-draw-settings-nav-tabs")
@@ -889,13 +889,9 @@ class SwpmSettings {
 	}
 
 	private function tab_6() {
-		//Register settings sections and fileds for the addon settings tab.
-	}
+		//Register settings sections and fileds for the blacklisting and whitelisting settings tab.
 
-	private function tab_7() {
-		//Register settings sections and fileds for the advanced settings tab.
-
-		register_setting( 'swpm-settings-tab-7', 'swpm-settings', array( &$this, 'sanitize_tab_7' ) );
+		register_setting( 'swpm-settings-tab-6', 'swpm-settings', array( &$this, 'sanitize_tab_6' ) );
 
 		add_settings_section( 'whitelist-settings', SwpmUtils::_( 'Whitelisting' ), array( &$this, 'whitelist_settings_callback' ), 'simple_wp_membership_settings' );
 
@@ -985,9 +981,12 @@ class SwpmSettings {
 				'item'    => 'blacklist-block-message',
 				'message' => SwpmUtils::_( 'Enter the message you want to display for blacklist users' ),
 			)
-		);
+		);            
+	}
 
-		
+	private function tab_7() {
+		//Register settings sections and fileds for the addon settings tab.
+            
 	}
 
 	public static function get_instance() {
@@ -1334,22 +1333,19 @@ class SwpmSettings {
 		return $output;
 	}
 
-	public function sanitize_tab_7( $input ) {
+	public function sanitize_tab_6( $input ) {
 		if ( empty( $this->settings ) ) {
 			$this->settings = (array) get_option( 'swpm-settings' );
 		}
-		$output                                      = $this->settings;
-		$output['enable-whitelisting']      = isset( $input['enable-whitelisting'] ) ? esc_attr( $input['enable-whitelisting'] ) : '';		
-		$output['whitelist-email-address']      = isset( $input['whitelist-email-address'] ) ? esc_attr( $input['whitelist-email-address'] ) : '';		
-		$output['whitelist-email-address-pattern']      = isset( $input['whitelist-email-address-pattern'] ) ? esc_attr( $input['whitelist-email-address-pattern'] ) : '';		
+		$output = $this->settings;
+		$output['enable-whitelisting'] = isset( $input['enable-whitelisting'] ) ? esc_attr( $input['enable-whitelisting'] ) : '';		
+		$output['whitelist-email-address'] = isset( $input['whitelist-email-address'] ) ? esc_attr( $input['whitelist-email-address'] ) : '';		
+		$output['whitelist-email-address-pattern'] = isset( $input['whitelist-email-address-pattern'] ) ? esc_attr( $input['whitelist-email-address-pattern'] ) : '';		
 
-		$output['enable-blacklisting']      = isset( $input['enable-blacklisting'] ) ? esc_attr( $input['enable-blacklisting'] ) : '';		
-		$output['blacklist-email-address']      = isset( $input['blacklist-email-address'] ) ? esc_attr( $input['blacklist-email-address'] ) : '';		
-		$output['blacklist-email-address-pattern']      = isset( $input['blacklist-email-address-pattern'] ) ? esc_attr( $input['blacklist-email-address-pattern'] ) : '';		
-		$output['blacklist-block-message']      = isset( $input['blacklist-block-message'] ) ? esc_attr( $input['blacklist-block-message'] ) : '';		
-
-		
-
+		$output['enable-blacklisting'] = isset( $input['enable-blacklisting'] ) ? esc_attr( $input['enable-blacklisting'] ) : '';		
+		$output['blacklist-email-address'] = isset( $input['blacklist-email-address'] ) ? esc_attr( $input['blacklist-email-address'] ) : '';		
+		$output['blacklist-email-address-pattern'] = isset( $input['blacklist-email-address-pattern'] ) ? esc_attr( $input['blacklist-email-address-pattern'] ) : '';		
+		$output['blacklist-block-message'] = isset( $input['blacklist-block-message'] ) ? esc_attr( $input['blacklist-block-message'] ) : '';
 		return $output;
 	}
 
@@ -1421,13 +1417,13 @@ class SwpmSettings {
 					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';
 					break;
 				case 6:
+                                        //Blacklist & whitelist settings
+                                        include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';
+                                        break;                                    
+				case 7:
 					//Addon settings
 					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_addon_settings.php';
 					break;
-				case 7:
-						//blacklist white list settings
-						include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';
-						break;
 				default:
 					//The default fallback (general settings)
 					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';

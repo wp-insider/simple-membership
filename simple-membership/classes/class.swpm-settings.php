@@ -984,7 +984,7 @@ class SwpmSettings {
 	}
 
 	private function tab_7() {
-		//Register settings sections and fileds for the addon settings tab.
+		//Register settings sections and fields for the addon settings tab.
             
 	}
 

@@ -115,133 +115,97 @@ class SwpmSelfActionHandler {
 
     public function handle_whitelist_blacklist_registration()
     {
-        
         $user_email = SwpmMemberUtils::get_sanitized_email($_POST["email"]);
-                
-        if(!$user_email)
-        {
+        if(!$user_email) {
             return;
         }
 
-        if(SwpmSettings::get_instance()->get_value( 'enable-whitelisting' ))
-        {
+        if(SwpmSettings::get_instance()->get_value( 'enable-whitelisting' )) {
             $emailaddress_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-email-address' );                        
-            if($emailaddress_whitelist)
-            {
-                
-                if(SwpmUtils::csv_equal_match($user_email,$emailaddress_whitelist))
-                {
+            if($emailaddress_whitelist) {
+                if(SwpmUtils::csv_equal_match($user_email,$emailaddress_whitelist)) {
                     return;
                 }
             }
 
             $emailaddress_pattern_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-email-address-pattern' );
-            if($emailaddress_pattern_whitelist)
-            {
-                if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_whitelist))
-                {
+            if($emailaddress_pattern_whitelist) {
+                if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_whitelist)) {
                     return;
                 }
             }
         }
 
-        if(SwpmSettings::get_instance()->get_value( 'enable-blacklisting' ))
-        {
-            $block_mesage  =SwpmSettings::get_instance()->get_value( 'blacklist-block-message' );                         
-            
-            if(!$block_mesage)
-            {                
-                $block_mesage = SwpmUtils::_("Blocked by Simple Membership Blacklist");
+        if(SwpmSettings::get_instance()->get_value( 'enable-blacklisting' )) {
+            $block_message = SwpmSettings::get_instance()->get_value( 'blacklist-block-message' );
+            if(!$block_message) {                
+                $block_message = SwpmUtils::_("The email address you used is blacklisted on this site.");
             }
 
             $emailaddress_blacklist = SwpmSettings::get_instance()->get_value( 'blacklist-email-address' );                        
-            if($emailaddress_blacklist)
-            {
-                
-                if(SwpmUtils::csv_equal_match($user_email,$emailaddress_blacklist))
-                {
+            if($emailaddress_blacklist) {
+                if(SwpmUtils::csv_equal_match($user_email,$emailaddress_blacklist)) {
                     SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' from the Blacklist Email Address List.', true );
-                    wp_die($block_mesage);                    
+                    wp_die($block_message);                    
                 }
             }
 
             $emailaddress_pattern_blacklist = SwpmSettings::get_instance()->get_value( 'blacklist-email-address-pattern' );
-            if($emailaddress_pattern_blacklist)
-            {
-                if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_blacklist))
-                {
+            if($emailaddress_pattern_blacklist) {
+                if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_blacklist)) {
                     SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' from the Blacklist Email Address Pattern List.', true );
-                    wp_die($block_mesage);                    
+                    wp_die($block_message);                    
                 }
             }
         }
-
         return;
-
     }
     
     public function handle_whitelist_blacklist_login($args)
     {
         $user_email = SwpmMemberUtils::get_sanitized_email($args["username"]);
-                
-        if(!$user_email)
-        {
+        if(!$user_email) {
             return;
         }
 
-        if(SwpmSettings::get_instance()->get_value( 'enable-whitelisting' ))
-        {
+        if(SwpmSettings::get_instance()->get_value( 'enable-whitelisting' )) {
             $emailaddress_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-email-address' );                        
-            if($emailaddress_whitelist)
-            {
-                
-                if(SwpmUtils::csv_equal_match($user_email,$emailaddress_whitelist))
-                {
+            if($emailaddress_whitelist) {
+                if(SwpmUtils::csv_equal_match($user_email,$emailaddress_whitelist)) {
                     return;
                 }
             }
 
             $emailaddress_pattern_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-email-address-pattern' );
-            if($emailaddress_pattern_whitelist)
-            {
-                if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_whitelist))
-                {
+            if($emailaddress_pattern_whitelist) {
+                if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_whitelist)) {
                     return;
                 }
             }
         }
 
-        if(SwpmSettings::get_instance()->get_value( 'enable-blacklisting' ))
-        {
-            $block_mesage  =SwpmSettings::get_instance()->get_value( 'blacklist-block-message' );                         
-            
-            if(!$block_mesage)
-            {
-                $block_mesage = SwpmUtils::_("Blocked by Simple Membership Blacklist");
+        if(SwpmSettings::get_instance()->get_value( 'enable-blacklisting' )) {
+            $block_message = SwpmSettings::get_instance()->get_value( 'blacklist-block-message' );
+            if(!$block_message) {
+                $block_message = SwpmUtils::_("The email address you used is blacklisted on this site.");
             }
 
-            $emailaddress_blacklist = SwpmSettings::get_instance()->get_value( 'blacklist-email-address' );                        
-            if($emailaddress_blacklist)
-            {
-                
-                if(SwpmUtils::csv_equal_match($user_email,$emailaddress_blacklist))
-                {
+            $emailaddress_blacklist = SwpmSettings::get_instance()->get_value( 'blacklist-email-address' );
+            if($emailaddress_blacklist) {
+                if(SwpmUtils::csv_equal_match($user_email,$emailaddress_blacklist)) {
                     SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' from the Blacklist Email Address List.', true );
-                    wp_die($block_mesage);                    
+                    wp_die($block_message);                    
                 }
             }
 
             $emailaddress_pattern_blacklist = SwpmSettings::get_instance()->get_value( 'blacklist-email-address-pattern' );
-            if($emailaddress_pattern_blacklist)
-            {
-                if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_blacklist))
-                {
+            if($emailaddress_pattern_blacklist) {
+                if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_blacklist)) {
                     SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' from the Blacklist Email Address Pattern List.', true );
-                    wp_die($block_mesage);                    
+                    wp_die($block_message);                    
                 }
             }
         }
-
         return;
     }
 }

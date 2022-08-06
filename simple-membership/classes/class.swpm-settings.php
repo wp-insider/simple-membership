@@ -915,7 +915,7 @@ class SwpmSettings {
 			'whitelist-settings',
 			array(
 				'item'    => 'whitelist-email-address',
-				'message' => SwpmUtils::_( 'Following is a list (comma separated) of whitelisted email addresses.' ),
+				'message' => SwpmUtils::_( 'Enter a list (comma separated) of email addresses to whitelist.' ),
 			)
 		);
 
@@ -927,11 +927,11 @@ class SwpmSettings {
 			'whitelist-settings',
 			array(
 				'item'    => 'whitelist-email-address-pattern',
-				'message' => SwpmUtils::_( 'Following is a list (comma separated) of whitelisted email addresses pattern e.g. @gooddomain.com, @gmail.com' ),
+				'message' => SwpmUtils::_( 'Enter a list (comma separated) of email addresses pattern to whitelist. Example value: @gooddomain.com, @gmail.com, @yahoo.com' ),
 			)
 		);
 
-		/** BLACLIST SETTINGS **/
+		/** BLACKLIST SETTINGS **/
 		add_settings_section( 'blacklist-settings', SwpmUtils::_( 'Blacklisting' ), array( &$this, 'blacklist_settings_callback' ), 'simple_wp_membership_settings' );
 
 		add_settings_field(
@@ -954,7 +954,7 @@ class SwpmSettings {
 			'blacklist-settings',
 			array(
 				'item'    => 'blacklist-email-address',
-				'message' => SwpmUtils::_( 'Following is a list (comma separated) of blacklisted email addresses.' ),
+				'message' => SwpmUtils::_( 'Enter a list (comma separated) of email addresses to blacklist.' ),
 			)
 		);
 
@@ -966,20 +966,19 @@ class SwpmSettings {
 			'blacklist-settings',
 			array(
 				'item'    => 'blacklist-email-address-pattern',
-				'message' => SwpmUtils::_( 'Following is a list (comma separated) of blacklisted email addresses pattern e.g. @gooddomain.com, @gmail.com' ),
+				'message' => SwpmUtils::_( 'Enter a list (comma separated) of email addresses pattern to blacklist. Example value: @baddomain.com, @crazydomain.com' ),
 			)
 		);
 
-
 		add_settings_field(
 			'blacklist-block-message',
-			SwpmUtils::_( 'Blacklist Block Message' ),
+			SwpmUtils::_( 'Blacklist Message Customization' ),
 			array( &$this, 'textarea_callback' ),
 			'simple_wp_membership_settings',
 			'blacklist-settings',
 			array(
 				'item'    => 'blacklist-block-message',
-				'message' => SwpmUtils::_( 'Enter the message you want to display for blacklist users' ),
+				'message' => SwpmUtils::_( 'Enter the message you want to show to the user when the blacklisted condition is met. Leave it empty to use the default message.' ),
 			)
 		);            
 	}
@@ -1205,7 +1204,13 @@ class SwpmSettings {
 			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
 		}
 
-		SwpmUtils::e( 'This section allows you to configure whitelisting settings.' );
+		echo '<div class="swpm-grey-box">';
+		echo '<p>';
+		SwpmUtils::e( 'This interface lets you configure blacklisting & whitelisting for email addresses. ' );
+		echo '<a href="https://simple-membership-plugin.com/blacklisting-whitelisting-feature/" target="_blank">' . SwpmUtils::_( 'This blacklisting & whitelisting documentation' ) . '</a>';
+		SwpmUtils::e( ' explains how to use this feautre.' );
+		echo '</p>';
+		echo '</div>';                
 	}
 
 	public function blacklist_settings_callback() {

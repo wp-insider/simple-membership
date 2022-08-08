@@ -139,13 +139,11 @@ class SwpmSelfActionHandler {
                 }
             }
 
-             //If whitelist is enabled and user email doesn't match any whitelist rule.
-            //Block the registration
-            if($is_whitelisted==false)
-            {
-                $block_message_whitelist =SwpmUtils::_("The email address you used is blacklisted on this site.");                
+            //If whitelist is enabled and user email doesn't match any whitelist rule then block the registration.
+            if($is_whitelisted==false) {
+                $block_message_whitelist = SwpmUtils::_("The email address you used is not whitelisted on this site.");                
 
-                SwpmLog::log_simple_debug( 'Registration blocked for user: '.$user_email.' , as it did not match any Whitelist rule.', true );
+                SwpmLog::log_simple_debug( 'Registration blocked for user: '.$user_email.', as it did not match any whitelisting rule.', true );
                 wp_die($block_message_whitelist);  
             }
         }
@@ -201,13 +199,11 @@ class SwpmSelfActionHandler {
                 }
             }
 
-            //If whitelist is enabled and user email doesn't match any whitelist rule.
-            //Block the login
-            if($is_whitelisted==false)
-            {
-                $block_message_whitelist =SwpmUtils::_("The email address you used is blacklisted on this site.");                
+            //If whitelist is enabled and user email doesn't match any whitelist rule then block the login.
+            if($is_whitelisted==false) {
+                $block_message_whitelist = SwpmUtils::_("The email address you used is not whitelisted on this site.");                
 
-                SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' , as it did not match any Whitelist rule.', true );
+                SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.', as it did not match any whitelisting rule.', true );
                 wp_die($block_message_whitelist);  
             }
         }

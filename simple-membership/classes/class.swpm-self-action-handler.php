@@ -121,9 +121,12 @@ class SwpmSelfActionHandler {
         }
 
         if(SwpmSettings::get_instance()->get_value( 'enable-whitelisting' )) {
+            $is_whitelisted=false;
+
             $emailaddress_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-email-address' );                        
             if($emailaddress_whitelist) {
                 if(SwpmUtils::csv_equal_match($user_email,$emailaddress_whitelist)) {
+                    $is_whitelisted=true;
                     return;
                 }
             }
@@ -131,8 +134,19 @@ class SwpmSelfActionHandler {
             $emailaddress_pattern_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-email-address-pattern' );
             if($emailaddress_pattern_whitelist) {
                 if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_whitelist)) {
+                    $is_whitelisted=true;
                     return;
                 }
+            }
+
+             //If whitelist is enabled and user email doesn't match any whitelist rule.
+            //Block the registration
+            if($is_whitelisted==false)
+            {
+                $block_message_whitelist =SwpmUtils::_("The email address you used is blacklisted on this site.");                
+
+                SwpmLog::log_simple_debug( 'Registration blocked for user: '.$user_email.' , as it did not match any Whitelist rule.', true );
+                wp_die($block_message_whitelist);  
             }
         }
 
@@ -169,9 +183,12 @@ class SwpmSelfActionHandler {
         }
 
         if(SwpmSettings::get_instance()->get_value( 'enable-whitelisting' )) {
+            $is_whitelisted=false;
+
             $emailaddress_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-email-address' );                        
             if($emailaddress_whitelist) {
                 if(SwpmUtils::csv_equal_match($user_email,$emailaddress_whitelist)) {
+                    $is_whitelisted=true;
                     return;
                 }
             }
@@ -179,8 +196,19 @@ class SwpmSelfActionHandler {
             $emailaddress_pattern_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-email-address-pattern' );
             if($emailaddress_pattern_whitelist) {
                 if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_whitelist)) {
+                    $is_whitelisted=true;
                     return;
                 }
+            }
+
+            //If whitelist is enabled and user email doesn't match any whitelist rule.
+            //Block the login
+            if($is_whitelisted==false)
+            {
+                $block_message_whitelist =SwpmUtils::_("The email address you used is blacklisted on this site.");                
+
+                SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' , as it did not match any Whitelist rule.', true );
+                wp_die($block_message_whitelist);  
             }
         }
 

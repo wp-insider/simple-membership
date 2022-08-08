@@ -889,10 +889,14 @@ class SwpmSettings {
 	}
 
 	private function tab_6() {
-		//Register settings sections and fileds for the blacklisting and whitelisting settings tab.
+		//Register settings sections and fields for the blacklisting and whitelisting settings tab.
 
 		register_setting( 'swpm-settings-tab-6', 'swpm-settings', array( &$this, 'sanitize_tab_6' ) );
 
+                /* Overview section at the top */
+                add_settings_section( 'blacklist-whitelist-settings-overview', SwpmUtils::_( 'Configure Blacklisting & Whitelisting' ), array( &$this, 'blacklist_whitelist_overview_callback' ), 'simple_wp_membership_settings' );
+                
+                /* Whitelisting settings section */
 		add_settings_section( 'whitelist-settings', SwpmUtils::_( 'Whitelisting' ), array( &$this, 'whitelist_settings_callback' ), 'simple_wp_membership_settings' );
 
 		add_settings_field(
@@ -931,7 +935,7 @@ class SwpmSettings {
 			)
 		);
 
-		/** BLACKLIST SETTINGS **/
+		/* Blacklisting settings section */
 		add_settings_section( 'blacklist-settings', SwpmUtils::_( 'Blacklisting' ), array( &$this, 'blacklist_settings_callback' ), 'simple_wp_membership_settings' );
 
 		add_settings_field(
@@ -1192,25 +1196,31 @@ class SwpmSettings {
 
 		}
 
+                echo '<div class="swpm-grey-box">';
+		echo '<p>';
 		SwpmUtils::e( 'This page allows you to configure some advanced features of the plugin.' );
+		echo '</p>';
+		echo '</div>';                 
 	}
 
-	public function whitelist_settings_callback() {
-
+        public function blacklist_whitelist_overview_callback() {
 		//Show settings updated message when it is updated
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
-
 			//This status message need to be in the callback function to prevent header sent warning
 			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
 		}
-
+                
 		echo '<div class="swpm-grey-box">';
 		echo '<p>';
 		SwpmUtils::e( 'This interface lets you configure blacklisting & whitelisting for email addresses. ' );
 		echo '<a href="https://simple-membership-plugin.com/blacklisting-whitelisting-feature/" target="_blank">' . SwpmUtils::_( 'This blacklisting & whitelisting documentation' ) . '</a>';
 		SwpmUtils::e( ' explains how to use this feautre.' );
 		echo '</p>';
-		echo '</div>';                
+		echo '</div>';            
+        }
+        
+	public function whitelist_settings_callback() {
+                SwpmUtils::e( 'This section allows you to configure whitelisting settings.' );
 	}
 
 	public function blacklist_settings_callback() {

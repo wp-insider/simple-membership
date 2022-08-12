@@ -143,7 +143,10 @@ class SwpmSelfActionHandler {
             //Block the registration
             if($is_whitelisted==false)
             {
-                $block_message_whitelist =SwpmUtils::_("The email address you used is blacklisted on this site.");                
+                $block_message_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-block-message' );
+                if(!$block_message_whitelist) {                
+                    $block_message_whitelist = SwpmUtils::_("The email address you used is not in whitelist of this site.");
+                }
 
                 SwpmLog::log_simple_debug( 'Registration blocked for user: '.$user_email.' , as it did not match any Whitelist rule.', true );
                 wp_die($block_message_whitelist);  
@@ -205,7 +208,10 @@ class SwpmSelfActionHandler {
             //Block the login
             if($is_whitelisted==false)
             {
-                $block_message_whitelist =SwpmUtils::_("The email address you used is blacklisted on this site.");                
+                $block_message_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-block-message' );
+                if(!$block_message_whitelist) {                
+                    $block_message_whitelist = SwpmUtils::_("The email address you used is not in whitelist of this site.");
+                }
 
                 SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' , as it did not match any Whitelist rule.', true );
                 wp_die($block_message_whitelist);  

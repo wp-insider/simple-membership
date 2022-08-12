@@ -931,6 +931,18 @@ class SwpmSettings {
 			)
 		);
 
+		add_settings_field(
+			'whitelist-block-message',
+			SwpmUtils::_( 'Whitelist Message Customization' ),
+			array( &$this, 'textarea_callback' ),
+			'simple_wp_membership_settings',
+			'whitelist-settings',
+			array(
+				'item'    => 'whitelist-block-message',
+				'message' => SwpmUtils::_( 'Enter the message you want to show to the user when the whitelisted condition is met. Leave it empty to use the default message.' ),
+			)
+		);     
+
 		/** BLACKLIST SETTINGS **/
 		add_settings_section( 'blacklist-settings', SwpmUtils::_( 'Blacklisting' ), array( &$this, 'blacklist_settings_callback' ), 'simple_wp_membership_settings' );
 
@@ -1346,6 +1358,7 @@ class SwpmSettings {
 		$output['enable-whitelisting'] = isset( $input['enable-whitelisting'] ) ? esc_attr( $input['enable-whitelisting'] ) : '';		
 		$output['whitelist-email-address'] = isset( $input['whitelist-email-address'] ) ? esc_attr( $input['whitelist-email-address'] ) : '';		
 		$output['whitelist-email-address-pattern'] = isset( $input['whitelist-email-address-pattern'] ) ? esc_attr( $input['whitelist-email-address-pattern'] ) : '';		
+		$output['whitelist-block-message'] = isset( $input['whitelist-block-message'] ) ? esc_attr( $input['whitelist-block-message'] ) : '';
 
 		$output['enable-blacklisting'] = isset( $input['enable-blacklisting'] ) ? esc_attr( $input['enable-blacklisting'] ) : '';		
 		$output['blacklist-email-address'] = isset( $input['blacklist-email-address'] ) ? esc_attr( $input['blacklist-email-address'] ) : '';		

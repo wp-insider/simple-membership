@@ -71,11 +71,20 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
-	$output .= SwpmMiscUtils::output_stripe_sca_frontend_scripts_once();
+	
+	//deprecated
+	//$output .= SwpmMiscUtils::output_stripe_sca_frontend_scripts_once();
+
+	wp_enqueue_script("swpm.stripe");
+	wp_enqueue_style("swpm.stripe");
+	
+	//initializing stripe for each button, right after loading stripe script
+	$stripe_js_obj="stripe_".$button_id;
+	wp_add_inline_script("swpm.stripe","var ".$stripe_js_obj." = Stripe('".esc_js( $api_keys['public'] )."');");
+	
 	ob_start();
 	?>
-	<script>
-		var stripe = Stripe('<?php echo esc_js( $api_keys['public'] ); ?>');
+	<script>		
 		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
 			e.preventDefault();
 			var btn = jQuery(this).find('button').attr('disabled', true);
@@ -86,7 +95,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 				'swpm_uniqid': '<?php echo esc_js( $uniqid ); ?>'
 				}).done(function (response) {
 					if (!response.error) {
-						stripe.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
+						<?php echo $stripe_js_obj;?>.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
 					});			
 					} else {
 						alert(response.error);
@@ -201,11 +210,20 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
-	$output .= SwpmMiscUtils::output_stripe_sca_frontend_scripts_once();
+	
+	//deprecated
+	//$output .= SwpmMiscUtils::output_stripe_sca_frontend_scripts_once();
+
+	wp_enqueue_script("swpm.stripe");
+	wp_enqueue_style("swpm.stripe");
+	
+	//initializing stripe for each button, right after loading stripe script
+	$stripe_js_obj="stripe_".$button_id;
+	wp_add_inline_script("swpm.stripe","var ".$stripe_js_obj." = Stripe('".esc_js( $api_keys['public'] )."');");
+
 	ob_start();
 	?>
-	<script>
-		var stripe = Stripe('<?php echo esc_js( $api_keys['public'] ); ?>');
+	<script>		
 		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
 			e.preventDefault();
 			var btn = jQuery(this).find('button').attr('disabled', true);
@@ -216,7 +234,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 				'swpm_uniqid': '<?php echo esc_js( $uniqid ); ?>'
 				}).done(function (response) {
 					if (!response.error) {
-						stripe.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
+						<?php echo $stripe_js_obj;?>.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
 					});			
 					} else {
 						alert(response.error);

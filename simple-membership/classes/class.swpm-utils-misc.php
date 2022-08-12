@@ -781,8 +781,12 @@ class SwpmMiscUtils {
 
 	/**
 	* Outputs Stripe SCA frontend scripts and styles once
+	* @deprecated
 	*/
 	public static function output_stripe_sca_frontend_scripts_once() {
+		
+		trigger_error(__METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
 		$out = '';
 		if ( ! self::$stripe_sca_frontend_scripts_printed ) {
 			$out                                      .= '<script src="https://js.stripe.com/v3/"></script>';

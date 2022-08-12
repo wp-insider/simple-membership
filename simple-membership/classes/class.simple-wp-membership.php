@@ -717,9 +717,9 @@ class SimpleWpMembership {
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.password-toggle', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-toggle.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         
-        //stripe
-        wp_register_script("swpm.stripe","https://js.stripe.com/v3/",array("jquery"));
-	    wp_register_style("swpm.stripe","https://checkout.stripe.com/v3/checkout/button.css");
+        //Stripe libraries
+        wp_register_script("swpm.stripe", "https://js.stripe.com/v3/", array("jquery"), SIMPLE_WP_MEMBERSHIP_VER);
+	wp_register_style("swpm.stripe.style", "https://checkout.stripe.com/v3/checkout/button.css", array(), SIMPLE_WP_MEMBERSHIP_VER);
     }
 
     public static function enqueue_validation_scripts($add_params = array()) {

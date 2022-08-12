@@ -76,7 +76,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	//$output .= SwpmMiscUtils::output_stripe_sca_frontend_scripts_once();
 
 	wp_enqueue_script("swpm.stripe");
-	wp_enqueue_style("swpm.stripe");
+	wp_enqueue_style("swpm.stripe.style");
 	
 	//initializing stripe for each button, right after loading stripe script
 	$stripe_js_obj="stripe_".$button_id;
@@ -215,7 +215,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	//$output .= SwpmMiscUtils::output_stripe_sca_frontend_scripts_once();
 
 	wp_enqueue_script("swpm.stripe");
-	wp_enqueue_style("swpm.stripe");
+	wp_enqueue_style("swpm.stripe.style");
 	
 	//initializing stripe for each button, right after loading stripe script
 	$stripe_js_obj="stripe_".$button_id;

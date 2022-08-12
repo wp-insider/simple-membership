@@ -139,13 +139,15 @@ class SwpmSelfActionHandler {
                 }
             }
 
-             //If whitelist is enabled and user email doesn't match any whitelist rule.
+            //Trigger a filter hook so it can be overriden from an addon
+            $is_whitelisted = apply_filters( 'swpm_email_not_whitelisted_before_registration_block', $is_whitelisted, $user_email);
+
+            //If whitelisting is enabled and the user email doesn't match any whitelisting rule.
             //Block the registration
-            if($is_whitelisted==false)
-            {
+            if($is_whitelisted==false) {
                 $block_message_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-block-message' );
-                if(!$block_message_whitelist) {                
-                    $block_message_whitelist = SwpmUtils::_("The email address you used is not in whitelist of this site.");
+                if( !isset($block_message_whitelist) || empty($block_message_whitelist) ) {
+                    $block_message_whitelist = SwpmUtils::_("The email address you used is not whitelisted on this site.");
                 }
 
                 SwpmLog::log_simple_debug( 'Registration blocked for user: '.$user_email.', as it did not match any whitelisting rule.', true );
@@ -204,13 +206,15 @@ class SwpmSelfActionHandler {
                 }
             }
 
+            //Trigger a filter hook so it can be overriden from an addon
+            $is_whitelisted = apply_filters( 'swpm_email_not_whitelisted_before_login_block', $is_whitelisted, $user_email);
+            
             //If whitelist is enabled and user email doesn't match any whitelist rule.
             //Block the login
-            if($is_whitelisted==false)
-            {
+            if($is_whitelisted==false) {
                 $block_message_whitelist = SwpmSettings::get_instance()->get_value( 'whitelist-block-message' );
-                if(!$block_message_whitelist) {                
-                    $block_message_whitelist = SwpmUtils::_("The email address you used is not in whitelist of this site.");
+                if( !isset($block_message_whitelist) || empty($block_message_whitelist) ) {
+                    $block_message_whitelist = SwpmUtils::_("The email address you used is not whitelisted on this site.");
                 }
 
                 SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.', as it did not match any whitelisting rule.', true );

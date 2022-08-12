@@ -16,6 +16,12 @@ if(isset($_REQUEST['recreate-required-pages-submit'])){
 ?>
 <div id="poststuff">
     <div id="post-body">
+        
+    <div class="swpm-grey-box">
+    <p>
+    <?php echo SwpmUtils::_("This interface contains useful tools for various admin operations.") ?>
+    </p>
+    </div>
 
         <div class="postbox">
             <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Generate a Registration Completion link') ?></label></h3>

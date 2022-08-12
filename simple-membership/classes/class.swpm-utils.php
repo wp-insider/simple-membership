@@ -603,6 +603,32 @@ abstract class SwpmUtils {
                 return false;
         }
         
+        public static function get_fb_rego_email_field_value(){
+            if ( !isset($_POST[ 'form_id' ]) ){
+                return '';
+            }
+            $fb_email = '';
+            $form_id = absint( $_POST[ 'form_id' ] );
+            if ( !empty($form_id) ){
+                //This is a form builder form. Get the email address for this custom form.
+                if ( !class_exists('SwpmFbForm') ){
+                    return '';
+                }
+                $fb_form = new SwpmFbForm();
+                $fb_form->init_by_id( $form_id );
+                foreach ( $fb_form->formmeta->fields as $field ){
+                    if ( !isset($field->key) || !is_string($field->key)){
+                        continue;
+                    }
+                    if( $field->key == 'primary_email' ){
+                        $fb_email = $fb_form->get_field_value($field);
+                        break;
+                    }
+                }
+            }
+            return $fb_email;
+        }
+        
 	public static function csv_equal_match( $needle, $haystack_csv ) {
 		//converting to lowercase
 		if($haystack_csv && strlen($haystack_csv)>0) {

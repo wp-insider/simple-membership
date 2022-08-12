@@ -113,16 +113,27 @@ class SwpmSelfActionHandler {
     public function handle_whitelist_blacklist_registration()
     {
         //Check if registration form has been submitted
-        if ( !SwpmUtils::is_rego_form_submitted()){
-            return true;
+        if ( !SwpmUtils::is_rego_form_submitted() ){
+            return;
         }
         
         //Get the email address
-        $user_email = SwpmMemberUtils::get_sanitized_email($_POST["email"]);
-        if(!$user_email) {
+        $user_email = '';
+        if ( isset ($_POST["email"]) ){
+            //Core plugin's rego form
+            $user_email = SwpmMemberUtils::get_sanitized_email($_POST["email"]);
+        } else {
+            $fb_email = SwpmUtils::get_fb_rego_email_field_value();
+            if ( !empty($fb_email) ){
+                //Form builder's rego form
+                $user_email = SwpmMemberUtils::get_sanitized_email($fb_email);
+            }
+        }
+        if( empty($user_email) ) {
             return;
         }
 
+        //Check whitelsting and blacklisting settings
         if(SwpmSettings::get_instance()->get_value( 'enable-whitelisting' )) {
             $is_whitelisted=false;
 

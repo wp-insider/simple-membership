@@ -14,11 +14,8 @@ class SwpmSelfActionHandler {
         add_filter('swpm_after_logout_redirect_url', array(&$this, 'handle_after_logout_redirection'));
         add_filter('swpm_auth_cookie_expiry_value', array(&$this, 'handle_auth_cookie_expiry_value'));
 
-        add_action("swpm_front_end_registration_form_submitted",array(&$this, 'handle_whitelist_blacklist_registration'));
-        add_action("swpm_before_login_request_is_processed",array(&$this, 'handle_whitelist_blacklist_login'));
-        
-        
-        
+        add_action("swpm_do_init_time_tasks_front_end", array(&$this, 'handle_whitelist_blacklist_registration'));
+        add_action("swpm_before_login_request_is_processed", array(&$this, 'handle_whitelist_blacklist_login'));
     }
 
     public function handle_auth_cookie_expiry_value($expire){
@@ -115,6 +112,12 @@ class SwpmSelfActionHandler {
 
     public function handle_whitelist_blacklist_registration()
     {
+        //Check if registration form has been submitted
+        if ( !SwpmUtils::is_rego_form_submitted()){
+            return true;
+        }
+        
+        //Get the email address
         $user_email = SwpmMemberUtils::get_sanitized_email($_POST["email"]);
         if(!$user_email) {
             return;

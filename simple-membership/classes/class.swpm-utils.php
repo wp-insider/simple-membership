@@ -589,37 +589,42 @@ abstract class SwpmUtils {
 		return $output;
 	}
 
+        public static function is_rego_form_submitted(){
+                if ( isset( $_POST[ 'swpm_registration_submit' ] ) ){
+                    //Core plugin's registration form submitted
+                    return true;
+                }
+                
+                if ( isset( $_POST[ 'swpm-fb-submit' ] ) ){
+                    //Form builder form submission.
+                    return true;
+                }
+                
+                return false;
+        }
+        
 	public static function csv_equal_match( $needle, $haystack_csv ) {
-		
 		//converting to lowercase
-		if($haystack_csv && strlen($haystack_csv)>0)
-		{
+		if($haystack_csv && strlen($haystack_csv)>0) {
 			$haystack_csv = strtolower($haystack_csv);
 			$haystack_csv_array = explode(",",$haystack_csv);
 	
-			foreach($haystack_csv_array as $value)
-			{
-				if(trim($needle)==trim($value))
-				{
+			foreach($haystack_csv_array as $value) {
+				if(trim($needle)==trim($value)) {
 					return true;
 				}
 			}
 		}
-		
 		return false;
 	}
 
 	
 	public static function csv_pattern_match( $needle, $haystack_csv ) {
-		
-		if($haystack_csv && strlen($haystack_csv)>0)
-		{
-			if(stripos($needle,$haystack_csv)!==false)
-			{
+		if($haystack_csv && strlen($haystack_csv)>0) {
+			if(stripos($needle,$haystack_csv)!==false) {
 				return true;
 			}
 		}
-		
 		return false;
 	}
 

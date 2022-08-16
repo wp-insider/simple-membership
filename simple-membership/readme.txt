@@ -166,6 +166,7 @@ https://simple-membership-plugin.com/
 - The member search option in the members interface will now work correctly with names containing apostrophe character.
 - Added a new filter hook in the password reset function: swpm_password_reset_generated_pass
 - Optimized the Stripe library loading for Stripe payment buttons so it can work with the partial protection addon.
+- If after login redirection addon is not used, the redirection after login will be sent to the current page instead of the home URL.
 
 = 4.1.6 =
 - Added a new action hook - swpm_front_end_edit_profile_form_submitted.

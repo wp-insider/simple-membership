@@ -321,7 +321,13 @@ class SimpleWpMembership {
         SwpmLog::log_auth_debug("Triggering swpm_after_login hook.", true);
         do_action('swpm_after_login');
         if (!SwpmUtils::is_ajax()) {
-            $redirect_url = apply_filters('swpm_after_login_redirect_url', SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL);
+            //Redirection after login to make sure the page loads with all the correct variables set everywhere.
+            $redirect_url = SwpmMiscUtils::get_current_page_url();
+            if(empty($redirect_url)){
+                $redirect_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+            }
+            $redirect_url = apply_filters('swpm_after_login_redirect_url', $redirect_url);
+            SwpmLog::log_auth_debug("After triggering the default swpm_after_login_redirect_url hook. Redirect URL: ". $redirect_url, true);
             wp_redirect($redirect_url);
             exit(0);
         }

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.0
-Stable tag: 4.1.6
+Stable tag: 4.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,8 @@ You can create a free forum user account and ask your questions.
 * Option to make the users agree to your privacy policy before they can register for a member account.
 * Option to automatically logout the members when they close the browser.
 * Ability to forward the payment notification to an external URL for further processing.
+* Option to configure whitelisting for user email addresses to allow registration only from specific email addresses or email domains.
+* Option to configure blacklisting for user email addresses to block registration from certain email addresses or email domains.
 
 = Language Translations =
 
@@ -161,8 +163,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.1.7 =
-- [TODO-more] Blacklisting & Whitelisting feature.
+= 4.1.7 =
+- Added a new Blacklisting & Whitelisting feature. [Usage documentation here](https://simple-membership-plugin.com/blacklisting-whitelisting-feature/)
 - The member search option in the members interface will now work correctly with names containing apostrophe character.
 - Added a new filter hook in the password reset function: swpm_password_reset_generated_pass
 - Optimized the Stripe library loading for Stripe payment buttons so it can work with the partial protection addon.

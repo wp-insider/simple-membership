@@ -33,8 +33,19 @@ class SwpmLog {
 		}
 		self::gen_log_file_names();
 		$log_file = 'd' === $type ? self::$log_file : self::$log_auth_file;
+                $log_file_full_path = SIMPLE_WP_MEMBERSHIP_PATH . $log_file;
+                
+		if ( ! file_exists( $log_file_full_path ) ) {
+                        $log_file_missing_msg = '<p>Could not find the log file. Reset the log file from the settings menu to regenerate it then try again. You can find the Reset Debug Log option in the Debug Settings section.</p>';
+                        $log_file_missing_msg .= '<p>If it still fails to open the log file after that, check if the plugin directory (' . SIMPLE_WP_MEMBERSHIP_PATH . ') is writeable on your server.</p>';
+                        wp_die( $log_file_missing_msg );
+		}
 
-		$fp = fopen( SIMPLE_WP_MEMBERSHIP_PATH . $log_file, 'r' );
+                //Open the log file
+		$fp = fopen( $log_file_full_path, 'rb' );
+		if ( ! $fp ) {
+			wp_die( 'Can\'t open the log file.' );
+		}
 		header( 'Content-Type: text/plain' );
 		fpassthru( $fp );
 		die;

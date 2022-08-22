@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.0
-Stable tag: 4.1.7
+Stable tag: 4.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -162,6 +162,9 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 4.1.8 =
+- Improved the view debug log operation to check if the file exists before trying to open the file. If the file doesn't exist, it will show a message to reset the debug file.
 
 = 4.1.7 =
 - Added a new Blacklisting & Whitelisting feature. [Usage documentation here](https://simple-membership-plugin.com/blacklisting-whitelisting-feature/)

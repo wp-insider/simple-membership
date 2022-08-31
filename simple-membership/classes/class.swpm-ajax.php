@@ -8,6 +8,8 @@ class SwpmAjax {
     public static function validate_email_ajax() {
         global $wpdb;
         $field_value = isset($_GET['fieldValue']) ? sanitize_text_field($_GET['fieldValue']) : '';
+        $field_value = stripslashes($field_value);//Clean the email address value (so it can work with values like: test.de'souz@exaple.com)
+        
         $field_id = isset($_GET['fieldId']) ? sanitize_text_field($_GET['fieldId']) : '';
         $member_id = isset($_GET['member_id']) ? sanitize_text_field($_GET['member_id']) : '';
         if (!check_ajax_referer( 'swpm-rego-form-ajax-nonce', 'nonce', false )) {

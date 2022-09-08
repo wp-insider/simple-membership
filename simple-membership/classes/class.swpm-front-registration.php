@@ -221,6 +221,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		unset( $member_info['plain_password'] );
 
 		if ( SwpmUtils::is_paid_registration() ) {
+                        //Remove any empty values from the array. This will preserve address information if it was received via the payment gateway.
+                        $member_info = array_filter($member_info);
+
+                        //Handle DB insert for paid registration scenario.
 			$member_info['reg_code'] = '';
 			$member_id               = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
 			$code                    = filter_input( INPUT_GET, 'code', FILTER_SANITIZE_STRING );

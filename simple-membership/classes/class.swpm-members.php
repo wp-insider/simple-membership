@@ -59,7 +59,8 @@ class SwpmMembers extends WP_List_Table {
 	}
 
 	function column_default( $item, $column_name ) {
-		$column_data = apply_filters( 'swpm_admin_members_table_column_' . $column_name, $item[ $column_name ], $item );
+                $column_value = isset( $item[ $column_name ] ) ? $item[ $column_name ] : '';
+		$column_data = apply_filters( 'swpm_admin_members_table_column_' . $column_name, $column_value, $item );
 		return $column_data;
 	}
 

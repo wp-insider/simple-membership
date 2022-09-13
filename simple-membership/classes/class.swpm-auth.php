@@ -260,8 +260,14 @@ class SwpmAuth {
 
 		$expire = apply_filters( 'swpm_auth_cookie_expiry_value', $expire );
 
-		setcookie( 'swpm_in_use', 'swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );
-
+		setcookie( 'swpm_in_use', 'swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Switch this to the following one.
+                setcookie( 'wp_swpm_in_use', 'swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Prefix the cookie with 'wp' to exclude Batcache caching.
+                if ( function_exists( 'wp_cache_serve_cache_file' ) ) {//WP Super cache workaround
+                    $author_value = isset( $this->userData->user_name ) ? $this->userData->user_name : 'wp_swpm';
+                    $author_value = apply_filters( 'swpm_comment_author_cookie_value', $author_value );
+                    setcookie( "comment_author_", $author_value, $expire, COOKIEPATH, COOKIE_DOMAIN );
+                }
+                
 		$expiration_timestamp = SwpmUtils::get_expiration_timestamp( $this->userData );
 		$enable_expired_login = SwpmSettings::get_instance()->get_value( 'enable-expired-account-login', '' );
 		// make sure cookie doesn't live beyond account expiration date.

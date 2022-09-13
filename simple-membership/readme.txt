@@ -166,6 +166,8 @@ https://simple-membership-plugin.com/
 = WIP 4.1.9 =
 - Allow apostrophe character in the email address field of the registration form.
 - Preserve address information of a profile when submitting the registration form (if the data was received from the payment gateway).
+- Added a workaround for sites using the Batcache caching system.
+- Updated the swpm_admin_members_table_column_<column_name> filter hook to check if the column value exists.
 
 = 4.1.8 =
 - Improved the view debug log operation to check if the file exists before trying to open the file. If the file doesn't exist, it will show a message to reset the debug file.

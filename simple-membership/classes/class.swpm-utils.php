@@ -630,9 +630,9 @@ abstract class SwpmUtils {
         }
         
 	public static function csv_equal_match( $needle, $haystack_csv ) {
-		//converting to lowercase
 		if($haystack_csv && strlen($haystack_csv)>0) {
-			$haystack_csv = strtolower($haystack_csv);
+                        //Converting to lowercase for better matching
+			$haystack_csv = strtolower($haystack_csv); 
 			$haystack_csv_array = explode(",",$haystack_csv);
 	
 			foreach($haystack_csv_array as $value) {
@@ -647,9 +647,17 @@ abstract class SwpmUtils {
 	
 	public static function csv_pattern_match( $needle, $haystack_csv ) {
 		if($haystack_csv && strlen($haystack_csv)>0) {
-			if(stripos($needle,$haystack_csv)!==false) {
-				return true;
-			}
+                        //For pattern match, we need to check if any of the individual pattern matches with any part/full of the entered user email address.
+                        $user_email_address = $needle;//We need to search each pattern entry within this user email address value to see if there is any match.
+			$haystack_csv = strtolower($haystack_csv);
+			$haystack_csv_array = explode(",",$haystack_csv);
+                        foreach($haystack_csv_array as $findme) {
+                            $findme = trim($findme);
+                            if(stripos($user_email_address, $findme)!==false) {
+                                    //Found a match for the pattern.
+                                    return true;
+                            }
+                        }
 		}
 		return false;
 	}

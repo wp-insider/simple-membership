@@ -64,7 +64,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	//Return, cancel, notifiy URLs
 	$notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_buy_now=1&ref_id=' . $ref_id; //We are going to use it to do post payment processing.
 
-	$current_url = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $current_url = SwpmMiscUtils::get_current_page_url();
 
 	/* === Stripe Buy Now Button Form === */
 	$output  = '';
@@ -201,7 +201,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	//Return, cancel, notifiy URLs
 	$notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_subscription=1&ref_id=' . $ref_id; //We are going to use it to do post payment processing.
 
-	$current_url = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+	$current_url = SwpmMiscUtils::get_current_page_url();
 
 	$plan_id = get_post_meta( $button_id, 'stripe_plan_id', true );
 

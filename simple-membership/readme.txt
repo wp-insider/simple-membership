@@ -169,6 +169,7 @@ https://simple-membership-plugin.com/
 - Added a workaround for sites using the Batcache caching system.
 - Updated the swpm_admin_members_table_column_<column_name> filter hook to check if the column value exists.
 - Fixed an issue with the email address whitelisting pattern feature.
+- Improved how the current_page URL value is retrieved for the Stripe payment buttons.
 
 = 4.1.8 =
 - Improved the view debug log operation to check if the file exists before trying to open the file. If the file doesn't exist, it will show a message to reset the debug file.

@@ -238,6 +238,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             );
             array_push($addons_data, $addon_28);
 
+            $addon_29 = array(
+                'name' => 'MailerLite Integration',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-mailerlite-integration.png',
+                'description' => 'Allows you to automatically signup your members to a group in your MailerLite account.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-mailerlite-integration-addon/',
+            );
+            array_push($addons_data, $addon_29);
+            
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {
                 $output .= '<div class="swpm_addon_item_canvas">';

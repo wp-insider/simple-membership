@@ -261,7 +261,7 @@ class SwpmAuth {
 		$expire = apply_filters( 'swpm_auth_cookie_expiry_value', $expire );
 
 		setcookie( 'swpm_in_use', 'swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Switch this to the following one.
-                setcookie( 'wp_swpm_in_use', 'swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Prefix the cookie with 'wp' to exclude Batcache caching.
+                setcookie( 'wp_swpm_in_use', 'wp_swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Prefix the cookie with 'wp' to exclude Batcache caching.
                 if ( function_exists( 'wp_cache_serve_cache_file' ) ) {//WP Super cache workaround
                     $author_value = isset( $this->userData->user_name ) ? $this->userData->user_name : 'wp_swpm';
                     $author_value = apply_filters( 'swpm_comment_author_cookie_value', $author_value );

@@ -414,7 +414,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
                 //Trigger a hook
                 $password = apply_filters( 'swpm_password_reset_generated_pass', $password );
 
-		$password_hash = SwpmUtils::encrypt_password( trim( $password ) ); //should use $saned??;
+		$password_hash = SwpmUtils::encrypt_password( trim( $password ) );
 		$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'password' => $password_hash ), array( 'member_id' => $user->member_id ) );
 
 		//Update wp user password

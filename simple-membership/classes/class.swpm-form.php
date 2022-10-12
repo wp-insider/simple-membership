@@ -88,7 +88,7 @@ class SwpmForm {
                 $this->errors['password'] = SwpmUtils::_('Password mismatch');
             }
             $this->sanitized['plain_password'] = $password;
-            $this->sanitized['password'] = SwpmUtils::encrypt_password(trim($password)); //should use $saned??;
+            $this->sanitized['password'] = SwpmUtils::encrypt_password(trim($saned));
         }
     }
 

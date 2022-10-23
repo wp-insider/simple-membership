@@ -319,34 +319,42 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 		try {
 			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
+			\Stripe\Stripe::setApiVersion("2022-08-01");
 
 			if ( empty( $plan_id ) ) {
 				//this is one-off payment
 				$opts = array(
 					'payment_method_types'       => array( 'card' ),
 					'client_reference_id'        => $ref_id,
-					'billing_address_collection' => $billing_address ? 'required' : 'auto',
-					'line_items'                 => array(
+					'billing_address_collection' => $billing_address ? 'required' : 'auto',					
+					'line_items' => array(
 						array(
-							'name'        => $item_name,
-							'description' => $payment_amount_formatted,
-							'amount'      => $price_in_cents,
-							'currency'    => $payment_currency,
-							'quantity'    => 1,
-						),
-					),
+							'price_data'  => array(
+								'currency' => $payment_currency,
+								'unit_amount'      => $price_in_cents,
+								'product_data' => array(
+									'name'        => $item_name,
+									'description' => $payment_amount_formatted,
+								),
+							),
+							'quantity'    => 1
+						)
+					),					
+					'mode' => 'payment',
 					'success_url'                => $notify_url,
 					'cancel_url'                 => $current_url,
 				);
 			} else {
 				//this is subscription payment
 				$opts = array(
-					'payment_method_types'       => array( 'card' ),
+					'payment_method_types'       => array('card'),
 					'client_reference_id'        => $ref_id,
-					'billing_address_collection' => $billing_address ? 'required' : 'auto',
-					'subscription_data'          => array(
-						'items' => array( array( 'plan' => $plan_id ) ),
-					),
+					'billing_address_collection' => $billing_address ? 'required' : 'auto',					
+					'line_items' => array(
+						array(
+						'price' => $plan_id						
+					)),
+					'mode' => 'subscription',
 					'success_url'                => $notify_url,
 					'cancel_url'                 => $current_url,
 				);
@@ -359,7 +367,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 			}
 
 			if ( ! empty( $item_logo ) ) {
-				$opts['line_items'][0]['images'] = array( $item_logo );
+				$opts['line_items'][0]["product_data"]['images'] = array( $item_logo );
 			}
 
 			if ( ! empty( $member_email ) ) {

@@ -352,8 +352,11 @@ class SwpmStripeSCABuyNowIpnHandler {
 					'billing_address_collection' => $billing_address ? 'required' : 'auto',					
 					'line_items' => array(
 						array(
-						'price' => $plan_id						
-					)),
+						'price' => $plan_id,
+						'quantity'    => 1
+						),
+						
+				),
 					'mode' => 'subscription',
 					'success_url'                => $notify_url,
 					'cancel_url'                 => $current_url,

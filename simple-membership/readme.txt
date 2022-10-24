@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.0
-Stable tag: 4.1.8
+Stable tag: 4.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,7 +163,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.1.9 =
+= 4.1.9 =
+- Stripe Button's code updated to use the latest Stripe API version.
 - Allow apostrophe character in the email address field of the registration form.
 - Preserve address information of a profile when submitting the registration form (if the data was received from the payment gateway).
 - Added a workaround for sites using the Batcache caching system.

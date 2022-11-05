@@ -80,7 +80,8 @@ class SwpmBraintreeBuyNowIpnHandler {
         }
 
         if (!$result->success) {
-            SwpmLog::log_simple_debug("Braintree transaction error occurred: " . $result->transaction->status . ", button ID: " . $button_id, false);
+            
+            SwpmLog::log_simple_debug("Braintree transaction error occurred: " . $result->transaction->status . ", message: ".$result->message."  , button ID: " . $button_id, false);
             wp_die("Braintree transaction error occurred: " . $result->transaction->status);
         } else {
 

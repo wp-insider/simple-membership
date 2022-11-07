@@ -40,7 +40,7 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     $payment_amount = round($payment_amount, 2); //round the amount to 2 decimal place.
     $payment_currency = get_post_meta($button_id, 'currency_code', true);
 
-    $payment_amount_formatted = SwpmMiscUtils::format_money($payment_amount,$payment_currency);
+    $payment_amount_formatted = SwpmMiscUtils::format_money($payment_amount, $payment_currency);
 
     //Return, cancel, notifiy URLs
     $return_url = get_post_meta($button_id, 'return_url', true);
@@ -107,140 +107,89 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     if (!empty($coupon_input)) {
         $output .= $coupon_input;
     }
-    $output .= '<div id="swpm-braintree-amount-container-' . $uniqid . '" class="swpm-braintree-amount-container"><p>' . $payment_amount_formatted.'</p></div>';
+    $output .= '<div id="swpm-braintree-amount-container-' . $uniqid . '" class="swpm-braintree-amount-container"><p>' . $payment_amount_formatted . '</p></div>';
     $output .= '</div>';
     $output .= '<button id="swpm-show-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-show-form-button-' . $button_id . ' ' . $class . '" type="button" onclick="swpm_braintree_show_form_' . $uniqid . '();"><span>' . $button_text . '</span></button>';
     $output .= '<button id="swpm-submit-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-submit-form-button-' . $button_id . ' ' . $class . '" type="submit" style="display: none;"><span>' . $button_text . '</span></button>';
-    //$output .= '<script src="https://js.braintreegateway.com/js/braintree-2.32.1.min.js"></script>';
-    $output .= '<script src="https://js.braintreegateway.com/web/3.88.2/js/client.min.js"></script>';
-    $output .= '<script src="https://js.braintreegateway.com/web/dropin/1.33.4/js/dropin.min.js"></script>';
-    $output .= '<script src="https://js.braintreegateway.com/web/3.34.0/js/three-d-secure.min.js"></script>';
     
+    $output .= '<script src="https://js.braintreegateway.com/web/3.88.2/js/client.min.js"></script>';
+    $output .= '<script src="https://js.braintreegateway.com/web/dropin/1.33.4/js/dropin.min.js"></script>';    
+
 
     ob_start();
-    ?>
+?>
+    <style>
+        .braintree-sheet__content--form .braintree-form__flexible-fields{
+            display:inherit;
+        }
+    </style>
     <script>
         function swpm_braintree_show_form__uniqid_() {
             document.getElementById('swpm-show-form-btn-_uniqid_').style.display = "none";
             document.getElementById('swpm-submit-form-btn-_uniqid_').style.display = "block";
             document.getElementById('swpm-form-cont-_uniqid_').style.display = "block";
             var clientToken = '_token_';
-            
             var submitButton = document.getElementById('swpm-submit-form-btn-_uniqid_');
-            var threeDSecure;
             var form = document.getElementById('swpm-braintree-payment-form-_uniqid_');
             var additional_fields = document.getElementById('swpm-braintree-additional-fields-container-_uniqid_');
-
             var amount = form.querySelector('[name="item_price"]').value;
-            var first_name = additional_fields.querySelector('[name="first_name"]').value;
-            var last_name = additional_fields.querySelector('[name="last_name"]').value;
-            var member_email = additional_fields.querySelector('[name="member_email"]').value;
-       
-            first_name="";
-            last_name="";
-            member_email="";
 
-      braintree.dropin.create({
-        authorization: clientToken,
-        container: '#swpm-form-cont-_uniqid_',
-        threeDSecure: true
-      }, function (err, dropinInstance) {
+            //creating dropin
+            braintree.dropin.create({
+                authorization: clientToken,
+                container: '#swpm-form-cont-_uniqid_',
+                threeDSecure: true
+            }, function(err, dropinInstance) {                
+                if (err) {
+                    // Handle any errors that might've occurred when creating Drop-in
+                    console.error(err);
+                    alert("Error creating payment form. Try again or check console logs");
+                    return;
+                }
 
-        if (err) {
-          // Handle any errors that might've occurred when creating Drop-in
-          console.error(err);
-          alert("error");
-          return;
-        }
+                document.getElementById('swpm-braintree-additional-fields-container-_uniqid_').style.display = "block";
 
-        document.getElementById('swpm-braintree-additional-fields-container-_uniqid_').style.display = "block";
-       
-        submitButton.addEventListener('click', function () {
-           
-            
-            
-            
-            
+                submitButton.addEventListener('click', function(e) {
+                    e.preventDefault();
 
-          dropinInstance.requestPaymentMethod({
-            threeDSecure:{
-            amount: amount,
-            email: member_email,
-            billingAddress: {
-                givenName: first_name, // ASCII-printable characters required, else will throw a validation error
-                surname: last_name, // ASCII-printable characters required, else will throw a validation error    
-                }  
-            }
-          },function (err, payload) {
-            if (err) {
-              // Handle errors in requesting payment method
-              console.log(err);
-              alert(err);
-            }
-            
-            
-            console.log(payload);
-            document.getElementById('swpm-submit-form-btn-_uniqid_').disabled = true;
-                    
-                    if (payload.type !== 'CreditCard') {
+                    var first_name = additional_fields.querySelector('[name="first_name"]').value;
+                    var last_name = additional_fields.querySelector('[name="last_name"]').value;
+                    var member_email = additional_fields.querySelector('[name="member_email"]').value;
+
+                    dropinInstance.requestPaymentMethod({
+                        threeDSecure: {
+                            amount: amount,
+                            email: member_email,
+                            billingAddress: {
+                                givenName: first_name,
+                                surname: last_name,
+                            }
+                        }
+                    }, function(err, payload) {
+                        if (err) {
+                            // Handle errors in requesting payment method
+                            console.log(err);
+                            document.getElementById('swpm-submit-form-btn-_uniqid_').disabled = false;
+                            alert("Error in requesting payment. Try again or check console logs");
+                        }
+                        
+                        document.getElementById('swpm-submit-form-btn-_uniqid_').disabled = true;
+
+                        if (payload.type !== 'CreditCard') {
+                            document.getElementById('swpm-braintree-nonce-field-_uniqid_').value = payload.nonce;
+                            document.getElementById('swpm-braintree-payment-form-_uniqid_').submit();
+                            return true;
+                        }
+                        
                         document.getElementById('swpm-braintree-nonce-field-_uniqid_').value = payload.nonce;
                         document.getElementById('swpm-braintree-payment-form-_uniqid_').submit();
-                        return true;
-                    }
-                    
-                    //liabilityShifted indicates that 3D Secure worked and authentication succeeded.
-                    //This will also be true if the issuing bank does not support 3D Secure,
-                    //but the payment method does. In both cases, the liability for fraud has been shifted to the bank.
-                    if (payload.liabilityShifted) {
-                        console.log('Liability shifted', payload);            
-                        document.getElementById('swpm-braintree-nonce-field-_uniqid_').value = payload.nonce;
-                        document.getElementById('swpm-braintree-payment-form-_uniqid_').submit();                    
-                    }
-                    else{
-                        alert(err.message);
-                            document.getElementById('swpm-submit-form-btn-_uniqid_').disabled = false;
-                            return false;
-                    }            
-          });
-        });
-      });
+                    });
+                });
+            });
 
-
-            // braintree.setup(clientToken, 'dropin', {
-            //     container: 'swpm-form-cont-_uniqid_',                
-            //     onReady: function(obj) {
-            //         document.getElementById('swpm-braintree-additional-fields-container-_uniqid_').style.display = "block";
-            //     },
-            //     onPaymentMethodReceived: function(obj) {
-            //         document.getElementById('swpm-submit-form-btn-_uniqid_').disabled = true;
-            //         var client = new braintree.api.Client({
-            //             clientToken: clientToken
-            //         });
-            //         if (obj.type !== 'CreditCard') {
-            //             document.getElementById('swpm-braintree-nonce-field-_uniqid_').value = obj.nonce;
-            //             document.getElementById('swpm-braintree-payment-form-_uniqid_').submit();
-            //             return true;
-            //         }
-            //         var form = document.getElementById('swpm-braintree-payment-form-_uniqid_');
-            //         var amount = form.querySelector('[name="item_price"]').value;
-            //         client.verify3DS({
-            //             amount: amount,
-            //             creditCard: obj.nonce
-            //         }, function(err, response) {
-            //             if (!err) {
-            //                 document.getElementById('swpm-braintree-nonce-field-_uniqid_').value = response.nonce;
-            //                 document.getElementById('swpm-braintree-payment-form-_uniqid_').submit();
-            //             } else {
-            //                 alert(err.message);
-            //                 document.getElementById('swpm-submit-form-btn-_uniqid_').disabled = false;
-            //                 return false;
-            //             }
-            //         });
-            //     }
-            // });
         }
     </script>
-    <?php
+<?php
 
     $scr = ob_get_clean();
     $scr = str_replace(array('_uniqid_', '_token_', '_amount_'), array($uniqid, $clientToken, $payment_amount), $scr);

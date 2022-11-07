@@ -60,11 +60,14 @@ class SwpmBraintreeBuyNowIpnHandler {
 
             $braintree_merc_acc_name = get_post_meta($button_id, 'braintree_merchant_acc_name', true);
 
+            
 
             // Create the charge on Braintree's servers - this will charge the user's card
 
             $nonce = sanitize_text_field($_POST['payment_method_nonce']);
 
+
+      
             $result = Braintree_Transaction::sale([
                         'amount' => $payment_amount,
                         'paymentMethodNonce' => $nonce,
@@ -80,6 +83,7 @@ class SwpmBraintreeBuyNowIpnHandler {
         }
 
         if (!$result->success) {
+            
             
             SwpmLog::log_simple_debug("Braintree transaction error occurred: " . $result->transaction->status . ", message: ".$result->message."  , button ID: " . $button_id, false);
             wp_die("Braintree transaction error occurred: " . $result->transaction->status);

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 4.1.9
+Stable tag: 4.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -162,6 +162,10 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 4.2.0 =
+- Braintree SDK updated for the Braintree payment gateway.
+- Google reCAPTCHA enterprise option is now [available as a free addon](https://simple-membership-plugin.com/simple-membership-google-recaptcha-enterprise-option/).
 
 = 4.1.9 =
 - Stripe Button's code updated to use the latest Stripe API version.

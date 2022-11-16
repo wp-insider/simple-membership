@@ -1300,25 +1300,25 @@ class SwpmSettings {
 		$output                              = $this->settings;
 		$output['reg-complete-mail-subject'] = sanitize_text_field( $input['reg-complete-mail-subject'] );
 
-		$output['reg-complete-mail-body']          = $input['reg-complete-mail-body'];
+		$output['reg-complete-mail-body']          = wp_kses_post( $input['reg-complete-mail-body'] );
 		$output['reg-complete-mail-subject-admin'] = sanitize_text_field( $input['reg-complete-mail-subject-admin'] );
-		$output['reg-complete-mail-body-admin']    = $input['reg-complete-mail-body-admin'];
+		$output['reg-complete-mail-body-admin']    = wp_kses_post( $input['reg-complete-mail-body-admin'] );
 
 		$output['reset-mail-subject'] = sanitize_text_field( $input['reset-mail-subject'] );
-		$output['reset-mail-body']    = $input['reset-mail-body'];
+		$output['reset-mail-body']    = wp_kses_post( $input['reset-mail-body'] );
 
 		$output['upgrade-complete-mail-subject'] = sanitize_text_field( $input['upgrade-complete-mail-subject'] );
-		$output['upgrade-complete-mail-body']    = $input['upgrade-complete-mail-body'];
+		$output['upgrade-complete-mail-body']    = wp_kses_post( $input['upgrade-complete-mail-body'] );
 		$output['disable-email-after-upgrade']   = isset( $input['disable-email-after-upgrade'] ) ? esc_attr( $input['disable-email-after-upgrade'] ) : '';
 
 		$output['bulk-activate-notify-mail-subject'] = sanitize_text_field( $input['bulk-activate-notify-mail-subject'] );
-		$output['bulk-activate-notify-mail-body']    = $input['bulk-activate-notify-mail-body'];
+		$output['bulk-activate-notify-mail-body']    = wp_kses_post( $input['bulk-activate-notify-mail-body'] );
 
 		$output['email-activation-mail-subject'] = sanitize_text_field( $input['email-activation-mail-subject'] );
-		$output['email-activation-mail-body']    = $input['email-activation-mail-body'];
+		$output['email-activation-mail-body']    = wp_kses_post( $input['email-activation-mail-body'] );
 
 		$output['reg-prompt-complete-mail-subject'] = sanitize_text_field( $input['reg-prompt-complete-mail-subject'] );
-		$output['reg-prompt-complete-mail-body']    = $input['reg-prompt-complete-mail-body'];
+		$output['reg-prompt-complete-mail-body']    = wp_kses_post( $input['reg-prompt-complete-mail-body'] );
 		$output['email-from']                       = trim( $input['email-from'] );
 		$output['email-enable-html']                = isset( $input['email-enable-html'] ) ? esc_attr( $input['email-enable-html'] ) : '';
 

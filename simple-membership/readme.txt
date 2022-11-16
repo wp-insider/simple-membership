@@ -163,6 +163,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.2.1 =
+- Added sanitization to the email body fields.
+
 = 4.2.0 =
 - Braintree SDK updated for the Braintree payment gateway.
 - Google reCAPTCHA enterprise option is now [available as a free addon](https://simple-membership-plugin.com/simple-membership-google-recaptcha-enterprise-option/).

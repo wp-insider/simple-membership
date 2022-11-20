@@ -165,6 +165,7 @@ https://simple-membership-plugin.com/
 
 = WIP 4.2.1 =
 - Added sanitization to the email body fields.
+- Updated the Spanish Mexican language translation file.
 
 = 4.2.0 =
 - Braintree SDK updated for the Braintree payment gateway.

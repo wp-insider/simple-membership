@@ -122,6 +122,13 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
         .braintree-sheet__content--form .braintree-form__flexible-fields{
             display:inherit;
         }
+        .error-required{
+            color:#b14747;
+            display: block;
+        }
+        .error-required-hide{
+            display: none;
+        }
     </style>
     <script>
         function swpm_braintree_show_form__uniqid_() {
@@ -133,6 +140,22 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
             var form = document.getElementById('swpm-braintree-payment-form-_uniqid_');
             var additional_fields = document.getElementById('swpm-braintree-additional-fields-container-_uniqid_');
             var amount = form.querySelector('[name="item_price"]').value;
+
+            var first_name_parent = additional_fields.querySelector('[name="first_name"]');
+            var member_email_parent = additional_fields.querySelector('[name="member_email"]');
+
+
+            var errorElement_firstname = document.createElement("label");
+            errorElement_firstname.innerText="First name is required";
+            errorElement_firstname.classList.add("error-required");
+            errorElement_firstname.classList.add("error-required-hide");
+            first_name_parent.parentNode.insertBefore(errorElement_firstname, first_name_parent.nextSibling);
+
+            var errorElement_email = document.createElement("label");
+            errorElement_email.innerText="Email address is required";
+            errorElement_email.classList.add("error-required");
+            errorElement_email.classList.add("error-required-hide");
+            member_email_parent.parentNode.insertBefore(errorElement_email, member_email_parent.nextSibling);
 
             //creating dropin
             braintree.dropin.create({
@@ -152,9 +175,45 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
                 submitButton.addEventListener('click', function(e) {
                     e.preventDefault();
 
+                    
                     var first_name = additional_fields.querySelector('[name="first_name"]').value;
+
                     var last_name = additional_fields.querySelector('[name="last_name"]').value;
+                    
                     var member_email = additional_fields.querySelector('[name="member_email"]').value;
+                    
+
+                    var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;                    
+                    var isError_firstname=false;
+                    var isError_email=false;
+
+                    if(first_name.length==0)
+                    {
+                        errorElement_firstname.classList.remove("error-required-hide");
+                        isError_firstname=true;
+                    }
+                    else{
+                        errorElement_firstname.classList.add("error-required-hide");
+                        isError_firstname=false;
+                    }
+
+                    if(!member_email.match(emailformat))
+                    {
+                        errorElement_email.classList.remove("error-required-hide");
+                        isError_email=true;
+                    }
+                    else{
+                        errorElement_email.classList.add("error-required-hide");
+                        isError_email=false;
+                    }
+
+
+                    if(isError_firstname==true || isError_email==true )
+                    {                    
+                        return;
+                    }
+
+                
 
                     dropinInstance.requestPaymentMethod({
                         threeDSecure: {
@@ -171,6 +230,7 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
                             console.log(err);
                             document.getElementById('swpm-submit-form-btn-_uniqid_').disabled = false;
                             alert("Error in requesting payment. Try again or check console logs");
+                            return;
                         }
                         
                         document.getElementById('swpm-submit-form-btn-_uniqid_').disabled = true;

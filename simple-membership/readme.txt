@@ -166,6 +166,7 @@ https://simple-membership-plugin.com/
 = WIP 4.2.1 =
 - Added sanitization to the email body fields.
 - Updated the Spanish Mexican language translation file.
+- Updated the Braintree payments integration to require the customer's name and email address during checkout.
 
 = 4.2.0 =
 - Braintree SDK updated for the Braintree payment gateway.

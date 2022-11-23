@@ -44,7 +44,7 @@ class SwpmAccessControl {
         //Check if the user is logged in.
         if(!$auth->is_logged_in()){
             //This user is not logged into the site. No access to this protected post.
-            $text = SwpmUtils::_('You need to login to view this content. ') . SwpmMiscUtils::get_login_link();
+            $text = SwpmUtils::_('You need to be logged in to view this content. ') . SwpmMiscUtils::get_login_link();
             $error_msg = '<div class="swpm-post-not-logged-in-msg">'.$text.'</div>';
             $this->lastError = apply_filters('swpm_not_logged_in_post_msg', $error_msg);
             return false;            
@@ -117,7 +117,7 @@ class SwpmAccessControl {
         //Check if the user is logged-in as a member.
         if(!$auth->is_logged_in()){
             //User is not logged-in. Not allowed to see this protected comment.
-            $error_msg = '<div class="swpm-comment-not-logged-in">' . SwpmUtils::_("You need to login to view this content. ") . '</div>';
+            $error_msg = '<div class="swpm-comment-not-logged-in">' . SwpmUtils::_("You need to be logged in to view this content. ") . '</div>';
             $this->lastError = apply_filters('swpm_not_logged_in_comment_msg', $error_msg);
             return false;            
         }
@@ -201,7 +201,7 @@ class SwpmAccessControl {
                 $auth = SwpmAuth::get_instance();
                 if(!$auth->is_logged_in()){
                     //User is not logged-in. Need to show the login message after the more tag.
-                    $text = SwpmUtils::_("You need to login to view the rest of the content. ") . SwpmMiscUtils::get_login_link();
+                    $text = SwpmUtils::_("You need to be logged in to view the rest of the content. ") . SwpmMiscUtils::get_login_link();
                     $error_msg = '<div class="swpm-more-tag-not-logged-in swpm-margin-top-10">' . $text . '</div>';
                     $more_tag_check_msg = apply_filters('swpm_not_logged_in_more_tag_msg', $error_msg);
                 } else {

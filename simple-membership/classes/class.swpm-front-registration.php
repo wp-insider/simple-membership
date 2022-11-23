@@ -176,7 +176,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 				// Allow hooks to change the value of login_page_url
 				$login_page_url = apply_filters('swpm_register_front_end_login_page_url', $login_page_url);
 
-				$after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_( 'Registration Successful. ' ) . SwpmUtils::_( 'Please' ) . ' <a href="' . $login_page_url . '">' . SwpmUtils::_( 'Login' ) . '</a></div>';
+				$after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_( 'Registration Successful. ' ) . SwpmUtils::_( 'Please' ) . ' <a href="' . $login_page_url . '">' . SwpmUtils::_( 'Log In' ) . '</a></div>';
 				$after_rego_msg = apply_filters( 'swpm_registration_success_msg', $after_rego_msg );
 				$message        = array(
 					'succeeded' => true,
@@ -468,7 +468,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		}
 		if ( $member->account_state !== 'activation_required' ) {
 			//account already active
-			echo SwpmUtils::_( 'Account already active. ' ) . '<a href="' . $login_page_url . '">' . SwpmUtils::_( 'click here' ) . '</a>' . SwpmUtils::_( ' to login.' );
+			echo SwpmUtils::_( 'Account already active. ' ) . '<a href="' . $login_page_url . '">' . SwpmUtils::_( 'click here' ) . '</a>' . SwpmUtils::_( ' to log in.' );
 			wp_die();
 		}
 		$code     = FILTER_INPUT( INPUT_GET, 'swpm_token', FILTER_SANITIZE_STRING );
@@ -521,7 +521,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		}
 		if ( $member->account_state !== 'activation_required' ) {
 			//account already active
-			$acc_active_msg = SwpmUtils::_( 'Account already active. ' ) . '<a href="' . $login_page_url . '">' . SwpmUtils::_( 'click here' ) . '</a>' . SwpmUtils::_( ' to login.' );
+			$acc_active_msg = SwpmUtils::_( 'Account already active. ' ) . '<a href="' . $login_page_url . '">' . SwpmUtils::_( 'click here' ) . '</a>' . SwpmUtils::_( ' to log in.' );
 			echo $acc_active_msg;
 			wp_die();
 		}

@@ -307,6 +307,9 @@ msgstr ""
 
 #: classes/class.swpm-access-control.php:47
 #: classes/class.swpm-access-control.php:120
+msgid "You need to be logged in to view this content. "
+msgstr ""
+
 msgid "You need to login to view this content. "
 msgstr ""
 
@@ -327,6 +330,9 @@ msgid "This content is not permitted for your membership level."
 msgstr ""
 
 #: classes/class.swpm-access-control.php:204
+msgid "You need to be logged in to view the rest of the content. "
+msgstr ""
+
 msgid "You need to login to view the rest of the content. "
 msgstr ""
 
@@ -640,6 +646,9 @@ msgstr ""
 
 #: classes/class.swpm-front-registration.php:179
 #: classes/class.swpm-utils-misc.php:363 views/login.php:47
+msgid "Log In"
+msgstr ""
+
 msgid "Login"
 msgstr ""
 
@@ -701,6 +710,9 @@ msgstr ""
 
 #: classes/class.swpm-front-registration.php:461
 #: classes/class.swpm-front-registration.php:514
+msgid " to log in."
+msgstr ""
+
 msgid " to login."
 msgstr ""
 

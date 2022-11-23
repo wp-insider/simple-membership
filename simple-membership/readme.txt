@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 4.2.0
+Stable tag: 4.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,7 +23,7 @@ Set up unlimited membership levels (example: free, silver, gold etc) and protect
 = User Friendly Interface for Content Protection = 
 When you are editing a post or page in the WordPress editor, you can select to protect that post or page for your members.
 
-Non-members viewing a protected page will be prompted to login or become a member.
+Non-members viewing a protected page will be prompted to log in or become a member.
 
 = Have Free and Paid Memberships =
 You can configure it to have free and/or paid memberships on your site. Paid membership payment is handled securely via PayPal. Membership payment can also be accepted using Stripe or Braintree payment gateways.
@@ -163,10 +163,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.2.1 =
-- Added sanitization to the email body fields.
-- Updated the Spanish Mexican language translation file.
+= 4.2.1 =
 - Updated the Braintree payments integration to require the customer's name and email address during checkout.
+- Updated the Spanish Mexican language translation file.
+- Updated the default content protection message.
+- Updated the text of the login form button.
+- Added sanitization to the email body fields.
 
 = 4.2.0 =
 - Braintree SDK updated for the Braintree payment gateway.

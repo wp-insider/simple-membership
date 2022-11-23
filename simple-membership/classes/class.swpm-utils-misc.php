@@ -360,7 +360,7 @@ class SwpmMiscUtils {
 		//Create the login/protection message
 		$filtered_login_url = apply_filters( 'swpm_get_login_link_url', $login_url ); //Addons can override the login URL value using this filter.
 		$login_msg          = '';
-		$login_msg         .= SwpmUtils::_( 'Please' ) . ' <a class="swpm-login-link" href="' . $filtered_login_url . '">' . SwpmUtils::_( 'Login' ) . '</a>. ';
+		$login_msg         .= SwpmUtils::_( 'Please' ) . ' <a class="swpm-login-link" href="' . $filtered_login_url . '">' . SwpmUtils::_( 'Log In' ) . '</a>. ';
 		$login_msg         .= SwpmUtils::_( 'Not a Member?' ) . ' <a href="' . $joinus_url . '">' . SwpmUtils::_( 'Join Us' ) . '</a>';
 
 		return $login_msg;

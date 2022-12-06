@@ -66,12 +66,21 @@ class SwpmBraintreeBuyNowIpnHandler {
 
             $nonce = sanitize_text_field($_POST['payment_method_nonce']);
 
+            $first_name= sanitize_text_field( $_POST['first_name'] );
+            $last_name= sanitize_text_field( $_POST['last_name'] );
+            $email= sanitize_text_field( $_POST['member_email'] );
 
+            $customer = array(
+				'firstName' => $first_name,
+				'lastName'  => $last_name,
+				'email'     => $email
+			);
       
             $result = Braintree_Transaction::sale([
                         'amount' => $payment_amount,
                         'paymentMethodNonce' => $nonce,
                         'channel' => 'TipsandTricks_SP',
+                        'customer'           => $customer,
                         'options' => [
                             'submitForSettlement' => True
                         ],

@@ -213,7 +213,7 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
                         return;
                     }
 
-                
+
 
                     dropinInstance.requestPaymentMethod({
                         threeDSecure: {

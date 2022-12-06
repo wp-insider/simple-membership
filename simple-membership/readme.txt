@@ -163,6 +163,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.2.2 =
+- The Braintree transactions will send the customer's name and email address to the API also.
+
 = 4.2.1 =
 - Updated the Braintree payments integration to require the customer's name and email address during checkout.
 - Updated the Spanish Mexican language translation file.

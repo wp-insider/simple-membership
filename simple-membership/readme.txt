@@ -164,6 +164,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 4.2.2 =
+- [TODO] [prepare and release the free override password lenght free addon.]
 - The Braintree transactions will send the customer's name and email address to the API also.
 - Added a new filter hook to the registration form so that the strong password validation string can be overridden and customized.
 - Added a new filter hook to the edit profile form so that the strong password validation string can be overridden and customized.

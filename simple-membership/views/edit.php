@@ -6,7 +6,7 @@ extract($user_data, EXTR_SKIP);
 $settings=SwpmSettings::get_instance();
 $force_strong_pass=$settings->get_value('force-strong-passwords');
 if (!empty($force_strong_pass)) {
-    $pass_class="validate[custom[strongPass],minSize[8]]";
+    $pass_class = apply_filters( "swpm_profile_strong_pass_validation", "validate[custom[strongPass],minSize[8]]" );
 } else {
     $pass_class="";
 }

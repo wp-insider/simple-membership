@@ -3,7 +3,7 @@ SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('e
 $settings = SwpmSettings::get_instance();
 $force_strong_pass = $settings->get_value('force-strong-passwords');
 if (!empty($force_strong_pass)) {
-    $pass_class = "validate[required,custom[strongPass],minSize[8]]";
+    $pass_class = apply_filters( "swpm_registration_strong_pass_validation", "validate[required,custom[strongPass],minSize[8]]" );
 } else {
     $pass_class = "";
 }
@@ -24,7 +24,7 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
             </tr>
             <tr class="swpm-registration-password-row">
                 <td><label for="password"><?php echo SwpmUtils::_('Password') ?></label></td>
-                <td><input type="password" autocomplete="off" id="password" class="<?php echo $pass_class; ?>" value="" size="50" name="password" /></td>
+                <td><input type="password" autocomplete="off" id="password" class="<?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); ?>" value="" size="50" name="password" /></td>
             </tr>
             <tr class="swpm-registration-password-retype-row">
                 <td><label for="password_re"><?php echo SwpmUtils::_('Repeat Password') ?></label></td>

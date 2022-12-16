@@ -84,6 +84,7 @@ class SimpleWpMembership {
         add_action('admin_init', array(&$this, 'admin_init_hook'));
         add_action('plugins_loaded', array(&$this, "plugins_loaded"));
         add_action('password_reset', array(&$this, 'wp_password_reset_hook'), 10, 2);
+        
     }
 
     public function wp_head_callback() {
@@ -468,10 +469,23 @@ class SimpleWpMembership {
         if ($succeeded) {
             return '';
         }
-        ob_start();
-        //Load the forgot password template
-        SwpmUtilsTemplate::swpm_load_template('forgot_password.php', false);
-        return ob_get_clean();
+
+        if(isset($_GET["action"]) && $_GET["action"]=="swpm-reset-using-link")
+        {
+            ob_start();
+            
+            //Load the reset password template
+            SwpmUtilsTemplate::swpm_load_template('reset_password.php', false);
+            return ob_get_clean();
+        }
+        else{
+            ob_start();
+            //Load the forgot password template
+            SwpmUtilsTemplate::swpm_load_template('forgot_password.php', false);
+            return ob_get_clean();
+        }
+
+        
     }
 
     public function profile_form() {

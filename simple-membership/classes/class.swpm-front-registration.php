@@ -393,10 +393,12 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			SwpmTransfer::get_instance()->set( 'status', $message );
 			return;
 		}
+
 		global $wpdb;
 		$query = 'SELECT member_id,user_name,first_name, last_name FROM ' .
 				$wpdb->prefix . 'swpm_members_tbl ' .
 				' WHERE email = %s';
+
 		$user  = $wpdb->get_row( $wpdb->prepare( $query, $email ) );
 		if ( empty( $user ) ) {
 			$message  = '<div class="swpm-reset-pw-error">' . SwpmUtils::_( 'No user found with that email address.' ) . '</div>';
@@ -408,33 +410,79 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			SwpmTransfer::get_instance()->set( 'status', $message );
 			return;
 		}
+
 		$settings = SwpmSettings::get_instance();
-		$password = wp_generate_password();
+		$password_reset_link='';		
+		$additional_args =array();
+		$message  = '<div class="swpm-reset-pw-success-box">';
+
+
+		$password_reset_using_link=$settings->get_value( 'enable-free-membership' );
+
+		
+
+		if($password_reset_using_link)
+		{
+			$user_data = get_user_by("email",$email);
+
+			if($user_data)
+			{
+				$key = get_password_reset_key( $user_data );
+				$user_login = $user_data->user_login;
+				$password_reset_link = esc_url_raw( $settings->get_value("reset-page-url") . "?action=swpm-reset-using-link&key=$key&login=" . rawurlencode($user_login) );		
+
+				
+				$additional_args["password_reset_link"]=$password_reset_link;
+				
+				//skip {password} tag
+				$additional_args["password"]="Reset password using link";
+
+				SwpmLog::log_simple_debug( 'Member password reset email sent to: ' . $email, true );
+				$message .= '<div class="swpm-reset-pw-success">' . SwpmUtils::_( 'Password reset link has been sent to your email address.' ) . '</div>';
+			}
+		}
+		else{
+			$password = wp_generate_password();
                 
-                //Trigger a hook
-                $password = apply_filters( 'swpm_password_reset_generated_pass', $password );
+			//Trigger a hook
+			$password = apply_filters( 'swpm_password_reset_generated_pass', $password );
+	
+			$password_hash = SwpmUtils::encrypt_password( trim( $password ) );
+			$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'password' => $password_hash ), array( 'member_id' => $user->member_id ) );
+	
+			//Update wp user password
+			add_filter( 'send_password_change_email', array( &$this, 'dont_send_password_change_email' ), 1, 3 ); //Stop WordPress from sending a reset password email to admin.
+			SwpmUtils::update_wp_user( $user->user_name, array( 'plain_password' => $password ) );
 
-		$password_hash = SwpmUtils::encrypt_password( trim( $password ) );
-		$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'password' => $password_hash ), array( 'member_id' => $user->member_id ) );
-
-		//Update wp user password
-		add_filter( 'send_password_change_email', array( &$this, 'dont_send_password_change_email' ), 1, 3 ); //Stop WordPress from sending a reset password email to admin.
-		SwpmUtils::update_wp_user( $user->user_name, array( 'plain_password' => $password ) );
+			$additional_args["password"]=$password;
+			SwpmLog::log_simple_debug( 'Member password has been reset. Password reset email sent to: ' . $email, true );
+			$message .= '<div class="swpm-reset-pw-success">' . SwpmUtils::_( 'New password has been sent to your email address.' ) . '</div>';
+		}
+		
+		
+		
+		
 
 		$body            = $settings->get_value( 'reset-mail-body' );
 		$subject         = $settings->get_value( 'reset-mail-subject' );
 		$body            = html_entity_decode( $body );
-		$additional_args = array( 'password' => $password );
 		$body            = SwpmMiscUtils::replace_dynamic_tags( $body, $user->member_id, $additional_args );
 		$from            = $settings->get_value( 'email-from' );
 		$headers         = 'From: ' . $from . "\r\n";
 		$subject         = apply_filters( 'swpm_email_password_reset_subject', $subject );
 		$body            = apply_filters( 'swpm_email_password_reset_body', $body );
-		SwpmMiscUtils::mail( $email, $subject, $body, $headers );
-		SwpmLog::log_simple_debug( 'Member password has been reset. Password reset email sent to: ' . $email, true );
 
-		$message  = '<div class="swpm-reset-pw-success-box">';
-		$message .= '<div class="swpm-reset-pw-success">' . SwpmUtils::_( 'New password has been sent to your email address.' ) . '</div>';
+
+		
+		//if no password_reset_link in email, add it at the bottom of body
+		if($password_reset_using_link && (SwpmMiscUtils::has_tag($body,"{password_reset_link}")==false))
+		{
+			$body .="<br>Password Reset Link: {password_reset_link}";							
+			$body = SwpmMiscUtils::replace_dynamic_tags( $body, $user->member_id, $additional_args );
+		}
+
+		SwpmMiscUtils::mail( $email, $subject, $body, $headers );
+		
 		$message .= '<div class="swpm-reset-pw-success-email">' . SwpmUtils::_( 'Email Address: ' ) . $email . '</div>';
 		$message .= '</div>';
 
@@ -443,7 +491,46 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			'message'         => $message,
 			'pass_reset_sent' => true,
 		);
+
 		SwpmTransfer::get_instance()->set( 'status', $message );
+		
+	}
+
+	public function reset_password_using_link( $user_data,$password ) {
+		
+		$email = $user_data->user_email;
+		
+		
+		global $wpdb;
+		$query = 'SELECT member_id,user_name,first_name, last_name FROM ' .
+				$wpdb->prefix . 'swpm_members_tbl ' .
+				' WHERE email = %s';
+
+		$user  = $wpdb->get_row( $wpdb->prepare( $query, $email ) );
+		if ( empty( $user ) ) {
+			$message  = '<div class="swpm-reset-pw-error">' . SwpmUtils::_( 'No user found with that email address.' ) . '</div>';
+			$message .= '<div class="swpm-reset-pw-error-email">' . SwpmUtils::_( 'Email Address: ' ) . $email . '</div>';
+			$message  = array(
+				'succeeded' => false,
+				'message'   => $message,
+			);
+			
+			set_transient("swpm-passsword-reset-error",$message);
+			SwpmLog::log_simple_debug( 'No member is found with email'.$user_data->user_email, true );
+			return false;
+		}
+	
+			$password_hash = SwpmUtils::encrypt_password( trim( $password ) );
+			$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'password' => $password_hash ), array( 'member_id' => $user->member_id ) );
+	
+			//Update wp user password
+			add_filter( 'send_password_change_email', array( &$this, 'dont_send_password_change_email' ), 1, 3 ); //Stop WordPress from sending a reset password email to admin.
+			SwpmUtils::update_wp_user( $user->user_name, array( 'plain_password' => $password ) );
+
+			SwpmLog::log_simple_debug( 'Member password has been reset.' . $email, true );
+			
+			return true;
+		
 	}
 
 	function dont_send_password_change_email( $send = false, $user = '', $userdata = '' ) {

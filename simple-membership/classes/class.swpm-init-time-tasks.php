@@ -43,6 +43,7 @@ class SwpmInitTimeTasks {
 				exit( 0 );
 			}
 			$this->process_password_reset();
+			$this->process_password_reset_using_link();
 			$this->register_member();
 			$this->check_and_do_email_activation();
 			$this->edit_profile();
@@ -154,6 +155,63 @@ class SwpmInitTimeTasks {
 		$swpm_reset_email = filter_input( INPUT_POST, 'swpm_reset_email', FILTER_UNSAFE_RAW );
 		if ( ! empty( $swpm_reset ) ) {
 			SwpmFrontRegistration::get_instance()->reset_password( $swpm_reset_email );
+		}
+	}
+
+	public function process_password_reset_using_link()
+	{
+		$swpm_reset       = filter_input( INPUT_POST, 'swpm-password-reset-using-link' );
+
+		if(is_null($swpm_reset))
+		{
+			return;
+		}
+
+		$message          = '';
+		
+		$user_login = filter_input( INPUT_POST, 'swpm_user_login', FILTER_UNSAFE_RAW );
+		$user_login = sanitize_user($user_login);
+
+		$swpm_new_password = filter_input( INPUT_POST, 'swpm_new_password', FILTER_UNSAFE_RAW );
+		$swpm_renew_password = filter_input( INPUT_POST, 'swpm_reenter_new_password', FILTER_UNSAFE_RAW );
+
+
+
+
+
+		//run validations
+		if($swpm_new_password!=$swpm_renew_password)
+		{
+			$message =__("Password does not match with Re-enter password",'simple-membership');
+		}
+
+		$user_data = get_user_by("login",$user_login);
+		if(!$user_data)
+		{			
+			$message =__("Invalid password reset request",'simple-membership');
+		}
+
+		if(strlen($message)>0)
+		{
+			set_transient("swpm-passsword-reset-error",$message);
+		}
+
+		if ( ! empty( $swpm_reset ) && strlen($message)==0) {
+			$is_password_reset = SwpmFrontRegistration::get_instance()->reset_password_using_link( $user_data,$swpm_new_password );
+
+
+			if($is_password_reset)
+			{
+				$settings    = SwpmSettings::get_instance();
+				$login_page_url=$settings->get_value("login-page-url");
+				wp_safe_redirect( $login_page_url );
+				exit( 0 );
+			}
+			else{
+				echo get_transient("swpm-passsword-reset-error");	
+				delete_transient("swpm-passsword-reset-error");
+			}
+			
 		}
 	}
 

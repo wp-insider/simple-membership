@@ -238,6 +238,18 @@ class SwpmSettings {
 			)
 		);
 
+		add_settings_field(
+			'password-reset-using-link',
+			SwpmUtils::_( 'Enable Password Reset using Link' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'general-settings',
+			array(
+				'item'    => 'password-reset-using-link',
+				'message' => SwpmUtils::_( 'You can use it to send password reset links.' )
+			)
+		);
+
 		add_settings_section( 'debug-settings', SwpmUtils::_( 'Test & Debug Settings' ), array( &$this, 'testndebug_settings_callback' ), 'simple_wp_membership_settings' );
 
 		$debug_log_url = add_query_arg(
@@ -1269,6 +1281,7 @@ class SwpmSettings {
 		$output['registration-page-url']    = esc_url( $input['registration-page-url'] );
 		$output['profile-page-url']         = esc_url( $input['profile-page-url'] );
 		$output['reset-page-url']           = esc_url( $input['reset-page-url'] );
+		$output['password-reset-using-link'] = isset( $input['password-reset-using-link'] ) ? esc_attr( $input['password-reset-using-link'] ) : '';
 		$output['join-us-page-url']         = esc_url( $input['join-us-page-url'] );
 		$output['default-account-status']   = esc_attr( $input['default-account-status'] );
 		$output['members-login-to-comment'] = isset( $input['members-login-to-comment'] ) ? esc_attr( $input['members-login-to-comment'] ) : '';

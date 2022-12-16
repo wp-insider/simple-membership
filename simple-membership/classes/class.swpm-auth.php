@@ -241,6 +241,12 @@ class SwpmAuth {
 		if ( ! $this->isLoggedIn ) {
 			return;
 		}
+                
+                if ( SwpmUtils::is_multisite_install() ) {
+                    //Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
+                    wp_cookie_constants();
+                }
+                
 		setcookie( SIMPLE_WP_MEMBERSHIP_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
 		setcookie( SIMPLE_WP_MEMBERSHIP_SEC_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
 		$this->userData      = null;
@@ -260,6 +266,11 @@ class SwpmAuth {
 
 		$expire = apply_filters( 'swpm_auth_cookie_expiry_value', $expire );
 
+                if ( SwpmUtils::is_multisite_install() ) {
+                    //Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
+                    wp_cookie_constants();
+                }
+                
 		setcookie( 'swpm_in_use', 'swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Switch this to the following one.
                 setcookie( 'wp_swpm_in_use', 'wp_swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Prefix the cookie with 'wp' to exclude Batcache caching.
                 if ( function_exists( 'wp_cache_serve_cache_file' ) ) {//WP Super cache workaround

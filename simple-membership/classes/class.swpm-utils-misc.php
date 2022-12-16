@@ -220,6 +220,10 @@ class SwpmMiscUtils {
 			$pageURL .= ltrim( $_SERVER['SERVER_NAME'], '.*' ) . $_SERVER['REQUEST_URI'];
 		}
 
+                //Clean any known port numbers from the URL (some hosts may include these port numbers).
+                $pageURL = str_replace(':8080', '', $pageURL);
+                
+                //Trigger filter 
 		$pageURL = apply_filters( 'swpm_get_current_page_url_filter', $pageURL );
 
 		return $pageURL;

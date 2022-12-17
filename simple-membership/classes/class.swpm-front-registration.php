@@ -417,7 +417,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$message  = '<div class="swpm-reset-pw-success-box">';
 
 
-		$password_reset_using_link=$settings->get_value( 'enable-free-membership' );
+		$password_reset_using_link=$settings->get_value( 'password-reset-using-link' );
 
 		
 

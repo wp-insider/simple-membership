@@ -176,9 +176,6 @@ class SwpmInitTimeTasks {
 		$swpm_renew_password = filter_input( INPUT_POST, 'swpm_reenter_new_password', FILTER_UNSAFE_RAW );
 
 
-
-
-
 		//run validations
 		if($swpm_new_password!=$swpm_renew_password)
 		{
@@ -202,15 +199,25 @@ class SwpmInitTimeTasks {
 
 			if($is_password_reset)
 			{
-				$settings    = SwpmSettings::get_instance();
-				$login_page_url=$settings->get_value("login-page-url");
-				wp_safe_redirect( $login_page_url );
-				exit( 0 );
+				$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );
+
+				// Allow hooks to change the value of login_page_url
+				$login_page_url = apply_filters('swpm_register_front_end_login_page_url', $login_page_url);
+
+				$after_pwd_reset = '<div class="swpm-reset-password-success-msg">' . SwpmUtils::_( 'Password Reset Successful. ' ) . SwpmUtils::_( 'Please' ) . ' <a href="' . $login_page_url . '">' . SwpmUtils::_( 'Log In' ) . '</a></div>';
+				$after_pwd_reset = apply_filters( 'swpm_password_reset_success_msg', $after_pwd_reset );
+				$message        = array(
+					'succeeded' => true,
+					'message'   => $after_pwd_reset,
+				);
 			}
 			else{
 				echo get_transient("swpm-passsword-reset-error");	
 				delete_transient("swpm-passsword-reset-error");
 			}
+
+			SwpmTransfer::get_instance()->set( 'status', $message );
+			return;
 			
 		}
 	}

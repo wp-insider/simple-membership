@@ -424,8 +424,6 @@ class SwpmFrontRegistration extends SwpmRegistration {
 				$user_login = $user_data->user_login;
 				$password_reset_link = esc_url_raw( $settings->get_value("reset-page-url") . "?action=swpm-reset-using-link&key=$key&login=" . rawurlencode($user_login) );
 				$additional_args["password_reset_link"] = $password_reset_link;
-                                
-SwpmLog::log_simple_debug( 'Reset link: ' . $password_reset_link, true );
 
 				//Skip the {password} tag
 				$additional_args["password"] = "Reset password using link";
@@ -461,9 +459,9 @@ SwpmLog::log_simple_debug( 'Reset link: ' . $password_reset_link, true );
 		$subject         = apply_filters( 'swpm_email_password_reset_subject', $subject );
 		$body            = apply_filters( 'swpm_email_password_reset_body', $body );
 
-		//if no password_reset_link in email, add it at the bottom of body
-		if( $password_reset_using_link && ( SwpmMiscUtils::has_tag($body,"{password_reset_link}")==false )) {
-			$body .= "<br>Password Reset Link: {password_reset_link}";							
+		//if no password_reset_link in email, add it at the bottom of the email body.
+		if( $password_reset_using_link && ( SwpmMiscUtils::has_tag( $body, "{password_reset_link}" ) == false ) ) {
+			$body .= "\n\nPassword Reset Link: {password_reset_link}";
 			$body = SwpmMiscUtils::replace_dynamic_tags( $body, $user->member_id, $additional_args );
 		}
 

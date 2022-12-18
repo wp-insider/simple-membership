@@ -246,7 +246,7 @@ class SwpmSettings {
 			'general-settings',
 			array(
 				'item'    => 'password-reset-using-link',
-				'message' => SwpmUtils::_( 'You can enable this option if you want to handle the password reset functionality using a reset link that is emailed to the member.' )
+				'message' => SwpmUtils::_( 'You can enable this option if you want to handle the password reset functionality using a reset link that is emailed to the member. Read <a href="https://simple-membership-plugin.com/password-reset-notification-email-customization/" target="_blank">this documentation</a> to learn more about the password reset function.' )
 			)
 		);
 

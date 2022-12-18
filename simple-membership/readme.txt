@@ -165,6 +165,8 @@ https://simple-membership-plugin.com/
 
 = WIP 4.2.2 =
 - [TODO] [prepare and release the free override password lenght free addon.]
+- [TODO] Document update or new for the password reset feature. Link to it from the settings option?
+
 - The Braintree transactions will send the customer's name and email address to the API also.
 - Added a new filter hook to the registration form so that the strong password validation string can be overridden and customized.
 - Added a new filter hook to the edit profile form so that the strong password validation string can be overridden and customized.

@@ -470,22 +470,18 @@ class SimpleWpMembership {
             return '';
         }
 
-        if(isset($_GET["action"]) && $_GET["action"]=="swpm-reset-using-link")
-        {
+        if( isset( $_GET["action"]) && $_GET["action"] == "swpm-reset-using-link" ) {
             ob_start();
-            
             //Load the reset password template
             SwpmUtilsTemplate::swpm_load_template('reset_password.php', false);
             return ob_get_clean();
         }
-        else{
+        else {
             ob_start();
             //Load the forgot password template
             SwpmUtilsTemplate::swpm_load_template('forgot_password.php', false);
             return ob_get_clean();
         }
-
-        
     }
 
     public function profile_form() {

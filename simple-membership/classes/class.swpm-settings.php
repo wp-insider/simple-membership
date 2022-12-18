@@ -240,13 +240,13 @@ class SwpmSettings {
 
 		add_settings_field(
 			'password-reset-using-link',
-			SwpmUtils::_( 'Enable Password Reset using Link' ),
+			SwpmUtils::_( 'Enable Password Reset Using Link' ),
 			array( &$this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
 			'general-settings',
 			array(
 				'item'    => 'password-reset-using-link',
-				'message' => SwpmUtils::_( 'You can use it to send password reset links.' )
+				'message' => SwpmUtils::_( 'You can enable this option if you want to handle the password reset functionality using a reset link that is emailed to the member.' )
 			)
 		);
 

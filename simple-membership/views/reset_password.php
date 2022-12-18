@@ -1,11 +1,9 @@
 <div class="swpm-pw-reset-widget-form">
 
-    <div>
+    <div class="swpm-pw-reset-widget-form-key-validation">
         <?php
         $is_valid_key = check_password_reset_key($_GET['key'], $_GET['login']);
-        $user_login = $_GET['login'];
-
-
+        $user_login = sanitize_text_field($_GET['login']);
 
         if (is_wp_error($is_valid_key)) {
             echo $is_valid_key->get_error_message();
@@ -20,17 +18,13 @@
         } else {
             $pass_class = "";
         }
-
         ?>
-
-
     </div>
 
     <div class="error">
         <?php echo get_transient("swpm-passsword-reset-error"); ?>
         <?php delete_transient("swpm-passsword-reset-error"); ?>
     </div>
-
 
     <form id="swpm-password-reset-using-link" name="swpm-password-reset-using-link" class="swpm-validate-form" method="post" action="">
         <div class="swpm-pw-reset-widget-inside">
@@ -50,7 +44,7 @@
             </div>
 
 
-            <input type="hidden" name="swpm_user_login" value="<?php echo $user_login; ?>" />
+            <input type="hidden" name="swpm_user_login" value="<?php echo esc_attr($user_login); ?>" />
             <div class="swpm-before-login-submit-section swpm-margin-top-10"><?php echo apply_filters('swpm_before_pass_reset_form_submit_button', ''); ?></div>
             <div class="swpm-pw-reset-submit-button swpm-margin-top-10">
                 <input type="submit" name="swpm-password-reset-using-link" class="swpm-pw-reset-submit" value="<?php echo SwpmUtils::_('Reset Password'); ?>" />

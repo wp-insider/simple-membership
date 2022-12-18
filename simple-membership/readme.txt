@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 4.2.1
+Stable tag: 4.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,9 +163,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.2.2 =
-- [TODO] [prepare and release the free override password lenght free addon.]
-
+= 4.2.2 =
 - The Braintree transactions will send the customer's name and email address to the API also.
 - Added a new filter hook to the registration form so that the strong password validation string can be overridden and customized.
 - Added a new filter hook to the edit profile form so that the strong password validation string can be overridden and customized.

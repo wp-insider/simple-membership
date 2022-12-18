@@ -473,7 +473,7 @@ class SimpleWpMembership {
         if( isset( $_GET["action"]) && $_GET["action"] == "swpm-reset-using-link" ) {
             ob_start();
             //Load the reset password template
-            SwpmUtilsTemplate::swpm_load_template('reset_password.php', false);
+            SwpmUtilsTemplate::swpm_load_template('reset_password_using_link.php', false);
             return ob_get_clean();
         }
         else {

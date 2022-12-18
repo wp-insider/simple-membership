@@ -165,13 +165,13 @@ https://simple-membership-plugin.com/
 
 = WIP 4.2.2 =
 - [TODO] [prepare and release the free override password lenght free addon.]
-- [TODO] Document update or new for the password reset feature. Link to it from the settings option?
 
 - The Braintree transactions will send the customer's name and email address to the API also.
 - Added a new filter hook to the registration form so that the strong password validation string can be overridden and customized.
 - Added a new filter hook to the edit profile form so that the strong password validation string can be overridden and customized.
 - The get_current_page_url() function will clean the 8080 port number from URL for better compatibility on some servers.
 - Added output escaping to the payment button shortcode.
+- Added a new option in the settings menu to offer password reset function using a reset link.
 
 = 4.2.1 =
 - Updated the Braintree payments integration to require the customer's name and email address during checkout.

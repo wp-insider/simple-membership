@@ -171,6 +171,7 @@ https://simple-membership-plugin.com/
 - Added a new filter hook to the registration form so that the strong password validation string can be overridden and customized.
 - Added a new filter hook to the edit profile form so that the strong password validation string can be overridden and customized.
 - The get_current_page_url() function will clean the 8080 port number from URL for better compatibility on some servers.
+- Added output escaping to the payment button shortcode.
 
 = 4.2.1 =
 - Updated the Braintree payments integration to require the customer's name and email address during checkout.

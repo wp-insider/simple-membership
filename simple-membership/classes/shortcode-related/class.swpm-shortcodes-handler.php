@@ -33,6 +33,9 @@ class SwpmShortcodesHandler {
 			return '<p class="swpm-red-box">Error! You must specify a button ID with this shortcode. Check the usage documentation.</p>';
 		}
 
+                //Sanitize the arguments.
+                $args = array_map( 'esc_attr', $args );
+                        
 		$button_id = $id;
 		//$button = get_post($button_id); //Retrieve the CPT for this button
 		$button_type = get_post_meta( $button_id, 'button_type', true );
@@ -222,12 +225,12 @@ class SwpmShortcodesHandler {
 			$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 			if ( $sandbox_enabled ) {
 				//Sandbox mode
-				$output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" '. $window_target . $link_css_class .'>';
+				$output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" '. $window_target . esc_attr($link_css_class) .'>';
 				$output .= $anchor_text;
 				$output .= '</a>';
 			} else {
 				//Live mode
-				$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" '.$window_target . $link_css_class .'>';
+				$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" '.$window_target . esc_attr($link_css_class) .'>';
 				$output .= $anchor_text;
 				$output .= '</a>';
 			}

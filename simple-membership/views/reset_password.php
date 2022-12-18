@@ -5,9 +5,13 @@
         $is_valid_key = check_password_reset_key($_GET['key'], $_GET['login']);
         $user_login = sanitize_text_field($_GET['login']);
 
-        if (is_wp_error($is_valid_key)) {
-            echo $is_valid_key->get_error_message();
-            wp_die();
+        if ( is_wp_error( $is_valid_key ) ) {
+            $error_message = __("Error! The password reset key is invalid. Please generate a new request.", "simple-membership");
+            //echo $is_valid_key->get_error_message();
+            echo '<div class="swpm-pw-reset-key-invalid-error swpm-red-error-text">';
+            echo $error_message;
+            echo '</div>';
+            return;
         }
 
         SimpleWpMembership::enqueue_validation_scripts();
@@ -21,7 +25,7 @@
         ?>
     </div>
 
-    <div class="error">
+    <div class="swpm-pw-reset-widget-error swpm-red-error-text">
         <?php echo get_transient("swpm-passsword-reset-error"); ?>
         <?php delete_transient("swpm-passsword-reset-error"); ?>
     </div>

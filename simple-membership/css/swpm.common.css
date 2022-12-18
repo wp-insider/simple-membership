@@ -11,6 +11,10 @@
 .swpm-hidden{
     display: none;
 }
+.swpm-red-error-text{
+    font-weight: bold;
+    color: red;    
+}
 
 .swpm-yellow-box{
     margin: 10px 0px;

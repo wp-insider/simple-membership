@@ -424,7 +424,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 				$user_login = $user_data->user_login;
 				$password_reset_link = esc_url_raw( $settings->get_value("reset-page-url") . "?action=swpm-reset-using-link&key=$key&login=" . rawurlencode($user_login) );
 				$additional_args["password_reset_link"] = $password_reset_link;
-				
+                                
+SwpmLog::log_simple_debug( 'Reset link: ' . $password_reset_link, true );
+
 				//Skip the {password} tag
 				$additional_args["password"] = "Reset password using link";
 
@@ -509,7 +511,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
                 add_filter( 'send_password_change_email', array( &$this, 'dont_send_password_change_email' ), 1, 3 ); //Stop WordPress from sending a reset password email to admin.
                 SwpmUtils::update_wp_user( $user->user_name, array( 'plain_password' => $password ) );
 
-                SwpmLog::log_simple_debug( 'Member password has been reset.' . $email, true );
+                SwpmLog::log_simple_debug( 'Member password has been reset. Email: ' . $email, true );
 
                 return true;
 	}

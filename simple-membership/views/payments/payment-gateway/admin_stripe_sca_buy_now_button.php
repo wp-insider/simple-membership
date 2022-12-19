@@ -158,7 +158,7 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 					<th scope="row"><?php echo SwpmUtils::_( 'Enable Automatic Tax' ); ?></th>
 					<td>
 						<input type="checkbox" name="automatic_tax" value="1" />
-						<p class="description">Enable this option if you want to enable automatic tax during Stripe checkout.</p>
+						<p class="description">Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.</p>
 					</td>
 				</tr>
 
@@ -431,7 +431,7 @@ function swpm_edit_stripe_sca_buy_now_button() {
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Collect Customer Address' ); ?></th>
 					<td>
-						<input type="checkbox" name="collect_address" value="1" <?php echo $collect_address; ?> />
+						<input type="checkbox" name="collect_address" value="1" <?php echo esc_attr($collect_address); ?> />
 						<p class="description">Enable this option if you want to collect customer address during Stripe checkout.</p>
 					</td>
 				</tr>
@@ -439,15 +439,15 @@ function swpm_edit_stripe_sca_buy_now_button() {
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Enable Automatic Tax' ); ?></th>
 					<td>
-					<input type="checkbox" name="automatic_tax" value="1" <?php echo $automatic_tax;?> />
-						<p class="description">Enable this option if you want to enable automatic tax during Stripe checkout.</p>
+					<input type="checkbox" name="automatic_tax" value="1" <?php echo esc_attr($automatic_tax); ?> />
+						<p class="description">Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.</p>
 					</td>
 				</tr>
 
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Return URL' ); ?></th>
 					<td>
-						<input type="text" size="100" name="return_url" value="<?php echo $return_url; ?>" />
+						<input type="text" size="100" name="return_url" value="<?php echo esc_url_raw($return_url); ?>" />
 						<p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
 					</td>
 				</tr>
@@ -455,7 +455,7 @@ function swpm_edit_stripe_sca_buy_now_button() {
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Button Image URL' ); ?></th>
 					<td>
-						<input type="text" size="100" name="button_image_url" value="<?php echo $button_image_url; ?>" />
+						<input type="text" size="100" name="button_image_url" value="<?php echo esc_url_raw($button_image_url); ?>" />
 						<p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
 					</td>
 				</tr>

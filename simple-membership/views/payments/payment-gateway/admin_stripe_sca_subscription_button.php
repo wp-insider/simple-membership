@@ -227,7 +227,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 					<th scope="row"><?php echo SwpmUtils::_( 'Enable Automatic Tax' ); ?></th>
 					<td>
 					<input type="checkbox" name="automatic_tax" value="1" <?php echo ( $edit ? ( ( isset( $opts['stripe_automatic_tax'][0] ) && $opts['stripe_automatic_tax'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
-						<p class="description">Enable this option if you want to enable automatic tax during Stripe checkout.</p>
+						<p class="description">Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.</p>
 					</td>
 				</tr>
 

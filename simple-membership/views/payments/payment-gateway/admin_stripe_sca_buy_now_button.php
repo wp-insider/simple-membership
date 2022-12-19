@@ -155,6 +155,14 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
+					<th scope="row"><?php echo SwpmUtils::_( 'Enable Automatic Tax' ); ?></th>
+					<td>
+						<input type="checkbox" name="automatic_tax" value="1" />
+						<p class="description">Enable this option if you want to enable automatic tax during Stripe checkout.</p>
+					</td>
+				</tr>
+
+				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Return URL' ); ?></th>
 					<td>
 						<input type="text" size="100" name="return_url" value="" />
@@ -227,6 +235,7 @@ function swpm_save_new_stripe_sca_buy_now_button_data() {
 		add_post_meta( $button_id, 'stripe_live_publishable_key', trim( sanitize_text_field( $_REQUEST['stripe_live_publishable_key'] ) ) );
 
 		add_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
+		add_post_meta( $button_id, 'stripe_automatic_tax', isset( $_POST['automatic_tax'] ) ? '1' : '' );
 
 		$stripe_use_global_keys = filter_input( INPUT_POST, 'stripe_use_global_keys', FILTER_SANITIZE_NUMBER_INT );
 		$stripe_use_global_keys = $stripe_use_global_keys ? true : false;
@@ -276,6 +285,13 @@ function swpm_edit_stripe_sca_buy_now_button() {
 		$collect_address = ' checked';
 	} else {
 		$collect_address = '';
+	}
+
+	$automatic_tax = get_post_meta( $button_id, 'stripe_automatic_tax', true );
+	if ( $automatic_tax == '1' ) {
+		$automatic_tax = ' checked';
+	} else {
+		$automatic_tax = '';
 	}
 
 	$use_global_keys = get_post_meta( $button_id, 'stripe_use_global_keys', true );
@@ -421,6 +437,14 @@ function swpm_edit_stripe_sca_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
+					<th scope="row"><?php echo SwpmUtils::_( 'Enable Automatic Tax' ); ?></th>
+					<td>
+					<input type="checkbox" name="automatic_tax" value="1" <?php echo $automatic_tax;?> />
+						<p class="description">Enable this option if you want to enable automatic tax during Stripe checkout.</p>
+					</td>
+				</tr>
+
+				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Return URL' ); ?></th>
 					<td>
 						<input type="text" size="100" name="return_url" value="<?php echo $return_url; ?>" />
@@ -511,6 +535,7 @@ function swpm_edit_stripe_sca_buy_now_button_data() {
 		}
 
 		update_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
+		update_post_meta( $button_id, 'stripe_automatic_tax', isset( $_POST['automatic_tax'] ) ? '1' : '' );
 
 		$stripe_use_global_keys = filter_input( INPUT_POST, 'stripe_use_global_keys', FILTER_SANITIZE_NUMBER_INT );
 		$stripe_use_global_keys = $stripe_use_global_keys ? true : false;

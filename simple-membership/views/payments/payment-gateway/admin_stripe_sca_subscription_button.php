@@ -224,6 +224,14 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				</tr>
 
 				<tr valign="top">
+					<th scope="row"><?php echo SwpmUtils::_( 'Enable Automatic Tax' ); ?></th>
+					<td>
+					<input type="checkbox" name="automatic_tax" value="1" <?php echo ( $edit ? ( ( isset( $opts['stripe_automatic_tax'][0] ) && $opts['stripe_automatic_tax'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
+						<p class="description">Enable this option if you want to enable automatic tax during Stripe checkout.</p>
+					</td>
+				</tr>
+
+				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Return URL' ); ?></th>
 					<td>
 						<input type="text" size="100" name="return_url" value="<?php echo ( $edit ? $opts['return_url'][0] : '' ); ?>" />
@@ -322,6 +330,7 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 		update_post_meta( $button_id, 'return_url', trim( sanitize_text_field( $_REQUEST['return_url'] ) ) );
 		update_post_meta( $button_id, 'button_image_url', trim( sanitize_text_field( $_REQUEST['button_image_url'] ) ) );
 		update_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
+		update_post_meta( $button_id, 'stripe_automatic_tax', isset( $_POST['automatic_tax'] ) ? '1' : '' );
 
 		//API details
 		$stripe_test_secret_key      = filter_input( INPUT_POST, 'stripe_test_secret_key', FILTER_SANITIZE_STRING );

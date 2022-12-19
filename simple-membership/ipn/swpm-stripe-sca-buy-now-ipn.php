@@ -284,6 +284,10 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 		//Billing address
 		$billing_address = isset( $args['billing_address'] ) ? '1' : '';
+
+		
+
+
 		//By default don't show the billing address in the checkout form.
 		//if billing_address parameter is not present in the shortcode, let's check button option
 		if ( $billing_address === '' ) {
@@ -293,6 +297,15 @@ class SwpmStripeSCABuyNowIpnHandler {
 				$billing_address = 1;
 			}
 		}
+
+		$automatic_tax= false;
+			$automatic_tax_opt = get_post_meta( $button_id, 'stripe_automatic_tax', true );
+			if ( $automatic_tax_opt === '1' ) {
+								
+				$automatic_tax = true;
+			}
+		
+		
 
 		$ref_id = 'swpm_' . $uniqid . '|' . $button_id;
 
@@ -376,6 +389,12 @@ class SwpmStripeSCABuyNowIpnHandler {
 			if ( ! empty( $member_email ) ) {
 				$opts['customer_email'] = $member_email;
 			}
+
+			if($automatic_tax==true)
+			{
+				$opts["automatic_tax"]=array("enabled"=>true);
+			}
+			
 
 			$opts = apply_filters( 'swpm_stripe_sca_session_opts', $opts, $button_id );
 

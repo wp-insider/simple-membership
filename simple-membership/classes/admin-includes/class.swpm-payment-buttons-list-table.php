@@ -42,7 +42,7 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
                     //This membership level doesn't exist. Show an error instead of the shortcode.
                     $shortcode = 'Error! The membership level you specified in this button does not exist. You may have deleted this level. Edit this button and use a valid membership level.';
                 } else {
-                    $shortcode = '[swpm_payment_button id='.$item['ID'].']';
+                    $shortcode = '<input type="text" onfocus="this.select();" readonly="readonly" value="[swpm_payment_button id='.$item['ID'].']" class="large-text code">';
                 }
                 return $shortcode;
                 break;            

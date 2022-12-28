@@ -19,6 +19,10 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
 	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : SwpmUtils::_( 'Buy Now' );
 
+        //Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account". 
+        //It can be used to enable ACH payment option.
+        $payment_method_types = isset( $args['payment_method_types'] ) ? $args['payment_method_types'] : '';
+        
 	$item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
 	$settings   = SwpmSettings::get_instance();
@@ -91,6 +95,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 			jQuery.post('<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
 				'action': 'swpm_stripe_sca_create_checkout_session',
 				'swpm_button_id': <?php echo esc_js( $button_id ); ?>,
+                                'payment_method_types': '<?php echo esc_js( $payment_method_types ); ?>',
 				'swpm_page_url': '<?php echo esc_js( $current_url ); ?>',
 				'swpm_uniqid': '<?php echo esc_js( $uniqid ); ?>'
 				}).done(function (response) {
@@ -152,6 +157,10 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
 	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : SwpmUtils::_( 'Buy Now' );
 
+        //Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account". 
+        //It can be used to enable ACH payment option.
+        $payment_method_types = isset( $args['payment_method_types'] ) ? $args['payment_method_types'] : '';
+        
 	$item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
 	$settings   = SwpmSettings::get_instance();
@@ -230,6 +239,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 			jQuery.post('<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
 				'action': 'swpm_stripe_sca_create_checkout_session',
 				'swpm_button_id': <?php echo esc_js( $button_id ); ?>,
+                                'payment_method_types': '<?php echo esc_js( $payment_method_types ); ?>',
 				'swpm_page_url': '<?php echo esc_js( $current_url ); ?>',
 				'swpm_uniqid': '<?php echo esc_js( $uniqid ); ?>'
 				}).done(function (response) {

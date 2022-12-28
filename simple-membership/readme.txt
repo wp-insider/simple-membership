@@ -167,6 +167,7 @@ https://simple-membership-plugin.com/
 - [TODO] [prepare and release the free override password length free addon.]
 - Added an option in the Stripe button configuration to use the Stripe's automatic tax feature.
 - Usability improvement: the payment button shortcode can be selected easily (for better copy and paste operation).
+- Added an option to specify the payment_method_types parameter in the Stripe payment button shortcode. It can be used to enable ACH payment option for a specific Stripe payment button.
 
 = 4.2.2 =
 - The Braintree transactions will send the customer's name and email address to the API also.

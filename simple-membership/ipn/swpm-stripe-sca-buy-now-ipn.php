@@ -232,6 +232,16 @@ class SwpmStripeSCABuyNowIpnHandler {
 			wp_send_json( array( 'error' => 'No button ID provided' ) );
 		}
 
+                //Check if payment_method_types is being used in the shortcode.
+                $payment_method_types = isset( $_POST['payment_method_types'] ) ? sanitize_text_field( stripslashes ( $_POST['payment_method_types'] ) ) : '';
+		if ( empty( $payment_method_types ) ) {
+                        //Use the default payment_method_types value.
+			$payment_method_types_array = array( 'card' );
+		} else {
+                        //Use the payment_method_types specified in the shortcode (example value: card,us_bank_account
+                        $payment_method_types_array = array_map( 'trim', explode (",", $payment_method_types) );
+                }
+                
 		$uniqid = filter_input( INPUT_POST, 'swpm_uniqid', FILTER_SANITIZE_STRING );
 		$uniqid = ! empty( $uniqid ) ? $uniqid : '';
 
@@ -330,7 +340,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 			if ( empty( $plan_id ) ) {
 				//this is one-off payment
 				$opts = array(
-					'payment_method_types'       => array( 'card' ),
+					'payment_method_types'       => $payment_method_types_array,
 					'client_reference_id'        => $ref_id,
 					'billing_address_collection' => $billing_address ? 'required' : 'auto',					
 					'line_items' => array(
@@ -353,7 +363,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 			} else {
 				//this is subscription payment
 				$opts = array(
-					'payment_method_types'       => array('card'),
+					'payment_method_types'       => $payment_method_types_array,
 					'client_reference_id'        => $ref_id,
 					'billing_address_collection' => $billing_address ? 'required' : 'auto',					
 					'line_items' => array(

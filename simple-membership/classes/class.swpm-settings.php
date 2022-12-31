@@ -64,11 +64,13 @@ class SwpmSettings {
 
 		register_setting( 'swpm-settings-tab-1', 'swpm-settings', array( &$this, 'sanitize_tab_1' ) );
 
-		//This settings section has no heading
+		//This settings section has no heading. Useful for hooking at this section and doing arbitrary request parameter checks and show response accordingly (for this settings tab)
 		add_settings_section( 'swpm-general-post-submission-check', '', array( &$this, 'swpm_general_post_submit_check_callback' ), 'simple_wp_membership_settings' );
 
+                //The documentation settings section for this tab
 		add_settings_section( 'swpm-documentation', SwpmUtils::_( 'Plugin Documentation' ), array( &$this, 'swpm_documentation_callback' ), 'simple_wp_membership_settings' );
-		add_settings_section( 'general-settings', SwpmUtils::_( 'General Settings' ), array( &$this, 'general_settings_callback' ), 'simple_wp_membership_settings' );
+		
+                add_settings_section( 'general-settings', SwpmUtils::_( 'General Settings' ), array( &$this, 'general_settings_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
 			'enable-free-membership',
 			SwpmUtils::_( 'Enable Free Membership' ),
@@ -312,7 +314,12 @@ class SwpmSettings {
 	private function tab_2() {
 		//Register settings sections and fileds for the payment settings tab.
 		register_setting( 'swpm-settings-tab-2', 'swpm-settings', array( $this, 'sanitize_tab_2' ) );
-		add_settings_section( 'stripe-global-settings', SwpmUtils::_( 'Stripe Global Settings' ), null, 'simple_wp_membership_settings' );
+                
+		//This settings section has no heading. Useful for hooking at this section and doing arbitrary request parameter checks and show response accordingly (on this settings tab)
+		add_settings_section( 'swpm-settings-tab-2-before-other-fields', '', array( &$this, 'swpm_settings_tab_2_before_fields_callback' ), 'simple_wp_membership_settings' );
+                
+		add_settings_section( 'stripe-global-settings', SwpmUtils::_( 'Stripe Global Settings' ), array( &$this, 'stripe_global_settings_callback' ), 'simple_wp_membership_settings' );
+                
 		add_settings_field(
 			'stripe-prefill-member-email',
 			SwpmUtils::_( 'Pre-fill Member Email Address' ),
@@ -1144,6 +1151,17 @@ class SwpmSettings {
 		SwpmUtils::e( 'Testing and Debug Related Settings.' );
 	}
 
+        public function swpm_settings_tab_2_before_fields_callback() {
+            	//Show settings updated message for tab 2
+		if ( isset( $_REQUEST['settings-updated'] ) ) {
+			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
+		}
+        }
+        
+	public function stripe_global_settings_callback() {
+                SwpmUtils::e( 'This section allows you to configure Stripe payment related settings.' );               
+	}
+        
 	public function reg_email_settings_callback() {
 		SwpmUtils::e( 'This email will be sent to your users when they complete the registration and become a member.' );
 	}

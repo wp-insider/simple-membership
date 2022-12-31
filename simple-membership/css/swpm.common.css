@@ -15,6 +15,9 @@
     font-weight: bold;
     color: red;    
 }
+.swpm-box-shadow {
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
 
 .swpm-yellow-box{
     margin: 10px 0px;
@@ -48,6 +51,18 @@
     border-radius: 3px 3px 3px 3px;
     border-style: solid;
     border-width: 1px;
+}
+
+/* Wrap directly with this class (not to be used with a paragraph tag) */
+.swpm-white-box{
+    margin: 10px 0px;
+    padding: 15px 10px;
+    color: #3c434a;
+    background-color: #fff;
+    border-color: #c3c4c7;
+    border-width: 1px;
+    border-radius: 3px 3px 3px 3px;
+    border-style: solid;
 }
 
 /* Wrap directly with this class (not to be used with a paragraph tag) */

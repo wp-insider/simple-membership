@@ -25,7 +25,12 @@
 
 		echo '<div class="swpm-grey-box">';
 		echo '<p>';
-		SwpmUtils::e( 'You can create membership payment buttons from the payments menu of this plugin (useful if you want to offer paid membership on the site).' );
+		SwpmUtils::e( 'You can create membership payment buttons from the ' );
+                echo '<a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" target="_blank">' . SwpmUtils::_( 'payments menu' ) . '</a>';
+                SwpmUtils::e( ' of this plugin (useful if you want to offer paid memberships on the site).' );
+                SwpmUtils::e( ' Read the ' );
+                echo '<a href="https://simple-membership-plugin.com/simple-membership-documentation/#membership-payment-options" target="_blank">' . SwpmUtils::_( 'membership payment section' ) . '</a>';
+                SwpmUtils::e( ' of our documentation to learn more about creating membership payment buttons.' );
 		echo '</p>';
 		echo '</div>';
 		?>

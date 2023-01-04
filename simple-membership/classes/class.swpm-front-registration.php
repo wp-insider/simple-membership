@@ -450,20 +450,24 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$message .= '<div class="swpm-reset-pw-success">' . SwpmUtils::_( 'New password has been sent to your email address.' ) . '</div>';
 		}
 
-		$body            = $settings->get_value( 'reset-mail-body' );
-		$subject         = $settings->get_value( 'reset-mail-subject' );
-		$body            = html_entity_decode( $body );
-		$body            = SwpmMiscUtils::replace_dynamic_tags( $body, $user->member_id, $additional_args );
-		$from            = $settings->get_value( 'email-from' );
-		$headers         = 'From: ' . $from . "\r\n";
-		$subject         = apply_filters( 'swpm_email_password_reset_subject', $subject );
-		$body            = apply_filters( 'swpm_email_password_reset_body', $body );
-
-		//if no password_reset_link in email, add it at the bottom of the email body.
-		if( $password_reset_using_link && ( SwpmMiscUtils::has_tag( $body, "{password_reset_link}" ) == false ) ) {
+                //Password reset email header and subject.
+		$from = $settings->get_value( 'email-from' );
+		$headers = 'From: ' . $from . "\r\n";
+                $subject = $settings->get_value( 'reset-mail-subject' );
+                
+                //Password reset email body
+		$body = $settings->get_value( 'reset-mail-body' );
+		$body = html_entity_decode( $body );
+		//If the tag {password_reset_link} is not present in the email body, add it at the bottom of the email body.
+		if( $password_reset_using_link && ( !SwpmMiscUtils::has_tag( $body, "{password_reset_link}" ) ) ) {
 			$body .= "\n\nPassword Reset Link: {password_reset_link}";
-			$body = SwpmMiscUtils::replace_dynamic_tags( $body, $user->member_id, $additional_args );
 		}
+                //Merge tag replacement.
+		$body = SwpmMiscUtils::replace_dynamic_tags( $body, $user->member_id, $additional_args );
+
+                //Trigger the filters for password reset email subject and body.
+		$subject = apply_filters( 'swpm_email_password_reset_subject', $subject );
+		$body = apply_filters( 'swpm_email_password_reset_body', $body );
 
 		SwpmMiscUtils::mail( $email, $subject, $body, $headers );
                 SwpmLog::log_simple_debug( 'Member password reset email sent to: ' . $email, true );

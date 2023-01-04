@@ -169,6 +169,7 @@ https://simple-membership-plugin.com/
 - Usability improvement: the payment button shortcode can be selected easily (for better copy and paste operation).
 - Added an option to specify the payment_method_types parameter in the Stripe payment button shortcode. It can be used to enable ACH payment option for a specific Stripe payment button.
 - Fixed: The Payment Settings tab not showing the settings updated message.
+- Fixed: The new password reset via link feature not seeing the already present {password_reset_link} email merge tag.
 
 = 4.2.2 =
 - The Braintree transactions will send the customer's name and email address to the API also.

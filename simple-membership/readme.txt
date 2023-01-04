@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 4.2.2
+Stable tag: 4.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,12 +163,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.2.3 =
-- [TODO] [prepare and release the free override password length free addon.]
+= 4.2.3 =
 - Added an option in the Stripe button configuration to use the Stripe's automatic tax feature.
 - Usability improvement: the payment button shortcode can be selected easily (for better copy and paste operation).
 - Added an option to specify the payment_method_types parameter in the Stripe payment button shortcode. It can be used to enable ACH payment option for a specific Stripe payment button.
-- Fixed: The Payment Settings tab not showing the settings updated message.
+- Fixed: The Payment Settings tab not showing the settings updated message correctly.
 - Fixed: The new password reset via link feature not seeing the already present {password_reset_link} email merge tag.
 
 = 4.2.2 =

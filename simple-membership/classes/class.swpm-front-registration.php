@@ -476,7 +476,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$message .= '</div>';
 
 		$message_ary = array(
-			'succeeded'       => false,
+			'succeeded'       => true,
 			'message'         => $message,
 			'pass_reset_sent' => true,
 		);

@@ -166,6 +166,7 @@ https://simple-membership-plugin.com/
 = WIP 4.2.4 =
 - Improved the enqueue_validation_scripts() function to work better with block themes.
 - Better Stripe payment button compatibility with some wp themes.
+- Fixed password reset success message showing an incorrect CSS class.
 
 = 4.2.3 =
 - Added an option in the Stripe button configuration to use the Stripe's automatic tax feature.

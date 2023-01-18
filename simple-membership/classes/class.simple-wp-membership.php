@@ -35,6 +35,9 @@ include_once('class-swpm-member-subscriptions.php');
 
 class SimpleWpMembership {
 
+    public $execution_success_notice = false;
+    public $success_notice_pw_reset = false;
+    
     public function __construct() {
 
         new SwpmShortcodesHandler(); //Tackle the shortcode definitions and implementation.
@@ -464,20 +467,24 @@ class SimpleWpMembership {
         SwpmMemberUtils::create_swpm_member_entry_from_array_data($fields);
     }
 
-    public function reset() {
-        $succeeded = $this->notices();
-        if ($succeeded) {
-            return '';
-        }
+    public function reset() {        
+        //Check if the form has been submitted and there is a success message.
+        $any_notice_output = $this->capture_any_notice_output();
+        if( !empty( $any_notice_output ) && $this->success_notice_pw_reset ){
+            //The password reset form execution was a success. Return the success notice output string (it will be used with the shortcode output).
+            return $any_notice_output;
+        }        
 
         if( isset( $_GET["action"]) && $_GET["action"] == "swpm-reset-using-link" ) {
             ob_start();
+            echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
             //Load the reset password template
             SwpmUtilsTemplate::swpm_load_template('reset_password_using_link.php', false);
             return ob_get_clean();
         }
         else {
             ob_start();
+            echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
             //Load the forgot password template
             SwpmUtilsTemplate::swpm_load_template('forgot_password.php', false);
             return ob_get_clean();
@@ -514,6 +521,7 @@ class SimpleWpMembership {
         
         if ( $message['succeeded'] ) {
             $output .= "<div id='swpm_message' class='swpm_success'>";
+            $this->execution_success_notice = true;
         } else {
             $output .= "<div id='swpm_message' class='swpm_error'>";
         }
@@ -529,6 +537,10 @@ class SimpleWpMembership {
             $output .= '</ul>';
         }
         $output .= "</div>";
+        //If password reset notice was sent, set the flag.
+        if (isset($message['pass_reset_sent'])) {
+            $this->success_notice_pw_reset = true;
+        }        
         return $output;
     }
     
@@ -840,14 +852,22 @@ class SimpleWpMembership {
     }
 
     public function registration_form($atts) {
-        $succeeded = $this->notices();
-        if ($succeeded) {
-            return;
+        $output = "";
+        
+        //Check if the form has been submitted and there is a success message.
+        $any_notice_output = $this->capture_any_notice_output();
+        if( !empty( $any_notice_output ) && $this->execution_success_notice ){
+            //The registration form execution was a success. Return the success notice output string (it will be used with the shortcode output).
+            return $any_notice_output;
         }
+        
         $is_free = SwpmSettings::get_instance()->get_value('enable-free-membership');
         $free_level = absint(SwpmSettings::get_instance()->get_value('free-membership-id'));
         $level = isset($atts['level']) ? absint($atts['level']) : ($is_free ? $free_level : null);
-        return SwpmFrontRegistration::get_instance()->regigstration_ui($level);
+        
+        $output .= $any_notice_output;
+        $output .= SwpmFrontRegistration::get_instance()->regigstration_ui($level);
+        return $output;
     }
 
     public function menu() {

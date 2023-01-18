@@ -741,13 +741,15 @@ class SimpleWpMembership {
     public static function enqueue_validation_scripts( $additional_params = array() ) {
         //This function gets called from a shortcode. So use the below technique to make the inline script loading process work smoothly.
         
-	if ( ! wp_script_is( 'swpm.validationEngine-localization', 'registered' ) ) {
-            //In some themes (block themes) this may not have been registered yet since that process can be delayed. So do it now before adding inline scripts.
-            wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
-	}
+        //In some themes (block themes) this may not have been registered yet since that process can be delayed. So do it now before adding any inline or localize scripts to it.
+        if ( ! wp_script_is( 'jquery.validationEngine', 'registered' ) ) {
+            wp_register_script('jquery.validationEngine', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
+        }
         if ( ! wp_script_is( 'jquery.validationEngine-en', 'registered' ) ) {
-            //In some themes (block themes) this may not have been registered yet since that process can be delayed. So do it now before adding inline scripts.
             wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
+	}
+	if ( ! wp_script_is( 'swpm.validationEngine-localization', 'registered' ) ) {
+            wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
 	}
 
         //The above code ensures that the scripts are registered for sure. Now we can enqueue and add inline script to them. This process works on all themes.

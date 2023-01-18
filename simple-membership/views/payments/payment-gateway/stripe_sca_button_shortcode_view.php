@@ -76,9 +76,11 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
 	
-	//deprecated
-	//$output .= SwpmMiscUtils::output_stripe_sca_frontend_scripts_once();
-
+	//Handle script and style loading for the button
+	if ( ! wp_script_is( 'swpm.stripe', 'registered' ) ) {
+            //In some themes (block themes) this may not have been registered yet since that process can be delayed. So register it now before doing inline script to it.
+            wp_register_script("swpm.stripe", "https://js.stripe.com/v3/", array("jquery"), SIMPLE_WP_MEMBERSHIP_VER);
+	}
 	wp_enqueue_script("swpm.stripe");
 	wp_enqueue_style("swpm.stripe.style");
 	
@@ -219,10 +221,12 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
-	
-	//deprecated
-	//$output .= SwpmMiscUtils::output_stripe_sca_frontend_scripts_once();
 
+        //Handle script and style loading for the button
+	if ( ! wp_script_is( 'swpm.stripe', 'registered' ) ) {
+            //In some themes (block themes) this may not have been registered yet since that process can be delayed. So register it now before doing inline script to it.
+            wp_register_script("swpm.stripe", "https://js.stripe.com/v3/", array("jquery"), SIMPLE_WP_MEMBERSHIP_VER);
+	}        
 	wp_enqueue_script("swpm.stripe");
 	wp_enqueue_style("swpm.stripe.style");
 	

@@ -738,7 +738,24 @@ class SimpleWpMembership {
 	wp_register_style("swpm.stripe.style", "https://checkout.stripe.com/v3/checkout/button.css", array(), SIMPLE_WP_MEMBERSHIP_VER);
     }
 
-    public static function enqueue_validation_scripts($add_params = array()) {
+    public static function enqueue_validation_scripts( $additional_params = array() ) {
+        //This function gets called from a shortcode. So use the below technique to make the inline script loading process work smoothly.
+        
+	if ( ! wp_script_is( 'swpm.validationEngine-localization', 'registered' ) ) {
+            //In some themes (block themes) this may not have been registered yet since that process can be delayed. So do it now before adding inline scripts.
+            wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
+	}
+        if ( ! wp_script_is( 'jquery.validationEngine-en', 'registered' ) ) {
+            //In some themes (block themes) this may not have been registered yet since that process can be delayed. So do it now before adding inline scripts.
+            wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
+	}
+
+        //The above code ensures that the scripts are registered for sure. Now we can enqueue and add inline script to them. This process works on all themes.
+        wp_enqueue_style('validationEngine.jquery');
+        wp_enqueue_script('jquery.validationEngine');
+        wp_enqueue_script('jquery.validationEngine-en');
+        wp_enqueue_script('swpm.validationEngine-localization');
+        
         //Localization for jquery.validationEngine
         //This array will be merged with $.validationEngineLanguage.allRules object from jquery.validationEngine-en.js file
         $loc_data = array(
@@ -771,26 +788,22 @@ class SimpleWpMembership {
             ),
         );
 
-        $nonce=wp_create_nonce( 'swpm-rego-form-ajax-nonce' );
+        $nonce = wp_create_nonce( 'swpm-rego-form-ajax-nonce' );
 
-        if ($add_params) {
+        if ($additional_params) {
             // Additional parameters should be added to the array, replacing existing ones
-            if (isset($add_params['ajaxEmailCall'])) {
-                if (isset($add_params['ajaxEmailCall']['extraData'])) {
-                    $add_params['ajaxEmailCall']['extraData'].='&nonce='.$nonce;
+            if (isset($additional_params['ajaxEmailCall'])) {
+                if (isset($additional_params['ajaxEmailCall']['extraData'])) {
+                    $additional_params['ajaxEmailCall']['extraData'].='&nonce='.$nonce;
                 }
             }
-            $loc_data = array_replace_recursive($add_params, $loc_data);
+            $loc_data = array_replace_recursive($additional_params, $loc_data);
         }
 
+        //The scripts are registered and enqueued. We can now add inline script to any of those registered scripts.
         wp_localize_script('swpm.validationEngine-localization', 'swpm_validationEngine_localization', $loc_data);
 
         wp_localize_script('jquery.validationEngine-en', 'swpmRegForm', array('nonce' => $nonce));
-
-        wp_enqueue_style('validationEngine.jquery');
-        wp_enqueue_script('jquery.validationEngine');
-        wp_enqueue_script('jquery.validationEngine-en');
-        wp_enqueue_script('swpm.validationEngine-localization');
     }
 
     public function registration_form($atts) {

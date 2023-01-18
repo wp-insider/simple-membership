@@ -486,13 +486,14 @@ class SimpleWpMembership {
 
     public function profile_form() {
         $auth = SwpmAuth::get_instance();
-        $this->notices();
+        $any_notice_output = $this->capture_any_notice_output();
         if ($auth->is_logged_in()) {
-            $out = apply_filters('swpm_profile_form_override', '');
-            if (!empty($out)) {
-                return $out;
+            $override_out = apply_filters('swpm_profile_form_override', '');
+            if (!empty($override_out)) {
+                return $override_out;
             }
             ob_start();
+            echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
             //Load the edit profile template
             SwpmUtilsTemplate::swpm_load_template('edit.php', false);
             return ob_get_clean();
@@ -500,8 +501,38 @@ class SimpleWpMembership {
         return SwpmUtils::_('You are not logged in.');
     }
 
+    /*
+     * Similar to $this->notices() function but instead of echoing the message, it returns the message (if any).
+     * Useful for using inside a shortcode output.
+     */
+    public function capture_any_notice_output() {
+        $output = '';
+        $message = SwpmTransfer::get_instance()->get('status');
+        if ( empty( $message ) ) {
+            return $output;
+        }
+        
+        if ( $message['succeeded'] ) {
+            $output .= "<div id='swpm_message' class='swpm_success'>";
+        } else {
+            $output .= "<div id='swpm_message' class='swpm_error'>";
+        }
+        $output .= $message['message'];
+        $extra = isset( $message['extra'] ) ? $message['extra'] : array();
+        if ( is_string($extra) ) {
+            $output .= $extra;
+        } else if ( is_array($extra) && !empty($extra) ) {
+            $output .= '<ul>';
+            foreach ($extra as $key => $value) {
+                $output .= '<li>' . $value . '</li>';
+            }
+            $output .= '</ul>';
+        }
+        $output .= "</div>";
+        return $output;
+    }
+    
     /* If any message/notice was set during the execution then this function will output that message */
-
     public function notices() {
         $message = SwpmTransfer::get_instance()->get('status');
         $succeeded = false;

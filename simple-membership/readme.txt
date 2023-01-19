@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 4.2.3
+Stable tag: 4.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,12 +163,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.2.4 =
+= 4.2.4 =
 - Improved the enqueue_validation_scripts() function to work better with block themes.
 - Better Stripe payment button compatibility with some wp themes.
 - Improved the login form's error message output. The error message will be shown in red so it is can be easily noticed.
 - Fixed the terms and conditions checkbox validation error not displaying correctly on some themes.
 - Fixed password reset success message showing an incorrect CSS class.
+- Regenerated the main translation POT file.
 
 = 4.2.3 =
 - Added an option in the Stripe button configuration to use the Stripe's automatic tax feature.

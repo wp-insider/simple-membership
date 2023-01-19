@@ -1,16 +1,16 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Simple WordPress Membership\n"
-"POT-Creation-Date: 2022-07-19 17:38+0600\n"
-"PO-Revision-Date: 2022-07-19 17:37+0600\n"
+"POT-Creation-Date: 2023-01-19 16:17+1100\n"
+"PO-Revision-Date: 2023-01-19 16:17+1100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Poedit 3.1.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: simple-wp-membership.php\n"
@@ -19,7 +19,7 @@ msgstr ""
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
 "_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
 #: classes/admin-includes/class.swpm-payment-buttons-list-table.php:76
 msgid "Payment Button ID"
@@ -128,7 +128,7 @@ msgstr ""
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:44
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:330
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:44
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:312
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:328
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:108
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:108
 msgid "Membership Level"
@@ -140,7 +140,7 @@ msgid "Status/Note"
 msgstr ""
 
 #: classes/class-swpm-member-subscriptions.php:121
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:164
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:167
 msgid "No active subscriptions"
 msgstr ""
 
@@ -152,140 +152,140 @@ msgstr ""
 msgid "Are you sure that you want to cancel the subscription?"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:237
+#: classes/class.simple-wp-membership.php:241
 msgid "The admin of this site does not allow users to access the wp dashboard."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:238
+#: classes/class.simple-wp-membership.php:242
 msgid "Go back to the home page by "
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:238
+#: classes/class.simple-wp-membership.php:242
 msgid "clicking here"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:303
+#: classes/class.simple-wp-membership.php:307
 msgid ""
 "Error! This site has the force WP user login feature enabled in the "
 "settings. We could not find a WP user record for the given username: "
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:304
+#: classes/class.simple-wp-membership.php:308
 msgid ""
 "This error is triggered when a member account doesn't have a corresponding "
 "WP user account. So the plugin fails to log the user into the WP User system."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:305
+#: classes/class.simple-wp-membership.php:309
 msgid ""
 "Contact the site admin and request them to check your username in the WP "
 "Users menu to see what happened with the WP user entry of your account."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:306
+#: classes/class.simple-wp-membership.php:310
 msgid ""
 "The site admin can disable the Force WP User Synchronization feature in the "
 "settings to disable this feature and this error will go away."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:307
+#: classes/class.simple-wp-membership.php:311
 msgid "You can use the back button of your browser to go back to the site."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:484
+#: classes/class.simple-wp-membership.php:511
 #: classes/class.swpm-wp-loaded-tasks.php:141
 msgid "You are not logged in."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:535
+#: classes/class.simple-wp-membership.php:599
 msgid ""
 "You have the sandbox payment mode enabled in plugin settings. Make sure to "
 "turn off the sandbox mode when you want to do live transactions."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:550
+#: classes/class.simple-wp-membership.php:614
 msgid "Simple WP Membership Protection"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:562
+#: classes/class.simple-wp-membership.php:626
 msgid "Simple Membership Protection options"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:580
+#: classes/class.simple-wp-membership.php:644
 msgid "Do you want to protect this content?"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:581
+#: classes/class.simple-wp-membership.php:645
 msgid "No, Do not protect this content."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:582
+#: classes/class.simple-wp-membership.php:646
 msgid "Yes, Protect this content."
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:585
+#: classes/class.simple-wp-membership.php:649
 msgid "Select the membership level that can access this content:"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:728
-#: classes/class.simple-wp-membership.php:732
+#: classes/class.simple-wp-membership.php:814
+#: classes/class.simple-wp-membership.php:818
 msgid "Validating, please wait"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:735
+#: classes/class.simple-wp-membership.php:821
 msgid "Invalid email address"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:738
+#: classes/class.simple-wp-membership.php:824
 msgid "This field is required"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:741
+#: classes/class.simple-wp-membership.php:827
 msgid "Password must contain at least:"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:741
+#: classes/class.simple-wp-membership.php:827
 msgid "- a digit"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:741
+#: classes/class.simple-wp-membership.php:827
 msgid "- an uppercase letter"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:741
+#: classes/class.simple-wp-membership.php:827
 msgid "- a lowercase letter"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:744 classes/class.swpm-auth.php:310
+#: classes/class.simple-wp-membership.php:830 classes/class.swpm-auth.php:342
 msgid "Invalid Username"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:744
+#: classes/class.simple-wp-membership.php:830
 msgid "Usernames can only contain: letters, numbers and .-_*@"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:747
+#: classes/class.simple-wp-membership.php:833
 msgid "Minimum "
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:748
+#: classes/class.simple-wp-membership.php:834
 msgid " characters required"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:751
+#: classes/class.simple-wp-membership.php:837
 msgid "Apostrophe character is not allowed"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:791
+#: classes/class.simple-wp-membership.php:881
 msgid "WP Membership"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:792 classes/class.swpm-members.php:12
-#: classes/class.swpm-members.php:729
+#: classes/class.simple-wp-membership.php:882 classes/class.swpm-members.php:12
+#: classes/class.swpm-members.php:730
 msgid "Members"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:793
+#: classes/class.simple-wp-membership.php:883
 #: classes/class.swpm-category-list.php:20
 #: classes/class.swpm-membership-levels.php:12
 #: classes/class.swpm-membership-levels.php:273
@@ -293,24 +293,21 @@ msgstr ""
 msgid "Membership Levels"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:794
+#: classes/class.simple-wp-membership.php:884
 msgid "Settings"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:795
+#: classes/class.simple-wp-membership.php:885
 msgid "Payments"
 msgstr ""
 
-#: classes/class.simple-wp-membership.php:796
+#: classes/class.simple-wp-membership.php:886
 msgid "Add-ons"
 msgstr ""
 
 #: classes/class.swpm-access-control.php:47
 #: classes/class.swpm-access-control.php:120
 msgid "You need to be logged in to view this content. "
-msgstr ""
-
-msgid "You need to login to view this content. "
 msgstr ""
 
 #: classes/class.swpm-access-control.php:56
@@ -331,9 +328,6 @@ msgstr ""
 
 #: classes/class.swpm-access-control.php:204
 msgid "You need to be logged in to view the rest of the content. "
-msgstr ""
-
-msgid "You need to login to view the rest of the content. "
 msgstr ""
 
 #: classes/class.swpm-access-control.php:217
@@ -364,110 +358,118 @@ msgstr ""
 msgid "Your current password"
 msgstr ""
 
-#: classes/class.swpm-ajax.php:14 classes/class.swpm-ajax.php:34
+#: classes/class.swpm-ajax.php:16 classes/class.swpm-ajax.php:36
 #: ipn/swpm-smart-checkout-ipn.php:333
 msgid "Nonce check failed. Please reload the page."
 msgstr ""
 
-#: classes/class.swpm-ajax.php:18
+#: classes/class.swpm-ajax.php:20
 msgid "Invalid Email Address"
 msgstr ""
 
-#: classes/class.swpm-ajax.php:25 classes/class.swpm-ajax.php:44
+#: classes/class.swpm-ajax.php:27 classes/class.swpm-ajax.php:46
 msgid "Already taken"
 msgstr ""
 
-#: classes/class.swpm-ajax.php:25 classes/class.swpm-ajax.php:45
+#: classes/class.swpm-ajax.php:27 classes/class.swpm-ajax.php:47
 msgid "Available"
 msgstr ""
 
-#: classes/class.swpm-ajax.php:38
+#: classes/class.swpm-ajax.php:40
 msgid "Name contains invalid character"
 msgstr ""
 
-#: classes/class.swpm-auth.php:60
+#: classes/class.swpm-auth.php:50
+msgid "Username field cannot be empty."
+msgstr ""
+
+#: classes/class.swpm-auth.php:57
+msgid "Password field cannot be empty."
+msgstr ""
+
+#: classes/class.swpm-auth.php:75
 msgid ""
 "Warning! Simple Membership plugin cannot process this login request to "
 "prevent you from getting logged out of WP Admin accidentally."
 msgstr ""
 
-#: classes/class.swpm-auth.php:61
+#: classes/class.swpm-auth.php:76
 msgid "Click here"
 msgstr ""
 
-#: classes/class.swpm-auth.php:61
+#: classes/class.swpm-auth.php:76
 msgid " to see the profile you are currently logged into in this browser."
 msgstr ""
 
-#: classes/class.swpm-auth.php:62
+#: classes/class.swpm-auth.php:77
 msgid ""
 "You are logged into the site as an ADMIN user in this browser. First, logout "
 "from WP Admin then you will be able to log in as a normal member."
 msgstr ""
 
-#: classes/class.swpm-auth.php:63
+#: classes/class.swpm-auth.php:78
 msgid ""
 "Alternatively, you can use a different browser (where you are not logged-in "
 "as ADMIN) to test the membership login."
 msgstr ""
 
-#: classes/class.swpm-auth.php:64
+#: classes/class.swpm-auth.php:79
 msgid ""
 "Your normal visitors or members will never see this message. This message is "
 "ONLY for ADMIN user."
 msgstr ""
 
-#: classes/class.swpm-auth.php:71
-msgid "Captcha validation failed on login form."
+#: classes/class.swpm-auth.php:86
+msgid "Captcha validation failed on the login form."
 msgstr ""
 
-#: classes/class.swpm-auth.php:96
-msgid "User Not Found."
+#: classes/class.swpm-auth.php:111
+msgid "No user found with that username or email."
 msgstr ""
 
-#: classes/class.swpm-auth.php:103
-msgid "Password Empty or Invalid."
+#: classes/class.swpm-auth.php:118
+msgid "Password empty or invalid."
 msgstr ""
 
-#: classes/class.swpm-auth.php:144
+#: classes/class.swpm-auth.php:159
 msgid "Account is inactive."
 msgstr ""
 
-#: classes/class.swpm-auth.php:147 classes/class.swpm-auth.php:176
+#: classes/class.swpm-auth.php:162 classes/class.swpm-auth.php:191
 msgid "Account has expired."
 msgstr ""
 
-#: classes/class.swpm-auth.php:150
+#: classes/class.swpm-auth.php:165
 msgid "Account is pending."
 msgstr ""
 
-#: classes/class.swpm-auth.php:160
+#: classes/class.swpm-auth.php:175
 #, php-format
 msgid ""
 "You need to activate your account. If you didn't receive an email then %s to "
 "resend the activation email."
 msgstr ""
 
-#: classes/class.swpm-auth.php:160
-#: classes/class.swpm-front-registration.php:461
-#: classes/class.swpm-front-registration.php:514
+#: classes/class.swpm-auth.php:175
+#: classes/class.swpm-front-registration.php:544
+#: classes/class.swpm-front-registration.php:597
 #: classes/class.swpm-utils-misc.php:196
 msgid "click here"
 msgstr ""
 
-#: classes/class.swpm-auth.php:184
+#: classes/class.swpm-auth.php:199
 msgid "You are logged in as:"
 msgstr ""
 
-#: classes/class.swpm-auth.php:248
+#: classes/class.swpm-auth.php:269
 msgid "Logged Out Successfully."
 msgstr ""
 
-#: classes/class.swpm-auth.php:301
+#: classes/class.swpm-auth.php:333
 msgid "Session Expired."
 msgstr ""
 
-#: classes/class.swpm-auth.php:318
+#: classes/class.swpm-auth.php:350
 msgid "Please login again."
 msgstr ""
 
@@ -598,7 +600,7 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-front-registration.php:60
-#: classes/class.swpm-utils-misc.php:364 views/login.php:53
+#: classes/class.swpm-utils-misc.php:374 views/login.php:53
 msgid "Join Us"
 msgstr ""
 
@@ -640,108 +642,122 @@ msgid "Registration Successful. "
 msgstr ""
 
 #: classes/class.swpm-front-registration.php:179
-#: classes/class.swpm-utils-misc.php:363 classes/class.swpm-utils-misc.php:375
+#: classes/class.swpm-init-time-tasks.php:199
+#: classes/class.swpm-utils-misc.php:373 classes/class.swpm-utils-misc.php:385
 msgid "Please"
 msgstr ""
 
 #: classes/class.swpm-front-registration.php:179
-#: classes/class.swpm-utils-misc.php:363 views/login.php:47
+#: classes/class.swpm-init-time-tasks.php:199
+#: classes/class.swpm-utils-misc.php:373 views/login.php:47
 msgid "Log In"
-msgstr ""
-
-msgid "Login"
 msgstr ""
 
 #: classes/class.swpm-front-registration.php:198
 msgid "Please correct the following"
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:246
+#: classes/class.swpm-front-registration.php:250
 msgid "Membership Level Couldn't be found."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:298
+#: classes/class.swpm-front-registration.php:302
 msgid "Error! Nonce verification failed for front end profile edit."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:306
+#: classes/class.swpm-front-registration.php:313
 msgid "Profile updated successfully."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:326
+#: classes/class.swpm-front-registration.php:333
 msgid ""
 "Profile updated successfully. You will need to re-login since you changed "
 "your password."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:354
+#: classes/class.swpm-front-registration.php:361
 msgid "Please correct the following."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:370
+#: classes/class.swpm-front-registration.php:377
 msgid "Captcha validation failed."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:381
+#: classes/class.swpm-front-registration.php:388
 msgid "Email address not valid."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:395
+#: classes/class.swpm-front-registration.php:404
+#: classes/class.swpm-front-registration.php:498
 msgid "No user found with that email address."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:396
-#: classes/class.swpm-front-registration.php:428
+#: classes/class.swpm-front-registration.php:405
+#: classes/class.swpm-front-registration.php:475
+#: classes/class.swpm-front-registration.php:499
 msgid "Email Address: "
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:427
+#: classes/class.swpm-front-registration.php:432
+msgid "Password reset link has been sent to your email address."
+msgstr ""
+
+#: classes/class.swpm-front-registration.php:450
 msgid "New password has been sent to your email address."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:456
+#: classes/class.swpm-front-registration.php:539
 msgid "Can't find member account."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:461
-#: classes/class.swpm-front-registration.php:514
+#: classes/class.swpm-front-registration.php:544
+#: classes/class.swpm-front-registration.php:597
 msgid "Account already active. "
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:461
-#: classes/class.swpm-front-registration.php:514
+#: classes/class.swpm-front-registration.php:544
+#: classes/class.swpm-front-registration.php:597
 msgid " to log in."
 msgstr ""
 
-msgid " to login."
-msgstr ""
-
-#: classes/class.swpm-front-registration.php:468
+#: classes/class.swpm-front-registration.php:551
 msgid ""
 "Activation code mismatch. Cannot activate this account. Please contact the "
 "site admin."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:482
+#: classes/class.swpm-front-registration.php:565
 msgid "Success! Your account has been activated successfully."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:509
+#: classes/class.swpm-front-registration.php:592
 msgid "Cannot find member account."
 msgstr ""
 
-#: classes/class.swpm-front-registration.php:531
+#: classes/class.swpm-front-registration.php:614
 msgid ""
 "Activation email has been sent. Please check your email and activate your "
 "account."
 msgstr ""
 
-#: classes/class.swpm-init-time-tasks.php:137
+#: classes/class.swpm-init-time-tasks.php:141
 msgid "Sorry, Nonce verification failed."
 msgstr ""
 
-#: classes/class.swpm-init-time-tasks.php:144
+#: classes/class.swpm-init-time-tasks.php:148
 msgid "Sorry, Password didn't match."
+msgstr ""
+
+#: classes/class.swpm-init-time-tasks.php:177
+msgid "Error! Password fields do not match. Please try again."
+msgstr ""
+
+#: classes/class.swpm-init-time-tasks.php:182
+msgid "Error! Invalid password reset request."
+msgstr ""
+
+#: classes/class.swpm-init-time-tasks.php:199
+msgid "Password Reset Successful. "
 msgstr ""
 
 #: classes/class.swpm-level-form.php:50
@@ -802,55 +818,55 @@ msgstr ""
 msgid "Set Status to Expired"
 msgstr ""
 
-#: classes/class.swpm-members.php:83
+#: classes/class.swpm-members.php:84
 msgid "incomplete"
 msgstr ""
 
-#: classes/class.swpm-members.php:226
+#: classes/class.swpm-members.php:227
 msgid "No member found."
 msgstr ""
 
-#: classes/class.swpm-members.php:383
+#: classes/class.swpm-members.php:384
 msgid "Error! Nonce verification failed for user delete from admin end."
 msgstr ""
 
-#: classes/class.swpm-members.php:533
+#: classes/class.swpm-members.php:534
 msgid ""
 "Error! Nonce security verification failed for Bulk Change Membership Level "
 "action. Clear cache and try again."
 msgstr ""
 
-#: classes/class.swpm-members.php:541 classes/class.swpm-members.php:578
+#: classes/class.swpm-members.php:542 classes/class.swpm-members.php:579
 msgid "Error! Please select a membership level first."
 msgstr ""
 
-#: classes/class.swpm-members.php:558
+#: classes/class.swpm-members.php:559
 msgid "Membership level change operation completed successfully."
 msgstr ""
 
-#: classes/class.swpm-members.php:570
+#: classes/class.swpm-members.php:571
 msgid ""
 "Error! Nonce security verification failed for Bulk Change Access Starts Date "
 "action. Clear cache and try again."
 msgstr ""
 
-#: classes/class.swpm-members.php:595
+#: classes/class.swpm-members.php:596
 msgid "Access starts date change operation successfully completed."
 msgstr ""
 
-#: classes/class.swpm-members.php:724
+#: classes/class.swpm-members.php:725
 msgid "Simple WP Membership::Members"
 msgstr ""
 
-#: classes/class.swpm-members.php:725 views/admin_members_list.php:70
+#: classes/class.swpm-members.php:726 views/admin_members_list.php:70
 msgid "Add New"
 msgstr ""
 
-#: classes/class.swpm-members.php:730 views/admin_add.php:7
+#: classes/class.swpm-members.php:731 views/admin_add.php:7
 msgid "Add Member"
 msgstr ""
 
-#: classes/class.swpm-members.php:731
+#: classes/class.swpm-members.php:732
 msgid "Bulk Operation"
 msgstr ""
 
@@ -954,7 +970,17 @@ msgstr ""
 msgid "category protection menu"
 msgstr ""
 
-#: classes/class.swpm-settings.php:42 classes/class.swpm-settings.php:70
+#: classes/class.swpm-self-action-handler.php:164
+#: classes/class.swpm-self-action-handler.php:231
+msgid "The email address you used is not whitelisted on this site."
+msgstr ""
+
+#: classes/class.swpm-self-action-handler.php:175
+#: classes/class.swpm-self-action-handler.php:242
+msgid "The email address you used is blacklisted on this site."
+msgstr ""
+
+#: classes/class.swpm-settings.php:42 classes/class.swpm-settings.php:73
 msgid "General Settings"
 msgstr ""
 
@@ -970,383 +996,400 @@ msgstr ""
 msgid "Tools"
 msgstr ""
 
-#: classes/class.swpm-settings.php:46 classes/class.swpm-settings.php:625
+#: classes/class.swpm-settings.php:46 classes/class.swpm-settings.php:645
 msgid "Advanced Settings"
 msgstr ""
 
 #: classes/class.swpm-settings.php:47
+msgid "Blacklisting & Whitelisting"
+msgstr ""
+
+#: classes/class.swpm-settings.php:48
 msgid "Addons Settings"
 msgstr ""
 
-#: classes/class.swpm-settings.php:69
+#: classes/class.swpm-settings.php:71
 msgid "Plugin Documentation"
 msgstr ""
 
-#: classes/class.swpm-settings.php:73
+#: classes/class.swpm-settings.php:76
 msgid "Enable Free Membership"
 msgstr ""
 
-#: classes/class.swpm-settings.php:79
+#: classes/class.swpm-settings.php:82
 msgid ""
 "Enable/disable registration for free membership level. When you enable this "
 "option, make sure to specify a free membership level ID in the field below."
 msgstr ""
 
-#: classes/class.swpm-settings.php:84
+#: classes/class.swpm-settings.php:87
 msgid "Free Membership Level ID"
 msgstr ""
 
-#: classes/class.swpm-settings.php:90
+#: classes/class.swpm-settings.php:93
 msgid "Assign free membership level ID"
 msgstr ""
 
-#: classes/class.swpm-settings.php:95
+#: classes/class.swpm-settings.php:98
 msgid "Enable More Tag Protection"
 msgstr ""
 
-#: classes/class.swpm-settings.php:101
+#: classes/class.swpm-settings.php:104
 msgid ""
 "Enables or disables \"more\" tag protection in the posts and pages. Anything "
 "after the More tag is protected. Anything before the more tag is teaser "
 "content."
 msgstr ""
 
-#: classes/class.swpm-settings.php:106
+#: classes/class.swpm-settings.php:109
 msgid "Hide Adminbar"
 msgstr ""
 
-#: classes/class.swpm-settings.php:112
+#: classes/class.swpm-settings.php:115
 msgid ""
 "WordPress shows an admin toolbar to the logged in users of the site. Check "
 "this if you want to hide that admin toolbar in the frontend of your site."
 msgstr ""
 
-#: classes/class.swpm-settings.php:117
+#: classes/class.swpm-settings.php:120
 msgid "Show Adminbar to Admin"
 msgstr ""
 
-#: classes/class.swpm-settings.php:123
+#: classes/class.swpm-settings.php:126
 msgid ""
 "Use this option if you want to show the admin toolbar to admin users only. "
 "The admin toolbar will be hidden for all other users."
 msgstr ""
 
-#: classes/class.swpm-settings.php:128
+#: classes/class.swpm-settings.php:131
 msgid "Disable Access to WP Dashboard"
 msgstr ""
 
-#: classes/class.swpm-settings.php:134
+#: classes/class.swpm-settings.php:137
 msgid ""
 "WordPress allows a standard wp user to be able to go to the wp-admin URL and "
 "access his profile from the wp dashboard. Using this option will prevent any "
 "non-admin users from going to the wp dashboard."
 msgstr ""
 
-#: classes/class.swpm-settings.php:140 classes/class.swpm-settings.php:817
+#: classes/class.swpm-settings.php:143 classes/class.swpm-settings.php:837
 msgid "Default Account Status"
 msgstr ""
 
-#: classes/class.swpm-settings.php:148
+#: classes/class.swpm-settings.php:151
 msgid ""
 "Select the default account status for newly registered users. If you want to "
 "manually approve the members then you can set the status to \"Pending\"."
 msgstr ""
 
-#: classes/class.swpm-settings.php:154
+#: classes/class.swpm-settings.php:157
 msgid "Members Must be Logged in to Comment"
 msgstr ""
 
-#: classes/class.swpm-settings.php:160
+#: classes/class.swpm-settings.php:163
 msgid ""
 "Enable this option if you only want the members of the site to be able to "
 "post a comment."
 msgstr ""
 
-#: classes/class.swpm-settings.php:166
+#: classes/class.swpm-settings.php:169
 msgid "Enable Toggle Password Visibility in Login Form"
 msgstr ""
 
-#: classes/class.swpm-settings.php:172
+#: classes/class.swpm-settings.php:175
 msgid ""
 "You can use it to show a toggle password visibility option in the login "
 "form. It will add a Show Password checkbox."
 msgstr ""
 
-#: classes/class.swpm-settings.php:183
+#: classes/class.swpm-settings.php:186
 msgid "Pages Settings"
 msgstr ""
 
-#: classes/class.swpm-settings.php:186
+#: classes/class.swpm-settings.php:189
 msgid "Login Page URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:197
+#: classes/class.swpm-settings.php:200
 msgid "Registration Page URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:208
+#: classes/class.swpm-settings.php:211
 msgid "Join Us Page URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:219
+#: classes/class.swpm-settings.php:222
 msgid "Edit Profile Page URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:230
+#: classes/class.swpm-settings.php:233
 msgid "Password Reset Page URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:240
+#: classes/class.swpm-settings.php:245
+msgid "Enable Password Reset Using Link"
+msgstr ""
+
+#: classes/class.swpm-settings.php:251
+msgid ""
+"You can enable this option if you want to handle the password reset "
+"functionality using a reset link that is emailed to the member. Read <a href="
+"\"https://simple-membership-plugin.com/password-reset-notification-email-"
+"customization/\" target=\"_blank\">this documentation</a> to learn more "
+"about the password reset function."
+msgstr ""
+
+#: classes/class.swpm-settings.php:255
 msgid "Test & Debug Settings"
 msgstr ""
 
-#: classes/class.swpm-settings.php:269
+#: classes/class.swpm-settings.php:284
 msgid "Check this option to enable debug logging."
 msgstr ""
 
-#: classes/class.swpm-settings.php:270
+#: classes/class.swpm-settings.php:285
 msgid ""
 " This can be useful when troubleshooting an issue. Turn it off and reset the "
 "log files after the troubleshooting is complete."
 msgstr ""
 
-#: classes/class.swpm-settings.php:272
+#: classes/class.swpm-settings.php:287
 msgid "View general debug log file by clicking "
 msgstr ""
 
-#: classes/class.swpm-settings.php:272 classes/class.swpm-settings.php:273
-#: classes/class.swpm-settings.php:274
+#: classes/class.swpm-settings.php:287 classes/class.swpm-settings.php:288
+#: classes/class.swpm-settings.php:289
 msgid "here"
 msgstr ""
 
-#: classes/class.swpm-settings.php:273
+#: classes/class.swpm-settings.php:288
 msgid "View login related debug log file by clicking "
 msgstr ""
 
-#: classes/class.swpm-settings.php:274
+#: classes/class.swpm-settings.php:289
 msgid "Reset debug log files by clicking "
 msgstr ""
 
-#: classes/class.swpm-settings.php:277
+#: classes/class.swpm-settings.php:292
 msgid "Enable Debug"
 msgstr ""
 
-#: classes/class.swpm-settings.php:288
+#: classes/class.swpm-settings.php:303
 msgid "Enable Sandbox Testing"
 msgstr ""
 
-#: classes/class.swpm-settings.php:294
+#: classes/class.swpm-settings.php:309
 msgid "Enable this option if you want to do sandbox payment testing."
 msgstr ""
 
-#: classes/class.swpm-settings.php:302
+#: classes/class.swpm-settings.php:321
 msgid "Stripe Global Settings"
 msgstr ""
 
-#: classes/class.swpm-settings.php:305
+#: classes/class.swpm-settings.php:325
 msgid "Pre-fill Member Email Address"
 msgstr ""
 
-#: classes/class.swpm-settings.php:311
+#: classes/class.swpm-settings.php:331
 msgid ""
 "Pre-fills the email address of the logged-in member on the Stripe checkout "
 "form when possible"
 msgstr ""
 
-#: classes/class.swpm-settings.php:316
+#: classes/class.swpm-settings.php:336
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:115
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:399
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:115
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:381
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:397
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:156
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:148
 msgid "Test Publishable Key"
 msgstr ""
 
-#: classes/class.swpm-settings.php:322
+#: classes/class.swpm-settings.php:342
 msgid "Stripe API Test publishable key"
 msgstr ""
 
-#: classes/class.swpm-settings.php:327
+#: classes/class.swpm-settings.php:347
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:122
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:406
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:122
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:388
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:404
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:164
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:156
 msgid "Test Secret Key"
 msgstr ""
 
-#: classes/class.swpm-settings.php:333
+#: classes/class.swpm-settings.php:353
 msgid "Stripe API Test secret key"
 msgstr ""
 
-#: classes/class.swpm-settings.php:338
+#: classes/class.swpm-settings.php:358
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:129
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:413
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:129
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:395
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:411
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:172
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:164
 msgid "Live Publishable Key"
 msgstr ""
 
-#: classes/class.swpm-settings.php:344
+#: classes/class.swpm-settings.php:364
 msgid "Stripe API Live publishable key"
 msgstr ""
 
-#: classes/class.swpm-settings.php:349
+#: classes/class.swpm-settings.php:369
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:136
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:420
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:136
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:402
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:418
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:180
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:172
 msgid "Live Secret Key"
 msgstr ""
 
-#: classes/class.swpm-settings.php:355
+#: classes/class.swpm-settings.php:375
 msgid "Stripe API Live secret key"
 msgstr ""
 
-#: classes/class.swpm-settings.php:365
+#: classes/class.swpm-settings.php:385
 msgid "Email Settings Overview"
 msgstr ""
 
-#: classes/class.swpm-settings.php:366
+#: classes/class.swpm-settings.php:386
 msgid "Email Misc. Settings"
 msgstr ""
 
-#: classes/class.swpm-settings.php:370
+#: classes/class.swpm-settings.php:390
 msgid "From Email Address"
 msgstr ""
 
-#: classes/class.swpm-settings.php:382
+#: classes/class.swpm-settings.php:402
 msgid "Allow HTML in Emails"
 msgstr ""
 
-#: classes/class.swpm-settings.php:393
+#: classes/class.swpm-settings.php:413
 msgid "Email Settings (Prompt to Complete Registration )"
 msgstr ""
 
-#: classes/class.swpm-settings.php:396 classes/class.swpm-settings.php:427
-#: classes/class.swpm-settings.php:508 classes/class.swpm-settings.php:533
-#: classes/class.swpm-settings.php:569 classes/class.swpm-settings.php:594
+#: classes/class.swpm-settings.php:416 classes/class.swpm-settings.php:447
+#: classes/class.swpm-settings.php:528 classes/class.swpm-settings.php:553
+#: classes/class.swpm-settings.php:589 classes/class.swpm-settings.php:614
 msgid "Email Subject"
 msgstr ""
 
-#: classes/class.swpm-settings.php:407 classes/class.swpm-settings.php:438
-#: classes/class.swpm-settings.php:519 classes/class.swpm-settings.php:544
-#: classes/class.swpm-settings.php:580 classes/class.swpm-settings.php:605
+#: classes/class.swpm-settings.php:427 classes/class.swpm-settings.php:458
+#: classes/class.swpm-settings.php:539 classes/class.swpm-settings.php:564
+#: classes/class.swpm-settings.php:600 classes/class.swpm-settings.php:625
 msgid "Email Body"
 msgstr ""
 
-#: classes/class.swpm-settings.php:418
+#: classes/class.swpm-settings.php:438
 msgid ""
 "Enter the email address where you want the admin notification email to be "
 "sent to."
 msgstr ""
 
-#: classes/class.swpm-settings.php:419
+#: classes/class.swpm-settings.php:439
 msgid ""
 " You can put multiple email addresses separated by comma (,) in the above "
 "field to send the notification to multiple email addresses."
 msgstr ""
 
-#: classes/class.swpm-settings.php:421
+#: classes/class.swpm-settings.php:441
 msgid "Enter the subject for the admin notification email."
 msgstr ""
 
-#: classes/class.swpm-settings.php:422
+#: classes/class.swpm-settings.php:442
 msgid ""
 "This email will be sent to the admin when a new user completes the "
 "membership registration. Only works if you have enabled the \"Send "
 "Notification to Admin\" option above."
 msgstr ""
 
-#: classes/class.swpm-settings.php:424
+#: classes/class.swpm-settings.php:444
 msgid "Email Settings (Registration Complete)"
 msgstr ""
 
-#: classes/class.swpm-settings.php:449
+#: classes/class.swpm-settings.php:469
 msgid "Send Notification to Admin"
 msgstr ""
 
-#: classes/class.swpm-settings.php:455
+#: classes/class.swpm-settings.php:475
 msgid ""
 "Enable this option if you want the admin to receive a notification when a "
 "member registers."
 msgstr ""
 
-#: classes/class.swpm-settings.php:460
+#: classes/class.swpm-settings.php:480
 msgid "Admin Email Address"
 msgstr ""
 
-#: classes/class.swpm-settings.php:471
+#: classes/class.swpm-settings.php:491
 msgid "Admin Notification Email Subject"
 msgstr ""
 
-#: classes/class.swpm-settings.php:482
+#: classes/class.swpm-settings.php:502
 msgid "Admin Notification Email Body"
 msgstr ""
 
-#: classes/class.swpm-settings.php:494
+#: classes/class.swpm-settings.php:514
 msgid "Send Email to Member When Added via Admin Dashboard"
 msgstr ""
 
-#: classes/class.swpm-settings.php:505
+#: classes/class.swpm-settings.php:525
 msgid "Email Settings (Password Reset)"
 msgstr ""
 
-#: classes/class.swpm-settings.php:530
+#: classes/class.swpm-settings.php:550
 msgid " Email Settings (Account Upgrade Notification)"
 msgstr ""
 
-#: classes/class.swpm-settings.php:555
+#: classes/class.swpm-settings.php:575
 msgid "Disable Email Notification After Upgrade"
 msgstr ""
 
-#: classes/class.swpm-settings.php:561
+#: classes/class.swpm-settings.php:581
 msgid ""
 "You can use this option to disable the email notification that gets sent to "
 "the members when they make a payment for upgrade or renewal."
 msgstr ""
 
-#: classes/class.swpm-settings.php:566
+#: classes/class.swpm-settings.php:586
 msgid " Email Settings (Bulk Account Activate Notification)"
 msgstr ""
 
-#: classes/class.swpm-settings.php:591
+#: classes/class.swpm-settings.php:611
 msgid " Email Settings (Email Activation)"
 msgstr ""
 
-#: classes/class.swpm-settings.php:629
+#: classes/class.swpm-settings.php:649
 msgid "Enable Expired Account Login"
 msgstr ""
 
-#: classes/class.swpm-settings.php:635
+#: classes/class.swpm-settings.php:655
 msgid ""
 "When enabled, expired members will be able to log into the system but won't "
 "be able to view any protected content. This allows them to easily renew "
 "their account by making another payment."
 msgstr ""
 
-#: classes/class.swpm-settings.php:641
+#: classes/class.swpm-settings.php:661
 msgid "Membership Renewal URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:647
+#: classes/class.swpm-settings.php:667
 msgid ""
 "You can create a renewal page for your site. Read <a href=\"https://simple-"
 "membership-plugin.com/creating-membership-renewal-button/\" target=\"_blank"
 "\">this documentation</a> to learn how to create a renewal page."
 msgstr ""
 
-#: classes/class.swpm-settings.php:653
+#: classes/class.swpm-settings.php:673
 msgid "After Registration Redirect URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:659
+#: classes/class.swpm-settings.php:679
 msgid ""
 "You can enter an URL here to redirect the members to this page after they "
 "submit the registration form. Read <a href=\"https://simple-membership-"
@@ -1355,11 +1398,11 @@ msgid ""
 "redirect."
 msgstr ""
 
-#: classes/class.swpm-settings.php:665
+#: classes/class.swpm-settings.php:685
 msgid "Enable Auto Login After Registration"
 msgstr ""
 
-#: classes/class.swpm-settings.php:671
+#: classes/class.swpm-settings.php:691
 msgid ""
 "Use this option if you want the members to be automatically logged into your "
 "site right after they complete the registration. This option will override "
@@ -1369,68 +1412,68 @@ msgid ""
 "documentation</a> to learn more."
 msgstr ""
 
-#: classes/class.swpm-settings.php:677
+#: classes/class.swpm-settings.php:697
 msgid "Hide Registration Form to Logged Users"
 msgstr ""
 
-#: classes/class.swpm-settings.php:683
+#: classes/class.swpm-settings.php:703
 msgid ""
 "Use this option if you want to hide the registration form to the logged-in "
 "members. If logged-in members visit the registration page, they will see a "
 "message instead of the registration form."
 msgstr ""
 
-#: classes/class.swpm-settings.php:689
+#: classes/class.swpm-settings.php:709
 msgid "After Logout Redirect URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:695
+#: classes/class.swpm-settings.php:715
 msgid ""
 "You can enter an URL here to redirect the members to this page after they "
 "click the logout link to logout from your site."
 msgstr ""
 
-#: classes/class.swpm-settings.php:701
+#: classes/class.swpm-settings.php:721
 msgid "Logout Member on Browser Close"
 msgstr ""
 
-#: classes/class.swpm-settings.php:707
+#: classes/class.swpm-settings.php:727
 msgid ""
 "Enable this option if you want the member to be logged out of the account "
 "when he closes the browser."
 msgstr ""
 
-#: classes/class.swpm-settings.php:713
+#: classes/class.swpm-settings.php:733
 msgid "Allow Account Deletion"
 msgstr ""
 
-#: classes/class.swpm-settings.php:719
+#: classes/class.swpm-settings.php:739
 msgid "Allow users to delete their accounts."
 msgstr ""
 
-#: classes/class.swpm-settings.php:725
+#: classes/class.swpm-settings.php:745
 msgid "Force Strong Password for Members"
 msgstr ""
 
-#: classes/class.swpm-settings.php:731
+#: classes/class.swpm-settings.php:751
 msgid ""
 "Enable this if you want the users to be forced to use a strong password for "
 "their accounts."
 msgstr ""
 
-#: classes/class.swpm-settings.php:737
+#: classes/class.swpm-settings.php:757
 msgid "Auto Delete Pending Account"
 msgstr ""
 
-#: classes/class.swpm-settings.php:749
+#: classes/class.swpm-settings.php:769
 msgid "Select how long you want to keep \"pending\" account."
 msgstr ""
 
-#: classes/class.swpm-settings.php:755
+#: classes/class.swpm-settings.php:775
 msgid "Admin Dashboard Access Permission"
 msgstr ""
 
-#: classes/class.swpm-settings.php:768
+#: classes/class.swpm-settings.php:788
 msgid ""
 "SWPM admin dashboard is accessible to admin users only (just like any other "
 "plugin). You can allow users with other WP user roles to access the SWPM "
@@ -1439,53 +1482,53 @@ msgid ""
 "Settings."
 msgstr ""
 
-#: classes/class.swpm-settings.php:774
+#: classes/class.swpm-settings.php:794
 msgid "Force WP User Synchronization"
 msgstr ""
 
-#: classes/class.swpm-settings.php:780
+#: classes/class.swpm-settings.php:800
 msgid ""
 "Enable this option if you want to force the member login to be synchronized "
 "with WP user account. This can be useful if you are using another plugin "
 "that uses WP user records. For example: bbPress plugin."
 msgstr ""
 
-#: classes/class.swpm-settings.php:785
+#: classes/class.swpm-settings.php:805
 msgid "Create Member Accounts for New WP Users"
 msgstr ""
 
-#: classes/class.swpm-settings.php:789
+#: classes/class.swpm-settings.php:809
 msgid "Enable Auto Create Member Accounts"
 msgstr ""
 
-#: classes/class.swpm-settings.php:795
+#: classes/class.swpm-settings.php:815
 msgid ""
 "Enable this option to automatically create member accounts for any new WP "
 "user that is created by another plugin."
 msgstr ""
 
-#: classes/class.swpm-settings.php:802
+#: classes/class.swpm-settings.php:822
 msgid "Default Membership Level"
 msgstr ""
 
-#: classes/class.swpm-settings.php:810
+#: classes/class.swpm-settings.php:830
 msgid ""
 "When automatically creating a member account using this feature, the "
 "membership level of the user will be set to the one you specify here."
 msgstr ""
 
-#: classes/class.swpm-settings.php:825
+#: classes/class.swpm-settings.php:845
 msgid ""
 "When automatically creating a member account using this feature, the "
 "membership account status of the user will be set to the one you specify "
 "here."
 msgstr ""
 
-#: classes/class.swpm-settings.php:831
+#: classes/class.swpm-settings.php:851
 msgid "Payment Notification Forward URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:837
+#: classes/class.swpm-settings.php:857
 msgid ""
 "You can enter an URL here to forward the payment notification after the "
 "membership payment has been processed by this plugin. Useful if you want to "
@@ -1493,73 +1536,158 @@ msgid ""
 "processing."
 msgstr ""
 
-#: classes/class.swpm-settings.php:842 views/add.php:68
+#: classes/class.swpm-settings.php:862 views/add.php:68
 msgid "Terms and Conditions"
 msgstr ""
 
-#: classes/class.swpm-settings.php:846
+#: classes/class.swpm-settings.php:866
 msgid "Enable Terms and Conditions"
 msgstr ""
 
-#: classes/class.swpm-settings.php:852
+#: classes/class.swpm-settings.php:872
 msgid "Users must accept the terms before they can complete the registration."
 msgstr ""
 
-#: classes/class.swpm-settings.php:857
+#: classes/class.swpm-settings.php:877
 msgid "Terms and Conditions Page URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:863
+#: classes/class.swpm-settings.php:883
 msgid ""
 "Enter the URL of your terms and conditions page. You can create a WordPress "
 "page and specify your terms in there then specify the URL of that page in "
 "the above field."
 msgstr ""
 
-#: classes/class.swpm-settings.php:868
+#: classes/class.swpm-settings.php:888
 msgid "Enable Privacy Policy"
 msgstr ""
 
-#: classes/class.swpm-settings.php:874
+#: classes/class.swpm-settings.php:894
 msgid "Users must accept it before they can complete the registration."
 msgstr ""
 
-#: classes/class.swpm-settings.php:879
+#: classes/class.swpm-settings.php:899
 msgid "Privacy Policy Page URL"
 msgstr ""
 
-#: classes/class.swpm-settings.php:885
+#: classes/class.swpm-settings.php:905
 msgid "Enter the URL of your privacy policy page."
 msgstr ""
 
-#: classes/class.swpm-settings.php:983
+#: classes/class.swpm-settings.php:916
+msgid "Configure Blacklisting & Whitelisting"
+msgstr ""
+
+#: classes/class.swpm-settings.php:919
+msgid "Whitelisting"
+msgstr ""
+
+#: classes/class.swpm-settings.php:923
+msgid "Enable Whitelisting Feature"
+msgstr ""
+
+#: classes/class.swpm-settings.php:929
+msgid "When enabled, whitelisting feature will be activated."
+msgstr ""
+
+#: classes/class.swpm-settings.php:935
+msgid "Email Address Whitelisting"
+msgstr ""
+
+#: classes/class.swpm-settings.php:941
+msgid "Enter a list (comma separated) of email addresses to whitelist."
+msgstr ""
+
+#: classes/class.swpm-settings.php:947
+msgid "Email Address Pattern Whitelisting"
+msgstr ""
+
+#: classes/class.swpm-settings.php:953
+msgid ""
+"Enter a list (comma separated) of email addresses pattern to whitelist. "
+"Example value: @gooddomain.com, @gmail.com, @yahoo.com"
+msgstr ""
+
+#: classes/class.swpm-settings.php:959
+msgid "Whitelist Message Customization"
+msgstr ""
+
+#: classes/class.swpm-settings.php:965
+msgid ""
+"Enter the message you want to show to the user when the whitelisted "
+"condition is met. Leave it empty to use the default message."
+msgstr ""
+
+#: classes/class.swpm-settings.php:970
+msgid "Blacklisting"
+msgstr ""
+
+#: classes/class.swpm-settings.php:974
+msgid "Enable Blacklisting Feature"
+msgstr ""
+
+#: classes/class.swpm-settings.php:980
+msgid "When enabled, blacklisting feature will be activated."
+msgstr ""
+
+#: classes/class.swpm-settings.php:986
+msgid "Email Address Blacklisting"
+msgstr ""
+
+#: classes/class.swpm-settings.php:992
+msgid "Enter a list (comma separated) of email addresses to blacklist."
+msgstr ""
+
+#: classes/class.swpm-settings.php:998
+msgid "Email Address Pattern Blacklisting"
+msgstr ""
+
+#: classes/class.swpm-settings.php:1004
+msgid ""
+"Enter a list (comma separated) of email addresses pattern to blacklist. "
+"Example value: @baddomain.com, @crazydomain.com"
+msgstr ""
+
+#: classes/class.swpm-settings.php:1010
+msgid "Blacklist Message Customization"
+msgstr ""
+
+#: classes/class.swpm-settings.php:1016
+msgid ""
+"Enter the message you want to show to the user when the blacklisted "
+"condition is met. Leave it empty to use the default message."
+msgstr ""
+
+#: classes/class.swpm-settings.php:1115
 #, php-format
 msgid "Visit the %s to read setup and configuration documentation."
 msgstr ""
 
-#: classes/class.swpm-settings.php:983
+#: classes/class.swpm-settings.php:1115
 msgid "Simple Membership Plugin Site"
 msgstr ""
 
-#: classes/class.swpm-settings.php:984
+#: classes/class.swpm-settings.php:1116
 #, php-format
 msgid "Please %s if you like the plugin."
 msgstr ""
 
-#: classes/class.swpm-settings.php:984
+#: classes/class.swpm-settings.php:1116
 msgid "give us a rating"
 msgstr ""
 
-#: classes/class.swpm-settings.php:1002 classes/class.swpm-settings.php:1048
-#: classes/class.swpm-settings.php:1076
+#: classes/class.swpm-settings.php:1134 classes/class.swpm-settings.php:1157
+#: classes/class.swpm-settings.php:1191 classes/class.swpm-settings.php:1219
+#: classes/class.swpm-settings.php:1252
 msgid "Settings updated!"
 msgstr ""
 
-#: classes/class.swpm-settings.php:1037 views/admin_tools_settings.php:82
+#: classes/class.swpm-settings.php:1180 views/admin_tools_settings.php:88
 msgid "This documentation"
 msgstr ""
 
-#: classes/class.swpm-settings.php:1091
+#: classes/class.swpm-settings.php:1234
 msgid ""
 "Note: You cannot enable both the \"Disable Access to WP Dashboard\" and "
 "\"Admin Dashboard Access Permission\" options at the same time. Only use one "
@@ -1567,6 +1695,10 @@ msgid ""
 msgstr ""
 
 #: classes/class.swpm-settings.php:1258
+msgid "This blacklisting & whitelisting documentation"
+msgstr ""
+
+#: classes/class.swpm-settings.php:1447
 msgid "Simple WP Membership::Settings"
 msgstr ""
 
@@ -1591,7 +1723,7 @@ msgid "Member Login"
 msgstr ""
 
 #: classes/class.swpm-utils-misc.php:113
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:135
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:138
 msgid "Profile"
 msgstr ""
 
@@ -1609,55 +1741,55 @@ msgstr ""
 msgid "Action Status"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:364
+#: classes/class.swpm-utils-misc.php:374
 msgid "Not a Member?"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:375
+#: classes/class.swpm-utils-misc.php:385
 msgid "renew"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:375
+#: classes/class.swpm-utils-misc.php:385
 msgid " your account to gain access to this content."
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:433 classes/class.swpm-utils-misc.php:439
+#: classes/class.swpm-utils-misc.php:443 classes/class.swpm-utils-misc.php:449
 msgid "Error! This action ("
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:684
+#: classes/class.swpm-utils-misc.php:694
 msgid "(Please Select)"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:700
+#: classes/class.swpm-utils-misc.php:710
 msgid "PayPal Buy Now"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:701
+#: classes/class.swpm-utils-misc.php:711
 msgid "PayPal Subscription"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:702
+#: classes/class.swpm-utils-misc.php:712
 msgid "PayPal Smart Checkout"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:703
+#: classes/class.swpm-utils-misc.php:713
 msgid "Stripe Buy Now"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:704
+#: classes/class.swpm-utils-misc.php:714
 msgid "Stripe Subscription"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:705
+#: classes/class.swpm-utils-misc.php:715
 msgid "Stripe SCA Buy Now"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:706
+#: classes/class.swpm-utils-misc.php:716
 msgid "Stripe SCA Subscription"
 msgstr ""
 
-#: classes/class.swpm-utils-misc.php:707
+#: classes/class.swpm-utils-misc.php:717
 msgid "Braintree Buy Now"
 msgstr ""
 
@@ -1727,61 +1859,61 @@ msgstr ""
 msgid "Subscription has been cancelled."
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:70
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:73
 msgid "Your membership profile will be updated to reflect the payment."
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:71
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:74
 msgid "Your profile username: "
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:89
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:92
 msgid "Click on the following link to complete the registration."
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:90
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:93
 msgid "Click here to complete your paid registration"
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:95
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:98
 msgid ""
 "If you have just made a membership payment then your payment is yet to be "
 "processed. Please check back in a few minutes. An email will be sent to you "
 "with the details shortly."
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:109
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:112
 msgid "Expiry: "
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:111
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:156
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:238
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:114
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:159
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:241
 msgid "You are not logged-in as a member"
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:133
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:136
 msgid "Logged in as: "
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:136
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:139
 #: views/loggedin.php:31
 msgid "Logout"
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:139
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:142
 msgid "Login Here"
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:140
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:143
 msgid "Not a member? "
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:141
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:144
 msgid "Join Now"
 msgstr ""
 
-#: classes/shortcode-related/class.swpm-shortcodes-handler.php:218
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:221
 msgid "Unsubscribe from PayPal"
 msgstr ""
 
@@ -1994,7 +2126,7 @@ msgid ""
 "displayed here (if you have them)"
 msgstr ""
 
-#: views/admin_addon_settings.php:9
+#: views/admin_addon_settings.php:10
 msgid "Save Changes"
 msgstr ""
 
@@ -2214,62 +2346,66 @@ msgstr ""
 msgid "The required pages have been re-created."
 msgstr ""
 
-#: views/admin_tools_settings.php:21
+#: views/admin_tools_settings.php:22
+msgid "This interface contains useful tools for various admin operations."
+msgstr ""
+
+#: views/admin_tools_settings.php:27
 msgid "Generate a Registration Completion link"
 msgstr ""
 
-#: views/admin_tools_settings.php:24
+#: views/admin_tools_settings.php:30
 msgid ""
 "You can manually generate a registration completion link here and give it to "
 "your customer if they have missed the email that was automatically sent out "
 "to them after the payment."
 msgstr ""
 
-#: views/admin_tools_settings.php:29
+#: views/admin_tools_settings.php:35
 msgid "Generate Registration Completion Link"
 msgstr ""
 
-#: views/admin_tools_settings.php:32
+#: views/admin_tools_settings.php:38
 msgid "OR"
 msgstr ""
 
-#: views/admin_tools_settings.php:33
+#: views/admin_tools_settings.php:39
 msgid "For All Incomplete Registrations"
 msgstr ""
 
-#: views/admin_tools_settings.php:38
+#: views/admin_tools_settings.php:44
 msgid "Send Registration Reminder Email Too"
 msgstr ""
 
-#: views/admin_tools_settings.php:44
+#: views/admin_tools_settings.php:50
 msgid "Submit"
 msgstr ""
 
-#: views/admin_tools_settings.php:53
+#: views/admin_tools_settings.php:59
 msgid ""
 "Link(s) generated successfully. The following link(s) can be used to "
 "complete the registration."
 msgstr ""
 
-#: views/admin_tools_settings.php:55
+#: views/admin_tools_settings.php:61
 msgid "Registration completion links will appear below"
 msgstr ""
 
-#: views/admin_tools_settings.php:65
+#: views/admin_tools_settings.php:71
 msgid "A prompt to complete registration email was also sent."
 msgstr ""
 
-#: views/admin_tools_settings.php:78 views/admin_tools_settings.php:88
+#: views/admin_tools_settings.php:84 views/admin_tools_settings.php:94
 msgid "Re-create the Required Pages"
 msgstr ""
 
-#: views/admin_tools_settings.php:81
+#: views/admin_tools_settings.php:87
 msgid ""
 "If you have accidentally deleted the required pages that this plugin creates "
 "at install time, you can use this option to re-create them."
 msgstr ""
 
-#: views/admin_tools_settings.php:82
+#: views/admin_tools_settings.php:88
 msgid " has full explanation."
 msgstr ""
 
@@ -2285,7 +2421,7 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: views/forgot_password.php:12
+#: views/forgot_password.php:12 views/reset_password_using_link.php:54
 msgid "Reset Password"
 msgstr ""
 
@@ -2368,19 +2504,27 @@ msgid ""
 "All the membership buttons that you created in the plugin are displayed here."
 msgstr ""
 
-#: views/payments/admin_payment_settings.php:33
-msgid "PayPal Integration Settings"
+#: views/payments/admin_payment_settings.php:27
+msgid "payments menu"
+msgstr ""
+
+#: views/payments/admin_payment_settings.php:30
+msgid "membership payment section"
 msgstr ""
 
 #: views/payments/admin_payment_settings.php:36
-msgid "Generate the \"Advanced Variables\" Code for your PayPal button"
+msgid "PayPal Hosted Button Integration Settings"
 msgstr ""
 
-#: views/payments/admin_payment_settings.php:39
-msgid "Enter the Membership Level ID"
+#: views/payments/admin_payment_settings.php:38
+msgid "Generate the \"Advanced Variables\" Code for your PayPal hosted button"
 msgstr ""
 
 #: views/payments/admin_payment_settings.php:41
+msgid "Enter the Membership Level ID"
+msgstr ""
+
+#: views/payments/admin_payment_settings.php:43
 msgid "Generate Code"
 msgstr ""
 
@@ -2393,7 +2537,7 @@ msgstr ""
 #: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:33
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:304
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:316
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:298
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:314
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:92
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:92
 msgid "Button ID"
@@ -2408,7 +2552,7 @@ msgstr ""
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:36
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:323
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:36
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:305
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:321
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:100
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:100
 msgid "Button Title"
@@ -2421,7 +2565,7 @@ msgstr ""
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:54
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:339
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:54
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:321
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:337
 msgid "Payment Amount"
 msgstr ""
 
@@ -2451,7 +2595,7 @@ msgstr ""
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:145
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:429
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:145
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:411
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:427
 msgid "The following details are optional."
 msgstr ""
 
@@ -2463,9 +2607,9 @@ msgstr ""
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:459
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:158
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:442
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:158
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:424
-#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:227
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:166
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:448
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:235
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:219
 msgid "Return URL"
 msgstr ""
@@ -2478,9 +2622,9 @@ msgstr ""
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:488
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:188
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:472
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:188
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:454
-#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:248
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:196
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:478
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:256
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:240
 msgid "Save Payment Data"
 msgstr ""
@@ -2498,7 +2642,7 @@ msgstr ""
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:62
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:346
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:62
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:328
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:344
 msgid "Payment Currency"
 msgstr ""
 
@@ -2515,9 +2659,9 @@ msgstr ""
 #: views/payments/payment-gateway/admin_paypal_subscription_button.php:467
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:166
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:450
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:166
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:432
-#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:235
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:174
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:456
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:243
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:227
 msgid "Button Image URL"
 msgstr ""
@@ -2711,21 +2855,21 @@ msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:26
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:307
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:289
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:305
 msgid "Stripe Buy Now Button Configuration"
 msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:102
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:386
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:102
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:368
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:384
 msgid "Stripe API keys. You can get this from your Stripe account."
 msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:107
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:391
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:107
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:373
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:389
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:148
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:140
 msgid "Use Global API Keys Settings"
@@ -2734,7 +2878,7 @@ msgstr ""
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:110
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:394
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:110
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:376
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:392
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:151
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:143
 msgid ""
@@ -2746,7 +2890,7 @@ msgstr ""
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:150
 #: views/payments/payment-gateway/admin_stripe_buy_now_button.php:434
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:150
-#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:416
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:432
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:219
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:211
 msgid "Collect Customer Address"
@@ -2754,6 +2898,12 @@ msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:26
 msgid "Stripe SCA Buy Now Button Configuration"
+msgstr ""
+
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:158
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:440
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:227
+msgid "Enable Automatic Tax"
 msgstr ""
 
 #: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:84
@@ -2790,7 +2940,7 @@ msgstr ""
 #: views/payments/payment-gateway/stripe_button_shortcode_view.php:20
 #: views/payments/payment-gateway/stripe_button_shortcode_view.php:161
 #: views/payments/payment-gateway/stripe_sca_button_shortcode_view.php:20
-#: views/payments/payment-gateway/stripe_sca_button_shortcode_view.php:144
+#: views/payments/payment-gateway/stripe_sca_button_shortcode_view.php:160
 msgid "Buy Now"
 msgstr ""
 
@@ -2807,10 +2957,36 @@ msgstr ""
 msgid "HTTP error occurred during payment process:"
 msgstr ""
 
+#: views/reset_password_using_link.php:9
+msgid ""
+"Error! The password reset key is invalid. Please generate a new request."
+msgstr ""
+
+#: views/reset_password_using_link.php:36
+msgid "New password"
+msgstr ""
+
+#: views/reset_password_using_link.php:44
+msgid "Re-enter new password"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Simple WordPress Membership"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+#. Author URI of the plugin/theme
+msgid "https://simple-membership-plugin.com/"
+msgstr ""
+
 #. Description of the plugin/theme
 msgid ""
 "A flexible, well-supported, and easy-to-use WordPress membership plugin for "
 "offering free and premium content from your WordPress site."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "smp7, wp.insider"
 msgstr ""
 
 #: Translation strings from addons

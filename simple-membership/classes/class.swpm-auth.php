@@ -40,9 +40,24 @@ class SwpmAuth {
 
 	private function authenticate( $user = null, $pass = null ) {
 		global $wpdb;
-		$swpm_password  = empty( $pass ) ? filter_input( INPUT_POST, 'swpm_password' ) : $pass;
 		$swpm_user_name = empty( $user ) ? apply_filters( 'swpm_user_name', filter_input( INPUT_POST, 'swpm_user_name' ) ) : $user;
-
+		$swpm_password  = empty( $pass ) ? filter_input( INPUT_POST, 'swpm_password' ) : $pass;
+                
+                if ( isset($_POST['swpm_user_name']) && empty ( $swpm_user_name )){
+                    //Login form was submitted but the username field was left empty.
+                    $this->isLoggedIn    = false;
+                    $this->userData      = null;
+                    $this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Username field cannot be empty.' ) . '</span>';
+                    return false;
+                }
+                if ( isset($_POST['swpm_password']) && empty ( $swpm_password )){
+                    //Login form was submitted but the password field was left empty.
+                    $this->isLoggedIn    = false;
+                    $this->userData      = null;
+                    $this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Password field cannot be empty.' ) . '</span>';
+                    return false;
+                }                
+                
 		if ( ! empty( $swpm_user_name ) && ! empty( $swpm_password ) ) {
 			//SWPM member login request.
 			//Trigger action hook that can be used to check stuff before the login request is processed by the plugin.
@@ -68,7 +83,7 @@ class SwpmAuth {
 			//If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
 			$captcha_validation_output = apply_filters( 'swpm_validate_login_form_submission', '' );
 			if ( ! empty( $captcha_validation_output ) ) {
-				$this->lastStatusMsg = SwpmUtils::_( 'Captcha validation failed on login form.' );
+				$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Captcha validation failed on the login form.' ) . '</span>';
 				return;
 			}
 
@@ -93,14 +108,14 @@ class SwpmAuth {
 			if ( ! $userData ) {
 				$this->isLoggedIn    = false;
 				$this->userData      = null;
-				$this->lastStatusMsg = SwpmUtils::_( 'User Not Found.' );
+				$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'User not found.' ) . '</span>';
 				return false;
 			}
 			$check = $this->check_password( $pass, $userData->password );
 			if ( ! $check ) {
 				$this->isLoggedIn    = false;
 				$this->userData      = null;
-				$this->lastStatusMsg = SwpmUtils::_( 'Password Empty or Invalid.' );
+				$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Password empty or invalid.' ) . '</span>';
 				return false;
 			}
 			if ( $this->check_constraints() ) {

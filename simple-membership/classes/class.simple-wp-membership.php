@@ -492,6 +492,7 @@ class SimpleWpMembership {
     }
 
     public function profile_form() {
+        $output = '';
         $auth = SwpmAuth::get_instance();
         $any_notice_output = $this->capture_any_notice_output();
         if ($auth->is_logged_in()) {
@@ -505,7 +506,11 @@ class SimpleWpMembership {
             SwpmUtilsTemplate::swpm_load_template('edit.php', false);
             return ob_get_clean();
         }
-        return SwpmUtils::_('You are not logged in.');
+        //User is not logged into the site. Show appropriate message.
+        $output .= '<div class="swpm_profile_not_logged_in_msg">';
+        $output .= SwpmUtils::_('You are not logged in.');
+        $output .= '</div>';
+        return $output;
     }
 
     /*

@@ -108,7 +108,7 @@ class SwpmAuth {
 			if ( ! $userData ) {
 				$this->isLoggedIn    = false;
 				$this->userData      = null;
-				$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'User not found.' ) . '</span>';
+				$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'No user found with that username or email.' ) . '</span>';
 				return false;
 			}
 			$check = $this->check_password( $pass, $userData->password );

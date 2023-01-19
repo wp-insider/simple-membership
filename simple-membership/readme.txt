@@ -166,8 +166,9 @@ https://simple-membership-plugin.com/
 = WIP 4.2.4 =
 - Improved the enqueue_validation_scripts() function to work better with block themes.
 - Better Stripe payment button compatibility with some wp themes.
-- Fixed password reset success message showing an incorrect CSS class.
 - Improved the login form's error message output. The error message will be shown in red so it is can be easily noticed.
+- Fixed the terms and conditions checkbox validation error not displaying correctly on some themes.
+- Fixed password reset success message showing an incorrect CSS class.
 
 = 4.2.3 =
 - Added an option in the Stripe button configuration to use the Stripe's automatic tax feature.

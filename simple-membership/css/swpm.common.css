@@ -144,10 +144,15 @@
 .swpm-registration-widget-form td{
     min-width: 100px;
 }
-
 .swpm-registration-widget-form input[type="text"], .swpm-registration-widget-form input[type="password"]{
     width: 95%;
     position: relative;
+}
+#swpm-accept-terms{
+    position: relative;/* needed for the validation message positioning */
+}
+#swpm-accept-pp{
+    position: relative;/* needed for the validation message positioning */
 }
 
 /* Edit profile form CSS */
@@ -161,7 +166,6 @@
 .swpm-edit-profile-submit-section{
     text-align: center;
 }
-
 .swpm-profile-account-delete-section{
     text-align: center;
 }
@@ -176,6 +180,7 @@
     font-weight: bold;
     color: red;    
 }
+
 /* Misc CSS */
 .swpm-restricted{
     font-weight: bold;
@@ -185,4 +190,3 @@
     margin: 0;
     padding-bottom: 5px;
 }
-

@@ -163,6 +163,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.2.5 =
+- Spanish language translation file updated.
+
 = 4.2.4 =
 - Improved the enqueue_validation_scripts() function to work better with block themes.
 - Better Stripe payment button compatibility with some wp themes.

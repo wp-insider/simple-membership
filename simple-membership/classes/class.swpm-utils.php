@@ -442,6 +442,19 @@ abstract class SwpmUtils {
 		return ( $is_free ) ? $free_level : null;
 	}
 
+        public static function is_registration_completion_link_invalid(){
+            if( self::is_paid_registration() ){
+                //We are on the prompt to complete registration link URL. 
+                //Check if it points to a valid user profile or not.
+                $member = SwpmUtils::get_paid_member_info();
+                if ( empty($member )){
+                    //A member record does not exist. So this link is invalid.
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         public static function is_registration_completion_link_already_used(){
             if( self::is_paid_registration() ){
                 //We are on the prompt to complete registration link URL. 
@@ -467,7 +480,7 @@ abstract class SwpmUtils {
 
 	public static function get_paid_member_info() {
 		$member_id = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
-		$code      = filter_input( INPUT_GET, 'code', FILTER_SANITIZE_STRING );
+                $code = isset( $_GET['code'] ) ? sanitize_text_field( stripslashes ( $_GET['code'] ) ) : '';
 		global $wpdb;
 		if ( ! empty( $member_id ) && ! empty( $code ) ) {
 			$query = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id= %d AND reg_code=%s';

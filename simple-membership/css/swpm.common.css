@@ -160,6 +160,9 @@
 .swpm_registration_hidden_to_logged_users_msg{
     font-weight: bold;
 }
+.swpm_registration_complete_link_invalid_msg{
+    font-weight: bold;
+}
 /* Edit profile form CSS */
 .swpm-edit-profile-form input[type="text"], .swpm-edit-profile-form input[type="password"] {
     width: 95%;

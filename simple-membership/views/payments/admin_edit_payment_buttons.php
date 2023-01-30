@@ -4,6 +4,7 @@
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_buy_now_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_smart_checkout_button.php';
+require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_new_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_buy_now_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_subscription_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php';

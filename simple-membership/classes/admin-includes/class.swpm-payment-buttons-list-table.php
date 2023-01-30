@@ -29,7 +29,10 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
                 return get_the_title($item['ID']);
                 break;
             case 'membership_level':
-                return get_post_meta($item['ID'], 'membership_level_id', true);
+                $level_id = get_post_meta($item['ID'], 'membership_level_id', true);
+				$level_edit_url = 'admin.php?page=simple_wp_membership_levels&level_action=edit&id=' . $level_id;
+				$mem_level_column_output = '<a href="'.esc_url_raw( $level_edit_url ).'" target="_new">'.esc_attr($level_id).'</a>';
+				return $mem_level_column_output;
                 break;
             case 'button_type':
                 $button_type = get_post_meta($item['ID'], 'button_type', true);

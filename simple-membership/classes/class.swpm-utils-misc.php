@@ -710,6 +710,7 @@ class SwpmMiscUtils {
 			'pp_buy_now'              => SwpmUtils::_( 'PayPal Buy Now' ),
 			'pp_subscription'         => SwpmUtils::_( 'PayPal Subscription' ),
 			'pp_smart_checkout'       => SwpmUtils::_( 'PayPal Smart Checkout' ),
+			'pp_subscription_new'     => SwpmUtils::_( 'PayPal Subscription (New)' ),
 			'stripe_buy_now'          => SwpmUtils::_( 'Stripe Buy Now' ),
 			'stripe_subscription'     => SwpmUtils::_( 'Stripe Subscription' ),
 			'stripe_sca_buy_now'      => SwpmUtils::_( 'Stripe SCA Buy Now' ),

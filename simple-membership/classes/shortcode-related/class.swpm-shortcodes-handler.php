@@ -52,6 +52,7 @@ class SwpmShortcodesHandler {
 		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_sca_button_shortcode_view.php' );
 		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/braintree_button_shortcode_view.php' );
 		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php' );
+		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_subscription_new_button_shortcode_view.php' );
 
 		$button_code = '';
 		$button_code = apply_filters( 'swpm_payment_button_shortcode_for_' . $button_type, $button_code, $args );

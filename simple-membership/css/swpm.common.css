@@ -13,7 +13,7 @@
 }
 .swpm-red-error-text{
     font-weight: bold;
-    color: red;    
+    color: red;
 }
 .swpm-box-shadow {
     box-shadow: 0 1px 1px rgba(0,0,0,.04);
@@ -26,7 +26,7 @@
     border-color: #E6DB55;
     border-radius: 3px 3px 3px 3px;
     border-style: solid;
-    border-width: 1px;    
+    border-width: 1px;
 }
 
 .swpm-red-box {
@@ -154,7 +154,12 @@
 #swpm-accept-pp{
     position: relative;/* needed for the validation message positioning */
 }
-
+.swpm_already_used_registration_complete_link_msg{
+    font-weight: bold;
+}
+.swpm_registration_hidden_to_logged_users_msg{
+    font-weight: bold;
+}
 /* Edit profile form CSS */
 .swpm-edit-profile-form input[type="text"], .swpm-edit-profile-form input[type="password"] {
     width: 95%;

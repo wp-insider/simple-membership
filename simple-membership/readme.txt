@@ -165,6 +165,7 @@ https://simple-membership-plugin.com/
 
 = WIP 4.2.5 =
 - Spanish language translation file updated.
+- Added an appropriate error message for when a user tries to re-use the special registration complete link.
 
 = 4.2.4 =
 - Improved the enqueue_validation_scripts() function to work better with block themes.

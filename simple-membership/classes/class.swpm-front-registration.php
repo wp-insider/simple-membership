@@ -21,13 +21,21 @@ class SwpmFrontRegistration extends SwpmRegistration {
                 if ( ! empty( $hide_rego_to_logged_users ) ){
                     //Hide registration form to logged-in users feature is enabled. Check if the form should be hidden.
                     if ( SwpmMemberUtils::is_member_logged_in() ) {
-
-                        $rego_hidden_to_logged_users_msg = '<div class="registration_hidden_to_logged_users_msg">';
+                        $rego_hidden_to_logged_users_msg = '<div class="swpm_registration_hidden_to_logged_users_msg">';
                         $rego_hidden_to_logged_users_msg .= '<div class="hide-rego-form-msg">' . SwpmUtils::_( "You are already logged in. You don't need to create another account. So the registration form is hidden." ) . '</div>';
-                        $rego_hidden_to_logged_users_msg .= apply_filters('swpm_below_registration_form_hidden_message','');
                         $rego_hidden_to_logged_users_msg .= '</div>';
+                        $rego_hidden_to_logged_users_msg = apply_filters('swpm_registration_form_hidden_message', $rego_hidden_to_logged_users_msg);
                         return $rego_hidden_to_logged_users_msg;
                     }
+                }
+                
+                //Check if the registration completion link has been already used. So appropriate message to prevent confusion.
+                if( SwpmUtils::is_registration_completion_link_already_used() ){
+                        $already_used_rego_complete_link_msg = '<div class="swpm_already_used_registration_complete_link_msg">';
+                        $already_used_rego_complete_link_msg .= SwpmUtils::_( "This special registration link (see the URL in the browser's address bar) has already been used. You don't need to create another account. Log into the existing account to access the protected content." );
+                        $already_used_rego_complete_link_msg .= '</div>';
+                        $already_used_rego_complete_link_msg = apply_filters('swpm_already_used_registration_link_message', $already_used_rego_complete_link_msg);
+                        return $already_used_rego_complete_link_msg;
                 }
 
 		//Trigger the filter to override the registration form (the form builder addon uses this filter)
@@ -54,7 +62,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$member           = SwpmTransfer::$default_fields;
 			$membership_level = absint( $level );
 		}
-
+                
 		//Check if free membership registration is disalbed on the site
 		if ( empty( $membership_level ) ) {
 			$joinuspage_link         = '<a href="' . $joinuspage_url . '">' . SwpmUtils::_( 'Join Us' ) . '</a>';

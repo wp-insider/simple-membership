@@ -111,11 +111,11 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Recurring Billing Cycle'); ?></th>
                         <td>
-                            <input type="number" min="0" step="1" size="10" name="recurring_billing_cycle" value="" required />
+                            <input type="number" min="0" step="1" size="10" name="recurring_billing_cycle" value="<?php echo ($is_edit_mode ? $bt_opts['recurring_billing_cycle'] : ''); ?>" required />
                             <select id="recurring_billing_cycle_term" name="recurring_billing_cycle_term">
-                                <option value="D">Day(s)</option>
-                                <option value="M">Month(s)</option>
-                                <option value="Y">Year(s)</option>
+                                <option value="D"<?php echo (isset($bt_opts['recurring_billing_cycle_term']) && $bt_opts['recurring_billing_cycle_term'] === 'D') ? ' selected' : ''; ?>>Day(s)</option>
+                                <option value="M"<?php echo (isset($bt_opts['recurring_billing_cycle_term']) && $bt_opts['recurring_billing_cycle_term'] === 'M') ? ' selected' : ''; ?>>Month(s)</option>
+                                <option value="Y"<?php echo (isset($bt_opts['recurring_billing_cycle_term']) && $bt_opts['recurring_billing_cycle_term'] === 'Y') ? ' selected' : ''; ?>>Year(s)</option>
                             </select>
                             <p class="description"><?php echo SwpmUtils::_('Set the interval of the recurring payment. Example value: 1 Month (if you want to charge every month)'); ?></p>
                         </td>
@@ -124,7 +124,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Recurring Billing Cycle Count'); ?></th>
                         <td>
-                            <input type="text" size="10" name="recurring_billing_cycle_count" value="" />
+                            <input type="text" size="10" name="recurring_billing_cycle_count" value="<?php echo ($is_edit_mode ? $bt_opts['recurring_billing_cycle_count'] : ''); ?>" />
                             <p class="description"><?php echo SwpmUtils::_('After how many cycles should billing stop. Leave this field empty (or enter 0) if you want the payment to continue until the subscription is canceled.'); ?></p>
                         </td>
                     </tr>
@@ -132,7 +132,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Re-attempt on Failure'); ?></th>
                         <td>
-                            <input type="checkbox" name="recurring_billing_reattempt" value="1" />
+                            <input type="checkbox" name="recurring_billing_reattempt" value="1" <?php echo (isset($bt_opts['recurring_billing_reattempt']) && !empty($bt_opts['recurring_billing_reattempt']) ) ? ' checked' : ''; ?> />
                             <p class="description"><?php echo SwpmUtils::_('When checked, the payment will be re-attempted two more times if the payment fails. After the third failure, the subscription will be canceled.'); ?></p>
                         </td>
                     </tr>                    
@@ -144,7 +144,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Trial Billing Amount'); ?></th>
                         <td>
-                            <input type="number" step="0.01" min="0" size="10" name="trial_billing_amount" value="" />
+                            <input type="number" step="0.01" min="0" size="10" name="trial_billing_amount" value="<?php echo ($is_edit_mode ? $bt_opts['trial_billing_amount'] : ''); ?>" />
                             <p class="description">Amount to be charged for the trial period. Enter 0 if you want to offer a free trial period.</p>
                         </td>
                     </tr>
@@ -152,11 +152,11 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Trial Billing Period'); ?></th>
                         <td>
-                            <input type="number" min="0" step="1" size="10" name="trial_billing_cycle" value="" />
+                            <input type="number" min="0" step="1" size="10" name="trial_billing_cycle" value="<?php echo ($is_edit_mode ? $bt_opts['trial_billing_cycle'] : ''); ?>" />
                             <select id="trial_billing_cycle_term" name="trial_billing_cycle_term">
-                                <option value="D">Day(s)</option>
-                                <option value="M">Month(s)</option>
-                                <option value="Y">Year(s)</option>
+                                <option value="D"<?php echo (isset($bt_opts['trial_billing_cycle_term']) && $bt_opts['trial_billing_cycle_term'] === 'D') ? ' selected' : ''; ?>>Day(s)</option>
+                                <option value="M"<?php echo (isset($bt_opts['trial_billing_cycle_term']) && $bt_opts['trial_billing_cycle_term'] === 'M') ? ' selected' : ''; ?>>Month(s)</option>
+                                <option value="Y"<?php echo (isset($bt_opts['trial_billing_cycle_term']) && $bt_opts['trial_billing_cycle_term'] === 'Y') ? ' selected' : ''; ?>>Year(s)</option>
                             </select>
                             <p class="description">Length of the trial period</p>
                         </td>
@@ -239,10 +239,6 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                             <p><label><input type="checkbox" name="pp_subscription_new_disable_funding_venmo" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_disable_funding_venmo']) ) ? ' checked' : ''; ?>> <?php _e("Venmo", "simple-membership"); ?></label></p>
                             <p class="description"><?php _e("By default, funding source eligibility is smartly decided based on a variety of factors. You can force disable funding options by selecting them here.", "simple-membership"); ?></p>
                         </td>
-                    </tr>
-
-                    <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional'); ?></div></th>
                     </tr>
 
                     <tr valign="top">

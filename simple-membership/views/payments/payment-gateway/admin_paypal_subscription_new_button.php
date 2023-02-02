@@ -57,11 +57,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Payment Amount'); ?></th>
-                        <td>
-                            <input type="text" size="6" name="payment_amount" value="<?php echo ($is_edit_mode ? $bt_opts['payment_amount'] : ''); ?>" required />
-                            <p class="description">Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).</p>
-                        </td>
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Subscription/Recurring Billing Details'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
@@ -105,34 +101,85 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Button Appearance Settings'); ?></div></th>
+                        <th scope="row"><?php echo SwpmUtils::_('Recurring Billing Amount'); ?></th>
+                        <td>
+                            <input type="number" min="0" step="0.01" size="10" name="recurring_billing_amount" value="<?php echo ($is_edit_mode ? $bt_opts['recurring_billing_amount'] : ''); ?>" required />
+                            <p class="description"><?php echo SwpmUtils::_('Amount to be charged on every billing cycle. If used with a trial period then this amount will be charged after the trial period is over. Example values: 9.90 or 25.00 or 299.90 etc (do not enter currency symbol).'); ?></p>
+                        </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e("Size", "simple-membership"); ?></th>
+                        <th scope="row"><?php echo SwpmUtils::_('Recurring Billing Cycle'); ?></th>
                         <td>
-                            <select name="pp_subscription_new_btn_size">
-                                <option value="medium"<?php echo (isset($bt_opts['pp_subscription_new_btn_size']) && $bt_opts['pp_subscription_new_btn_size'] === 'medium') ? ' selected' : ''; ?>><?php _e("Medium", "simple-membership"); ?></option>
-                                <option value="large"<?php echo (isset($bt_opts['pp_subscription_new_btn_size']) && $bt_opts['pp_subscription_new_btn_size'] === 'large') ? ' selected' : ''; ?>><?php _e("Large", "simple-membership"); ?></option>
-                                <option value="responsive"<?php echo (isset($bt_opts['pp_subscription_new_btn_size']) && $bt_opts['pp_subscription_new_btn_size'] === 'responsive') ? ' selected' : ''; ?>><?php _e("Repsonsive", "simple-membership"); ?></option>
+                            <input type="number" min="0" step="1" size="10" name="recurring_billing_cycle" value="" required />
+                            <select id="recurring_billing_cycle_term" name="recurring_billing_cycle_term">
+                                <option value="D">Day(s)</option>
+                                <option value="M">Month(s)</option>
+                                <option value="Y">Year(s)</option>
                             </select>
-                            <p class="description"><?php _e("Select button size.", "simple-membership"); ?></p>
+                            <p class="description"><?php echo SwpmUtils::_('Set the interval of the recurring payment. Example value: 1 Month (if you want to charge every month)'); ?></p>
                         </td>
                     </tr>
+
                     <tr valign="top">
-                        <th scope="row"><?php _e("Color", "simple-membership"); ?></th>
+                        <th scope="row"><?php echo SwpmUtils::_('Recurring Billing Cycle Count'); ?></th>
                         <td>
-                            <select name="pp_subscription_new_btn_color">
-                                <option value="gold"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'gold') ? ' selected' : ''; ?>><?php _e("Gold", "simple-membership"); ?></option>
-                                <option value="blue"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'blue') ? ' selected' : ''; ?>><?php _e("Blue", "simple-membership"); ?></option>
-                                <option value="silver"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'silver') ? ' selected' : ''; ?>><?php _e("Silver", "simple-membership"); ?></option>
-                                <option value="black"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'black') ? ' selected' : ''; ?>><?php _e("Black", "simple-membership"); ?></option>
-                            </select>
-                            <p class="description"><?php _e("Select button color.", "simple-membership"); ?></p>
+                            <input type="text" size="10" name="recurring_billing_cycle_count" value="" />
+                            <p class="description"><?php echo SwpmUtils::_('After how many cycles should billing stop. Leave this field empty (or enter 0) if you want the payment to continue until the subscription is canceled.'); ?></p>
                         </td>
                     </tr>
+
                     <tr valign="top">
-                        <th scope="row"><?php _e("Shape", "simple-membership"); ?></th>
+                        <th scope="row"><?php echo SwpmUtils::_('Re-attempt on Failure'); ?></th>
+                        <td>
+                            <input type="checkbox" name="recurring_billing_reattempt" value="1" />
+                            <p class="description"><?php echo SwpmUtils::_('When checked, the payment will be re-attempted two more times if the payment fails. After the third failure, the subscription will be canceled.'); ?></p>
+                        </td>
+                    </tr>                    
+
+                    <tr valign="top">
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Trial Billing Details (Leave empty if you are not offering a trial period)'); ?></div></th>
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Trial Billing Amount'); ?></th>
+                        <td>
+                            <input type="number" step="0.01" min="0" size="10" name="trial_billing_amount" value="" />
+                            <p class="description">Amount to be charged for the trial period. Enter 0 if you want to offer a free trial period.</p>
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Trial Billing Period'); ?></th>
+                        <td>
+                            <input type="number" min="0" step="1" size="10" name="trial_billing_cycle" value="" />
+                            <select id="trial_billing_cycle_term" name="trial_billing_cycle_term">
+                                <option value="D">Day(s)</option>
+                                <option value="M">Month(s)</option>
+                                <option value="Y">Year(s)</option>
+                            </select>
+                            <p class="description">Length of the trial period</p>
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Button Style Settings (Optional)'); ?></div></th>
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row"><?php _e("Button Type", "simple-membership"); ?></th>
+                        <td>
+                            <select name="pp_subscription_new_btn_type" style="min-width: 150px;">
+                                <option value="checkout"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'checkout') ? ' selected' : ''; ?>><?php _e("Checkout", "simple-membership"); ?></option>                                
+                                <option value="pay"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'pay') ? ' selected' : ''; ?>><?php _e("Pay", "simple-membership"); ?></option>
+                                <option value="paypal"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'paypal') ? ' selected' : ''; ?>><?php _e("PayPal", "simple-membership"); ?></option>
+                                <option value="buynow"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'buynow') ? ' selected' : ''; ?>><?php _e("Buy Now", "simple-membership"); ?></option>
+                            </select>
+                            <p class="description"><?php _e("Select button type.", "simple-membership"); ?></p>
+                        </td>
+                    </tr>                    
+                    <tr valign="top">
+                        <th scope="row"><?php _e("Button Shape", "simple-membership"); ?></th>
                         <td>
                             <p><label><input type="radio" name="pp_subscription_new_btn_shape" value="rect"<?php echo (isset($bt_opts['pp_subscription_new_btn_shape']) && $bt_opts['pp_subscription_new_btn_shape'] === 'rect' || empty($bt_opts['pp_subscription_new_btn_shape'])) ? ' checked' : ''; ?>> <?php _e("Rectangular", "simple-membership"); ?></label></p>
                             <p><label><input type="radio" name="pp_subscription_new_btn_shape" value="pill"<?php echo (isset($bt_opts['pp_subscription_new_btn_shape']) && $bt_opts['pp_subscription_new_btn_shape'] === 'pill') ? ' checked' : ''; ?>> <?php _e("Pill", "simple-membership"); ?></label></p>
@@ -140,24 +187,57 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php _e("Layout", "simple-membership"); ?></th>
+                        <th scope="row"><?php _e("Button Layout", "simple-membership"); ?></th>
                         <td>
                             <p><label><input type="radio" name="pp_subscription_new_btn_layout" value="vertical"<?php echo (isset($bt_opts['pp_subscription_new_btn_layout']) && $bt_opts['pp_subscription_new_btn_layout'] === 'vertical' || empty($bt_opts['pp_subscription_new_btn_layout'])) ? ' checked' : ''; ?>> <?php _e("Vertical", "simple-membership"); ?></label></p>
                             <p><label><input type="radio" name="pp_subscription_new_btn_layout" value="horizontal"<?php echo (isset($bt_opts['pp_subscription_new_btn_layout']) && $bt_opts['pp_subscription_new_btn_layout'] === 'horizontal') ? ' checked' : ''; ?>> <?php _e("Horizontal", "simple-membership"); ?></label></p>
                             <p class="description"><?php _e("Select button layout.", "simple-membership"); ?></p>
                         </td>
-                    </tr>
-
+                    </tr>               
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Additional Settings'); ?></div></th>
-                    </tr>
-
-                    <tr valign="top">
-                        <th scope="row"><?php _e("Payment Methods", "simple-membership"); ?></th>
+                        <th scope="row"><?php _e("Button Height", "simple-membership"); ?></th>
                         <td>
-                            <p><label><input type="checkbox" name="pp_subscription_new_payment_method_credit" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_payment_method_credit']) ) ? ' checked' : ''; ?>> <?php _e("PayPal Credit", "simple-membership"); ?></label></p>
-                            <p><label><input type="checkbox" name="pp_subscription_new_payment_method_elv" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_payment_method_elv']) ) ? ' checked' : ''; ?>> <?php _e("ELV", "simple-membership"); ?></label></p>
-                            <p class="description"><?php _e("Select payment methods that could be used by customers. Note that payment with cards is always enabled.", "simple-membership"); ?></p>
+                            <select name="pp_subscription_new_btn_height" style="min-width: 150px;">
+                                <option value="small"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'small') ? ' selected' : ''; ?>><?php _e("Small", "simple-membership"); ?></option>                                
+                                <option value="medium"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'medium') ? ' selected' : ''; ?>><?php _e("Medium", "simple-membership"); ?></option>
+                                <option value="large"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'large') ? ' selected' : ''; ?>><?php _e("Large", "simple-membership"); ?></option>
+                                <option value="extra-large"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'extra-large') ? ' selected' : ''; ?>><?php _e("Extra Large", "simple-membership"); ?></option>
+                            </select>
+                            <p class="description"><?php _e("Select button height.", "simple-membership"); ?></p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row"><?php echo SwpmUtils::_('Button Width'); ?></th>
+                        <td>
+                            <input type="number" step="1" min="0" size="10" name="pp_subscription_new_btn_width" value="300" style="min-width: 150px;" />
+                            <p class="description"><?php _e("Select button width.", "simple-membership"); ?></p>
+                        </td>
+                    </tr>                    
+                    <tr valign="top">
+                        <th scope="row"><?php _e("Button Color", "simple-membership"); ?></th>
+                        <td>
+                            <select name="pp_subscription_new_btn_color" style="min-width: 150px;">
+                                <option value="gold"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'gold') ? ' selected' : ''; ?>><?php _e("Gold", "simple-membership"); ?></option>
+                                <option value="blue"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'blue') ? ' selected' : ''; ?>><?php _e("Blue", "simple-membership"); ?></option>
+                                <option value="silver"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'silver') ? ' selected' : ''; ?>><?php _e("Silver", "simple-membership"); ?></option>
+                                <option value="white"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'white') ? ' selected' : ''; ?>><?php _e("White", "simple-membership"); ?></option>
+                                <option value="black"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'black') ? ' selected' : ''; ?>><?php _e("Black", "simple-membership"); ?></option>
+                            </select>
+                            <p class="description"><?php _e("Select button color.", "simple-membership"); ?></p>
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Additional Settings (Optional)'); ?></div></th>
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row"><?php _e("Disable Funding", "simple-membership"); ?></th>
+                        <td>
+                        <p><label><input type="checkbox" name="pp_subscription_new_disable_funding_card" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_disable_funding_card']) ) ? ' checked' : ''; ?>> <?php _e("Credit or debig cards", "simple-membership"); ?></label></p>
+                            <p><label><input type="checkbox" name="pp_subscription_new_disable_funding_credit" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_disable_funding_credit']) ) ? ' checked' : ''; ?>> <?php _e("PayPal Credit", "simple-membership"); ?></label></p>
+                            <p><label><input type="checkbox" name="pp_subscription_new_disable_funding_venmo" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_disable_funding_venmo']) ) ? ' checked' : ''; ?>> <?php _e("Venmo", "simple-membership"); ?></label></p>
+                            <p class="description"><?php _e("By default, funding source eligibility is smartly decided based on a variety of factors. You can force disable funding options by selecting them here.", "simple-membership"); ?></p>
                         </td>
                     </tr>
 
@@ -194,6 +274,8 @@ function swpm_create_new_pp_subscription_new_button() {
 
     $bt_opts = array(
         'button_type' => sanitize_text_field($_REQUEST['button_type']),
+        'pp_subscription_new_btn_height' => 'medium', /* set default button height */
+        'pp_subscription_new_btn_color' => 'blue', /* set default button color */
     );
 
     render_save_edit_pp_subscription_new_button_interface($bt_opts);
@@ -218,14 +300,24 @@ function swpm_edit_pp_subscription_new_button() {
         'button_type' => sanitize_text_field($_REQUEST['button_type']),
         'button_name' => $button->post_title,
         'membership_level_id' => get_post_meta($button_id, 'membership_level_id', true),
-        'payment_amount' => get_post_meta($button_id, 'payment_amount', true),
         'payment_currency' => get_post_meta($button_id, 'payment_currency', true),
-        'pp_subscription_new_btn_size' => get_post_meta($button_id, 'pp_subscription_new_btn_size', true),
-        'pp_subscription_new_btn_color' => get_post_meta($button_id, 'pp_subscription_new_btn_color', true),
+        'recurring_billing_amount' => get_post_meta($button_id, 'recurring_billing_amount', true),
+        'recurring_billing_cycle' => get_post_meta($button_id, 'recurring_billing_cycle', true),
+        'recurring_billing_cycle_term' => get_post_meta($button_id, 'recurring_billing_cycle_term', true),
+        'recurring_billing_cycle_count' => get_post_meta($button_id, 'recurring_billing_cycle_count', true),
+        'recurring_billing_reattempt' => get_post_meta($button_id, 'recurring_billing_reattempt', true),
+        'trial_billing_amount' => get_post_meta($button_id, 'trial_billing_amount', true),
+        'trial_billing_cycle' => get_post_meta($button_id, 'trial_billing_cycle', true),
+        'trial_billing_cycle_term' => get_post_meta($button_id, 'trial_billing_cycle_term', true),
+        'pp_subscription_new_btn_type' => get_post_meta($button_id, 'pp_subscription_new_btn_type', true),
         'pp_subscription_new_btn_shape' => get_post_meta($button_id, 'pp_subscription_new_btn_shape', true),
-        'pp_subscription_new_btn_layout' => get_post_meta($button_id, 'pp_subscription_new_btn_layout', true),
-        'pp_subscription_new_payment_method_credit' => get_post_meta($button_id, 'pp_subscription_new_payment_method_credit', true),
-        'pp_subscription_new_payment_method_elv' => get_post_meta($button_id, 'pp_subscription_new_payment_method_elv', true),
+        'pp_subscription_new_btn_layout' => get_post_meta($button_id, 'pp_subscription_new_btn_layout', true),        
+        'pp_subscription_new_btn_height' => get_post_meta($button_id, 'pp_subscription_new_btn_height', true),
+        'pp_subscription_new_btn_width' => get_post_meta($button_id, 'pp_subscription_new_btn_width', true),
+        'pp_subscription_new_btn_color' => get_post_meta($button_id, 'pp_subscription_new_btn_color', true),
+        'pp_subscription_new_disable_funding_card' => get_post_meta($button_id, 'pp_subscription_new_disable_funding_card', true),
+        'pp_subscription_new_disable_funding_credit' => get_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', true),
+        'pp_subscription_new_disable_funding_venmo' => get_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', true),
         'return_url' => get_post_meta($button_id, 'return_url', true),
     );
 
@@ -240,14 +332,18 @@ add_action('swpm_edit_payment_button_for_pp_subscription_new', 'swpm_edit_pp_sub
  * Start of process submission: save or edit new PayPal subscription payment button data
  *************************************************************************************/
 function swpm_save_edit_pp_subscription_new_button_data() {
-
-    $btn_size = isset($_POST['pp_subscription_new_btn_size']) ? sanitize_text_field($_POST['pp_subscription_new_btn_size']) : '';
-    $btn_color = isset($_POST['pp_subscription_new_btn_color']) ? sanitize_text_field($_POST['pp_subscription_new_btn_color']) : '';
+    $btn_type = isset($_POST['pp_subscription_new_btn_type']) ? sanitize_text_field($_POST['pp_subscription_new_btn_type']) : '';
     $btn_shape = isset($_POST['pp_subscription_new_btn_shape']) ? sanitize_text_field($_POST['pp_subscription_new_btn_shape']) : '';
     $btn_layout = isset($_POST['pp_subscription_new_btn_layout']) ? sanitize_text_field($_POST['pp_subscription_new_btn_layout']) : '';
-    $pm_credit = isset($_POST['pp_subscription_new_payment_method_credit']) ? sanitize_text_field($_POST['pp_subscription_new_payment_method_credit']) : '';
-    $pm_elv = isset($_POST['pp_subscription_new_payment_method_elv']) ? sanitize_text_field($_POST['pp_subscription_new_payment_method_elv']) : '';
+    $btn_height = isset($_POST['pp_subscription_new_btn_height']) ? sanitize_text_field($_POST['pp_subscription_new_btn_height']) : '';
+    $btn_width = isset($_POST['pp_subscription_new_btn_width']) ? sanitize_text_field($_POST['pp_subscription_new_btn_width']) : '';
+    $btn_color = isset($_POST['pp_subscription_new_btn_color']) ? sanitize_text_field($_POST['pp_subscription_new_btn_color']) : '';
 
+    $disable_funding_card = isset($_POST['pp_subscription_new_disable_funding_card']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_card']) : '';
+    $disable_funding_credit = isset($_POST['pp_subscription_new_disable_funding_credit']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_credit']) : '';
+    $disable_funding_venmo = isset($_POST['pp_subscription_new_disable_funding_venmo']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_venmo']) : '';
+
+    //Process form submission
     if (isset($_REQUEST['swpm_pp_subscription_new_save_submit'])) {
         //This is a PayPal Subscription (New) button save event.
 
@@ -265,16 +361,28 @@ function swpm_save_edit_pp_subscription_new_button_data() {
         $button_type = sanitize_text_field($_REQUEST['button_type']);
         add_post_meta($button_id, 'button_type', $button_type);
         add_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
-        add_post_meta($button_id, 'payment_amount', trim(sanitize_text_field($_REQUEST['payment_amount'])));
-        add_post_meta($button_id, 'payment_currency', trim(sanitize_text_field($_REQUEST['payment_currency'])));
 
-        add_post_meta($button_id, 'pp_subscription_new_btn_size', $btn_size);
-        add_post_meta($button_id, 'pp_subscription_new_btn_color', $btn_color);
+        add_post_meta($button_id, 'payment_currency', trim(sanitize_text_field($_REQUEST['payment_currency']))); 
+        add_post_meta($button_id, 'recurring_billing_amount', trim(sanitize_text_field($_REQUEST['recurring_billing_amount'])));
+        add_post_meta($button_id, 'recurring_billing_cycle', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle'])));
+        add_post_meta($button_id, 'recurring_billing_cycle_term', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_term'])));
+        add_post_meta($button_id, 'recurring_billing_cycle_count', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_count'])));
+        add_post_meta($button_id, 'recurring_billing_reattempt', isset($_REQUEST['recurring_billing_reattempt']) ? '1' : '');
+
+        add_post_meta($button_id, 'trial_billing_amount', trim(sanitize_text_field($_REQUEST['trial_billing_amount'])));
+        add_post_meta($button_id, 'trial_billing_cycle', trim(sanitize_text_field($_REQUEST['trial_billing_cycle'])));
+        add_post_meta($button_id, 'trial_billing_cycle_term', trim(sanitize_text_field($_REQUEST['trial_billing_cycle_term'])));
+
+        add_post_meta($button_id, 'pp_subscription_new_btn_type', $btn_type);
         add_post_meta($button_id, 'pp_subscription_new_btn_shape', $btn_shape);
-        add_post_meta($button_id, 'pp_subscription_new_btn_layout', $btn_layout);
+        add_post_meta($button_id, 'pp_subscription_new_btn_layout', $btn_layout);        
+        add_post_meta($button_id, 'pp_subscription_new_btn_height', $btn_height);
+        add_post_meta($button_id, 'pp_subscription_new_btn_width', $btn_width);
+        add_post_meta($button_id, 'pp_subscription_new_btn_color', $btn_color);
 
-        add_post_meta($button_id, 'pp_subscription_new_payment_method_credit', $pm_credit);
-        add_post_meta($button_id, 'pp_subscription_new_payment_method_elv', $pm_elv);
+        add_post_meta($button_id, 'pp_subscription_new_disable_funding_card', $disable_funding_card);
+        add_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', $disable_funding_credit);
+        add_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', $disable_funding_venmo);
 
         add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
 
@@ -302,16 +410,28 @@ function swpm_save_edit_pp_subscription_new_button_data() {
 
         update_post_meta($button_id, 'button_type', $button_type);
         update_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
-        update_post_meta($button_id, 'payment_amount', trim(sanitize_text_field($_REQUEST['payment_amount'])));
-        update_post_meta($button_id, 'payment_currency', trim(sanitize_text_field($_REQUEST['payment_currency'])));
 
-        update_post_meta($button_id, 'pp_subscription_new_btn_size', $btn_size);
-        update_post_meta($button_id, 'pp_subscription_new_btn_color', $btn_color);
+        update_post_meta($button_id, 'payment_currency', trim(sanitize_text_field($_REQUEST['payment_currency'])));        
+        update_post_meta($button_id, 'recurring_billing_amount', trim(sanitize_text_field($_REQUEST['recurring_billing_amount'])));
+        update_post_meta($button_id, 'recurring_billing_cycle', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle'])));
+        update_post_meta($button_id, 'recurring_billing_cycle_term', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_term'])));
+        update_post_meta($button_id, 'recurring_billing_cycle_count', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_count'])));
+        update_post_meta($button_id, 'recurring_billing_reattempt', isset($_REQUEST['recurring_billing_reattempt']) ? '1' : '');
+
+        update_post_meta($button_id, 'trial_billing_amount', trim(sanitize_text_field($_REQUEST['trial_billing_amount'])));
+        update_post_meta($button_id, 'trial_billing_cycle', trim(sanitize_text_field($_REQUEST['trial_billing_cycle'])));
+        update_post_meta($button_id, 'trial_billing_cycle_term', trim(sanitize_text_field($_REQUEST['trial_billing_cycle_term'])));
+
+        update_post_meta($button_id, 'pp_subscription_new_btn_type', $btn_type);
         update_post_meta($button_id, 'pp_subscription_new_btn_shape', $btn_shape);
-        update_post_meta($button_id, 'pp_subscription_new_btn_layout', $btn_layout);
+        update_post_meta($button_id, 'pp_subscription_new_btn_layout', $btn_layout);        
+        update_post_meta($button_id, 'pp_subscription_new_btn_height', $btn_height);
+        update_post_meta($button_id, 'pp_subscription_new_btn_width', $btn_width);
+        update_post_meta($button_id, 'pp_subscription_new_btn_color', $btn_color);
 
-        update_post_meta($button_id, 'pp_subscription_new_payment_method_credit', $pm_credit);
-        update_post_meta($button_id, 'pp_subscription_new_payment_method_elv', $pm_elv);
+        update_post_meta($button_id, 'pp_subscription_new_disable_funding_card', $disable_funding_card);
+        update_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', $disable_funding_credit);
+        update_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', $disable_funding_venmo);
 
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
 

@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * PayPal REST API request class.
+ */
 class SWPM_PayPal_Request_API {
 
 	protected static $instance;

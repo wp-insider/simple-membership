@@ -16,10 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Do not access this file directly.' );
 }
 
-include_once( 'classes/class.simple-wp-membership.php' );
-include_once( 'classes/class.swpm-cronjob.php' );
-include_once( 'swpm-compat.php' );
-
 define( 'SIMPLE_WP_MEMBERSHIP_VER', '4.2.4' );
 define( 'SIMPLE_WP_MEMBERSHIP_DB_VER', '1.3' );
 define( 'SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url() );
@@ -33,6 +29,10 @@ if ( ! defined( 'COOKIEHASH' ) ) {
 define( 'SIMPLE_WP_MEMBERSHIP_AUTH', 'simple_wp_membership_' . COOKIEHASH );
 define( 'SIMPLE_WP_MEMBERSHIP_SEC_AUTH', 'simple_wp_membership_sec_' . COOKIEHASH );
 define( 'SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS', serialize( array( 'JPY', 'MGA', 'VND', 'KRW' ) ) );
+
+include_once( 'classes/class.simple-wp-membership.php' );
+include_once( 'classes/class.swpm-cronjob.php' );
+include_once( 'swpm-compat.php' );
 
 SwpmUtils::do_misc_initial_plugin_setup_tasks();
 
@@ -52,5 +52,4 @@ function swpm_add_settings_link( $links, $file ) {
 	}
 	return $links;
 }
-
 add_filter( 'plugin_action_links', 'swpm_add_settings_link', 10, 2 );

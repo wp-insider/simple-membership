@@ -323,6 +323,54 @@ class SwpmSettings {
 			)
 		);
 
+		//PayPal checkout (new) settings section.
+		add_settings_section( 'paypal-checkout-settings', SwpmUtils::_( 'PayPal Checkout Settings' ), array( &$this, 'paypal_checkout_settings_callback' ), 'simple_wp_membership_settings' );
+
+		add_settings_field(
+			'paypal-live-client-id',
+			SwpmUtils::_( 'Live Client ID' ),
+			array( $this, 'textfield_long_callback' ),
+			'simple_wp_membership_settings',
+			'paypal-checkout-settings',
+			array(
+				'item'    => 'paypal-live-client-id',
+				'message' => SwpmUtils::_( 'Enter your PayPal Client ID for live mode.' ),
+			)
+		);
+		add_settings_field(
+			'paypal-live-secret-key',
+			SwpmUtils::_( 'Live Secret Key' ),
+			array( $this, 'textfield_long_callback' ),
+			'simple_wp_membership_settings',
+			'paypal-checkout-settings',
+			array(
+				'item'    => 'paypal-live-secret-key',
+				'message' => SwpmUtils::_( 'Enter your PayPal Secret Key for live mode.' ),
+			)
+		);
+		add_settings_field(
+			'paypal-sandbox-client-id',
+			SwpmUtils::_( 'Sandbox Client ID' ),
+			array( $this, 'textfield_long_callback' ),
+			'simple_wp_membership_settings',
+			'paypal-checkout-settings',
+			array(
+				'item'    => 'paypal-sandbox-client-id',
+				'message' => SwpmUtils::_( 'Enter your PayPal Client ID for sandbox mode.' ),
+			)
+		);
+		add_settings_field(
+			'paypal-sandbox-secret-key',
+			SwpmUtils::_( 'Sandbox Secret Key' ),
+			array( $this, 'textfield_long_callback' ),
+			'simple_wp_membership_settings',
+			'paypal-checkout-settings',
+			array(
+				'item'    => 'paypal-sandbox-secret-key',
+				'message' => SwpmUtils::_( 'Enter your PayPal Secret Key for sandbox mode.' ),
+			)
+		);
+
 		//Stripe global settings section.
 		add_settings_section( 'stripe-global-settings', SwpmUtils::_( 'Stripe Global Settings' ), array( &$this, 'stripe_global_settings_callback' ), 'simple_wp_membership_settings' );
                 
@@ -340,7 +388,7 @@ class SwpmSettings {
 		add_settings_field(
 			'stripe-test-public-key',
 			SwpmUtils::_( 'Test Publishable Key' ),
-			array( $this, 'textfield_callback' ),
+			array( $this, 'textfield_long_callback' ),
 			'simple_wp_membership_settings',
 			'stripe-global-settings',
 			array(
@@ -351,7 +399,7 @@ class SwpmSettings {
 		add_settings_field(
 			'stripe-test-secret-key',
 			SwpmUtils::_( 'Test Secret Key' ),
-			array( $this, 'textfield_callback' ),
+			array( $this, 'textfield_long_callback' ),
 			'simple_wp_membership_settings',
 			'stripe-global-settings',
 			array(
@@ -362,7 +410,7 @@ class SwpmSettings {
 		add_settings_field(
 			'stripe-live-public-key',
 			SwpmUtils::_( 'Live Publishable Key' ),
-			array( $this, 'textfield_callback' ),
+			array( $this, 'textfield_long_callback' ),
 			'simple_wp_membership_settings',
 			'stripe-global-settings',
 			array(
@@ -373,7 +421,7 @@ class SwpmSettings {
 		add_settings_field(
 			'stripe-live-secret-key',
 			SwpmUtils::_( 'Live Secret Key' ),
-			array( $this, 'textfield_callback' ),
+			array( $this, 'textfield_long_callback' ),
 			'simple_wp_membership_settings',
 			'stripe-global-settings',
 			array(
@@ -1168,6 +1216,11 @@ class SwpmSettings {
 			SwpmUtils::e( 'This section allows you to enable/disable sandbox or test mode for the payment buttons.' );
 	}
 
+	public function paypal_checkout_settings_callback() {
+		SwpmUtils::e( 'Configure the PayPal API credentials for the new PayPal checkout.' );
+		echo '&nbsp;' . '<a href="https://simple-membership-plugin.com/getting-paypal-api-credentials" target="_blank">' . SwpmUtils::_( 'Read this documentation' ) . '</a> ' . SwpmUtils::_( 'to learn how to get your PayPal API credentials.' );
+	}
+
 	public function stripe_global_settings_callback() {
                 SwpmUtils::e( 'This section allows you to configure Stripe payment related settings.' );               
 	}
@@ -1302,7 +1355,6 @@ class SwpmSettings {
 		$output['enable-free-membership'] = isset( $input['enable-free-membership'] ) ? esc_attr( $input['enable-free-membership'] ) : '';
 		$output['enable-moretag']         = isset( $input['enable-moretag'] ) ? esc_attr( $input['enable-moretag'] ) : '';
 		$output['enable-debug']           = isset( $input['enable-debug'] ) ? esc_attr( $input['enable-debug'] ) : '';
-		$output['enable-sandbox-testing'] = isset( $input['enable-sandbox-testing'] ) ? esc_attr( $input['enable-sandbox-testing'] ) : '';
 
 		$output['free-membership-id']       = ( $input['free-membership-id'] != 1 ) ? absint( $input['free-membership-id'] ) : '';
 		$output['login-page-url']           = esc_url( $input['login-page-url'] );
@@ -1324,12 +1376,18 @@ class SwpmSettings {
 		}
 		$output = $this->settings;
 
+		$output['enable-sandbox-testing'] = isset( $input['enable-sandbox-testing'] ) ? esc_attr( $input['enable-sandbox-testing'] ) : '';
+
+		$output['paypal-live-client-id'] = sanitize_text_field( $input['paypal-live-client-id'] );
+		$output['paypal-live-secret-key'] = sanitize_text_field( $input['paypal-live-secret-key'] );
+		$output['paypal-sandbox-client-id'] = sanitize_text_field( $input['paypal-sandbox-client-id'] );
+		$output['paypal-sandbox-secret-key'] = sanitize_text_field( $input['paypal-sandbox-secret-key'] );
+
+		$output['stripe-prefill-member-email'] = isset( $input['stripe-prefill-member-email'] ) ? esc_attr( $input['stripe-prefill-member-email'] ) : 0;
 		$output['stripe-test-public-key'] = sanitize_text_field( $input['stripe-test-public-key'] );
 		$output['stripe-test-secret-key'] = sanitize_text_field( $input['stripe-test-secret-key'] );
 		$output['stripe-live-public-key'] = sanitize_text_field( $input['stripe-live-public-key'] );
 		$output['stripe-live-secret-key'] = sanitize_text_field( $input['stripe-live-secret-key'] );
-
-		$output['stripe-prefill-member-email'] = isset( $input['stripe-prefill-member-email'] ) ? esc_attr( $input['stripe-prefill-member-email'] ) : 0;
 
 		return $output;
 	}

@@ -167,6 +167,7 @@ https://simple-membership-plugin.com/
 - Spanish language translation file updated.
 - Added an appropriate error message for when a user tries to re-use the special registration complete link.
 - Check if the registration completion link (if present in the URL) is valid. Show an appropriate error message to prevent confusion.
+- Moved the Sandbox/Test Mode option to the "Payment Settings" tab.
 
 = 4.2.4 =
 - Improved the enqueue_validation_scripts() function to work better with block themes.

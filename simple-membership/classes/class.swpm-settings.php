@@ -298,17 +298,7 @@ class SwpmSettings {
 				'message' => $debug_field_help_text,
 			)
 		);
-		add_settings_field(
-			'enable-sandbox-testing',
-			SwpmUtils::_( 'Enable Sandbox Testing' ),
-			array( &$this, 'checkbox_callback' ),
-			'simple_wp_membership_settings',
-			'debug-settings',
-			array(
-				'item'    => 'enable-sandbox-testing',
-				'message' => SwpmUtils::_( 'Enable this option if you want to do sandbox payment testing.' ),
-			)
-		);
+
 	}
 
 	private function tab_2() {
@@ -317,7 +307,23 @@ class SwpmSettings {
                 
 		//This settings section has no heading. Useful for hooking at this section and doing arbitrary request parameter checks and show response accordingly (on this settings tab)
 		add_settings_section( 'swpm-settings-tab-2-before-other-fields', '', array( &$this, 'swpm_settings_tab_2_before_fields_callback' ), 'simple_wp_membership_settings' );
-                
+
+		//Sandbox or Testmode payment settings section.
+		add_settings_section( 'testmode-payment-settings', SwpmUtils::_( 'Sandbox or Test Mode Payment Settings' ), array( &$this, 'testmode_payment_settings_callback' ), 'simple_wp_membership_settings' );
+
+		add_settings_field(
+			'enable-sandbox-testing',
+			SwpmUtils::_( 'Enable Sandbox or Test Mode' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'testmode-payment-settings',
+			array(
+				'item'    => 'enable-sandbox-testing',
+				'message' => SwpmUtils::_( 'Enable this option if you want to do sandbox payment testing.' ),
+			)
+		);
+
+		//Stripe global settings section.
 		add_settings_section( 'stripe-global-settings', SwpmUtils::_( 'Stripe Global Settings' ), array( &$this, 'stripe_global_settings_callback' ), 'simple_wp_membership_settings' );
                 
 		add_settings_field(
@@ -1158,6 +1164,10 @@ class SwpmSettings {
 		}
         }
         
+	public function testmode_payment_settings_callback() {
+			SwpmUtils::e( 'This section allows you to enable/disable sandbox or test mode for the payment buttons.' );
+	}
+
 	public function stripe_global_settings_callback() {
                 SwpmUtils::e( 'This section allows you to configure Stripe payment related settings.' );               
 	}

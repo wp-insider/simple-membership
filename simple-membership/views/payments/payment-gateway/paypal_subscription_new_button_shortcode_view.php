@@ -19,6 +19,8 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     $output .= '</div>';
 
     //TODO - NEED TO COMPLETE THIS BY LOOKING AT THE EXAMPLE CODE FROM MY TEST CODE.
+    //Best to create the plan when the shortcode is being rendered.
+    //create_billing_plan_for_button($button_id);
 
     return $output;
 }

@@ -26,7 +26,32 @@ class SWPM_PayPal_Utility_Functions{
         return $subsc_args;
     }
 
+    /**
+     * Checks if the plan details (core subscription plan values) in new form submission have changed for the given button ID.
+     */
+    public static function has_plan_details_changed_for_button( $button_id ){
+		$plan_details_changed = false;
+        $core_plan_fields = array(
+            'payment_currency' => trim(sanitize_text_field($_REQUEST['payment_currency'])),
+            'recurring_billing_amount' => trim(sanitize_text_field($_REQUEST['recurring_billing_amount'])),
+            'recurring_billing_cycle' => trim(sanitize_text_field($_REQUEST['recurring_billing_cycle'])),
+            'recurring_billing_cycle_term' => trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_term'])),
+            'recurring_billing_cycle_count' => trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_count'])),
+            'trial_billing_amount' => trim(sanitize_text_field($_REQUEST['trial_billing_amount'])),
+            'trial_billing_cycle' => trim(sanitize_text_field($_REQUEST['trial_billing_cycle'])),
+            'trial_billing_cycle_term' => trim(sanitize_text_field($_REQUEST['trial_billing_cycle_term'])),
+        );
+		foreach ( $core_plan_fields as $meta_name => $value ) {
+            $old_value = get_post_meta( $button_id, $meta_name, true );
+            if ( $old_value !== $value ) {
+                $plan_details_changed = true;
+            }
+		}
+		return $plan_details_changed;
+    }
+
     public static function create_billing_plan_for_button( $button_id ){
+        $output = "";
         $plan_id = get_post_meta($button_id, 'pp_subscription_plan_id', true);
         if ( empty ( $plan_id )){
             //Billing plan doesn't exist. Need to create a new billing plan in PayPal.
@@ -47,20 +72,18 @@ class SWPM_PayPal_Utility_Functions{
                 //Plan created successfully. Save the plan ID for future reference.
                 update_post_meta($button_id, 'pp_subscription_plan_id', $plan_id);
                 update_post_meta($button_id, 'pp_subscription_plan_mode', $paypal_mode);
-				return true;
+				return $output;
             } else {
                 //Plan creation failed. Show an error message.
                 $last_error = $paypal_req_api->get_last_error();
                 $error_message = isset($last_error['error_message']) ? $last_error['error_message'] : '';
-                $edit_button_url = 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id='.$button_id.'&button_type=pp_subscription_new';
-                echo '<div id="message" class="error">';
-                echo '<p>Error! Failed to create a subscription billing plan in your PayPal account. The following error message was returned from the PayPal API.</p>';
-                echo '<p>Error Message: ' . esc_attr($error_message) . '</p>';
-                echo '<p><a href="'.esc_url_raw($edit_button_url).'">Click here</a> to edit the button again.</p>';
-                echo '</div>';
-                return false;
+                $output .= '<div id="message" class="error">';
+                $output .= '<p>Error! Failed to create a subscription billing plan in your PayPal account. The following error message was returned from the PayPal API.</p>';
+                $output .= '<p>Error Message: ' . esc_attr($error_message) . '</p>';
+                $output .= '</div>';
+                return $output;
             }
         }
-		return true;
+		return $output;
     }
 }

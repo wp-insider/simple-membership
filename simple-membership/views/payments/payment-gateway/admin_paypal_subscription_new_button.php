@@ -18,8 +18,6 @@ It's much easier to modify it as the changes (descriptions update etc) are refle
  *************************************************************************************/
 function swpm_save_edit_pp_subscription_new_button_data() {
     $button_name = isset($_REQUEST['button_name']) ? sanitize_text_field($_REQUEST['button_name']) : '';
-    $button_type = isset($_REQUEST['button_type']) ? sanitize_text_field($_REQUEST['button_type']) : '';
-    $payment_currency = isset($_REQUEST['payment_currency']) ? trim(sanitize_text_field($_REQUEST['payment_currency'])) : 'USD';
 
     $btn_type = isset($_POST['pp_subscription_new_btn_type']) ? sanitize_text_field($_POST['pp_subscription_new_btn_type']) : '';
     $btn_shape = isset($_POST['pp_subscription_new_btn_shape']) ? sanitize_text_field($_POST['pp_subscription_new_btn_shape']) : '';
@@ -47,10 +45,10 @@ function swpm_save_edit_pp_subscription_new_button_data() {
                 )
         );
 
-        add_post_meta($button_id, 'button_type', $button_type);
+        add_post_meta($button_id, 'button_type', sanitize_text_field($_REQUEST['button_type']));
         add_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
 
-        add_post_meta($button_id, 'payment_currency', $payment_currency); 
+        add_post_meta($button_id, 'payment_currency', trim(sanitize_text_field($_REQUEST['payment_currency']))); 
         add_post_meta($button_id, 'recurring_billing_amount', trim(sanitize_text_field($_REQUEST['recurring_billing_amount'])));
         add_post_meta($button_id, 'recurring_billing_cycle', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle'])));
         add_post_meta($button_id, 'recurring_billing_cycle_term', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_term'])));
@@ -74,14 +72,6 @@ function swpm_save_edit_pp_subscription_new_button_data() {
 
         add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
 
-        //Check and create PayPal billing plan for this button.
-        if( SWPM_PayPal_Utility_Functions::create_billing_plan_for_button($button_id) ){
-            //Plan created successfully.
-        } else {
-            //Something went wrong. The error message was printed already.
-			return;
-        }
-
         //Redirect to the manage payment buttons interface
         $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=payment_buttons';
         SwpmMiscUtils::redirect_to_url($url);
@@ -102,10 +92,16 @@ function swpm_save_edit_pp_subscription_new_button_data() {
         );
         wp_update_post($button_post);
 
-        update_post_meta($button_id, 'button_type', $button_type);
+        update_post_meta($button_id, 'button_type', sanitize_text_field($_REQUEST['button_type']));
         update_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
 
-        update_post_meta($button_id, 'payment_currency', $payment_currency);
+        if( SWPM_PayPal_Utility_Functions::has_plan_details_changed_for_button($button_id) ){
+            //Plan details have changed. Delete any existing plan (so a new one can be created next time this button is used).
+            SwpmLog::log_simple_debug("PayPal Subscription button edit - billing plan details have been updated.", true);
+            delete_post_meta( $button_id, 'pp_subscription_plan_id' );
+        }
+
+        update_post_meta($button_id, 'payment_currency', trim(sanitize_text_field($_REQUEST['payment_currency'])));
         update_post_meta($button_id, 'recurring_billing_amount', trim(sanitize_text_field($_REQUEST['recurring_billing_amount'])));
         update_post_meta($button_id, 'recurring_billing_cycle', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle'])));
         update_post_meta($button_id, 'recurring_billing_cycle_term', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_term'])));
@@ -128,14 +124,6 @@ function swpm_save_edit_pp_subscription_new_button_data() {
         update_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', $disable_funding_venmo);
 
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
-
-        //Check and create PayPal billing plan for this button.
-        if( SWPM_PayPal_Utility_Functions::create_billing_plan_for_button($button_id) ){
-            //Plan created successfully.
-        } else {
-            //Something went wrong. The error message was printed already.
-			return;
-        }
 
         echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
     }

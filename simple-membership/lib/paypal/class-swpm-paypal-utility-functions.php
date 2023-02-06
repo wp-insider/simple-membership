@@ -96,8 +96,13 @@ class SWPM_PayPal_Utility_Functions{
 	}
 
     public static function check_current_mode_and_set_notice_if_webhook_not_set() {
-        //Check if the current mode is sandbox or production. Then check if a webhook is set for that mode.
+        //Check if the current mode is sandbox or production. Then check if a webhook is set for that mode. 
         //If not, show a notice to the admin user by using the admin_notice hook.
+
+        //TODO - need to finilaize this.
+        //update_option( "swpm_show_{$mode}_webhook_notice", 'no' === $ret[ $mode ]['status'] );
+        //Check the following code for example:
+        //add_action( 'admin_notices', array( $this, 'show_webhooks_admin_notice' ) );
     }
-    
+
 }

@@ -147,12 +147,8 @@ add_action('swpm_edit_payment_button_process_submission', 'swpm_save_edit_pp_sub
 function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edit_mode = false) {
 
     $settings = SwpmSettings::get_instance();
-    $live_client_id = $settings->get_value('paypal-live-client-id');
-    //$live_secret = $settings->get_value('paypal-live-secret');    
+    $live_client_id = $settings->get_value('paypal-live-client-id');  
     $sandbox_client_id = $settings->get_value('paypal-sandbox-client-id');
-    //$sandbox_secret = $settings->get_value('paypal-sandbox-secret');
-    //$sandbox_enabled = $settings->get_value('enable-sandbox-testing');
-    //$paypal_mode = $sandbox_enabled ? 'sandbox' : 'live';
 
     if ( empty($live_client_id) && empty($sandbox_client_id) ) {
         //API credentials are not configured. Show a warning message and return.

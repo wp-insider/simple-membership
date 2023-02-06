@@ -371,6 +371,10 @@ class SwpmSettings {
 			)
 		);
 
+		//PayPal checkout (new) Webhook settings section (no heading). This section will be used to add our custom HTML code to handle the webhook creation and status update.
+		add_settings_section( 'paypal-webhooks-settings', '', array( &$this, 'paypal_webhooks_settings_callback' ), 'simple_wp_membership_settings' );
+
+
 		//Stripe global settings section.
 		add_settings_section( 'stripe-global-settings', SwpmUtils::_( 'Stripe Global Settings' ), array( &$this, 'stripe_global_settings_callback' ), 'simple_wp_membership_settings' );
                 
@@ -1219,6 +1223,73 @@ class SwpmSettings {
 	public function paypal_checkout_settings_callback() {
 		SwpmUtils::e( 'Configure the PayPal API credentials for the new PayPal checkout.' );
 		echo '&nbsp;' . '<a href="https://simple-membership-plugin.com/getting-paypal-api-credentials" target="_blank">' . SwpmUtils::_( 'Read this documentation' ) . '</a> ' . SwpmUtils::_( 'to learn how to get your PayPal API credentials.' );
+	}
+
+	public function paypal_webhooks_settings_callback() {
+		echo '<h2 id="paypal-subscription-webhooks">' . SwpmUtils::_( 'PayPal Subscription Payment Webhooks' ) . '</h2>';
+		echo '<p>' . SwpmUtils::_( 'The new PayPal subscription/recurring payment buttons require webhooks. The plugin will create the webhooks when you create a subscription payment button.' ) . '</p>';
+		echo '<p>' . SwpmUtils::_( 'If you have issues with webhooks, you can delete it and create again.' ) . '</p>';
+
+		?>
+		<table class="form-table" role="presentation">
+		<tbody>
+			<tr>
+				<th scope="row">Live Webhook Status</th>
+				<td>
+					<?php
+					$production_webhook_id = get_option( 'swpm_paypal_webhook_id_production' );
+					if( !empty($production_webhook_id)){
+						//Production webhook exists
+						echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span> Live Webhook exists. If you still have issues with webhooks, you can delete it and create again.</span>';
+					} else {
+						//Production webhook does not exist
+						if( empty( $this->get_value('paypal-live-client-id')) || empty( $this->get_value('paypal-live-secret-key')) ){
+							echo '<p><span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span> Live PayPal API credentials are not set. Please set the Live PayPal API credentials first.</span></p>';
+						} else {
+							echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span> No webhook found. Use the following Create Live Webhook link to create a new webhook automatically.</span>';
+							$create_live_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_create_live_webhook=1' );
+							$create_live_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_live_webhook' ), $create_live_webhook_url );
+							echo '<p><a class="button swpm-paypal-create-live-webhook-btn" href="' . esc_url_raw( $create_live_webhook_url_nonced ) . '" target="_blank">Create Live Webhook</a></p>';
+						}
+					}
+					?>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">Test Webhook Status</th>
+				<td>
+					<?php
+					$sandbox_webhook_id = get_option( 'swpm_paypal_webhook_id_sandbox' );
+					if( !empty($sandbox_webhook_id)){
+						//Sandbox webhook exists
+						echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span> Sandbox Webhook exists. If you still have issues with webhooks, you can delete it and create again.</span>';
+					} else {
+						//Sandbox webhook does not exist
+						if( empty( $this->get_value('paypal-sandbox-client-id')) || empty( $this->get_value('paypal-sandbox-secret-key')) ){
+							echo '<p><span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span> Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal API credentials first.</span></p>';
+						} else {
+							echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span> No webhook found. Use the following Create Sandbox Webhook link to create a new webhook automatically.</span>';
+							$create_sandbox_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_create_sandbox_webhook=1' );
+							$create_sandbox_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_sandbox_webhook' ), $create_sandbox_webhook_url );
+							echo '<p><a class="button swpm-paypal-create-sandbox-webhook-btn" href="' . esc_url_raw( $create_sandbox_webhook_url_nonced ) . '" target="_blank">Create Sandbox Webhook</a></p>';
+						}
+					}
+					?>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">Delete Webhooks</th>
+				<td>
+					<?php
+						$delete_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_delete_webhook=1' );
+						$delete_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_delete_webhook' ), $delete_webhook_url );
+						echo '<p><a class="button swpm-paypal-delete-webhook-btn" href="'.esc_url_raw($delete_webhook_url_nonced).'" target="_blank">Delete Webhook</a></p>';					
+					?>
+				</td>
+			</tr>
+		</tbody>
+		</table>
+		<?php
 	}
 
 	public function stripe_global_settings_callback() {

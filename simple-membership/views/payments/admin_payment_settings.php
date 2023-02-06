@@ -1,14 +1,5 @@
 <?php
-global $wpdb;
-
-//TODO - this code maybe reused for the webhook delete/refresh button. 
-// if (isset($_POST['swpm_generate_adv_code'])) {
-//     $paypal_ipn_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_ipn=1';
-//     $mem_level = trim(sanitize_text_field($_POST['swpm_paypal_adv_member_level']));
-//     echo '<div id="message" class="updated fade"><p>';
-//     echo '<strong>Paste the code below in the "Add advanced variables" field of your PayPal button for membership level ' . $mem_level . '</strong>';
-//     echo '</p></div>';
-// }
+//This file is used to render the settings page for the payment settings tab.
 
 //Tab overview message and documentation link.
 echo '<div class="swpm-grey-box">';
@@ -22,7 +13,33 @@ SwpmUtils::e(' of our documentation to learn more about creating membership paym
 echo '</p>';
 echo '</div>';
 
-//Any other arbitrary HTML code and forms can be added here.
+//Any other arbitrary HTML code and forms can be added here. 
+//We can also use settings section (with empty heading) inside the tab_2() method to render arbitrary HTML code. 
+//However, you can't add forms in there since it will be wrapped by the main settings form. You can create links to use GET query arguments.
+//See the "paypal-webhooks-settings" section for example.
+
+//Handle the webhook create/delete requests
+if (isset($_GET['swpm_paypal_create_live_webhook'])){
+    check_admin_referer( 'swpm_paypal_create_live_webhook' );
+    $pp_webhook = new SWPM_PayPal_Webhook();
+    $ret = $pp_webhook->check_and_create_webhook_for_live_mode();
+    $live_wh_create_result = isset($ret['msg']) ? $ret['msg'] : '';
+    echo '<div id="message" class="updated"><strong><p>Live webhook create action result: ' . $live_wh_create_result . '</p></strong></div>';
+
+}
+if (isset($_GET['swpm_paypal_create_sandbox_webhook'])){
+    check_admin_referer( 'swpm_paypal_create_sandbox_webhook' );
+    $pp_webhook = new SWPM_PayPal_Webhook();
+    $ret = $pp_webhook->check_and_create_webhook_for_sandbox_mode();
+    $sandbox_wh_create_result = isset($ret['msg']) ? $ret['msg'] : '';
+    echo '<div id="message" class="updated"><strong><p>Sandbox webhook create action result: ' . $sandbox_wh_create_result . '</p></strong></div>';
+}
+if (isset($_GET['swpm_paypal_delete_webhook'])){
+    check_admin_referer( 'swpm_paypal_delete_webhook' );
+    $pp_webhook = new SWPM_PayPal_Webhook();
+    $delete_action_result = $pp_webhook->check_and_delete_webhooks_for_both_modes();
+    echo '<div id="message" class="updated"><strong><p>' . $delete_action_result . '</p></strong></div>';
+}
 ?>
 
 <!-- render the rest of the settings fields for tab-2 -->

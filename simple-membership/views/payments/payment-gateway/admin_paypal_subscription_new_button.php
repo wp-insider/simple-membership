@@ -18,7 +18,7 @@ It's much easier to modify it as the changes (descriptions update etc) are refle
  *************************************************************************************/
 function swpm_save_edit_pp_subscription_new_button_data() {
     $button_name = isset($_REQUEST['button_name']) ? sanitize_text_field($_REQUEST['button_name']) : '';
-    $button_type = sanitize_text_field($_REQUEST['button_type']);
+    $button_type = isset($_REQUEST['button_type']) ? sanitize_text_field($_REQUEST['button_type']) : '';
     $payment_currency = isset($_REQUEST['payment_currency']) ? trim(sanitize_text_field($_REQUEST['payment_currency'])) : 'USD';
 
     $btn_type = isset($_POST['pp_subscription_new_btn_type']) ? sanitize_text_field($_POST['pp_subscription_new_btn_type']) : '';
@@ -31,18 +31,6 @@ function swpm_save_edit_pp_subscription_new_button_data() {
     $disable_funding_card = isset($_POST['pp_subscription_new_disable_funding_card']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_card']) : '';
     $disable_funding_credit = isset($_POST['pp_subscription_new_disable_funding_credit']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_credit']) : '';
     $disable_funding_venmo = isset($_POST['pp_subscription_new_disable_funding_venmo']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_venmo']) : '';
-
-    //Setup the PayPal API class.
-    $settings = SwpmSettings::get_instance();
-    $live_client_id = $settings->get_value('paypal-live-client-id');
-    $live_secret = $settings->get_value('paypal-live-secret-key');    
-    $sandbox_client_id = $settings->get_value('paypal-sandbox-client-id');
-	$sandbox_secret = $settings->get_value('paypal-sandbox-secret-key');
-    $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
-    $paypal_mode = $sandbox_enabled ? 'sandbox' : 'production';
-    $paypal_req_api = SWPM_PayPal_Request_API::get_instance();
-	$paypal_req_api->set_mode_and_api_credentials( $paypal_mode, $live_client_id, $live_secret, $sandbox_client_id, $sandbox_secret );
-    $pp_api_injector = new SWPM_PayPal_Request_API_Injector($paypal_req_api);//Injector for doing certain premade API queries
 
     //Process form submission
     if (isset($_REQUEST['swpm_pp_subscription_new_save_submit'])) {
@@ -87,7 +75,7 @@ function swpm_save_edit_pp_subscription_new_button_data() {
         add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
 
         //Check and create PayPal billing plan for this button.
-        if( SWPM_PayPal_Utility_Functions::create_billing_plan_for_button($button_id, $paypal_req_api, $pp_api_injector) ){
+        if( SWPM_PayPal_Utility_Functions::create_billing_plan_for_button($button_id) ){
             //Plan created successfully.
         } else {
             //Something went wrong. The error message was printed already.
@@ -142,7 +130,7 @@ function swpm_save_edit_pp_subscription_new_button_data() {
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
 
         //Check and create PayPal billing plan for this button.
-        if( SWPM_PayPal_Utility_Functions::create_billing_plan_for_button($button_id, $paypal_req_api, $pp_api_injector) ){
+        if( SWPM_PayPal_Utility_Functions::create_billing_plan_for_button($button_id) ){
             //Plan created successfully.
         } else {
             //Something went wrong. The error message was printed already.

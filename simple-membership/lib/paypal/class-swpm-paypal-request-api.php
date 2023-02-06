@@ -41,6 +41,9 @@ class SWPM_PayPal_Request_API {
 	}
 
 	public function set_api_credentials( $client_id, $secret ) {
+		if( empty( $client_id ) || empty( $secret ) ){
+			wp_die( "PayPal API credentials are not set. Missing Client ID or Secret Key. Please set them in the plugin's payment settings page." );
+		}
 		$this->client_id = $client_id;
 		$this->secret = $secret;
 		$this->basic_auth_string = base64_encode( $this->client_id . ":" . $this->secret );

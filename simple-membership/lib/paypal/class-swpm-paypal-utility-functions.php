@@ -26,19 +26,22 @@ class SWPM_PayPal_Utility_Functions{
         return $subsc_args;
     }
 
-    public static function create_billing_plan_for_button( $button_id, $paypal_req_api, $pp_api_injector ){
+    public static function create_billing_plan_for_button( $button_id ){
         $plan_id = get_post_meta($button_id, 'pp_subscription_plan_id', true);
         if ( empty ( $plan_id )){
             //Billing plan doesn't exist. Need to create a new billing plan in PayPal.
             $product_params = self::create_product_params_from_button( $button_id );         
             $subsc_args = self::create_subscription_args_from_button( $button_id );
 
+            //Setup the PayPal API Injector class. This class is used to do certain premade API queries.
+            $pp_api_injector = new SWPM_PayPal_Request_API_Injector();
+			$paypal_req_api = $pp_api_injector->get_paypal_req_api();
+            $paypal_mode = $paypal_req_api->get_api_environment_mode();
             // Debugging
             // echo '<pre>';
             // var_dump($paypal_req_api);
             // echo '</pre>';
 
-            $paypal_mode = $paypal_req_api->get_api_environment_mode();
             $plan_id = $pp_api_injector->create_product_and_billing_plan($product_params, $subsc_args);
             if ( $plan_id !== false ) {
                 //Plan created successfully. Save the plan ID for future reference.

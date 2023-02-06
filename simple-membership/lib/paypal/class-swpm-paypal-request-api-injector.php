@@ -6,8 +6,31 @@
 class SWPM_PayPal_Request_API_Injector {
         protected $paypal_req_api;
     
-        public function __construct( $paypal_req_api ) {
+        public function __construct() {
+            //Setup the PayPal API request object that the injector will use to make pre-made API requests.
+            $settings = SwpmSettings::get_instance();
+            $live_client_id = $settings->get_value('paypal-live-client-id');
+            $live_secret = $settings->get_value('paypal-live-secret-key');    
+            $sandbox_client_id = $settings->get_value('paypal-sandbox-client-id');
+            $sandbox_secret = $settings->get_value('paypal-sandbox-secret-key');
+            $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
+            $paypal_mode = $sandbox_enabled ? 'sandbox' : 'production';
+            $paypal_req_api = SWPM_PayPal_Request_API::get_instance();
+            $paypal_req_api->set_mode_and_api_credentials( $paypal_mode, $live_client_id, $live_secret, $sandbox_client_id, $sandbox_secret );            
             $this->paypal_req_api = $paypal_req_api;
+        }
+
+        public function get_last_error_from_api_call(){
+            return $this->paypal_req_api->get_last_error();
+        }
+                
+        public function set_paypal_req_api( $paypal_req_api ){
+            //Set a particular request ojbect for API call. Useful for testing purposes.
+            $this->paypal_req_api = $paypal_req_api;
+        }
+
+        public function get_paypal_req_api(){
+            return $this->paypal_req_api;
         }
         
         /*

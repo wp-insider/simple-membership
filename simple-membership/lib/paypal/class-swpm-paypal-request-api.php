@@ -28,6 +28,18 @@ class SWPM_PayPal_Request_API {
 		return self::$instance;
 	}
 
+	public function set_mode_and_api_credentials( $mode, $live_client_id, $live_secret, $sandbox_client_id, $sandbox_secret ) {
+		$this->set_api_environment_mode( $mode );
+		if ( $mode == 'production' ) {
+			$client_id = $live_client_id;
+			$secret = $live_secret;
+		} else {
+			$client_id = $sandbox_client_id;
+			$secret = $sandbox_secret;
+		}
+		$this->set_api_credentials( $client_id, $secret );
+	}
+
 	public function set_api_credentials( $client_id, $secret ) {
 		$this->client_id = $client_id;
 		$this->secret = $secret;

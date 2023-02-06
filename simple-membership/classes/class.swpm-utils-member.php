@@ -139,6 +139,12 @@ class SwpmMemberUtils {
 		return $wp_user;
 	}
 
+	public static function get_membership_level_id_of_a_member( $member_id ) {
+		$user_row = SwpmMemberUtils::get_user_by_id( $member_id );
+		$level_id = $user_row->membership_level;
+		return $level_id;
+	}
+
 	public static function get_all_members_of_a_level( $level_id ) {
 		//Retrieves all the SWPM user records for the given membership level
 		global $wpdb;
@@ -155,6 +161,27 @@ class SwpmMemberUtils {
 		$members_table_name = $wpdb->prefix . 'swpm_members_tbl';
 		$query              = $wpdb->prepare( "UPDATE $members_table_name SET membership_level=%s WHERE member_id=%s", $target_membership_level, $member_id );
 		$resultset          = $wpdb->query( $query );
+	}
+
+	/*
+	 * Use this function to update or set membership level of a member and also update the role (according to the role specified in the new level).
+	 */
+	public static function update_membership_level_and_role( $member_id, $target_membership_level ) {
+		//Get the old (before update) membership level.
+		$old_membership_level = self::get_membership_level_id_of_a_member( $member_id );
+
+		//Update the membership level.
+		self::update_membership_level($member_id, $target_membership_level );
+
+		//Trigger the level changed/updated action hook.
+		do_action(
+			'swpm_membership_level_changed',
+			array(
+				'member_id'  => $member_id,
+				'from_level' => $old_membership_level,
+				'to_level'   => $target_membership_level,
+			)
+		);
 	}
 
 	/*

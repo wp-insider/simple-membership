@@ -1,16 +1,188 @@
 <?php
 
-/*****************************************************************************
- * Start of render the new PayPal Subscription payment button creation interface
- *****************************************************************************/
+/*
+It uses the following action hooks to render the button's form then process the form submission.
+do_action( 'swpm_create_new_button_process_submission' );//To handle the save/create new operation
+do_action( 'swpm_edit_payment_button_process_submission' );//To handle the edit operation
+do_action( 'swpm_create_new_button_for_' . $button_type );//To render the HTML form for the create/edit button
+*/
 
 /*
-  The render function has been optimized to avoid code duplication.
-  This function is responsible for rendering either Save or Edit button interface depending on the parameters.
-  It's much easier to modify it as the changes (descriptions update etc) are reflected in both forms at once.
+The functions has been optimized to avoid code duplication.
+This function is responsible for rendering either Save or Edit button interface depending on the parameters.
+It's much easier to modify it as the changes (descriptions update etc) are reflected in both forms at once.
  */
 
+/*************************************************************************************
+ * Start of process submission: save or edit PayPal subscription (New) payment button data
+ *************************************************************************************/
+function swpm_save_edit_pp_subscription_new_button_data() {
+    $button_name = isset($_REQUEST['button_name']) ? sanitize_text_field($_REQUEST['button_name']) : '';
+    $button_type = sanitize_text_field($_REQUEST['button_type']);
+    $payment_currency = isset($_REQUEST['payment_currency']) ? trim(sanitize_text_field($_REQUEST['payment_currency'])) : 'USD';
+
+    $btn_type = isset($_POST['pp_subscription_new_btn_type']) ? sanitize_text_field($_POST['pp_subscription_new_btn_type']) : '';
+    $btn_shape = isset($_POST['pp_subscription_new_btn_shape']) ? sanitize_text_field($_POST['pp_subscription_new_btn_shape']) : '';
+    $btn_layout = isset($_POST['pp_subscription_new_btn_layout']) ? sanitize_text_field($_POST['pp_subscription_new_btn_layout']) : '';
+    $btn_height = isset($_POST['pp_subscription_new_btn_height']) ? sanitize_text_field($_POST['pp_subscription_new_btn_height']) : '';
+    $btn_width = isset($_POST['pp_subscription_new_btn_width']) ? sanitize_text_field($_POST['pp_subscription_new_btn_width']) : '';
+    $btn_color = isset($_POST['pp_subscription_new_btn_color']) ? sanitize_text_field($_POST['pp_subscription_new_btn_color']) : '';
+
+    $disable_funding_card = isset($_POST['pp_subscription_new_disable_funding_card']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_card']) : '';
+    $disable_funding_credit = isset($_POST['pp_subscription_new_disable_funding_credit']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_credit']) : '';
+    $disable_funding_venmo = isset($_POST['pp_subscription_new_disable_funding_venmo']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_venmo']) : '';
+
+    //Setup the PayPal API class.
+    $settings = SwpmSettings::get_instance();
+    $live_client_id = $settings->get_value('paypal-live-client-id');
+    $live_secret = $settings->get_value('paypal-live-secret-key');    
+    $sandbox_client_id = $settings->get_value('paypal-sandbox-client-id');
+	$sandbox_secret = $settings->get_value('paypal-sandbox-secret-key');
+    $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
+    $paypal_mode = $sandbox_enabled ? 'sandbox' : 'production';
+    $paypal_req_api = SWPM_PayPal_Request_API::get_instance();
+	$paypal_req_api->set_mode_and_api_credentials( $paypal_mode, $live_client_id, $live_secret, $sandbox_client_id, $sandbox_secret );
+    $pp_api_injector = new SWPM_PayPal_Request_API_Injector($paypal_req_api);//Injector for doing certain premade API queries
+
+    //Process form submission
+    if (isset($_REQUEST['swpm_pp_subscription_new_save_submit'])) {
+        //This is a PayPal Subscription (New) button creation/save event.
+
+        check_admin_referer( 'swpm_admin_add_edit_pp_subscription_new_btn', 'swpm_admin_add_edit_pp_subscription_new_btn' );
+
+        $button_id = wp_insert_post(
+                array(
+                    'post_title' => $button_name,
+                    'post_type' => 'swpm_payment_button',
+                    'post_content' => '',
+                    'post_status' => 'publish'
+                )
+        );
+
+        add_post_meta($button_id, 'button_type', $button_type);
+        add_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
+
+        add_post_meta($button_id, 'payment_currency', $payment_currency); 
+        add_post_meta($button_id, 'recurring_billing_amount', trim(sanitize_text_field($_REQUEST['recurring_billing_amount'])));
+        add_post_meta($button_id, 'recurring_billing_cycle', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle'])));
+        add_post_meta($button_id, 'recurring_billing_cycle_term', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_term'])));
+        add_post_meta($button_id, 'recurring_billing_cycle_count', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_count'])));
+        add_post_meta($button_id, 'recurring_billing_reattempt', isset($_REQUEST['recurring_billing_reattempt']) ? '1' : '');
+
+        add_post_meta($button_id, 'trial_billing_amount', trim(sanitize_text_field($_REQUEST['trial_billing_amount'])));
+        add_post_meta($button_id, 'trial_billing_cycle', trim(sanitize_text_field($_REQUEST['trial_billing_cycle'])));
+        add_post_meta($button_id, 'trial_billing_cycle_term', trim(sanitize_text_field($_REQUEST['trial_billing_cycle_term'])));
+
+        add_post_meta($button_id, 'pp_subscription_new_btn_type', $btn_type);
+        add_post_meta($button_id, 'pp_subscription_new_btn_shape', $btn_shape);
+        add_post_meta($button_id, 'pp_subscription_new_btn_layout', $btn_layout);        
+        add_post_meta($button_id, 'pp_subscription_new_btn_height', $btn_height);
+        add_post_meta($button_id, 'pp_subscription_new_btn_width', $btn_width);
+        add_post_meta($button_id, 'pp_subscription_new_btn_color', $btn_color);
+
+        add_post_meta($button_id, 'pp_subscription_new_disable_funding_card', $disable_funding_card);
+        add_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', $disable_funding_credit);
+        add_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', $disable_funding_venmo);
+
+        add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
+
+        //Check and create PayPal billing plan for this button.
+        if( SWPM_PayPal_Utility_Functions::create_billing_plan_for_button($button_id, $paypal_req_api, $pp_api_injector) ){
+            //Plan created successfully.
+        } else {
+            //Something went wrong. The error message was printed already.
+			return;
+        }
+
+        //Redirect to the manage payment buttons interface
+        $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=payment_buttons';
+        SwpmMiscUtils::redirect_to_url($url);
+    }
+
+    if (isset($_REQUEST['swpm_pp_subscription_new_edit_submit'])) {
+        //This is a PayPal Subscription (New) button edit event.
+
+        check_admin_referer( 'swpm_admin_add_edit_pp_subscription_new_btn', 'swpm_admin_add_edit_pp_subscription_new_btn' );
+
+        $button_id = sanitize_text_field($_REQUEST['button_id']);
+        $button_id = absint($button_id);
+
+        $button_post = array(
+            'ID' => $button_id,
+            'post_title' => $button_name,
+            'post_type' => 'swpm_payment_button',
+        );
+        wp_update_post($button_post);
+
+        update_post_meta($button_id, 'button_type', $button_type);
+        update_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
+
+        update_post_meta($button_id, 'payment_currency', $payment_currency);
+        update_post_meta($button_id, 'recurring_billing_amount', trim(sanitize_text_field($_REQUEST['recurring_billing_amount'])));
+        update_post_meta($button_id, 'recurring_billing_cycle', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle'])));
+        update_post_meta($button_id, 'recurring_billing_cycle_term', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_term'])));
+        update_post_meta($button_id, 'recurring_billing_cycle_count', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_count'])));
+        update_post_meta($button_id, 'recurring_billing_reattempt', isset($_REQUEST['recurring_billing_reattempt']) ? '1' : '');
+
+        update_post_meta($button_id, 'trial_billing_amount', trim(sanitize_text_field($_REQUEST['trial_billing_amount'])));
+        update_post_meta($button_id, 'trial_billing_cycle', trim(sanitize_text_field($_REQUEST['trial_billing_cycle'])));
+        update_post_meta($button_id, 'trial_billing_cycle_term', trim(sanitize_text_field($_REQUEST['trial_billing_cycle_term'])));
+
+        update_post_meta($button_id, 'pp_subscription_new_btn_type', $btn_type);
+        update_post_meta($button_id, 'pp_subscription_new_btn_shape', $btn_shape);
+        update_post_meta($button_id, 'pp_subscription_new_btn_layout', $btn_layout);        
+        update_post_meta($button_id, 'pp_subscription_new_btn_height', $btn_height);
+        update_post_meta($button_id, 'pp_subscription_new_btn_width', $btn_width);
+        update_post_meta($button_id, 'pp_subscription_new_btn_color', $btn_color);
+
+        update_post_meta($button_id, 'pp_subscription_new_disable_funding_card', $disable_funding_card);
+        update_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', $disable_funding_credit);
+        update_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', $disable_funding_venmo);
+
+        update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
+
+        //Check and create PayPal billing plan for this button.
+        if( SWPM_PayPal_Utility_Functions::create_billing_plan_for_button($button_id, $paypal_req_api, $pp_api_injector) ){
+            //Plan created successfully.
+        } else {
+            //Something went wrong. The error message was printed already.
+			return;
+        }
+
+        echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
+    }
+}
+
+//I've merged two (save and edit events) into one
+add_action('swpm_create_new_button_process_submission', 'swpm_save_edit_pp_subscription_new_button_data');
+add_action('swpm_edit_payment_button_process_submission', 'swpm_save_edit_pp_subscription_new_button_data');
+
+/*************************************************************************************
+ * END of Process submission
+ *************************************************************************************/
+
+/*****************************************************************************
+ * Start of render the PayPal Subscription (New) payment button creation interface
+ *****************************************************************************/
 function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edit_mode = false) {
+
+    $settings = SwpmSettings::get_instance();
+    $live_client_id = $settings->get_value('paypal-live-client-id');
+    //$live_secret = $settings->get_value('paypal-live-secret');    
+    $sandbox_client_id = $settings->get_value('paypal-sandbox-client-id');
+    //$sandbox_secret = $settings->get_value('paypal-sandbox-secret');
+    //$sandbox_enabled = $settings->get_value('enable-sandbox-testing');
+    //$paypal_mode = $sandbox_enabled ? 'sandbox' : 'live';
+
+    if ( empty($live_client_id) && empty($sandbox_client_id) ) {
+        //API credentials are not configured. Show a warning message and return.
+        echo '<div class="swpm-orange-box">';
+        echo 'You need to configure your PayPal API credentials first. ';
+        echo '<a href="admin.php?page=simple_wp_membership_settings&tab=2" target="_blank">Click here</a> to configure your PayPal API credentials in the payment settings menu.';
+        echo '</div>';
+        return;
+    }
+
     ?>
 
     <div class="swpm-orange-box">
@@ -55,6 +227,31 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                             <p class="description">Select the membership level this payment button is for.</p>
                         </td>
                     </tr>
+
+                    <?php
+                    //If the button is being edited then show various PayPal billing plan ID and the environment mode this subscritpiton button is configured for.
+					if ( $is_edit_mode ) {
+                        ?>
+                        <tr valign="top">
+                            <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('PayPal Billing Plan Details for This Button'); ?></div></th>
+                        </tr>
+
+                        <tr valign="top">
+                            <th scope="row"><?php echo SwpmUtils::_('Subscription Plan Mode'); ?></th>
+                            <td>
+                                <input type="text" size="20" name="pp_subscription_plan_mode" value="<?php echo esc_attr($bt_opts['pp_subscription_plan_mode']); ?>" readonly />
+                                <p class="description">This is the paypal mode this subscription button was created in.</p>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row"><?php echo SwpmUtils::_('Subscription Plan ID'); ?></th>
+                            <td>
+                                <input type="text" size="20" name="pp_subscription_plan_id" value="<?php echo esc_attr($bt_opts['pp_subscription_plan_id']); ?>" readonly />
+                                <p class="description">This is the paypal subscription plan ID.</p>
+                            </td>
+                        <?php                    
+					}
+                    ?>
 
                     <tr valign="top">
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Subscription/Recurring Billing Details'); ?></div></th>
@@ -264,7 +461,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
 }
 
 /*****************************************************************
- * Render create new PayPal subscription payment button interface
+ * Render the create new PayPal subscription payment button interface
  * ************************************************************** */
 function swpm_create_new_pp_subscription_new_button() {
 
@@ -279,7 +476,7 @@ function swpm_create_new_pp_subscription_new_button() {
 add_action('swpm_create_new_button_for_pp_subscription_new', 'swpm_create_new_pp_subscription_new_button');
 
 /*****************************************************************
- * Render edit new PayPal subscription payment button interface
+ * Render the edit new PayPal subscription payment button interface
  *************************************************************** */
 function swpm_edit_pp_subscription_new_button() {
 
@@ -315,6 +512,8 @@ function swpm_edit_pp_subscription_new_button() {
         'pp_subscription_new_disable_funding_credit' => get_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', true),
         'pp_subscription_new_disable_funding_venmo' => get_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', true),
         'return_url' => get_post_meta($button_id, 'return_url', true),
+        'pp_subscription_plan_id' => get_post_meta($button_id, 'pp_subscription_plan_id', true),
+        'pp_subscription_plan_mode' => get_post_meta($button_id, 'pp_subscription_plan_mode', true),
     );
 
     render_save_edit_pp_subscription_new_button_interface($bt_opts, true);
@@ -322,123 +521,4 @@ function swpm_edit_pp_subscription_new_button() {
 add_action('swpm_edit_payment_button_for_pp_subscription_new', 'swpm_edit_pp_subscription_new_button');
 /*************************************************************************************
  * END of render button configuration HTML
- *************************************************************************************/
-
-/*************************************************************************************
- * Start of process submission: save or edit new PayPal subscription payment button data
- *************************************************************************************/
-function swpm_save_edit_pp_subscription_new_button_data() {
-    $btn_type = isset($_POST['pp_subscription_new_btn_type']) ? sanitize_text_field($_POST['pp_subscription_new_btn_type']) : '';
-    $btn_shape = isset($_POST['pp_subscription_new_btn_shape']) ? sanitize_text_field($_POST['pp_subscription_new_btn_shape']) : '';
-    $btn_layout = isset($_POST['pp_subscription_new_btn_layout']) ? sanitize_text_field($_POST['pp_subscription_new_btn_layout']) : '';
-    $btn_height = isset($_POST['pp_subscription_new_btn_height']) ? sanitize_text_field($_POST['pp_subscription_new_btn_height']) : '';
-    $btn_width = isset($_POST['pp_subscription_new_btn_width']) ? sanitize_text_field($_POST['pp_subscription_new_btn_width']) : '';
-    $btn_color = isset($_POST['pp_subscription_new_btn_color']) ? sanitize_text_field($_POST['pp_subscription_new_btn_color']) : '';
-
-    $disable_funding_card = isset($_POST['pp_subscription_new_disable_funding_card']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_card']) : '';
-    $disable_funding_credit = isset($_POST['pp_subscription_new_disable_funding_credit']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_credit']) : '';
-    $disable_funding_venmo = isset($_POST['pp_subscription_new_disable_funding_venmo']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_venmo']) : '';
-
-    //Process form submission
-    if (isset($_REQUEST['swpm_pp_subscription_new_save_submit'])) {
-        //This is a PayPal Subscription (New) button save event.
-
-        check_admin_referer( 'swpm_admin_add_edit_pp_subscription_new_btn', 'swpm_admin_add_edit_pp_subscription_new_btn' );
-
-        $button_id = wp_insert_post(
-                array(
-                    'post_title' => sanitize_text_field($_REQUEST['button_name']),
-                    'post_type' => 'swpm_payment_button',
-                    'post_content' => '',
-                    'post_status' => 'publish'
-                )
-        );
-
-        $button_type = sanitize_text_field($_REQUEST['button_type']);
-        add_post_meta($button_id, 'button_type', $button_type);
-        add_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
-
-        add_post_meta($button_id, 'payment_currency', trim(sanitize_text_field($_REQUEST['payment_currency']))); 
-        add_post_meta($button_id, 'recurring_billing_amount', trim(sanitize_text_field($_REQUEST['recurring_billing_amount'])));
-        add_post_meta($button_id, 'recurring_billing_cycle', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle'])));
-        add_post_meta($button_id, 'recurring_billing_cycle_term', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_term'])));
-        add_post_meta($button_id, 'recurring_billing_cycle_count', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_count'])));
-        add_post_meta($button_id, 'recurring_billing_reattempt', isset($_REQUEST['recurring_billing_reattempt']) ? '1' : '');
-
-        add_post_meta($button_id, 'trial_billing_amount', trim(sanitize_text_field($_REQUEST['trial_billing_amount'])));
-        add_post_meta($button_id, 'trial_billing_cycle', trim(sanitize_text_field($_REQUEST['trial_billing_cycle'])));
-        add_post_meta($button_id, 'trial_billing_cycle_term', trim(sanitize_text_field($_REQUEST['trial_billing_cycle_term'])));
-
-        add_post_meta($button_id, 'pp_subscription_new_btn_type', $btn_type);
-        add_post_meta($button_id, 'pp_subscription_new_btn_shape', $btn_shape);
-        add_post_meta($button_id, 'pp_subscription_new_btn_layout', $btn_layout);        
-        add_post_meta($button_id, 'pp_subscription_new_btn_height', $btn_height);
-        add_post_meta($button_id, 'pp_subscription_new_btn_width', $btn_width);
-        add_post_meta($button_id, 'pp_subscription_new_btn_color', $btn_color);
-
-        add_post_meta($button_id, 'pp_subscription_new_disable_funding_card', $disable_funding_card);
-        add_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', $disable_funding_credit);
-        add_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', $disable_funding_venmo);
-
-        add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
-
-        //Redirect to the manage payment buttons interface
-        $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=payment_buttons';
-        SwpmMiscUtils::redirect_to_url($url);
-    }
-
-    if (isset($_REQUEST['swpm_pp_subscription_new_edit_submit'])) {
-        //This is a PayPal Subscription (New) button edit event.
-
-        check_admin_referer( 'swpm_admin_add_edit_pp_subscription_new_btn', 'swpm_admin_add_edit_pp_subscription_new_btn' );
-
-        $button_id = sanitize_text_field($_REQUEST['button_id']);
-        $button_id = absint($button_id);
-        $button_type = sanitize_text_field($_REQUEST['button_type']);
-        $button_name = sanitize_text_field($_REQUEST['button_name']);
-
-        $button_post = array(
-            'ID' => $button_id,
-            'post_title' => $button_name,
-            'post_type' => 'swpm_payment_button',
-        );
-        wp_update_post($button_post);
-
-        update_post_meta($button_id, 'button_type', $button_type);
-        update_post_meta($button_id, 'membership_level_id', sanitize_text_field($_REQUEST['membership_level_id']));
-
-        update_post_meta($button_id, 'payment_currency', trim(sanitize_text_field($_REQUEST['payment_currency'])));        
-        update_post_meta($button_id, 'recurring_billing_amount', trim(sanitize_text_field($_REQUEST['recurring_billing_amount'])));
-        update_post_meta($button_id, 'recurring_billing_cycle', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle'])));
-        update_post_meta($button_id, 'recurring_billing_cycle_term', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_term'])));
-        update_post_meta($button_id, 'recurring_billing_cycle_count', trim(sanitize_text_field($_REQUEST['recurring_billing_cycle_count'])));
-        update_post_meta($button_id, 'recurring_billing_reattempt', isset($_REQUEST['recurring_billing_reattempt']) ? '1' : '');
-
-        update_post_meta($button_id, 'trial_billing_amount', trim(sanitize_text_field($_REQUEST['trial_billing_amount'])));
-        update_post_meta($button_id, 'trial_billing_cycle', trim(sanitize_text_field($_REQUEST['trial_billing_cycle'])));
-        update_post_meta($button_id, 'trial_billing_cycle_term', trim(sanitize_text_field($_REQUEST['trial_billing_cycle_term'])));
-
-        update_post_meta($button_id, 'pp_subscription_new_btn_type', $btn_type);
-        update_post_meta($button_id, 'pp_subscription_new_btn_shape', $btn_shape);
-        update_post_meta($button_id, 'pp_subscription_new_btn_layout', $btn_layout);        
-        update_post_meta($button_id, 'pp_subscription_new_btn_height', $btn_height);
-        update_post_meta($button_id, 'pp_subscription_new_btn_width', $btn_width);
-        update_post_meta($button_id, 'pp_subscription_new_btn_color', $btn_color);
-
-        update_post_meta($button_id, 'pp_subscription_new_disable_funding_card', $disable_funding_card);
-        update_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', $disable_funding_credit);
-        update_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', $disable_funding_venmo);
-
-        update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
-
-        echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
-    }
-}
-
-//I've merged two (save and edit events) into one
-add_action('swpm_create_new_button_process_submission', 'swpm_save_edit_pp_subscription_new_button_data');
-add_action('swpm_edit_payment_button_process_submission', 'swpm_save_edit_pp_subscription_new_button_data');
-
-/*************************************************************************************
- * END of Process submission
  *************************************************************************************/

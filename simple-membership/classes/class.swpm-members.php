@@ -547,7 +547,7 @@ class SwpmMembers extends WP_List_Table {
 				if ( $member_records ) {
 					foreach ( $member_records as $row ) {
 						$member_id = $row->member_id;
-						SwpmMemberUtils::update_membership_level( $member_id, $to_level_id );
+						SwpmMemberUtils::update_membership_level_and_role( $member_id, $to_level_id );
 					}
 				}
 			}

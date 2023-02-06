@@ -17,6 +17,7 @@ It's much easier to modify it as the changes (descriptions update etc) are refle
  * Start of process submission: save or edit PayPal subscription (New) payment button data
  *************************************************************************************/
 function swpm_save_edit_pp_subscription_new_button_data() {
+
     $button_name = isset($_REQUEST['button_name']) ? sanitize_text_field($_REQUEST['button_name']) : '';
 
     $btn_type = isset($_POST['pp_subscription_new_btn_type']) ? sanitize_text_field($_POST['pp_subscription_new_btn_type']) : '';
@@ -71,6 +72,9 @@ function swpm_save_edit_pp_subscription_new_button_data() {
         add_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', $disable_funding_venmo);
 
         add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
+
+        //Check if webhooks already configured for this site. If not, create necessary webhooks.
+		SWPM_PayPal_Utility_Functions::check_and_create_webhooks_for_this_site();
 
         //Redirect to the manage payment buttons interface
         $url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=payment_buttons';

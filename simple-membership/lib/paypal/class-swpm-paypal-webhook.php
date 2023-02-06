@@ -12,21 +12,49 @@ class SWPM_PayPal_Webhook {
 	/**
 	 * The webhook mode.
 	 */
-
 	 protected $mode;
 
 	 //The paypal request API object (for sending POST and GET requests to PayPal API endpoints)
 	 protected $paypal_req_api;
 
+	protected $live_client_id;
+	protected $live_secret;
+	protected $sandbox_client_id;
+	protected $sandbox_secret;
 	/**
 	 * Creates a webhook for given mode.
 	 *
 	 * @param string $mode The transaction mode (`live` or `test`).
 	 */
-	public function __construct( $paypal_req_api ) {
+	public function __construct() {
+		//Setup the PayPal API request object so that we can use it to make pre-made API requests easily.
+		$settings = SwpmSettings::get_instance();
+		$this->live_client_id = $settings->get_value('paypal-live-client-id');
+		$this->live_secret = $settings->get_value('paypal-live-secret-key');    
+		$this->sandbox_client_id = $settings->get_value('paypal-sandbox-client-id');
+		$this->sandbox_secret = $settings->get_value('paypal-sandbox-secret-key');
+		$sandbox_enabled = $settings->get_value('enable-sandbox-testing');
+		$paypal_mode = $sandbox_enabled ? 'sandbox' : 'production';
+		$paypal_req_api = SWPM_PayPal_Request_API::get_instance();
+		$paypal_req_api->set_mode_and_api_credentials( $paypal_mode, $this->live_client_id, $this->live_secret, $this->sandbox_client_id, $this->sandbox_secret );            
+
 		$this->paypal_req_api = $paypal_req_api;
 		$this->mode = $paypal_req_api->get_api_environment_mode();
-		$this->id   = get_option( 'swpm_paypal_' . $this->mode . '_webhook_id' );
+		$this->id = get_option( 'swpm_paypal_webhook_id_' . $this->mode );
+	}
+
+	/**
+	 * Sets the webhook mode. Used to override/set the mode (if needed) after the object is created.
+	 */
+	public function set_mode_and_api_creds_for_webhook( $mode, $client_id, $secret ) {
+		$this->mode = $mode;
+
+		//The mode has been overridden. Need to update the webhook ID as well.
+		$this->id = get_option( 'swpm_paypal_webhook_id_' . $this->mode );
+
+		//Update the PayPal API request object with the new mode and credentials.
+		$this->paypal_req_api->set_api_environment_mode( $this->mode );
+		$this->paypal_req_api->set_api_credentials( $client_id, $secret );
 	}
 
 	/**
@@ -44,7 +72,7 @@ class SWPM_PayPal_Webhook {
 	 * @param string $id The Woebhook PayPal ID.
 	 */
 	public function set_id( $id ) {
-		update_option( 'swpm_paypal_' . $this->mode . '_webhook_id', $id );
+		update_option( 'swpm_paypal_webhook_id_' . $this->mode, $id );
 	}
 
 	/**
@@ -149,7 +177,7 @@ class SWPM_PayPal_Webhook {
 		$response = $this->paypal_req_api->delete($endpoint, $params);
 		if ( $response !== false){
 			//Response is a success!
-			delete_option( 'swpm_paypal_' . $this->mode . '_webhook_id' );
+			delete_option( 'swpm_paypal_webhook_id_' . $this->mode );
 			return $response;
 		} else {
 			//Error response. Convert to WP_Error object so it can be handled easily by the caller
@@ -348,4 +376,35 @@ class SWPM_PayPal_Webhook {
 		$ret['msg'] = __( 'No webhook found. Nothing to delete.', 'simple-membership' );
 		return $ret;	
 	}
+
+	/**
+	 * Check and create webhooks for both modes (live and sandbox).
+	 * This function is specfic to the plugin in question and how it plans to create the webhooks.
+	 */
+	public function check_and_create_webhooks_for_both_modes() {
+		//First, handle the live/production mode webhook.
+		if( !empty($this->live_client_id) && !empty($this->live_secret) ){
+			$this->set_mode_and_api_creds_for_webhook( 'production', $this->live_client_id, $this->live_secret );
+			$ret = $this->check_and_create_webhook();
+			if( isset( $ret['status']) && $ret['status'] == 'no' ){
+				//Webhook creation failed. 
+				SwpmLog::log_simple_debug( 'Webhook creation failed for live mode. Error: ' . $ret['msg'], true );
+			}
+		} else {
+			//Live mode credentials are not set. We will show a notice to the admin using admin_notice hook.
+		}
+
+		//Next, handle the sandbox mode webhook.
+		if( !empty($this->sandbox_client_id) && !empty($this->sandbox_secret) ){
+			$this->set_mode_and_api_creds_for_webhook( 'sandbox', $this->sandbox_client_id, $this->sandbox_secret );
+			$ret = $this->check_and_create_webhook();
+			if( isset( $ret['status']) && $ret['status'] == 'no' ){
+				//Webhook creation failed. 
+				SwpmLog::log_simple_debug( 'Webhook creation failed for live mode. Error: ' . $ret['msg'], true );
+			}			
+		} else {
+			//Sandbox mode credentials are not set. We will show a notice to the admin using admin_notice hook.
+		}
+	}
+
 }

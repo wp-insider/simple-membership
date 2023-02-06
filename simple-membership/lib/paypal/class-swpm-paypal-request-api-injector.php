@@ -7,7 +7,7 @@ class SWPM_PayPal_Request_API_Injector {
         protected $paypal_req_api;
     
         public function __construct() {
-            //Setup the PayPal API request object that the injector will use to make pre-made API requests.
+            //Setup the PayPal API request object so that the injector can use it to make pre-made API requests easily.
             $settings = SwpmSettings::get_instance();
             $live_client_id = $settings->get_value('paypal-live-client-id');
             $live_secret = $settings->get_value('paypal-live-secret-key');    

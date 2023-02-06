@@ -86,4 +86,18 @@ class SWPM_PayPal_Utility_Functions{
         }
 		return $output;
     }
+
+    /**
+     * Checks if a webhook already exists for this site for BOTH sandbox and production modes. If one doesn't exist, create one.
+     */
+	public static function check_and_create_webhooks_for_this_site() {
+		$pp_webhook = new SWPM_PayPal_Webhook();
+		$pp_webhook->check_and_create_webhooks_for_both_modes();    
+	}
+
+    public static function check_current_mode_and_set_notice_if_webhook_not_set() {
+        //Check if the current mode is sandbox or production. Then check if a webhook is set for that mode.
+        //If not, show a notice to the admin user by using the admin_notice hook.
+    }
+    
 }

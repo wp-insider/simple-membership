@@ -14,7 +14,7 @@ class SWPM_PayPal_Request_API {
 	public $sandbox_api_base_url = 'https://api-m.sandbox.paypal.com';
 	public $production_api_base_url = 'https://api.paypal.com';
 
-	public $last_error = array();
+	public $last_error;
 
 	public $app_info = array(
 		'name' => 'Simple Membership',
@@ -208,7 +208,7 @@ class SWPM_PayPal_Request_API {
 			return $res;
 		}
 		//DELETE success response status code is 204 by default
-		$status_code = isset( $additional_args['status_code'] ) ? $additional_args['status_code'] : 201;
+		$status_code = isset( $additional_args['status_code'] ) ? $additional_args['status_code'] : 204;
 		$return = $this->process_request_result( $res, $status_code );
 
 		return $return;
@@ -232,6 +232,9 @@ class SWPM_PayPal_Request_API {
 					$this->last_error['error_code'] = $body['error'];//String error code (ex: "invalid_client")
 					$this->last_error['http_code'] = $res['response']['code'];//HTTP error code (ex: 400)
 				}
+			} else {
+				//Empty body response.
+				$this->last_error['error_message'] = 'Error! The body of the response is empty. Check that the expected response status code is correct.';
 			}
 			return false;
 		}

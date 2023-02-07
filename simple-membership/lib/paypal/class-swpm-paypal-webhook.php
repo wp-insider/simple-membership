@@ -47,12 +47,15 @@ class SWPM_PayPal_Webhook {
 	 * Sets the webhook mode. Used to override/set the mode (if needed) after the object is created.
 	 */
 	public function set_mode_and_api_creds_for_webhook( $mode, $client_id, $secret ) {
+		//Set the environment mode.
 		$this->mode = $mode;
 
 		//The mode has been overridden. Need to update the webhook ID as well.
 		$this->id = get_option( 'swpm_paypal_webhook_id_' . $this->mode );
 
 		//Update the PayPal API request object with the new mode and credentials.
+		$paypal_req_api = SWPM_PayPal_Request_API::get_instance();
+		$this->paypal_req_api = $paypal_req_api;
 		$this->paypal_req_api->set_api_environment_mode( $this->mode );
 		$this->paypal_req_api->set_api_credentials( $client_id, $secret );
 	}
@@ -174,9 +177,10 @@ class SWPM_PayPal_Webhook {
 	 */
 	public function delete() {
 		$params = array();
+		$additional_args = array();
 		$endpoint = '/v1/notifications/webhooks/'.$this->get_id();
 
-		$response = $this->paypal_req_api->delete($endpoint, $params);
+		$response = $this->paypal_req_api->delete($endpoint, $params, $additional_args);
 		if ( $response !== false){
 			//Response is a success!
 			delete_option( 'swpm_paypal_webhook_id_' . $this->mode );
@@ -288,12 +292,14 @@ class SWPM_PayPal_Webhook {
 			$error_code = $response->get_error_code();
 			if ( $error_code === 'INVALID_RESOURCE_ID' ) {
 				$ret['msg'] = __( 'No webhook found. Use the following Create Webhook button to create a new webhook automatically in your PayPal account.', 'simple-membership' );
+				//No webhook exists in PayPal. Delete the webhook ID (if any) from our DB to clean it up (so it can be created again).
+				delete_option( 'swpm_paypal_webhook_id_' . $this->mode );
 			} elseif ( $error_code === 'UNAUTHORIZED' ) {
-				$ret['msg']     = $response->get_error_message() . '. ' . sprintf( __( 'PayPal API Credential information is missing in settings. Please enter valid PayPal API Credentials in the General Settings tab for %s mode.', 'simple-membership' ), $this->mode );
+				$ret['msg'] = $response->get_error_message() . '. ' . sprintf( __( 'PayPal API Credential information is missing in settings. Please enter valid PayPal API Credentials in the General Settings tab for %s mode.', 'simple-membership' ), $this->mode );
 			} elseif ( $error_code === 'invalid_client' ) {
-				$ret['msg']     = sprintf( __( 'Invalid or Missing API Credentials! Check the plugin settings and enter valid API credentials in the PayPal Credentials section for %s mode.', 'simple-membership' ), $this->mode );
+				$ret['msg'] = sprintf( __( 'Invalid or Missing API Credentials! Check the plugin settings and enter valid API credentials in the PayPal Credentials section for %s mode.', 'simple-membership' ), $this->mode );
 			} else {
-				$ret['msg']     = $response->get_error_message();
+				$ret['msg'] = $response->get_error_message();
 			}
 			return $ret;
 		}
@@ -328,7 +334,7 @@ class SWPM_PayPal_Webhook {
 		$protocol = wp_parse_url( $webhook_url, PHP_URL_SCHEME );
 		if ( $protocol !== 'https' ) {
 			$ret['status'] = 'no';
-			$ret['msg']    = __( 'Invalid webhook URL', 'simple-membership' )  . ': ' . __( 'Note that the PayPal subscription API requires your site to use HTTPS URLs. You must use an SSL certificate with HTTPS URLs to complete the setup of the subscription addon and use it.', 'simple-membership' );
+			$ret['msg']    = __( 'Invalid webhook URL.', 'simple-membership' )  . ': ' . __( 'Note that the PayPal subscription API requires your site to use HTTPS URLs. You must use an SSL certificate with HTTPS URLs to complete the setup of the subscription addon and use it.', 'simple-membership' );
 			return $ret;
 		}
 
@@ -337,7 +343,7 @@ class SWPM_PayPal_Webhook {
 			// webhook created.
 			$ret['status']  = 'yes';
 			$ret['hidebtn'] = true;
-			$ret['msg'] = __( 'Webhook has been created', 'simple-membership' );
+			$ret['msg'] = __( 'Webhook has been created.', 'simple-membership' );
 		} else {
 			// Error occurred during webhook creation.
 			$ret['status'] = 'no';
@@ -361,7 +367,7 @@ class SWPM_PayPal_Webhook {
 			if ( !is_wp_error( $response )){
 				//Webhook deleted.
 				$ret['success'] = true;
-				$ret['msg'] = __( 'Webhook has been deleted', 'simple-membership' );
+				$ret['msg'] = __( 'Webhook has been deleted.', 'simple-membership' );
 				return $ret;
 			} else {
 				//Error occurred during webhook deletion.
@@ -376,6 +382,9 @@ class SWPM_PayPal_Webhook {
 		$ret = array();
 		$ret['success'] = false;
 		$ret['msg'] = __( 'No webhook found. Nothing to delete.', 'simple-membership' );
+		//No webhook exists in PayPal. Delete the webhook ID (if any) from our DB to clean it up (so it can be created again).
+		delete_option( 'swpm_paypal_webhook_id_' . $this->mode );
+
 		return $ret;	
 	}
 
@@ -386,10 +395,10 @@ class SWPM_PayPal_Webhook {
 			return $ret;
 		} else {
 			//Live mode credentials are not set. We will show a notice to the admin using admin_notice hook.
-			SwpmLog::log_simple_debug( 'Live mode API credentials are not set', true );
+			SwpmLog::log_simple_debug( 'Live mode API credentials are not set.', true );
 			$ret = array();
 			$ret['success'] = false;
-			$ret['msg'] = __( 'Live mode credentials are not set. Cannot create webhook', 'simple-membership' );
+			$ret['msg'] = __( 'Live mode credentials are not set. Cannot create webhook.', 'simple-membership' );
 			return $ret;
 		}
 	}
@@ -401,10 +410,10 @@ class SWPM_PayPal_Webhook {
 			return $ret;
 		} else {
 			//Sandbox mode credentials are not set. We will show a notice to the admin using admin_notice hook.
-			SwpmLog::log_simple_debug( 'Sandbox mode API credentials are not set', true );
+			SwpmLog::log_simple_debug( 'Sandbox mode API credentials are not set.', true );
 			$ret = array();
 			$ret['success'] = false;
-			$ret['msg'] = __( 'Sandbox mode credentials are not set. Cannot create webhook', 'simple-membership' );
+			$ret['msg'] = __( 'Sandbox mode credentials are not set. Cannot create webhook.', 'simple-membership' );
 			return $ret;			
 		}
 	}
@@ -446,8 +455,8 @@ class SWPM_PayPal_Webhook {
 			$ret = $this->check_and_delete_webhook();
 			if( isset( $ret['msg']) ){
 				//Webhook delete action result.
-				$delete_result .= '<p>Live Webhook delete action result: ' . $ret['msg'] . '</p>';
-				SwpmLog::log_simple_debug( 'Live Webhook delete action result ' . $ret['msg'], true );
+				$delete_result .= '<p><strong>Delete Live Webhook: </strong>' . $ret['msg'] . '</p>';
+				SwpmLog::log_simple_debug( 'Live Webhook delete action result: ' . $ret['msg'], true );
 			}
 		} else {
 			//Live mode credentials are not set. We will show a notice to the admin using admin_notice hook.
@@ -459,8 +468,8 @@ class SWPM_PayPal_Webhook {
 			$ret = $this->check_and_delete_webhook();
 			if( isset( $ret['msg']) ){
 				//Webhook delete action result.
-				$delete_result .= '<p>Sandbox Webhook delete action result: ' . $ret['msg'] . '</p>';
-				SwpmLog::log_simple_debug( 'Sandbox Webhook delete action result ' . $ret['msg'], true );
+				$delete_result .= '<p><strong>Delete Sandbox Webhook: </strong>' . $ret['msg'] . '</p>';
+				SwpmLog::log_simple_debug( 'Sandbox Webhook delete action result: ' . $ret['msg'], true );
 			}			
 		} else {
 			//Sandbox mode credentials are not set. We will show a notice to the admin using admin_notice hook.

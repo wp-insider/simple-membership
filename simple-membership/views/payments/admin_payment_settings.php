@@ -23,22 +23,39 @@ if (isset($_GET['swpm_paypal_create_live_webhook'])){
     check_admin_referer( 'swpm_paypal_create_live_webhook' );
     $pp_webhook = new SWPM_PayPal_Webhook();
     $ret = $pp_webhook->check_and_create_webhook_for_live_mode();
-    $live_wh_create_result = isset($ret['msg']) ? $ret['msg'] : '';
-    echo '<div id="message" class="updated"><strong><p>Live webhook create action result: ' . $live_wh_create_result . '</p></strong></div>';
+
+    //Create the response message.
+	$live_wh_create_result = '';
+    if( isset($ret['status']) && ($ret['status'] == 'yes' )){
+        //Add an extra checkmark in the message for visual appeal.
+        $live_wh_create_result .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
+    }
+    $live_wh_create_result .= isset($ret['msg']) ? $ret['msg'] : '';
+    $live_wh_create_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
+    echo '<div class="swpm-yellow-box"><p><strong>Create Live Webhook: </strong>' . $live_wh_create_result . '</p></div>';
 
 }
 if (isset($_GET['swpm_paypal_create_sandbox_webhook'])){
     check_admin_referer( 'swpm_paypal_create_sandbox_webhook' );
     $pp_webhook = new SWPM_PayPal_Webhook();
     $ret = $pp_webhook->check_and_create_webhook_for_sandbox_mode();
-    $sandbox_wh_create_result = isset($ret['msg']) ? $ret['msg'] : '';
-    echo '<div id="message" class="updated"><strong><p>Sandbox webhook create action result: ' . $sandbox_wh_create_result . '</p></strong></div>';
+
+    //Create the response message.
+	$sandbox_wh_create_result = '';
+    if( isset($ret['status']) && ($ret['status'] == 'yes' )){
+        //Add an extra checkmark in the message for visual appeal.
+        $sandbox_wh_create_result .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
+    }    
+    $sandbox_wh_create_result .= isset($ret['msg']) ? $ret['msg'] : '';
+    $sandbox_wh_create_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
+    echo '<div class="swpm-yellow-box"><p><strong>Create Sandbox Webhook: </strong>' . $sandbox_wh_create_result . '</p></div>';
 }
 if (isset($_GET['swpm_paypal_delete_webhook'])){
     check_admin_referer( 'swpm_paypal_delete_webhook' );
     $pp_webhook = new SWPM_PayPal_Webhook();
     $delete_action_result = $pp_webhook->check_and_delete_webhooks_for_both_modes();
-    echo '<div id="message" class="updated"><strong><p>' . $delete_action_result . '</p></strong></div>';
+	$delete_action_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
+    echo '<div class="swpm-yellow-box"><p>' . $delete_action_result . '</p></div>';
 }
 ?>
 

@@ -50,8 +50,15 @@ class SWPM_PayPal_Utility_Functions{
 		return $plan_details_changed;
     }
 
+    /**
+     * Checks if a billling plan exists for the given button ID. If not, it creates a new billing plan in PayPal. 
+     * Returns the billing plan ID in an array.
+     * @param mixed $button_id
+     * @return array
+     */
     public static function create_billing_plan_for_button( $button_id ){
         $output = "";
+		$ret = array();
         $plan_id = get_post_meta($button_id, 'pp_subscription_plan_id', true);
         if ( empty ( $plan_id )){
             //Billing plan doesn't exist. Need to create a new billing plan in PayPal.
@@ -72,19 +79,50 @@ class SWPM_PayPal_Utility_Functions{
                 //Plan created successfully. Save the plan ID for future reference.
                 update_post_meta($button_id, 'pp_subscription_plan_id', $plan_id);
                 update_post_meta($button_id, 'pp_subscription_plan_mode', $paypal_mode);
-				return $output;
+
+                $ret['success'] = true;
+                $ret['plan_id'] = $plan_id;
+				$ret['output'] = $output;
+				return $ret;
             } else {
                 //Plan creation failed. Show an error message.
                 $last_error = $paypal_req_api->get_last_error();
                 $error_message = isset($last_error['error_message']) ? $last_error['error_message'] : '';
-                $output .= '<div id="message" class="error">';
+                $output .= '<div class="swpm-paypal-api-error-msg">';
                 $output .= '<p>Error! Failed to create a subscription billing plan in your PayPal account. The following error message was returned from the PayPal API.</p>';
                 $output .= '<p>Error Message: ' . esc_attr($error_message) . '</p>';
                 $output .= '</div>';
-                return $output;
+
+                $ret['success'] = false;
+                $ret['plan_id'] = '';
+                $ret['error_message'] = $error_message;
+                $ret['output'] = $output;
+                return $ret;
             }
         }
-		return $output;
+        $ret['success'] = true;
+        $ret['plan_id'] = $plan_id;
+        $ret['output'] = $output;
+		return $ret;
+    }
+
+    public static function check_billing_plan_exists( $plan_id ){
+        //Setup the PayPal API Injector class. This class is used to do certain premade API queries.
+        $pp_api_injector = new SWPM_PayPal_Request_API_Injector();
+
+        //Use the "Show plan details" API call to verify that the plan exists for the given account and mode.
+        https://developer.paypal.com/docs/api/subscriptions/v1/#plans_get
+        $plan_details = $pp_api_injector->get_paypal_billing_plan_details( $plan_id );
+        if( $plan_details !== false ){
+            //Plan exists. Return true.
+            return true;
+        }
+        
+        $paypal_req_api = $pp_api_injector->get_paypal_req_api();
+        $paypal_mode = $paypal_req_api->get_api_environment_mode();
+
+        Swpmlog::log_simple_debug( "Billing plan with ID: ". $plan_id . " does not exist in PayPal. The check was done in mode: ".$paypal_mode.". Maybe the plan was originally created in a different environment mode.", true );
+		return false;
     }
 
     /**

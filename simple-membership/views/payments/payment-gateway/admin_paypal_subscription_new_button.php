@@ -340,15 +340,16 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e("Button Type", "simple-membership"); ?></th>
+                        <th scope="row"><?php _e("Button Type/Label", "simple-membership"); ?></th>
                         <td>
                             <select name="pp_subscription_new_btn_type" style="min-width: 150px;">
                                 <option value="checkout"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'checkout') ? ' selected' : ''; ?>><?php _e("Checkout", "simple-membership"); ?></option>                                
                                 <option value="pay"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'pay') ? ' selected' : ''; ?>><?php _e("Pay", "simple-membership"); ?></option>
                                 <option value="paypal"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'paypal') ? ' selected' : ''; ?>><?php _e("PayPal", "simple-membership"); ?></option>
                                 <option value="buynow"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'buynow') ? ' selected' : ''; ?>><?php _e("Buy Now", "simple-membership"); ?></option>
+                                <option value="subscribe"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'subscribe') ? ' selected' : ''; ?>><?php _e("Subscribe", "simple-membership"); ?></option>
                             </select>
-                            <p class="description"><?php _e("Select button type.", "simple-membership"); ?></p>
+                            <p class="description"><?php _e("Select button type/label.", "simple-membership"); ?></p>
                         </td>
                     </tr>                    
                     <tr valign="top">

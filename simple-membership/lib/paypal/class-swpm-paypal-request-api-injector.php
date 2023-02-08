@@ -122,6 +122,24 @@ class SWPM_PayPal_Request_API_Injector {
         }
         
         /*
+         * Show the details of an existing paypal billing plan.
+         * https://developer.paypal.com/docs/api/subscriptions/v1/#plans_get
+         */
+        public function get_paypal_billing_plan_details( $plan_id ){
+            $endpoint = '/v1/billing/plans/' . $plan_id;
+            $params = array();
+            $response = $this->paypal_req_api->get($endpoint, $params);
+            if ( $response !== false){
+                $plan_details = $response;
+                //echo '<br />Plan ID: ' . $plan_details->id;
+                //echo '<br />Product ID: ' . $plan_details->product_id;
+                return $plan_details;
+            } else {
+                return false;
+            }
+        }
+
+        /*
          * Creates a PayPal billing plan for subscription.
          */
         public function create_paypal_billing_plan( $params ){

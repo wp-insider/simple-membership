@@ -26,7 +26,7 @@ class SWPM_PayPal_JS_Button_Embed {
 		//Example settings args array
 		/*
 		$settings_args = array(
-			'is_live' => 0,
+			'is_live_mode' => 0,
 			'live_client_id' => 'THE LIVE CLIENT ID',
 			'sandbox_client_id' => 'THE SANDBOX CLIENT ID',
 			'currency' => 'USD',
@@ -50,7 +50,7 @@ class SWPM_PayPal_JS_Button_Embed {
 
 		//Reference - https://developer.paypal.com/sdk/js/configuration/
 		$sdk_args = array();
-		$sdk_args['client-id'] = $this->settings_args['is_live'] ? $this->settings_args['live_client_id'] : $this->settings_args['sandbox_client_id'];
+		$sdk_args['client-id'] = $this->settings_args['is_live_mode'] ? $this->settings_args['live_client_id'] : $this->settings_args['sandbox_client_id'];
 		$sdk_args['intent'] = 'capture';
 		$sdk_args['currency'] = $this->settings_args['currency'];
 
@@ -62,7 +62,7 @@ class SWPM_PayPal_JS_Button_Embed {
 		// Enable Venmo by default (could be disabled by 'disable-funding' option).
 		$sdk_args['enable-funding']  = 'venmo';
 		// Required for Venmo in sandbox.
-		if ( ! $this->settings_args['is_live'] ) {
+		if ( ! $this->settings_args['is_live_mode'] ) {
 			$sdk_args['buyer-country']  = 'US';
 		}
 

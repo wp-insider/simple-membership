@@ -6,6 +6,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-request-
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-js-button-embed.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-subsc-billing-plan.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook.php' );
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook-event-handler.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-functions.php' );//Misc project specific utility functions.
 
 /**
@@ -15,13 +16,13 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-
 class SWPM_PayPal_Main {
 
     public function __construct() {
-        add_action( 'wp_loaded', array(&$this, 'handle_paypal_webhook') );
+
+		if ( isset( $_GET['action'] ) && $_GET['action'] == 'swpm_paypal_webhook_event' && isset( $_GET['mode'] )) {
+			//Register action (to handle webhook) only on our webhook notification URL.
+			new SWPM_PayPal_Webhook_Event_Handler();
+		}
     }
 
-    function handle_paypal_webhook(){
-        //TODO 
-        //Handle PayPal Webhook
-    }
 }
 
 new SWPM_PayPal_Main();

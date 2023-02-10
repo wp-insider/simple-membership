@@ -136,6 +136,15 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
                 // notify the buyer that the subscription is successful
                 onApprove: (data, actions) => {
                     console.log('You have successfully created subscription');
+                    console.log(data);
+
+                    //alert(JSON.stringify(data));
+                    //order_id = data.orderID;
+                    //subscription_id = data.subscriptionID;
+                    console.log('Order ID: ' + data.orderID);
+                    console.log('Subscription ID: ' + data.subscriptionID);//Use this to retrieve subscripiton details from API
+
+
                     return_url = "<?php echo esc_url_raw($return_url); ?>";
                     if( return_url ){
                         //redirect to the Thank you page URL.
@@ -150,7 +159,8 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     
                 // handle unrecoverable errors
                 onError: (err) => {
-                    console.error('An error prevented the buyer from checking out with PayPal');
+                    console.error('An error prevented the user from checking out with PayPal');
+                    alert('An error prevented the user from checking out with PayPal');
                 }
             });
     

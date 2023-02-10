@@ -5,19 +5,37 @@
  */
 class SWPM_PayPal_Request_API_Injector {
         protected $paypal_req_api;
-    
+        protected $mode;
+        protected $live_client_id;
+        protected $live_secret;
+        protected $sandbox_client_id;
+        protected $sandbox_secret;
+
         public function __construct() {
             //Setup the PayPal API request object so that the injector can use it to make pre-made API requests easily.
             $settings = SwpmSettings::get_instance();
-            $live_client_id = $settings->get_value('paypal-live-client-id');
-            $live_secret = $settings->get_value('paypal-live-secret-key');    
-            $sandbox_client_id = $settings->get_value('paypal-sandbox-client-id');
-            $sandbox_secret = $settings->get_value('paypal-sandbox-secret-key');
+            $this->live_client_id = $settings->get_value('paypal-live-client-id');
+            $this->live_secret = $settings->get_value('paypal-live-secret-key');    
+            $this->sandbox_client_id = $settings->get_value('paypal-sandbox-client-id');
+            $this->sandbox_secret = $settings->get_value('paypal-sandbox-secret-key');
             $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
-            $paypal_mode = $sandbox_enabled ? 'sandbox' : 'production';
+            $this->mode = $sandbox_enabled ? 'sandbox' : 'production';
             $paypal_req_api = SWPM_PayPal_Request_API::get_instance();
-            $paypal_req_api->set_mode_and_api_credentials( $paypal_mode, $live_client_id, $live_secret, $sandbox_client_id, $sandbox_secret );            
+            $paypal_req_api->set_mode_and_api_credentials( $this->mode, $this->live_client_id, $this->live_secret, $this->sandbox_client_id, $this->sandbox_secret );            
             $this->paypal_req_api = $paypal_req_api;
+        }
+
+        /**
+         * Sets the webhook mode. Used to override/set the mode (if needed) after the object is created.
+         */
+        public function set_mode_and_api_creds_based_on_mode( $mode ) {
+            //Set the mode.
+            $this->mode = $mode;
+
+            //Set the API credentials for the Req_API object based on the mode.
+            $paypal_req_api = SWPM_PayPal_Request_API::get_instance();
+            $paypal_req_api->set_mode_and_api_credentials( $mode, $this->live_client_id, $this->live_secret, $this->sandbox_client_id, $this->sandbox_secret );
+            $this->paypal_req_api = $paypal_req_api; 
         }
 
         public function get_last_error_from_api_call(){
@@ -155,5 +173,24 @@ class SWPM_PayPal_Request_API_Injector {
                 return false;
             }
         }
+
+        /*
+         * Show the details of a paypal subscription.
+         * https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_get
+         */
+        public function get_paypal_subscription_details( $sub_id ){
+            $endpoint = '/v1/billing/subscriptions/' . $sub_id;
+            $params = array();
+            $response = $this->paypal_req_api->get($endpoint, $params);
+            if ( $response !== false){
+                $sub_details = $response;
+                //$sub_details->billing_info contains the useful info
+                //https://developer.paypal.com/docs/api/subscriptions/v1/#definition-subscription_billing_info
+                
+                return $sub_details;
+            } else {
+                return false;
+            }
+        }        
         
 }

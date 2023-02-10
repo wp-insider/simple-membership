@@ -12,10 +12,10 @@ class SWPM_PayPal_Webhook {
 	/**
 	 * The webhook mode.
 	 */
-	 protected $mode;
+	protected $mode;
 
 	 //The paypal request API object (for sending POST and GET requests to PayPal API endpoints)
-	 protected $paypal_req_api;
+	protected $paypal_req_api;
 
 	protected $live_client_id;
 	protected $live_secret;
@@ -24,7 +24,7 @@ class SWPM_PayPal_Webhook {
 	/**
 	 * Creates a webhook for given mode.
 	 *
-	 * @param string $mode The transaction mode (`live` or `test`).
+	 * @param string $mode The transaction mode (`production` or `sandbox`).
 	 */
 	public function __construct() {
 		//Setup the PayPal API request object so that we can use it to make pre-made API requests easily.
@@ -58,6 +58,17 @@ class SWPM_PayPal_Webhook {
 		$this->paypal_req_api = $paypal_req_api;
 		$this->paypal_req_api->set_api_environment_mode( $this->mode );
 		$this->paypal_req_api->set_api_credentials( $client_id, $secret );
+	}
+
+	public function set_mode_and_api_creds_based_on_mode( $mode ) {
+		if( $mode == 'sandbox' ){
+			$client_id = $this->sandbox_client_id;
+			$secret = $this->sandbox_secret;
+		} else {
+			$client_id = $this->live_client_id;
+			$secret = $this->live_secret;
+		}
+		$this->set_mode_and_api_creds_for_webhook( $mode, $client_id, $secret );
 	}
 
 	/**
@@ -207,7 +218,7 @@ class SWPM_PayPal_Webhook {
 	 * @param array $event   The event data received from PayPal API.
 	 * @param array $headers The request headers received from PayPal API.
 	 */
-	public function verify( $event, $headers ) {
+	public function verify_webhook_signature( $event, $headers ) {
 		$headers = array_intersect_key(
 			$headers,
 			array(
@@ -245,6 +256,7 @@ class SWPM_PayPal_Webhook {
 
 		//A successful Verify POST should return 200 status code.
 		$additional_args = array();
+		//$additional_args['return_raw_response'] = true;//Return the raw response instead of the parsed JSON response.
 		$additional_args['status_code'] = 200;
 		$response = $this->paypal_req_api->post($endpoint, $params, $additional_args);
 		if ( $response !== false){

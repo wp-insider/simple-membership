@@ -6,6 +6,8 @@
 class SWPM_PayPal_Webhook_Event_Handler {
 
 	public function __construct() {
+		//Register to handle the webhook event.
+		//Handle it at 'wp_loaded' since custom post types will also be available then
 		add_action( 'wp_loaded', array(&$this, 'handle_paypal_webhook' ) );
 	}
 
@@ -125,7 +127,7 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		SwpmLog::log_simple_debug( 'Info 1: ' . $subscription_id . '|' . $subscription_status .'|'. $email_address . '|' . $first_name .'|'.$last_name, true );
 		SwpmLog::log_simple_debug( 'Info 2: ' . $create_time . '|' . $subscription_plan_id .'|'. $customer_id, true );
 		SwpmLog::log_simple_debug( $address_line_1 . $address_line_2 . '|' . $admin_area_1 . $admin_area_2 .'|'. $postal_code . $country_code, true);
-		SwpmLog::log_array_data_to_debug( $billing_info, true );
+		//SwpmLog::log_array_data_to_debug( $billing_info, true );
 		
 
 		//[2023/02/09 22:20:07] - SUCCESS: Info 3: I-BW452GLLEP1G|ACTIVE|customer@example.com|John|Doe
@@ -160,16 +162,18 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
 		if( $sub_details !== false ){
 			$billing_info = $sub_details->billing_info;
+			$tenure_type = $billing_info['cycle_executions'][0]['tenure_type'];//'REGULAR' or 'TRIAL'
+			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type, true );
 
 			//TODO - update the "Access starts date" of the member account to the current date.
 
-			ob_start();
-			echo '<pre>';
-			var_dump($sub_details);
-			echo '</pre>';
-			$contents = ob_get_contents();
-			ob_end_clean();
-			SwpmLog::log_simple_debug( 'Sub details Info: ' . $contents, true );			
+			// ob_start();
+			// echo '<pre>';
+			// var_dump($sub_details);
+			// echo '</pre>';
+			// $contents = ob_get_contents();
+			// ob_end_clean();
+			// SwpmLog::log_simple_debug( 'Sub details Info: ' . $contents, true );			
 
 		} else {
 			//Error getting subscription details.

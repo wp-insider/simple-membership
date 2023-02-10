@@ -7,6 +7,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-js-butto
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-subsc-billing-plan.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook-event-handler.php' );
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-functions.php' );//Misc project specific utility functions.
 
 /**
@@ -21,6 +22,9 @@ class SWPM_PayPal_Main {
 			//Register action (to handle webhook) only on our webhook notification URL.
 			new SWPM_PayPal_Webhook_Event_Handler();
 		}
+
+		//Initialize the PayPal OnApprove IPN Handler so it can handle the 'onApprove' ajax request.
+		new SWPM_PayPal_OnApprove_IPN_Handler();
     }
 
 }

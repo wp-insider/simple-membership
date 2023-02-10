@@ -205,8 +205,8 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     </tr>
 
                     <?php
-                    //If the button is being edited then show various PayPal billing plan ID and the environment mode this subscritpiton button is configured for.
-					if ( $is_edit_mode ) {
+                    //If the button is being edited and there is a plan ID, then show PayPal billing plan ID and the environment mode this subscritpiton button is configured for.
+					if ( $is_edit_mode && !empty($bt_opts['pp_subscription_plan_id'])) {
                         ?>
                         <tr valign="top">
                             <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('PayPal Billing Plan Details for This Button'); ?></div></th>

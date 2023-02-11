@@ -105,6 +105,7 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$subscription_id = $event['resource']['id'];
 		SwpmLog::log_simple_debug( 'Subscription ID from resource: ' . $subscription_id, true );
 
+
 		//TODO - May NEED TO make an API call to get the subscription details.
 
 		$subscription_id = $event['resource']['id'];
@@ -132,6 +133,8 @@ class SWPM_PayPal_Webhook_Event_Handler {
 
 		//[2023/02/09 22:20:07] - SUCCESS: Info 3: I-BW452GLLEP1G|ACTIVE|customer@example.com|John|Doe
 		//[2023/02/09 22:20:07] - SUCCESS: Info 4: 2018-12-10T21:20:49Z|P-5ML4271244454362WXNWU5NQ|
+
+		//update_time or status_update_time may be used to determine the last time the subscription status was updated. And if a notification is duplicate.
 
 		// if ( ! $subscription || $this->status === $subscription->get_status() ) {
 		// 	return;
@@ -162,6 +165,10 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
 		if( $sub_details !== false ){
 			$billing_info = $sub_details->billing_info;
+			if(is_object($billing_info)){
+				//Convert the object to an array.
+				$billing_info = json_decode(json_encode($billing_info), true);
+			}			
 			$tenure_type = $billing_info['cycle_executions'][0]['tenure_type'];//'REGULAR' or 'TRIAL'
 			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type, true );
 

@@ -10,13 +10,22 @@ class SwpmTransactions {
 		global $wpdb;
 
 		$current_date = SwpmUtils::get_current_date_in_wp_zone();//date( 'Y-m-d' );
-		$custom_var   = self::parse_custom_var( $ipn_data['custom'] );
+		$custom_var = self::parse_custom_var( $ipn_data['custom'] );
+
+		//Get the IP address (if available)
+		$ip_address = isset($ipn_data['ip']) ? $ipn_data['ip'] : '';
+		if( empty($ip_address) ){
+			$ip_address = isset($custom_var['user_ip']) ? $custom_var['user_ip'] : '';
+		}
+
+		//Subscription ID
+		$subscr_id = $ipn_data['subscr_id'];
 
 		$txn_data                     = array();
 		$txn_data['email']            = $ipn_data['payer_email'];
 		$txn_data['first_name']       = $ipn_data['first_name'];
 		$txn_data['last_name']        = $ipn_data['last_name'];
-		$txn_data['ip_address']       = $ipn_data['ip'];
+		$txn_data['ip_address']       = $ip_address;
 		$txn_data['member_id']        = isset ( $custom_var['swpm_id'] ) ? $custom_var['swpm_id'] : '';
 		$txn_data['membership_level'] = isset ( $custom_var['subsc_ref'] ) ? $custom_var['subsc_ref'] : '';
 
@@ -25,30 +34,50 @@ class SwpmTransactions {
 		$txn_data['subscr_id']      = $ipn_data['subscr_id'];
 		$txn_data['reference']      = isset( $custom_var['reference'] ) ? $custom_var['reference'] : '';
 		$txn_data['payment_amount'] = $ipn_data['mc_gross'];
-		$txn_data['gateway']        = $ipn_data['gateway'];
-		$txn_data['status']         = $ipn_data['status'];
+		$txn_data['gateway']        = isset($ipn_data['gateway']) ? $ipn_data['gateway'] : '';
+		$txn_data['status']         = isset($ipn_data['status']) ? $ipn_data['status'] : '';
+
+		//Check that a transaction ID exists before saving the transaction record.
+		if ( empty( $txn_data['txn_id'] ) ) {
+			SwpmLog::log_simple_debug( 'Transaction ID is empty. This transaction record cannot be saved.', false );
+			return;
+		}
 
 		$txn_data = array_filter( $txn_data );//Remove any null values.
 		$wpdb->insert( $wpdb->prefix . 'swpm_payments_tbl', $txn_data );
 
 		$db_row_id = $wpdb->insert_id;
 
-                /*** Save to the swpm_transactions CPT also ***/
+        /*** Save to the swpm_transactions CPT also ***/
 		//Let's also store the transactions data in swpm_transactions CPT.
-		$post                = array();
+		$post = array();
 		$post['post_title']  = '';
 		$post['post_status'] = 'publish';
-		$post['content']     = '';
-		$post['post_type']   = 'swpm_transactions';
+		$post['content'] = '';
+		$post['post_type'] = 'swpm_transactions';
 
 		$post_id = wp_insert_post( $post );
 
 		//The key that connects the 'swpm_transactions' CPT post and the the swpm_payments_tbl row.
 		update_post_meta( $post_id, 'db_row_id', $db_row_id );
 
+		//Check if this is a paypal subscription checkout.
+		if ( isset( $ipn_data['gateway']) && $ipn_data['gateway'] == 'paypal_subscription_checkout' ) {
+			//Save the swpm_transactions CPT post ID of the original checkout in the member's proifle. Useful to retreive some of the original checkout txn data (example: custom_field data).
+			$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $subscr_id );
+			if( ! $member_record ){
+				SwpmLog::log_simple_debug( 'Error! Could not find an existing member record for the given subscriber ID: ' . $subscr_id, false );
+			} else {
+				$member_id = $member_record->member_id;
+				$extra_info = SwpmMemberUtils::get_account_extra_info( $member_id );
+				$extra_info['orig_swpm_txn_cpt_id'] = $post_id;
+				SwpmMemberUtils::update_account_extra_info( $member_id, $extra_info );
+			}
+		}
+
 		//Save the subscr_id to the swpm_transactions CPT as post meta (so it can be used to query the CPT for a specific subscription).
-		if ( isset( $ipn_data['subscr_id'] ) ) {
-			update_post_meta( $post_id, 'subscr_id', $ipn_data['subscr_id'] );
+		if ( isset( $subscr_id ) && ! empty( $subscr_id ) ) {
+			update_post_meta( $post_id, 'subscr_id', $subscr_id );
 		}		
 
                 //Add the payment_button_id to the txn_data array so it can be saved to the swpm_transactions CPT.

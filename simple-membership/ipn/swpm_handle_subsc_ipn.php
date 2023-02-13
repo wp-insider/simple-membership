@@ -290,7 +290,11 @@ function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 	$account_state = SwpmSettings::get_instance()->get_value( 'default-account-status', 'active' );
         $account_state = apply_filters( 'swpm_account_status_for_subscription_start_date_update', $account_state );
 
-	swpm_debug_log_subsc( 'Updating subscription start date if applicable for this subscription payment. Subscriber ID: ' . $subscr_id . ', Email: ' . $email . ', Account status: ' . $account_state, true );
+	if( empty( $subscr_id ) ) {
+		swpm_debug_log_subsc( 'Subscription ID is empty. A Subscription ID value is required to update the access start date.', false );
+		return;
+	}
+	swpm_debug_log_subsc( 'Updating the access start date if applicable for this subscription payment. Subscriber ID: ' . $subscr_id . ', Email: ' . $email . ', Account status: ' . $account_state, true );
 
 	// We can also query using the email address or SWPM ID (if present in custom var).
 

@@ -259,7 +259,7 @@ class SimpleWpMembership {
     public function hide_adminbar() {
 
         //Never show admin toolbar if the user is not even logged in
-        if (!is_user_logged_in()) {
+        if (function_exists('is_user_logged_in') && !is_user_logged_in()) {
             return false;
         }
 

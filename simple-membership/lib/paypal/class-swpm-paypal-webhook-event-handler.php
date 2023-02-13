@@ -174,7 +174,6 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		//Get the subscription ID from the event data.
 		$subscription_id = isset( $event['resource']['billing_agreement_id'] ) ? $event['resource']['billing_agreement_id'] : '';
 		$txn_id = isset( $event['resource']['id'] ) ? $event['resource']['id'] : '';
-		//$subscription_id = 'I-02JKMA5PA1H4';//Testing
 		SwpmLog::log_simple_debug( 'Subscription ID from resource: ' . $subscription_id . '. Transaction ID: ' . $txn_id, true );
 		if( empty( $subscription_id )){
 			SwpmLog::log_simple_debug( 'Subscription ID is empty. Ignoring this webhook event.', true );
@@ -191,25 +190,28 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$api_injector->set_mode_and_api_creds_based_on_mode( $mode );
 		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
 		if( $sub_details !== false ){
-			$billing_info = $sub_details->billing_info;
-			if(is_object($billing_info)){
-				//Convert the object to an array.
-				$billing_info = json_decode(json_encode($billing_info), true);
-			}			
-			$tenure_type = $billing_info['cycle_executions'][0]['tenure_type'];//'REGULAR' or 'TRIAL'
-			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type, true );
+			// $billing_info = $sub_details->billing_info;
+			// if(is_object($billing_info)){
+			// 	//Convert the object to an array.
+			// 	$billing_info = json_decode(json_encode($billing_info), true);
+			// }			
+			// $tenure_type = $billing_info['cycle_executions'][0]['tenure_type'];//'REGULAR' or 'TRIAL'
+			// SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type, true );
 
-			//TODO - update the "Access starts date" of the member account to the current date.
-			//TODO - swpm_update_member_subscription_start_date_if_applicable
-			//TODO - Save transaction details to the DB.
+			//Create the IPN data array from the subscription details.
+			$ipn_data = self::create_ipn_data_from_paypal_api_subscription_details_data( $sub_details, $event );
 
-			// ob_start();
-			// echo '<pre>';
-			// var_dump($sub_details);
-			// echo '</pre>';
-			// $contents = ob_get_contents();
-			// ob_end_clean();
-			// SwpmLog::log_simple_debug( 'Sub details Info: ' . $contents, true );			
+SwpmLog::log_array_data_to_debug( $ipn_data, true );//TODO - remove after testing.
+
+			//Update the "Access starts date" of the member account to the current date.
+			swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
+
+			//Save the payment transaction details to the DB.
+			SwpmTransactions::save_txn_record( $ipn_data, array() );
+			SwpmLog::log_simple_debug( 'Executed save_txn_record() function.', true );
+	
+			// Trigger the webhook processed action hook (so other plugins can can listen for this event).
+			do_action( 'swpm_paypal_subscription_sale_completed_webhook_processed', $ipn_data );		
 
 		} else {
 			//Error getting subscription details.
@@ -217,14 +219,57 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			//TODO - Show additional error details if available.
 			return;
 		}
+	}
 
-		// if ( ! $subscription || $this->status === $subscription->get_status() ) {
-		// 	return;
-		// }
+	public static function create_ipn_data_from_paypal_api_subscription_details_data( $sub_details, $event ){
+		//Creates the $ipn_data array using the data from the PayPal API endpoint - v1/billing/subscriptions/{$subscription_id}
+		$ipn_data = array();
+		if(!is_object($sub_details)){
+			SwpmLog::log_simple_debug( 'Error! Invalid subscription details data. Cannot create ipn data.', false );
+			return false;
+		}
 
-		//TODO - update the "Access starts date" of the member account to the current date.
+		//Get the subscriber info array
+		$subscriber_info = $sub_details->subscriber;
+		if(is_object($subscriber_info)){
+			//Convert the object to an array.
+			$subscriber_info = json_decode(json_encode($subscriber_info), true);
+		}
 
+		//Get the billing info array
+		$billing_info = $sub_details->billing_info;
+		if(is_object($billing_info)){
+			//Convert the object to an array.
+			$billing_info = json_decode(json_encode($billing_info), true);
+		}
 
+		//Get the Subscription ID and Txn ID from the event data.
+		$subscription_id = isset( $event['resource']['billing_agreement_id'] ) ? $event['resource']['billing_agreement_id'] : '';
+		$txn_id = isset( $event['resource']['id'] ) ? $event['resource']['id'] : '';
+
+		//Get the custom field data from the original subscription checkout from the user profile (if available).
+		$extra_info = SwpmMemberUtils::get_account_extra_info_by_subscr_id( $subscription_id );
+		if( isset( $extra_info['orig_swpm_txn_cpt_id'] ) && !empty( $extra_info['orig_swpm_txn_cpt_id'] )){
+			$txn_cpt_post_id = $extra_info['orig_swpm_txn_cpt_id'];
+			//Example value: subsc_ref=123&user_ip=1.2.3.4
+			$custom = get_post_meta( $txn_cpt_post_id, 'custom', true );
+			SwpmLog::log_simple_debug('Custom field data from the original subscription checkout: ' . $custom, true);
+		}
+
+		//Set the data to the $ipn_data array.
+		$ipn_data['custom'] = isset($custom) ? $custom : '';
+		$ipn_data['payer_email'] = $subscriber_info['email_address'];
+		$ipn_data['first_name'] = $subscriber_info['name']['given_name'];
+		$ipn_data['last_name'] = $subscriber_info['name']['surname'];
+
+		$ipn_data['txn_id'] = $txn_id;
+		$ipn_data['subscr_id'] = $subscription_id;
+		$ipn_data['mc_gross'] = isset($billing_info['last_payment']['amount']['value']) ? $billing_info['last_payment']['amount']['value'] : '';
+		$ipn_data['gateway'] = 'paypal_subscription_checkout';
+		$ipn_data['txn_type'] = 'pp_subscription_sale_completed_webhook';
+		$ipn_data['status'] = 'completed';
+
+		return $ipn_data;
 	}
 
 	public static function is_sale_completed_webhook_already_processed( $event ){

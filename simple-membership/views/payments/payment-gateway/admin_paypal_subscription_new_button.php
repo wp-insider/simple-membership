@@ -446,6 +446,7 @@ function swpm_create_new_pp_subscription_new_button() {
         'button_type' => sanitize_text_field($_REQUEST['button_type']),
         'pp_subscription_new_btn_height' => 'medium', /* set default button height */
         'pp_subscription_new_btn_color' => 'blue', /* set default button color */
+        'pp_subscription_new_disable_funding_credit' => '1', /* set credit option to be disabled by default */
     );
 
     render_save_edit_pp_subscription_new_button_interface($bt_opts);

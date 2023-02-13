@@ -207,7 +207,7 @@ class SwpmMemberUtils {
 	}
 
 	/*
-	 * Use this function to update or set account status of a member easily.
+	 * Use this function to update or set extra_info array data of a profile easily.
 	 */
 	public static function update_account_extra_info( $member_id, $extra_info = array() ) {
 		//Example $extra_info value: array('last_webhook_status' => 'expired', 'plan_id' => '1234');
@@ -217,6 +217,27 @@ class SwpmMemberUtils {
 		//SwpmLog::log_simple_debug( 'Updating the extra_info value of member (' . $member_id . ') to: ' . $extra_info_serialized, true );
 		$query = $wpdb->prepare( "UPDATE $members_table_name SET extra_info=%s WHERE member_id=%s", $extra_info_serialized, $member_id );
 		$resultset = $wpdb->query( $query );
+	}
+
+	/*
+	 * Use this function to get extra_info array data of a profile easily.
+	 */	
+	public static function get_account_extra_info( $member_id ){
+		$member_record = self::get_user_by_id( $member_id );
+		$extra_info = maybe_unserialize( $member_record->extra_info );
+		return $extra_info;
+	}
+
+	/*
+	 * Use this function to get extra_info array data of a profile using the subscr_id.
+	 */	
+	public static function get_account_extra_info_by_subscr_id( $subscr_id ){
+		$member_record = self::get_user_by_subsriber_id( $subscr_id );
+		if( !$member_record ){
+			return false;
+		}
+		$extra_info = maybe_unserialize( $member_record->extra_info );
+		return $extra_info;
 	}
 
 	/*

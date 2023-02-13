@@ -69,7 +69,7 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 
 		//Create the IPN data array from the transaction data.
 		$this->create_ipn_data_array_from_txn_data( $data, $txn_data );
-		SwpmLog::log_array_data_to_debug( $this->ipn_data, true );//TODO: Remove this line after testing
+		//SwpmLog::log_array_data_to_debug( $this->ipn_data, true );//Debugging only.
 		
 		//Validate the subscription txn data before using it.
 		$validation_response = $this->validate_subscription_checkout_txn_data( $data, $txn_data );

@@ -29,7 +29,7 @@ class SwpmWpLoadedTasks {
 	 * Logs out the user from the swpm session if they are logged out of the WP user session
 	 */
 	public function synchronise_swpm_logout_for_wp_users() {
-		if ( ! is_user_logged_in() ) {
+		if ( function_exists('is_user_logged_in') && ! is_user_logged_in() ) {
 			/* WP user is logged out. So logout the SWPM user (if applicable) */
 			if ( SwpmMemberUtils::is_member_logged_in() ) {
 

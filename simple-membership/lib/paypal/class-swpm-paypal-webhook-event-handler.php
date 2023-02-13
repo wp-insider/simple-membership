@@ -27,8 +27,6 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$event = json_decode( $event, true );
 		SwpmLog::log_simple_debug( 'Webhook event type: ' . $event['event_type'] . '. Event summary: ' . $event['summary'], true );
 
-		status_header(200);//Send a 200 status code to PayPal to indicate that the webhook event was received successfully.
-
 		if ($_GET['mode'] == 'production') {
 			$mode = 'production';
 		} else {
@@ -39,7 +37,7 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		//Verify the webhook for the given mode.
 		if ( ! self::verify_webhook_event_for_given_mode( $event, $mode ) ) {
 			status_header(200);//Send a 200 status code to PayPal to indicate that the webhook event was received successfully.
-			exit;
+			wp_die();
 		}
 
 		//Handle the events
@@ -94,7 +92,12 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		 */
 		do_action( 'swpm_paypal_subscription_webhook_event', $event );
 
-		wp_die();
+		if ( ! headers_sent() ) {
+			//Send a 200 status code to PayPal to indicate that the webhook event was received successfully.
+			header("HTTP/1.1 200 OK");
+		}
+		echo '200 OK';//Force header output.
+		exit;
     }
 
 	/**
@@ -103,45 +106,64 @@ class SWPM_PayPal_Webhook_Event_Handler {
 	public function handle_subscription_status_update( $status, $event, $mode ) {
 		//Get the subscription ID from the event data.
 		$subscription_id = $event['resource']['id'];
-		SwpmLog::log_simple_debug( 'Subscription ID from resource: ' . $subscription_id, true );
+		SwpmLog::log_simple_debug( 'Handling Webhook status update. Subscription ID: ' . $subscription_id, true );
 
+		// $subscription_id = $event['resource']['id'];
+		// $create_time = $event['resource']['create_time'];
+		// $subscription_status = $event['resource']['status'];
+		// $subscription_plan_id = $event['resource']['plan_id'];
+		// $customer_id = $event['resource']['subscriber']['payer_id'];
+		// $email_address = $event['resource']['subscriber']['email_address'];
+		// $first_name = $event['resource']['subscriber']['name']['given_name'];
+		// $last_name = $event['resource']['subscriber']['name']['surname'];
 
-		//TODO - May NEED TO make an API call to get the subscription details.
+		// $billing_info = $event['resource']['billing_info'];
+		// $address_line_1 = $event['resource']['subscriber']['shipping_address']['address']['address_line_1'];
+		// $address_line_2 = $event['resource']['subscriber']['shipping_address']['address']['address_line_2'];
+		// $admin_area_1 = $event['resource']['subscriber']['shipping_address']['address']['admin_area_1'];
+		// $admin_area_2 = $event['resource']['subscriber']['shipping_address']['address']['admin_area_2'];
+		// $postal_code = $event['resource']['subscriber']['shipping_address']['address']['postal_code'];
+		// $country_code = $event['resource']['subscriber']['shipping_address']['address']['country_code'];
 
-		$subscription_id = $event['resource']['id'];
-		$create_time = $event['resource']['create_time'];
-		$subscription_status = $event['resource']['status'];
-		$subscription_plan_id = $event['resource']['plan_id'];
-		$customer_id = $event['resource']['subscriber']['payer_id'];
-		$first_name = $event['resource']['subscriber']['name']['given_name'];
-		$last_name = $event['resource']['subscriber']['name']['surname'];
-		$email_address = $event['resource']['subscriber']['email_address'];
-
-		$billing_info = $event['resource']['billing_info'];
-		$address_line_1 = $event['resource']['subscriber']['shipping_address']['address']['address_line_1'];
-		$address_line_2 = $event['resource']['subscriber']['shipping_address']['address']['address_line_2'];
-		$admin_area_1 = $event['resource']['subscriber']['shipping_address']['address']['admin_area_1'];
-		$admin_area_2 = $event['resource']['subscriber']['shipping_address']['address']['admin_area_2'];
-		$postal_code = $event['resource']['subscriber']['shipping_address']['address']['postal_code'];
-		$country_code = $event['resource']['subscriber']['shipping_address']['address']['country_code'];
-
-		SwpmLog::log_simple_debug( 'Info 1: ' . $subscription_id . '|' . $subscription_status .'|'. $email_address . '|' . $first_name .'|'.$last_name, true );
-		SwpmLog::log_simple_debug( 'Info 2: ' . $create_time . '|' . $subscription_plan_id .'|'. $customer_id, true );
-		SwpmLog::log_simple_debug( $address_line_1 . $address_line_2 . '|' . $admin_area_1 . $admin_area_2 .'|'. $postal_code . $country_code, true);
+		//SwpmLog::log_simple_debug( 'Info 1: ' . $subscription_id . '|' . $subscription_status .'|'. $email_address . '|' . $first_name .'|'.$last_name, true );
 		//SwpmLog::log_array_data_to_debug( $billing_info, true );
-		
 
-		//[2023/02/09 22:20:07] - SUCCESS: Info 3: I-BW452GLLEP1G|ACTIVE|customer@example.com|John|Doe
-		//[2023/02/09 22:20:07] - SUCCESS: Info 4: 2018-12-10T21:20:49Z|P-5ML4271244454362WXNWU5NQ|
+		if( $status == 'activated'){
+			//Hanlded at checkout time. Nothing to do here at this time.
+			return;
+		}
 
-		//update_time or status_update_time may be used to determine the last time the subscription status was updated. And if a notification is duplicate.
+		if( $status == 'expired' || $status == 'cancelled' || $status == 'suspended'){
+			//Set the account profile to expired or inactive.
 
-		// if ( ! $subscription || $this->status === $subscription->get_status() ) {
-		// 	return;
-		// }
+			//Retrieve the member record for this subscription
+			$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $subscription_id );
+			if( ! $member_record ){
+				// No member record found
+				SwpmLog::log_simple_debug( 'Could not find an existing member record for the given subscriber ID: ' . $subscription_id . '. This user profile may have been deleted. Nothing to do', true );
+				return;
+			}
 
-		//For cancelled
-		//"/v1/billing/subscriptions/{$id}/cancel", 'POST', $mode
+			// Found a member record
+			$member_id = $member_record->member_id;
+			//Example value: array('last_webhook_status' => 'expired' );
+			$extra_info = maybe_unserialize( $member_record->extra_info );
+			if( isset( $extra_info['last_webhook_status'] ) && $extra_info['last_webhook_status'] == $status ){
+				//Nothing to do. This webhook status has already been processed.
+				SwpmLog::log_simple_debug( 'This webhook status ('.$status.') has already been processed for this member (ID: '.$member_id.'). Nothing to do.', true );
+				return;
+			} else {
+				//Save the last webhook status.
+				$extra_info['last_webhook_status'] = $status;
+				SwpmMemberUtils::update_account_extra_info( $member_id, $extra_info );
+
+				//Handle the account status update according to the membership level's expiry settings.
+				$ipn_data = array();
+				$ipn_data['custom'] = 'swpm_id=' . $member_id;
+				swpm_handle_subsc_cancel_stand_alone( $ipn_data );
+				return;
+			}
+		}
 
 	}
 
@@ -159,6 +181,11 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			return;
 		}
 
+		if( self::is_sale_completed_webhook_already_processed( $event ) ){
+			//This webhook event has already been processed. Ignoring this webhook event.
+			return;
+		}
+
 		//Get the subscription details from PayPal API endpoint - v1/billing/subscriptions/{$subscription_id}
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
 		$api_injector->set_mode_and_api_creds_based_on_mode( $mode );
@@ -173,6 +200,8 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type, true );
 
 			//TODO - update the "Access starts date" of the member account to the current date.
+			//TODO - swpm_update_member_subscription_start_date_if_applicable
+			//TODO - Save transaction details to the DB.
 
 			// ob_start();
 			// echo '<pre>';
@@ -196,6 +225,20 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		//TODO - update the "Access starts date" of the member account to the current date.
 
 
+	}
+
+	public static function is_sale_completed_webhook_already_processed( $event ){
+		// Query the DB to check if we have already processed this transaction or not.
+		global $wpdb;
+		$txn_id = isset( $event['resource']['id'] ) ? $event['resource']['id'] : '';
+		$subscription_id = isset( $event['resource']['billing_agreement_id'] ) ? $event['resource']['billing_agreement_id'] : '';
+		$txn_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE txn_id = %s and subscr_id = %s", $txn_id, $subscription_id ), OBJECT );
+		if (!empty($txn_row)) {
+			// And if we have already processed it, do nothing and return true
+			SwpmLog::log_simple_debug( "This webhook event has already been processed (Txn ID: ".$txn_id.", Subscr ID: ".$subscription_id."). This looks to be a duplicate webhook notification. Nothing to do.", true );
+			return true;
+		}
+		return false;
 	}
 
 	/**

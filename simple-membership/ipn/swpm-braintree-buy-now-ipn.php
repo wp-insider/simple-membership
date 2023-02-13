@@ -1,6 +1,6 @@
 <?php
 
-include(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php');
+include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php');
 
 class SwpmBraintreeBuyNowIpnHandler {
 

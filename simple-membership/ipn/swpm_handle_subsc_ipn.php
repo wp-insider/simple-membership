@@ -136,7 +136,7 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		$reg_code                      = uniqid();
 		$md5_code                      = md5( $reg_code );
 		$data['reg_code']              = $md5_code;
-		$data['referrer']              = $data['extra_info'] = $data['txn_id'] = '';
+		$data['referrer']              = $data['txn_id'] = '';
 		$data['last_accessed_from_ip'] = isset( $custom_vars['user_ip'] ) ? $custom_vars['user_ip'] : ''; // Save the users IP address.
 
 		swpm_debug_log_subsc( 'Creating new member account. Membership level ID: ' . $membership_level . ', Subscriber ID value: ' . $data['subscr_id'], true );
@@ -350,22 +350,5 @@ function swpm_is_paypal_recurring_payment($payment_data){
 }
 
 function swpm_debug_log_subsc( $message, $success, $end = false ) {
-	$settings      = SwpmSettings::get_instance();
-	$debug_enabled = $settings->get_value( 'enable-debug' );
-	if ( empty( $debug_enabled ) ) { // Debug is not enabled.
-		return;
-	}
-
-	$debug_log_file_name = SIMPLE_WP_MEMBERSHIP_PATH . 'log.txt';
-
-	// Timestamp.
-        $log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
-	$text = '[' . $log_timestamp . '] - ' . ( ( $success ) ? 'SUCCESS: ' : 'FAILURE: ' ) . $message . "\n";
-	if ( $end ) {
-		$text .= "\n------------------------------------------------------------------\n\n";
-	}
-	// Write to log.
-	$fp = fopen( $debug_log_file_name, 'a' );
-	fwrite( $fp, $text );
-	fclose( $fp );  // close file.
+	SwpmLog::log_simple_debug( $message, $success, $end);
 }

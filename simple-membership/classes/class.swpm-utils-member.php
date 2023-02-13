@@ -207,6 +207,19 @@ class SwpmMemberUtils {
 	}
 
 	/*
+	 * Use this function to update or set account status of a member easily.
+	 */
+	public static function update_account_extra_info( $member_id, $extra_info = array() ) {
+		//Example $extra_info value: array('last_webhook_status' => 'expired', 'plan_id' => '1234');
+		global $wpdb;
+		$members_table_name = $wpdb->prefix . 'swpm_members_tbl';
+		$extra_info_serialized = serialize( $extra_info );
+		//SwpmLog::log_simple_debug( 'Updating the extra_info value of member (' . $member_id . ') to: ' . $extra_info_serialized, true );
+		$query = $wpdb->prepare( "UPDATE $members_table_name SET extra_info=%s WHERE member_id=%s", $extra_info_serialized, $member_id );
+		$resultset = $wpdb->query( $query );
+	}
+
+	/*
 	 * Calculates the Access Starts date value considering the level and current expiry. Useful for after payment member profile update.
 	 */
 	public static function calculate_access_start_date_for_account_update( $args ) {

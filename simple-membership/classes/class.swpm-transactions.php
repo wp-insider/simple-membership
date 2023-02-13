@@ -43,7 +43,13 @@ class SwpmTransactions {
 
 		$post_id = wp_insert_post( $post );
 
+		//The key that connects the 'swpm_transactions' CPT post and the the swpm_payments_tbl row.
 		update_post_meta( $post_id, 'db_row_id', $db_row_id );
+
+		//Save the subscr_id to the swpm_transactions CPT as post meta (so it can be used to query the CPT for a specific subscription).
+		if ( isset( $ipn_data['subscr_id'] ) ) {
+			update_post_meta( $post_id, 'subscr_id', $ipn_data['subscr_id'] );
+		}		
 
                 //Add the payment_button_id to the txn_data array so it can be saved to the swpm_transactions CPT.
 		if ( isset( $ipn_data['payment_button_id'] ) ) {

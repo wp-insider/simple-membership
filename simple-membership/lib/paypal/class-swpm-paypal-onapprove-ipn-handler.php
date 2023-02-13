@@ -38,7 +38,7 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 				)
 			);
 		}
-		SwpmLog::log_array_data_to_debug( $data, true );//TODO: Remove this line after testing
+		//SwpmLog::log_array_data_to_debug( $data, true );//For debugging only
 
 		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
 		SwpmLog::log_simple_debug( 'OnApprove ajax request received. On Page Button ID: ' . $on_page_button_id, true );
@@ -64,11 +64,11 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 				)
 			);
 		}
-		SwpmLog::log_array_data_to_debug( $txn_data, true );//TODO: Remove this line after testing
+		//SwpmLog::log_array_data_to_debug( $txn_data, true );//Debugging only.
 
 
 		//Create the IPN data array from the transaction data.
-		$this->ipn_data = $this->create_ipn_data_array_from_txn_data( $data, $txn_data );
+		$this->create_ipn_data_array_from_txn_data( $data, $txn_data );
 		SwpmLog::log_array_data_to_debug( $this->ipn_data, true );//TODO: Remove this line after testing
 		
 		//Validate the subscription txn data before using it.
@@ -83,8 +83,9 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 			exit;
 		}
 
-		//TODO: Process the IPN data array
-		SwpmLog::log_simple_debug( 'Validation passed continue processing.', true );
+		//Process the IPN data array
+		SwpmLog::log_simple_debug( 'Validation passed. Going to create/update member account and save transaction data.', true );
+		$this->create_membership_and_save_txn_data( $data, $txn_data );
 
 
 		//If everything is processed successfully, send the success response.
@@ -94,6 +95,11 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 
 	public function create_ipn_data_array_from_txn_data( $data, $txn_data ) {
 		$ipn = array();
+
+		//Get the custom field value from the request
+		$custom = isset($data['custom_field']) ? $data['custom_field'] : '';
+		$custom = urldecode( $custom );//Decode it just in case it was encoded.
+		$customvariables = SwpmTransactions::parse_custom_var( $custom );
 
 		$billing_info = isset($txn_data['billing_info']) ? $txn_data['billing_info'] : array();
 
@@ -110,7 +116,10 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		$ipn['subscr_id'] = isset($data['subscriptionID']) ? $data['subscriptionID'] : '';
 		$ipn['plan_id'] = isset($txn_data['plan_id']) ? $txn_data['plan_id'] : '';
 		$ipn['create_time'] = isset($txn_data['create_time']) ? $txn_data['create_time'] : '';
+
+		$ipn['gateway'] = 'paypal_subscription_checkout';
 		$ipn['txn_type'] = 'pp_subscription_new';
+		$ipn['status'] = isset($txn_data['status']) ? ucfirst( $txn_data['status'] ) : '';
 		$ipn['payment_status'] = isset($txn_data['status']) ? ucfirst( $txn_data['status'] ) : '';
 		$ipn['subscription_status'] = isset($txn_data['status']) ? $txn_data['status'] : '';//Can be used to check if the subscription is active or not (in the webhook handler)
 
@@ -124,6 +133,7 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		$ipn['quantity'] = 1;
 
 		// customer info.
+		$ipn['ip'] = isset($customvariables['user_ip']) ? $customvariables['user_ip'] : '';
 		$ipn['first_name'] = isset($txn_data['subscriber']['name']['given_name']) ? $txn_data['subscriber']['name']['given_name'] : '';
 		$ipn['last_name'] = isset($txn_data['subscriber']['name']['surname']) ? $txn_data['subscriber']['name']['surname'] : '';
 		$ipn['payer_email'] = isset($txn_data['subscriber']['email_address']) ? $txn_data['subscriber']['email_address'] : '';
@@ -137,7 +147,7 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		//Additional variables
 		//$ipn['reason_code'] = $txn_data['reason_code'];
 
-		return $ipn;
+		$this->ipn_data = $ipn;
 	}
 
 	public function is_trial_payment( $billing_info ) {
@@ -206,4 +216,63 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		return true;
 	}
 
+	public function create_membership_and_save_txn_data( $data, $txn_data ){
+		//Check if this is a duplicate notification.
+		if( self::is_txn_already_processed($this->ipn_data)){
+			//This transaction notification has already been processed. So we don't need to process it again.
+			return true;
+		}
+		
+		$button_id = $data['button_id'];
+		$txn_id = isset($this->ipn_data['txn_id']) ? $this->ipn_data['txn_id'] : '';
+		$txn_type = isset($this->ipn_data['txn_type']) ? $this->ipn_data['txn_type'] : '';
+		SwpmLog::log_simple_debug( 'Transaction type: ' . $txn_type . ', Transaction ID: ' . $txn_id, true );
+
+		// Custom variables
+		$custom = isset($this->ipn_data['custom']) ? $this->ipn_data['custom'] : '';
+		$customvariables = SwpmTransactions::parse_custom_var( $custom );
+		
+		// Membership level ID.
+		$membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
+		SwpmLog::log_simple_debug( 'Membership payment paid for membership level ID: ' . $membership_level_id, true );
+		if ( ! empty( $membership_level_id ) ) {
+			$swpm_id = '';
+			if ( isset( $customvariables['swpm_id'] ) ) {
+				$swpm_id = $customvariables['swpm_id'];
+			}
+
+			// Process the user profile creation/update.
+			swpm_handle_subsc_signup_stand_alone( $this->ipn_data, $membership_level_id, $txn_id, $swpm_id );
+			
+		} else {
+			SwpmLog::log_simple_debug( 'Membership level ID is missing in the button configuration! Cannot process this notification.', false );
+		}
+
+		// Save the transaction data.
+		SwpmLog::log_simple_debug( 'Saving transaction data to the database table.', true );
+		$this->ipn_data['status']  = $this->ipn_data['payment_status'];
+		SwpmTransactions::save_txn_record( $this->ipn_data, array() );
+		SwpmLog::log_simple_debug( 'Transaction data saved.', true );
+
+		// Trigger the IPN processed action hook (so other plugins can can listen for this event).
+		do_action( 'swpm_paypal_subscription_checkout_ipn_processed', $this->ipn_data );
+
+		do_action( 'swpm_payment_ipn_processed', $this->ipn_data );
+
+		return true;
+	}
+
+	public static function is_txn_already_processed( $ipn_data ){
+		// Query the DB to check if we have already processed this transaction or not.
+		global $wpdb;
+		$txn_id = isset($ipn_data['txn_id']) ? $ipn_data['txn_id'] : '';
+		$payer_email = isset($ipn_data['payer_email']) ? $ipn_data['payer_email'] : '';
+		$txn_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE txn_id = %s and email = %s", $txn_id, $payer_email ), OBJECT );
+		if (!empty($txn_row)) {
+			// And if we have already processed it, do nothing and return true
+			SwpmLog::log_simple_debug( "This transaction has already been processed (Txn ID: ".$txn_id.", Payer Email: ".$payer_email."). This looks to be a duplicate notification. Nothing to do here.", true );
+			return true;
+		}
+		return false;
+	}
 }

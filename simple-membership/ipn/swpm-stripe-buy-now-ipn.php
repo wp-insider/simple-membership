@@ -1,6 +1,6 @@
 <?php
 
-require SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php';
+require_once SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php';
 
 class SwpmStripeBuyNowIpnHandler {
 

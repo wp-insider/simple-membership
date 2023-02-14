@@ -190,13 +190,15 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$api_injector->set_mode_and_api_creds_based_on_mode( $mode );
 		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
 		if( $sub_details !== false ){
-			// $billing_info = $sub_details->billing_info;
-			// if(is_object($billing_info)){
-			// 	//Convert the object to an array.
-			// 	$billing_info = json_decode(json_encode($billing_info), true);
-			// }			
-			// $tenure_type = $billing_info['cycle_executions'][0]['tenure_type'];//'REGULAR' or 'TRIAL'
-			// SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type, true );
+			$billing_info = $sub_details->billing_info;
+			if(is_object($billing_info)){
+				//Convert the object to an array.
+				$billing_info = json_decode(json_encode($billing_info), true);
+			}
+			SwpmLog::log_array_data_to_debug( $billing_info, true );//Debugging only.
+			$tenure_type = isset($billing_info['cycle_executions'][0]['tenure_type']) ? $billing_info['cycle_executions'][0]['tenure_type'] : ''; //'REGULAR' or 'TRIAL'
+			$sequence = isset($billing_info['cycle_executions'][0]['sequence']) ? $billing_info['cycle_executions'][0]['sequence'] : '';//1, 2, 3, etc.
+			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type . ', Sequence: ' . $sequence, true );
 
 			//Create the IPN data array from the subscription details.
 			$ipn_data = self::create_ipn_data_from_paypal_api_subscription_details_data( $sub_details, $event );

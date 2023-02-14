@@ -32,9 +32,9 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     if (SwpmMemberUtils::is_member_logged_in()) {
         $member_id = SwpmMemberUtils::get_logged_in_members_id();
         $custom_field_value .= '&swpm_id=' . $member_id;
-        $member_first_name = SwpmMemberUtils::get_member_field_by_id($member_id, 'first_name');
-        $member_last_name = SwpmMemberUtils::get_member_field_by_id($member_id, 'last_name');
-        $member_email = SwpmMemberUtils::get_member_field_by_id($member_id, 'email');
+        //$member_first_name = SwpmMemberUtils::get_member_field_by_id($member_id, 'first_name');
+        //$member_last_name = SwpmMemberUtils::get_member_field_by_id($member_id, 'last_name');
+        //$member_email = SwpmMemberUtils::get_member_field_by_id($member_id, 'email');
     }
     $custom_field_value = apply_filters('swpm_custom_field_value_filter', $custom_field_value);
 
@@ -133,6 +133,8 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     $output = '';
     ob_start();
     ?>
+    <div class="swpm-button-wrapper swpm-paypal-subscription-button-wrapper">
+
     <!-- PayPal button container where the button will be rendered -->
     <div id="<?php echo esc_attr($on_page_embed_button_id); ?>" style="width: <?php echo esc_attr($btn_width); ?>px;"></div>
     <!-- Some additiona hidden input fields -->
@@ -142,17 +144,17 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     jQuery( function( $ ) {
         $( document ).on( "swpm_paypal_sdk_loaded", function() { 
             //Anything that goes here will only be executed after the PayPal SDK is loaded.
-            //console.log( 'Rendering JS of Button ID: ' + $on_page_embed_button_id );
+            //console.log( 'Rendering JS code for Button ID: ' + $on_page_embed_button_id );
 
             const paypalButtonsComponent = paypal.Buttons({
                 // optional styling for buttons
                 // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
                 style: {
-                    color: "<?php echo esc_js($btn_color); ?>",
-                    shape: "<?php echo esc_js($btn_shape); ?>",
+                    color: '<?php echo esc_js($btn_color); ?>',
+                    shape: '<?php echo esc_js($btn_shape); ?>',
                     height: <?php echo esc_js($btn_height); ?>,
-                    label: "<?php echo esc_js($btn_type); ?>",
-                    layout: "<?php echo esc_js($btn_layout); ?>",
+                    label: '<?php echo esc_js($btn_type); ?>',
+                    layout: '<?php echo esc_js($btn_layout); ?>',
                 },
     
                 // set up the recurring transaction
@@ -166,56 +168,40 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     
                 // notify the buyer that the subscription is successful
                 onApprove: function(data, actions) {
-                    console.log('You have successfully created subscription');
-                    console.log(JSON.stringify(data));
+                    console.log('Successfully created a subscription.');
+                    //console.log(JSON.stringify(data));
 
-                    //alert(JSON.stringify(data));
-                    //order_id = data.orderID;
-                    //subscription_id = data.subscriptionID;
-                    console.log('Order ID: ' + data.orderID);
-                    console.log('Subscription ID: ' + data.subscriptionID);//Use this to retrieve subscripiton details from API
-                    console.log('Actions details: ' + JSON.stringify( actions ));
+                    //Show the spinner while we process this transaction.
+                    var pp_button_container = jQuery('#<?php echo esc_js($on_page_embed_button_id); ?>');
+                    var pp_button_spinner_conainer = pp_button_container.siblings('.swpm-pp-button-spinner-container');
+                    pp_button_container.hide();//Hide the buttons
+                    pp_button_spinner_conainer.css('display', 'inline-block');//Show the spinner.
 
-                    // actions.order.capture().then( function( details ) {
-                    //     console.log( 'Order capture details: ' + JSON.stringify( details ) );
-                    // });
-
-                    //Subscription related
+                    //Get the subscription details and send AJAX request to process the transaction.
                     actions.subscription.get().then( function( txn_data ) {
-                        console.log( 'Subscription details: ' + JSON.stringify( txn_data ) );
-                        // var payment = {};
-                        // payment.subscription = txn_data;
-                        // payment.order_id = data.orderID;
-                        // payment.payer = txn_data.subscriber;
-                        //console.log( 'Subscriber details: ' + JSON.stringify( txn_data.subscriber ) );
+                        //console.log( 'Subscription details: ' + JSON.stringify( txn_data ) );
 
                         //Ajax request to process the transaction. This will process it similar to how an IPN request is handled.
-                        var custom = document.getElementById("<?php echo esc_attr($on_page_embed_button_id.'-custom-field'); ?>").value;
+                        var custom = document.getElementById('<?php echo esc_attr($on_page_embed_button_id."-custom-field"); ?>').value;
                         data.custom_field = custom;
                         data.button_id = '<?php echo esc_js($button_id); ?>';
                         data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
                         data.item_name = '<?php echo esc_js($item_name); ?>';
                         jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_onapprove_create_subscription', data: data, txn_data: txn_data, _wpnonce: '<?php echo $nonce; ?>'}, function( response ) {
-                            console.log( 'Response from the server: ' + JSON.stringify( response ) );
+                            //console.log( 'Response from the server: ' + JSON.stringify( response ) );
                             if ( response.success ) {
-                                //Success response. Do something.
-                                console.log( 'Success response: ' + JSON.stringify( response ) );
-
-                                //TODO - finalize any remaining tasks here.
-
-
-alert('You have successfully created subscription');//TODO - remove later
-return;//TODO - remove later
+                                //Success response.
 
                                 //Redirect to the Thank you page URL if it is set.
-                                return_url = "<?php echo esc_url_raw($return_url); ?>";
+                                return_url = '<?php echo esc_url_raw($return_url); ?>';
                                 if( return_url ){
                                     //redirect to the Thank you page URL.
                                     console.log('Redirecting to the Thank you page URL: ' + return_url);
                                     window.location.href = return_url;
+                                    return;
                                 } else {
                                     //No return URL is set. Just show a success message.
-                                    txn_success_msg = "<?php echo esc_attr($txn_success_message); ?>";
+                                    txn_success_msg = '<?php echo esc_attr($txn_success_message); ?>';
                                     alert(txn_success_msg);
                                 }
 
@@ -224,6 +210,10 @@ return;//TODO - remove later
                                 console.log( 'Error response: ' + JSON.stringify( response.err_msg ) );
                                 alert( JSON.stringify( response ) );
                             }
+
+                            //Return the button and the spinner back to their orignal display state.
+                            pp_button_container.show();//Show the buttons
+                            pp_button_spinner_conainer.hide();//Hide the spinner.
 
                         });
 
@@ -238,7 +228,7 @@ return;//TODO - remove later
             });
     
             paypalButtonsComponent
-                .render("#<?php echo $on_page_embed_button_id; ?>")
+                .render('#<?php echo esc_js($on_page_embed_button_id); ?>')
                 .catch((err) => {
                     console.error('PayPal Buttons failed to render');
                 });
@@ -246,7 +236,34 @@ return;//TODO - remove later
             });
         });
     </script>
-
+    <style>
+        @keyframes swpm-pp-button-spinner {
+            to {transform: rotate(360deg);}
+        }
+        .swpm-pp-button-spinner {
+            margin: 0 auto;
+            text-indent: -9999px;
+            vertical-align: middle;
+            box-sizing: border-box;
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 5px solid #ccc;
+            border-top-color: #0070ba;
+            animation: swpm-pp-button-spinner .6s linear infinite;
+        }
+        .swpm-pp-button-spinner-container {
+            width: 100%;
+            text-align: center;
+            margin-top:10px;
+            display: none;
+        }
+    </style>
+    <div class="swpm-pp-button-spinner-container">
+        <div class="swpm-pp-button-spinner"></div>
+    </div>
+    </div><!-- end of .swpm-button-wrapper -->
     <?php
     $output .= ob_get_clean();
 

@@ -176,7 +176,10 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 				//Convert the object to an array.
 				$billing_info = json_decode(json_encode($billing_info), true);
 			}
-			//SwpmLog::log_array_data_to_debug( $billing_info, true );	
+			SwpmLog::log_array_data_to_debug( $billing_info, true );//Debugging only.
+			$tenure_type = isset($billing_info['cycle_executions'][0]['tenure_type']) ? $billing_info['cycle_executions'][0]['tenure_type'] : ''; //'REGULAR' or 'TRIAL'
+			$sequence = isset($billing_info['cycle_executions'][0]['sequence']) ? $billing_info['cycle_executions'][0]['sequence'] : '';//1, 2, 3, etc.
+			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type . ', Sequence: ' . $sequence, true );			
 
 			//Tenure type - 'REGULAR' or 'TRIAL'
 			$tenure_type = isset($billing_info['cycle_executions'][0]['tenure_type']) ? $billing_info['cycle_executions'][0]['tenure_type'] : 'REGULAR';

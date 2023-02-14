@@ -74,7 +74,7 @@ class SWPM_PayPal_JS_Button_Embed {
 			foreach ( $disabled_funding as $funding ) {
 				$disable_funding_arg .= $funding . ',';
 			}
-			$disable_funding_arg = rtrim( $disable_funding_arg, ',' );
+			$disable_funding_arg = rtrim( $disable_funding_arg, ',' );//Remove the last comma and any white space.
 			$sdk_args['disable-funding'] = $disable_funding_arg;
 		}
 

@@ -1,10 +1,11 @@
 <?php
 //Render the create new payment button tab
 
-require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_buy_now_button.php';
-require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_button.php';
-require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_smart_checkout_button.php';
-require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_new_button.php';
+require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_buy_now_new_button.php';//PayPal Buy Now button (New API)
+require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_new_button.php';//PayPal Subscription button (New API)
+require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_buy_now_button.php';//Standard
+require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_button.php';//Standard
+require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_smart_checkout_button.php';//Legacy
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_buy_now_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_subscription_button.php';
@@ -34,9 +35,11 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 				<br />
 				<label><input type="radio" name="button_type" value="pp_subscription" /> <?php SwpmUtils::e( 'PayPal Subscription' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="pp_smart_checkout" /> <?php SwpmUtils::e( 'PayPal Smart Checkout' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_buy_now_new" /> <?php SwpmUtils::e( 'PayPal Buy Now (New API)' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="pp_subscription_new" /> <?php SwpmUtils::e( 'PayPal Subscription (New)' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_subscription_new" /> <?php SwpmUtils::e( 'PayPal Subscription (New API)' ); ?></label>								
+				<br />
+				<label><input type="radio" name="button_type" value="pp_smart_checkout" /> <?php SwpmUtils::e( 'PayPal Smart Checkout' ); ?></label>
 				<br />				
 				<label><input type="radio" name="button_type" value="braintree_buy_now" /> <?php SwpmUtils::e( 'Braintree Buy Now' ); ?></label>
 				<br />

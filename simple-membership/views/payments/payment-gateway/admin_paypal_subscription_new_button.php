@@ -162,12 +162,12 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
     ?>
 
     <div class="swpm-orange-box">
-        View the <a target="_blank" href="https://simple-membership-plugin.com/creating-paypal-subscription-new-buttons-for-membership-payment/">documentation</a>&nbsp;
-        to learn how to create and use a PayPal Subscription (New) payment button.
+        View the <a target="_blank" href="https://simple-membership-plugin.com/creating-paypal-subscription-new-api-buttons-for-membership-payment/">documentation</a>&nbsp;
+        to learn how to create and use a PayPal Subscription (New API) payment button.
     </div>
 
     <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Subscription (New) Button Configuration'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Subscription (New API) Button Configuration'); ?></label></h3>
         <div class="inside">
 
             <form id="pp_subscription_new_button_config_form" method="post">

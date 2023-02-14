@@ -43,18 +43,7 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		//Handle the events
 		//https://developer.paypal.com/api/rest/webhooks/event-names/#link-subscriptions
 
-		//TODO - remove later.
-// ob_start();
-// echo '<pre>';
-// var_dump($event);
-// echo '</pre>';
-// $contents = ob_get_contents();
-// ob_end_clean();
-// SwpmLog::log_simple_debug( 'Webhook event: ' . $contents, true );
-		//SwpmLog::log_simple_debug( 'Webhook event received: ' . $event, true );
-
-		//Save the event type as a status (a short string) and the subscription ID in the payments table. This can be used to see if a notification is a duplicate or not.
-		//We will handle the following event types.
+		//We will handle the following webhook event types.
 		$event_type = $event['event_type'];
 		//The subscription is added to the payments/transactions menu/database at checkout time (from the front-end). Later these events are used to update the status of the entries. 
 		switch ( $event_type ) {
@@ -77,6 +66,10 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			case 'PAYMENT.SALE.COMPLETED':
 				// A payment is made on a subscription. Update access starts date (if needed).
 				$this->handle_subscription_payment_received('sale_completed', $event, $mode );
+				break;
+			case 'PAYMENT.SALE.REFUNDED':
+				// A merchant refunded a sale.
+				$this->handle_payment_refunded('sale_refunded', $event, $mode );
 				break;
 			default:
 				// Nothing to do for us. Ignore this event.
@@ -221,6 +214,32 @@ SwpmLog::log_array_data_to_debug( $ipn_data, true );//TODO - remove after testin
 			//TODO - Show additional error details if available.
 			return;
 		}
+	}
+
+	public function handle_payment_refunded( $payment_status, $event, $mode ){
+		//For subscription payment, the account is cancelled when the subscription is cancelled or expired.
+		//For one time payment, the refund event can trigger the account cancellation.
+
+		//TODO - remove later.
+		SwpmLog::log_simple_debug( 'Payment refunded webhook event received.', true );
+		SwpmLog::log_array_data_to_debug( $event, true );//Debugging only.
+
+		$txn_id = isset( $event['resource']['id'] ) ? $event['resource']['id'] : '';
+		$sale_id = isset( $event['resource']['sale_id'] ) ? $event['resource']['sale_id'] : '';
+		$parent_payment = isset( $event['resource']['parent_payment'] ) ? $event['resource']['parent_payment'] : '';
+		SwpmLog::log_simple_debug( 'Transaction ID from resource. Transaction ID: ' . $txn_id . ', Sale ID: ' . $sale_id . ', Parent Payment: ' . $parent_payment, true );
+		if( empty( $txn_id )){
+			SwpmLog::log_simple_debug( 'Transaction ID is empty. Ignoring this webhook event.', true );
+			return;
+		}
+
+		$amount = isset( $event['resource']['amount']['total'] ) ? $event['resource']['amount']['total'] : '';
+		
+		//TODO - remove later.
+		//Create the IPN data for refund.
+		//Call swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false );
+		//Create a separate Handle refund only function.
+
 	}
 
 	public static function create_ipn_data_from_paypal_api_subscription_details_data( $sub_details, $event ){

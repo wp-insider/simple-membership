@@ -276,6 +276,8 @@ class SWPM_PayPal_Webhook {
 	public static function get_event_types() {
 		return array(
 			'PAYMENT.SALE.COMPLETED',              // A payment is made on a subscription.
+			'PAYMENT.SALE.REFUNDED',               // A merchant refunds a sale.
+			'PAYMENT.SALE.REVERSED',               // A payment is reversed on a subscription.
 			'BILLING.SUBSCRIPTION.CREATED',        // A subscription is created.
 			'BILLING.SUBSCRIPTION.ACTIVATED',      // A subscription is activated.
 			'BILLING.SUBSCRIPTION.UPDATED',        // A subscription is updated.

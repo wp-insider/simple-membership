@@ -89,7 +89,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
         'sandbox_client_id' => $sandbox_client_id,
         'currency' => $currency,
         'disable-funding' => $disable_funding, /*array('card', 'credit', 'venmo'),*/
-        'is_subscription' => 0, /* It is used to set the "vault" parameter in the JS SDK */
+        'is_subscription' => 1, /* It is used to set the "vault" parameter in the JS SDK */
     );
 
     $pp_js_button = SWPM_PayPal_JS_Button_Embed::get_instance();
@@ -155,7 +155,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                             items: [{
                                 name: '<?php echo esc_js($item_name); ?>',
                                 quantity: js_quantity,
-                                category: js_digital_goods_enabled ? 'PHYSICAL_GOODS' : 'DIGITAL_GOODS',
+                                /*category: js_digital_goods_enabled ? 'PHYSICAL_GOODS' : 'DIGITAL_GOODS',*/
                                 unit_amount: {
                                     value: js_payment_amount,
                                     currency_code: '<?php echo esc_js($currency); ?>',
@@ -187,7 +187,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                         data.button_id = '<?php echo esc_js($button_id); ?>';
                         data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
                         data.item_name = '<?php echo esc_js($item_name); ?>';
-                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_onapprove_create_buy_now', data: data, txn_data: txn_data, _wpnonce: '<?php echo $nonce; ?>'}, function( response ) {
+                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_onapprove_create_order', data: data, txn_data: txn_data, _wpnonce: '<?php echo $nonce; ?>'}, function( response ) {
                             //console.log( 'Response from the server: ' + JSON.stringify( response ) );
                             if ( response.success ) {
                                 //Success response.

@@ -18,15 +18,18 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 	 */
 	public function setup_ajax_request_actions() {
 		//Handle the onApprove ajax request for 'Buy Now' type buttons
-		// add_action( 'wp_ajax_swpm_onapprove_create_order', array(&$this, 'swpm_onapprove_create_order' ) );
-		// add_action( 'wp_ajax_nopriv_swpm_onapprove_create_order', array(&$this, 'swpm_onapprove_create_order' ) );
+		add_action( 'wp_ajax_swpm_onapprove_create_order', array(&$this, 'swpm_onapprove_create_order' ) );
+		add_action( 'wp_ajax_nopriv_swpm_onapprove_create_order', array(&$this, 'swpm_onapprove_create_order' ) );
 
 		//Handle the onApprove ajax request for 'Subscription' type buttons
 		add_action( 'wp_ajax_swpm_onapprove_create_subscription', array(&$this, 'swpm_onapprove_create_subscription' ) );
 		add_action( 'wp_ajax_nopriv_swpm_onapprove_create_subscription', array(&$this, 'swpm_onapprove_create_subscription' ) );
 	}
 
-    public function swpm_onapprove_create_subscription(){
+	/**
+	 * Handle the onApprove ajax request for 'Buy Now' type buttons
+	 */
+	 public function swpm_onapprove_create_order(){
 
 		//Get the data from the request
 		$data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : array();
@@ -38,10 +41,10 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 				)
 			);
 		}
-		//SwpmLog::log_array_data_to_debug( $data, true );//For debugging only
+		SwpmLog::log_array_data_to_debug( $data, true );//For debugging only
 
 		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
-		SwpmLog::log_simple_debug( 'OnApprove ajax request received. On Page Button ID: ' . $on_page_button_id, true );
+		SwpmLog::log_simple_debug( 'OnApprove ajax request received for createOrder. On Page Button ID: ' . $on_page_button_id, true );
 
 		// Check nonce.
 		if ( ! check_ajax_referer( $on_page_button_id, '_wpnonce', false ) ) {
@@ -68,7 +71,185 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 
 
 		//Create the IPN data array from the transaction data.
-		$this->create_ipn_data_array_from_txn_data( $data, $txn_data );
+		$this->create_ipn_data_array_from_create_order_txn_data( $data, $txn_data );
+		//SwpmLog::log_array_data_to_debug( $this->ipn_data, true );//Debugging only.
+		
+		//Validate the buy now txn data before using it.
+		$validation_response = $this->validate_buy_now_checkout_txn_data( $data, $txn_data );
+		if( $validation_response !== true ){
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => $validation_response,
+				)
+			);
+			exit;
+		}
+
+		//Process the IPN data array
+		SwpmLog::log_simple_debug( 'Validation passed. Going to create/update member account and save transaction data.', true );
+		$this->create_membership_and_save_txn_data( $data, $txn_data );
+
+		// Trigger the IPN processed action hook (so other plugins can can listen for this event).
+		do_action( 'swpm_paypal_buy_now_checkout_ipn_processed', $this->ipn_data );
+		do_action( 'swpm_payment_ipn_processed', $this->ipn_data );
+
+		//If everything is processed successfully, send the success response.
+		wp_send_json( array( 'success' => true ) );
+		exit;
+    }
+
+	public function create_ipn_data_array_from_create_order_txn_data( $data, $txn_data ) {
+		$ipn = array();
+
+		//Get the custom field value from the request
+		$custom = isset($data['custom_field']) ? $data['custom_field'] : '';
+		$custom = urldecode( $custom );//Decode it just in case it was encoded.
+		$customvariables = SwpmTransactions::parse_custom_var( $custom );
+
+		$purchase_units = isset($txn_data['purchase_units']) ? $txn_data['purchase_units'] : array();
+
+		$address_street = isset($txn_data['purchase_units'][0]['shipping']['address']['address_line_1']) ? $txn_data['payer']['shipping']['address']['address_line_1'] : '';
+		if ( isset ( $txn_data['purchase_units'][0]['shipping']['address']['address_line_2'] )){
+			//If address line 2 is present, add it to the address.
+			$address_street .= ", " . $txn_data['purchase_units'][0]['shipping']['address']['address_line_2'];
+		}
+
+		$ipn['gateway'] = 'paypal_buy_now_checkout';
+		$ipn['txn_type'] = 'pp_buy_now_new';
+		$ipn['custom'] = isset($data['custom_field']) ? $data['custom_field'] : '';
+		$ipn['txn_id'] = isset($data['orderID']) ? $data['orderID'] : '';
+		$ipn['subscr_id'] = isset($data['orderID']) ? $data['orderID'] : '';
+
+		$ipn['item_number'] = isset($data['button_id']) ? $data['button_id'] : '';
+		$ipn['item_name'] = isset($data['item_name']) ? $data['item_name'] : '';
+
+		$ipn['status'] = isset($txn_data['status']) ? ucfirst( $txn_data['status'] ) : '';
+		$ipn['payment_status'] = isset($txn_data['status']) ? ucfirst( $txn_data['status'] ) : '';
+
+		//Amount and currency.
+		$ipn['mc_gross'] = isset($txn_data['purchase_units'][0]['amount']['value']) ? $txn_data['purchase_units'][0]['amount']['value'] : '';
+		$ipn['mc_currency'] = isset($txn_data['purchase_units'][0]['amount']['currency_code']) ? $txn_data['purchase_units'][0]['amount']['currency_code'] : '';
+		$ipn['quantity'] = 1;
+
+		// customer info.
+		$ipn['ip'] = isset($customvariables['user_ip']) ? $customvariables['user_ip'] : '';
+		$ipn['first_name'] = isset($txn_data['payer']['name']['given_name']) ? $txn_data['payer']['name']['given_name'] : '';
+		$ipn['last_name'] = isset($txn_data['payer']['name']['surname']) ? $txn_data['payer']['name']['surname'] : '';
+		$ipn['payer_email'] = isset($txn_data['payer']['email_address']) ? $txn_data['payer']['email_address'] : '';
+		$ipn['payer_id'] = isset($txn_data['payer']['payer_id']) ? $txn_data['payer']['payer_id'] : '';
+		$ipn['address_street'] = $address_street;
+		$ipn['address_city']    = isset($txn_data['purchase_units'][0]['shipping']['address']['admin_area_2']) ? $txn_data['purchase_units'][0]['shipping']['address']['admin_area_2'] : '';
+		$ipn['address_state']   = isset($txn_data['purchase_units'][0]['shipping']['address']['admin_area_1']) ? $txn_data['purchase_units'][0]['shipping']['address']['admin_area_1'] : '';
+		$ipn['address_zip']     = isset($txn_data['purchase_units'][0]['shipping']['address']['postal_code']) ? $txn_data['purchase_units'][0]['shipping']['address']['postal_code'] : '';
+		$ipn['address_country'] = isset($txn_data['purchase_units'][0]['shipping']['address']['country_code']) ? $txn_data['purchase_units'][0]['shipping']['address']['country_code'] : '';
+
+		//Additional variables
+		//$ipn['reason_code'] = $txn_data['reason_code'];
+
+		$this->ipn_data = $ipn;
+	}
+
+	/**
+	 * Validate that the transaction/order exists in PayPal and the price matches the price in the DB.
+	 */
+	public function validate_buy_now_checkout_txn_data( $data, $txn_data ) {
+		//Get the transaction/order details from PayPal API endpoint - /v2/checkout/orders/{$order_id}
+		$txn_id = $data['orderID'];
+		$button_id = $data['button_id'];
+
+		$validation_error_msg = '';
+
+		//This is for on-site checkout only. So the 'mode' and API creds will be whatever is currently set in the settings.
+		$api_injector = new SWPM_PayPal_Request_API_Injector();
+		$order_details = $api_injector->get_paypal_order_details( $txn_id );
+		if( $order_details !== false ){
+			//The order details were retrieved successfully.
+			if(is_object($order_details)){
+				//Convert the object to an array.
+				$order_details = json_decode(json_encode($order_details), true);
+			}
+			//SwpmLog::log_array_data_to_debug( $order_details, true );//Debugging only.
+
+			//Check that the amount matches with what we expect.
+			$amount = isset($order_details['purchase_units'][0]['amount']['value']) ? $order_details['purchase_units'][0]['amount']['value'] : 0;
+
+			$payment_amount_expected = get_post_meta( $button_id, 'payment_amount', true );
+			if( floatval($amount) < floatval($payment_amount_expected) ){
+				//The amount does not match.
+				$validation_error_msg = 'Validation Error! The payment amount does not match. Button ID: ' . $button_id . ', Transaction ID: ' . $txn_id . ', Amount Received: ' . $amount . ', Amount Expected: ' . $payment_amount_expected;
+				SwpmLog::log_simple_debug( $validation_error_msg, false );
+				return $validation_error_msg;
+			}
+
+			//Check that the currency matches with what we expect.
+			$currency = isset($order_details['purchase_units'][0]['amount']['currency_code']) ? $order_details['purchase_units'][0]['amount']['currency_code'] : '';
+			$currency_expected = get_post_meta( $button_id, 'payment_currency', true );
+			if( $currency != $currency_expected ){
+				//The currency does not match.
+				$validation_error_msg = 'Validation Error! The payment currency does not match. Button ID: ' . $button_id . ', Transaction ID: ' . $txn_id . ', Currency Received: ' . $currency . ', Currency Expected: ' . $currency_expected;
+				SwpmLog::log_simple_debug( $validation_error_msg, false );
+				return $validation_error_msg;
+			}
+
+		} else {
+			//Error getting subscription details.
+			$validation_error_msg = 'Validation Error! Failed to get transaction/order details from the PayPal API. Transaction ID: ' . $txn_id;
+			//TODO - Show additional error details if available.
+			SwpmLog::log_simple_debug( $validation_error_msg, false );
+			return $validation_error_msg;
+		}
+
+		//All good. The data is valid.
+		return true;
+	}
+
+	/**
+	 * Handle the onApprove ajax request for 'Subscription' type buttons
+	 */
+    public function swpm_onapprove_create_subscription(){
+
+		//Get the data from the request
+		$data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : array();
+		if ( empty( $data ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Empty data received.', 'simple-membership' ),
+				)
+			);
+		}
+		//SwpmLog::log_array_data_to_debug( $data, true );//For debugging only
+
+		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
+		SwpmLog::log_simple_debug( 'OnApprove ajax request received for createSubscription. On Page Button ID: ' . $on_page_button_id, true );
+
+		// Check nonce.
+		if ( ! check_ajax_referer( $on_page_button_id, '_wpnonce', false ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
+
+		//Get the transaction data from the request
+		$txn_data = isset( $_POST['txn_data'] ) ? stripslashes_deep( $_POST['txn_data'] ) : array();
+		if ( empty( $txn_data ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Empty transaction data received.', 'simple-membership' ),
+				)
+			);
+		}
+		//SwpmLog::log_array_data_to_debug( $txn_data, true );//Debugging only.
+
+
+		//Create the IPN data array from the transaction data.
+		$this->create_ipn_data_array_from_create_subscription_txn_data( $data, $txn_data );
 		//SwpmLog::log_array_data_to_debug( $this->ipn_data, true );//Debugging only.
 		
 		//Validate the subscription txn data before using it.
@@ -87,13 +268,16 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		SwpmLog::log_simple_debug( 'Validation passed. Going to create/update member account and save transaction data.', true );
 		$this->create_membership_and_save_txn_data( $data, $txn_data );
 
+		// Trigger the IPN processed action hook (so other plugins can can listen for this event).
+		do_action( 'swpm_paypal_subscription_checkout_ipn_processed', $this->ipn_data );
+		do_action( 'swpm_payment_ipn_processed', $this->ipn_data );
 
 		//If everything is processed successfully, send the success response.
 		wp_send_json( array( 'success' => true ) );
 		exit;
     }
 
-	public function create_ipn_data_array_from_txn_data( $data, $txn_data ) {
+	public function create_ipn_data_array_from_create_subscription_txn_data( $data, $txn_data ) {
 		$ipn = array();
 
 		//Get the custom field value from the request
@@ -109,16 +293,17 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 			$address_street .= ", " . $txn_data['subscriber']['shipping_address']['address']['address_line_2'];
 		}
 
+		$ipn['gateway'] = 'paypal_subscription_checkout';
+		$ipn['txn_type'] = 'pp_subscription_new';		
 		$ipn['custom'] = isset($data['custom_field']) ? $data['custom_field'] : '';
 		$ipn['item_number'] = isset($data['button_id']) ? $data['button_id'] : '';
 		$ipn['item_name'] = isset($data['item_name']) ? $data['item_name'] : '';
 		$ipn['txn_id'] = isset($data['orderID']) ? $data['orderID'] : '';
 		$ipn['subscr_id'] = isset($data['subscriptionID']) ? $data['subscriptionID'] : '';
+
 		$ipn['plan_id'] = isset($txn_data['plan_id']) ? $txn_data['plan_id'] : '';
 		$ipn['create_time'] = isset($txn_data['create_time']) ? $txn_data['create_time'] : '';
 
-		$ipn['gateway'] = 'paypal_subscription_checkout';
-		$ipn['txn_type'] = 'pp_subscription_new';
 		$ipn['status'] = isset($txn_data['status']) ? ucfirst( $txn_data['status'] ) : '';
 		$ipn['payment_status'] = isset($txn_data['status']) ? ucfirst( $txn_data['status'] ) : '';
 		$ipn['subscription_status'] = isset($txn_data['status']) ? $txn_data['status'] : '';//Can be used to check if the subscription is active or not (in the webhook handler)
@@ -176,10 +361,12 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 				//Convert the object to an array.
 				$billing_info = json_decode(json_encode($billing_info), true);
 			}
-			SwpmLog::log_array_data_to_debug( $billing_info, true );//Debugging only.
+			//SwpmLog::log_array_data_to_debug( $billing_info, true );//Debugging only.
+			
 			$tenure_type = isset($billing_info['cycle_executions'][0]['tenure_type']) ? $billing_info['cycle_executions'][0]['tenure_type'] : ''; //'REGULAR' or 'TRIAL'
 			$sequence = isset($billing_info['cycle_executions'][0]['sequence']) ? $billing_info['cycle_executions'][0]['sequence'] : '';//1, 2, 3, etc.
-			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type . ', Sequence: ' . $sequence, true );			
+			$cycles_completed = isset($billing_info['cycle_executions'][0]['cycles_completed']) ? $billing_info['cycle_executions'][0]['cycles_completed'] : '';//1, 2, 3, etc.
+			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type . ', Sequence: ' . $sequence . ', Cycles Completed: '. $cycles_completed, true );			
 
 			//Tenure type - 'REGULAR' or 'TRIAL'
 			$tenure_type = isset($billing_info['cycle_executions'][0]['tenure_type']) ? $billing_info['cycle_executions'][0]['tenure_type'] : 'REGULAR';
@@ -202,6 +389,15 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 				if( $amount < $recurring_billing_amount ){
 					//The amount does not match.
 					$validation_error_msg = 'Validation Error! The subscription amount does not match. Button ID: ' . $button_id . ', Subscription ID: ' . $subscription_id . ', Amount Received: ' . $amount . ', Amount Expected: ' . $recurring_billing_amount;
+					SwpmLog::log_simple_debug( $validation_error_msg, false );
+					return $validation_error_msg;
+				}
+				//Check that the Currency code matches
+				$currency = isset($billing_info['last_payment']['amount']['currency_code']) ? $billing_info['last_payment']['amount']['currency_code'] : '';
+				$currency_expected = get_post_meta( $button_id, 'payment_currency', true );
+				if( $currency !== $currency_expected ){
+					//The currency does not match.
+					$validation_error_msg = 'Validation Error! The subscription currency does not match. Button ID: ' . $button_id . ', Subscription ID: ' . $subscription_id . ', Currency Received: ' . $currency . ', Currency Expected: ' . $currency_expected;
 					SwpmLog::log_simple_debug( $validation_error_msg, false );
 					return $validation_error_msg;
 				}
@@ -256,11 +452,6 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		$this->ipn_data['status']  = $this->ipn_data['payment_status'];
 		SwpmTransactions::save_txn_record( $this->ipn_data, array() );
 		SwpmLog::log_simple_debug( 'Transaction data saved.', true );
-
-		// Trigger the IPN processed action hook (so other plugins can can listen for this event).
-		do_action( 'swpm_paypal_subscription_checkout_ipn_processed', $this->ipn_data );
-
-		do_action( 'swpm_payment_ipn_processed', $this->ipn_data );
 
 		return true;
 	}

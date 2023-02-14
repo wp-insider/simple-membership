@@ -191,6 +191,23 @@ class SWPM_PayPal_Request_API_Injector {
             } else {
                 return false;
             }
-        }        
+        } 
+        
+        /*
+         * Show the details of a paypal order/transaction.
+         * https://developer.paypal.com/docs/api/orders/v2/#orders_get
+         */
+        public function get_paypal_order_details( $order_id ){
+            $endpoint = '/v2/checkout/orders/' . $order_id;
+            $params = array();
+            $response = $this->paypal_req_api->get($endpoint, $params);
+            if ( $response !== false){
+                $order_details = $response;
+                //https://developer.paypal.com/docs/api/orders/v2/#orders-get-response
+                return $order_details;
+            } else {
+                return false;
+            }
+        }             
         
 }

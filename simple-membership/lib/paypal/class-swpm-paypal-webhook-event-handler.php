@@ -191,7 +191,9 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			SwpmLog::log_array_data_to_debug( $billing_info, true );//Debugging only.
 			$tenure_type = isset($billing_info['cycle_executions'][0]['tenure_type']) ? $billing_info['cycle_executions'][0]['tenure_type'] : ''; //'REGULAR' or 'TRIAL'
 			$sequence = isset($billing_info['cycle_executions'][0]['sequence']) ? $billing_info['cycle_executions'][0]['sequence'] : '';//1, 2, 3, etc.
-			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type . ', Sequence: ' . $sequence, true );
+			$cycles_completed = isset($billing_info['cycle_executions'][0]['cycles_completed']) ? $billing_info['cycle_executions'][0]['cycles_completed'] : '';//1, 2, 3, etc.
+			$last_payment_time = isset($billing_info['last_payment']['time']) ? $billing_info['last_payment']['time'] : '';//2022-12-01T00:00:00Z
+			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type . ', Sequence: ' . $sequence . ', Cycles Completed: '. $cycles_completed. ', Last Payment Time: ' . $last_payment_time, true );
 
 			//Create the IPN data array from the subscription details.
 			$ipn_data = self::create_ipn_data_from_paypal_api_subscription_details_data( $sub_details, $event );

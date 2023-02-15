@@ -204,7 +204,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		if ( $search_term ) {// Only load the searched records.
 			$like          = $wpdb->esc_like( $search_term );
 			$like          = '%' . $like . '%';
-			$prepare_query = $wpdb->prepare( "SELECT * FROM  {$wpdb->prefix}swpm_payments_tbl WHERE `email` LIKE %s OR `txn_id` LIKE %s OR `first_name` LIKE %s OR `last_name` LIKE %s", $like, $like, $like, $like );
+			$prepare_query = $wpdb->prepare( "SELECT * FROM  {$wpdb->prefix}swpm_payments_tbl WHERE `email` LIKE %s OR `txn_id` LIKE %s OR `first_name` LIKE %s OR `last_name` LIKE %s OR `subscr_id` LIKE %s", $like, $like, $like, $like, $like );
 			$data          = $wpdb->get_results( $prepare_query, ARRAY_A );
 			$total_items   = count( $data );
 		} else { // Load all data in an optimized way (so it is only loading data for the current page)

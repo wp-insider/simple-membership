@@ -729,6 +729,7 @@ class SwpmMiscUtils {
 	}
 
 	public static function format_money( $amount, $currency = false ) {
+		$amount = floatval($amount);
 		$formatted = number_format( $amount, 2 );
 		if ( $currency ) {
 			$formatted .= ' ' . $currency;

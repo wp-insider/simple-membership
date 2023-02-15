@@ -101,26 +101,6 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$subscription_id = $event['resource']['id'];
 		SwpmLog::log_simple_debug( 'Handling Webhook status update. Subscription ID: ' . $subscription_id, true );
 
-		// $subscription_id = $event['resource']['id'];
-		// $create_time = $event['resource']['create_time'];
-		// $subscription_status = $event['resource']['status'];
-		// $subscription_plan_id = $event['resource']['plan_id'];
-		// $customer_id = $event['resource']['subscriber']['payer_id'];
-		// $email_address = $event['resource']['subscriber']['email_address'];
-		// $first_name = $event['resource']['subscriber']['name']['given_name'];
-		// $last_name = $event['resource']['subscriber']['name']['surname'];
-
-		// $billing_info = $event['resource']['billing_info'];
-		// $address_line_1 = $event['resource']['subscriber']['shipping_address']['address']['address_line_1'];
-		// $address_line_2 = $event['resource']['subscriber']['shipping_address']['address']['address_line_2'];
-		// $admin_area_1 = $event['resource']['subscriber']['shipping_address']['address']['admin_area_1'];
-		// $admin_area_2 = $event['resource']['subscriber']['shipping_address']['address']['admin_area_2'];
-		// $postal_code = $event['resource']['subscriber']['shipping_address']['address']['postal_code'];
-		// $country_code = $event['resource']['subscriber']['shipping_address']['address']['country_code'];
-
-		//SwpmLog::log_simple_debug( 'Info 1: ' . $subscription_id . '|' . $subscription_status .'|'. $email_address . '|' . $first_name .'|'.$last_name, true );
-		//SwpmLog::log_array_data_to_debug( $billing_info, true );
-
 		if( $status == 'activated'){
 			//Hanlded at checkout time. Nothing to do here at this time.
 			return;
@@ -188,17 +168,17 @@ class SWPM_PayPal_Webhook_Event_Handler {
 				//Convert the object to an array.
 				$billing_info = json_decode(json_encode($billing_info), true);
 			}
-			SwpmLog::log_array_data_to_debug( $billing_info, true );//Debugging only.
+			//SwpmLog::log_array_data_to_debug( $billing_info, true );//Debugging only.
+
 			$tenure_type = isset($billing_info['cycle_executions'][0]['tenure_type']) ? $billing_info['cycle_executions'][0]['tenure_type'] : ''; //'REGULAR' or 'TRIAL'
 			$sequence = isset($billing_info['cycle_executions'][0]['sequence']) ? $billing_info['cycle_executions'][0]['sequence'] : '';//1, 2, 3, etc.
 			$cycles_completed = isset($billing_info['cycle_executions'][0]['cycles_completed']) ? $billing_info['cycle_executions'][0]['cycles_completed'] : '';//1, 2, 3, etc.
-			$last_payment_time = isset($billing_info['last_payment']['time']) ? $billing_info['last_payment']['time'] : '';//2022-12-01T00:00:00Z
+			$last_payment_time = isset($billing_info['last_payment']['time']) ? $billing_info['last_payment']['time'] : '';
 			SwpmLog::log_simple_debug( 'Subscription tenure type: ' . $tenure_type . ', Sequence: ' . $sequence . ', Cycles Completed: '. $cycles_completed. ', Last Payment Time: ' . $last_payment_time, true );
 
 			//Create the IPN data array from the subscription details.
 			$ipn_data = self::create_ipn_data_from_paypal_api_subscription_details_data( $sub_details, $event );
-
-SwpmLog::log_array_data_to_debug( $ipn_data, true );//TODO - remove after testing.
+			//SwpmLog::log_array_data_to_debug( $ipn_data, true );//Debugging only.
 
 			//Update the "Access starts date" of the member account to the current date.
 			swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
@@ -222,7 +202,7 @@ SwpmLog::log_array_data_to_debug( $ipn_data, true );//TODO - remove after testin
 		//For subscription payment, the account is cancelled when the subscription is cancelled or expired.
 		//For one time payment, the refund event can trigger the account cancellation.
 
-		//TODO - remove later.
+		//TODO
 		SwpmLog::log_simple_debug( 'Payment refunded webhook event received.', true );
 		SwpmLog::log_array_data_to_debug( $event, true );//Debugging only.
 
@@ -290,7 +270,7 @@ SwpmLog::log_array_data_to_debug( $ipn_data, true );//TODO - remove after testin
 		$ipn_data['mc_gross'] = isset($billing_info['last_payment']['amount']['value']) ? $billing_info['last_payment']['amount']['value'] : '';
 		$ipn_data['gateway'] = 'paypal_subscription_checkout';
 		$ipn_data['txn_type'] = 'pp_subscription_sale_completed_webhook';
-		$ipn_data['status'] = 'completed';
+		$ipn_data['status'] = 'Completed';
 
 		return $ipn_data;
 	}
@@ -323,7 +303,6 @@ SwpmLog::log_array_data_to_debug( $ipn_data, true );//TODO - remove after testin
 
 			$headers[ $header ] = $value;
 		}
-		//SwpmLog::log_array_data_to_debug( $headers, true );
 		return $headers;
 	}
 
@@ -339,7 +318,7 @@ SwpmLog::log_array_data_to_debug( $ipn_data, true );//TODO - remove after testin
 		$response = $pp_webhook->verify_webhook_signature( $event, $headers );
 
 		if( $response !== false && $response->verification_status === 'SUCCESS' ){
-			//SwpmLog::log_simple_debug( 'Webhook verification success! Verification status: ' . $response->verification_status, true );//TODO - remove later.
+			//Webhook verification success!
 			return true;
 		}
 

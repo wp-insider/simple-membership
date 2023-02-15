@@ -169,6 +169,7 @@ https://simple-membership-plugin.com/
 - Added an appropriate error message for when a user tries to re-use the special registration complete link.
 - Check if the registration completion link (if present in the URL) is valid. Show an appropriate error message to prevent confusion.
 - The bulk membership level change feature will updaet the WP user role also (if specified in the target memership level configuration).
+- The transactions in the payments menu can now be searched using a Subscriber ID values also.
 
 = 4.2.4 =
 - Improved the enqueue_validation_scripts() function to work better with block themes.

@@ -66,6 +66,16 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 
 		</div>
 	</div><!-- end of .postbox -->
+
+	<div class="swpm-grey-box">
+	<?php echo SwpmUtils::_( 'You can also use payment buttons from the following plugins to accept payments for your memberships.' ); ?>
+	<p>
+		<a href="https://wordpress.org/plugins/wp-express-checkout/" target="_blank">WP Express Checkout</a>
+		&nbsp;|&nbsp;
+		<a href="https://wordpress.org/plugins/stripe-payments/" target="_blank">Accept Stripe Payments</a>
+	</p>
+	</div>
+
 	<?php
 } else {
 	//Button type has been selected. Show the payment button configuration option.

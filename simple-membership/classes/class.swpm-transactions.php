@@ -66,7 +66,7 @@ class SwpmTransactions {
 			//Save the swpm_transactions CPT post ID of the original checkout in the member's proifle. Useful to retreive some of the original checkout txn data (example: custom_field data).
 			$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $subscr_id );
 			if( ! $member_record ){
-				SwpmLog::log_simple_debug( 'Error! Could not find an existing member record for the given subscriber ID: ' . $subscr_id, false );
+				SwpmLog::log_simple_debug( 'Error! Could not find an existing member record for the given subscriber ID: ' . $subscr_id . '. This member profile may have been deleted.', false );
 			} else {
 				$member_id = $member_record->member_id;
 				$extra_info = SwpmMemberUtils::get_account_extra_info( $member_id );

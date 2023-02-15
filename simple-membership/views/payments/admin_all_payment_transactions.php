@@ -9,7 +9,7 @@
 <div class="postbox">
     <h3 class="hndle"><label for="title">Search Transaction</label></h3>
     <div class="inside">
-        <?php echo SwpmUtils::_('Search for a transaction by using email or name'); ?>
+        <?php echo SwpmUtils::_('Search for a transaction by using email, name, transaction ID or Subscr ID.'); ?>
         <br /><br />
         <form method="post" action="">
             <input name="swpm_txn_search" type="text" size="40" value="<?php echo isset($_POST['swpm_txn_search']) ? esc_attr($_POST['swpm_txn_search']) : ''; ?>"/>

@@ -41,7 +41,7 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 				)
 			);
 		}
-		SwpmLog::log_array_data_to_debug( $data, true );//For debugging only
+		//SwpmLog::log_array_data_to_debug( $data, true );//Debugging purpose
 
 		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
 		SwpmLog::log_simple_debug( 'OnApprove ajax request received for createOrder. On Page Button ID: ' . $on_page_button_id, true );
@@ -67,12 +67,12 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 				)
 			);
 		}
-		//SwpmLog::log_array_data_to_debug( $txn_data, true );//Debugging only.
+		//SwpmLog::log_array_data_to_debug( $txn_data, true );//Debugging purpose.
 
 
 		//Create the IPN data array from the transaction data.
 		$this->create_ipn_data_array_from_create_order_txn_data( $data, $txn_data );
-		//SwpmLog::log_array_data_to_debug( $this->ipn_data, true );//Debugging only.
+		SwpmLog::log_array_data_to_debug( $this->ipn_data, true );//Debugging purpose.
 		
 		//Validate the buy now txn data before using it.
 		$validation_response = $this->validate_buy_now_checkout_txn_data( $data, $txn_data );
@@ -105,10 +105,20 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		//Get the custom field value from the request
 		$custom = isset($data['custom_field']) ? $data['custom_field'] : '';
 		$custom = urldecode( $custom );//Decode it just in case it was encoded.
+
+		if(isset($data['orderID'])){
+			//Add the PayPal API orderID value to the reference parameter. So it gets saved with custom field data. This will be used to also save it to the reference DB column field when saving the transaction.
+			$data['custom_field'] = $custom . '&reference=' . $data['orderID'];
+		}
+
+		//Parse the custom field to read the IP address.
 		$customvariables = SwpmTransactions::parse_custom_var( $custom );
 
 		$purchase_units = isset($txn_data['purchase_units']) ? $txn_data['purchase_units'] : array();
 
+		//The $data['orderID'] is the ID for the order created using createOrder API call. The Transaction ID is the ID for the captured payment.
+		$txn_id = isset($txn_data['purchase_units'][0]['payments']['captures'][0]['id']) ? $txn_data['purchase_units'][0]['payments']['captures'][0]['id'] : '';
+		
 		$address_street = isset($txn_data['purchase_units'][0]['shipping']['address']['address_line_1']) ? $txn_data['payer']['shipping']['address']['address_line_1'] : '';
 		if ( isset ( $txn_data['purchase_units'][0]['shipping']['address']['address_line_2'] )){
 			//If address line 2 is present, add it to the address.
@@ -118,14 +128,14 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		$ipn['gateway'] = 'paypal_buy_now_checkout';
 		$ipn['txn_type'] = 'pp_buy_now_new';
 		$ipn['custom'] = isset($data['custom_field']) ? $data['custom_field'] : '';
-		$ipn['txn_id'] = isset($data['orderID']) ? $data['orderID'] : '';
-		$ipn['subscr_id'] = isset($data['orderID']) ? $data['orderID'] : '';
+		$ipn['txn_id'] = $txn_id;
+		$ipn['subscr_id'] = $txn_id;//Same as txn_id for one-time payments.
 
 		$ipn['item_number'] = isset($data['button_id']) ? $data['button_id'] : '';
 		$ipn['item_name'] = isset($data['item_name']) ? $data['item_name'] : '';
 
-		$ipn['status'] = isset($txn_data['status']) ? ucfirst( $txn_data['status'] ) : '';
-		$ipn['payment_status'] = isset($txn_data['status']) ? ucfirst( $txn_data['status'] ) : '';
+		$ipn['status'] = isset($txn_data['status']) ? ucfirst( strtolower($txn_data['status']) ) : '';
+		$ipn['payment_status'] = isset($txn_data['status']) ? ucfirst( strtolower($txn_data['status']) ) : '';
 
 		//Amount and currency.
 		$ipn['mc_gross'] = isset($txn_data['purchase_units'][0]['amount']['value']) ? $txn_data['purchase_units'][0]['amount']['value'] : '';
@@ -155,14 +165,14 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 	 */
 	public function validate_buy_now_checkout_txn_data( $data, $txn_data ) {
 		//Get the transaction/order details from PayPal API endpoint - /v2/checkout/orders/{$order_id}
-		$txn_id = $data['orderID'];
+		$pp_orderID = $data['orderID'];
 		$button_id = $data['button_id'];
 
 		$validation_error_msg = '';
 
 		//This is for on-site checkout only. So the 'mode' and API creds will be whatever is currently set in the settings.
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
-		$order_details = $api_injector->get_paypal_order_details( $txn_id );
+		$order_details = $api_injector->get_paypal_order_details( $pp_orderID );
 		if( $order_details !== false ){
 			//The order details were retrieved successfully.
 			if(is_object($order_details)){
@@ -177,7 +187,7 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 			$payment_amount_expected = get_post_meta( $button_id, 'payment_amount', true );
 			if( floatval($amount) < floatval($payment_amount_expected) ){
 				//The amount does not match.
-				$validation_error_msg = 'Validation Error! The payment amount does not match. Button ID: ' . $button_id . ', Transaction ID: ' . $txn_id . ', Amount Received: ' . $amount . ', Amount Expected: ' . $payment_amount_expected;
+				$validation_error_msg = 'Validation Error! The payment amount does not match. Button ID: ' . $button_id . ', PayPal Order ID: ' . $pp_orderID . ', Amount Received: ' . $amount . ', Amount Expected: ' . $payment_amount_expected;
 				SwpmLog::log_simple_debug( $validation_error_msg, false );
 				return $validation_error_msg;
 			}
@@ -187,14 +197,14 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 			$currency_expected = get_post_meta( $button_id, 'payment_currency', true );
 			if( $currency != $currency_expected ){
 				//The currency does not match.
-				$validation_error_msg = 'Validation Error! The payment currency does not match. Button ID: ' . $button_id . ', Transaction ID: ' . $txn_id . ', Currency Received: ' . $currency . ', Currency Expected: ' . $currency_expected;
+				$validation_error_msg = 'Validation Error! The payment currency does not match. Button ID: ' . $button_id . ', PayPal Order ID: ' . $pp_orderID . ', Currency Received: ' . $currency . ', Currency Expected: ' . $currency_expected;
 				SwpmLog::log_simple_debug( $validation_error_msg, false );
 				return $validation_error_msg;
 			}
 
 		} else {
 			//Error getting subscription details.
-			$validation_error_msg = 'Validation Error! Failed to get transaction/order details from the PayPal API. Transaction ID: ' . $txn_id;
+			$validation_error_msg = 'Validation Error! Failed to get transaction/order details from the PayPal API. PayPal Order ID: ' . $pp_orderID;
 			//TODO - Show additional error details if available.
 			SwpmLog::log_simple_debug( $validation_error_msg, false );
 			return $validation_error_msg;
@@ -219,7 +229,7 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 				)
 			);
 		}
-		//SwpmLog::log_array_data_to_debug( $data, true );//For debugging only
+		//SwpmLog::log_array_data_to_debug( $data, true );//Debugging only
 
 		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
 		SwpmLog::log_simple_debug( 'OnApprove ajax request received for createSubscription. On Page Button ID: ' . $on_page_button_id, true );
@@ -246,7 +256,6 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 			);
 		}
 		//SwpmLog::log_array_data_to_debug( $txn_data, true );//Debugging only.
-
 
 		//Create the IPN data array from the transaction data.
 		$this->create_ipn_data_array_from_create_subscription_txn_data( $data, $txn_data );
@@ -283,6 +292,12 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		//Get the custom field value from the request
 		$custom = isset($data['custom_field']) ? $data['custom_field'] : '';
 		$custom = urldecode( $custom );//Decode it just in case it was encoded.
+
+		if(isset($data['orderID'])){
+			//Add the PayPal API orderID value to the reference parameter. So it gets saved with custom field data. This will be used to also save it to the reference DB column field when saving the transaction.
+			$data['custom_field'] = $custom . '&reference=' . $data['orderID'];
+		}
+
 		$customvariables = SwpmTransactions::parse_custom_var( $custom );
 
 		$billing_info = isset($txn_data['billing_info']) ? $txn_data['billing_info'] : array();
@@ -298,18 +313,20 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		$ipn['custom'] = isset($data['custom_field']) ? $data['custom_field'] : '';
 		$ipn['item_number'] = isset($data['button_id']) ? $data['button_id'] : '';
 		$ipn['item_name'] = isset($data['item_name']) ? $data['item_name'] : '';
+
+		//This is the PayPal orderID value of the V2 order API. It's not the actual transaction ID of the payment. We can query the Orders API to retrieve the actual transaction ID (if needed).
 		$ipn['txn_id'] = isset($data['orderID']) ? $data['orderID'] : '';
 		$ipn['subscr_id'] = isset($data['subscriptionID']) ? $data['subscriptionID'] : '';
 
 		$ipn['plan_id'] = isset($txn_data['plan_id']) ? $txn_data['plan_id'] : '';
 		$ipn['create_time'] = isset($txn_data['create_time']) ? $txn_data['create_time'] : '';
 
-		$ipn['status'] = isset($txn_data['status']) ? ucfirst( $txn_data['status'] ) : '';
-		$ipn['payment_status'] = isset($txn_data['status']) ? ucfirst( $txn_data['status'] ) : '';
+		$ipn['status'] = __('Subscription created', 'simple-membership');
+		$ipn['payment_status'] = __('Subscription created', 'simple-membership');
 		$ipn['subscription_status'] = isset($txn_data['status']) ? $txn_data['status'] : '';//Can be used to check if the subscription is active or not (in the webhook handler)
 
 		//Amount and currency.
-		$ipn['mc_gross'] = isset($txn_data['billing_info']['last_payment']['amount']['value']) ? $txn_data['billing_info']['last_payment']['amount']['value'] : '';
+		$ipn['mc_gross'] = isset($txn_data['billing_info']['last_payment']['amount']['value']) ? $txn_data['billing_info']['last_payment']['amount']['value'] : 0;
 		$ipn['mc_currency'] = isset($txn_data['billing_info']['last_payment']['amount']['currency_code']) ? $txn_data['billing_info']['last_payment']['amount']['currency_code'] : '';
 		if( $this->is_trial_payment( $billing_info )){
 			//TODO: May need to get the trial amount from the 'cycle_executions' array
@@ -449,7 +466,6 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 
 		// Save the transaction data.
 		SwpmLog::log_simple_debug( 'Saving transaction data to the database table.', true );
-		$this->ipn_data['status']  = $this->ipn_data['payment_status'];
 		SwpmTransactions::save_txn_record( $this->ipn_data, array() );
 		SwpmLog::log_simple_debug( 'Transaction data saved.', true );
 

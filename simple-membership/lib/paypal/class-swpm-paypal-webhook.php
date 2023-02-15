@@ -389,7 +389,6 @@ class SWPM_PayPal_Webhook {
 				$ret['msg'] = $response->get_error_message() . ': ' . json_encode( $response->get_error_data() );
 				return $ret;
 			}
-			return $ret;
 		}
 
 		// Webhook does not exist. Nothing to delete.
@@ -454,7 +453,7 @@ class SWPM_PayPal_Webhook {
 			SwpmLog::log_simple_debug( 'Webhook creation failed for sandbox mode. Error: ' . $ret['msg'], true );
 		}
 		$action_result_msg .= '<p>Sandbox mode webhook create action result: ' . $ret['msg'] . '</p>';
-		return action_result_msg;
+		return $action_result_msg;
 	}
 		
 		/**

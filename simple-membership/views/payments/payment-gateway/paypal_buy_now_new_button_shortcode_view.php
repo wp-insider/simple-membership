@@ -89,14 +89,16 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
         'sandbox_client_id' => $sandbox_client_id,
         'currency' => $currency,
         'disable-funding' => $disable_funding, /*array('card', 'credit', 'venmo'),*/
-        'is_subscription' => 1, /* It is used to set the "vault" parameter in the JS SDK */
+        'intent' => 'capture', /* It is used to set the "intent" parameter in the JS SDK */
+        'is_subscription' => 0, /* It is used to set the "vault" parameter in the JS SDK */
     );
 
+    //Initialize and set the settings args that will be used to load the JS SDK.
     $pp_js_button = SWPM_PayPal_JS_Button_Embed::get_instance();
-    $pp_js_button->set_settings_args($settings_args);//Set the settings args that will be used to load the JS SDK.
-    
-    add_action( 'wp_footer', array($pp_js_button, 'load_paypal_sdk') );//Load the JS SDK on footer (so it only loads once per page)
+    $pp_js_button->set_settings_args( $settings_args );
 
+    //Load the JS SDK on footer (so it only loads once per page)
+    add_action( 'wp_footer', array($pp_js_button, 'load_paypal_sdk') );
 
     //The on page embed button id is used to identify the button on the page. Useful when there are multiple buttons (of the same item/product) on the same page.
     $on_page_embed_button_id = $pp_js_button->get_next_button_id();
@@ -117,7 +119,6 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
     jQuery( function( $ ) {
         $( document ).on( "swpm_paypal_sdk_loaded", function() { 
             //Anything that goes here will only be executed after the PayPal SDK is loaded.
-            //console.log( 'Rendering JS code for Button ID: ' + $on_page_embed_button_id );
 
             var js_currency_code = '<?php echo esc_js($currency); ?>';
             var js_payment_amount = <?php echo esc_js($payment_amount); ?>;
@@ -169,7 +170,6 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                 // notify the buyer that the subscription is successful
                 onApprove: function(data, actions) {
                     console.log('Successfully created a transaction.');
-                    console.log(JSON.stringify(data));
 
                     //Show the spinner while we process this transaction.
                     var pp_button_container = jQuery('#<?php echo esc_js($on_page_embed_button_id); ?>');
@@ -179,7 +179,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
 
                     //Get the order/transaction details and send AJAX request to process the transaction.
                     actions.order.capture().then( function( txn_data ) {
-                        console.log( 'Transaction details: ' + JSON.stringify( txn_data ) );
+                        //console.log( 'Transaction details: ' + JSON.stringify( txn_data ) );
 
                         //Ajax request to process the transaction. This will process it similar to how an IPN request is handled.
                         var custom = document.getElementById('<?php echo esc_attr($on_page_embed_button_id."-custom-field"); ?>').value;

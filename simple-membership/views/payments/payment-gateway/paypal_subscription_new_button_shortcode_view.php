@@ -110,23 +110,25 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
      * PayPal SDK Settings
      **********************/
     //Configure the paypal SDK settings and enqueue the code for SDK loading.
-    $settings_args = array(
+    $settings_args_sub = array(
         'is_live_mode' => $is_live_mode,
         'live_client_id' => $live_client_id,
         'sandbox_client_id' => $sandbox_client_id,
         'currency' => $currency,
         'disable-funding' => $disable_funding, /*array('card', 'credit', 'venmo'),*/
+        'intent' => 'subscription', /* It is used to set the "intent" parameter in the JS SDK */
         'is_subscription' => 1, /* It is used to set the "vault" parameter in the JS SDK */
     );
 
-    $pp_js_button = SWPM_PayPal_JS_Button_Embed::get_instance();
-    $pp_js_button->set_settings_args($settings_args);//Set the settings args that will be used to load the JS SDK.
-    
-    add_action( 'wp_footer', array($pp_js_button, 'load_paypal_sdk') );//Load the JS SDK on footer (so it only loads once per page)
+    //Initialize and set the settings args that will be used to load the JS SDK for subscription buttons.
+    $pp_js_button_subscription = SWPM_PayPal_JS_Button_Embed::get_instance();
+    $pp_js_button_subscription->set_settings_args_for_subscriptions( $settings_args_sub );
 
+    //Load the JS SDK for Subscriptions on footer (so it only loads once per page)
+    add_action( 'wp_footer', array($pp_js_button_subscription, 'load_paypal_sdk_for_subscriptions') );
 
     //The on page embed button id is used to identify the button on the page. Useful when there are multiple buttons (of the same item/product) on the same page.
-    $on_page_embed_button_id = $pp_js_button->get_next_button_id();
+    $on_page_embed_button_id = $pp_js_button_subscription->get_next_button_id();
     //Create nonce for this button. 
     $nonce = wp_create_nonce($on_page_embed_button_id);
 
@@ -142,11 +144,10 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
 
     <script type="text/javascript">
     jQuery( function( $ ) {
-        $( document ).on( "swpm_paypal_sdk_loaded", function() { 
+        $( document ).on( "swpm_paypal_sdk_subscriptions_loaded", function() { 
             //Anything that goes here will only be executed after the PayPal SDK is loaded.
-            //console.log( 'Rendering JS code for Button ID: ' + $on_page_embed_button_id );
 
-            const paypalButtonsComponent = paypal.Buttons({
+            const paypalSubButtonsComponent = swpm_paypal_subscriptions.Buttons({
                 // optional styling for buttons
                 // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
                 style: {
@@ -227,7 +228,7 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
                 }
             });
     
-            paypalButtonsComponent
+            paypalSubButtonsComponent
                 .render('#<?php echo esc_js($on_page_embed_button_id); ?>')
                 .catch((err) => {
                     console.error('PayPal Buttons failed to render');

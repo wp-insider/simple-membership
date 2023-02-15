@@ -148,7 +148,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 		//Validate swpm level hash data.
 		$hash_val_posted = sanitize_text_field( $_POST['swpm_level_hash'] );
-		$level_value     = sanitize_text_field( $_POST['membership_level'] );
+		$level_value     = SwpmForm::get_membership_level_from_request();
 		$swpm_p_key      = get_option( 'swpm_private_key_one' );
 		$hash_val        = md5( $swpm_p_key . '|' . $level_value );
 		if ( $hash_val != $hash_val_posted ) {//Level hash validation failed.

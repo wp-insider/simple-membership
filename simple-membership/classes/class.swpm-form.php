@@ -215,6 +215,14 @@ class SwpmForm {
         $this->sanitized['membership_level'] = $membership_level;
     }
 
+    public static function get_membership_level_from_request() {
+        $membership_level = filter_input(INPUT_POST, 'membership_level', FILTER_SANITIZE_NUMBER_INT);
+        if (empty($membership_level)) {
+            $membership_level = filter_input(INPUT_POST, 'swpm_membership_level', FILTER_SANITIZE_NUMBER_INT);
+        }
+        return $membership_level;
+    }
+
     protected function password_re() {
 
     }

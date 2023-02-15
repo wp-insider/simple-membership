@@ -421,7 +421,7 @@ abstract class SwpmUtils {
 		$encrypted = sanitize_text_field( $_POST['level_identifier'] );
 		if ( ! empty( $encrypted ) ) {
                     //We already checked using hash that the membership_level value is authentic. Now check the level_identifier against the membership_level.
-                    $level_value = sanitize_text_field( $_POST['membership_level'] );
+                    $level_value = SwpmForm::get_membership_level_from_request();
                     $hash_val = md5( $level_value );
                     if ( $hash_val != $encrypted ) {//level_identifier validation failed.
                             $msg  = '<p>Error! Security check failed for membership level identifier validation.</p>';

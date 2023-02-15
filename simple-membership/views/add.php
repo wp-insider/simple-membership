@@ -44,7 +44,7 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                     <?php
                     echo $membership_level_alias; //Show the level name in the form.
                     //Add the input fields for the level data.
-                    echo '<input type="hidden" value="' . $membership_level . '" size="50" name="membership_level" id="membership_level" />';
+                    echo '<input type="hidden" value="' . $membership_level . '" size="50" name="swpm_membership_level" id="membership_level" />';
                     //Add the level input verification data.
                     $swpm_p_key = get_option('swpm_private_key_one');
                     if (empty($swpm_p_key)) {

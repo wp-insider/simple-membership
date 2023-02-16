@@ -191,7 +191,7 @@ class SwpmMemberUtils {
 		global $wpdb;
 		$members_table_name = $wpdb->prefix . 'swpm_members_tbl';
 
-		SwpmLog::log_simple_debug( 'Updating the account status value of member (' . $member_id . ') to: ' . $new_status, true );
+		SwpmLog::log_simple_debug( 'Updating the account status value of member (ID: ' . $member_id . ') to: ' . $new_status, true );
 		$query     = $wpdb->prepare( "UPDATE $members_table_name SET account_state=%s WHERE member_id=%s", $new_status, $member_id );
 		$resultset = $wpdb->query( $query );
 	}

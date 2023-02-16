@@ -71,6 +71,10 @@ class SWPM_PayPal_Webhook_Event_Handler {
 				// A merchant refunded a sale.
 				$this->handle_payment_refunded('sale_refunded', $event, $mode );
 				break;
+			case 'PAYMENT.CAPTURE.REFUNDED':
+				// A merchant refunded a payment capture.
+				$this->handle_payment_refunded('capture_refunded', $event, $mode );
+				break;				
 			default:
 				// Nothing to do for us. Ignore this event.
 				break;
@@ -200,28 +204,41 @@ class SWPM_PayPal_Webhook_Event_Handler {
 
 	public function handle_payment_refunded( $payment_status, $event, $mode ){
 		//For subscription payment, the account is cancelled when the subscription is cancelled or expired.
-		//For one time payment, the refund event can trigger the account cancellation.
+		//For one time payment, the refund event will trigger the account cancellation.
 
-		//TODO
-		SwpmLog::log_simple_debug( 'Payment refunded webhook event received.', true );
+		//TODO - Handle any other refund related webhook notifications.
+		SwpmLog::log_simple_debug( 'Processing the payment refund/reversal webhook event.', true );
 		SwpmLog::log_array_data_to_debug( $event, true );//Debugging only.
 
-		$txn_id = isset( $event['resource']['id'] ) ? $event['resource']['id'] : '';
-		$sale_id = isset( $event['resource']['sale_id'] ) ? $event['resource']['sale_id'] : '';
-		$parent_payment = isset( $event['resource']['parent_payment'] ) ? $event['resource']['parent_payment'] : '';
-		SwpmLog::log_simple_debug( 'Transaction ID from resource. Transaction ID: ' . $txn_id . ', Sale ID: ' . $sale_id . ', Parent Payment: ' . $parent_payment, true );
-		if( empty( $txn_id )){
-			SwpmLog::log_simple_debug( 'Transaction ID is empty. Ignoring this webhook event.', true );
+		if( $payment_status != 'capture_refunded'){
+			//At the moment we are only processing the capture refunded event.
+			SwpmLog::log_simple_debug( 'This is not a capture refund event. Ignore this event.', true );
 			return;
 		}
 
-		$amount = isset( $event['resource']['amount']['total'] ) ? $event['resource']['amount']['total'] : '';
-		
-		//TODO - remove later.
-		//Create the IPN data for refund.
-		//Call swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false );
-		//Create a separate Handle refund only function.
+		$refund_txn_id = isset( $event['resource']['id'] ) ? $event['resource']['id'] : '';
+		$rerfund_amount = isset( $event['resource']['amount']['value'] ) ? $event['resource']['amount']['value'] : 0;
+		$refund_currency = isset( $event['resource']['amount']['currency_code'] ) ? $event['resource']['amount']['currency_code'] : '';
 
+		$links = isset( $event['resource']['links'] ) ? $event['resource']['links'] : array();
+		$link_refund_txn = isset( $links[0]['href'] ) ? $links[0]['href'] : '';
+		//This will contain the origial capture transaction ID and the URL to query and get the details.
+		$link_capture_txn = isset( $links[1]['href'] ) ? $links[1]['href'] : '';
+
+		//Get the original capture txn ID from the refund link url.
+		$uri_path_components = explode("/", parse_url($link_capture_txn, PHP_URL_PATH));
+		$orig_capture_txn_id = array_pop($uri_path_components);
+		SwpmLog::log_simple_debug( 'Transaction ID from resource. Transaction ID: ' . $orig_capture_txn_id . '. Original Capture Link: ' . $link_capture_txn, true );
+		
+		if( empty( $orig_capture_txn_id )){
+			SwpmLog::log_simple_debug( 'Transaction ID value is empty. Ignoring this webhook event.', true );
+			return;
+		}
+		
+		$ipn_data = array();
+		$ipn_data['parent_txn_id'] = $orig_capture_txn_id;//Important for one time transactions refund.
+		$ipn_data['subscr_id'] = '';
+		swpm_handle_refund_using_parent_txn_id( $ipn_data );
 	}
 
 	public static function create_ipn_data_from_paypal_api_subscription_details_data( $sub_details, $event ){
@@ -250,14 +267,8 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$subscription_id = isset( $event['resource']['billing_agreement_id'] ) ? $event['resource']['billing_agreement_id'] : '';
 		$txn_id = isset( $event['resource']['id'] ) ? $event['resource']['id'] : '';
 
-		//Get the custom field data from the original subscription checkout from the user profile (if available).
-		$extra_info = SwpmMemberUtils::get_account_extra_info_by_subscr_id( $subscription_id );
-		if( isset( $extra_info['orig_swpm_txn_cpt_id'] ) && !empty( $extra_info['orig_swpm_txn_cpt_id'] )){
-			$txn_cpt_post_id = $extra_info['orig_swpm_txn_cpt_id'];
-			//Example value: subsc_ref=123&user_ip=1.2.3.4
-			$custom = get_post_meta( $txn_cpt_post_id, 'custom', true );
-			SwpmLog::log_simple_debug('Custom field data from the original subscription checkout: ' . $custom, true);
-		}
+		//Get the custom field data of the original subscription checkout from the user profile (if available).
+		$custom = SwpmTransactions::get_original_custom_value_from_transactions_cpt( $subscription_id );
 
 		//Set the data to the $ipn_data array.
 		$ipn_data['custom'] = isset($custom) ? $custom : '';

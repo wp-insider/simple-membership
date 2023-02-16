@@ -186,18 +186,63 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 }
 
 /*
+ * This function will handle the refund notification from PayPal as long as the parent transction ID is present.
+ * It will deactivate the corresponding member account.
+ * It will also mark the transaction as "Refunded" in the transactions list.
+ */
+function swpm_handle_refund_using_parent_txn_id( $ipn_data ){
+	swpm_debug_log_subsc( 'Refund notification - lets see if a member account needs to be deactivated.', true );
+
+	//Find the transaction record that matches the parent transaction ID.
+	$parent_txn_id = isset($ipn_data['parent_txn_id']) ? $ipn_data['parent_txn_id'] : '';
+	if(empty($parent_txn_id)){
+		swpm_debug_log_subsc("Parent txn id field is empty. cannot process this request.", true);
+		return;
+	}
+	$txn_db_row = SwpmTransactions::get_transaction_row_by_txn_id( $parent_txn_id );
+	if( ! $txn_db_row ){
+		swpm_debug_log_subsc("No transaction record found for the transaction id: " . $parent_txn_id, true);
+		return;
+	}
+	//Mark the transaction as refunded.
+	$txn_row_id = $txn_db_row->id;
+	SwpmTransactions::update_transaction_status( $txn_row_id, 'Refunded' );
+
+	//Get the member's ID associated with this transaction
+	$member_id = isset($txn_db_row->member_id) ? $txn_db_row->member_id : '';
+	if( empty ( $member_id )){
+		//Lets try to retrieve the member ID using the subscr_id field.
+		$subscr_id = $txn_db_row->subscr_id;//The member account can be pulled up from this subscr_id value.
+		if(empty($subscr_id)){
+			//If subscr_id value is empty, try using the transaction id as the subscr_id value.
+			$subscr_id = $parent_txn_id;
+		}
+		$member_db_row = SwpmMemberUtils::get_user_by_subsriber_id( $subscr_id );
+		$member_id = isset($member_db_row->member_id) ? $member_db_row->member_id : '';
+	}
+
+	if( empty ( $member_id )){
+		swpm_debug_log_subsc("No associated member account found for the transaction id: " . $parent_txn_id. ". The member account may have been deleted.", true);
+		return;
+	}
+
+	//Deactivate the member account.
+	SwpmMemberUtils::update_account_state( $member_id, 'inactive' ); //Set the account status to inactive.
+	swpm_debug_log_subsc( 'Member account deactivated.', true );
+}
+
+/*
  * All in one function that can handle notification for refund, cancellation, end of term
  */
-
 function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 
 	global $wpdb;
 
-        $swpm_id = '';
-        if ( isset( $ipn_data['custom'] ) ){
-            $customvariables = SwpmTransactions::parse_custom_var( $ipn_data['custom'] );
-            $swpm_id         = $customvariables['swpm_id'];
-        }
+	$swpm_id = '';
+	if ( isset( $ipn_data['custom'] ) ){
+		$customvariables = SwpmTransactions::parse_custom_var( $ipn_data['custom'] );
+		$swpm_id         = $customvariables['swpm_id'];
+	}
 
 	swpm_debug_log_subsc( 'Refund/Cancellation check - lets see if a member account needs to be deactivated.', true );
 	// swpm_debug_log_subsc("Parent txn id: " . $ipn_data['parent_txn_id'] . ", Subscr ID: " . $ipn_data['subscr_id'] . ", SWPM ID: " . $swpm_id, true);.

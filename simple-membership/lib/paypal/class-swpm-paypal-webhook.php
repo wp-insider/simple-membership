@@ -278,6 +278,8 @@ class SWPM_PayPal_Webhook {
 			'PAYMENT.SALE.COMPLETED',              // A payment is made on a subscription.
 			'PAYMENT.SALE.REFUNDED',               // A merchant refunds a sale.
 			'PAYMENT.SALE.REVERSED',               // A payment is reversed on a subscription.
+			'PAYMENT.CAPTURE.REFUNDED',            // A merchant refunds a payment capture.
+			'PAYMENT.CAPTURE.REVERSED',            // A payment capture is reversed.
 			'BILLING.SUBSCRIPTION.CREATED',        // A subscription is created.
 			'BILLING.SUBSCRIPTION.ACTIVATED',      // A subscription is activated.
 			'BILLING.SUBSCRIPTION.UPDATED',        // A subscription is updated.

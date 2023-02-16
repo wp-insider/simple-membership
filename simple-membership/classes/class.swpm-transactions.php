@@ -6,7 +6,7 @@
 
 class SwpmTransactions {
 
-	static function save_txn_record( $ipn_data, $items = array() ) {
+	public static function save_txn_record( $ipn_data, $items = array() ) {
 		global $wpdb;
 
 		$current_date = SwpmUtils::get_current_date_in_wp_zone();//date( 'Y-m-d' );
@@ -105,7 +105,19 @@ class SwpmTransactions {
 
 	}
 
-	static function parse_custom_var( $custom ) {
+	/*
+	 * Use this function to update or set account status of a member easily.
+	 */
+	public static function update_transaction_status( $txn_row_id, $new_status = 'Completed' ) {
+		global $wpdb;
+		$payments_table_name = $wpdb->prefix . 'swpm_payments_tbl';
+
+		SwpmLog::log_simple_debug( 'Updating the payment status value of transaction to: ' . $new_status . '. Row ID: ' . $txn_row_id, true );
+		$query = $wpdb->prepare( "UPDATE $payments_table_name SET status=%s WHERE id=%s", $new_status, $txn_row_id );
+		$resultset = $wpdb->query( $query );
+	}
+
+	public static function parse_custom_var( $custom ) {
 		$delimiter       = '&';
 		$customvariables = array();
 
@@ -124,13 +136,40 @@ class SwpmTransactions {
 		return $customvariables;
 	}
 
-        static function get_transaction_row_by_subscr_id ($subscr_id) {
-                global $wpdb;
-                $query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE subscr_id = %s", $subscr_id ), OBJECT );
-                return $query_db;
-        }
+	public static function get_transaction_row_by_subscr_id ($subscr_id) {
+			global $wpdb;
+			$query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE subscr_id = %s", $subscr_id ), OBJECT );
+			return $query_db;
+	}
 
-        static function get_original_custom_value_for_subscription_payment ( $subscr_id ) {
+	public static function get_transaction_row_by_txn_id ($txn_id) {
+		global $wpdb;
+		$query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE txn_id = %s", $txn_id ), OBJECT );
+		return $query_db;
+	}
+
+		/**
+		 * Get the custom field data of the original subscription checkout from the user profile (if available).
+		 * The Transaction CPT Post ID is saved in the member's profile when the subscription is created.
+		 * @param string $subscr_id
+		 * @return string
+		 */
+		public static function get_original_custom_value_from_transactions_cpt ( $subscr_id ) {
+			$extra_info = SwpmMemberUtils::get_account_extra_info_by_subscr_id( $subscr_id );
+			if( isset( $extra_info['orig_swpm_txn_cpt_id'] ) && !empty( $extra_info['orig_swpm_txn_cpt_id'] )){
+				$txn_cpt_post_id = $extra_info['orig_swpm_txn_cpt_id'];
+				//Example value: subsc_ref=2&orig_swpm_txn_cpt_id=123
+				$custom = get_post_meta( $txn_cpt_post_id, 'custom', true );
+				SwpmLog::log_simple_debug('Custom field data from the original subscription checkout: ' . $custom, true);
+			}
+			else{
+				$custom = '';
+				SwpmLog::log_simple_debug('Could not find the original subscription checkout custom field data.', true);
+			}
+			return $custom;
+		}
+
+        public static function get_original_custom_value_for_subscription_payment ( $subscr_id ) {
             if ( isset ( $subscr_id )){
                 //Lets check if a proper custom field value is already saved in the CPT for this stripe subscription.
                 $txn_cpt_qry_args = array(

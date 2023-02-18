@@ -140,7 +140,7 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
     ?>
 
     <div class="swpm-orange-box">
-        View the <a target="_blank" href="https://simple-membership-plugin.com/creating-paypal-buy-now-new-api-buttons-for-membership-payment/">documentation</a>&nbsp;
+        View the <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-buy-now-buttons-paypal-api/">documentation</a>&nbsp;
         to learn how to create and use a PayPal Buy Now (New API) payment button.
     </div>
 

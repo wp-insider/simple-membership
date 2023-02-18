@@ -136,7 +136,7 @@ class SwpmMiscUtils {
 		$swpm_profile_page_permalink = get_permalink( $profile_page_id );
 		$settings->set_value( 'profile-page-url', $swpm_profile_page_permalink );
 
-		//Create reset page
+		//Create password reset page
 		$swpm_reset_page = array(
 			'post_title'     => SwpmUtils::_( 'Password Reset' ),
 			'post_name'      => 'password-reset',
@@ -148,7 +148,7 @@ class SwpmMiscUtils {
 			'ping_status'    => 'closed',
 		);
 		$reset_page_obj  = get_page_by_path( 'password-reset' );
-		if ( ! $profile_page_obj ) {
+		if ( ! $reset_page_obj ) {
 			$reset_page_id = wp_insert_post( $swpm_reset_page );
 		} else {
 			$reset_page_id = $reset_page_obj->ID;
@@ -164,7 +164,36 @@ class SwpmMiscUtils {
 		$swpm_reset_page_permalink = get_permalink( $reset_page_id );
 		$settings->set_value( 'reset-page-url', $swpm_reset_page_permalink );
 
-		$settings->save(); //Save all settings object changes
+		//Create a default Thank You page
+		$swpm_thank_you_page = array(
+			'post_title'     => SwpmUtils::_( 'Thank You' ),
+			'post_name'      => 'thank-you',
+			'post_content'   => '[swpm_thank_you_page_registration]',
+			'post_parent'    => 0,
+			'post_status'    => 'publish',
+			'post_type'      => 'page',
+			'comment_status' => 'closed',
+			'ping_status'    => 'closed',
+		);
+		$thank_you_page_obj  = get_page_by_path( 'thank-you' );
+		if ( ! $thank_you_page_obj ) {
+			$thank_you_page_id = wp_insert_post( $swpm_thank_you_page );
+		} else {
+			$thank_you_page_id = $thank_you_page_obj->ID;
+			if ( $thank_you_page_obj->post_status == 'trash' ) { //For cases where page may be in trash, bring it out of trash
+				wp_update_post(
+					array(
+						'ID'          => $thank_you_page_obj->ID,
+						'post_status' => 'publish',
+					)
+				);
+			}
+		}
+		$swpm_thank_you_page_permalink = get_permalink( $thank_you_page_id );
+		$settings->set_value( 'thank-you-page-url', $swpm_thank_you_page_permalink );
+
+		//Save all settings object changes
+		$settings->save(); 
 	}
 
 	public static function redirect_to_url( $url ) {

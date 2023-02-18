@@ -32,6 +32,7 @@ class SwpmInstallation {
 
         //Do this if single site standard install
         SwpmInstallation::installer();
+        //Set default values for the settings in the DB.
         SwpmInstallation::initdb();
     }
 
@@ -275,7 +276,8 @@ class SwpmInstallation {
             //Do upgrade tasks
         }
 
-        $settings->set_value('swpm-active-version', SIMPLE_WP_MEMBERSHIP_VER)->save(); //save everything.
+        //save everything.
+        $settings->set_value('swpm-active-version', SIMPLE_WP_MEMBERSHIP_VER)->save(); 
         //Generate and save a swpm private key for this site
         $unique_id = uniqid('', true);
         add_option('swpm_private_key_one', $unique_id);

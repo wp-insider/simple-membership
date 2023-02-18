@@ -67,10 +67,11 @@ class SwpmSettings {
 		//This settings section has no heading. Useful for hooking at this section and doing arbitrary request parameter checks and show response accordingly (for this settings tab)
 		add_settings_section( 'swpm-general-post-submission-check', '', array( &$this, 'swpm_general_post_submit_check_callback' ), 'simple_wp_membership_settings' );
 
-                //The documentation settings section for this tab
+        //The documentation settings section for this tab
 		add_settings_section( 'swpm-documentation', SwpmUtils::_( 'Plugin Documentation' ), array( &$this, 'swpm_documentation_callback' ), 'simple_wp_membership_settings' );
 		
-                add_settings_section( 'general-settings', SwpmUtils::_( 'General Settings' ), array( &$this, 'general_settings_callback' ), 'simple_wp_membership_settings' );
+		/* General Settings Section */
+		add_settings_section( 'general-settings', SwpmUtils::_( 'General Settings' ), array( &$this, 'general_settings_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
 			'enable-free-membership',
 			SwpmUtils::_( 'Enable Free Membership' ),
@@ -176,13 +177,19 @@ class SwpmSettings {
 			)
 		);
 
-		/*
-		  add_settings_field('protect-everything',  SwpmUtils::_('Protect Everything'),
-		  array(&$this, 'checkbox_callback'), 'simple_wp_membership_settings', 'general-settings',
-		  array('item' => 'protect-everything',
-		  'message'=>SwpmUtils::_('Check this box if you want to protect all posts/pages by default.')));
-		 */
+		add_settings_field(
+			'password-reset-using-link',
+			SwpmUtils::_( 'Enable Password Reset Using Link' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'general-settings',
+			array(
+				'item'    => 'password-reset-using-link',
+				'message' => SwpmUtils::_( 'You can enable this option if you want to handle the password reset functionality using a reset link that is emailed to the member. Read <a href="https://simple-membership-plugin.com/password-reset-notification-email-customization/" target="_blank">this documentation</a> to learn more about the password reset function.' )
+			)
+		);
 
+		/* Pages Settings Section*/
 		add_settings_section( 'pages-settings', SwpmUtils::_( 'Pages Settings' ), array( &$this, 'pages_settings_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
 			'login-page-url',
@@ -240,18 +247,21 @@ class SwpmSettings {
 			)
 		);
 
+		/* Optional Pages Settings Section */
+		add_settings_section( 'optional-pages-settings', SwpmUtils::_( 'Optional Pages Settings' ), array( &$this, 'optional_pages_settings_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
-			'password-reset-using-link',
-			SwpmUtils::_( 'Enable Password Reset Using Link' ),
-			array( &$this, 'checkbox_callback' ),
+			'thank-you-page-url',
+			SwpmUtils::_( 'Thank You Page URL' ),
+			array( &$this, 'textfield_long_callback' ),
 			'simple_wp_membership_settings',
-			'general-settings',
+			'optional-pages-settings',
 			array(
-				'item'    => 'password-reset-using-link',
-				'message' => SwpmUtils::_( 'You can enable this option if you want to handle the password reset functionality using a reset link that is emailed to the member. Read <a href="https://simple-membership-plugin.com/password-reset-notification-email-customization/" target="_blank">this documentation</a> to learn more about the password reset function.' )
+				'item'    => 'thank-you-page-url',
+				'message' => SwpmUtils::_( 'It is useful to use a thank you page in your payment button configuration. Read <a href="https://simple-membership-plugin.com/paid-registration-from-the-thank-you-page/" target="_blank">this documentation</a> to learn more.' ),
 			)
-		);
-
+		);		
+		
+		/* Debug Settings Section */
 		add_settings_section( 'debug-settings', SwpmUtils::_( 'Test & Debug Settings' ), array( &$this, 'testndebug_settings_callback' ), 'simple_wp_membership_settings' );
 
 		$debug_log_url = add_query_arg(
@@ -324,7 +334,7 @@ class SwpmSettings {
 		);
 
 		//PayPal checkout (new) settings section.
-		add_settings_section( 'paypal-checkout-settings', SwpmUtils::_( 'PayPal Checkout Settings' ), array( &$this, 'paypal_checkout_settings_callback' ), 'simple_wp_membership_settings' );
+		add_settings_section( 'paypal-checkout-settings', SwpmUtils::_( 'PayPal Settings' ), array( &$this, 'paypal_checkout_settings_callback' ), 'simple_wp_membership_settings' );
 
 		add_settings_field(
 			'paypal-live-client-id',
@@ -1202,6 +1212,13 @@ class SwpmSettings {
 
 		echo '<p>';
 		SwpmUtils::e( 'The following pages are required for the plugin to function correctly. These pages were automatically created by the plugin at install time.' );
+		SwpmUtils::e( ' Read <a href="https://simple-membership-plugin.com/recreating-required-pages-simple-membership-plugin/" target="_blank">this documentation</a> to learn how to recreate them (if needed).' );
+		echo '</p>';
+	}
+
+	public function optional_pages_settings_callback() {
+		echo '<p>';
+		SwpmUtils::e( 'Optional page. It is automatically created by the plugin when you install the plugin for the first time.' );
 		echo '</p>';
 	}
 
@@ -1226,10 +1243,14 @@ class SwpmSettings {
 	}
 
 	public function paypal_webhooks_settings_callback() {
-		echo '<h2 id="paypal-subscription-webhooks">' . SwpmUtils::_( 'PayPal Subscription Payment Webhooks' ) . '</h2>';
-		echo '<p>' . SwpmUtils::_( 'The new PayPal subscription/recurring payment buttons require webhooks. The plugin will create the webhooks when you create a subscription payment button.' ) . '</p>';
-		echo '<p>' . SwpmUtils::_( 'If you have issues with webhooks, you can delete it and create again.' ) . '</p>';
+		echo '<h2 id="paypal-subscription-webhooks">' . SwpmUtils::_( 'PayPal Webhooks' ) . '</h2>';
+		echo '<p>' . SwpmUtils::_( 'The PayPal payment buttons that uses the new API require webhooks. The plugin will auto-create the required webhooks when you create a PayPal payment button.' ) . '</p>';
+		echo '<p>' . SwpmUtils::_( 'If you have issues with the webhooks, you can delete it and create again.' ) . '</p>';
 
+		$all_api_creds_missing = false;
+		if( empty( $this->get_value('paypal-sandbox-client-id')) && empty( $this->get_value('paypal-sandbox-secret-key')) && empty( $this->get_value('paypal-live-client-id')) && empty( $this->get_value('paypal-live-secret-key')) ){
+			$all_api_creds_missing = true;
+		}
 		?>
 		<table class="form-table" role="presentation">
 		<tbody>
@@ -1240,16 +1261,22 @@ class SwpmSettings {
 					$production_webhook_id = get_option( 'swpm_paypal_webhook_id_production' );
 					if( !empty($production_webhook_id)){
 						//Production webhook exists
-						echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span> Live Webhook exists. If you still have issues with webhooks, you can delete it and create again.</span>';
+						echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
+						SwpmUtils::e( 'Live Webhook exists. If you still have issues with webhooks, you can delete it and create again.' );
+						echo '</span>';
 					} else {
 						//Production webhook does not exist
 						if( empty( $this->get_value('paypal-live-client-id')) || empty( $this->get_value('paypal-live-secret-key')) ){
-							echo '<p><span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span> Live PayPal API credentials are not set. Please set the Live PayPal API credentials first.</span></p>';
+							echo '<p><span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+							SwpmUtils::e( 'Live PayPal API credentials are not set. Please set the Live PayPal API credentials first.');
+							echo '</span></p>';
 						} else {
-							echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span> No webhook found. Use the following Create Live Webhook link to create a new webhook automatically.</span>';
+							echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+							SwpmUtils::e( 'No webhook found. Use the following Create Live Webhook link to create a new webhook automatically.' );
+							echo '</span>';
 							$create_live_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_create_live_webhook=1' );
 							$create_live_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_live_webhook' ), $create_live_webhook_url );
-							echo '<p><a class="button swpm-paypal-create-live-webhook-btn" href="' . esc_url_raw( $create_live_webhook_url_nonced ) . '" target="_blank">Create Live Webhook</a></p>';
+							echo '<p><a class="button swpm-paypal-create-live-webhook-btn" href="' . esc_url_raw( $create_live_webhook_url_nonced ) . '" target="_blank">'.SwpmUtils::_('Create Live Webhook').'</a></p>';
 						}
 					}
 					?>
@@ -1262,28 +1289,40 @@ class SwpmSettings {
 					$sandbox_webhook_id = get_option( 'swpm_paypal_webhook_id_sandbox' );
 					if( !empty($sandbox_webhook_id)){
 						//Sandbox webhook exists
-						echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span> Sandbox Webhook exists. If you still have issues with webhooks, you can delete it and create again.</span>';
+						echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
+						SwpmUtils::e( 'Sandbox Webhook exists. If you still have issues with webhooks, you can delete it and create again.');
+						echo '</span>';
 					} else {
 						//Sandbox webhook does not exist
 						if( empty( $this->get_value('paypal-sandbox-client-id')) || empty( $this->get_value('paypal-sandbox-secret-key')) ){
-							echo '<p><span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span> Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal API credentials first.</span></p>';
+							echo '<p><span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+							SwpmUtils::e( 'Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal API credentials first.' );
+							echo '</span></p>';
 						} else {
-							echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span> No webhook found. Use the following Create Sandbox Webhook link to create a new webhook automatically.</span>';
+							echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+							SwpmUtils::e( 'No webhook found. Use the following Create Sandbox Webhook link to create a new webhook automatically.' );
+							echo '</span>';
 							$create_sandbox_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_create_sandbox_webhook=1' );
 							$create_sandbox_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_sandbox_webhook' ), $create_sandbox_webhook_url );
-							echo '<p><a class="button swpm-paypal-create-sandbox-webhook-btn" href="' . esc_url_raw( $create_sandbox_webhook_url_nonced ) . '" target="_blank">Create Sandbox Webhook</a></p>';
+							echo '<p><a class="button swpm-paypal-create-sandbox-webhook-btn" href="' . esc_url_raw( $create_sandbox_webhook_url_nonced ) . '" target="_blank">'.SwpmUtils::_('Create Sandbox Webhook').'</a></p>';
 						}
 					}
 					?>
 				</td>
 			</tr>
 			<tr>
-				<th scope="row">Delete Webhooks</th>
+				<th scope="row"><?php SwpmUtils::e('Delete Webhooks'); ?></th>
 				<td>
 					<?php
-						$delete_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_delete_webhook=1' );
-						$delete_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_delete_webhook' ), $delete_webhook_url );
-						echo '<p><a class="button swpm-paypal-delete-webhook-btn" href="'.esc_url_raw($delete_webhook_url_nonced).'" target="_blank">Delete Webhook</a></p>';					
+						if( $all_api_creds_missing ){
+							echo '<p><span class="swpm-paypal-delete-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp';
+							SwpmUtils::e( 'PayPal API credentials are missing. Please set the PayPal API credentials.' ); 
+							echo '</span></p>';
+						} else {
+							$delete_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_delete_webhook=1' );
+							$delete_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_delete_webhook' ), $delete_webhook_url );
+							echo '<p><a class="button swpm-paypal-delete-webhook-btn" href="'.esc_url_raw($delete_webhook_url_nonced).'" target="_blank">'.SwpmUtils::_('Delete Webhooks').'</a></p>';					
+						}
 					?>
 				</td>
 			</tr>
@@ -1432,6 +1471,7 @@ class SwpmSettings {
 		$output['registration-page-url']    = esc_url( $input['registration-page-url'] );
 		$output['profile-page-url']         = esc_url( $input['profile-page-url'] );
 		$output['reset-page-url']           = esc_url( $input['reset-page-url'] );
+		$output['thank-you-page-url']       = esc_url( $input['thank-you-page-url'] );
 		$output['password-reset-using-link'] = isset( $input['password-reset-using-link'] ) ? esc_attr( $input['password-reset-using-link'] ) : '';
 		$output['join-us-page-url']         = esc_url( $input['join-us-page-url'] );
 		$output['default-account-status']   = esc_attr( $input['default-account-status'] );

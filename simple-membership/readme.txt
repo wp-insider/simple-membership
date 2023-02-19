@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 4.2.4
+Stable tag: 4.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,7 +32,9 @@ Both one time and recurring/subscription payments are supported for PayPal and S
 
 You can accept one time membership payment via Braintree payment gateway.
 
-There is also option to use PayPal smart button for membership payment.
+Option to make membership payment buttons using the new PayPal Checkout API. 
+
+There is also option to use PayPal smart buttons for membership payment.
 
 You can enable email activation or email confirmation for the free memberships.
 
@@ -103,6 +105,9 @@ You can create a free forum user account and ask your questions.
 * Ability to forward the payment notification to an external URL for further processing.
 * Option to configure whitelisting for user email addresses to allow registration only from specific email addresses or email domains.
 * Option to configure blacklisting for user email addresses to block registration from certain email addresses or email domains.
+* Option to configure PayPal payment buttons for memberships (one-time and recurring payments).
+* Option to configure Stripe payment buttons for memberships (one-time and recurring payments).
+* Option to configure Braintree payment buttons for memberships (one-time payments).
 
 = Language Translations =
 
@@ -163,13 +168,14 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.2.5 =
-- [TODO - update stripe doc reference] Moved the Sandbox/Test Mode option to the "Payment Settings" tab.
-- Spanish language translation file updated.
+= 4.2.5 =
+- Added new membership payment button options using the new PayPal API. You can find it under the Create New Buttons menu tab. 
+- Moved the Sandbox/Test Mode option to the "Payment Settings" tab.
 - Added an appropriate error message for when a user tries to re-use the special registration complete link.
 - Check if the registration completion link (if present in the URL) is valid. Show an appropriate error message to prevent confusion.
 - The bulk membership level change feature will updaet the WP user role also (if specified in the target memership level configuration).
 - The transactions in the payments menu can now be searched using a Subscriber ID values also.
+- Spanish language translation file updated.
 
 = 4.2.4 =
 - Improved the enqueue_validation_scripts() function to work better with block themes.

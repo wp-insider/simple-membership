@@ -152,8 +152,8 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		$ipn['address_city']    = isset($txn_data['purchase_units'][0]['shipping']['address']['admin_area_2']) ? $txn_data['purchase_units'][0]['shipping']['address']['admin_area_2'] : '';
 		$ipn['address_state']   = isset($txn_data['purchase_units'][0]['shipping']['address']['admin_area_1']) ? $txn_data['purchase_units'][0]['shipping']['address']['admin_area_1'] : '';
 		$ipn['address_zip']     = isset($txn_data['purchase_units'][0]['shipping']['address']['postal_code']) ? $txn_data['purchase_units'][0]['shipping']['address']['postal_code'] : '';
-		$ipn['address_country'] = isset($txn_data['purchase_units'][0]['shipping']['address']['country_code']) ? $txn_data['purchase_units'][0]['shipping']['address']['country_code'] : '';
-
+		$country_code = isset($txn_data['purchase_units'][0]['shipping']['address']['country_code']) ? $txn_data['purchase_units'][0]['shipping']['address']['country_code'] : '';
+		$ipn['address_country'] = SwpmMiscUtils::get_country_name_by_country_code($country_code);
 		//Additional variables
 		//$ipn['reason_code'] = $txn_data['reason_code'];
 
@@ -344,8 +344,8 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		$ipn['address_city']    = isset($txn_data['subscriber']['shipping_address']['address']['admin_area_2']) ? $txn_data['subscriber']['shipping_address']['address']['admin_area_2'] : '';
 		$ipn['address_state']   = isset($txn_data['subscriber']['shipping_address']['address']['admin_area_1']) ? $txn_data['subscriber']['shipping_address']['address']['admin_area_1'] : '';
 		$ipn['address_zip']     = isset($txn_data['subscriber']['shipping_address']['address']['postal_code']) ? $txn_data['subscriber']['shipping_address']['address']['postal_code'] : '';
-		$ipn['address_country'] = isset($txn_data['subscriber']['shipping_address']['address']['country_code']) ? $txn_data['subscriber']['shipping_address']['address']['country_code'] : '';
-
+		$country_code = isset($txn_data['subscriber']['shipping_address']['address']['country_code']) ? $txn_data['subscriber']['shipping_address']['address']['country_code'] : '';
+		$ipn['address_country'] = SwpmMiscUtils::get_country_name_by_country_code($country_code);
 		//Additional variables
 		//$ipn['reason_code'] = $txn_data['reason_code'];
 

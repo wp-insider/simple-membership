@@ -168,6 +168,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.2.5.1 =
+- Spelling mistake fixed.
+
 = 4.2.5 =
 - Added new membership payment button options using the new PayPal API. You can find it under the Create New Buttons menu tab. 
 - Moved the Sandbox/Test Mode option to the "Payment Settings" tab.

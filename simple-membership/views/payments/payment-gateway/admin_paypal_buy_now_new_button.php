@@ -307,7 +307,7 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
                     <tr valign="top">
                         <th scope="row"><?php _e("Disable Funding", "simple-membership"); ?></th>
                         <td>
-                        <p><label><input type="checkbox" name="pp_buy_now_new_disable_funding_card" value="1"<?php echo (!empty($bt_opts['pp_buy_now_new_disable_funding_card']) ) ? ' checked' : ''; ?>> <?php _e("Credit or debig cards", "simple-membership"); ?></label></p>
+                        <p><label><input type="checkbox" name="pp_buy_now_new_disable_funding_card" value="1"<?php echo (!empty($bt_opts['pp_buy_now_new_disable_funding_card']) ) ? ' checked' : ''; ?>> <?php _e("Credit or debit cards", "simple-membership"); ?></label></p>
                             <p><label><input type="checkbox" name="pp_buy_now_new_disable_funding_credit" value="1"<?php echo (!empty($bt_opts['pp_buy_now_new_disable_funding_credit']) ) ? ' checked' : ''; ?>> <?php _e("PayPal Credit", "simple-membership"); ?></label></p>
                             <p><label><input type="checkbox" name="pp_buy_now_new_disable_funding_venmo" value="1"<?php echo (!empty($bt_opts['pp_buy_now_new_disable_funding_venmo']) ) ? ' checked' : ''; ?>> <?php _e("Venmo", "simple-membership"); ?></label></p>
                             <p class="description"><?php _e("By default, funding source eligibility is smartly decided based on a variety of factors. You can force disable funding options by selecting them here.", "simple-membership"); ?></p>

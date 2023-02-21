@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 4.2.5
+Stable tag: 4.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -159,7 +159,8 @@ Do the following to install the membership plugin:
 
 == Frequently Asked Questions ==
 
-None.
+= Where can I find complete documentation for this plugin? =
+You can find the full documentation for this plugin on the [Simple Membership plugin documentation](https://simple-membership-plugin.com/simple-membership-documentation/) page.
 
 == Screenshots ==
 
@@ -168,7 +169,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.2.5.1 =
+= 4.2.6 =
 - Spelling mistake fixed in the PayPal button creation interface.
 - Regenerated the translation POT file.
 
@@ -177,7 +178,7 @@ https://simple-membership-plugin.com/
 - Moved the Sandbox/Test Mode option to the "Payment Settings" tab.
 - Added an appropriate error message for when a user tries to re-use the special registration complete link.
 - Check if the registration completion link (if present in the URL) is valid. Show an appropriate error message to prevent confusion.
-- The bulk membership level change feature will updaet the WP user role also (if specified in the target memership level configuration).
+- The bulk membership level change feature will update the WP user role also (if specified in the target membership level configuration).
 - The transactions in the payments menu can now be searched using a Subscriber ID values also.
 - Spanish language translation file updated.
 

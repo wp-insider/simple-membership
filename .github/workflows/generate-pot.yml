@@ -1,0 +1,26 @@
+name: Generate POT
+
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  #  push:
+  #  branches: [ main ]
+  # pull_request:
+  #  branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  WP_POT_Generator:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: WordPress POT Generator
+      uses: varunsridharan/action-wp-pot-generator@2.0
+      with:
+        save_path: './simple-membership/languages'
+        item_slug: 'simple-membership'
+        domain: 'simple-membership'
+        package_name: 'Simple Membership'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

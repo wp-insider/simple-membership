@@ -169,7 +169,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 4.2.5.1 =
-- Spelling mistake fixed.
+- Spelling mistake fixed in the PayPal button creation interface.
+- Regenerated the translation POT file.
 
 = 4.2.5 =
 - Added new membership payment button options using the new PayPal API. You can find it under the Create New Buttons menu tab. 

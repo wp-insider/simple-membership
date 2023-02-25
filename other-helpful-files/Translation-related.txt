@@ -111,6 +111,10 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
+#: includes/swpm_mda_show_profile.php:48
+msgid "Postcode"
+msgstr ""
+
 #: includes/swpm_mda_show_profile.php:34
 msgid "Phone"
 msgstr ""

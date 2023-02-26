@@ -191,7 +191,14 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		$ipn_data['address_city']    = isset( $bd_addr->city ) ? $bd_addr->city : '';
 		$ipn_data['address_state']   = isset( $bd_addr->state ) ? $bd_addr->state : '';
 		$ipn_data['address_zipcode'] = isset( $bd_addr->postal_code ) ? $bd_addr->postal_code : '';
-		$ipn_data['address_country'] = isset( $bd_addr->country ) ? $bd_addr->country : '';
+
+		//Get country value from the Stripe response. It can be a country code or a country name.
+		$country = isset( $bd_addr->country ) ? $bd_addr->country : '';
+		if( strlen($country) == 2 ){//We have a country code. Let's convert it to country name.
+			$ipn_data['address_country'] = SwpmMiscUtils::get_country_name_by_country_code($country);
+		} else {
+			$ipn_data['address_country'] = $country;
+		}		
 
 		$ipn_data['payment_button_id'] = $button_id;
 		$ipn_data['is_live']           = ! $sandbox_enabled;

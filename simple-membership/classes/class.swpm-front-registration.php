@@ -16,36 +16,36 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 		$settings_configs = SwpmSettings::get_instance();
 
-                //Check if the hide rego from logged-in users feature is enabled before rendering the registration form.
-                $hide_rego_to_logged_users = $settings_configs->get_value( 'hide-rego-form-to-logged-users' );
-                if ( ! empty( $hide_rego_to_logged_users ) ){
-                    //Hide registration form to logged-in users feature is enabled. Check if the form should be hidden.
-                    if ( SwpmMemberUtils::is_member_logged_in() ) {
-                        $rego_hidden_to_logged_users_msg = '<div class="swpm_registration_hidden_to_logged_users_msg">';
-                        $rego_hidden_to_logged_users_msg .= '<div class="hide-rego-form-msg">' . SwpmUtils::_( "You are already logged in. You don't need to create another account. So the registration form is hidden." ) . '</div>';
-                        $rego_hidden_to_logged_users_msg .= '</div>';
-                        $rego_hidden_to_logged_users_msg = apply_filters('swpm_registration_form_hidden_message', $rego_hidden_to_logged_users_msg);
-                        return $rego_hidden_to_logged_users_msg;
-                    }
-                }
-                
-                //Check if the registration completion link (if present in the URL) has been already used. Show an  appropriate error message to prevent confusion.
-                if( SwpmUtils::is_registration_completion_link_already_used() ){
-                        $already_used_rego_complete_link_msg = '<div class="swpm_already_used_registration_complete_link_msg">';
-                        $already_used_rego_complete_link_msg .= SwpmUtils::_( "This special registration link (see the URL in the browser's address bar) has already been used. You don't need to create another account. Log into the existing account to access the protected content." );
-                        $already_used_rego_complete_link_msg .= '</div>';
-                        $already_used_rego_complete_link_msg = apply_filters('swpm_already_used_registration_link_message', $already_used_rego_complete_link_msg);
-                        return $already_used_rego_complete_link_msg;
-                }
-                
-                //Check if the registration completion link (if present in the URL) is invalid. Show an appropriate error message to prevent confusion (when they are clicking an invalid/deleted/old link).
-                if( SwpmUtils::is_registration_completion_link_invalid() ){
-                        $rego_complete_link_invalid_msg = '<div class="swpm_registration_complete_link_invalid_msg">';
-                        $rego_complete_link_invalid_msg .= SwpmUtils::_( "This special registration link (see the URL in the browser's address bar) is invalid. Could not find a match for the given member ID and the security code. Please contact the site administrator." );
-                        $rego_complete_link_invalid_msg .= '</div>';
-                        $rego_complete_link_invalid_msg = apply_filters('swpm_registration_completion_link_invalid_message', $rego_complete_link_invalid_msg);
-                        return $rego_complete_link_invalid_msg;
-                }                
+		//Check if the hide rego from logged-in users feature is enabled before rendering the registration form.
+		$hide_rego_to_logged_users = $settings_configs->get_value( 'hide-rego-form-to-logged-users' );
+		if ( ! empty( $hide_rego_to_logged_users ) ){
+			//Hide registration form to logged-in users feature is enabled. Check if the form should be hidden.
+			if ( SwpmMemberUtils::is_member_logged_in() ) {
+				$rego_hidden_to_logged_users_msg = '<div class="swpm_registration_hidden_to_logged_users_msg">';
+				$rego_hidden_to_logged_users_msg .= '<div class="hide-rego-form-msg">' . SwpmUtils::_( "You are already logged in. You don't need to create another account. So the registration form is hidden." ) . '</div>';
+				$rego_hidden_to_logged_users_msg .= '</div>';
+				$rego_hidden_to_logged_users_msg = apply_filters('swpm_registration_form_hidden_message', $rego_hidden_to_logged_users_msg);
+				return $rego_hidden_to_logged_users_msg;
+			}
+		}
+		
+		//Check if the registration completion link (if present in the URL) has been already used. Show an  appropriate error message to prevent confusion.
+		if( SwpmUtils::is_registration_completion_link_already_used() ){
+			$already_used_rego_complete_link_msg = '<div class="swpm_already_used_registration_complete_link_msg">';
+			$already_used_rego_complete_link_msg .= SwpmUtils::_( "This special registration link (see the URL in the browser's address bar) has already been used. You don't need to create another account. Log into the existing account to access the protected content." );
+			$already_used_rego_complete_link_msg .= '</div>';
+			$already_used_rego_complete_link_msg = apply_filters('swpm_already_used_registration_link_message', $already_used_rego_complete_link_msg);
+			return $already_used_rego_complete_link_msg;
+		}
+		
+		//Check if the registration completion link (if present in the URL) is invalid. Show an appropriate error message to prevent confusion (when they are clicking an invalid/deleted/old link).
+		if( SwpmUtils::is_registration_completion_link_invalid() ){
+				$rego_complete_link_invalid_msg = '<div class="swpm_registration_complete_link_invalid_msg">';
+				$rego_complete_link_invalid_msg .= SwpmUtils::_( "This special registration link (see the URL in the browser's address bar) is invalid. Could not find a match for the given member ID and the security code. Please contact the site administrator." );
+				$rego_complete_link_invalid_msg .= '</div>';
+				$rego_complete_link_invalid_msg = apply_filters('swpm_registration_completion_link_invalid_message', $rego_complete_link_invalid_msg);
+				return $rego_complete_link_invalid_msg;
+		}
 
 		//Trigger the filter to override the registration form (the form builder addon uses this filter)
 		$form = apply_filters( 'swpm_registration_form_override', '', $level ); //The $level value could be empty also so the code handling the filter need to check for it.

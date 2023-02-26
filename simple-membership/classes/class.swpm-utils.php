@@ -445,6 +445,12 @@ abstract class SwpmUtils {
         public static function is_registration_completion_link_invalid(){
             if( self::is_paid_registration() ){
                 //We are on the prompt to complete registration link URL. 
+
+				//Check that this is not after the registration form has been submitted (we don't want to show a warning if the form has been submitted just now)
+				if( isset( $_REQUEST['swpm_registration_submit'] ) || isset( $_REQUEST['swpm-fb-submit'] )){
+					return false;
+				}
+
                 //Check if it points to a valid user profile or not.
                 $member = SwpmUtils::get_paid_member_info();
                 if ( empty($member )){
@@ -458,6 +464,12 @@ abstract class SwpmUtils {
         public static function is_registration_completion_link_already_used(){
             if( self::is_paid_registration() ){
                 //We are on the prompt to complete registration link URL. 
+
+				//Check that this is not after the registration form has been submitted (we don't want to show a warning if the form has been submitted just now)
+				if( isset( $_REQUEST['swpm_registration_submit'] ) || isset( $_REQUEST['swpm-fb-submit'] )){
+					return false;
+				}
+
                 //Check if this link has already been used and the profile setup is already done.
                 $member_id = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
                 $member_record = SwpmMemberUtils::get_user_by_id($member_id);

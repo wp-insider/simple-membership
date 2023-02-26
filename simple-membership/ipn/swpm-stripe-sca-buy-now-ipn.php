@@ -13,7 +13,9 @@ class SwpmStripeSCABuyNowIpnHandler {
 			return;
 		}
 
-		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php';
+		if( !function_exists('swpm_handle_subsc_signup_stand_alone')){
+			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
+		}
 		$this->handle_stripe_ipn();
 	}
 

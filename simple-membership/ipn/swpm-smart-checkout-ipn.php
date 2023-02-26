@@ -1,6 +1,9 @@
 <?php
 
-require_once 'swpm_handle_subsc_ipn.php';
+if( !function_exists('swpm_handle_subsc_signup_stand_alone')){
+	include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
+}
+
 // Ignoring invalid class name PHPCS warning
 class swpm_smart_checkout_ipn_handler { // phpcs:ignore
 

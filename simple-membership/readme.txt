@@ -171,8 +171,9 @@ https://simple-membership-plugin.com/
 
 = 4.2.8 =
 - The country code from Stripe webhook notification is now converted to the full country name for better selection in the dropdown menu.
-- Removed the option to create new Smart checkout buttons as it has been deprecated by PayPal. You can get the same functionality from the new PayPal checkout buttons that have been added to the plugin.
 - Prevent the newly added unique registration link validity check from incorrectly showing on registration form submission.
+- Removed the option to create new Smart checkout buttons as it has been deprecated by PayPal. You can get the same functionality from the new PayPal checkout buttons that have been added to the plugin.
+- Note: All the existing paypal buttons will continue to work as usual. We have added the new PayPal buttons as per PayPal's guidelines to make sure that in the future the plugin remains compatible with PayPal's latest API.
 
 = 4.2.7 =
 - Added an alternative method of getting the URL if SERVER_NAME is not set in an install.

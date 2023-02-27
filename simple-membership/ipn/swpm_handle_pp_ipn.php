@@ -1,9 +1,5 @@
 <?php
 
-if( !function_exists('swpm_handle_subsc_signup_stand_alone')){
-	include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
-}
-
 class swpm_paypal_ipn_handler { // phpcs:ignore
 
 	public $ipn_log = false;                    // bool: log IPN results to text file?

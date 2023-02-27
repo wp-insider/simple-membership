@@ -13,9 +13,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 			return;
 		}
 
-		if( !function_exists('swpm_handle_subsc_signup_stand_alone')){
-			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
-		}
+		//Handle Stripe IPN
 		$this->handle_stripe_ipn();
 	}
 
@@ -24,8 +22,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 
 		// Read and sanitize the request parameters.
-
-		$ref_id = filter_input( INPUT_GET, 'ref_id', FILTER_SANITIZE_STRING );
+		$ref_id = isset( $_GET['ref_id'] ) ? sanitize_text_field( stripslashes ( $_GET['ref_id'] ) ) : '';
 
 		if ( empty( $ref_id ) ) {
 			//no ref id provided, cannot proceed

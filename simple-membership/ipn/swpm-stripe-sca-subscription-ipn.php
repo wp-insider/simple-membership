@@ -1,9 +1,5 @@
 <?php
 
-if( !function_exists('swpm_handle_subsc_signup_stand_alone')){
-	include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
-}
-
 class SwpmStripeSCASubscriptionIpnHandler {
 
 	public function __construct() {
@@ -12,15 +8,14 @@ class SwpmStripeSCASubscriptionIpnHandler {
 	}
 
 	public function handle_stripe_ipn() {
-				//This will get executed only for direct post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
-				//The webhooks are handled by the "swpm-stripe-subscription-ipn.php" script.
+		//This will get executed only for direct post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
+		//The webhooks are handled by the "swpm-stripe-subscription-ipn.php" script.
 
 		SwpmLog::log_simple_debug( 'Stripe SCA Subscription IPN (HTTP POST) received. Processing request...', true );
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 
 		// Read and sanitize the request parameters.
-
-		$ref_id = filter_input( INPUT_GET, 'ref_id', FILTER_SANITIZE_STRING );
+		$ref_id = isset( $_GET['ref_id'] ) ? sanitize_text_field( stripslashes ( $_GET['ref_id'] ) ) : '';
 
 		if ( empty( $ref_id ) ) {
 			//no ref id provided, cannot proceed
@@ -76,9 +71,10 @@ class SwpmStripeSCASubscriptionIpnHandler {
 				$error_msg = sprintf( "Fatal error! Payment with ref_id %s can't be found", $ref_id );
 				SwpmLog::log_simple_debug( $error_msg, false );
 				wp_die( esc_html( $error_msg ) );
+				return;
 			}
 
-			$sub_id = $sess->subscription;
+			$sub_id = isset( $sess->subscription ) ? $sess->subscription : '';
 
 			$sub = \Stripe\Subscription::retrieve( $sub_id );
 		} catch ( Exception $e ) {

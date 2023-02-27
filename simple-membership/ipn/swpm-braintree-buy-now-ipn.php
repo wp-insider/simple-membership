@@ -1,8 +1,9 @@
 <?php
-
-if( !function_exists('swpm_handle_subsc_signup_stand_alone')){
-	include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
-}
+/*
+ * Braintree Buy Now IPN handler
+ * 
+ * This class handles the Braintree Buy Now IPN requests.
+ */
 
 class SwpmBraintreeBuyNowIpnHandler {
 

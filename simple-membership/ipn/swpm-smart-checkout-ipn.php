@@ -1,11 +1,6 @@
 <?php
 
-if( !function_exists('swpm_handle_subsc_signup_stand_alone')){
-	include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
-}
-
-// Ignoring invalid class name PHPCS warning
-class swpm_smart_checkout_ipn_handler { // phpcs:ignore
+class swpm_smart_checkout_ipn_handler {
 
 	public $ipn_log = false;                    // bool: log IPN results to text file?
 	public $ipn_log_file;               // filename of the IPN log.
@@ -13,6 +8,7 @@ class swpm_smart_checkout_ipn_handler { // phpcs:ignore
 	public $ipn_data     = array();         // array contains the POST values for IPN.
 	public $fields       = array();           // array holds the fields to submit to paypal.
 	public $sandbox_mode = false;
+	public $paypal_url = 'https://www.paypal.com/cgi-bin/webscr';
 
 	public function __construct() {
 		$this->paypal_url   = 'https://www.paypal.com/cgi-bin/webscr';

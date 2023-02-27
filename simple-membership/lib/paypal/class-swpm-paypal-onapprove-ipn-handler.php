@@ -119,7 +119,7 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		//The $data['orderID'] is the ID for the order created using createOrder API call. The Transaction ID is the ID for the captured payment.
 		$txn_id = isset($txn_data['purchase_units'][0]['payments']['captures'][0]['id']) ? $txn_data['purchase_units'][0]['payments']['captures'][0]['id'] : '';
 		
-		$address_street = isset($txn_data['purchase_units'][0]['shipping']['address']['address_line_1']) ? $txn_data['payer']['shipping']['address']['address_line_1'] : '';
+		$address_street = isset($txn_data['purchase_units'][0]['shipping']['address']['address_line_1']) ? $txn_data['purchase_units'][0]['shipping']['address']['address_line_1'] : '';
 		if ( isset ( $txn_data['purchase_units'][0]['shipping']['address']['address_line_2'] )){
 			//If address line 2 is present, add it to the address.
 			$address_street .= ", " . $txn_data['purchase_units'][0]['shipping']['address']['address_line_2'];

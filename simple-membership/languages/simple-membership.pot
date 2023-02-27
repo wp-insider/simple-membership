@@ -603,14 +603,14 @@ msgstr ""
 
 #: classes/class.swpm-front-registration.php:35
 msgid ""
-"This special registration link (see the URL in the browser's address bar) "
+"This unique registration link (see the URL in the browser's address bar) "
 "has already been used. You don't need to create another account. Log into "
 "the existing account to access the protected content."
 msgstr ""
 
 #: classes/class.swpm-front-registration.php:44
 msgid ""
-"This special registration link (see the URL in the browser's address bar) is "
+"This unique registration link (see the URL in the browser's address bar) is "
 "invalid. Could not find a match for the given member ID and the security "
 "code. Please contact the site administrator."
 msgstr ""

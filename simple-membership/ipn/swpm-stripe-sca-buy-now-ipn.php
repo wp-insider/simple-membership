@@ -284,8 +284,11 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 		//$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
 		//User's IP address
-		$user_ip                                     = SwpmUtils::get_user_ip_address();
+		$user_ip = SwpmUtils::get_user_ip_address();
 		$_SESSION['swpm_payment_button_interaction'] = $user_ip;
+
+		//Get the button's level ID
+		$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 
 		//Custom field data
 		$custom_field_value  = 'subsc_ref=' . $membership_level_id;

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 4.2.8
+Stable tag: 4.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -168,6 +168,12 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 4.2.9 =
+- Added filter hooks to the Thank you page output message so it can be customized using custom code.
+- The address data (if available) will be collected when using the new PayPal checkout buttons.
+- Fixed a warning that was generating after Stripe Buy Now button checkout.
+- Added a new option so the directory listing addon can display the address fields separately (by using shortcode parameters).
 
 = 4.2.8 =
 - The country code from Stripe webhook notification is now converted to the full country name for better selection in the dropdown menu.

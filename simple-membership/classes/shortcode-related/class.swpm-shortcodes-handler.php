@@ -78,7 +78,7 @@ class SwpmShortcodesHandler {
 			return $output;
 		}
 
-		$output     .= '<div class="swpm-ty-page-registration">';
+		$output .= '<div class="swpm-ty-page-registration">';
 		$member_data = SwpmUtils::get_incomplete_paid_member_info_by_ip();
 		if ( $member_data ) {
 			//Found a member profile record for this IP that needs to be completed
@@ -90,19 +90,24 @@ class SwpmShortcodesHandler {
 				),
 				$reg_page_url
 			);
-			$output           .= '<div class="swpm-ty-page-registration-link swpm-yellow-box">';
-			$output           .= '<p>' . SwpmUtils::_( 'Click on the following link to complete the registration.' ) . '</p>';
-			$output           .= '<p><a href="' . $rego_complete_url . '">' . SwpmUtils::_( 'Click here to complete your paid registration' ) . '</a></p>';
-			$output           .= '</div>';
+			$output .= '<div class="swpm-ty-page-registration-link swpm-yellow-box">';
+			$output .= '<p>' . SwpmUtils::_( 'Click on the following link to complete the registration.' ) . '</p>';
+			$output .= '<p><a href="' . $rego_complete_url . '">' . SwpmUtils::_( 'Click here to complete your paid registration' ) . '</a></p>';
+			$output .= '</div>';
+			//Allow addons to modify the output
+			$output = apply_filters( 'swpm_ty_page_registration_msg_with_link', $output, $rego_complete_url );
 		} else {
 			//Nothing found. Check again later.
 			$output .= '<div class="swpm-ty-page-registration-link swpm-yellow-box">';
 			$output .= SwpmUtils::_( 'If you have just made a membership payment then your payment is yet to be processed. Please check back in a few minutes. An email will be sent to you with the details shortly.' );
 			$output .= '</div>';
+			//Allow addons to modify the output
+			$output = apply_filters( 'swpm_ty_page_registration_msg_no_link', $output );
 		}
 
 		$output .= '</div>'; //end of .swpm-ty-page-registration
 
+		$output = apply_filters( 'swpm_ty_page_registration_output', $output );
 		return $output;
 	}
 

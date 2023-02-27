@@ -32,7 +32,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		//Check if the registration completion link (if present in the URL) has been already used. Show an  appropriate error message to prevent confusion.
 		if( SwpmUtils::is_registration_completion_link_already_used() ){
 			$already_used_rego_complete_link_msg = '<div class="swpm_already_used_registration_complete_link_msg">';
-			$already_used_rego_complete_link_msg .= SwpmUtils::_( "This special registration link (see the URL in the browser's address bar) has already been used. You don't need to create another account. Log into the existing account to access the protected content." );
+			$already_used_rego_complete_link_msg .= SwpmUtils::_( "This unique registration link (see the URL in the browser's address bar) has already been used. You don't need to create another account. Log into the existing account to access the protected content." );
 			$already_used_rego_complete_link_msg .= '</div>';
 			$already_used_rego_complete_link_msg = apply_filters('swpm_already_used_registration_link_message', $already_used_rego_complete_link_msg);
 			return $already_used_rego_complete_link_msg;
@@ -41,7 +41,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		//Check if the registration completion link (if present in the URL) is invalid. Show an appropriate error message to prevent confusion (when they are clicking an invalid/deleted/old link).
 		if( SwpmUtils::is_registration_completion_link_invalid() ){
 				$rego_complete_link_invalid_msg = '<div class="swpm_registration_complete_link_invalid_msg">';
-				$rego_complete_link_invalid_msg .= SwpmUtils::_( "This special registration link (see the URL in the browser's address bar) is invalid. Could not find a match for the given member ID and the security code. Please contact the site administrator." );
+				$rego_complete_link_invalid_msg .= SwpmUtils::_( "This unique registration link (see the URL in the browser's address bar) is invalid. Could not find a match for the given member ID and the security code. Please contact the site administrator." );
 				$rego_complete_link_invalid_msg .= '</div>';
 				$rego_complete_link_invalid_msg = apply_filters('swpm_registration_completion_link_invalid_message', $rego_complete_link_invalid_msg);
 				return $rego_complete_link_invalid_msg;

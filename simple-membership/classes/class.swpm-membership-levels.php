@@ -132,7 +132,7 @@ class SwpmMembershipLevels extends WP_List_Table {
     }
 
     function no_items() {
-        SwpmUtils::e('No membership levels found.');
+        _e('No membership levels found.', 'simple-membership');
     }
 
     function process_form_request() {
@@ -229,7 +229,7 @@ class SwpmMembershipLevels extends WP_List_Table {
         </form>
 
         <p>
-            <a href="admin.php?page=simple_wp_membership_levels&level_action=add" class="button-primary"><?php SwpmUtils::e('Add New') ?></a>
+            <a href="admin.php?page=simple_wp_membership_levels&level_action=add" class="button-primary"><?php _e('Add New', 'simple-membership') ?></a>
         </p>
         <?php
     }
@@ -283,7 +283,7 @@ class SwpmMembershipLevels extends WP_List_Table {
             $menu_tabs = apply_filters('swpm_membership_levels_additional_menu_tabs_array', array());
             foreach ($menu_tabs as $level_action => $title){
                 ?>
-                <a class="nav-tab <?php echo ($selected == $member_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=<?php echo esc_attr($level_action); ?>" ><?php SwpmUtils::e($title); ?></a>
+                <a class="nav-tab <?php echo ($selected == $level_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_levels&level_action=<?php echo esc_attr($level_action); ?>" ><?php _e($title, 'simple-membership'); ?></a>
                 <?php
             }
 

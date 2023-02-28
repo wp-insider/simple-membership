@@ -24,9 +24,9 @@ class SwpmPaymentsAdminMenu {
 
             <!-- start nav menu tabs -->
             <h2 class="nav-tab-wrapper">
-                <a class="nav-tab <?php echo ($tab == '') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments"><?php SwpmUtils::e('Transactions'); ?></a>
-                <a class="nav-tab <?php echo ($tab == 'payment_buttons') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons"><?php SwpmUtils::e('Manage Payment Buttons'); ?></a>
-                <a class="nav-tab <?php echo ($tab == 'create_new_button') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=create_new_button"><?php SwpmUtils::e('Create New Button'); ?></a>
+                <a class="nav-tab <?php echo ($tab == '') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments"><?php _e('Transactions', 'simple-membership'); ?></a>
+                <a class="nav-tab <?php echo ($tab == 'payment_buttons') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons"><?php _e('Manage Payment Buttons', 'simple-membership'); ?></a>
+                <a class="nav-tab <?php echo ($tab == 'create_new_button') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=create_new_button"><?php _e('Create New Button', 'simple-membership'); ?></a>
                 <?php
                 if ($tab == 'edit_button') {//Only show the "edit button" tab when a button is being edited.
                     echo '<a class="nav-tab nav-tab-active" href="#">Edit Button</a>';
@@ -38,7 +38,7 @@ class SwpmPaymentsAdminMenu {
                 $menu_tabs = apply_filters('swpm_payments_menu_additional_menu_tabs_array', array());
                 foreach ($menu_tabs as $menu_action => $title){
                     ?>
-                    <a class="nav-tab <?php echo ($selected == $menu_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=<?php echo $menu_action; ?>" ><?php SwpmUtils::e($title); ?></a>
+                    <a class="nav-tab <?php echo ($selected == $menu_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=<?php echo $menu_action; ?>" ><?php _e($title, 'simple-membership'); ?></a>
                     <?php
                 }
 

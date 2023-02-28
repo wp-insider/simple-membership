@@ -8,7 +8,7 @@ function swpm_handle_add_new_txn_manually(){
     global $wpdb;
 
     echo '<div class="swpm-grey-box">';
-    SwpmUtils::e( 'You can add a new transaction record manually using this interface. It can be useful if you manually accept cash payment for your memberships.' );
+    _e( 'You can add a new transaction record manually using this interface. It can be useful if you manually accept cash payment for your memberships.', 'simple-membership' );
     echo '</div>';
 
     if( isset( $_REQUEST['swpm_add_new_txn_save_submit'])){
@@ -51,7 +51,7 @@ function swpm_handle_add_new_txn_manually(){
         SwpmLog::log_simple_debug("Manual transaction added successfully.", true);
 
         echo '<div class="swpm-orange-box">';
-        SwpmUtils::e('Manual transaction added successfully. ');
+        _e('Manual transaction added successfully. ', 'simple-membership');
         echo '<a href="admin.php?page=simple_wp_membership_payments">View all transactions</a>';
         echo '</div>';
 

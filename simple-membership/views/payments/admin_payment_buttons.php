@@ -24,5 +24,5 @@ $payments_buttons_table->prepare_items();
 </form>
 
 <p>
-    <a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" class="button"><?php SwpmUtils::e('Create New Button'); ?></a>
+    <a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" class="button"><?php _e('Create New Button', 'simple-membership'); ?></a>
 </p>

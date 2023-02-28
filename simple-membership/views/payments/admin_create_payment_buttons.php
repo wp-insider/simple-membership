@@ -31,23 +31,23 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 			<tr>
 			<td>
 			<fieldset>
-				<label><input type="radio" name="button_type" value="pp_buy_now" checked /> <?php SwpmUtils::e( 'PayPal Buy Now' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_buy_now" checked /> <?php _e( 'PayPal Buy Now', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="pp_subscription" /> <?php SwpmUtils::e( 'PayPal Subscription' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_subscription" /> <?php _e( 'PayPal Subscription', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="pp_buy_now_new" /> <?php SwpmUtils::e( 'PayPal Buy Now (New API)' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_buy_now_new" /> <?php _e( 'PayPal Buy Now (New API)', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="pp_subscription_new" /> <?php SwpmUtils::e( 'PayPal Subscription (New API)' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_subscription_new" /> <?php _e( 'PayPal Subscription (New API)', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="braintree_buy_now" /> <?php SwpmUtils::e( 'Braintree Buy Now' ); ?></label>
+				<label><input type="radio" name="button_type" value="braintree_buy_now" /> <?php _e( 'Braintree Buy Now', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_sca_buy_now" /> <?php SwpmUtils::e( 'Stripe SCA Buy Now' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_sca_buy_now" /> <?php _e( 'Stripe SCA Buy Now', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_sca_subscription" /> <?php SwpmUtils::e( 'Stripe SCA Subscription' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_sca_subscription" /> <?php _e( 'Stripe SCA Subscription', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_buy_now" /> <?php SwpmUtils::e( 'Stripe Legacy Buy Now (deprecated)' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_buy_now" /> <?php _e( 'Stripe Legacy Buy Now (deprecated)', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_subscription" /> <?php SwpmUtils::e( 'Stripe Legacy Subscription (deprecated)' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_subscription" /> <?php _e( 'Stripe Legacy Subscription (deprecated)', 'simple-membership' ); ?></label>
 				<br />
 			</fieldset>
 			</td>

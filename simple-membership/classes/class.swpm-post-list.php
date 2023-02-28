@@ -234,7 +234,7 @@ class SwpmPostList extends WP_List_Table {
     }
 
     function no_items() {
-        SwpmUtils::e('No items found.');
+        _e('No items found.', 'simple-membership');
     }
 
 }

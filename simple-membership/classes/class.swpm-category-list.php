@@ -134,7 +134,7 @@ class SwpmCategoryList extends WP_List_Table {
     }
 
     function no_items() {
-        SwpmUtils::e('No category found.');
+        _e('No category found.', 'simple-membership');
     }
 
 }

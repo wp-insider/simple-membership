@@ -1204,26 +1204,26 @@ class SwpmSettings {
 	}
 
 	public function general_settings_callback() {
-		SwpmUtils::e( 'General Plugin Settings.' );
+		_e( 'General Plugin Settings.', 'simple-membership' );
 	}
 
 	public function pages_settings_callback() {
-		SwpmUtils::e( 'Page Setup and URL Related settings.' );
+		_e( 'Page Setup and URL Related settings.', 'simple-membership' );
 
 		echo '<p>';
-		SwpmUtils::e( 'The following pages are required for the plugin to function correctly. These pages were automatically created by the plugin at install time.' );
-		SwpmUtils::e( ' Read <a href="https://simple-membership-plugin.com/recreating-required-pages-simple-membership-plugin/" target="_blank">this documentation</a> to learn how to recreate them (if needed).' );
+		_e( 'The following pages are required for the plugin to function correctly. These pages were automatically created by the plugin at install time.', 'simple-membership' );
+		_e( ' Read <a href="https://simple-membership-plugin.com/recreating-required-pages-simple-membership-plugin/" target="_blank">this documentation</a> to learn how to recreate them (if needed).', 'simple-membership' );
 		echo '</p>';
 	}
 
 	public function optional_pages_settings_callback() {
 		echo '<p>';
-		SwpmUtils::e( 'Optional page. It is automatically created by the plugin when you install the plugin for the first time.' );
+		_e( 'Optional page. It is automatically created by the plugin when you install the plugin for the first time.', 'simple-membership' );
 		echo '</p>';
 	}
 
 	public function testndebug_settings_callback() {
-		SwpmUtils::e( 'Testing and Debug Related Settings.' );
+		_e( 'Testing and Debug Related Settings.', 'simple-membership' );
 	}
 
         public function swpm_settings_tab_2_before_fields_callback() {
@@ -1234,11 +1234,11 @@ class SwpmSettings {
         }
         
 	public function testmode_payment_settings_callback() {
-			SwpmUtils::e( 'This section allows you to enable/disable sandbox or test mode for the payment buttons.' );
+			_e( 'This section allows you to enable/disable sandbox or test mode for the payment buttons.', 'simple-membership' );
 	}
 
 	public function paypal_checkout_settings_callback() {
-		SwpmUtils::e( 'Configure the PayPal API credentials for the new PayPal checkout.' );
+		_e( 'Configure the PayPal API credentials for the new PayPal checkout.', 'simple-membership' );
 		echo '&nbsp;' . '<a href="https://simple-membership-plugin.com/getting-paypal-api-credentials" target="_blank">' . SwpmUtils::_( 'Read this documentation' ) . '</a> ' . SwpmUtils::_( 'to learn how to get your PayPal API credentials.' );
 	}
 
@@ -1262,17 +1262,17 @@ class SwpmSettings {
 					if( !empty($production_webhook_id)){
 						//Production webhook exists
 						echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						SwpmUtils::e( 'Live Webhook exists. If you still have issues with webhooks, you can delete it and create again.' );
+						_e( 'Live Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership' );
 						echo '</span>';
 					} else {
 						//Production webhook does not exist
 						if( empty( $this->get_value('paypal-live-client-id')) || empty( $this->get_value('paypal-live-secret-key')) ){
 							echo '<p><span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							SwpmUtils::e( 'Live PayPal API credentials are not set. Please set the Live PayPal API credentials first.');
+							_e( 'Live PayPal API credentials are not set. Please set the Live PayPal API credentials first.', 'simple-membership');
 							echo '</span></p>';
 						} else {
 							echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							SwpmUtils::e( 'No webhook found. Use the following Create Live Webhook link to create a new webhook automatically.' );
+							_e( 'No webhook found. Use the following Create Live Webhook link to create a new webhook automatically.', 'simple-membership' );
 							echo '</span>';
 							$create_live_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_create_live_webhook=1' );
 							$create_live_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_live_webhook' ), $create_live_webhook_url );
@@ -1290,17 +1290,17 @@ class SwpmSettings {
 					if( !empty($sandbox_webhook_id)){
 						//Sandbox webhook exists
 						echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						SwpmUtils::e( 'Sandbox Webhook exists. If you still have issues with webhooks, you can delete it and create again.');
+						_e( 'Sandbox Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership');
 						echo '</span>';
 					} else {
 						//Sandbox webhook does not exist
 						if( empty( $this->get_value('paypal-sandbox-client-id')) || empty( $this->get_value('paypal-sandbox-secret-key')) ){
 							echo '<p><span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							SwpmUtils::e( 'Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal API credentials first.' );
+							_e( 'Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal API credentials first.', 'simple-membership' );
 							echo '</span></p>';
 						} else {
 							echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							SwpmUtils::e( 'No webhook found. Use the following Create Sandbox Webhook link to create a new webhook automatically.' );
+							_e( 'No webhook found. Use the following Create Sandbox Webhook link to create a new webhook automatically.', 'simple-membership' );
 							echo '</span>';
 							$create_sandbox_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_create_sandbox_webhook=1' );
 							$create_sandbox_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_sandbox_webhook' ), $create_sandbox_webhook_url );
@@ -1311,12 +1311,12 @@ class SwpmSettings {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php SwpmUtils::e('Delete Webhooks'); ?></th>
+				<th scope="row"><?php _e('Delete Webhooks', 'simple-membership'); ?></th>
 				<td>
 					<?php
 						if( $all_api_creds_missing ){
 							echo '<p><span class="swpm-paypal-delete-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp';
-							SwpmUtils::e( 'PayPal API credentials are missing. Please set the PayPal API credentials.' ); 
+							_e( 'PayPal API credentials are missing. Please set the PayPal API credentials.', 'simple-membership' ); 
 							echo '</span></p>';
 						} else {
 							$delete_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_delete_webhook=1' );
@@ -1332,26 +1332,26 @@ class SwpmSettings {
 	}
 
 	public function stripe_global_settings_callback() {
-                SwpmUtils::e( 'This section allows you to configure Stripe payment related settings.' );               
+                _e( 'This section allows you to configure Stripe payment related settings.', 'simple-membership' );               
 	}
         
 	public function reg_email_settings_callback() {
-		SwpmUtils::e( 'This email will be sent to your users when they complete the registration and become a member.' );
+		_e( 'This email will be sent to your users when they complete the registration and become a member.', 'simple-membership' );
 	}
 
 	public function reset_password_settings_callback() {
-		SwpmUtils::e( 'This email will be sent to your users when they use the password reset functionality.' );
+		_e( 'This email will be sent to your users when they use the password reset functionality.', 'simple-membership' );
 	}
 
 	public function email_settings_overview_callback() {
 		echo '<div class="swpm-grey-box">';
 		echo '<p>';
-		SwpmUtils::e( 'This interface lets you customize the various emails that get sent to your members for various actions. The default settings should be good to get your started.' );
+		_e( 'This interface lets you customize the various emails that get sent to your members for various actions. The default settings should be good to get your started.', 'simple-membership' );
 		echo '</p>';
 
 		echo '<p>';
 		echo '<a href="https://simple-membership-plugin.com/email-merge-tags-email-shortcodes-for-email-customization/" target="_blank">' . SwpmUtils::_( 'This documentation' ) . '</a>';
-		SwpmUtils::e( ' explains what email merge tags you can use in the email body field to customize it (if you want to).' );
+		_e( ' explains what email merge tags you can use in the email body field to customize it (if you want to).', 'simple-membership' );
 		echo '</p>';
 		echo '</div>';
 	}
@@ -1364,24 +1364,24 @@ class SwpmSettings {
 			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
 		}
 
-		SwpmUtils::e( 'Settings in this section apply to all emails.' );
+		_e( 'Settings in this section apply to all emails.', 'simple-membership' );
 	}
 
 	public function upgrade_email_settings_callback() {
-		SwpmUtils::e( 'This email will be sent to your users after account upgrade (when an existing member pays for a new membership level).' );
+		_e( 'This email will be sent to your users after account upgrade (when an existing member pays for a new membership level).', 'simple-membership' );
 	}
 
 	public function bulk_activate_email_settings_callback() {
-		SwpmUtils::e( 'This email will be sent to your members when you use the bulk account activate and notify action.' );
-		SwpmUtils::e( ' You cannot use email merge tags in this email. You can only use generic text.' );
+		_e( 'This email will be sent to your members when you use the bulk account activate and notify action.', 'simple-membership' );
+		_e( ' You cannot use email merge tags in this email. You can only use generic text.', 'simple-membership' );
 	}
 
 	public function email_activation_email_settings_callback() {
-		SwpmUtils::e( 'This email will be sent if Email Activation is enabled for a Membership Level.' );
+		_e( 'This email will be sent if Email Activation is enabled for a Membership Level.', 'simple-membership' );
 	}
 
 	public function reg_prompt_email_settings_callback() {
-		SwpmUtils::e( 'This email will be sent to prompt users to complete registration after the payment.' );
+		_e( 'This email will be sent to prompt users to complete registration after the payment.', 'simple-membership' );
 	}
 
 	public function advanced_settings_callback() {
@@ -1413,7 +1413,7 @@ class SwpmSettings {
 
                 echo '<div class="swpm-grey-box">';
 		echo '<p>';
-		SwpmUtils::e( 'This page allows you to configure some advanced features of the plugin.' );
+		_e( 'This page allows you to configure some advanced features of the plugin.', 'simple-membership' );
 		echo '</p>';
 		echo '</div>';                 
 	}
@@ -1427,27 +1427,27 @@ class SwpmSettings {
                 
 		echo '<div class="swpm-grey-box">';
 		echo '<p>';
-		SwpmUtils::e( 'This interface lets you configure blacklisting & whitelisting for email addresses. ' );
+		_e( 'This interface lets you configure blacklisting & whitelisting for email addresses. ', 'simple-membership' );
 		echo '<a href="https://simple-membership-plugin.com/blacklisting-whitelisting-feature/" target="_blank">' . SwpmUtils::_( 'This blacklisting & whitelisting documentation' ) . '</a>';
-		SwpmUtils::e( ' explains how to use this feautre.' );
+		_e( ' explains how to use this feautre.', 'simple-membership' );
 		echo '</p>';
 		echo '</div>';            
         }
         
 	public function whitelist_settings_callback() {
-                SwpmUtils::e( 'This section allows you to configure whitelisting settings.' );
+		_e( 'This section allows you to configure whitelisting settings.', 'simple-membership' );
 	}
 
 	public function blacklist_settings_callback() {
-		SwpmUtils::e( 'This section allows you to configure blacklisting settings.' );
+		_e( 'This section allows you to configure blacklisting settings.', 'simple-membership' );
 	}
 
 	public function advanced_settings_auto_create_swpm_uses_settings_callback() {
-		SwpmUtils::e( 'This section allows you to configure automatic creation of member accounts when new WP User records are created by another plugin. It can be useful if you are using another plugin that creates WP user records and you want them to be recognized in the membership plugin.' );
+		_e( 'This section allows you to configure automatic creation of member accounts when new WP User records are created by another plugin. It can be useful if you are using another plugin that creates WP user records and you want them to be recognized in the membership plugin.', 'simple-membership' );
 	}
 
 	public function advanced_settings_terms_and_conditions_callback() {
-		SwpmUtils::e( 'This section allows you to configure terms and conditions and privacy policy that users must accept at registration time.' );
+		_e( 'This section allows you to configure terms and conditions and privacy policy that users must accept at registration time.', 'simple-membership' );
 	}
 
 	public function sanitize_tab_1( $input ) {

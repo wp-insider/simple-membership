@@ -602,11 +602,11 @@ class SwpmMembers extends WP_List_Table {
 		?>
 
 		<div class="postbox">
-			<h3 class="hndle"><label for="title"><?php SwpmUtils::e( 'Bulk Update Membership Level of Members' ); ?></label></h3>
+			<h3 class="hndle"><label for="title"><?php _e( 'Bulk Update Membership Level of Members', 'simple-membership' ); ?></label></h3>
 			<div class="inside">
 				<p>
-					<?php SwpmUtils::e( 'You can manually change the membership level of any member by editing the record from the members menu. ' ); ?>
-					<?php SwpmUtils::e( 'You can use the following option to bulk update the membership level of users who belong to the level you select below.' ); ?>
+					<?php _e( 'You can manually change the membership level of any member by editing the record from the members menu. ', 'simple-membership' ); ?>
+					<?php _e( 'You can use the following option to bulk update the membership level of users who belong to the level you select below.', 'simple-membership' ); ?>
 				</p>
 				<form method="post" action="">
 					<input type="hidden" name="swpm_bulk_change_level_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_change_level_nonce_action' ); ?>" />
@@ -614,33 +614,33 @@ class SwpmMembers extends WP_List_Table {
 					<table width="100%" border="0" cellspacing="0" cellpadding="6">
 						<tr valign="top">
 							<td width="25%" align="left">
-								<strong><?php SwpmUtils::e( 'Membership Level: ' ); ?></strong>
+								<strong><?php _e( 'Membership Level: ', 'simple-membership' ); ?></strong>
 							</td>
 							<td align="left">
 								<select name="swpm_bulk_change_level_from">
-									<option value="please_select"><?php SwpmUtils::e( 'Select Current Level' ); ?></option>
+									<option value="please_select"><?php _e( 'Select Current Level', 'simple-membership' ); ?></option>
 									<?php echo SwpmUtils::membership_level_dropdown(); ?>
 								</select>
-								<p class="description"><?php SwpmUtils::e( 'Select the current membership level (the membership level of all members who are in this level will be updated).' ); ?></p>
+								<p class="description"><?php _e( 'Select the current membership level (the membership level of all members who are in this level will be updated).', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<strong><?php SwpmUtils::e( 'Level to Change to: ' ); ?></strong>
+								<strong><?php _e( 'Level to Change to: ', 'simple-membership' ); ?></strong>
 							</td>
 							<td align="left">
 								<select name="swpm_bulk_change_level_to">
-									<option value="please_select"><?php SwpmUtils::e( 'Select Target Level' ); ?></option>
+									<option value="please_select"><?php _e( 'Select Target Level', 'simple-membership' ); ?></option>
 									<?php echo SwpmUtils::membership_level_dropdown(); ?>
 								</select>
-								<p class="description"><?php SwpmUtils::e( 'Select the new membership level.' ); ?></p>
+								<p class="description"><?php _e( 'Select the new membership level.', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<input type="submit" class="button" name="swpm_bulk_change_level_process" value="<?php SwpmUtils::e( 'Bulk Change Membership Level' ); ?>" />
+								<input type="submit" class="button" name="swpm_bulk_change_level_process" value="<?php _e( 'Bulk Change Membership Level', 'simple-membership' ); ?>" />
 							</td>
 							<td align="left"></td>
 						</tr>
@@ -650,12 +650,12 @@ class SwpmMembers extends WP_List_Table {
 			</div></div>
 
 		<div class="postbox">
-			<h3 class="hndle"><label for="title"><?php SwpmUtils::e( 'Bulk Update Access Starts Date of Members' ); ?></label></h3>
+			<h3 class="hndle"><label for="title"><?php _e( 'Bulk Update Access Starts Date of Members', 'simple-membership' ); ?></label></h3>
 			<div class="inside">
 
 				<p>
-					<?php SwpmUtils::e( 'The access starts date of a member is set to the day the user registers. This date value is used to calculate how long the member can access your content that are protected with a duration type protection in the membership level. ' ); ?>
-					<?php SwpmUtils::e( 'You can manually set a specific access starts date value of all members who belong to a particular level using the following option.' ); ?>
+					<?php _e( 'The access starts date of a member is set to the day the user registers. This date value is used to calculate how long the member can access your content that are protected with a duration type protection in the membership level. ', 'simple-membership' ); ?>
+					<?php _e( 'You can manually set a specific access starts date value of all members who belong to a particular level using the following option.', 'simple-membership' ); ?>
 				</p>
 				<form method="post" action="">
 					<input type="hidden" name="swpm_bulk_start_date_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_start_date_nonce_action' ); ?>" />
@@ -663,13 +663,13 @@ class SwpmMembers extends WP_List_Table {
 					<table width="100%" border="0" cellspacing="0" cellpadding="6">
 						<tr valign="top">
 							<td width="25%" align="left">
-								<strong><?php SwpmUtils::e( 'Membership Level: ' ); ?></strong>
+								<strong><?php _e( 'Membership Level: ', 'simple-membership' ); ?></strong>
 							</td><td align="left">
 								<select name="swpm_bulk_user_start_date_change_level">
-									<option value="please_select"><?php SwpmUtils::e( 'Select Level' ); ?></option>
+									<option value="please_select"><?php _e( 'Select Level', 'simple-membership' ); ?></option>
 									<?php echo SwpmUtils::membership_level_dropdown(); ?>
 								</select>
-								<p class="description"><?php SwpmUtils::e( 'Select the Membership level (the access start date of all members who are in this level will be updated).' ); ?></p>
+								<p class="description"><?php _e( 'Select the Membership level (the access start date of all members who are in this level will be updated).', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
@@ -678,13 +678,13 @@ class SwpmMembers extends WP_List_Table {
 								<strong>Access Starts Date: </strong>
 							</td><td align="left">
 								<input name="swpm_bulk_user_start_date_change_date" id="swpm_bulk_user_start_date_change_date" class="swpm-select-date" type="text" size="20" value="<?php echo ( date( 'Y-m-d' ) ); ?>" />
-								<p class="description"><?php SwpmUtils::e( 'Specify the Access Starts date value.' ); ?></p>
+								<p class="description"><?php _e( 'Specify the Access Starts date value.', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<input type="submit" class="button" name="swpm_bulk_user_start_date_change_process" value="<?php SwpmUtils::e( 'Bulk Change Access Starts Date' ); ?>" />
+								<input type="submit" class="button" name="swpm_bulk_user_start_date_change_process" value="<?php _e( 'Bulk Change Access Starts Date', 'simple-membership' ); ?>" />
 							</td>
 							<td align="left"></td>
 						</tr>
@@ -741,7 +741,7 @@ class SwpmMembers extends WP_List_Table {
 				$menu_tabs = apply_filters( 'swpm_members_additional_menu_tabs_array', array() );
 				foreach ( $menu_tabs as $member_action => $title ) {
 					?>
-					<a class="nav-tab <?php echo ( $selected == $member_action ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=<?php echo $member_action; ?>" ><?php SwpmUtils::e( $title ); ?></a>
+					<a class="nav-tab <?php echo ( $selected == $member_action ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=<?php echo $member_action; ?>" ><?php _e( $title, 'simple-membership' ); ?></a>
 					<?php
 				}
 				?>

@@ -62,7 +62,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			//Lets check if this is a registration for paid membership
 			$member = SwpmUtils::get_paid_member_info();
 			if ( empty( $member ) ) {
-				SwpmUtils::e( 'Error! Invalid Request. Could not find a match for the given security code and the user ID.' );
+				_e( 'Error! Invalid Request. Could not find a match for the given security code and the user ID.', 'simple-membership' );
 			} else {
 				$membership_level = $member->membership_level;
 			}

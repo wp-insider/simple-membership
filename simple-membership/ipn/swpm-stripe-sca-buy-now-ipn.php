@@ -5,7 +5,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 	public function __construct() {
 		//check if this is session create request
 		if ( wp_doing_ajax() ) {
-			$action = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_STRING );
+			$action = isset( $_POST['action'] ) ? sanitize_text_field( stripslashes ( $_POST['action'] ) ) : '';
 			if ( 'swpm_stripe_sca_create_checkout_session' === $action ) {
 				add_action( 'wp_ajax_swpm_stripe_sca_create_checkout_session', array( $this, 'handle_session_create' ) );
 				add_action( 'wp_ajax_nopriv_swpm_stripe_sca_create_checkout_session', array( $this, 'handle_session_create' ) );
@@ -238,17 +238,17 @@ class SwpmStripeSCABuyNowIpnHandler {
 			wp_send_json( array( 'error' => 'No button ID provided' ) );
 		}
 
-                //Check if payment_method_types is being used in the shortcode.
-                $payment_method_types = isset( $_POST['payment_method_types'] ) ? sanitize_text_field( stripslashes ( $_POST['payment_method_types'] ) ) : '';
+		//Check if payment_method_types is being used in the shortcode.
+		$payment_method_types = isset( $_POST['payment_method_types'] ) ? sanitize_text_field( stripslashes ( $_POST['payment_method_types'] ) ) : '';
 		if ( empty( $payment_method_types ) ) {
-                        //Use the default payment_method_types value.
+        	//Use the default payment_method_types value.
 			$payment_method_types_array = array( 'card' );
 		} else {
-                        //Use the payment_method_types specified in the shortcode (example value: card,us_bank_account
-                        $payment_method_types_array = array_map( 'trim', explode (",", $payment_method_types) );
-                }
+			//Use the payment_method_types specified in the shortcode (example value: card,us_bank_account
+			$payment_method_types_array = array_map( 'trim', explode (",", $payment_method_types) );
+        }
                 
-		$uniqid = filter_input( INPUT_POST, 'swpm_uniqid', FILTER_SANITIZE_STRING );
+		$uniqid = isset( $_POST['swpm_uniqid'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_uniqid'] ) ) : '';
 		$uniqid = ! empty( $uniqid ) ? $uniqid : '';
 
 		$settings   = SwpmSettings::get_instance();

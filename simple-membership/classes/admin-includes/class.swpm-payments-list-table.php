@@ -198,7 +198,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		// pagination requirement
 		$current_page = $this->get_pagenum();
 
-		$search_term = filter_input( INPUT_POST, 'swpm_txn_search', FILTER_SANITIZE_STRING );
+		$search_term = isset( $_POST['swpm_txn_search'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_txn_search'] ) ) : '';
 		$search_term = trim( $search_term );
 
 		if ( $search_term ) {// Only load the searched records.

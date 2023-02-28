@@ -512,8 +512,8 @@ function swpm_edit_stripe_sca_buy_now_button_data() {
 		update_post_meta( $button_id, 'payment_amount', trim( sanitize_text_field( $_REQUEST['payment_amount'] ) ) );
 		update_post_meta( $button_id, 'payment_currency', sanitize_text_field( $_REQUEST['payment_currency'] ) );
 
-		$stripe_test_secret_key      = filter_input( INPUT_POST, 'stripe_test_secret_key', FILTER_SANITIZE_STRING );
-		$stripe_test_publishable_key = filter_input( INPUT_POST, 'stripe_test_publishable_key', FILTER_SANITIZE_STRING );
+		$stripe_test_secret_key = isset( $_POST['stripe_test_secret_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_secret_key'] ) ) : '';
+		$stripe_test_publishable_key = isset( $_POST['stripe_test_publishable_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_publishable_key'] ) ) : '';	
 
 		if ( ! is_null( $stripe_test_secret_key ) ) {
 			update_post_meta( $button_id, 'stripe_test_secret_key', trim( $stripe_test_secret_key ) );
@@ -523,8 +523,8 @@ function swpm_edit_stripe_sca_buy_now_button_data() {
 			update_post_meta( $button_id, 'stripe_test_publishable_key', trim( $stripe_test_publishable_key ) );
 		}
 
-		$stripe_live_secret_key      = filter_input( INPUT_POST, 'stripe_live_secret_key', FILTER_SANITIZE_STRING );
-		$stripe_live_publishable_key = filter_input( INPUT_POST, 'stripe_live_publishable_key', FILTER_SANITIZE_STRING );
+		$stripe_live_secret_key = isset( $_POST['stripe_live_secret_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_live_secret_key'] ) ) : '';
+		$stripe_live_publishable_key = isset( $_POST['stripe_live_publishable_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_live_publishable_key'] ) ) : '';
 
 		if ( ! is_null( $stripe_live_secret_key ) ) {
 			update_post_meta( $button_id, 'stripe_live_secret_key', trim( $stripe_live_secret_key ) );

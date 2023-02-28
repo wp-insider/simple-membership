@@ -169,6 +169,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.3.0 =
+- Regenerated the Translation POT file.
+- Language strings updated in various admin interfaces.
+- Removed the use of the FILTER_SANITIZE_STRING flag for PHP8.1 compatibility.
+
 = 4.2.9 =
 - Added filter hooks to the Thank you page output message so it can be customized using custom code.
 - The address data (if available) will be collected when using the new PayPal checkout buttons.

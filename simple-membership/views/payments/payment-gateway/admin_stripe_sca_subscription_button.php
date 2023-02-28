@@ -333,10 +333,11 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 		update_post_meta( $button_id, 'stripe_automatic_tax', isset( $_POST['automatic_tax'] ) ? '1' : '' );
 
 		//API details
-		$stripe_test_secret_key      = filter_input( INPUT_POST, 'stripe_test_secret_key', FILTER_SANITIZE_STRING );
-		$stripe_test_publishable_key = filter_input( INPUT_POST, 'stripe_test_publishable_key', FILTER_SANITIZE_STRING );
-		$stripe_live_secret_key      = filter_input( INPUT_POST, 'stripe_live_secret_key', FILTER_SANITIZE_STRING );
-		$stripe_live_publishable_key = filter_input( INPUT_POST, 'stripe_live_publishable_key', FILTER_SANITIZE_STRING );
+		$stripe_test_secret_key = isset( $_POST['stripe_test_secret_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_secret_key'] ) ) : '';
+		$stripe_test_publishable_key = isset( $_POST['stripe_test_publishable_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_publishable_key'] ) ) : '';
+		$stripe_live_secret_key = isset( $_POST['stripe_live_secret_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_live_secret_key'] ) ) : '';
+		$stripe_live_publishable_key = isset( $_POST['stripe_live_publishable_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_live_publishable_key'] ) ) : '';
+
 		if ( isset( $stripe_test_secret_key ) ) {
 			update_post_meta( $button_id, 'stripe_test_secret_key', sanitize_text_field( $stripe_test_secret_key ) );
 		}

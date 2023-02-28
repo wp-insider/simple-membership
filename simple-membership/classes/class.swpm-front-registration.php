@@ -243,8 +243,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
                         //Handle DB insert for paid registration scenario.
 			$member_info['reg_code'] = '';
-			$member_id               = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
-			$code                    = filter_input( INPUT_GET, 'code', FILTER_SANITIZE_STRING );
+			$member_id = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
+			$code = isset( $_GET['code'] ) ? sanitize_text_field( stripslashes ( $_GET['code'] ) ) : '';
 			$wpdb->update(
 				$wpdb->prefix . 'swpm_members_tbl',
 				$member_info,
@@ -561,7 +561,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			echo SwpmUtils::_( 'Account already active. ' ) . '<a href="' . $login_page_url . '">' . SwpmUtils::_( 'click here' ) . '</a>' . SwpmUtils::_( ' to log in.' );
 			wp_die();
 		}
-		$code     = FILTER_INPUT( INPUT_GET, 'swpm_token', FILTER_SANITIZE_STRING );
+
+		$code = isset( $_GET['swpm_token'] ) ? sanitize_text_field( stripslashes ( $_GET['swpm_token'] ) ) : '';
 		$act_data = get_option( 'swpm_email_activation_data_usr_' . $member_id );
 		if ( empty( $code ) || empty( $act_data ) || $act_data['act_code'] !== $code ) {
 			//code mismatch

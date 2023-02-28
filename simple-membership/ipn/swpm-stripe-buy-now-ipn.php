@@ -26,9 +26,10 @@ class SwpmStripeBuyNowIpnHandler {
 		} else {
 			$price_in_cents = $payment_amount * 100;// The amount (in cents). This value is used in Stripe API.
 		}
-		$stripe_token      = filter_input( INPUT_POST, 'stripeToken', FILTER_SANITIZE_STRING );
-		$stripe_token_type = filter_input( INPUT_POST, 'stripeTokenType', FILTER_SANITIZE_STRING );
-		$stripe_email      = filter_input( INPUT_POST, 'stripeEmail', FILTER_SANITIZE_EMAIL );
+
+		$stripe_token = isset( $_POST['stripeToken'] ) ? sanitize_text_field( stripslashes ( $_POST['stripeToken'] ) ) : '';
+		$stripe_token_type = isset( $_POST['stripeTokenType'] ) ? sanitize_text_field( stripslashes ( $_POST['stripeTokenType'] ) ) : '';
+		$stripe_email = filter_input( INPUT_POST, 'stripeEmail', FILTER_SANITIZE_EMAIL );
 
 		// Retrieve the CPT for this button
 		$button_cpt = get_post( $button_id );

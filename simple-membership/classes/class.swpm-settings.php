@@ -17,7 +17,7 @@ class SwpmSettings {
 
 		if ( is_admin() ) { // for frontend just load settings but dont try to render settings page.
 			//Handle view log request
-			$view_log_type = filter_input( INPUT_GET, 'swpm_view_log', FILTER_SANITIZE_STRING );
+			$view_log_type = isset( $_GET['swpm_view_log'] ) ? sanitize_text_field( stripslashes ( $_GET['swpm_view_log'] ) ) : '';
 			if ( ! empty( $view_log_type ) ) {
 				switch ( $view_log_type ) {
 					case 'd':

@@ -11,7 +11,8 @@ class SwpmAuth {
 
 	private function __construct() {
 		//check if we need to display custom message on the login form
-		$custom_msg = filter_input( INPUT_COOKIE, 'swpm-login-form-custom-msg', FILTER_SANITIZE_STRING );
+		$custom_msg = filter_input( INPUT_COOKIE, 'swpm-login-form-custom-msg', FILTER_UNSAFE_RAW );
+		$custom_msg = sanitize_text_field( $custom_msg );
 		if ( ! empty( $custom_msg ) ) {
 			$this->lastStatusMsg = $custom_msg;
 			//let's 'unset' the cookie

@@ -322,7 +322,7 @@ function swpm_pp_smart_checkout_ajax_hanlder() {
 	// Start of IPN handling (script execution).
 
 	// check nonce.
-	$uniqid = filter_input( INPUT_POST, 'uniqid', FILTER_SANITIZE_STRING );
+	$uniqid = isset( $_POST['uniqid'] ) ? sanitize_text_field( stripslashes ( $_POST['uniqid'] ) ) : '';
 
 	if ( ! check_ajax_referer( 'swpm-pp-smart-checkout-ajax-nonce-' . $uniqid, 'nonce', false ) ) {
 		wp_send_json(
@@ -379,7 +379,8 @@ function swpm_pp_smart_checkout_ajax_hanlder() {
 		$ipn_handler_instance->sandbox_mode = true;
 	}
 
-	$ip = filter_input( INPUT_SERVER, 'REMOTE_ADDR', FILTER_SANITIZE_STRING );
+	$ip = filter_input( INPUT_SERVER, 'REMOTE_ADDR', FILTER_UNSAFE_RAW );
+	$ip = sanitize_text_field( $ip );
 
 	$ipn_handler_instance->debug_log( 'Paypal Smart Checkout Class Initiated by ' . $ip, true );
 

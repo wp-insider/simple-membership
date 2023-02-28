@@ -123,14 +123,14 @@ class SwpmWpLoadedTasks {
 			wp_die();
 		}
 
-		$token = filter_input( INPUT_POST, 'swpm_cancel_sub_token', FILTER_SANITIZE_STRING );
+		$token = isset( $_POST['swpm_cancel_sub_token'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_cancel_sub_token'] ) ) : '';
 		if ( empty( $token ) ) {
 			//no token
 			msg( SwpmUtils::_( 'No token provided.' ) );
 		}
 
 		//check nonce
-		$nonce = filter_input( INPUT_POST, 'swpm_cancel_sub_nonce', FILTER_SANITIZE_STRING );
+		$nonce = isset( $_POST['swpm_cancel_sub_nonce'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_cancel_sub_nonce'] ) ) : '';
 		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, $token ) ) {
 			//nonce check failed
 			msg( SwpmUtils::_( 'Nonce check failed.' ) );

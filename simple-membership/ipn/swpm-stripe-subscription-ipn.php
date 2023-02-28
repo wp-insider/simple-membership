@@ -155,8 +155,8 @@ class SwpmStripeSubscriptionIpnHandler {
 		$button_id    = absint( $button_id );
 		$button_title = sanitize_text_field( $_REQUEST['item_name'] );
 
-		$stripe_token      = filter_input( INPUT_POST, 'stripeToken', FILTER_SANITIZE_STRING );
-		$stripe_token_type = filter_input( INPUT_POST, 'stripeTokenType', FILTER_SANITIZE_STRING );
+		$stripe_token = isset( $_POST['stripeToken'] ) ? sanitize_text_field( stripslashes ( $_POST['stripeToken'] ) ) : '';
+		$stripe_token_type = isset( $_POST['stripeTokenType'] ) ? sanitize_text_field( stripslashes ( $_POST['stripeTokenType'] ) ) : '';
 		$stripe_email      = filter_input( INPUT_POST, 'stripeEmail', FILTER_SANITIZE_EMAIL );
 
 		// Retrieve the CPT for this button

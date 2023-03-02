@@ -18,6 +18,7 @@ class SwpmTransfer {
         'alias' => '', 'role' => '',
         'subscription_period' => '', 'subscription_duration_type' => SwpmMembershipLevel::NO_EXPIRY);
     
+    public $message;
     public static $admin_messages = array();
     private static $_this;
 

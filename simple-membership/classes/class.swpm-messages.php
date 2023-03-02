@@ -1,10 +1,6 @@
 <?php
 
-/**
- *
- *
- * @author nur
- */
+
 class SwpmMessages {
 
     private $messages;
@@ -12,7 +8,7 @@ class SwpmMessages {
 
     public function __construct() {
         $this->messages = get_option('swpm-messages');
-        $this->sesion_key = $_COOKIE['swpm_session'];
+        $this->session_key = $_COOKIE['swpm_session'];
     }
 
     public function get($key) {

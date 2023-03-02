@@ -169,26 +169,34 @@ class SwpmInitTimeTasks {
 		$user_login = filter_input( INPUT_POST, 'swpm_user_login', FILTER_UNSAFE_RAW );
 		$user_login = sanitize_user( $user_login );
 
-		$swpm_new_password = filter_input( INPUT_POST, 'swpm_new_password', FILTER_UNSAFE_RAW );
-		$swpm_renew_password = filter_input( INPUT_POST, 'swpm_reenter_new_password', FILTER_UNSAFE_RAW );
+		//Validate password reset key
+        $is_valid_key = check_password_reset_key($_GET['key'], $_GET['login']);
+        if ( is_wp_error( $is_valid_key ) ) {
+            $error_message = __("Error! A password reset request has been submitted but the password reset key is invalid. Please generate a new request.", "simple-membership");
+        }
 
-		//Validations
+		//Validate password fields match
+		$swpm_new_password = filter_input( INPUT_POST, 'swpm_new_password', FILTER_UNSAFE_RAW );
+		$swpm_renew_password = filter_input( INPUT_POST, 'swpm_reenter_new_password', FILTER_UNSAFE_RAW );		
 		if( $swpm_new_password != $swpm_renew_password ) {
 			$error_message = __("Error! Password fields do not match. Please try again.", 'simple-membership');
 		}
 
+		//Validate user exists
 		$user_data = get_user_by( "login", $user_login );
 		if( !$user_data ) {			
 			$error_message = __("Error! Invalid password reset request.", 'simple-membership');
 		}
 
 		if( strlen( $error_message) > 0 ) {
-                        //If any error messsage, save it in the transient for output later.
+            //If any error messsage, save it in the transient for output later. The transient will be deleted after it is displayed.
+			//The error output is displayed in the form's HTML output file.
 			set_transient( "swpm-passsword-reset-error", $error_message );
+			return;
 		}
-                
+
 		if ( ! empty( $swpm_reset ) && strlen( $error_message ) == 0 ) {
-                    
+			//Valiation passed. Lets try to reset the password.
 			$is_password_reset = SwpmFrontRegistration::get_instance()->reset_password_using_link( $user_data, $swpm_new_password );
 			if( $is_password_reset ) {
 				$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );
@@ -202,17 +210,10 @@ class SwpmInitTimeTasks {
 					'succeeded' => true,
 					'message'   => $after_pwd_reset,
 				);
+				SwpmTransfer::get_instance()->set( 'status', $message_ary );
+				return;
 			}
-			else{
-                                //Output any error message that may have been encounted during the pass reset process.
-				echo get_transient("swpm-passsword-reset-error");	
-				delete_transient("swpm-passsword-reset-error");
-			}
-
-			SwpmTransfer::get_instance()->set( 'status', $message_ary );
-			return;
 		}
-                
 	}
 
 	private function register_member() {

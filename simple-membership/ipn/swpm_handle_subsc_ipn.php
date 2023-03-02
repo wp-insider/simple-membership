@@ -11,6 +11,7 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		$subscr_id = $unique_ref;
 	}
 
+	$ipn_data['custom'] = isset( $ipn_data['custom'] ) ? $ipn_data['custom'] : ''; // Make sure the custom field is set. (It should be set by the payment gateway.
 	swpm_debug_log_subsc( 'swpm_handle_subsc_signup_stand_alone(). Custom value: ' . $ipn_data['custom'] . ', Unique reference: ' . $unique_ref, true );
 	parse_str( $ipn_data['custom'], $custom_vars );
 
@@ -239,9 +240,9 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 	global $wpdb;
 
 	$swpm_id = '';
-	if ( isset( $ipn_data['custom'] ) ){
+	if ( isset( $ipn_data['custom'] ) && !empty( $ipn_data['custom'] ) ){
 		$customvariables = SwpmTransactions::parse_custom_var( $ipn_data['custom'] );
-		$swpm_id         = $customvariables['swpm_id'];
+		$swpm_id = $customvariables['swpm_id'];
 	}
 
 	swpm_debug_log_subsc( 'Refund/Cancellation check - lets see if a member account needs to be deactivated.', true );

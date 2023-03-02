@@ -173,6 +173,7 @@ https://simple-membership-plugin.com/
 - Regenerated the Translation POT file.
 - Language strings updated in various admin interfaces.
 - Removed the use of the FILTER_SANITIZE_STRING flag for PHP8.1 compatibility.
+- Minor enhancement - verify the custom field value is set in the IPN data.
 
 = 4.2.9 =
 - Added filter hooks to the Thank you page output message so it can be customized using custom code.

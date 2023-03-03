@@ -423,6 +423,7 @@ class SwpmMembers extends WP_List_Table {
 			wp_delete_user( $wp_user_id, 1 ); //assigns all related to this user to admin.
 		} else {
 			//This is an admin user. So not going to delete the WP User record.
+			SwpmLog::log_simple_debug( 'For safety, we do not allow deletion of any associated WordPress account with administrator role.', true );
 			SwpmTransfer::get_instance()->set( 'status', 'For safety, we do not allow deletion of any associated WordPress account with administrator role.' );
 			return;
 		}

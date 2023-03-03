@@ -257,11 +257,11 @@ class SwpmAuth {
 		if ( ! $this->isLoggedIn ) {
 			return;
 		}
-                
-                if ( SwpmUtils::is_multisite_install() ) {
-                    //Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
-                    wp_cookie_constants();
-                }
+
+		if ( SwpmUtils::is_multisite_install() ) {
+			//Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
+			wp_cookie_constants();
+		}
                 
 		setcookie( SIMPLE_WP_MEMBERSHIP_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
 		setcookie( SIMPLE_WP_MEMBERSHIP_SEC_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
@@ -269,6 +269,16 @@ class SwpmAuth {
 		$this->isLoggedIn    = false;
 		$this->lastStatusMsg = SwpmUtils::_( 'Logged Out Successfully.' );
 		do_action( 'swpm_logout' );
+	}
+	
+	public function swpm_clear_auth_cookies() {
+		do_action( 'swpm_clear_auth_cookies' );
+		if ( SwpmUtils::is_multisite_install() ) {
+			//Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
+			wp_cookie_constants();
+		}
+		setcookie( SIMPLE_WP_MEMBERSHIP_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
+		setcookie( SIMPLE_WP_MEMBERSHIP_SEC_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
 	}
 
 	private function set_cookie( $remember = '', $secure = '' ) {
@@ -401,14 +411,16 @@ class SwpmAuth {
 		}
 		$user_name = $this->get( 'user_name' );
 		$user_id   = $this->get( 'member_id' );
-		$subscr_id = $this->get( 'subscr_id' );
-		$email     = $this->get( 'email' );
+		//$subscr_id = $this->get( 'subscr_id' );
+		//$email     = $this->get( 'email' );
 
-		$this->logout();
-                wp_clear_auth_cookie();
-
+		SwpmLog::log_simple_debug( 'Deleting member profile with username: ' . $user_name . ' (ID: ' . $user_id . ')', true );
+		$this->swpm_clear_auth_cookies();
+		wp_clear_auth_cookie();
 		SwpmMembers::delete_swpm_user_by_id( $user_id );
 		SwpmMembers::delete_wp_user( $user_name );
+		$this->isLoggedIn = false;
+		SwpmLog::log_simple_debug( 'User profile deleted.', true );
 	}
 
 	public function reload_user_data() {
@@ -416,8 +428,12 @@ class SwpmAuth {
 			return;
 		}
 		global $wpdb;
-		$query          = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id = %d';
-		$this->userData = $wpdb->get_row( $wpdb->prepare( $query, $this->userData->member_id ) );
+		$member_id = isset( $this->userData->member_id ) ? $this->userData->member_id : '';
+		if( empty( $member_id ) ) {
+			return;
+		}
+		$query = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id = %d';
+		$this->userData = $wpdb->get_row( $wpdb->prepare( $query, $member_id ) );
 	}
 
 	public function is_expired_account() {

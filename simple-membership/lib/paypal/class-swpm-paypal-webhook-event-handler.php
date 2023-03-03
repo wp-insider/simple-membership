@@ -33,7 +33,7 @@ class SWPM_PayPal_Webhook_Event_Handler {
             $mode = 'sandbox';
         }
 
-		//TODO - re-enable it when finished with simulator.
+		//If using simulator, this will need to be commented out.
 		//Verify the webhook for the given mode.
 		if ( ! self::verify_webhook_event_for_given_mode( $event, $mode ) ) {
 			status_header(200);//Send a 200 status code to PayPal to indicate that the webhook event was received successfully.

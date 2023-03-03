@@ -520,7 +520,8 @@ abstract class SwpmUtils {
 		ob_start();
 		include SIMPLE_WP_MEMBERSHIP_PATH . 'views/account_delete_warning.php';
 		ob_get_flush();
-		wp_die( '', '', array( 'back_link' => true ) );
+		$title = __( 'Confirm Account Deletion', 'simple-membership' );
+		wp_die( '', $title, array( 'back_link' => true ) );
 	}
 
 	public static function delete_account_button() {

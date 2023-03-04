@@ -32,13 +32,17 @@ else{
             </div>
             <?php if( $display_password_toggle ){ ?>
                 <div class="swpm-password-input-visibility">                                        
-                    <span class="swpm-password-toggle-checkbox"><input type="checkbox" id="swpm-password-toggle-checkbox" data-state="password-hidden" > </span>
-                    <span class="swpm-password-toggle-label"> <?php echo SwpmUtils::_('Show password') ?></span>
+                    <span class="swpm-password-toggle-checkbox"><input type="checkbox" name="swpm-password-toggle-checkbox" id="swpm-password-toggle-checkbox" data-state="password-hidden" > </span>
+                    <label for="swpm-password-toggle-checkbox" class="swpm-password-toggle-checkbox-label">
+                        <span class="swpm-password-toggle-label"> <?php echo SwpmUtils::_('Show password') ?></span>
+                    </label>
                 </div>
             <?php } ?>
             <div class="swpm-remember-me">
-                <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" value="checked='checked'"></span>
-                <span class="swpm-rember-label"> <?php echo SwpmUtils::_('Remember Me') ?></span>
+                <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" id="swpm-rememberme" value="checked='checked'"></span>
+                <label for="swpm-rememberme" class="swpm-rememberme-label">
+                    <span class="swpm-rember-label"> <?php echo SwpmUtils::_('Remember Me') ?></span>
+                </label>
             </div>
 
             <div class="swpm-before-login-submit-section"><?php echo apply_filters('swpm_before_login_form_submit_button', ''); ?></div>

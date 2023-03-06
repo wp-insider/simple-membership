@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 4.2.9
+Stable tag: 4.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,7 +169,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.3.0 =
+= 4.3.0 =
 - Regenerated the Translation POT file.
 - Language strings updated in various admin interfaces.
 - Removed the use of the FILTER_SANITIZE_STRING flag for PHP8.1 compatibility.

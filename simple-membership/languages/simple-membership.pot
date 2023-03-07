@@ -2073,7 +2073,7 @@ msgid "This blacklisting & whitelisting documentation"
 msgstr ""
 
 #: classes/class.swpm-settings.php:1432
-msgid " explains how to use this feautre."
+msgid " explains how to use this feature."
 msgstr ""
 
 #: classes/class.swpm-settings.php:1438

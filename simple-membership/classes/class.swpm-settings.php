@@ -1429,7 +1429,7 @@ class SwpmSettings {
 		echo '<p>';
 		_e( 'This interface lets you configure blacklisting & whitelisting for email addresses. ', 'simple-membership' );
 		echo '<a href="https://simple-membership-plugin.com/blacklisting-whitelisting-feature/" target="_blank">' . SwpmUtils::_( 'This blacklisting & whitelisting documentation' ) . '</a>';
-		_e( ' explains how to use this feautre.', 'simple-membership' );
+		_e( ' explains how to use this feature.', 'simple-membership' );
 		echo '</p>';
 		echo '</div>';            
         }

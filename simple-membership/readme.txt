@@ -169,6 +169,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.3.1 =
+- Minor - Spelling mistake fixed in the Blacklisting feature.
+
 = 4.3.0 =
 - Regenerated the Translation POT file.
 - Language strings updated in various admin interfaces.

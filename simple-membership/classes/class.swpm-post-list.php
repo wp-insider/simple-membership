@@ -230,7 +230,7 @@ class SwpmPostList extends WP_List_Table {
         $sortable = $this->get_sortable_columns();
 
         $this->_column_headers = array($columns, $hidden, $sortable);
-        $this->items = $all_items;
+        $this->items = isset( $all_items ) ? $all_items : array();
     }
 
     function no_items() {

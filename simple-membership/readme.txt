@@ -171,6 +171,7 @@ https://simple-membership-plugin.com/
 
 = WIP 4.3.1 =
 - Minor - Spelling mistake fixed in the Blacklisting feature.
+- Fixed Warning: Undefined variable $all_items
 
 = 4.3.0 =
 - Regenerated the Translation POT file.

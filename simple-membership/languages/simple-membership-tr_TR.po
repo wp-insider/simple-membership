@@ -1,709 +1,4303 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: simple membership\n"
-"POT-Creation-Date: 2014-08-28 19:28+1000\n"
-"PO-Revision-Date: 2014-12-18 21:42+0200\n"
+"Project-Id-Version: Simple WordPress Membership\n"
+"POT-Creation-Date: 2023-02-28 19:14+1100\n"
+"PO-Revision-Date: 2023-03-08 22:23+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.1\n"
-"X-Poedit-KeywordsList: __;_e\n"
-"X-Poedit-Basepath: .\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"Language: tr_TR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: simple-wp-membership.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
-#: classes/class.bAccessControl.php:23 classes/class.bAccessControl.php:40
-msgid "You are not allowed to view this content"
-msgstr "Bu içeriği  görmenize izin verilmemektedir."
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:79
+msgid "Payment Button ID"
+msgstr "Ödeme Düğmesi Kimliği"
 
-#: classes/class.bAccessControl.php:26 classes/class.bAccessControl.php:43
-msgid "You need to login to view this content. "
-msgstr "Bu içeriği görmek  için giriş yapmanız gerekmektedir."
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:80
+msgid "Payment Button Title"
+msgstr "Ödeme Düğmesi Başlığı"
 
-#: classes/class.bAdminRegistration.php:48
-#: classes/class.bFrontRegistration.php:64
-msgid "Registration Successful."
-msgstr "Kayıt başarıyla son bulmuştur"
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:81
+msgid "Membership Level ID"
+msgstr "Üyelik Seviye Kimliği"
 
-#: classes/class.bAdminRegistration.php:53
-#: classes/class.bAdminRegistration.php:73
-#: classes/class.bMembershipLevel.php:36 classes/class.bMembershipLevel.php:54
-msgid "Please correct the following:"
-msgstr "Lütfen düzeltin:"
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:82
+msgid "Button Type"
+msgstr "Düğme Tipi"
 
-#: classes/class.bAjax.php:16 classes/class.bAjax.php:28
-msgid "Aready taken"
-msgstr "Halihazırda alınmıştır"
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:83
+msgid "Button Shortcode"
+msgstr "Düğme Kısa Kodu"
 
-#: classes/class.bAjax.php:29
-msgid "Available"
-msgstr "Müsaittir"
-
-#: classes/class.bAuth.php:48 classes/class.bFrontRegistration.php:179
-msgid "User Not Found."
-msgstr "Kullanıcı bulunamadı"
-
-#: classes/class.bAuth.php:55
-msgid "Password Empty or Invalid."
-msgstr "Şifre boş veya geçersiz."
-
-#: classes/class.bAuth.php:79
-msgid "Account is inactive."
-msgstr "Hesap  aktif değil."
-
-#: classes/class.bAuth.php:89
-msgid "You are logged in as:"
-msgstr "Kullanıcı  hesabınız:"
-
-#: classes/class.bAuth.php:128
-msgid "Logged Out Successfully."
-msgstr "Oturum başarı ile sonlandırılmıştır."
-
-#: classes/class.bAuth.php:170
-msgid "Session Expired."
-msgstr "Oturum zamanı  doldu."
-
-#: classes/class.bAuth.php:179
-msgid "Invalid User Name"
-msgstr "Geçersiz Kullanıcı  Adı"
-
-#: classes/class.bAuth.php:187
-msgid "Bad Cookie Hash"
-msgstr "Kötü çerez kaydı"
-
-#: classes/class.bForm.php:26
-msgid ""
-"Wordpress account exists with given user name. But given email doesn't match."
-msgstr ""
-"Belirtilen kullanıcı  hesabı  mevcut.  Ama verilen  e-posta adresi  "
-"uyuşmuyor."
-
-#: classes/class.bForm.php:31
-msgid ""
-"Wordpress account exists with given email. But given user name doesn't match."
-msgstr ""
-"Belirtilen kullanıcı  hesabı  mevcut.  Ama verilen  kullanıcı adı adresi  "
-"uyuşmuyor."
-
-#: classes/class.bForm.php:40
-msgid "User name is required"
-msgstr "Kullanıcı adı gerekiyor"
-
-#: classes/class.bForm.php:49
-msgid "User name already exists."
-msgstr "Bu kullanıcı adı mevcut."
-
-#: classes/class.bForm.php:72
-msgid "Password is required"
-msgstr "Şifre gerekiyor"
-
-#: classes/class.bForm.php:79
-msgid "Password mismatch"
-msgstr "Şifre yanlış"
-
-#: classes/class.bForm.php:95
-msgid "Email is required"
-msgstr "E-Posta gereklidir"
-
-#: classes/class.bForm.php:99
-msgid "Email is invalid"
-msgstr "E-Posta geçersizdir."
-
-#: classes/class.bForm.php:112
-msgid "Email is already used."
-msgstr "E-Posta halen sistemimizde kulanılıyor."
-
-#: classes/class.bForm.php:178
-msgid "Member since field is invalid"
-msgstr "Üye  ...den beri alanı  geçersiz."
-
-#: classes/class.bForm.php:189
-msgid "Subscription starts field is invalid"
-msgstr "Kayıt Başlama alanı  geçersiz"
-
-#: classes/class.bForm.php:199
-msgid "Gender field is invalid"
-msgstr "Cinsiyet  alanı geçersiz"
-
-#: classes/class.bForm.php:210
-msgid "Account state field is invalid"
-msgstr "Hesap durumu alanı geçersiz"
-
-#: classes/class.bFrontRegistration.php:64 classes/class.bSettings.php:326
-msgid "Please"
-msgstr "Lütfen"
-
-#: classes/class.bFrontRegistration.php:64 classes/class.bSettings.php:326
-#: views/login.php:21
-msgid "Login"
-msgstr "Giriş"
-
-#: classes/class.bFrontRegistration.php:79
-#: classes/class.bFrontRegistration.php:158
-msgid "Please correct the following"
-msgstr "Lütfen Düzeltin :"
-
-#: classes/class.bFrontRegistration.php:92
-msgid "Membership Level Couldn't be found."
-msgstr "Üyelik Seviyesi bulunamıyor"
-
-#: classes/class.bFrontRegistration.php:168
-msgid "Email Address Not Valid."
-msgstr "E-Posta Geçersiz."
-
-#: classes/class.bFrontRegistration.php:199
-msgid "New password has been sent to your email address."
-msgstr "Yeni Şifre e-posta adresinize gönderildi."
-
-#: classes/class.bLevelForm.php:31
-msgid "Subscriptoin duration must be > 0."
-msgstr "Üyelik Süresi Sıfırdan Büyük Olmalıdır."
-
-#: classes/class.bMembers.php:7
-msgid "Member"
-msgstr "Üye"
-
-#: classes/class.bMembers.php:8 classes/class.simple-wp-membership.php:467
-msgid "Members"
-msgstr "Üyeler"
-
-#: classes/class.bMembers.php:16 classes/class.bMembershipLevels.php:16
-msgid "ID"
-msgstr "Kimlik No"
-
-#: classes/class.bMembers.php:17 views/add.php:5 views/edit.php:4
-#: views/login.php:5
-msgid "User Name"
-msgstr "Kullanıcı Adı"
-
-#: classes/class.bMembers.php:18 views/add.php:21
-#: views/admin_member_form_common_part.php:2 views/edit.php:20
-msgid "First Name"
-msgstr "İlk Adınız"
-
-#: classes/class.bMembers.php:19 views/add.php:25
-#: views/admin_member_form_common_part.php:6 views/edit.php:24
-msgid "Last Name"
-msgstr "Soyadınız"
-
-#: classes/class.bMembers.php:20 views/add.php:9 views/edit.php:8
-msgid "Email"
-msgstr "E-Posta"
-
-#: classes/class.bMembers.php:21 classes/class.bMembershipLevels.php:8
-#: classes/class.bMembershipLevels.php:17 views/add.php:64
-#: views/admin_member_form_common_part.php:55 views/edit.php:52
-msgid "Membership Level"
-msgstr "Üyelik Düzeyi"
-
-#: classes/class.bMembers.php:22 views/admin_member_form_common_part.php:78
-msgid "Subscription Starts"
-msgstr "Üyelik Başlama Tarihi"
-
-#: classes/class.bMembers.php:23
-msgid "Account State"
-msgstr "Hesap Durumu"
-
-#: classes/class.bMembers.php:35 classes/class.bMembershipLevels.php:29
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:98
+#: classes/admin-includes/class.swpm-payments-list-table.php:118
+#: classes/class.swpm-members.php:51
+#: classes/class.swpm-membership-levels.php:36
 msgid "Delete"
 msgstr "Sil"
 
-#: classes/class.bMembers.php:100
-msgid "No Member found."
-msgstr "Üye Bulunamadı"
+#: classes/admin-includes/class.swpm-payment-buttons-list-table.php:135
+#: views/admin_members_list.php:8
+#: views/payments/admin_all_payment_transactions.php:33
+msgid "The selected entry was deleted!"
+msgstr "Seçilen Giriş Silindi!"
 
-#: classes/class.bMembershipLevel.php:31
-msgid "Membership Level Creation Successful."
-msgstr "Üyelik Derecesi Oluşturulması Başarılı."
+#: classes/admin-includes/class.swpm-payments-admin-menu.php:23
+msgid "Simple Membership::Payments"
+msgstr "Basit Üyelik::Ödemeler"
 
-#: classes/class.bMembershipLevel.php:50
-msgid "Updated Successfully."
-msgstr "Başarıyla Güncellendi."
+#: classes/admin-includes/class.swpm-payments-admin-menu.php:27
+msgid "Transactions"
+msgstr "Ödeme İşlemleri"
 
-#: classes/class.bMembershipLevels.php:9
-#: classes/class.simple-wp-membership.php:469
+#: classes/admin-includes/class.swpm-payments-admin-menu.php:28
+msgid "Manage Payment Buttons"
+msgstr "Ödeme Düğmelerini Yönet"
+
+#: classes/admin-includes/class.swpm-payments-admin-menu.php:29
+#: views/payments/admin_payment_buttons.php:27
+msgid "Create New Button"
+msgstr "Yeni Buton Oluştur"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:73
+#: views/template-1.php:95 views/template-2.php:97
+msgid "View Profile"
+msgstr "Profili Görüntüle"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:91
+msgid "Row ID"
+msgstr "Sıra Kimliği"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:92
+#: views/forgot_password.php:5
+#: views/payments/admin_add_edit_transaction_manually.php:75
+msgid "Email Address"
+msgstr "E-Posta Adresi"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:93
+#: classes/class.swpm-members.php:23 views/add.php:34
+#: views/admin_member_form_common_part.php:6 views/edit.php:39
+#: views/payments/admin_add_edit_transaction_manually.php:83
+#: includes/swpm_mda_show_profile.php:28
+msgid "First Name"
+msgstr "Adınız"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:94
+#: classes/class.swpm-members.php:24 views/add.php:38
+#: views/admin_member_form_common_part.php:10 views/edit.php:43
+#: views/payments/admin_add_edit_transaction_manually.php:91
+#: includes/swpm_mda_show_profile.php:29
+msgid "Last Name"
+msgstr "Soyadınız"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:95
+msgid "Member Profile"
+msgstr "Üye Profili"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:96
+#: classes/class.swpm-post-list.php:43 classes/class.swpm-post-list.php:52
+#: classes/class.swpm-post-list.php:62
+#: views/payments/admin_add_edit_transaction_manually.php:125
+msgid "Date"
+msgstr "Tarih"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:97
+#: views/payments/admin_add_edit_transaction_manually.php:133
+msgid "Transaction ID"
+msgstr "İşlem Kimliği"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:98
+#: views/payments/admin_add_edit_transaction_manually.php:141
+msgid "Subscriber ID"
+msgstr "İşlem Kimliği"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:99
+#: views/payments/admin_add_edit_transaction_manually.php:117
+msgid "Amount"
+msgstr "Tutar"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:100
+#: classes/class.swpm-category-list.php:19 classes/class.swpm-members.php:26
+#: classes/class.swpm-membership-levels.php:11
+#: classes/class.swpm-membership-levels.php:21
+#: classes/class.swpm-post-list.php:20 views/add.php:42 views/admin_add.php:37
+#: views/admin_edit.php:74 views/admin_members_list.php:50 views/edit.php:75
+#: views/payments/admin_add_edit_transaction_manually.php:107
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:50
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:34
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:232
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:176
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:49
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:35
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:320
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:198
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:44
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:330
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:44
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:328
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:108
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:108
+msgid "Membership Level"
+msgstr "Üyelik Düzeyi"
+
+#: classes/admin-includes/class.swpm-payments-list-table.php:101
+#: views/payments/admin_add_edit_transaction_manually.php:149
+msgid "Status/Note"
+msgstr "Durum/Not"
+
+#: classes/class-swpm-member-subscriptions.php:121
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:174
+msgid "No active subscriptions"
+msgstr "Aktif Abonelik Yok"
+
+#: classes/class-swpm-member-subscriptions.php:132
+msgid "Cancel Subscription"
+msgstr "Aboneliği İptal Et"
+
+#: classes/class-swpm-member-subscriptions.php:134
+msgid "Are you sure that you want to cancel the subscription?"
+msgstr "Aboneliği iptal etmek istediğinizden emin misiniz?"
+
+#: classes/class.simple-wp-membership.php:243
+msgid "The admin of this site does not allow users to access the wp dashboard."
+msgstr ""
+"Bu sitenin yöneticisi, kullanıcıların kontrol paneline erişmesine izin "
+"vermiyor."
+
+#: classes/class.simple-wp-membership.php:244
+msgid "Go back to the home page by "
+msgstr "Ana sayfaya geri dön "
+
+#: classes/class.simple-wp-membership.php:244
+msgid "clicking here"
+msgstr "buraya tıklayınız"
+
+#: classes/class.simple-wp-membership.php:309
+msgid ""
+"Error! This site has the force WP user login feature enabled in the "
+"settings. We could not find a WP user record for the given username: "
+msgstr ""
+"Hata! Bu site, ayarlarda zorunlu kullanıcı girişi özelliğini "
+"etkinleştirmiştir. Verilen kullanıcı adı için bir kullanıcı kaydı bulamadık: "
+
+#: classes/class.simple-wp-membership.php:310
+msgid ""
+"This error is triggered when a member account doesn't have a corresponding "
+"WP user account. So the plugin fails to log the user into the WP User system."
+msgstr ""
+"Bu hata, bir üye hesabının karşılık gelen bir kullanıcı hesabı olmadığında "
+"tetiklenir. Bu nedenle eklenti, Kullanıcı sisteminde oturum açamıyor."
+
+#: classes/class.simple-wp-membership.php:311
+msgid ""
+"Contact the site admin and request them to check your username in the WP "
+"Users menu to see what happened with the WP user entry of your account."
+msgstr ""
+"Site yöneticisiyle iletişime geçin ve hesabınızın kullanıcı girişiyle ilgili "
+"ne olduğunu öğrenmek için kullanıcı adınızı kontrol etmelerini isteyin."
+
+#: classes/class.simple-wp-membership.php:312
+msgid ""
+"The site admin can disable the Force WP User Synchronization feature in the "
+"settings to disable this feature and this error will go away."
+msgstr ""
+"Site yöneticisi, bu özelliği devre dışı bırakmak için ayarlarda Kullanıcı "
+"Senkronizasyonunu Zorla özelliğini devre dışı bırakabilir ve bu hata ortadan "
+"kalkar."
+
+#: classes/class.simple-wp-membership.php:313
+msgid "You can use the back button of your browser to go back to the site."
+msgstr ""
+"Siteye geri dönmek için tarayıcınızın geri düğmesini kullanabilirsiniz."
+
+#: classes/class.simple-wp-membership.php:513
+#: classes/class.swpm-wp-loaded-tasks.php:141
+msgid "You are not logged in."
+msgstr "Giriş yapılamadı."
+
+#: classes/class.simple-wp-membership.php:601
+msgid ""
+"You have the sandbox payment mode enabled in plugin settings. Make sure to "
+"turn off the sandbox mode when you want to do live transactions."
+msgstr ""
+"Eklenti ayarlarında korumalı alan ödeme modunu etkinleştirdiniz. Canlı "
+"işlemler yapmak istediğinizde korumalı alan modunu kapattığınızdan emin olun."
+
+#: classes/class.simple-wp-membership.php:616
+msgid "Simple WP Membership Protection"
+msgstr "Üyelik Koruması"
+
+#: classes/class.simple-wp-membership.php:628
+msgid "Simple Membership Protection options"
+msgstr "Üyelik Koruması seçenekleri"
+
+#: classes/class.simple-wp-membership.php:646
+msgid "Do you want to protect this content?"
+msgstr "Bu içeriği korumak istiyor musunuz?"
+
+#: classes/class.simple-wp-membership.php:647
+msgid "No, Do not protect this content."
+msgstr "Hayır, bu içeriği korumayın."
+
+#: classes/class.simple-wp-membership.php:648
+msgid "Yes, Protect this content."
+msgstr "Evet, bu içeriği koruyun."
+
+#: classes/class.simple-wp-membership.php:651
+msgid "Select the membership level that can access this content:"
+msgstr "Bu içeriğe erişebilecek üyelik seviyesini seçin:"
+
+#: classes/class.simple-wp-membership.php:816
+#: classes/class.simple-wp-membership.php:820
+msgid "Validating, please wait"
+msgstr "Doğrulanıyor, lütfen bekleyin"
+
+#: classes/class.simple-wp-membership.php:823
+msgid "Invalid email address"
+msgstr "Geçersiz E-Posta adresi"
+
+#: classes/class.simple-wp-membership.php:826
+msgid "This field is required"
+msgstr "Bu alan gereklidir"
+
+#: classes/class.simple-wp-membership.php:829
+msgid "Password must contain at least:"
+msgstr "Parola en az şunları içermelidir:"
+
+#: classes/class.simple-wp-membership.php:829
+msgid "- a digit"
+msgstr "- rakam (1-2-3)"
+
+#: classes/class.simple-wp-membership.php:829
+msgid "- an uppercase letter"
+msgstr "- büyük harf (A)"
+
+#: classes/class.simple-wp-membership.php:829
+msgid "- a lowercase letter"
+msgstr "- küçük harf (a)"
+
+#: classes/class.simple-wp-membership.php:832 classes/class.swpm-auth.php:342
+msgid "Invalid Username"
+msgstr "Geçersiz kullanıcı adı"
+
+#: classes/class.simple-wp-membership.php:832
+msgid "Usernames can only contain: letters, numbers and .-_*@"
+msgstr ""
+"Kullanıcı adları yalnızca şunları içerebilir: harfler, sayılar ve .-_*@"
+
+#: classes/class.simple-wp-membership.php:835
+msgid "Minimum "
+msgstr "En az "
+
+#: classes/class.simple-wp-membership.php:836
+msgid " characters required"
+msgstr " gerekli karakterler"
+
+#: classes/class.simple-wp-membership.php:839
+msgid "Apostrophe character is not allowed"
+msgstr "Kesme işareti karakterine izin verilmez"
+
+#: classes/class.simple-wp-membership.php:883
+msgid "WP Membership"
+msgstr "WP Üyeliği"
+
+#: classes/class.simple-wp-membership.php:884 classes/class.swpm-members.php:12
+#: classes/class.swpm-members.php:730
+msgid "Members"
+msgstr "Üyeler"
+
+#: classes/class.simple-wp-membership.php:885
+#: classes/class.swpm-category-list.php:20
+#: classes/class.swpm-membership-levels.php:12
+#: classes/class.swpm-membership-levels.php:273
+#: classes/class.swpm-post-list.php:21
 msgid "Membership Levels"
 msgstr "Üyelik Düzeyleri"
 
-#: classes/class.bMembershipLevels.php:18
-msgid "Role"
-msgstr "Görev"
-
-#: classes/class.bMembershipLevels.php:19
-msgid "Subscription Valid For"
-msgstr "Üyelik Geçerli :"
-
-#: classes/class.bSettings.php:28
-msgid "Plugin Documentation"
-msgstr "Eklenti Dökümantasyonu"
-
-#: classes/class.bSettings.php:30
-msgid "General Settings"
-msgstr "Genel Ayarlar"
-
-#: classes/class.bSettings.php:32
-msgid "Enable Free Membership"
-msgstr "Ücretsiz Üyelik Mümkünmü?"
-
-#: classes/class.bSettings.php:35
-msgid "Enable/disable registration for free membership level"
-msgstr "Ücretsiz üyelik için kaydolmayı aç veya kapa"
-
-#: classes/class.bSettings.php:36
-msgid "Free Membership Level ID"
-msgstr "Ücretsiz Üyelik Seviyesi Numarası"
-
-#: classes/class.bSettings.php:39
-msgid "Assign free membership level ID"
-msgstr "Ücretsiz Üyelik Numarası Atanması"
-
-#: classes/class.bSettings.php:40
-msgid "Hide Adminbar"
-msgstr "Yönetici çubuğunu sakla"
-
-#: classes/class.bSettings.php:43
-msgid ""
-"WordPress shows an admin toolbar to the logged in users of the site. Check "
-"this box if you want to hide that admin toolbar in the fronend of your site."
-msgstr ""
-"Blog sitenin çevrimiçi kullanıcılarına yönetici çubuğunu gösterir.  Eğer  "
-"yönetim  çubuğunu saklamak  istiyorsanız bu kutucuğu işaretleyin."
-
-#: classes/class.bSettings.php:45
-msgid "Pages Settings"
-msgstr "Sayfa Ayarları"
-
-#: classes/class.bSettings.php:47
-msgid "Login Page URL"
-msgstr "Giriş Sayfası URLsi"
-
-#: classes/class.bSettings.php:51
-msgid "Registration Page URL"
-msgstr "Kayıt Sayfası URLsi"
-
-#: classes/class.bSettings.php:55
-msgid "Join Us Page URL"
-msgstr "Bize Katılın Sayfası URLsi"
-
-#: classes/class.bSettings.php:59
-msgid "Edit Profile Page URL"
-msgstr "Profil Düzenleme Sayfası URLsi"
-
-#: classes/class.bSettings.php:63
-msgid "Password Reset Page URL"
-msgstr "Şifre  Reset Sayfası URLsi"
-
-#: classes/class.bSettings.php:68
-msgid "Test & Debug Settings"
-msgstr "Test ve Debug Ayarları"
-
-#: classes/class.bSettings.php:74
-msgid "Enable Sandbox Testing"
-msgstr "Sandbox Testi Aktif Et"
-
-#: classes/class.bSettings.php:77
-msgid "Enable this option if you want to do sandbox payment testing."
-msgstr "Bu opsiyonu ,  eğer  SANDBOX ödeme testi istiyorsanız aktif edin."
-
-#: classes/class.bSettings.php:90
-msgid "Email Misc. Settings"
-msgstr "E-Posta Çeşitli Ayarları"
-
-#: classes/class.bSettings.php:92
-msgid "From Email Address"
-msgstr "Gönderen E-Posta Adresi"
-
-#: classes/class.bSettings.php:97
-msgid "Email Settings (Prompt to Complete Registration )"
-msgstr "E-Posta Ayarları ( Anında Kayıt Tamamlama) "
-
-#: classes/class.bSettings.php:99 classes/class.bSettings.php:110
-#: classes/class.bSettings.php:129
-msgid "Email Subject"
-msgstr "E-Posta Konusu"
-
-#: classes/class.bSettings.php:103 classes/class.bSettings.php:114
-#: classes/class.bSettings.php:133
-msgid "Email Body"
-msgstr "E-Posta Gövdesi"
-
-#: classes/class.bSettings.php:108
-msgid "Email Settings (Registration Complete)"
-msgstr "E-Posta Ayarları (Kayut Tamamlandı)"
-
-#: classes/class.bSettings.php:118
-msgid "Send Notification To Admin"
-msgstr "Yöneticiye Uyarı Gönder"
-
-#: classes/class.bSettings.php:122
-msgid "Send Email to Member When Added via Admin Dashboard"
-msgstr "Yönetim Panelinden Kayıt Yapıldığı  Zaman Üyeye E-Posta Gönder"
-
-#: classes/class.bSettings.php:127
-msgid " Email Settings (Account Upgrade Notification)"
-msgstr "E-Posta Ayarları ( Hesap Yükseltme Bildirimi)"
-
-#: classes/class.bSettings.php:326
-msgid "Not a Member?"
-msgstr "Üye Değilmisiniz?"
-
-#: classes/class.bSettings.php:326 views/login.php:30
-msgid "Join Us"
-msgstr "Bize Katılın"
-
-#: classes/class.bUtils.php:32 views/admin_member_form_common_part.php:66
-msgid "Active"
-msgstr "Aktif"
-
-#: classes/class.bUtils.php:33 views/admin_member_form_common_part.php:67
-msgid "Inactive"
-msgstr "Aktif Değil"
-
-#: classes/class.bUtils.php:34 views/admin_member_form_common_part.php:68
-msgid "Pending"
-msgstr "Beklemede"
-
-#: classes/class.bUtils.php:35 views/admin_member_form_common_part.php:69
-msgid "Expired"
-msgstr "Süresi Dolmuş"
-
-#: classes/class.bUtils.php:225
-msgid "Never"
-msgstr "Asla"
-
-#: classes/class.miscUtils.php:51
-msgid "Registration"
-msgstr "Kayıt"
-
-#: classes/class.miscUtils.php:74
-msgid "Member Login"
-msgstr "Üye Girişi"
-
-#: classes/class.miscUtils.php:97
-msgid "Profile"
-msgstr "Profil"
-
-#: classes/class.miscUtils.php:120
-msgid "Password Reset"
-msgstr "Şifre Reset"
-
-#: classes/class.simple-wp-membership.php:178
-msgid "You are not logged in."
-msgstr "Giriş Yapmadınız."
-
-#: classes/class.simple-wp-membership.php:209
-msgid "Simple WP Membership Protection"
-msgstr "Basit Blog Üyelik Koruması"
-
-#: classes/class.simple-wp-membership.php:222
-msgid "Simple Membership Protection options"
-msgstr "Basit Üyelik Koruması Opsiyonları"
-
-#: classes/class.simple-wp-membership.php:238
-msgid "Do you want to protect this content?"
-msgstr "Bu içeriği korumak istiyormusunuz?"
-
-#: classes/class.simple-wp-membership.php:243
-msgid "Select the membership level that can access this content:"
-msgstr "Bu içeriğe erişecek üyelik seviyesini seçiniz:"
-
-#: classes/class.simple-wp-membership.php:375
-msgid "Display SWPM Login."
-msgstr "SWPM Girişini Göster."
-
-#: classes/class.simple-wp-membership.php:377
-msgid "SWPM Login"
-msgstr "SWPM Girişi"
-
-#: classes/class.simple-wp-membership.php:464
-msgid "WP Membership"
-msgstr "Blog Üyeliği"
-
-#: classes/class.simple-wp-membership.php:471
+#: classes/class.simple-wp-membership.php:886
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: views/add.php:13 views/admin_member_form_common_part.php:45
-#: views/edit.php:12 views/login.php:11
-msgid "Password"
-msgstr "Şifre"
+#: classes/class.simple-wp-membership.php:887
+msgid "Payments"
+msgstr "Ödemeler"
 
-#: views/add.php:17 views/edit.php:16
-msgid "Repeat Password"
-msgstr "Şifre Tekrarı"
+#: classes/class.simple-wp-membership.php:888
+msgid "Add-ons"
+msgstr "Eklentiler"
 
-#: views/add.php:29 views/admin_member_form_common_part.php:10
-msgid "Gender"
-msgstr "Cinsiyet"
+#: classes/class.swpm-access-control.php:47
+#: classes/class.swpm-access-control.php:120
+msgid "You need to be logged in to view this content. "
+msgstr "Bu içeriği görüntülemek için giriş yapmalısınız. "
 
-#: views/add.php:36 views/admin_member_form_common_part.php:17
-#: views/edit.php:28
-msgid "Phone"
-msgstr "Telefon"
+#: classes/class.swpm-access-control.php:56
+#: classes/class.swpm-access-control.php:128
+#: classes/class.swpm-access-control.php:212
+msgid "Your account has expired. "
+msgstr "Hesabınızın süresi doldu. "
 
-#: views/add.php:40 views/admin_member_form_common_part.php:21
-#: views/edit.php:32
-msgid "Street"
-msgstr "Cadde"
+#: classes/class.swpm-access-control.php:66
+#: classes/class.swpm-access-control.php:138
+msgid "This content can only be viewed by members who joined on or before "
+msgstr ""
+"Bu içerik yalnızca tarihinde veya daha önce katılan üyeler tarafından "
+"görüntülenebilir. "
 
-#: views/add.php:44 views/admin_member_form_common_part.php:25
-#: views/edit.php:36
-msgid "City"
-msgstr "Şehir"
+#: classes/class.swpm-access-control.php:79
+#: classes/class.swpm-access-control.php:148
+msgid "This content is not permitted for your membership level."
+msgstr "Üyelik seviyeniz için bu içeriğe izin verilmiyor."
 
-#: views/add.php:48 views/admin_member_form_common_part.php:29
-#: views/edit.php:40
-msgid "State"
-msgstr "İl"
+#: classes/class.swpm-access-control.php:204
+msgid "You need to be logged in to view the rest of the content. "
+msgstr "İçeriğin geri kalanını görüntülemek için giriş yapmalısınız. "
 
-#: views/add.php:52 views/admin_member_form_common_part.php:33
-#: views/edit.php:44
-msgid "Zipcode"
-msgstr "Posta Kodu"
+#: classes/class.swpm-access-control.php:217
+msgid " The rest of the content is not permitted for your membership level."
+msgstr " Üyelik seviyeniz için içeriğin geri kalanına izin verilmez."
 
-#: views/add.php:56 views/admin_member_form_common_part.php:37
-#: views/edit.php:48
-msgid "Country"
-msgstr "Ülke"
+#: classes/class.swpm-admin-registration.php:25
+msgid "Error! Nonce verification failed for user registration from admin end."
+msgstr "Hata! Kullanıcı kaydı için doğrulama başarısız oldu."
 
-#: views/add.php:60 views/admin_member_form_common_part.php:41
-msgid "Company"
-msgstr "Şirket"
+#: classes/class.swpm-admin-registration.php:79
+msgid "Member record added successfully."
+msgstr "Üye kaydı başarıyla oluşturuldu."
 
-#: views/add.php:71
-msgid "Register"
-msgstr "Kayıt"
+#: classes/class.swpm-admin-registration.php:87
+#: classes/class.swpm-admin-registration.php:149
+#: classes/class.swpm-admin-registration.php:187
+#: classes/class.swpm-membership-level.php:73
+#: classes/class.swpm-membership-level.php:105
+msgid "Please correct the following:"
+msgstr "Lütfen aşağıdakileri düzeltin:"
 
-#: views/admin_add.php:6
-msgid "Add Member"
-msgstr "Üye Ekleme"
+#: classes/class.swpm-admin-registration.php:100
+msgid "Error! Nonce verification failed for user edit from admin end."
+msgstr "Hata! Kullanıcı düzenlemesi için doğrulama başarısız oldu."
 
-#: views/admin_add.php:7
-msgid "Create a brand new user and add it to this site."
-msgstr "Yeni bir  kullanıcı oluşturun ve bu siteye ekleyin."
+#: classes/class.swpm-admin-registration.php:166
+msgid "Your current password"
+msgstr "Mevcut şifreniz"
 
-#: views/admin_add.php:11
-msgid "User name"
-msgstr "Kullanıcı Adı"
+#: classes/class.swpm-ajax.php:16 classes/class.swpm-ajax.php:36
+#: ipn/swpm-smart-checkout-ipn.php:332
+msgid "Nonce check failed. Please reload the page."
+msgstr "Kontrol başarısız oldu. Lütfen sayfayı yenileyin."
 
-#: views/admin_add.php:11 views/admin_add.php:15 views/admin_add_level.php:11
-#: views/admin_add_level.php:15 views/admin_add_level.php:19
-#: views/admin_edit.php:9 views/admin_edit.php:13
-#: views/admin_edit_level.php:10 views/admin_edit_level.php:14
-#: views/admin_edit_level.php:18
-msgid "(required)"
-msgstr "(gerekli)"
+#: classes/class.swpm-ajax.php:20
+msgid "Invalid Email Address"
+msgstr "Geçersiz E-Posta adresi"
 
-#: views/admin_add.php:15 views/admin_edit.php:13
-msgid "E-mail"
-msgstr "E-Posta"
+#: classes/class.swpm-ajax.php:27 classes/class.swpm-ajax.php:46
+msgid "Already taken"
+msgstr "Zaten alınmış"
 
-#: views/admin_add.php:19
-msgid "Add New Member "
-msgstr "Yeni Üye Kaydı"
+#: classes/class.swpm-ajax.php:27 classes/class.swpm-ajax.php:47
+msgid "Available"
+msgstr "Mevcut"
 
-#: views/admin_add_level.php:6
-msgid "Create new membership level."
-msgstr "Yeni Üyelik Seviyesi Oluşturulması"
+#: classes/class.swpm-ajax.php:40
+msgid "Name contains invalid character"
+msgstr "Ad geçersiz karakter içeriyor"
 
-#: views/admin_add_level.php:11 views/admin_edit_level.php:10
-msgid "Membership Level Name"
-msgstr "Üyelik Seviyesi İsmi"
+#: classes/class.swpm-auth.php:50
+msgid "Username field cannot be empty."
+msgstr "Kullanıcı adı alanı boş geçilemez."
 
-#: views/admin_add_level.php:15 views/admin_edit_level.php:14
-msgid "Default WordPress Role"
-msgstr "Varsayılan Blog Görevi"
+#: classes/class.swpm-auth.php:57
+msgid "Password field cannot be empty."
+msgstr "Şifre alanı boş geçilemez."
 
-#: views/admin_add_level.php:19 views/admin_edit_level.php:18
-msgid "Subscription Duration"
-msgstr "Üyelik Süresi"
+#: classes/class.swpm-auth.php:75
+msgid ""
+"Warning! Simple Membership plugin cannot process this login request to "
+"prevent you from getting logged out of WP Admin accidentally."
+msgstr ""
+"Uyarı! Simple Membership plugin, WP Admin'den yanlışlıkla çıkış yapmanızı "
+"önlemek için bu oturum açma isteğini işleyemez."
 
-#: views/admin_add_level.php:26 views/admin_edit_level.php:27
-msgid "No Expiry"
-msgstr "Süresiz"
+#: classes/class.swpm-auth.php:76
+msgid "Click here"
+msgstr "Buraya tıklayın"
 
-#: views/admin_add_level.php:55
-msgid "Add New Membership Level "
-msgstr "Yeni Üyelik Seviyesi Ekleyin"
+#: classes/class.swpm-auth.php:76
+msgid " to see the profile you are currently logged into in this browser."
+msgstr " Bu tarayıcıda oturum açmış olduğunuz profili görmek için."
 
-#: views/admin_edit.php:5
-msgid "Edit Member"
-msgstr "Üyelik Bilgileri Düzenleyin"
+#: classes/class.swpm-auth.php:77
+msgid ""
+"You are logged into the site as an ADMIN user in this browser. First, logout "
+"from WP Admin then you will be able to log in as a normal member."
+msgstr ""
+"Bu tarayıcıda siteye Yönetici kullanıcısı olarak giriş yaptınız. İlk olarak, "
+"WP Yönetici'den çıkış yapın, ardından normal bir üye olarak giriş "
+"yapabileceksiniz."
 
-#: views/admin_edit.php:6
-msgid "Edit existing member details."
-msgstr "Mevcut  üye detaylarını düzenleyin."
+#: classes/class.swpm-auth.php:78
+msgid ""
+"Alternatively, you can use a different browser (where you are not logged-in "
+"as ADMIN) to test the membership login."
+msgstr ""
+"Alternatif olarak, üyelik girişini test etmek için (Yönetici olarak giriş "
+"yapmadığınız) farklı bir tarayıcı kullanabilirsiniz."
 
-#: views/admin_edit.php:9
+#: classes/class.swpm-auth.php:79
+msgid ""
+"Your normal visitors or members will never see this message. This message is "
+"ONLY for ADMIN user."
+msgstr ""
+"Normal ziyaretçileriniz veya üyeleriniz bu mesajı asla görmeyecek. Bu mesaj "
+"Yalnızca Yönetici kullanıcısı içindir."
+
+#: classes/class.swpm-auth.php:86
+msgid "Captcha validation failed on the login form."
+msgstr "Oturum açma formunda Captcha doğrulaması başarısız oldu."
+
+#: classes/class.swpm-auth.php:111
+msgid "No user found with that username or email."
+msgstr "Bu kullanıcı adına veya e-postaya sahip bir kullanıcı bulunamadı."
+
+#: classes/class.swpm-auth.php:118
+msgid "Password empty or invalid."
+msgstr "Şifre boş veya geçersiz."
+
+#: classes/class.swpm-auth.php:159
+msgid "Account is inactive."
+msgstr "Hesap etkin değil."
+
+#: classes/class.swpm-auth.php:162 classes/class.swpm-auth.php:191
+msgid "Account has expired."
+msgstr "Hesabın süresi doldu."
+
+#: classes/class.swpm-auth.php:165
+msgid "Account is pending."
+msgstr "Hesap beklemede."
+
+#: classes/class.swpm-auth.php:175
+#, php-format
+msgid ""
+"You need to activate your account. If you didn't receive an email then %s to "
+"resend the activation email."
+msgstr ""
+"Hesabınızı etkinleştirmeniz gerekiyor. Bir e-posta almadıysanız, "
+"etkinleştirme e-postasını yeniden göndermek için %s."
+
+#: classes/class.swpm-auth.php:175
+#: classes/class.swpm-front-registration.php:561
+#: classes/class.swpm-front-registration.php:614
+#: classes/class.swpm-utils-misc.php:225
+msgid "click here"
+msgstr "buraya tıklayın"
+
+#: classes/class.swpm-auth.php:199
+msgid "You are logged in as:"
+msgstr "Şu şekilde oturum açtınız:"
+
+#: classes/class.swpm-auth.php:269
+msgid "Logged Out Successfully."
+msgstr "Oturum Başarıyla Kapatıldı."
+
+#: classes/class.swpm-auth.php:333
+msgid "Session Expired."
+msgstr "Oturum süresi doldu."
+
+#: classes/class.swpm-auth.php:350
+msgid "Please login again."
+msgstr "Lütfen tekrar giriş yapın."
+
+#: classes/class.swpm-category-list.php:33
+msgid "Category ID"
+msgstr "Kategori ID"
+
+#: classes/class.swpm-category-list.php:34
+msgid "Category Name"
+msgstr "Kategori Adı"
+
+#: classes/class.swpm-category-list.php:35
+msgid "Category Type (Taxonomy)"
+msgstr "Kategori Tipi"
+
+#: classes/class.swpm-category-list.php:36
+msgid "Description"
+msgstr "Tanım"
+
+#: classes/class.swpm-category-list.php:37
+msgid "Count"
+msgstr "Saymak"
+
+#: classes/class.swpm-category-list.php:78
+msgid ""
+"Error! Nonce security verification failed for Category Protection Update "
+"action. Clear cache and try again."
+msgstr ""
+"Hata! Kategori Koruma Güncellemesi eylemi için güvenlik doğrulaması "
+"başarısız oldu. Önbelleği temizleyin ve tekrar deneyin."
+
+#: classes/class.swpm-category-list.php:99
+msgid "Category protection updated!"
+msgstr "Kategori koruması güncellendi!"
+
+#: classes/class.swpm-category-list.php:137
+msgid "No category found."
+msgstr "Kategori bulunamadı."
+
+#: classes/class.swpm-comment-form-related.php:15
+msgid "Please login to comment."
+msgstr "Lütfen yorum yapmak için giriş yapın."
+
+#: classes/class.swpm-comment-form-related.php:40
+msgid "Please Login to Comment."
+msgstr "Lütfen yorum yapmak için giriş yapın."
+
+#: classes/class.swpm-comment-form-related.php:79
+msgid "Comments not allowed by a non-member."
+msgstr "Üye olmayanların yorum yapmasına izin verilmez."
+
+#: classes/class.swpm-form.php:30
+msgid ""
+"Wordpress account exists with given username. But the given email doesn't "
+"match."
+msgstr ""
+"Verilen kullanıcı adı ile wordpress hesabı mevcuttur. Ancak verilen e-posta "
+"eşleşmiyor."
+
+#: classes/class.swpm-form.php:31
+msgid ""
+" Use a different username to complete the registration. If you want to use "
+"that username then you must enter the correct email address associated with "
+"the existing WP user to connect with that account."
+msgstr ""
+" Kaydı tamamlamak için farklı bir kullanıcı adı kullanın! Bu kullanıcı adını "
+"kullanmak istiyorsanız, o hesaba bağlanmak için mevcut WP kullanıcısıyla "
+"ilişkili doğru e-posta adresini girmelisiniz."
+
+#: classes/class.swpm-form.php:37
+msgid ""
+"Wordpress account exists with given email. But the given username doesn't "
+"match."
+msgstr ""
+"Verilen e-posta ile wordpress hesabı var. Ancak verilen kullanıcı adı "
+"eşleşmiyor."
+
+#: classes/class.swpm-form.php:38
+msgid ""
+" Use a different email address to complete the registration. If you want to "
+"use that email then you must enter the correct username associated with the "
+"existing WP user to connect with that account."
+msgstr ""
+" Kaydı tamamlamak için farklı bir e-posta adresi kullanın. Bu e-postayı "
+"kullanmak istiyorsanız, o hesaba bağlanmak için mevcut WP kullanıcısıyla "
+"ilişkili doğru kullanıcı adını girmelisiniz."
+
+#: classes/class.swpm-form.php:48
+msgid "Username is required"
+msgstr "Kullanıcı adı gerekli"
+
+#: classes/class.swpm-form.php:52
+msgid "Username contains invalid character"
+msgstr "Kullanıcı adı geçersiz karakter içeriyor"
+
+#: classes/class.swpm-form.php:60
+msgid "Username already exists."
+msgstr "Kullanıcı adı zaten var."
+
+#: classes/class.swpm-form.php:81
+msgid "Password is required"
+msgstr "Şifre gereklidir"
+
+#: classes/class.swpm-form.php:88
+msgid "Password mismatch"
+msgstr "Şifre eşleşmiyor"
+
+#: classes/class.swpm-form.php:99
+msgid "Email is required"
+msgstr "E-posta gereklidir"
+
+#: classes/class.swpm-form.php:103
+msgid "Email is invalid"
+msgstr "E-posta geçersiz"
+
+#: classes/class.swpm-form.php:119
+msgid "Email is already used."
+msgstr "E-posta zaten kullanılmış."
+
+#: classes/class.swpm-form.php:171
+msgid "Member since field is invalid"
+msgstr "Alan geçersiz olduğu için üye"
+
+#: classes/class.swpm-form.php:182
+msgid "Access starts field is invalid"
+msgstr "Erişim başlangıçları alanı geçersiz"
+
+#: classes/class.swpm-form.php:192
+msgid "Gender field is invalid"
+msgstr "Cinsiyet alanı geçersiz"
+
+#: classes/class.swpm-form.php:203
+msgid "Account state field is invalid"
+msgstr "Hesap durumu alanı geçersiz"
+
+#: classes/class.swpm-form.php:210
+msgid "Invalid membership level"
+msgstr "Geçersiz üyelik düzeyi"
+
+#: classes/class.swpm-front-registration.php:25
+msgid ""
+"You are already logged in. You don't need to create another account. So the "
+"registration form is hidden."
+msgstr ""
+"Zaten giriş yaptınız. Başka bir hesap oluşturmanıza gerek yok. Kayıt formu "
+"gizlidir."
+
+#: classes/class.swpm-front-registration.php:35
+msgid ""
+"This unique registration link (see the URL in the browser's address bar) has "
+"already been used. You don't need to create another account. Log into the "
+"existing account to access the protected content."
+msgstr ""
+"Bu benzersiz kayıt bağlantısı (tarayıcının adres çubuğundaki URL'ye bakın) "
+"zaten kullanılmış. Başka bir hesap oluşturmanıza gerek yoktur. Korunan "
+"içeriğe erişmek için mevcut hesapta oturum açın."
+
+#: classes/class.swpm-front-registration.php:44
+msgid ""
+"This unique registration link (see the URL in the browser's address bar) is "
+"invalid. Could not find a match for the given member ID and the security "
+"code. Please contact the site administrator."
+msgstr ""
+"Bu benzersiz kayıt bağlantısı (tarayıcının adres çubuğundaki URL'ye bakın) "
+"geçersiz. Verilen üye kimliği ve güvenlik kodu için bir eşleşme bulunamadı. "
+"Lütfen site yöneticisiyle iletişime geçin."
+
+#: classes/class.swpm-front-registration.php:65
+msgid ""
+"Error! Invalid Request. Could not find a match for the given security code "
+"and the user ID."
+msgstr ""
+"Hata! Geçersiz istek. Verilen güvenlik kodu ve kullanıcı kimliği için bir "
+"eşleşme bulunamadı."
+
+#: classes/class.swpm-front-registration.php:77
+#: classes/class.swpm-utils-misc.php:415 views/login.php:53
+msgid "Join Us"
+msgstr "Bize katılın"
+
+#: classes/class.swpm-front-registration.php:79
+msgid ""
+"Free membership is disabled on this site. Please make a payment from the "
+msgstr ""
+"Bu sitede ücretsiz üyelik devre dışıdır. Lütfen şu adresten ödeme yapın: "
+
+#: classes/class.swpm-front-registration.php:81
+msgid " page to pay for a premium membership."
+msgstr " premium üyelik için ödeme sayfası."
+
+#: classes/class.swpm-front-registration.php:83
+msgid ""
+"You will receive a unique link via email after the payment. You will be able "
+"to use that link to complete the premium membership registration."
+msgstr ""
+"Ödemeden sonra e-posta yoluyla benzersiz bir bağlantı alacaksınız. Premium "
+"üyelik kaydını tamamlamak için bu bağlantıyı kullanabileceksiniz."
+
+#: classes/class.swpm-front-registration.php:115
+msgid "Security check: captcha validation failed."
+msgstr "Güvenlik kontrolü: CAPTCHA doğrulaması başarısız oldu."
+
+#: classes/class.swpm-front-registration.php:128
+msgid "You must accept the terms and conditions."
+msgstr "Şartlar ve koşulları kabul etmelisiniz."
+
+#: classes/class.swpm-front-registration.php:142
+msgid "You must agree to the privacy policy."
+msgstr "Gizlilik politikasını kabul etmelisiniz."
+
+#: classes/class.swpm-front-registration.php:183
+msgid ""
+"You need to confirm your email address. Please check your email and follow "
+"instructions to complete your registration."
+msgstr ""
+"E-posta adresinizi onaylamanız gerekiyor. Lütfen e-postanızı kontrol edin ve "
+"kaydınızı tamamlamak için talimatları izleyin."
+
+#: classes/class.swpm-front-registration.php:196
+msgid "Registration Successful. "
+msgstr "Kayıt başarılı. "
+
+#: classes/class.swpm-front-registration.php:196
+#: classes/class.swpm-init-time-tasks.php:199
+#: classes/class.swpm-utils-misc.php:414 classes/class.swpm-utils-misc.php:426
+msgid "Please"
+msgstr "Lütfen"
+
+#: classes/class.swpm-front-registration.php:196
+#: classes/class.swpm-init-time-tasks.php:199
+#: classes/class.swpm-utils-misc.php:414 views/login.php:47
+msgid "Log In"
+msgstr "Giriş Yapın"
+
+#: classes/class.swpm-front-registration.php:215
+msgid "Please correct the following"
+msgstr "Lütfen aşağıdakileri düzeltin"
+
+#: classes/class.swpm-front-registration.php:267
+msgid "Membership Level Couldn't be found."
+msgstr "Üyelik Düzeyi bulunamadı."
+
+#: classes/class.swpm-front-registration.php:319
+msgid "Error! Nonce verification failed for front end profile edit."
+msgstr "Hata! Kullanıcı profil düzenlemesi için doğrulama başarısız oldu."
+
+#: classes/class.swpm-front-registration.php:330
+msgid "Profile updated successfully."
+msgstr "Profil başarıyla güncellendi."
+
+#: classes/class.swpm-front-registration.php:350
+msgid ""
+"Profile updated successfully. You will need to re-login since you changed "
+"your password."
+msgstr ""
+"Profil başarıyla güncellendi. Parolanızı değiştirdiğiniz için yeniden oturum "
+"açmanız gerekecek."
+
+#: classes/class.swpm-front-registration.php:378
+msgid "Please correct the following."
+msgstr "Lütfen aşağıdakileri düzeltin."
+
+#: classes/class.swpm-front-registration.php:394
+msgid "Captcha validation failed."
+msgstr "CAPTCHA doğrulaması başarısız oldu."
+
+#: classes/class.swpm-front-registration.php:405
+msgid "Email address not valid."
+msgstr "E-posta adresi geçerli değil."
+
+#: classes/class.swpm-front-registration.php:421
+#: classes/class.swpm-front-registration.php:515
+msgid "No user found with that email address."
+msgstr "Bu E-Posta adresine sahip kullanıcı bulunamadı."
+
+#: classes/class.swpm-front-registration.php:422
+#: classes/class.swpm-front-registration.php:492
+#: classes/class.swpm-front-registration.php:516
+msgid "Email Address: "
+msgstr "E-posta Adresi: "
+
+#: classes/class.swpm-front-registration.php:449
+msgid "Password reset link has been sent to your email address."
+msgstr "Şifre sıfırlama bağlantısı e-posta adresinize gönderilmiştir."
+
+#: classes/class.swpm-front-registration.php:467
+msgid "New password has been sent to your email address."
+msgstr "E-posta adresinize yeni şifre gönderilmiştir."
+
+#: classes/class.swpm-front-registration.php:556
+msgid "Can't find member account."
+msgstr "Üye hesabı bulunamıyor."
+
+#: classes/class.swpm-front-registration.php:561
+#: classes/class.swpm-front-registration.php:614
+msgid "Account already active. "
+msgstr "Hesap zaten aktif. "
+
+#: classes/class.swpm-front-registration.php:561
+#: classes/class.swpm-front-registration.php:614
+msgid " to log in."
+msgstr " giriş yapın."
+
+#: classes/class.swpm-front-registration.php:568
+msgid ""
+"Activation code mismatch. Cannot activate this account. Please contact the "
+"site admin."
+msgstr ""
+"Aktivasyon kodu uyuşmazlığı. Bu hesap etkinleştirilemiyor. Lütfen site "
+"yöneticisi ile iletişime geçiniz."
+
+#: classes/class.swpm-front-registration.php:582
+msgid "Success! Your account has been activated successfully."
+msgstr "Tebrikler! Hesabınız başarıyla etkinleştirildi."
+
+#: classes/class.swpm-front-registration.php:609
+msgid "Cannot find member account."
+msgstr "Üye hesabı bulunamıyor."
+
+#: classes/class.swpm-front-registration.php:631
+msgid ""
+"Activation email has been sent. Please check your email and activate your "
+"account."
+msgstr ""
+"Etkinleştirme E-Postası gönderildi. Lütfen E-Postanızı kontrol edin ve "
+"hesabınızı etkinleştirin."
+
+#: classes/class.swpm-init-time-tasks.php:141
+msgid "Sorry, Nonce verification failed."
+msgstr "Üzgünüz, doğrulama başarısız oldu."
+
+#: classes/class.swpm-init-time-tasks.php:148
+msgid "Sorry, Password didn't match."
+msgstr "Üzgünüz, parola eşleşmedi."
+
+#: classes/class.swpm-init-time-tasks.php:177
+msgid "Error! Password fields do not match. Please try again."
+msgstr "Hata! Parola alanları eşleşmiyor. Lütfen tekrar deneyin."
+
+#: classes/class.swpm-init-time-tasks.php:182
+msgid "Error! Invalid password reset request."
+msgstr "Hata! Geçersiz parola sıfırlama isteği."
+
+#: classes/class.swpm-init-time-tasks.php:199
+msgid "Password Reset Successful. "
+msgstr "Parola Sıfırlama Başarılı. "
+
+#: classes/class.swpm-level-form.php:50
+msgid "Date format is not valid."
+msgstr "Tarih biçimi geçerli değil."
+
+#: classes/class.swpm-level-form.php:58
+msgid "Access duration must be > 0."
+msgstr "Erişim süresi > 0 olmalıdır."
+
+#: classes/class.swpm-members.php:11
+msgid "Member"
+msgstr "Üye"
+
+#: classes/class.swpm-members.php:21
+#: classes/class.swpm-membership-levels.php:20
+msgid "ID"
+msgstr "ID"
+
+#: classes/class.swpm-members.php:22 views/add.php:18 views/admin_add.php:12
+#: views/admin_edit.php:19 views/edit.php:23
+#: includes/swpm_mda_show_profile.php:27
 msgid "Username"
 msgstr "Kullanıcı Adı"
 
-#: views/admin_edit.php:18
-msgid "Edit User "
-msgstr "Kullanıcı Bilgilerini Düzenleyin"
+#: classes/class.swpm-members.php:25 views/add.php:22 views/edit.php:27
+#: includes/swpm_mda_show_profile.php:35
+msgid "Email"
+msgstr "E-Posta"
 
-#: views/admin_edit_level.php:5
-msgid "Edit membership level"
-msgstr "Üyelik seviyesi düzenleyin"
+#: classes/class.swpm-members.php:27 views/admin_member_form_common_part.php:2
+msgid "Access Starts"
+msgstr "Erişim Başlangıçları"
 
-#: views/admin_edit_level.php:6
-msgid "Edit membership level."
-msgstr "Üyelik seviyesi düzenleyin."
+#: classes/class.swpm-members.php:28 views/admin_members_list.php:45
+#: includes/swpm_mda_show_profile.php:31
+msgid "Account State"
+msgstr "Hesap Durumu"
 
-#: views/admin_edit_level.php:54
-msgid "Edit Membership Level "
-msgstr "Üyelik Seviyesi Düzenleyin"
+#: classes/class.swpm-members.php:29
+msgid "Last Login Date"
+msgstr "Son Giriş Tarihi"
 
-#: views/admin_members.php:2
+#: classes/class.swpm-members.php:52
+msgid "Set Status to Active"
+msgstr "Durumu Etkin olarak ayarla"
+
+#: classes/class.swpm-members.php:53
+msgid "Set Status to Active and Notify"
+msgstr "Durumu Aktif Yap ve Bildir"
+
+#: classes/class.swpm-members.php:54
+msgid "Set Status to Inactive"
+msgstr "Durumu Etkin Değil olarak ayarlayın"
+
+#: classes/class.swpm-members.php:55
+msgid "Set Status to Pending"
+msgstr "Durumu Beklemede olarak ayarlayın"
+
+#: classes/class.swpm-members.php:56
+msgid "Set Status to Expired"
+msgstr "Durumu Süresi Doldu olarak ayarlayın"
+
+#: classes/class.swpm-members.php:84
+msgid "incomplete"
+msgstr "eksik"
+
+#: classes/class.swpm-members.php:227
+msgid "No member found."
+msgstr "Üye bulunamadı."
+
+#: classes/class.swpm-members.php:384
+msgid "Error! Nonce verification failed for user delete from admin end."
+msgstr ""
+"Hata! Kullanıcının yönetici tarafından silinmesi için doğrulama başarısız "
+"oldu."
+
+#: classes/class.swpm-members.php:534
+msgid ""
+"Error! Nonce security verification failed for Bulk Change Membership Level "
+"action. Clear cache and try again."
+msgstr ""
+"Hata! Güvenlik doğrulaması, Toplu Üyelik Düzeyini Değiştirme eylemi için "
+"başarısız oldu. Önbelleği temizleyin ve tekrar deneyin."
+
+#: classes/class.swpm-members.php:542 classes/class.swpm-members.php:579
+msgid "Error! Please select a membership level first."
+msgstr "Hata! Lütfen önce bir üyelik düzeyi seçin."
+
+#: classes/class.swpm-members.php:559
+msgid "Membership level change operation completed successfully."
+msgstr "Üyelik seviyesi değiştirme işlemi başarıyla tamamlandı."
+
+#: classes/class.swpm-members.php:571
+msgid ""
+"Error! Nonce security verification failed for Bulk Change Access Starts Date "
+"action. Clear cache and try again."
+msgstr ""
+"Hata! Toplu Erişim Başlangıç ​​Tarihini Değiştir eylemi için güvenlik "
+"doğrulaması başarısız oldu. Önbelleği temizleyin ve tekrar deneyin."
+
+#: classes/class.swpm-members.php:596
+msgid "Access starts date change operation successfully completed."
+msgstr "Erişim başlangıç ​​tarihi değiştirme işlemi başarıyla tamamlandı."
+
+#: classes/class.swpm-members.php:605
+msgid "Bulk Update Membership Level of Members"
+msgstr "Üyelerin Toplu Üyelik Düzeyini Güncelleme"
+
+#: classes/class.swpm-members.php:608
+msgid ""
+"You can manually change the membership level of any member by editing the "
+"record from the members menu. "
+msgstr ""
+"Üyeler menüsünden kaydı düzenleyerek herhangi bir üyenin üyelik seviyesini "
+"manuel olarak değiştirebilirsiniz. "
+
+#: classes/class.swpm-members.php:609
+msgid ""
+"You can use the following option to bulk update the membership level of "
+"users who belong to the level you select below."
+msgstr ""
+"Aşağıda seçtiğiniz seviyeye ait olan kullanıcıların üyelik seviyelerini "
+"toplu olarak güncellemek için aşağıdaki seçeneği kullanabilirsiniz."
+
+#: classes/class.swpm-members.php:617 classes/class.swpm-members.php:666
+msgid "Membership Level: "
+msgstr "Üyelik Düzeyi: "
+
+#: classes/class.swpm-members.php:621
+msgid "Select Current Level"
+msgstr "Mevcut Seviyeyi Seçin"
+
+#: classes/class.swpm-members.php:624
+msgid ""
+"Select the current membership level (the membership level of all members who "
+"are in this level will be updated)."
+msgstr ""
+"Mevcut üyelik seviyesini seçin (bu seviyedeki tüm üyelerin üyelik seviyeleri "
+"güncellenecektir)."
+
+#: classes/class.swpm-members.php:630
+msgid "Level to Change to: "
+msgstr "Değiştirilecek Düzey: "
+
+#: classes/class.swpm-members.php:634
+msgid "Select Target Level"
+msgstr "Hedef Düzey Seçin"
+
+#: classes/class.swpm-members.php:637
+msgid "Select the new membership level."
+msgstr "Yeni üyelik seviyesini seçin."
+
+#: classes/class.swpm-members.php:643
+msgid "Bulk Change Membership Level"
+msgstr "Toplu Üyelik Düzeyini Değiştirme"
+
+#: classes/class.swpm-members.php:653
+msgid "Bulk Update Access Starts Date of Members"
+msgstr "Toplu Güncelleme Erişimi Üyelerin Başlangıç ​​Tarihi"
+
+#: classes/class.swpm-members.php:657
+msgid ""
+"The access starts date of a member is set to the day the user registers. "
+"This date value is used to calculate how long the member can access your "
+"content that are protected with a duration type protection in the membership "
+"level. "
+msgstr ""
+"Bir üyenin erişim başlangıç ​​tarihi, kullanıcının kayıt olduğu gün olarak "
+"belirlenir. Bu tarih, üyelik düzeyinde bir süre tipi koruma ile korunan "
+"içeriğinize üyenin ne kadar süreyle erişebileceğini hesaplamak için "
+"kullanılır. "
+
+#: classes/class.swpm-members.php:658
+msgid ""
+"You can manually set a specific access starts date value of all members who "
+"belong to a particular level using the following option."
+msgstr ""
+"Aşağıdaki seçeneği kullanarak, belirli bir düzeye ait tüm üyelerin belirli "
+"bir erişim başlangıç ​​tarihini manuel olarak ayarlayabilirsiniz."
+
+#: classes/class.swpm-members.php:669
+msgid "Select Level"
+msgstr "Seviye seç"
+
+#: classes/class.swpm-members.php:672
+msgid ""
+"Select the Membership level (the access start date of all members who are in "
+"this level will be updated)."
+msgstr ""
+"Üyelik seviyesini seçin (bu seviyedeki tüm üyelerin erişim başlangıç ​​tarihi "
+"güncellenecektir)."
+
+#: classes/class.swpm-members.php:681
+msgid "Specify the Access Starts date value."
+msgstr "Erişim Başlangıç ​​tarihini belirtin."
+
+#: classes/class.swpm-members.php:687
+msgid "Bulk Change Access Starts Date"
+msgstr "Toplu Değişiklik Erişim Başlangıç ​​Tarihi"
+
+#: classes/class.swpm-members.php:725
 msgid "Simple WP Membership::Members"
-msgstr "Blog Üyelik::Üyeler"
+msgstr "Simple WP Membership::Üyeler"
 
-#: views/admin_members.php:3 views/admin_members.php:19
-#: views/admin_membership_levels.php:21
+#: classes/class.swpm-members.php:726
+#: classes/class.swpm-membership-levels.php:232 views/admin_members_list.php:70
 msgid "Add New"
-msgstr "Yeni Ekleyin"
+msgstr "Yeni Ekle"
 
-#: views/admin_members.php:9 views/admin_membership_levels.php:11
-msgid "search"
-msgstr "ara"
+#: classes/class.swpm-members.php:731 views/admin_add.php:7
+msgid "Add Member"
+msgstr "Üye Ekle"
 
-#: views/admin_membership_levels.php:3
+#: classes/class.swpm-members.php:732
+msgid "Bulk Operation"
+msgstr "Toplu İşlem"
+
+#: classes/class.swpm-membership-level.php:52
+msgid ""
+"Error! Nonce verification failed for membership level creation from admin "
+"end."
+msgstr "Hata! Yönetici üyelik düzeyi oluşturma doğrulaması başarısız oldu."
+
+#: classes/class.swpm-membership-level.php:68
+msgid "Membership Level Creation Successful."
+msgstr "Üyelik Seviyesi Oluşturma Başarılı."
+
+#: classes/class.swpm-membership-level.php:84
+msgid ""
+"Error! Nonce verification failed for membership level edit from admin end."
+msgstr ""
+"Hata! Yönetici tarafından üyelik düzeyinde düzenleme için zaman doğrulama "
+"başarısız oldu."
+
+#: classes/class.swpm-membership-level.php:100
+msgid "Membership Level Updated Successfully."
+msgstr "Üyelik Düzeyi Başarıyla Güncellendi."
+
+#: classes/class.swpm-membership-levels.php:22
+msgid "Role"
+msgstr "Rol"
+
+#: classes/class.swpm-membership-levels.php:23
+msgid "Access Valid For/Until"
+msgstr "Erişim Geçerlilik Süresi/Sonu"
+
+#: classes/class.swpm-membership-levels.php:135
+msgid "No membership levels found."
+msgstr "Üyelik düzeyi bulunamadı."
+
+#: classes/class.swpm-membership-levels.php:203
+msgid ""
+"Error! Nonce verification failed for membership level delete from admin end."
+msgstr "Hata! Yönetici üyelik düzeyi silme için doğrulama başarısız oldu."
+
+#: classes/class.swpm-membership-levels.php:222 views/admin_members_list.php:56
+#: views/payments/admin_all_payment_transactions.php:16 views/template-1.php:53
+#: views/template-2.php:54
+msgid "Search"
+msgstr "Ara"
+
+#: classes/class.swpm-membership-levels.php:269
 msgid "Simple WP Membership::Membership Levels"
-msgstr "Blog Üyeliği:: Üyelik Seviyeleri"
+msgstr "Simple WP Membership : Üyelik Seviyeleri"
 
-#: views/admin_membership_level_menu.php:2
-msgid "Membership level"
-msgstr "Üyelik Seviyeleri"
+#: classes/class.swpm-membership-levels.php:274
+msgid "Add Level"
+msgstr "Seviye Ekle"
 
-#: views/admin_membership_level_menu.php:3
-msgid "Manage Content Production"
-msgstr "İçerik Korumasını Yönet"
+#: classes/class.swpm-membership-levels.php:275
+msgid "Manage Content Protection"
+msgstr "İçerik Korumasını Yönetin"
 
-#: views/admin_membership_manage.php:17
-msgid "Example Content Protection Settings"
-msgstr "İçerik Yönetimi Örnek Ayarları"
+#: classes/class.swpm-membership-levels.php:276
+msgid "Category Protection"
+msgstr "Kategori Koruması"
 
-#: views/admin_member_form_common_part.php:45
+#: classes/class.swpm-membership-levels.php:277
+msgid "Post and Page Protection"
+msgstr "Gönderi ve Sayfa Koruması"
+
+#: classes/class.swpm-post-list.php:44 classes/class.swpm-post-list.php:53
+#: classes/class.swpm-post-list.php:63
+msgid "Title"
+msgstr "Başlık"
+
+#: classes/class.swpm-post-list.php:45 classes/class.swpm-post-list.php:54
+#: classes/class.swpm-post-list.php:64
+msgid "Author"
+msgstr "Yazar"
+
+#: classes/class.swpm-post-list.php:46 classes/class.swpm-post-list.php:56
+#: classes/class.swpm-post-list.php:66
+msgid "Status"
+msgstr "Durum"
+
+#: classes/class.swpm-post-list.php:55
+msgid "Categories"
+msgstr "Kategoriler"
+
+#: classes/class.swpm-post-list.php:65
+msgid "Type"
+msgstr "Tip"
+
+#: classes/class.swpm-post-list.php:109
+msgid ""
+"Error! Nonce security verification failed for Post Protection Update action. "
+"Clear cache and try again."
+msgstr ""
+"Hata! Koruma Sonrası Güncelleme eylemi için güvenlik doğrulaması başarısız "
+"oldu. Önbelleği temizleyin ve tekrar deneyin."
+
+#: classes/class.swpm-post-list.php:132
+msgid "Protection settings updated!"
+msgstr "Koruma ayarları güncellendi!"
+
+#: classes/class.swpm-post-list.php:237
+msgid "No items found."
+msgstr "Hiçbir öğe bulunamadı."
+
+#: classes/class.swpm-protection.php:22
+msgid ""
+"The category or parent category of this post is protected. You can change "
+"the category protection settings from the "
+msgstr ""
+"Bu gönderinin kategorisi veya üst kategorisi korumalıdır. Kategori koruma "
+"ayarlarını şu adresten değiştirebilirsiniz: "
+
+#: classes/class.swpm-protection.php:23
+msgid "category protection menu"
+msgstr "kategori koruma menüsü"
+
+#: classes/class.swpm-self-action-handler.php:164
+#: classes/class.swpm-self-action-handler.php:231
+msgid "The email address you used is not whitelisted on this site."
+msgstr "Kullandığınız E-Posta adresi bu sitede beyaz listede yok."
+
+#: classes/class.swpm-self-action-handler.php:175
+#: classes/class.swpm-self-action-handler.php:242
+msgid "The email address you used is blacklisted on this site."
+msgstr "Kullandığınız E-Posta adresi bu sitede kara listede."
+
+#: classes/class.swpm-settings.php:42 classes/class.swpm-settings.php:74
+msgid "General Settings"
+msgstr "Genel Ayarlar"
+
+#: classes/class.swpm-settings.php:43
+msgid "Payment Settings"
+msgstr "Ödeme Ayarları"
+
+#: classes/class.swpm-settings.php:44
+msgid "Email Settings"
+msgstr "E-Posta Ayarları"
+
+#: classes/class.swpm-settings.php:45
+msgid "Tools"
+msgstr "Aletler"
+
+#: classes/class.swpm-settings.php:46 classes/class.swpm-settings.php:713
+msgid "Advanced Settings"
+msgstr "Gelişmiş Ayarlar"
+
+#: classes/class.swpm-settings.php:47
+msgid "Blacklisting & Whitelisting"
+msgstr "Kara Liste ve Beyaz Liste"
+
+#: classes/class.swpm-settings.php:48
+msgid "Addons Settings"
+msgstr "Eklenti Ayarları"
+
+#: classes/class.swpm-settings.php:71
+msgid "Plugin Documentation"
+msgstr "Eklenti Belgeleri"
+
+#: classes/class.swpm-settings.php:77
+msgid "Enable Free Membership"
+msgstr "Ücretsiz Üyeliği Etkinleştir"
+
+#: classes/class.swpm-settings.php:83
+msgid ""
+"Enable/disable registration for free membership level. When you enable this "
+"option, make sure to specify a free membership level ID in the field below."
+msgstr ""
+"Ücretsiz üyelik düzeyi için kaydı etkinleştirin/devre dışı bırakın. Bu "
+"seçeneği etkinleştirdiğinizde, aşağıdaki alanda ücretsiz bir üyelik düzeyi "
+"kimliği belirttiğinizden emin olun."
+
+#: classes/class.swpm-settings.php:88
+msgid "Free Membership Level ID"
+msgstr "Ücretsiz Üyelik Düzeyi Kimliği"
+
+#: classes/class.swpm-settings.php:94
+msgid "Assign free membership level ID"
+msgstr "Ücretsiz üyelik düzeyi kimliği atayın"
+
+#: classes/class.swpm-settings.php:99
+msgid "Enable More Tag Protection"
+msgstr "Daha Fazla Etiket Korumasını Etkinleştirin"
+
+#: classes/class.swpm-settings.php:105
+msgid ""
+"Enables or disables \"more\" tag protection in the posts and pages. Anything "
+"after the More tag is protected. Anything before the more tag is teaser "
+"content."
+msgstr ""
+"Gönderilerde ve sayfalarda \"daha fazla\" etiket korumasını etkinleştirir "
+"veya devre dışı bırakır. Daha fazla etiketinden sonraki her şey korunur. "
+"Daha fazla etiketinden önceki her şey tanıtım içeriğidir."
+
+#: classes/class.swpm-settings.php:110
+msgid "Hide Adminbar"
+msgstr "Yönetici Çubuğunu Gizle"
+
+#: classes/class.swpm-settings.php:116
+msgid ""
+"WordPress shows an admin toolbar to the logged in users of the site. Check "
+"this if you want to hide that admin toolbar in the frontend of your site."
+msgstr ""
+"WordPress, sitenin oturum açmış kullanıcılarına bir yönetici araç çubuğu "
+"gösterir. Bu yönetici araç çubuğunu sitenizin ön ucunda gizlemek "
+"istiyorsanız bunu işaretleyin."
+
+#: classes/class.swpm-settings.php:121
+msgid "Show Adminbar to Admin"
+msgstr "Yönetici Çubuğunu Yöneticiye Göster"
+
+#: classes/class.swpm-settings.php:127
+msgid ""
+"Use this option if you want to show the admin toolbar to admin users only. "
+"The admin toolbar will be hidden for all other users."
+msgstr ""
+"Yönetici araç çubuğunu yalnızca yönetici kullanıcılara göstermek "
+"istiyorsanız bu seçeneği kullanın. Yönetici araç çubuğu diğer tüm "
+"kullanıcılar için gizlenecektir."
+
+#: classes/class.swpm-settings.php:132
+msgid "Disable Access to WP Dashboard"
+msgstr "WP Dashboard'a Erişimi Devre Dışı Bırak"
+
+#: classes/class.swpm-settings.php:138
+msgid ""
+"WordPress allows a standard wp user to be able to go to the wp-admin URL and "
+"access his profile from the wp dashboard. Using this option will prevent any "
+"non-admin users from going to the wp dashboard."
+msgstr ""
+"WordPress, standart bir wp kullanıcısının wp-admin URL'sine gitmesine ve "
+"profiline wp panosundan erişmesine izin verir. Bu seçeneğin kullanılması, "
+"yönetici olmayan kullanıcıların wp kontrol paneline gitmesini "
+"engelleyecektir."
+
+#: classes/class.swpm-settings.php:144 classes/class.swpm-settings.php:905
+msgid "Default Account Status"
+msgstr "Varsayılan Hesap Durumu"
+
+#: classes/class.swpm-settings.php:152
+msgid ""
+"Select the default account status for newly registered users. If you want to "
+"manually approve the members then you can set the status to \"Pending\"."
+msgstr ""
+"Yeni kayıtlı kullanıcılar için varsayılan hesap durumunu seçin. Üyeleri "
+"manuel olarak onaylamak istiyorsanız durumu \"Beklemede\" olarak "
+"ayarlayabilirsiniz."
+
+#: classes/class.swpm-settings.php:158
+msgid "Members Must be Logged in to Comment"
+msgstr "Üyelerin Yorum Yapabilmeleri İçin Oturum Açmaları Gerekir"
+
+#: classes/class.swpm-settings.php:164
+msgid ""
+"Enable this option if you only want the members of the site to be able to "
+"post a comment."
+msgstr ""
+"Yalnızca site üyelerinin yorum yazabilmesini istiyorsanız bu seçeneği "
+"etkinleştirin."
+
+#: classes/class.swpm-settings.php:170
+msgid "Enable Toggle Password Visibility in Login Form"
+msgstr "Oturum Açma Formunda Geçiş Parolası Görünürlüğünü Etkinleştir"
+
+#: classes/class.swpm-settings.php:176
+msgid ""
+"You can use it to show a toggle password visibility option in the login "
+"form. It will add a Show Password checkbox."
+msgstr ""
+"Oturum açma formunda geçiş parolası görünürlük seçeneği göstermek için "
+"kullanabilirsiniz. Bir Parolayı Göster onay kutusu ekleyecektir."
+
+#: classes/class.swpm-settings.php:182
+msgid "Enable Password Reset Using Link"
+msgstr "Bağlantıyı Kullanarak Parola Sıfırlamayı Etkinleştirin"
+
+#: classes/class.swpm-settings.php:188
+msgid ""
+"You can enable this option if you want to handle the password reset "
+"functionality using a reset link that is emailed to the member. Read <a "
+"href=\"https://simple-membership-plugin.com/password-reset-notification-"
+"email-customization/\" target=\"_blank\">this documentation</a> to learn "
+"more about the password reset function."
+msgstr ""
+"Üyeye E-Postayla gönderilen bir sıfırlama bağlantısını kullanarak parola "
+"sıfırlama işlevini gerçekleştirmek istiyorsanız bu seçeneği "
+"etkinleştirebilirsiniz. Oku <a href=\"https://simple-membership-plugin.com/"
+"password-reset-notification-email-customization/\" target=\"_blank\">bu "
+"belgeler </a> Parola sıfırlama işlevi hakkında daha fazla bilgi edinmek için."
+
+#: classes/class.swpm-settings.php:193
+msgid "Pages Settings"
+msgstr "Sayfa Ayarları"
+
+#: classes/class.swpm-settings.php:196
+msgid "Login Page URL"
+msgstr "Giriş Sayfası URL'si"
+
+#: classes/class.swpm-settings.php:207
+msgid "Registration Page URL"
+msgstr "Kayıt Sayfası URL'si"
+
+#: classes/class.swpm-settings.php:218
+msgid "Join Us Page URL"
+msgstr "Bize Katılın Sayfa URL'si"
+
+#: classes/class.swpm-settings.php:229
+msgid "Edit Profile Page URL"
+msgstr "Profil Sayfası URL'sini Düzenle"
+
+#: classes/class.swpm-settings.php:240
+msgid "Password Reset Page URL"
+msgstr "Parola Sıfırlama Sayfası URL'si"
+
+#: classes/class.swpm-settings.php:251
+msgid "Optional Pages Settings"
+msgstr "İsteğe Bağlı Sayfa Ayarları"
+
+#: classes/class.swpm-settings.php:254
+msgid "Thank You Page URL"
+msgstr "Teşekkür Sayfası URL'si"
+
+#: classes/class.swpm-settings.php:260
+msgid ""
+"It is useful to use a thank you page in your payment button configuration. "
+"Read <a href=\"https://simple-membership-plugin.com/paid-registration-from-"
+"the-thank-you-page/\" target=\"_blank\">this documentation</a> to learn more."
+msgstr ""
+"Ödeme butonu yapılandırmanızda bir teşekkür sayfası kullanmanızda fayda var. "
+"Oku <a href=\"https://simple-membership-plugin.com/paid-registration-from-"
+"the-thank-you-page/\" target=\"_blank\">bu belgeler </a> daha fazla öğrenmek "
+"için."
+
+#: classes/class.swpm-settings.php:265
+msgid "Test & Debug Settings"
+msgstr "Test ve Hata Ayıklama Ayarları"
+
+#: classes/class.swpm-settings.php:294
+msgid "Check this option to enable debug logging."
+msgstr "Hata ayıklama günlüğünü etkinleştirmek için bu seçeneği işaretleyin."
+
+#: classes/class.swpm-settings.php:295
+msgid ""
+" This can be useful when troubleshooting an issue. Turn it off and reset the "
+"log files after the troubleshooting is complete."
+msgstr ""
+" Bu, bir sorunu giderirken faydalı olabilir. Sorun giderme tamamlandıktan "
+"sonra kapatın ve günlük dosyalarını sıfırlayın."
+
+#: classes/class.swpm-settings.php:297
+msgid "View general debug log file by clicking "
+msgstr "Genel hata ayıklama günlük dosyasını görüntülemek için tıklayın! "
+
+#: classes/class.swpm-settings.php:297 classes/class.swpm-settings.php:298
+#: classes/class.swpm-settings.php:299
+msgid "here"
+msgstr "burada"
+
+#: classes/class.swpm-settings.php:298
+msgid "View login related debug log file by clicking "
+msgstr ""
+"Oturum açmayla ilgili hata ayıklama günlük dosyasını görüntülemek için "
+"tıklayın! "
+
+#: classes/class.swpm-settings.php:299
+msgid "Reset debug log files by clicking "
+msgstr "Hata ayıklama günlük dosyalarını tıklayarak sıfırlayın "
+
+#: classes/class.swpm-settings.php:302
+msgid "Enable Debug"
+msgstr "Hata Ayıklamayı Etkinleştir"
+
+#: classes/class.swpm-settings.php:322
+msgid "Sandbox or Test Mode Payment Settings"
+msgstr "Korumalı Alan veya Test Modu Ödeme Ayarları"
+
+#: classes/class.swpm-settings.php:326
+msgid "Enable Sandbox or Test Mode"
+msgstr "Sandbox veya Test Modunu Etkinleştirin"
+
+#: classes/class.swpm-settings.php:332
+msgid "Enable this option if you want to do sandbox payment testing."
+msgstr ""
+"Korumalı alan ödeme testi yapmak istiyorsanız bu seçeneği etkinleştirin."
+
+#: classes/class.swpm-settings.php:337
+msgid "PayPal Settings"
+msgstr "PayPal Ayarları"
+
+#: classes/class.swpm-settings.php:341
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:111
+msgid "Live Client ID"
+msgstr "Canlı İstemci Kimliği"
+
+#: classes/class.swpm-settings.php:347
+msgid "Enter your PayPal Client ID for live mode."
+msgstr "Canlı mod için PayPal Müşteri Kimliğinizi girin."
+
+#: classes/class.swpm-settings.php:352 classes/class.swpm-settings.php:437
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:136
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:420
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:136
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:418
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:180
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:172
+msgid "Live Secret Key"
+msgstr "Canlı Gizli Anahtar"
+
+#: classes/class.swpm-settings.php:358
+msgid "Enter your PayPal Secret Key for live mode."
+msgstr "Canlı mod için PayPal Gizli Anahtarınızı girin."
+
+#: classes/class.swpm-settings.php:363
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:127
+msgid "Sandbox Client ID"
+msgstr "Sandbox İstemci Kimliği"
+
+#: classes/class.swpm-settings.php:369
+msgid "Enter your PayPal Client ID for sandbox mode."
+msgstr "Korumalı alan modu için PayPal İstemci Kimliğinizi girin."
+
+#: classes/class.swpm-settings.php:374
+msgid "Sandbox Secret Key"
+msgstr "Sandbox Gizli Anahtarı"
+
+#: classes/class.swpm-settings.php:380
+msgid "Enter your PayPal Secret Key for sandbox mode."
+msgstr "Korumalı alan modu için PayPal Gizli Anahtarınızı girin."
+
+#: classes/class.swpm-settings.php:389
+msgid "Stripe Global Settings"
+msgstr "Şerit Genel Ayarları"
+
+#: classes/class.swpm-settings.php:393
+msgid "Pre-fill Member Email Address"
+msgstr "Üye E-posta Adresini Önceden Doldurun"
+
+#: classes/class.swpm-settings.php:399
+msgid ""
+"Pre-fills the email address of the logged-in member on the Stripe checkout "
+"form when possible"
+msgstr ""
+"Mümkün olduğunda Stripe ödeme formunda oturum açmış üyenin E-Posta adresini "
+"önceden doldurur"
+
+#: classes/class.swpm-settings.php:404
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:115
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:399
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:115
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:397
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:156
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:148
+msgid "Test Publishable Key"
+msgstr "Yayınlanabilir Anahtarı Test Et"
+
+#: classes/class.swpm-settings.php:410
+msgid "Stripe API Test publishable key"
+msgstr "Stripe API Testi yayınlanabilir anahtarı"
+
+#: classes/class.swpm-settings.php:415
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:122
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:406
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:122
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:404
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:164
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:156
+msgid "Test Secret Key"
+msgstr "Gizli Anahtarı Test Et"
+
+#: classes/class.swpm-settings.php:421
+msgid "Stripe API Test secret key"
+msgstr "Stripe API Testi gizli anahtarı"
+
+#: classes/class.swpm-settings.php:426
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:129
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:413
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:129
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:411
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:172
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:164
+msgid "Live Publishable Key"
+msgstr "Canlı Yayınlanabilir Anahtar"
+
+#: classes/class.swpm-settings.php:432
+msgid "Stripe API Live publishable key"
+msgstr "Stripe API Live yayınlanabilir anahtarı"
+
+#: classes/class.swpm-settings.php:443
+msgid "Stripe API Live secret key"
+msgstr "Stripe API Live gizli anahtarı"
+
+#: classes/class.swpm-settings.php:453
+msgid "Email Settings Overview"
+msgstr "E-Posta Ayarlarına Genel Bakış"
+
+#: classes/class.swpm-settings.php:454
+msgid "Email Misc. Settings"
+msgstr "E-Posta Çeşitli Ayarlar"
+
+#: classes/class.swpm-settings.php:458
+msgid "From Email Address"
+msgstr "E-Posta adresinden"
+
+#: classes/class.swpm-settings.php:470
+msgid "Allow HTML in Emails"
+msgstr "E-Postalarda HTML'ye İzin Ver"
+
+#: classes/class.swpm-settings.php:481
+msgid "Email Settings (Prompt to Complete Registration )"
+msgstr "E-Posta Ayarları (Kaydı Tamamlama İstemi)"
+
+#: classes/class.swpm-settings.php:484 classes/class.swpm-settings.php:515
+#: classes/class.swpm-settings.php:596 classes/class.swpm-settings.php:621
+#: classes/class.swpm-settings.php:657 classes/class.swpm-settings.php:682
+msgid "Email Subject"
+msgstr "E-Posta konu"
+
+#: classes/class.swpm-settings.php:495 classes/class.swpm-settings.php:526
+#: classes/class.swpm-settings.php:607 classes/class.swpm-settings.php:632
+#: classes/class.swpm-settings.php:668 classes/class.swpm-settings.php:693
+msgid "Email Body"
+msgstr "E-Posta Gövdesi"
+
+#: classes/class.swpm-settings.php:506
+msgid ""
+"Enter the email address where you want the admin notification email to be "
+"sent to."
+msgstr ""
+"Yönetici bildirim E-Postasının gönderilmesini istediğiniz E-Posta adresini "
+"girin."
+
+#: classes/class.swpm-settings.php:507
+msgid ""
+" You can put multiple email addresses separated by comma (,) in the above "
+"field to send the notification to multiple email addresses."
+msgstr ""
+" Bildirimi birden çok E-Posta adresine göndermek için yukarıdaki alana "
+"virgülle (,) ayırarak birden çok E-Posta adresi girebilirsiniz."
+
+#: classes/class.swpm-settings.php:509
+msgid "Enter the subject for the admin notification email."
+msgstr "Yönetici bildirim E-Postası için konuyu girin."
+
+#: classes/class.swpm-settings.php:510
+msgid ""
+"This email will be sent to the admin when a new user completes the "
+"membership registration. Only works if you have enabled the \"Send "
+"Notification to Admin\" option above."
+msgstr ""
+"Bu E-Posta, yeni bir kullanıcı üyelik kaydını tamamladığında yöneticiye "
+"gönderilecektir. Yalnızca yukarıdaki \"Yöneticiye Bildirim Gönder\" "
+"seçeneğini etkinleştirdiyseniz çalışır."
+
+#: classes/class.swpm-settings.php:512
+msgid "Email Settings (Registration Complete)"
+msgstr "E-Posta Ayarları (Kayıt Tamamlandı)"
+
+#: classes/class.swpm-settings.php:537
+msgid "Send Notification to Admin"
+msgstr "Yöneticiye Bildirim Gönder"
+
+#: classes/class.swpm-settings.php:543
+msgid ""
+"Enable this option if you want the admin to receive a notification when a "
+"member registers."
+msgstr ""
+"Bir üye kaydolduğunda yöneticinin bir bildirim almasını istiyorsanız bu "
+"seçeneği etkinleştirin."
+
+#: classes/class.swpm-settings.php:548
+msgid "Admin Email Address"
+msgstr "Yönetici E-Posta Adresi"
+
+#: classes/class.swpm-settings.php:559
+msgid "Admin Notification Email Subject"
+msgstr "Yönetici Bildirimi E-Posta Konusu"
+
+#: classes/class.swpm-settings.php:570
+msgid "Admin Notification Email Body"
+msgstr "Yönetici Bildirim E-Posta Gövdesi"
+
+#: classes/class.swpm-settings.php:582
+msgid "Send Email to Member When Added via Admin Dashboard"
+msgstr "Yönetici Panosu aracılığıyla Eklendiğinde Üyeye E-Posta Gönder"
+
+#: classes/class.swpm-settings.php:593
+msgid "Email Settings (Password Reset)"
+msgstr "E-Posta Ayarları (Şifre Sıfırlama)"
+
+#: classes/class.swpm-settings.php:618
+msgid " Email Settings (Account Upgrade Notification)"
+msgstr " E-Posta Ayarları (Hesap Yükseltme Bildirimi)"
+
+#: classes/class.swpm-settings.php:643
+msgid "Disable Email Notification After Upgrade"
+msgstr "Yükseltmeden Sonra E-Posta Bildirimini Devre Dışı Bırak"
+
+#: classes/class.swpm-settings.php:649
+msgid ""
+"You can use this option to disable the email notification that gets sent to "
+"the members when they make a payment for upgrade or renewal."
+msgstr ""
+"Yükseltme veya yenileme için ödeme yaptıklarında üyelere gönderilen E-Posta "
+"bildirimini devre dışı bırakmak için bu seçeneği kullanabilirsiniz."
+
+#: classes/class.swpm-settings.php:654
+msgid " Email Settings (Bulk Account Activate Notification)"
+msgstr " E-Posta Ayarları (Toplu Hesap Aktivasyon Bildirimi)"
+
+#: classes/class.swpm-settings.php:679
+msgid " Email Settings (Email Activation)"
+msgstr " E-Posta Ayarları (E-Posta Etkinleştirme)"
+
+#: classes/class.swpm-settings.php:717
+msgid "Enable Expired Account Login"
+msgstr "Süresi Dolmuş Hesap Girişini Etkinleştir"
+
+#: classes/class.swpm-settings.php:723
+msgid ""
+"When enabled, expired members will be able to log into the system but won't "
+"be able to view any protected content. This allows them to easily renew "
+"their account by making another payment."
+msgstr ""
+"Etkinleştirildiğinde, süresi dolmuş üyeler sisteme giriş yapabilecek ancak "
+"korunan içeriği görüntüleyemeyecektir. Bu, başka bir ödeme yaparak "
+"hesaplarını kolayca yenilemelerini sağlar."
+
+#: classes/class.swpm-settings.php:729
+msgid "Membership Renewal URL"
+msgstr "Üyelik Yenileme URL'si"
+
+#: classes/class.swpm-settings.php:735
+msgid ""
+"You can create a renewal page for your site. Read <a href=\"https://simple-"
+"membership-plugin.com/creating-membership-renewal-button/\" "
+"target=\"_blank\">this documentation</a> to learn how to create a renewal "
+"page."
+msgstr ""
+"Siteniz için yenileme sayfası oluşturabilirsiniz. Oku <a href=\"https://"
+"simple-membership-plugin.com/creating-membership-renewal-button/\" "
+"target=\"_blank\">bu belgeler</a> yenileme sayfasının nasıl oluşturulacağını "
+"öğrenmek için."
+
+#: classes/class.swpm-settings.php:741
+msgid "After Registration Redirect URL"
+msgstr "Kayıttan Sonra Yönlendirme URL'si"
+
+#: classes/class.swpm-settings.php:747
+msgid ""
+"You can enter an URL here to redirect the members to this page after they "
+"submit the registration form. Read <a href=\"https://simple-membership-"
+"plugin.com/configure-after-registration-redirect-for-members/\" "
+"target=\"_blank\">this documentation</a> to learn how to setup after "
+"registration redirect."
+msgstr ""
+"Kayıt formunu gönderdikten sonra üyeleri bu sayfaya yönlendirmek için buraya "
+"bir URL girebilirsiniz. Oku <a href=\"https://simple-membership-plugin.com/"
+"configure-after-registration-redirect-for-members/\" target=\"_blank\">bu "
+"belgeler</a> kayıt yönlendirmesinden sonra nasıl kurulacağını öğrenmek için."
+
+#: classes/class.swpm-settings.php:753
+msgid "Enable Auto Login After Registration"
+msgstr "Kayıttan Sonra Otomatik Oturum Açmayı Etkinleştir"
+
+#: classes/class.swpm-settings.php:759
+msgid ""
+"Use this option if you want the members to be automatically logged into your "
+"site right after they complete the registration. This option will override "
+"any after registration redirection and instead it will trigger the after "
+"login redirection. Read <a href=\"https://simple-membership-plugin.com/"
+"configure-auto-login-after-registration-members/\" target=\"_blank\">this "
+"documentation</a> to learn more."
+msgstr ""
+"Üyelerin kaydı tamamladıktan hemen sonra sitenize otomatik olarak giriş "
+"yapmalarını istiyorsanız bu seçeneği kullanın. Bu seçenek, herhangi bir "
+"kayıt sonrası yeniden yönlendirmeyi geçersiz kılar ve bunun yerine oturum "
+"açma sonrası yeniden yönlendirmeyi tetikler. Oku <a href=\"https://simple-"
+"membership-plugin.com/configure-auto-login-after-registration-members/\" "
+"target=\"_blank\">bu belgeler</a> daha fazla öğrenmek için."
+
+#: classes/class.swpm-settings.php:765
+msgid "Hide Registration Form to Logged Users"
+msgstr "Kayıt Formunu Kayıtlı Kullanıcılara Gizle"
+
+#: classes/class.swpm-settings.php:771
+msgid ""
+"Use this option if you want to hide the registration form to the logged-in "
+"members. If logged-in members visit the registration page, they will see a "
+"message instead of the registration form."
+msgstr ""
+"Kayıt formunu oturum açmış üyelerden gizlemek istiyorsanız bu seçeneği "
+"kullanın. Giriş yapan üyeler kayıt sayfasını ziyaret ederse, kayıt formu "
+"yerine bir mesaj görürler."
+
+#: classes/class.swpm-settings.php:777
+msgid "After Logout Redirect URL"
+msgstr "Çıkış Yönlendirme URL'sinden Sonra"
+
+#: classes/class.swpm-settings.php:783
+msgid ""
+"You can enter an URL here to redirect the members to this page after they "
+"click the logout link to logout from your site."
+msgstr ""
+"Sitenizden çıkış yapmak için çıkış bağlantısına tıkladıktan sonra üyeleri bu "
+"sayfaya yönlendirmek için buraya bir URL girebilirsiniz."
+
+#: classes/class.swpm-settings.php:789
+msgid "Logout Member on Browser Close"
+msgstr "Tarayıcıda Üye Oturumunu Kapat"
+
+#: classes/class.swpm-settings.php:795
+msgid ""
+"Enable this option if you want the member to be logged out of the account "
+"when he closes the browser."
+msgstr ""
+"Üyenin tarayıcıyı kapattığında hesaptan çıkış yapmasını istiyorsanız bu "
+"seçeneği etkinleştirin."
+
+#: classes/class.swpm-settings.php:801
+msgid "Allow Account Deletion"
+msgstr "Hesabın Silinmesine İzin Ver"
+
+#: classes/class.swpm-settings.php:807
+msgid "Allow users to delete their accounts."
+msgstr "Kullanıcıların hesaplarını silmesine izin verin."
+
+#: classes/class.swpm-settings.php:813
+msgid "Force Strong Password for Members"
+msgstr "Üyeler İçin Güçlü Parolayı Zorla"
+
+#: classes/class.swpm-settings.php:819
+msgid ""
+"Enable this if you want the users to be forced to use a strong password for "
+"their accounts."
+msgstr ""
+"Kullanıcıların hesapları için güçlü bir parola kullanmaya zorlanmasını "
+"istiyorsanız bunu etkinleştirin."
+
+#: classes/class.swpm-settings.php:825
+msgid "Auto Delete Pending Account"
+msgstr "Bekleyen Hesabı Otomatik Sil"
+
+#: classes/class.swpm-settings.php:837
+msgid "Select how long you want to keep \"pending\" account."
+msgstr "Hesabı ne kadar süreyle \"beklemede\" tutmak istediğinizi seçin."
+
+#: classes/class.swpm-settings.php:843
+msgid "Admin Dashboard Access Permission"
+msgstr "Yönetici Panosu Erişim İzni"
+
+#: classes/class.swpm-settings.php:856
+msgid ""
+"SWPM admin dashboard is accessible to admin users only (just like any other "
+"plugin). You can allow users with other WP user roles to access the SWPM "
+"admin dashboard by selecting a value here. Note that this option cannot work "
+"if you enabled the \"Disable Access to WP Dashboard\" option in General "
+"Settings."
+msgstr ""
+"SWPM yönetici kontrol paneline yalnızca yönetici kullanıcılar erişebilir "
+"(tıpkı diğer eklentiler gibi). Burada bir değer seçerek, diğer WP kullanıcı "
+"rollerine sahip kullanıcıların SWPM yönetici panosuna erişmesine izin "
+"verebilirsiniz. Genel Ayarlarda \"WP Dashboard'a Erişimi Devre Dışı Bırak\" "
+"seçeneğini etkinleştirdiyseniz, bu seçeneğin çalışamayacağını unutmayın."
+
+#: classes/class.swpm-settings.php:862
+msgid "Force WP User Synchronization"
+msgstr "WP Kullanıcı Senkronizasyonunu Zorla"
+
+#: classes/class.swpm-settings.php:868
+msgid ""
+"Enable this option if you want to force the member login to be synchronized "
+"with WP user account. This can be useful if you are using another plugin "
+"that uses WP user records. For example: bbPress plugin."
+msgstr ""
+"Üye girişini WP kullanıcı hesabıyla senkronize olmaya zorlamak istiyorsanız "
+"bu seçeneği etkinleştirin. Bu, WP kullanıcı kayıtlarını kullanan başka bir "
+"eklenti kullanıyorsanız faydalı olabilir. Örneğin: bbPress eklentisi."
+
+#: classes/class.swpm-settings.php:873
+msgid "Create Member Accounts for New WP Users"
+msgstr "Yeni WP Kullanıcıları İçin Üye Hesapları Oluşturun"
+
+#: classes/class.swpm-settings.php:877
+msgid "Enable Auto Create Member Accounts"
+msgstr "Üye Hesaplarını Otomatik Oluşturmayı Etkinleştir"
+
+#: classes/class.swpm-settings.php:883
+msgid ""
+"Enable this option to automatically create member accounts for any new WP "
+"user that is created by another plugin."
+msgstr ""
+"Başka bir eklenti tarafından oluşturulan herhangi bir yeni WP kullanıcısı "
+"için otomatik olarak üye hesapları oluşturmak için bu seçeneği etkinleştirin."
+
+#: classes/class.swpm-settings.php:890
+msgid "Default Membership Level"
+msgstr "Varsayılan Üyelik Düzeyi"
+
+#: classes/class.swpm-settings.php:898
+msgid ""
+"When automatically creating a member account using this feature, the "
+"membership level of the user will be set to the one you specify here."
+msgstr ""
+"Bu özelliği kullanarak otomatik olarak üye hesabı oluştururken, kullanıcının "
+"üyelik seviyesi burada belirttiğiniz seviyeye ayarlanacaktır."
+
+#: classes/class.swpm-settings.php:913
+msgid ""
+"When automatically creating a member account using this feature, the "
+"membership account status of the user will be set to the one you specify "
+"here."
+msgstr ""
+"Bu özelliği kullanarak otomatik olarak üye hesabı oluştururken, kullanıcının "
+"üyelik hesabı durumu burada belirteceğiniz şekilde ayarlanacaktır."
+
+#: classes/class.swpm-settings.php:919
+msgid "Payment Notification Forward URL"
+msgstr "Ödeme Bildirimi Yönlendirme URL'si"
+
+#: classes/class.swpm-settings.php:925
+msgid ""
+"You can enter an URL here to forward the payment notification after the "
+"membership payment has been processed by this plugin. Useful if you want to "
+"forward the payment notification to an external script for further "
+"processing."
+msgstr ""
+"Üyelik ödemesi bu eklenti tarafından işlendikten sonra ödeme bildirimini "
+"iletmek için buraya bir URL girebilirsiniz. Ödeme bildirimini daha fazla "
+"işlenmek üzere harici bir komut dosyasına iletmek istiyorsanız kullanışlıdır."
+
+#: classes/class.swpm-settings.php:930 views/add.php:68
+msgid "Terms and Conditions"
+msgstr "Şartlar ve koşullar"
+
+#: classes/class.swpm-settings.php:934
+msgid "Enable Terms and Conditions"
+msgstr "Şartlar ve Koşulları Etkinleştir"
+
+#: classes/class.swpm-settings.php:940
+msgid "Users must accept the terms before they can complete the registration."
+msgstr "Kullanıcılar, kaydı tamamlamadan önce şartları kabul etmelidir."
+
+#: classes/class.swpm-settings.php:945
+msgid "Terms and Conditions Page URL"
+msgstr "Şartlar ve Koşullar Sayfası URL'si"
+
+#: classes/class.swpm-settings.php:951
+msgid ""
+"Enter the URL of your terms and conditions page. You can create a WordPress "
+"page and specify your terms in there then specify the URL of that page in "
+"the above field."
+msgstr ""
+"Şartlar ve koşullar sayfanızın URL'sini girin. Bir WordPress sayfası "
+"oluşturabilir ve orada terimlerinizi belirtebilir, ardından yukarıdaki "
+"alanda o sayfanın URL'sini belirtebilirsiniz."
+
+#: classes/class.swpm-settings.php:956
+msgid "Enable Privacy Policy"
+msgstr "Gizlilik Politikasını Etkinleştir"
+
+#: classes/class.swpm-settings.php:962
+msgid "Users must accept it before they can complete the registration."
+msgstr "Kullanıcılar, kaydı tamamlamadan önce bunu kabul etmelidir."
+
+#: classes/class.swpm-settings.php:967
+msgid "Privacy Policy Page URL"
+msgstr "Gizlilik Politikası Sayfası URL'si"
+
+#: classes/class.swpm-settings.php:973
+msgid "Enter the URL of your privacy policy page."
+msgstr "Gizlilik politikası sayfanızın URL'sini girin."
+
+#: classes/class.swpm-settings.php:984
+msgid "Configure Blacklisting & Whitelisting"
+msgstr "Kara Liste ve Beyaz Listeyi Yapılandırma"
+
+#: classes/class.swpm-settings.php:987
+msgid "Whitelisting"
+msgstr "Beyaz liste"
+
+#: classes/class.swpm-settings.php:991
+msgid "Enable Whitelisting Feature"
+msgstr "Beyaz Liste Özelliğini Etkinleştir"
+
+#: classes/class.swpm-settings.php:997
+msgid "When enabled, whitelisting feature will be activated."
+msgstr "Etkinleştirildiğinde, beyaz liste özelliği etkinleştirilecektir."
+
+#: classes/class.swpm-settings.php:1003
+msgid "Email Address Whitelisting"
+msgstr "E-Posta Adresi Beyaz Liste"
+
+#: classes/class.swpm-settings.php:1009
+msgid "Enter a list (comma separated) of email addresses to whitelist."
+msgstr ""
+"Beyaz listeye eklenecek E-Posta adreslerinin bir listesini (virgülle "
+"ayrılmış) girin."
+
+#: classes/class.swpm-settings.php:1015
+msgid "Email Address Pattern Whitelisting"
+msgstr "E-posta Adresi Kalıbı Beyaz Listeye Alma"
+
+#: classes/class.swpm-settings.php:1021
+msgid ""
+"Enter a list (comma separated) of email addresses pattern to whitelist. "
+"Example value: @gooddomain.com, @gmail.com, @yahoo.com"
+msgstr ""
+"Beyaz listeye eklenecek E-Posta adreslerinin bir listesini (virgülle "
+"ayrılmış) girin. Örneğin: @emsalara.com, @gmail.com, @yahoo.com"
+
+#: classes/class.swpm-settings.php:1027
+msgid "Whitelist Message Customization"
+msgstr "Beyaz Liste Mesajı Özelleştirme"
+
+#: classes/class.swpm-settings.php:1033
+msgid ""
+"Enter the message you want to show to the user when the whitelisted "
+"condition is met. Leave it empty to use the default message."
+msgstr ""
+"Beyaz liste koşulu karşılandığında kullanıcıya göstermek istediğiniz mesajı "
+"girin. Varsayılan mesajı kullanmak için boş bırakın."
+
+#: classes/class.swpm-settings.php:1038
+msgid "Blacklisting"
+msgstr "Kara liste"
+
+#: classes/class.swpm-settings.php:1042
+msgid "Enable Blacklisting Feature"
+msgstr "Kara Liste Özelliğini Etkinleştir"
+
+#: classes/class.swpm-settings.php:1048
+msgid "When enabled, blacklisting feature will be activated."
+msgstr "Etkinleştirildiğinde, kara listeye alma özelliği etkinleştirilecektir."
+
+#: classes/class.swpm-settings.php:1054
+msgid "Email Address Blacklisting"
+msgstr "E-Posta Adresinin Kara Listeye Alınması"
+
+#: classes/class.swpm-settings.php:1060
+msgid "Enter a list (comma separated) of email addresses to blacklist."
+msgstr ""
+"Kara listeye alınacak E-Posta adreslerinin bir listesini (virgülle ayrılmış) "
+"girin."
+
+#: classes/class.swpm-settings.php:1066
+msgid "Email Address Pattern Blacklisting"
+msgstr "E-Posta Adresi Modeli Kara Listeye Alma"
+
+#: classes/class.swpm-settings.php:1072
+msgid ""
+"Enter a list (comma separated) of email addresses pattern to blacklist. "
+"Example value: @baddomain.com, @crazydomain.com"
+msgstr ""
+"Kara listeye alınacak E-Posta adreslerinin bir listesini (virgülle ayrılmış) "
+"girin. Örneğin; @baddomain.com, @crazydomain.com"
+
+#: classes/class.swpm-settings.php:1078
+msgid "Blacklist Message Customization"
+msgstr "Kara Liste Mesajı Özelleştirme"
+
+#: classes/class.swpm-settings.php:1084
+msgid ""
+"Enter the message you want to show to the user when the blacklisted "
+"condition is met. Leave it empty to use the default message."
+msgstr ""
+"Kara liste koşulu karşılandığında kullanıcıya göstermek istediğiniz mesajı "
+"girin. Varsayılan mesajı kullanmak için boş bırakın."
+
+#: classes/class.swpm-settings.php:1183
+#, php-format
+msgid "Visit the %s to read setup and configuration documentation."
+msgstr ""
+"Kurulum ve yapılandırma belgelerini okumak için %s adresini ziyaret edin."
+
+#: classes/class.swpm-settings.php:1183
+msgid "Simple Membership Plugin Site"
+msgstr "Basit Üyelik Eklenti Sitesi"
+
+#: classes/class.swpm-settings.php:1184
+#, php-format
+msgid "Please %s if you like the plugin."
+msgstr "Eklentiyi beğendiyseniz lütfen %s."
+
+#: classes/class.swpm-settings.php:1184
+msgid "give us a rating"
+msgstr "bize puan ver"
+
+#: classes/class.swpm-settings.php:1202 classes/class.swpm-settings.php:1232
+#: classes/class.swpm-settings.php:1364 classes/class.swpm-settings.php:1392
+#: classes/class.swpm-settings.php:1425
+msgid "Settings updated!"
+msgstr "Ayarlar güncellendi!"
+
+#: classes/class.swpm-settings.php:1207
+msgid "General Plugin Settings."
+msgstr "Genel Eklenti Ayarları."
+
+#: classes/class.swpm-settings.php:1211
+msgid "Page Setup and URL Related settings."
+msgstr "Sayfa Yapısı ve URL ile İlgili ayarlar."
+
+#: classes/class.swpm-settings.php:1214
+msgid ""
+"The following pages are required for the plugin to function correctly. These "
+"pages were automatically created by the plugin at install time."
+msgstr ""
+"Eklentinin doğru çalışması için aşağıdaki sayfalar gereklidir. Bu sayfalar, "
+"kurulum sırasında eklenti tarafından otomatik olarak oluşturulmuştur."
+
+#: classes/class.swpm-settings.php:1215
+msgid ""
+" Read <a href=\"https://simple-membership-plugin.com/recreating-required-"
+"pages-simple-membership-plugin/\" target=\"_blank\">this documentation</a> "
+"to learn how to recreate them (if needed)."
+msgstr ""
+" Oku <a href=\"https://simple-membership-plugin.com/recreating-required-"
+"pages-simple-membership-plugin/\" target=\"_blank\">bu belgeler</a> onları "
+"nasıl yeniden yaratacağınızı öğrenmek (gerekirse)."
+
+#: classes/class.swpm-settings.php:1221
+msgid ""
+"Optional page. It is automatically created by the plugin when you install "
+"the plugin for the first time."
+msgstr ""
+"İsteğe bağlı sayfa. Eklentiyi ilk kez yüklediğinizde eklenti tarafından "
+"otomatik olarak oluşturulur."
+
+#: classes/class.swpm-settings.php:1226
+msgid "Testing and Debug Related Settings."
+msgstr "İlgili Ayarları Test Etme ve Hata Ayıklama."
+
+#: classes/class.swpm-settings.php:1237
+msgid ""
+"This section allows you to enable/disable sandbox or test mode for the "
+"payment buttons."
+msgstr ""
+"Bu bölüm, ödeme düğmeleri için korumalı alan veya test modunu "
+"etkinleştirmenizi/devre dışı bırakmanızı sağlar."
+
+#: classes/class.swpm-settings.php:1241
+msgid "Configure the PayPal API credentials for the new PayPal checkout."
+msgstr "Yeni PayPal ödemesi için PayPal API kimlik bilgilerini yapılandırın."
+
+#: classes/class.swpm-settings.php:1242
+msgid "Read this documentation"
+msgstr "Bu belgeleri okuyun"
+
+#: classes/class.swpm-settings.php:1242
+msgid "to learn how to get your PayPal API credentials."
+msgstr "payPal API kimlik bilgilerinizi nasıl alacağınızı öğrenmek için."
+
+#: classes/class.swpm-settings.php:1246
+msgid "PayPal Webhooks"
+msgstr "PayPal Web Kancaları"
+
+#: classes/class.swpm-settings.php:1247
+msgid ""
+"The PayPal payment buttons that uses the new API require webhooks. The "
+"plugin will auto-create the required webhooks when you create a PayPal "
+"payment button."
+msgstr ""
+"Yeni API'yi kullanan PayPal ödeme düğmeleri web kancaları gerektirir. Bir "
+"PayPal ödeme düğmesi oluşturduğunuzda, eklenti gerekli web kancalarını "
+"otomatik olarak oluşturacaktır."
+
+#: classes/class.swpm-settings.php:1248
+msgid ""
+"If you have issues with the webhooks, you can delete it and create again."
+msgstr ""
+"Web kancalarıyla ilgili sorunlarınız varsa, onu silebilir ve yeniden "
+"oluşturabilirsiniz."
+
+#: classes/class.swpm-settings.php:1265
+msgid ""
+"Live Webhook exists. If you still have issues with webhooks, you can delete "
+"it and create again."
+msgstr ""
+"Canlı Web kancası var. Hala web kancalarıyla ilgili sorunlarınız varsa, onu "
+"silebilir ve yeniden oluşturabilirsiniz."
+
+#: classes/class.swpm-settings.php:1271
+msgid ""
+"Live PayPal API credentials are not set. Please set the Live PayPal API "
+"credentials first."
+msgstr ""
+"Canlı PayPal API kimlik bilgileri ayarlanmadı. Lütfen önce Canlı PayPal API "
+"kimlik bilgilerini ayarlayın."
+
+#: classes/class.swpm-settings.php:1275
+msgid ""
+"No webhook found. Use the following Create Live Webhook link to create a new "
+"webhook automatically."
+msgstr ""
+"Web kancası bulunamadı. Otomatik olarak yeni bir web kancası oluşturmak için "
+"aşağıdaki Canlı Web Kancası Oluştur bağlantısını kullanın."
+
+#: classes/class.swpm-settings.php:1279
+msgid "Create Live Webhook"
+msgstr "Canlı Web Kancası Oluştur"
+
+#: classes/class.swpm-settings.php:1293
+msgid ""
+"Sandbox Webhook exists. If you still have issues with webhooks, you can "
+"delete it and create again."
+msgstr ""
+"Sandbox Webhook mevcuttur. Hala web kancalarıyla ilgili sorunlarınız varsa, "
+"onu silebilir ve yeniden oluşturabilirsiniz."
+
+#: classes/class.swpm-settings.php:1299
+msgid ""
+"Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal "
+"API credentials first."
+msgstr ""
+"Sanbbox PayPal API kimlik bilgileri ayarlanmadı. Lütfen önce Sandbox PayPal "
+"API kimlik bilgilerini ayarlayın."
+
+#: classes/class.swpm-settings.php:1303
+msgid ""
+"No webhook found. Use the following Create Sandbox Webhook link to create a "
+"new webhook automatically."
+msgstr ""
+"Web kancası bulunamadı. Otomatik olarak yeni bir web kancası oluşturmak için "
+"aşağıdaki Korumalı Alan Web Kancası Oluştur bağlantısını kullanın."
+
+#: classes/class.swpm-settings.php:1307
+msgid "Create Sandbox Webhook"
+msgstr "Korumalı Alan Web Kancası Oluşturma"
+
+#: classes/class.swpm-settings.php:1314 classes/class.swpm-settings.php:1324
+msgid "Delete Webhooks"
+msgstr "Web Kancalarını Sil"
+
+#: classes/class.swpm-settings.php:1319
+msgid ""
+"PayPal API credentials are missing. Please set the PayPal API credentials."
+msgstr ""
+"PayPal API kimlik bilgileri eksik. Lütfen PayPal API kimlik bilgilerini "
+"ayarlayın."
+
+#: classes/class.swpm-settings.php:1335
+msgid "This section allows you to configure Stripe payment related settings."
+msgstr ""
+"Bu bölüm, Stripe ödeme ile ilgili ayarları yapılandırmanıza izin verir."
+
+#: classes/class.swpm-settings.php:1339
+msgid ""
+"This email will be sent to your users when they complete the registration "
+"and become a member."
+msgstr ""
+"Bu E-Posta, kullanıcılarınıza kayıt işlemlerini tamamlayıp üye olduklarında "
+"gönderilecektir."
+
+#: classes/class.swpm-settings.php:1343
+msgid ""
+"This email will be sent to your users when they use the password reset "
+"functionality."
+msgstr ""
+"Bu E-Posta, parola sıfırlama işlevini kullandıklarında kullanıcılarınıza "
+"gönderilecektir."
+
+#: classes/class.swpm-settings.php:1349
+msgid ""
+"This interface lets you customize the various emails that get sent to your "
+"members for various actions. The default settings should be good to get your "
+"started."
+msgstr ""
+"Bu ara yüz, çeşitli eylemler için üyelerinize gönderilen çeşitli E-Postaları "
+"özelleştirmenizi sağlar. Başlamak için varsayılan ayarlar iyi olmalıdır."
+
+#: classes/class.swpm-settings.php:1353 views/admin_tools_settings.php:88
+msgid "This documentation"
+msgstr "Bu belgeler"
+
+#: classes/class.swpm-settings.php:1354
+msgid ""
+" explains what email merge tags you can use in the email body field to "
+"customize it (if you want to)."
+msgstr ""
+" özelleştirmek için (isterseniz) E-Posta gövde alanında hangi E-Posta "
+"birleştirme etiketlerini kullanabileceğinizi açıklar."
+
+#: classes/class.swpm-settings.php:1367
+msgid "Settings in this section apply to all emails."
+msgstr "Bu bölümdeki ayarlar tüm E-Postalar için geçerlidir."
+
+#: classes/class.swpm-settings.php:1371
+msgid ""
+"This email will be sent to your users after account upgrade (when an "
+"existing member pays for a new membership level)."
+msgstr ""
+"Bu E-Posta, hesap yükseltme işleminden sonra (mevcut bir üye yeni bir üyelik "
+"düzeyi için ödeme yaptığında) kullanıcılarınıza gönderilecektir."
+
+#: classes/class.swpm-settings.php:1375
+msgid ""
+"This email will be sent to your members when you use the bulk account "
+"activate and notify action."
+msgstr ""
+"Bu E-Posta, toplu hesap etkinleştirme ve bildirim eylemini kullandığınızda "
+"üyelerinize gönderilecektir."
+
+#: classes/class.swpm-settings.php:1376
+msgid ""
+" You cannot use email merge tags in this email. You can only use generic "
+"text."
+msgstr ""
+" Bu E-Postada E-Posta birleştirme etiketleri kullanamazsınız. Yalnızca genel "
+"metin kullanabilirsiniz."
+
+#: classes/class.swpm-settings.php:1380
+msgid ""
+"This email will be sent if Email Activation is enabled for a Membership "
+"Level."
+msgstr ""
+"Bu E-Posta, bir Üyelik Düzeyi için E-Posta Aktivasyonu etkinleştirildiğinde "
+"gönderilecektir."
+
+#: classes/class.swpm-settings.php:1384
+msgid ""
+"This email will be sent to prompt users to complete registration after the "
+"payment."
+msgstr ""
+"Bu E-Posta, kullanıcılardan ödeme yapıldıktan sonra kaydı tamamlamalarını "
+"istemek için gönderilecektir."
+
+#: classes/class.swpm-settings.php:1407
+msgid ""
+"Note: You cannot enable both the \"Disable Access to WP Dashboard\" and "
+"\"Admin Dashboard Access Permission\" options at the same time. Only use one "
+"of those options."
+msgstr ""
+"Not: \"WP Dashboard'a Erişimi Devre Dışı Bırak\" ve \"Admin Dashboard Erişim "
+"İzni\" seçeneklerini aynı anda etkinleştiremezsiniz. Bu seçeneklerden "
+"yalnızca birini kullanın."
+
+#: classes/class.swpm-settings.php:1416
+msgid "This page allows you to configure some advanced features of the plugin."
+msgstr ""
+"Bu sayfa, eklentinin bazı gelişmiş özelliklerini yapılandırmanıza izin verir."
+
+#: classes/class.swpm-settings.php:1430
+msgid ""
+"This interface lets you configure blacklisting & whitelisting for email "
+"addresses. "
+msgstr ""
+"Bu ara yüz, E-Posta adresleri için kara liste ve beyaz listeyi "
+"yapılandırmanıza olanak tanır. "
+
+#: classes/class.swpm-settings.php:1431
+msgid "This blacklisting & whitelisting documentation"
+msgstr "Bu kara listeye alma ve beyaz listeye alma belgeleri"
+
+#: classes/class.swpm-settings.php:1432
+msgid " explains how to use this feautre."
+msgstr " bu özelliğin nasıl kullanılacağını açıklar."
+
+#: classes/class.swpm-settings.php:1438
+msgid "This section allows you to configure whitelisting settings."
+msgstr "Bu bölüm, beyaz listeye alma ayarlarını yapılandırmanıza olanak tanır."
+
+#: classes/class.swpm-settings.php:1442
+msgid "This section allows you to configure blacklisting settings."
+msgstr "Bu bölüm, kara listeye alma ayarlarını yapılandırmanıza izin verir."
+
+#: classes/class.swpm-settings.php:1446
+msgid ""
+"This section allows you to configure automatic creation of member accounts "
+"when new WP User records are created by another plugin. It can be useful if "
+"you are using another plugin that creates WP user records and you want them "
+"to be recognized in the membership plugin."
+msgstr ""
+"Bu bölüm, başka bir eklenti tarafından yeni WP Kullanıcı kayıtları "
+"oluşturulduğunda üye hesaplarının otomatik olarak oluşturulmasını "
+"yapılandırmanıza izin verir. WP kullanıcı kayıtları oluşturan başka bir "
+"eklenti kullanıyorsanız ve bunların üyelik eklentisinde tanınmasını "
+"istiyorsanız faydalı olabilir."
+
+#: classes/class.swpm-settings.php:1450
+msgid ""
+"This section allows you to configure terms and conditions and privacy policy "
+"that users must accept at registration time."
+msgstr ""
+"Bu bölüm, kullanıcıların kayıt sırasında kabul etmesi gereken hüküm ve "
+"koşulları ve gizlilik politikasını yapılandırmanıza olanak tanır."
+
+#: classes/class.swpm-settings.php:1626
+msgid "Simple WP Membership::Settings"
+msgstr "Basit WP Üyeliği: Ayarlar"
+
+#: classes/class.swpm-utils-member.php:36
+#: classes/class.swpm-utils-member.php:44
+#: classes/class.swpm-utils-member.php:52
+#: classes/class.swpm-utils-member.php:62
+#: classes/class.swpm-utils-member.php:68
+msgid "User is not logged in."
+msgstr "Kullanıcı giriş yapmadı."
+
+#: classes/class.swpm-utils-member.php:88
+msgid "No Expiry"
+msgstr "Sona Erme Yok"
+
+#: classes/class.swpm-utils-misc.php:57
+msgid "Registration"
+msgstr "Kayıt"
+
+#: classes/class.swpm-utils-misc.php:85
+msgid "Member Login"
+msgstr "Üye Girişi"
+
+#: classes/class.swpm-utils-misc.php:113
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:145
+msgid "Profile"
+msgstr "Profil"
+
+#: classes/class.swpm-utils-misc.php:141
+msgid "Password Reset"
+msgstr "Parola sıfırlama"
+
+#: classes/class.swpm-utils-misc.php:169
+msgid "Thank You"
+msgstr "Teşekkürler"
+
+#: classes/class.swpm-utils-misc.php:224
+#, php-format
+msgid ""
+"You will be automatically redirected in a few seconds. If not, please %s."
+msgstr ""
+"Birkaç saniye içinde otomatik olarak yönlendirileceksiniz. Değilse, lütfen "
+"%s."
+
+#: classes/class.swpm-utils-misc.php:228
+msgid "Action Status"
+msgstr "Eylem Durumu"
+
+#: classes/class.swpm-utils-misc.php:415
+msgid "Not a Member?"
+msgstr "Üye değil misiniz?"
+
+#: classes/class.swpm-utils-misc.php:426
+msgid "renew"
+msgstr "yenile"
+
+#: classes/class.swpm-utils-misc.php:426
+msgid " your account to gain access to this content."
+msgstr " Bu içeriğe erişmek için hesabınızı."
+
+#: classes/class.swpm-utils-misc.php:484 classes/class.swpm-utils-misc.php:490
+msgid "Error! This action ("
+msgstr "Hata! Bu hareket ("
+
+#: classes/class.swpm-utils-misc.php:962
+msgid "(Please Select)"
+msgstr "(Lütfen seçin)"
+
+#: classes/class.swpm-utils-misc.php:978
+#: views/payments/admin_create_payment_buttons.php:34
+msgid "PayPal Buy Now"
+msgstr "Şimdi Satın Al"
+
+#: classes/class.swpm-utils-misc.php:979
+#: views/payments/admin_create_payment_buttons.php:36
+msgid "PayPal Subscription"
+msgstr "PayPal Aboneliği"
+
+#: classes/class.swpm-utils-misc.php:980
+#: views/payments/admin_create_payment_buttons.php:38
+msgid "PayPal Buy Now (New API)"
+msgstr "PayPal Şimdi Satın Al (Yeni API)"
+
+#: classes/class.swpm-utils-misc.php:981
+#: views/payments/admin_create_payment_buttons.php:40
+msgid "PayPal Subscription (New API)"
+msgstr "PayPal Aboneliği (Yeni API)"
+
+#: classes/class.swpm-utils-misc.php:982
+msgid "PayPal Smart Checkout"
+msgstr "PayPal Akıllı Ödeme"
+
+#: classes/class.swpm-utils-misc.php:983
+msgid "Stripe Buy Now"
+msgstr "Stripe Şimdi Satın Al"
+
+#: classes/class.swpm-utils-misc.php:984
+msgid "Stripe Subscription"
+msgstr "Stripe Aboneliği"
+
+#: classes/class.swpm-utils-misc.php:985
+#: views/payments/admin_create_payment_buttons.php:44
+msgid "Stripe SCA Buy Now"
+msgstr "Çizgili SCA Şimdi Satın Al"
+
+#: classes/class.swpm-utils-misc.php:986
+#: views/payments/admin_create_payment_buttons.php:46
+msgid "Stripe SCA Subscription"
+msgstr "Stripe SCA Aboneliği"
+
+#: classes/class.swpm-utils-misc.php:987
+#: views/payments/admin_create_payment_buttons.php:42
+msgid "Braintree Buy Now"
+msgstr "Braintree'yi Şimdi Satın Al"
+
+#: classes/class.swpm-utils-template.php:38
+msgid "Error! Failed to find a template path for the specified template: "
+msgstr "Hata! Belirtilen şablon için bir şablon yolu bulunamadı: "
+
+#: classes/class.swpm-utils.php:111
+msgid "Never"
+msgstr "Asla"
+
+#: classes/class.swpm-utils.php:119
+msgid "Male"
+msgstr "Erkek"
+
+#: classes/class.swpm-utils.php:120
+msgid "Female"
+msgstr "Kadın"
+
+#: classes/class.swpm-utils.php:121
+msgid "Not Specified"
+msgstr "Belirtilmemiş"
+
+#: classes/class.swpm-utils.php:126 views/admin_members_list.php:33
+msgid "Active"
+msgstr "Aktif"
+
+#: classes/class.swpm-utils.php:127 views/admin_members_list.php:34
+msgid "Inactive"
+msgstr "Etkin değil"
+
+#: classes/class.swpm-utils.php:128 views/admin_members_list.php:35
+msgid "Activation Required"
+msgstr "Aktivasyon gerekiyor"
+
+#: classes/class.swpm-utils.php:129 views/admin_members_list.php:36
+msgid "Pending"
+msgstr "Askıda olması"
+
+#: classes/class.swpm-utils.php:130 views/admin_members_list.php:38
+msgid "Expired"
+msgstr "Günü geçmiş"
+
+#: classes/class.swpm-utils.php:533 views/account_delete_warning.php:3
+msgid "Delete Account"
+msgstr "Hesabı sil"
+
+#: classes/class.swpm-wp-loaded-tasks.php:118
+msgid ""
+"You will be redirected to the previous page in a few seconds. If not, please "
+"<a href=\"\">click here</a>."
+msgstr ""
+"Birkaç saniye içinde önceki sayfaya yönlendirileceksiniz. "
+"Yönlendirilmemişse, lütfen <a href=\"\">tıklayınız</a>."
+
+#: classes/class.swpm-wp-loaded-tasks.php:121
+msgid "Success!"
+msgstr "Başarılı!"
+
+#: classes/class.swpm-wp-loaded-tasks.php:129
+msgid "No token provided."
+msgstr "Belirteç sağlanmadı."
+
+#: classes/class.swpm-wp-loaded-tasks.php:136
+msgid "Nonce check failed."
+msgstr "Kontrol başarısız oldu."
+
+#: classes/class.swpm-wp-loaded-tasks.php:161
+msgid "Subscription has been cancelled."
+msgstr "Abonelik iptal edildi."
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:75
+msgid "Your membership profile will be updated to reflect the payment."
+msgstr "Üyelik profiliniz ödemeyi yansıtacak şekilde güncellenecektir."
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:76
+msgid "Your profile username: "
+msgstr "Profil kullanıcı adınız: "
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:94
+msgid "Click on the following link to complete the registration."
+msgstr "Kayıt işlemini tamamlamak için aşağıdaki bağlantıya tıklayın."
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:95
+msgid "Click here to complete your paid registration"
+msgstr "Ücretli kaydınızı tamamlamak için buraya tıklayın"
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:102
+msgid ""
+"If you have just made a membership payment then your payment is yet to be "
+"processed. Please check back in a few minutes. An email will be sent to you "
+"with the details shortly."
+msgstr ""
+"Üyelik ödemesi yaptıysanız, ödemeniz henüz işleme alınmamıştır. Lütfen bir "
+"kaç dakika sonra tekrar kontrol ediniz. Kısa süre içinde ayrıntıları içeren "
+"bir E-Posta gönderilecektir."
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:119
+msgid "Expiry: "
+msgstr "Son kullanma tarihi: "
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:121
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:166
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:248
+msgid "You are not logged-in as a member"
+msgstr "Üye girişi yapmadınız"
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:143
+msgid "Logged in as: "
+msgstr "Olarak giriş yaptı: "
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:146
+#: views/loggedin.php:31
+msgid "Logout"
+msgstr "Çıkış Yap"
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:149
+msgid "Login Here"
+msgstr "Giriş yapın"
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:150
+msgid "Not a member? "
+msgstr "Üye değil misiniz? "
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:151
+msgid "Join Now"
+msgstr "Şimdi Katıl"
+
+#: classes/shortcode-related/class.swpm-shortcodes-handler.php:228
+msgid "Unsubscribe from PayPal"
+msgstr "PayPal üyeliğinden çık"
+
+#. translators: %1$d is error code; %2$s is error message.
+#: ipn/swpm-smart-checkout-ipn.php:270 ipn/swpm-smart-checkout-ipn.php:297
+#, php-format
+msgid ""
+"Error occured during payment verification. Error code: %1$d. Message: %2$s"
+msgstr "Ödeme doğrulaması sırasında hata oluştu. Hata kodu: %1$d. Mesaj: %2$s"
+
+#. translators:  %1$s is expected amount, %2$s is expected currency.
+#: ipn/swpm-smart-checkout-ipn.php:311
+#, php-format
+msgid ""
+"Payment check failed: invalid amount received. Expected %1$s %2$s, got %3$s "
+"%4$s."
+msgstr ""
+"Ödeme kontrolü başarısız oldu: Alınan geçersiz tutar. Beklenen %1$s %2$s, "
+"%3$s %4$s aldı."
+
+#: ipn/swpm-smart-checkout-ipn.php:347
+msgid "Empty payment data received."
+msgstr "Boş ödeme verileri alındı."
+
+#: ipn/swpm-smart-checkout-ipn.php:406
+msgid "IPN product validation failed. Check the debug log for more details."
+msgstr ""
+"IPN ürün doğrulaması başarısız oldu. Daha fazla ayrıntı için hata ayıklama "
+"günlüğünü kontrol edin."
+
+#: lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php:40
+#: lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php:228
+msgid "Empty data received."
+msgstr "Boş veri alındı."
+
+#: lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php:54
+#: lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php:242
+msgid ""
+"Nonce check failed. The page was most likely cached. Please reload the page "
+"and try again."
+msgstr ""
+"Hiçbir kontrol başarısız oldu. Sayfa büyük olasılıkla önbelleğe alındı. "
+"Lütfen sayfayı yeniden yükleyin ve tekrar deneyin."
+
+#: lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php:66
+#: lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php:254
+msgid "Empty transaction data received."
+msgstr "Boş işlem verileri alındı."
+
+#: lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php:324
+#: lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php:325
+msgid "Subscription created"
+msgstr "Abonelik oluşturuldu"
+
+#: lib/paypal/class-swpm-paypal-webhook.php:310
+msgid ""
+"No webhook found. Use the following Create Webhook button to create a new "
+"webhook automatically in your PayPal account."
+msgstr ""
+"Web kancası bulunamadı. PayPal hesabınızda otomatik olarak yeni bir web "
+"kancası oluşturmak için aşağıdaki Web kancası oluştur düğmesini kullanın."
+
+#: lib/paypal/class-swpm-paypal-webhook.php:314
+#, php-format
+msgid ""
+"PayPal API Credential information is missing in settings. Please enter valid "
+"PayPal API Credentials in the General Settings tab for %s mode."
+msgstr ""
+"Ayarlarda PayPal API Kimlik bilgileri eksik. Lütfen %s modu için Genel "
+"Ayarlar sekmesinde geçerli PayPal API Kimlik Bilgilerini girin."
+
+#: lib/paypal/class-swpm-paypal-webhook.php:316
+#, php-format
+msgid ""
+"Invalid or Missing API Credentials! Check the plugin settings and enter "
+"valid API credentials in the PayPal Credentials section for %s mode."
+msgstr ""
+"Geçersiz veya Eksik API Kimlik Bilgileri! Eklenti ayarlarını kontrol edin ve "
+"%s modu için PayPal Kimlik Bilgileri bölümüne geçerli API kimlik bilgilerini "
+"girin."
+
+#: lib/paypal/class-swpm-paypal-webhook.php:326
+msgid ""
+"Webhook exists. If you still have issues with webhooks, you can delete it "
+"and create again."
+msgstr ""
+"Web kancası var. Hala web kancalarıyla ilgili sorunlarınız varsa, onu "
+"silebilir ve yeniden oluşturabilirsiniz."
+
+#: lib/paypal/class-swpm-paypal-webhook.php:353
+msgid "Invalid webhook URL."
+msgstr "Geçersiz web kancası URL'si."
+
+#: lib/paypal/class-swpm-paypal-webhook.php:353
+msgid ""
+"Note that the PayPal subscription API requires your site to use HTTPS URLs. "
+"You must use an SSL certificate with HTTPS URLs to complete the setup of the "
+"subscription addon and use it."
+msgstr ""
+"PayPal abonelik API'sinin sitenizin HTTPS URL'lerini kullanmasını "
+"gerektirdiğini unutmayın. Abonelik eklentisinin kurulumunu tamamlamak ve "
+"kullanmak için HTTPS URL'lerine sahip bir SSL sertifikası kullanmalısınız."
+
+#: lib/paypal/class-swpm-paypal-webhook.php:362
+msgid "Webhook has been created."
+msgstr "Web kancası oluşturuldu."
+
+#: lib/paypal/class-swpm-paypal-webhook.php:386
+msgid "Webhook has been deleted."
+msgstr "Web kancası silindi."
+
+#: lib/paypal/class-swpm-paypal-webhook.php:399
+msgid "No webhook found. Nothing to delete."
+msgstr "Web kancası bulunamadı. Silinecek bir şey yok."
+
+#: lib/paypal/class-swpm-paypal-webhook.php:416
+msgid "Live mode credentials are not set. Cannot create webhook."
+msgstr "Canlı mod kimlik bilgileri ayarlanmadı. Web kancası oluşturulamıyor."
+
+#: lib/paypal/class-swpm-paypal-webhook.php:431
+msgid "Sandbox mode credentials are not set. Cannot create webhook."
+msgstr ""
+"Korumalı alan modu kimlik bilgileri ayarlanmadı. Web kancası oluşturulamıyor."
+
+#: views/account_delete_warning.php:7
+msgid ""
+"You are about to delete an account. This will delete user data associated "
+"with this account. "
+msgstr ""
+"Bir hesabı silmek üzeresiniz. Bu, bu hesapla ilişkili kullanıcı verilerini "
+"siler. "
+
+#: views/account_delete_warning.php:8
+msgid "It will also delete the associated WordPress user account."
+msgstr "Ayrıca ilişkili WordPress kullanıcı hesabını da siler."
+
+#: views/account_delete_warning.php:9
+msgid ""
+"(NOTE: for safety, we do not allow deletion of any associated WordPress "
+"account with administrator role)."
+msgstr ""
+"(NOT: güvenlik için, yönetici rolüyle ilişkili herhangi bir WordPress "
+"hesabının silinmesine izin vermiyoruz)."
+
+#: views/account_delete_warning.php:10
+msgid "Continue?"
+msgstr "Devam etmek istiyor musunuz?"
+
+#: views/account_delete_warning.php:13
+msgid "Password: "
+msgstr "Şifre: "
+
+#: views/account_delete_warning.php:14
+msgid "Confirm Account Deletion"
+msgstr "Hesap Silme İşlemini Onaylayın"
+
+#: views/add.php:26 views/admin_add.php:20 views/admin_edit.php:44
+#: views/edit.php:31 views/login.php:28
+msgid "Password"
+msgstr "Şifre"
+
+#: views/add.php:30 views/edit.php:35
+msgid "Repeat Password"
+msgstr "Şifreyi tekrar girin"
+
+#: views/add.php:68
+msgid "I accept the "
+msgstr "Kabul ediyorum "
+
+#: views/add.php:80
+msgid "I agree to the "
+msgstr "I agree to the "
+
+#: views/add.php:80
+msgid "Privacy Policy"
+msgstr "Gizlilik Politikası"
+
+#: views/add.php:91
+msgid "Register"
+msgstr "Kayıt"
+
+#: views/admin_add.php:8
+msgid "Create a brand new user and add it to this site."
+msgstr "Yeni bir kullanıcı oluşturun ve bu siteye ekleyin."
+
+#: views/admin_add.php:12 views/admin_add.php:16 views/admin_add_level.php:12
+#: views/admin_add_level.php:16 views/admin_add_level.php:20
+#: views/admin_edit.php:19 views/admin_edit.php:40
+#: views/admin_edit_level.php:16 views/admin_edit_level.php:20
+#: views/admin_edit_level.php:24
+msgid "(required)"
+msgstr "(gerekli)"
+
+#: views/admin_add.php:16 views/admin_edit.php:40
+msgid "E-mail"
+msgstr "E-Posta"
+
+#: views/admin_add.php:20
 msgid "(twice, required)"
-msgstr "(ikinci defa,  bu  gereklidir)"
+msgstr "(iki kez, gerekli)"
 
-#: views/admin_member_form_common_part.php:50
+#: views/admin_add.php:25 views/admin_edit.php:48
 msgid "Strength indicator"
-msgstr "Güvenlik Seviyesi"
+msgstr "Güç göstergesi"
 
-#: views/admin_member_form_common_part.php:51
+#: views/admin_add.php:26 views/admin_edit.php:49
 msgid ""
 "Hint: The password should be at least seven characters long. To make it "
 "stronger, use upper and lower case letters, numbers and symbols like ! \" ? "
 "$ % ^ &amp; )."
 msgstr ""
-"İpucu: Şifre en az 7 karakterden oluşmalıdır. Güçlü bir  şifre için küçük ve "
-"Büyük harfler, rakamlar ve  ! \" ? $ % ^ &amp; ) gibi çeşitli semboller "
-"şifrede kullanılmalıdır. "
+"İpucu: Parola en az yedi karakter uzunluğunda olmalıdır. Daha güçlü hale "
+"getirmek için büyük ve küçük harfler, sayılar ve \" ? $ % ^ gibi semboller "
+"kullanın!  &amp; )."
 
-#: views/admin_member_form_common_part.php:64 views/loggedin.php:7
-#: views/login_widget_logged.php:6
+#: views/admin_add.php:30 views/admin_edit.php:53 views/loggedin.php:10
 msgid "Account Status"
 msgstr "Hesap Durumu"
 
-#: views/admin_member_form_common_part.php:74
+#: views/admin_add.php:49
+msgid "Add New Member "
+msgstr "Yeni Üye Ekle "
+
+#: views/admin_add_level.php:6
+msgid "Add Membership Level"
+msgstr "Üyelik Düzeyi Ekle"
+
+#: views/admin_add_level.php:7
+msgid "Create new membership level."
+msgstr "Yeni üyelik düzeyi oluşturun."
+
+#: views/admin_add_level.php:12 views/admin_edit_level.php:16
+msgid "Membership Level Name"
+msgstr "Üyelik Düzeyi Adı"
+
+#: views/admin_add_level.php:16 views/admin_edit_level.php:20
+msgid "Default WordPress Role"
+msgstr "Varsayılan WordPress Rolü"
+
+#: views/admin_add_level.php:20 views/admin_edit_level.php:24
+msgid "Access Duration"
+msgstr "Erişim Süresi"
+
+#: views/admin_add_level.php:23
+msgid "No Expiry (Access for this level will not expire until cancelled"
+msgstr ""
+"Süre Sonu Yok (Bu seviyeye erişim, iptal edilene kadar sona ermeyecektir.)"
+
+#: views/admin_add_level.php:24 views/admin_add_level.php:26
+#: views/admin_add_level.php:28 views/admin_add_level.php:30
+#: views/admin_edit_level.php:28 views/admin_edit_level.php:31
+#: views/admin_edit_level.php:34 views/admin_edit_level.php:37
+msgid "Expire After"
+msgstr "Şu tarihten sonra sona eriyor"
+
+#: views/admin_add_level.php:25 views/admin_edit_level.php:29
+msgid "Days (Access expires after given number of days)"
+msgstr "Günler (Erişim, belirtilen gün sayısından sonra sona erer.)"
+
+#: views/admin_add_level.php:27
+msgid "Weeks (Access expires after given number of weeks"
+msgstr "Haftalar (Erişim, belirtilen sayıda haftadan sonra sona erer.)"
+
+#: views/admin_add_level.php:29 views/admin_edit_level.php:35
+msgid "Months (Access expires after given number of months)"
+msgstr "Aylar (Erişim, belirtilen sayıda aydan sonra sona erer.)"
+
+#: views/admin_add_level.php:31 views/admin_edit_level.php:38
+msgid "Years (Access expires after given number of years)"
+msgstr "Yıllar (Verilen yıl sayısından sonra erişim sona erer.)"
+
+#: views/admin_add_level.php:32 views/admin_edit_level.php:40
+msgid "Fixed Date Expiry"
+msgstr "Sabit Tarih Sonu"
+
+#: views/admin_add_level.php:33 views/admin_edit_level.php:41
+msgid "(Access expires on a fixed date)"
+msgstr "(Erişim sabit bir tarihte sona erer.)"
+
+#: views/admin_add_level.php:38 views/admin_edit_level.php:46
+msgid "Email Activation"
+msgstr "E-Posta Aktivasyonu"
+
+#: views/admin_add_level.php:43
+msgid ""
+"Enable new user activation via email. When enabled, members will need to "
+"click on an activation link that is sent to their email address to activate "
+"the account. Useful for free membership. "
+msgstr ""
+"E-Posta yoluyla yeni kullanıcı aktivasyonunu etkinleştirin. "
+"Etkinleştirildiğinde, üyelerin hesabı etkinleştirmek için E-Posta "
+"adreslerine gönderilen bir etkinleştirme bağlantısına tıklamaları "
+"gerekecektir. Ücretsiz üyelik için kullanışlıdır. "
+
+#: views/admin_add_level.php:44 views/admin_edit_level.php:52
+msgid "View Documentation"
+msgstr "Belgeleri Görüntüle"
+
+#: views/admin_add_level.php:45 views/admin_edit_level.php:53
+msgid "Note:"
+msgstr "Not:"
+
+#: views/admin_add_level.php:45
+msgid ""
+"If enabled, the member's decryptable password is temporarily stored in the "
+"database until the account is activated."
+msgstr ""
+"Etkinleştirilirse, üyenin şifresi çözülebilir, hesap etkinleştirilene kadar "
+"geçici olarak veritabanında saklanır."
+
+#: views/admin_add_level.php:52
+msgid "Add New Membership Level "
+msgstr "Yeni Üyelik Düzeyi Ekle "
+
+#: views/admin_add_ons_page.php:11
+msgid "Simple WP Membership::Add-ons"
+msgstr "Basit WP Üyeliği: Eklentiler"
+
+#: views/admin_addon_settings.php:3
+msgid ""
+"Some of the simple membership plugin's addon settings and options will be "
+"displayed here (if you have them)"
+msgstr ""
+"Basit üyelik eklentisinin eklenti ayarlarından ve seçeneklerinden bazıları "
+"burada görüntülenecektir (eğer varsa)"
+
+#: views/admin_addon_settings.php:10
+msgid "Save Changes"
+msgstr "Değişiklikleri Kaydet"
+
+#: views/admin_category_list.php:5
+msgid ""
+"First of all, globally protect the category on your site by selecting "
+"\"General Protection\" from the drop-down box below and then select the "
+"categories that should be protected from non-logged in users."
+msgstr ""
+"Öncelikle aşağıdaki açılır kutudan \"Genel Koruma\" seçeneğini seçerek "
+"sitenizdeki kategoriyi global olarak koruyun ve ardından oturum açmamış "
+"kullanıcılardan korunması gereken kategorileri seçin."
+
+#: views/admin_category_list.php:8
+msgid ""
+"Next, select an existing membership level from the drop-down box below and "
+"then select the categories you want to grant access to (for that particular "
+"membership level)."
+msgstr ""
+"Ardından, aşağıdaki açılır kutudan mevcut bir üyelik seviyesini seçin ve "
+"ardından erişim izni vermek istediğiniz kategorileri seçin (söz konusu "
+"üyelik seviyesi için)."
+
+#: views/admin_category_list.php:11 views/admin_membership_manage.php:5
+#: views/admin_post_list.php:11
+msgid "Read the "
+msgstr "Oku "
+
+#: views/admin_category_list.php:11
+msgid "category protection documentation"
+msgstr "kategori koruma belgeleri"
+
+#: views/admin_category_list.php:11 views/admin_membership_manage.php:5
+msgid "to learn more."
+msgstr "daha fazla öğrenmek için."
+
+#: views/admin_category_list.php:19 views/admin_post_list.php:32
+msgid "Membership Level:"
+msgstr "Üyelik Düzeyi:"
+
+#: views/admin_category_list.php:21 views/admin_post_list.php:34
+msgid "General Protection"
+msgstr "Genel Koruma"
+
+#: views/admin_category_list.php:26 views/admin_post_list.php:39
+#: views/edit.php:84
+msgid "Update"
+msgstr "Güncelleme"
+
+#: views/admin_edit.php:11
+msgid "Edit Member"
+msgstr "Üyeyi Düzenle"
+
+#: views/admin_edit.php:13
+msgid "Edit existing member details."
+msgstr "Mevcut üye ayrıntılarını düzenleyin."
+
+#: views/admin_edit.php:14
+msgid " You are currently editing member with member ID: "
+msgstr " Şu anda üye kimliğine sahip üyeyi düzenliyorsunuz: "
+
+#: views/admin_edit.php:44
+msgid "(twice, leave empty to retain old password)"
+msgstr "(iki kez, eski şifreyi korumak için boş bırakın)"
+
+#: views/admin_edit.php:59
+msgid ""
+"This is the member's account status. If you want to manually activate an "
+"expired member's account then read"
+msgstr ""
+"Bu, üyenin hesap durumudur. Süresi dolmuş bir üyenin hesabını manuel olarak "
+"etkinleştirmek istiyorsanız, okuyun"
+
+#: views/admin_edit.php:60
+msgid "this documentation"
+msgstr "bu belgeler"
+
+#: views/admin_edit.php:61
+msgid " to learn how to do it."
+msgstr " nasıl yapılacağını öğrenmek için."
+
+#: views/admin_edit.php:66
+msgid "Notify User"
+msgstr "Kullanıcıyı Bildir"
+
+#: views/admin_edit.php:69
+msgid ""
+"You can use this option to send a quick notification email to this member "
+"(the email will be sent when you hit the save button below)."
+msgstr ""
+"Bu üyeye hızlı bir bildirim E-Postası göndermek için bu seçeneği "
+"kullanabilirsiniz (E-Posta aşağıdaki kaydet düğmesine bastığınızda "
+"gönderilecektir)."
+
+#: views/admin_edit.php:103
+msgid "Subscriber ID/Reference"
+msgstr "Abone Kimliği/Referansı"
+
+#: views/admin_edit.php:107
+msgid "Expiry Date"
+msgstr "Son kullanma tarihi"
+
+#: views/admin_edit.php:114
+msgid ""
+"This is calculated based on the current membership level assigned to this "
+"member and the expiry condition that you have set for that membership level."
+msgstr ""
+"Bu, bu üyeye atanan mevcut üyelik düzeyine ve o üyelik düzeyi için "
+"belirlediğiniz sona erme koşuluna göre hesaplanır."
+
+#: views/admin_edit.php:119
+msgid "Last Accessed Date"
+msgstr "Son Erişim Tarihi"
+
+#: views/admin_edit.php:122 views/admin_edit.php:129
+msgid "This value gets updated when this member logs into your site."
+msgstr "Bu üye sitenize giriş yaptığında bu değer güncellenir."
+
+#: views/admin_edit.php:126
+msgid "Last Accessed From IP"
+msgstr "Son Erişim IP'den"
+
+#: views/admin_edit.php:137
+msgid "Save Data"
+msgstr "Veri kaydet"
+
+#: views/admin_edit.php:142
+msgid "Delete User Profile"
+msgstr "Kullanıcı Profilini Sil"
+
+#: views/admin_edit_level.php:6
+msgid "Edit membership level"
+msgstr "Üyelik seviyesini düzenle"
+
+#: views/admin_edit_level.php:9
+msgid ""
+"You can edit details of a selected membership level from this interface. "
+msgstr ""
+"Bu ara yüzden seçilen bir üyelik seviyesinin ayrıntılarını "
+"düzenleyebilirsiniz. "
+
+#: views/admin_edit_level.php:10
+msgid "You are currently editing: "
+msgstr "Şu anda düzenliyorsunuz: "
+
+#: views/admin_edit_level.php:27
+msgid "No Expiry (Access for this level will not expire until cancelled)"
+msgstr ""
+"Süre Sonu Yok (Bu seviyeye erişim, iptal edilene kadar sona ermeyecektir.)"
+
+#: views/admin_edit_level.php:32
+msgid "Weeks (Access expires after given number of weeks)"
+msgstr "Haftalar (Erişim, belirtilen hafta sayısından sonra sona erer.)"
+
+#: views/admin_edit_level.php:51
+msgid ""
+"Enable new user activation via email. When enabled, members will need to "
+"click on an activation link that is sent to their email address to activate "
+"the account. Useful for free membership."
+msgstr ""
+"E-Posta yoluyla yeni kullanıcı aktivasyonunu etkinleştirin. "
+"Etkinleştirildiğinde, üyelerin hesabı etkinleştirmek için E-Posta "
+"adreslerine gönderilen bir etkinleştirme bağlantısına tıklamaları "
+"gerekecektir. Ücretsiz üyelik için kullanışlıdır."
+
+#: views/admin_edit_level.php:53
+msgid ""
+"If enabled, decryptable member password is temporarily stored in the "
+"database until the account is activated."
+msgstr ""
+"Etkinleştirilirse, şifresi çözülebilir üye parolası, hesap etkinleştirilene "
+"kadar veri tabanında geçici olarak saklanır."
+
+#: views/admin_edit_level.php:60
+msgid "Save Membership Level "
+msgstr "Üyelik Düzeyini Kaydet "
+
+#: views/admin_member_form_common_part.php:14
+#: includes/swpm_mda_show_profile.php:37
+msgid "Gender"
+msgstr "Cinsiyet"
+
+#: views/admin_member_form_common_part.php:21 views/edit.php:47
+#: includes/swpm_mda_show_profile.php:34
+msgid "Phone"
+msgstr "Telefon"
+
+#: views/admin_member_form_common_part.php:25 views/edit.php:51
+msgid "Street"
+msgstr "Sokak"
+
+#: views/admin_member_form_common_part.php:29 views/edit.php:55
+msgid "City"
+msgstr "Şehir"
+
+#: views/admin_member_form_common_part.php:33 views/edit.php:59
+msgid "State"
+msgstr "Mahalle"
+
+#: views/admin_member_form_common_part.php:37 views/edit.php:63
+msgid "Zipcode"
+msgstr "Posta kodu"
+
+#: views/admin_member_form_common_part.php:41 views/edit.php:67
+#: includes/swpm_mda_show_profile.php:33
+msgid "Country"
+msgstr "Ülke"
+
+#: views/admin_member_form_common_part.php:45
+#: includes/swpm_mda_show_profile.php:38
+msgid "Company"
+msgstr "Şirket"
+
+#: views/admin_member_form_common_part.php:49
+#: includes/swpm_mda_show_profile.php:36
 msgid "Member Since"
-msgstr "Üyelik Başlama Tarihi"
+msgstr "Tarihinden beri üye"
 
-#: views/admin_payment_settings.php:2 views/admin_settings.php:2
-#: views/admin_tools_settings.php:2
-msgid "Simple WP Membership::Settings"
-msgstr "Blog Üyeliği:: Ayarlar"
+#: views/admin_members_list.php:32
+msgid "All"
+msgstr "Tüm"
 
-#: views/admin_payment_settings.php:33
-msgid "PayPal Integration Settings"
-msgstr "Paypal Entegrasyon Ayarları"
+#: views/admin_members_list.php:37 views/admin_members_list.php:47
+msgid "Incomplete"
+msgstr "Eksik"
 
-#: views/admin_payment_settings.php:36
-msgid "Generate the \"Advanced Variables\" Code for your PayPal button"
-msgstr "PayPal Düğmeniz için  \"Gelişmiş Seçenekler \" Oluşturulması"
+#: views/admin_membership_manage.php:5
+msgid "content protection documentation"
+msgstr "içerik koruma belgeleri"
 
-#: views/admin_payment_settings.php:39
-msgid "Enter the Membership Level ID"
-msgstr "Üyelik Numarasını Girin"
+#: views/admin_membership_manage.php:7
+msgid "How to Apply Content Protection"
+msgstr "İçerik Koruması Nasıl Uygulanır"
 
-#: views/admin_payment_settings.php:41
-msgid "Generate Code"
-msgstr "Kod Oluştur"
+#: views/admin_membership_manage.php:9
+msgid ""
+"Take the following steps to apply protection to your content so only members "
+"can have access to it."
+msgstr ""
+"İçeriğinize yalnızca üyelerin erişebilmesi için koruma uygulamak üzere "
+"aşağıdaki adımları uygulayın."
 
-#: views/admin_tools_settings.php:9
+#: views/admin_membership_manage.php:12
+msgid "Edit the Post or Page that you want to protect in WordPress editor."
+msgstr ""
+"Korumak istediğiniz Gönderiyi veya Sayfayı WordPress düzenleyicide "
+"düzenleyin."
+
+#: views/admin_membership_manage.php:13
+msgid "Scroll down to the section titled 'Simple WP Membership Protection'."
+msgstr "'Simple WP Membership Protection' başlıklı bölüme gidin."
+
+#: views/admin_membership_manage.php:14
+msgid "Select 'Yes, Protect this content' option."
+msgstr "'Evet, Bu içeriği koru' seçeneğini seçin."
+
+#: views/admin_membership_manage.php:15
+msgid ""
+"Check the membership levels that should have access to that page's content."
+msgstr ""
+"O sayfanın içeriğine erişimi olması gereken üyelik düzeylerini kontrol edin."
+
+#: views/admin_membership_manage.php:16
+msgid "Hit the Update/Save Button to save the changes."
+msgstr "Değişiklikleri kaydetmek için Güncelle/Kaydet Düğmesine basın."
+
+#: views/admin_membership_manage.php:19
+msgid "Example Content Protection Settings"
+msgstr "Örnek İçerik Koruma Ayarları"
+
+#: views/admin_post_list.php:5
+msgid ""
+"First of all, globally protect posts and pages on your site by selecting "
+"\"General Protection\" from the drop-down box below and then select posts "
+"and pages that should be protected from non-logged in users."
+msgstr ""
+"Her şeyden önce, aşağıdaki açılır kutudan \"Genel Koruma\"yı seçerek "
+"sitenizdeki gönderileri ve sayfaları küresel olarak koruyun ve ardından "
+"oturum açmamış kullanıcılardan korunması gereken gönderileri ve sayfaları "
+"seçin."
+
+#: views/admin_post_list.php:8
+msgid ""
+"Next, select an existing membership level from the drop-down box below and "
+"then select posts and pages you want to grant access to (for that particular "
+"membership level)."
+msgstr ""
+"Ardından, aşağıdaki açılır kutudan mevcut bir üyelik düzeyi seçin ve "
+"ardından erişim izni vermek istediğiniz gönderileri ve sayfaları seçin (söz "
+"konusu üyelik düzeyi için)."
+
+#: views/admin_post_list.php:11
+msgid "bulk protect posts and pages documentation"
+msgstr "toplu koruma gönderileri ve sayfaları belgeleri"
+
+#: views/admin_post_list.php:11
+msgid " to learn how to use it."
+msgstr " Nasıl kullanılacağını öğrenmek için."
+
+#: views/admin_post_list.php:21
+msgid "Posts"
+msgstr "Gönderiler"
+
+#: views/admin_post_list.php:22
+msgid "Pages"
+msgstr "Sayfalar"
+
+#: views/admin_post_list.php:23
+msgid "Custom Posts"
+msgstr "Özel Gönderiler"
+
+#: views/admin_tools_settings.php:14
+msgid "The required pages have been re-created."
+msgstr "Gerekli sayfalar yeniden oluşturuldu."
+
+#: views/admin_tools_settings.php:22
+msgid "This interface contains useful tools for various admin operations."
+msgstr "Bu ara yüz, çeşitli yönetici işlemleri için faydalı araçlar içerir."
+
+#: views/admin_tools_settings.php:27
 msgid "Generate a Registration Completion link"
-msgstr "Kayıt Tamamlama Linki Oluştur"
+msgstr "Bir Kayıt Tamamlama bağlantısı oluşturun"
 
-#: views/admin_tools_settings.php:12
+#: views/admin_tools_settings.php:30
 msgid ""
 "You can manually generate a registration completion link here and give it to "
 "your customer if they have missed the email that was automatically sent out "
 "to them after the payment."
 msgstr ""
-"Eğer müşteriniz kayıttan sonra otomatik olarak  gönderilen epostayı "
-"almadıysa,  BURADA kayıt tamamlama linkini manuel olarak  oluşturabilir ve "
-"müşterinize gönderebilirsiniz."
+"Burada manuel olarak bir kayıt tamamlama bağlantısı oluşturabilir ve "
+"ödemeden sonra kendilerine otomatik olarak gönderilen e-postayı kaçıran "
+"müşterinize verebilirsiniz."
 
-#: views/admin_tools_settings.php:17
+#: views/admin_tools_settings.php:35
 msgid "Generate Registration Completion Link"
-msgstr "Kayıt Tamamlama Linki Oluştur"
+msgstr "Kayıt Tamamlama Bağlantısı Oluştur"
 
-#: views/admin_tools_settings.php:20
+#: views/admin_tools_settings.php:36
+msgid "For a Particular Member ID"
+msgstr "Belirli bir Üye Kimliği için"
+
+#: views/admin_tools_settings.php:38
 msgid "OR"
-msgstr "VEYA"
+msgstr "veya"
 
-#: views/admin_tools_settings.php:21
-msgid "For All Pending Registrations"
-msgstr "Bekleyen Bütün Kayıtlar İçin"
+#: views/admin_tools_settings.php:39
+msgid "For All Incomplete Registrations"
+msgstr "Tüm Eksik Kayıtlar İçin"
 
-#: views/admin_tools_settings.php:24
-msgid "Registration Completion Links Will Appear Below:"
-msgstr "Kayıt Tamamama Linkleri Aşağıda Görülecektir."
+#: views/admin_tools_settings.php:44
+msgid "Send Registration Reminder Email Too"
+msgstr "Tüm Eksik Kayıtlar İçin"
 
-#: views/admin_tools_settings.php:31
-msgid "Send Registration Reminder Email too"
-msgstr "Kayıt Hatırlatma E-Postası da Gönder"
-
-#: views/admin_tools_settings.php:34
+#: views/admin_tools_settings.php:50
 msgid "Submit"
-msgstr "Giriş Yapın"
+msgstr "Gönder"
 
-#: views/edit.php:58
-msgid "Update"
-msgstr "Güncelle"
+#: views/admin_tools_settings.php:59
+msgid ""
+"Link(s) generated successfully. The following link(s) can be used to "
+"complete the registration."
+msgstr ""
+"Bağlantı(lar) başarıyla oluşturuldu. Kayıt işlemini tamamlamak için "
+"aşağıdaki bağlantı(lar) kullanılabilir."
 
-#: views/forgot_password.php:5
-msgid "Email Address"
-msgstr "E-Posta Adresi"
+#: views/admin_tools_settings.php:61
+msgid "Registration completion links will appear below"
+msgstr "Kayıt tamamlama bağlantıları aşağıda görünecektir"
 
-#: views/forgot_password.php:12
+#: views/admin_tools_settings.php:71
+msgid "A prompt to complete registration email was also sent."
+msgstr "Kayıt E-Postasını tamamlama istemi de gönderildi."
+
+#: views/admin_tools_settings.php:84 views/admin_tools_settings.php:94
+msgid "Re-create the Required Pages"
+msgstr "Gerekli Sayfaları Yeniden Oluşturun"
+
+#: views/admin_tools_settings.php:87
+msgid ""
+"If you have accidentally deleted the required pages that this plugin creates "
+"at install time, you can use this option to re-create them."
+msgstr ""
+"Bu eklentinin yükleme sırasında oluşturduğu gerekli sayfaları yanlışlıkla "
+"sildiyseniz, yeniden oluşturmak için bu seçeneği kullanabilirsiniz."
+
+#: views/admin_tools_settings.php:88
+msgid " has full explanation."
+msgstr " tam açıklaması var."
+
+#: views/edit.php:32 views/edit.php:36
+msgid "Leave empty to keep the current password"
+msgstr "Geçerli parolayı korumak için boş bırakın"
+
+#: views/edit.php:71
+msgid "Company Name"
+msgstr "Firma Adı"
+
+#: views/forgot_password.php:12 views/reset_password_using_link.php:54
 msgid "Reset Password"
-msgstr "Şifre Resetle"
+msgstr "Şifreyi yenile"
 
-#: views/loggedin.php:3 views/login_widget_logged.php:3
+#: views/loggedin.php:6
 msgid "Logged in as"
-msgstr "Giriş yapılan hesap:"
+msgstr "Olarak giriş yaptı"
 
-#: views/loggedin.php:11 views/login_widget_logged.php:9
+#: views/loggedin.php:14
 msgid "Membership"
 msgstr "Üyelik"
 
-#: views/loggedin.php:15 views/login_widget_logged.php:12
+#: views/loggedin.php:18
 msgid "Account Expiry"
-msgstr "Hesap süresi doldu"
+msgstr "Hesap Sona Erme"
 
-#: views/loggedin.php:19 views/login_widget_logged.php:16
-msgid "Logout"
-msgstr "ÇIKIŞ"
+#: views/loggedin.php:26
+msgid "Edit Profile"
+msgstr "Profili Düzenle"
 
-#: views/login.php:17
+#: views/login.php:7
+msgid "Username or Email"
+msgstr "Kullanıcı adı ya da E-Posta"
+
+#: views/login.php:36
+msgid "Show password"
+msgstr "Şifreyi göster"
+
+#: views/login.php:41
 msgid "Remember Me"
 msgstr "Beni Hatırla"
 
-#: views/login.php:26
-msgid "Forgot Password"
-msgstr "Şifreyi Unut"
+#: views/login.php:50
+msgid "Forgot Password?"
+msgstr "Parolanızı mı unuttunuz?"
+
+#: views/payments/admin_add_edit_transaction_manually.php:11
+msgid ""
+"You can add a new transaction record manually using this interface. It can "
+"be useful if you manually accept cash payment for your memberships."
+msgstr ""
+"Bu arayüzü kullanarak manuel olarak yeni bir işlem kaydı ekleyebilirsiniz. "
+"Üyelikleriniz için manuel olarak nakit ödeme kabul etmeniz yararlı olabilir."
+
+#: views/payments/admin_add_edit_transaction_manually.php:54
+msgid "Manual transaction added successfully. "
+msgstr "Manuel işlem başarıyla eklendi. "
+
+#: views/payments/admin_add_edit_transaction_manually.php:68
+msgid "Add New Transaction"
+msgstr "Yeni İşlem Ekle"
+
+#: views/payments/admin_add_edit_transaction_manually.php:99
+#: includes/swpm_mda_show_profile.php:26
+msgid "Member ID"
+msgstr "Kullanıcı Kimliği"
+
+#: views/payments/admin_add_edit_transaction_manually.php:160
+msgid "Save Transaction Data"
+msgstr "İşlem Verilerini Kaydet"
+
+#: views/payments/admin_all_payment_transactions.php:6
+msgid "All the payments/transactions of your members are recorded here."
+msgstr "Üyelerinizin tüm ödemeleri/işlemleri burada kayıt altına alınır."
+
+#: views/payments/admin_all_payment_transactions.php:12
+msgid ""
+"Search for a transaction by using email, name, transaction ID or Subscr ID."
+msgstr ""
+"E-Posta, Ad, İşlem Kimliği veya Abone Kimliği kullanarak bir işlem arayın."
+
+#: views/payments/admin_all_payment_transactions.php:50
+msgid "Add a Transaction Manually"
+msgstr "Manuel Olarak İşlem Ekleme"
+
+#: views/payments/admin_create_payment_buttons.php:19
+msgid ""
+"You can create a new payment button for your memberships using this "
+"interface."
+msgstr ""
+"Bu arayüzü kullanarak üyelikleriniz için yeni bir ödeme butonu "
+"oluşturabilirsiniz."
+
+#: views/payments/admin_create_payment_buttons.php:27
+msgid "Select Payment Button Type"
+msgstr "Ödeme Düğmesi Türünü Seçin"
+
+#: views/payments/admin_create_payment_buttons.php:48
+msgid "Stripe Legacy Buy Now (deprecated)"
+msgstr "Stripe Legacy Şimdi Satın Al (Kullanımdan kaldırıldı)"
+
+#: views/payments/admin_create_payment_buttons.php:50
+msgid "Stripe Legacy Subscription (deprecated)"
+msgstr "Stripe Legacy Aboneliği (kullanımdan kaldırıldı)"
+
+#: views/payments/admin_create_payment_buttons.php:62
+msgid "Next"
+msgstr "Sonraki"
+
+#: views/payments/admin_create_payment_buttons.php:69
+msgid ""
+"You can also use payment buttons from the following plugins to accept "
+"payments for your memberships."
+msgstr ""
+"Üyelikleriniz için ödeme kabul etmek için aşağıdaki eklentilerden ödeme "
+"düğmelerini de kullanabilirsiniz."
+
+#: views/payments/admin_edit_payment_buttons.php:19
+msgid "You can edit a payment button using this interface."
+msgstr "Bu arayüzü kullanarak bir ödeme düğmesini düzenleyebilirsiniz."
+
+#: views/payments/admin_payment_buttons.php:6
+msgid ""
+"All the membership buttons that you created in the plugin are displayed here."
+msgstr "Eklentide oluşturduğunuz tüm üyelik düğmeleri burada görüntülenir."
+
+#: views/payments/admin_payment_settings.php:7
+msgid "You can create membership payment buttons from the "
+msgstr "Üyelik ödeme butonlarını menüden oluşturabilirsiniz. "
+
+#: views/payments/admin_payment_settings.php:8
+msgid "payments menu"
+msgstr "ödeme menüsü"
+
+#: views/payments/admin_payment_settings.php:9
+msgid ""
+" of this plugin (useful if you want to offer paid memberships on the site)."
+msgstr ""
+" bu eklentinin (sitede ücretli üyelikler sunmak istiyorsanız kullanışlıdır)."
+
+#: views/payments/admin_payment_settings.php:10
+msgid " Read the "
+msgstr " Oku "
+
+#: views/payments/admin_payment_settings.php:11
+msgid "membership payment section"
+msgstr "üyelik ödeme bölümü"
+
+#: views/payments/admin_payment_settings.php:12
+msgid ""
+" of our documentation to learn more about creating membership payment "
+"buttons."
+msgstr ""
+" Üyelik ödeme düğmeleri oluşturma hakkında daha fazla bilgi edinmek için "
+"belgelerimizi inceleyin."
+
+#: views/payments/admin_payment_settings.php:31
+#: views/payments/admin_payment_settings.php:47
+msgid " Success! "
+msgstr " Başarı! "
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:22
+msgid "Braintree Buy Now Button Configuration"
+msgstr "Braintree Şimdi Satın Al Düğmesi Yapılandırması"
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:34
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:216
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:160
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:33
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:304
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:182
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:316
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:314
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:92
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:92
+msgid "Button ID"
+msgstr "Düğme kimliği"
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:42
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:26
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:224
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:168
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:41
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:27
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:312
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:190
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:36
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:323
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:36
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:321
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:100
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:100
+msgid "Button Title"
+msgstr "Düğme Başlığı"
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:60
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:44
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:242
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:230
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:59
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:54
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:339
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:54
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:337
+msgid "Payment Amount"
+msgstr "Ödeme miktarı"
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:68
+msgid ""
+"Braintree API key and account details. You can get this from your Braintree "
+"account."
+msgstr ""
+"Braintree API anahtarı ve hesap ayrıntıları. Bunu Braintree hesabınızdan "
+"alabilirsiniz."
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:72
+msgid "Merchant ID"
+msgstr "Tüccar kimliği"
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:80
+msgid "Public Key"
+msgstr "Genel anahtar"
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:87
+msgid "Private Key"
+msgstr "Private Key"
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:95
+msgid "Merchant Account ID"
+msgstr "Tüccar hesap kimliği"
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:113
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:145
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:429
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:145
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:427
+msgid "The following details are optional."
+msgstr "Aşağıdaki ayrıntılar isteğe bağlıdır."
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:117
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:92
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:290
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:318
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:204
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:172
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:459
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:419
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:158
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:442
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:166
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:448
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:235
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:219
+msgid "Return URL"
+msgstr "Dönüş URL'si"
+
+#: views/payments/payment-gateway/admin_braintree_buy_now_button.php:128
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:127
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:325
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:329
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:215
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:201
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:488
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:430
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:188
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:472
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:196
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:478
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:256
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:240
+msgid "Save Payment Data"
+msgstr "Ödeme Verilerini Kaydet"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:16
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:207
+msgid "PayPal Buy Now Button Configuration"
+msgstr "PayPal Şimdi Satın Al Düğme Yapılandırması"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:52
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:250
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:190
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:67
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:45
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:330
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:237
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:62
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:346
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:62
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:344
+msgid "Payment Currency"
+msgstr "Ödeme Para Birimi"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:100
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:298
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:85
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:370
+msgid "PayPal Email"
+msgstr "PayPal E-Postası"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:108
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:306
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:180
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:467
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:166
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:450
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:174
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:456
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:243
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:227
+msgid "Button Image URL"
+msgstr "Düğme Resmi URL'si"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:116
+#: views/payments/payment-gateway/admin_paypal_buy_now_button.php:314
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:188
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:475
+msgid "Custom Checkout Page Logo Image"
+msgstr "Özel Ödeme Sayfası Logo Resmi"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:148
+msgid "PayPal Buy Now (New API) Button Configuration"
+msgstr "PayPal Şimdi Satın Al (Yeni API) Düğme Yapılandırması"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:186
+msgid "Payment Details"
+msgstr "Ödeme detayları"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:233
+msgid ""
+"Enter payment amount. Example values: 9.90 or 25.00 or 299.90 etc (do not "
+"enter currency symbol)."
+msgstr ""
+"Ödeme tutarını girin. Örnek değerler: 9,90 veya 25,00 veya 299,90 vb (para "
+"birimi simgesi girmeyin)."
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:238
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:339
+msgid "Button Style Settings (Optional)"
+msgstr "Düğme Stili Ayarları (Opsiyonel)"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:242
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:343
+msgid "Button Type/Label"
+msgstr "Düğme Tipi/Etiket"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:245
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:346
+msgid "Checkout"
+msgstr "Çıkış yap"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:246
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:347
+msgid "Pay"
+msgstr "Öde"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:247
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:348
+msgid "PayPal"
+msgstr "PayPal"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:248
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:349
+#: views/payments/payment-gateway/braintree_button_shortcode_view.php:21
+#: views/payments/payment-gateway/paypal_button_shortcode_view.php:100
+#: views/payments/payment-gateway/paypal_button_shortcode_view.php:102
+#: views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php:15
+#: views/payments/payment-gateway/stripe_button_shortcode_view.php:20
+#: views/payments/payment-gateway/stripe_button_shortcode_view.php:161
+#: views/payments/payment-gateway/stripe_sca_button_shortcode_view.php:20
+#: views/payments/payment-gateway/stripe_sca_button_shortcode_view.php:160
+msgid "Buy Now"
+msgstr "Şimdi Al"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:249
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:350
+msgid "Subscribe"
+msgstr "Abone"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:251
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:352
+msgid "Select button type/label."
+msgstr "Düğme tipini/etiketini seçin."
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:255
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:356
+msgid "Button Shape"
+msgstr "Düğme Şekli"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:257
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:172
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:358
+msgid "Rectangular"
+msgstr "Dikdörtgen"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:258
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:173
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:359
+msgid "Pill"
+msgstr "Hap"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:259
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:174
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:360
+msgid "Select button shape."
+msgstr "Düğme şeklini seçin."
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:263
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:364
+msgid "Button Layout"
+msgstr "Düğme Düzeni"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:265
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:180
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:366
+msgid "Vertical"
+msgstr "Dikey"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:266
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:181
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:367
+msgid "Horizontal"
+msgstr "Yatay"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:267
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:182
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:368
+msgid "Select button layout."
+msgstr "Düğme düzenini seçin."
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:271
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:372
+msgid "Button Height"
+msgstr "Düğme Yüksekliği"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:274
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:375
+msgid "Small"
+msgstr "Küçük"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:275
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:150
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:376
+msgid "Medium"
+msgstr "Orta"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:276
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:151
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:377
+msgid "Large"
+msgstr "Büyük"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:277
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:378
+msgid "Extra Large"
+msgstr "Ekstra büyük"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:279
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:380
+msgid "Select button height."
+msgstr "Düğme yüksekliğini seçin."
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:283
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:384
+msgid "Button Width"
+msgstr "Düğme Genişliği"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:286
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:387
+msgid "Select button width."
+msgstr "Düğme genişliğini seçin."
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:290
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:391
+msgid "Button Color"
+msgstr "Düğme rengi"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:293
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:161
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:394
+msgid "Gold"
+msgstr "Altın"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:294
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:162
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:395
+msgid "Blue"
+msgstr "Mavi"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:295
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:163
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:396
+msgid "Silver"
+msgstr "Gümüş"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:296
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:397
+msgid "White"
+msgstr "Beyaz"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:297
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:164
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:398
+msgid "Black"
+msgstr "Siyah"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:299
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:166
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:400
+msgid "Select button color."
+msgstr "Düğme rengini seçin."
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:304
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:405
+msgid "Additional Settings (Optional)"
+msgstr "Ek Ayarlar (Opsiyonel)"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:308
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:409
+msgid "Disable Funding"
+msgstr "Finansmanı Devre Dışı Bırak"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:310
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:411
+msgid "Credit or debit cards"
+msgstr "Kredi veya banka kartları"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:311
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:193
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:412
+msgid "PayPal Credit"
+msgstr "PayPal Kredisi"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:312
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:413
+msgid "Venmo"
+msgstr "Venmo"
+
+#: views/payments/payment-gateway/admin_paypal_buy_now_new_button.php:313
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:414
+msgid ""
+"By default, funding source eligibility is smartly decided based on a variety "
+"of factors. You can force disable funding options by selecting them here."
+msgstr ""
+"Varsayılan olarak, finansman kaynağı uygunluğuna çeşitli faktörlere dayalı "
+"olarak akıllıca karar verilir. Finansman seçeneklerini burada seçerek devre "
+"dışı bırakmaya zorlayabilirsiniz."
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:21
+msgid "PayPal Smart Checkout Button Configuration"
+msgstr "PayPal Akıllı Ödeme Düğmesi Yapılandırması"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:107
+msgid ""
+"PayPal Smart Checkout API Credentials (you can get this from your PayPal "
+"account)"
+msgstr ""
+"PayPal Smart Checkout API Kimlik Bilgileri (Bunu PayPal hesabınızdan "
+"alabilirsiniz)"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:119
+msgid "Live Secret"
+msgstr "Gizli Canlı"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:135
+msgid "Sandbox Secret"
+msgstr "Sandbox Sırrı"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:143
+msgid "Button Appearance Settings"
+msgstr "Düğme Görünüm Ayarları"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:147
+msgid "Size"
+msgstr "Boyut"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:152
+msgid "Repsonsive"
+msgstr "Duyarlı"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:154
+msgid "Select button size."
+msgstr "Düğme boyutunu seçin."
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:158
+msgid "Color"
+msgstr "Renk"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:170
+msgid "Shape"
+msgstr "Şekil"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:178
+msgid "Layout"
+msgstr "Düzen"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:187
+msgid "Additional Settings"
+msgstr "Ek ayarlar"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:191
+msgid "Payment Methods"
+msgstr "Ödeme metodları"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:194
+msgid "ELV"
+msgstr "ELV"
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:195
+msgid ""
+"Select payment methods that could be used by customers. Note that payment "
+"with cards is always enabled."
+msgstr ""
+"Müşteriler tarafından kullanılabilecek ödeme yöntemlerini seçin. Kartlarla "
+"ödemenin her zaman etkin olduğunu unutmayın."
+
+#: views/payments/payment-gateway/admin_paypal_smart_checkout_button.php:200
+msgid "The following details are optional"
+msgstr "Aşağıdaki ayrıntılar isteğe bağlıdır"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:18
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:298
+msgid "PayPal Subscription Button Configuration"
+msgstr "PayPal Abonelik Düğmesi Yapılandırması"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:93
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:378
+msgid "Billing Amount Each Cycle"
+msgstr "Her Döngüde Fatura Tutarı"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:101
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:386
+msgid "Billing Cycle"
+msgstr "Fatura döngüsü"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:114
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:399
+msgid "Billing Cycle Count"
+msgstr "Fatura Döngüsü Sayısı"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:122
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:407
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:306
+msgid "Re-attempt on Failure"
+msgstr "Başarısızlık durumunda yeniden deneme"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:135
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:422
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:314
+msgid ""
+"Trial Billing Details (Leave empty if you are not offering a trial period)"
+msgstr "Deneme Fatura Ayrıntıları (Deneme süresi sunmuyorsanız boş bırakın)"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:141
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:428
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:318
+msgid "Trial Billing Amount"
+msgstr "Deneme Fatura Tutarı"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:149
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:436
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:326
+msgid "Trial Billing Period"
+msgstr "Deneme Fatura Dönemi"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:166
+#: views/payments/payment-gateway/admin_paypal_subscription_button.php:453
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:213
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:205
+msgid "Optional Details"
+msgstr "Opsiyonel Detaylar"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:170
+msgid "PayPal Subscription (New API) Button Configuration"
+msgstr "PayPal Aboneliği (Yeni API) Düğme Yapılandırması"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:212
+msgid "PayPal Billing Plan Details for This Button"
+msgstr "Bu Düğme için PayPal Faturalandırma Planı Ayrıntıları"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:216
+msgid "Subscription Plan Mode"
+msgstr "Abonelik Planı Modu"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:223
+msgid "Subscription Plan ID"
+msgstr "Abonelik Planı Kimliği"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:233
+msgid "Subscription/Recurring Billing Details"
+msgstr "Abonelik/Yinelenen Faturalandırma Ayrıntıları"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:277
+msgid "Recurring Billing Amount"
+msgstr "Yinelenen Fatura Tutarı"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:280
+msgid ""
+"Amount to be charged on every billing cycle. If used with a trial period "
+"then this amount will be charged after the trial period is over. Example "
+"values: 9.90 or 25.00 or 299.90 etc (do not enter currency symbol)."
+msgstr ""
+"Her faturalandırma döngüsünde tahsil edilecek tutar. Deneme süresi ile "
+"kullanılması halinde, deneme süresi sona erdikten sonra bu tutar tahsil "
+"edilecektir. Örnek değerler: 9,90 veya 25,00 veya 299,90 vb (para birimi "
+"simgesi girmeyin)."
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:285
+msgid "Recurring Billing Cycle"
+msgstr "Yinelenen Faturalandırma Döngüsü"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:293
+msgid ""
+"Set the interval of the recurring payment. Example value: 1 Month (if you "
+"want to charge every month)"
+msgstr ""
+"Yinelenen ödemenin aralığını ayarlayın. Örnek değer: 1 Ay (her ay "
+"ücretlendirmek istiyorsanız)"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:298
+msgid "Recurring Billing Cycle Count"
+msgstr "Yinelenen Fatura Döngüsü Sayısı"
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:301
+msgid ""
+"After how many cycles should billing stop. Leave this field empty (or enter "
+"0) if you want the payment to continue until the subscription is canceled."
+msgstr ""
+"Faturalama kaç döngüden sonra durmalıdır? Abonelik iptal edilene kadar "
+"ödemenin devam etmesini istiyorsanız bu alanı boş bırakın (veya 0 girin)."
+
+#: views/payments/payment-gateway/admin_paypal_subscription_new_button.php:309
+msgid ""
+"When checked, the payment will be re-attempted two more times if the payment "
+"fails. After the third failure, the subscription will be canceled."
+msgstr ""
+"İşaretlendiğinde, ödeme başarısız olursa ödeme iki kez daha denenecektir. "
+"Üçüncü başarısızlıktan sonra abonelik iptal edilecektir."
+
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:26
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:307
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:305
+msgid "Stripe Buy Now Button Configuration"
+msgstr "Şerit Şimdi Satın Al Düğme Yapılandırması"
+
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:102
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:386
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:102
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:384
+msgid "Stripe API keys. You can get this from your Stripe account."
+msgstr "Şerit API anahtarları. Bunu Stripe hesabınızdan alabilirsiniz."
+
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:107
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:391
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:107
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:389
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:148
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:140
+msgid "Use Global API Keys Settings"
+msgstr "Global API Anahtarları Ayarlarını Kullan"
+
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:110
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:394
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:110
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:392
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:151
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:143
+msgid ""
+"Use API keys from <a href=\"admin.php?"
+"page=simple_wp_membership_settings&tab=2\" target=\"_blank\">Payment "
+"Settings</a> tab."
+msgstr ""
+"Şuradaki API anahtarlarını kullan: <a href=\"admin.php?"
+"page=simple_wp_membership_settings&tab=2\" target=\"_blank\">Ödeme Ayarları</"
+"a> sekme."
+
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:150
+#: views/payments/payment-gateway/admin_stripe_buy_now_button.php:434
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:150
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:432
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:219
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:211
+msgid "Collect Customer Address"
+msgstr "Müşteri Adresini Topla"
+
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:26
+msgid "Stripe SCA Buy Now Button Configuration"
+msgstr "Stripe SCA Şimdi Satın Al Düğme Yapılandırması"
+
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:158
+#: views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php:440
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:227
+msgid "Enable Automatic Tax"
+msgstr "Otomatik Vergiyi Etkinleştir"
+
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:84
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:84
+msgid "Stripe Subscription Button Configuration"
+msgstr "Şerit Abonelik Düğmesi Yapılandırması"
+
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:118
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:118
+msgid "Stripe API ID"
+msgstr "Şerit API Kimliği"
+
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:129
+msgid "Trial Period"
+msgstr "Deneme süresi"
+
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:142
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:134
+msgid "Stripe API Settings"
+msgstr "Şerit API Ayarları"
+
+#: views/payments/payment-gateway/admin_stripe_sca_subscription_button.php:188
+msgid "Webhook Endpoint URL"
+msgstr "Web kancası Uç Nokta URL'si"
+
+#: views/payments/payment-gateway/admin_stripe_subscription_button.php:180
+msgid "Webook Endpoint URL"
+msgstr "Web Kitabı Uç Nokta URL'si"
+
+#: views/payments/payment-gateway/paypal_button_shortcode_view.php:235
+#: views/payments/payment-gateway/paypal_button_shortcode_view.php:237
+msgid "Subscribe Now"
+msgstr "Şimdi Abone Ol"
+
+#: views/payments/payment-gateway/paypal_buy_now_new_button_shortcode_view.php:80
+#: views/payments/payment-gateway/paypal_subscription_new_button_shortcode_view.php:77
+msgid "Transaction completed successfully!"
+msgstr "İşlem başarıyla tamamlandı!"
+
+#: views/payments/payment-gateway/paypal_buy_now_new_button_shortcode_view.php:226
+#: views/payments/payment-gateway/paypal_subscription_new_button_shortcode_view.php:227
+msgid "Error occurred during PayPal checkout process."
+msgstr "PayPal ödeme işlemi sırasında hata oluştu."
+
+#: views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php:155
+msgid "Error occurred during PayPal Smart Checkout process."
+msgstr "PayPal Smart Checkout işlemi sırasında hata oluştu."
+
+#: views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php:184
+msgid "HTTP error occurred during payment process:"
+msgstr "Ödeme işlemi sırasında HTTP hatası oluştu:"
+
+#: views/reset_password_using_link.php:9
+msgid ""
+"Error! The password reset key is invalid. Please generate a new request."
+msgstr ""
+"Hata! Parola sıfırlama anahtarı geçersiz. Lütfen yeni bir istek oluşturun."
+
+#: views/reset_password_using_link.php:36
+msgid "New password"
+msgstr "New password"
+
+#: views/reset_password_using_link.php:44
+msgid "Re-enter new password"
+msgstr "Yeni şifreyi tekrar giriniz"
+
+#. Plugin Name of the plugin/theme
+msgid "Simple WordPress Membership"
+msgstr "Simple WordPress Üyeliği"
+
+#. Plugin URI of the plugin/theme
+#. Author URI of the plugin/theme
+msgid "https://simple-membership-plugin.com/"
+msgstr "https://simple-membership-plugin.com/"
+
+#. Description of the plugin/theme
+msgid ""
+"A flexible, well-supported, and easy-to-use WordPress membership plugin for "
+"offering free and premium content from your WordPress site."
+msgstr ""
+"WordPress sitenizden ücretsiz ve premium içerik sunmak için esnek, iyi "
+"desteklenen ve kullanımı kolay bir WordPress üyelik eklentisi."
+
+#. Author of the plugin/theme
+msgid "smp7, wp.insider"
+msgstr "smp7, wp.insider"
+
+#: Translation strings from addons === Form builder addon
+msgid "Type password here"
+msgstr "Şifreyi buraya yazın"
+
+msgid "Retype password here"
+msgstr "Şifreyi buraya tekrar yazın"
+
+msgid "Registration is complete. You can now log into the site."
+msgstr "Kayıt tamamlandı. Artık siteye giriş yapabilirsiniz."
+
+msgid " Field has invalid character"
+msgstr " Alanda geçersiz karakter var"
+
+msgid " Password does not match"
+msgstr " Parola eşleşmiyor"
+
+msgid "Already taken."
+msgstr "Zaten alınmış."
+
+msgid "Street Address"
+msgstr "Açık adres"
+
+msgid "Apt, Suite, Bldg. (optional)"
+msgstr "Daire, Süit, Kat. (isteğe bağlı)"
+
+msgid "State / Province / Region"
+msgstr "Eyalet / İl / Bölge"
+
+msgid "Postal / Zip Code"
+msgstr "Posta / Posta Kodu"
+
+msgid ""
+"Check this box to delete the image. The image will be deleted when you save "
+"the profile."
+msgstr ""
+"Resmi silmek için bu kutuyu işaretleyin. Profili kaydettiğinizde resim "
+"silinecektir."
+
+msgid "You will need to re-login since you changed your password."
+msgstr "Parolanızı değiştirdiğiniz için yeniden oturum açmanız gerekecek."
+
+msgid ""
+"Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
+msgstr ""
+"Lütfen herhangi iki haneyi girin <strong>Hayır</strong> boşluklar (Örnek: 12)"
+
+msgid "Verification"
+msgstr "Doğrulama"
+
+msgid "Please enter any two digits with no spaces (Example: 12)*"
+msgstr "Lütfen iki rakamı boşluk bırakmadan girin (Örnek: 12)*"
+
+msgid "Username can only contain: letters, numbers and .-*@"
+msgstr "Kullanıcı adı yalnızca şunları içerebilir: harfler, sayılar ve .-*@"
+
+msgid "Allowed characters are: letters, numbers and .-_*@"
+msgstr "İzin verilen karakterler şunlardır: harfler, sayılar ve .-_*@"
+
+msgid "Please check at least one."
+msgstr "Lütfen en az birini kontrol edin."
+
+#: === Partial protection addon strings
+msgid "You do not have permission to view this content."
+msgstr "Bu içeriği görüntüleme izniniz yok."
+
+msgid "Your membership level does not have permission to view this content."
+msgstr "Üyelik seviyenizin bu içeriği görüntüleme izni yok."
+
+msgid "This content is for members only."
+msgstr "Bu içerik sadece üyeler içindir."
+
+#: === Member Directory Listing addon strings swpm-member-directory-admin.php:9
+msgid "Member Directory"
+msgstr "Üye Dizini"
+
+#: includes/swpm_mda_show_profile.php:30
+msgid "Level"
+msgstr "Seviye"
+
+#: includes/swpm_mda_show_profile.php:32
+msgid "Address"
+msgstr "Adres"
+
+#: includes/swpm_mda_show_profile.php:48
+msgid "Postcode"
+msgstr "Posta kodu"
+
+#: views/template-1.php:52 views/template-2.php:53
+msgid "Search..."
+msgstr "Ara."
+
+#: views/template-1.php:60 views/template-2.php:62
+msgid "Clear Search"
+msgstr "Aramayı Temizle"
+
+# === Misc Shortcodes Addon ===
+msgid "You must be logged in to upgrade a membership."
+msgstr "Üyeliğinizi yükseltmek için giriş yapmalısınız."
+
+msgid "Membership level has been updated."
+msgstr "Üyelik seviyesi güncellendi."
+
+msgid "Already a member of this level."
+msgstr "Zaten bu seviyenin bir üyesi."

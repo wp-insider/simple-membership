@@ -170,6 +170,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 4.3.1 =
+- Updated the Turkish language translation file.
 - Minor - Spelling mistake fixed in the Blacklisting feature.
 - Fixed Warning: Undefined variable $all_items
 

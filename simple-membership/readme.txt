@@ -173,6 +173,7 @@ https://simple-membership-plugin.com/
 - Updated the Turkish language translation file.
 - Minor - Spelling mistake fixed in the Blacklisting feature.
 - Fixed Warning: Undefined variable $all_items
+- Stripe Buy Now button's webhook handling code updated for the new Stripe API version.
 
 = 4.3.0 =
 - Regenerated the Translation POT file.

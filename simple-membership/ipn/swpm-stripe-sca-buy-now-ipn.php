@@ -18,8 +18,10 @@ class SwpmStripeSCABuyNowIpnHandler {
 	}
 
 	public function handle_stripe_ipn() {
+		//Stripe API upgrade change log - https://stripe.com/docs/upgrades
+
 		SwpmLog::log_simple_debug( 'Stripe SCA Buy Now IPN received. Processing request...', true );
-		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
+		//SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 
 		// Read and sanitize the request parameters.
 		$ref_id = isset( $_GET['ref_id'] ) ? sanitize_text_field( stripslashes ( $_GET['ref_id'] ) ) : '';
@@ -89,12 +91,40 @@ class SwpmStripeSCABuyNowIpnHandler {
 			wp_die( esc_html( $error_msg ) );
 		}
 
-		$charge = $pi->charges;
+		//Get the charge object based on the Stripe API version used in the payment intents object.
+		if( isset ( $pi->latest_charge ) ){
+			//Using the new Stripe API version 2022-11-15 or later
+			SwpmLog::log_simple_debug( 'Using the Stripe API version 2022-11-15 or later for Payment Intents object. Need to retrieve the charge object.', true );
+			$charge_id = $pi->latest_charge;
+			//For Stripe API version 2022-11-15 or later, the charge object is not included in the payment intents object. It needs to be retrieved using the charge ID.
+			try {
+				//Retrieve the charge object using the charge ID
+				$charge = \Stripe\Charge::retrieve($charge_id);
+			} catch (\Stripe\Exception\ApiErrorException $e) {
+				// Handle the error
+				SwpmLog::log_simple_debug( 'Stripe error occurred trying to retrieve the charge object using the charge ID. ' . $e->getMessage(), false );
+				exit;
+			}
+		} else {
+			//Using the old Stripe API version 2022-08-01 or earlier
+			$charge = $pi->charges;
+			$charge = $pi->charges->data[0];
+			$charge_id = $charge->id;
+			//The old method that is not needed anymore as we will read it from the charge object below.
+			// $stripe_email = $charge->data[0]->billing_details->email;
+			// $name = trim( $charge->data[0]->billing_details->name );
+			// $bd_addr = $charge->data[0]->billing_details->address;		
+		}
+
+		//Get the email, name and address from the charge object.
+		$stripe_email = $charge->billing_details->email;
+		$name = trim( $charge->billing_details->name );
+		$bd_addr = $charge->billing_details->address;
+
+		SwpmLog::log_simple_debug( "Email: " . $stripe_email . ", Name: " . $name . ", Charge ID: " . $charge_id, true );
 
 		// Grab the charge ID and set it as the transaction ID.
-		$txn_id = $charge->data[0]->id;
-		// The charge ID can be used to retrieve the transaction details using hte following call.
-		// \Stripe\Charge::retrieve($charge->$data[0]->id);
+		$txn_id = $charge_id;//The charge ID.
 
 		//check if this payment has already been processed
 		$payment = get_posts(
@@ -129,8 +159,6 @@ class SwpmStripeSCABuyNowIpnHandler {
 		}
 
 		$payment_amount = floatval( $payment_amount );
-
-		$stripe_email = $charge->data[0]->billing_details->email;
 
 		$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 
@@ -172,7 +200,6 @@ class SwpmStripeSCABuyNowIpnHandler {
 		$swpm_id    = isset( $custom_var['swpm_id'] ) ? $custom_var['swpm_id'] : '';
 
 		// Let's try to get first_name and last_name from full name
-		$name       = trim( $charge->data[0]->billing_details->name );
 		$last_name  = ( strpos( $name, ' ' ) === false ) ? '' : preg_replace( '#.*\s([\w-]*)$#', '$1', $name );
 		$first_name = trim( preg_replace( '#' . $last_name . '#', '', $name ) );
 
@@ -190,8 +217,6 @@ class SwpmStripeSCABuyNowIpnHandler {
 		$ipn_data['custom']           = $custom;
 		$ipn_data['gateway']          = 'stripe-sca';
 		$ipn_data['status']           = 'completed';
-
-		$bd_addr = $charge->data[0]->billing_details->address;
 
 		$ipn_data['address_street']  = isset( $bd_addr->line1 ) ? $bd_addr->line1 : '';
 		$ipn_data['address_city']    = isset( $bd_addr->city ) ? $bd_addr->city : '';

@@ -316,8 +316,8 @@ class SimpleWpMembership {
             }
         }
 
+        SwpmLog::log_auth_debug("Triggering swpm_login_auth_completed_filter hook.", true);
         $proceed_after_auth = apply_filters('swpm_login_auth_completed_filter', true);
-
         if (!$proceed_after_auth) {
             $auth = SwpmAuth::get_instance();
             $auth->logout();

@@ -65,7 +65,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 					// Found a record using the "txn_id" of the payments table.
 					$member_id = $resultset->member_id;
 				}                            
-                        }
+            }
 		}
 
 		if ( ! empty( $member_id ) ) {
@@ -73,6 +73,24 @@ class SWPMPaymentsListTable extends WP_List_Table {
 			$column_value = '<a href="' . $profile_page . '">' . SwpmUtils::_( 'View Profile' ) . '</a>';
 		} else {
 			$column_value = '';
+		}
+		return $column_value;
+	}
+
+	function column_status( $item ) {
+		$status = $item['status'];
+		$column_value = '';
+
+		if ( strtolower($status) == 'completed' ) {
+			$column_value = '<span class="swpm_status_completed">' . $status . '</span>';
+		} else if ( strtolower($status) == 'refunded' ) {
+			$column_value = '<span class="swpm_status_refunded">' . $status . '</span>';
+		} else if ( strtolower($status) == 'subscription created' ) {
+			$column_value = '<span class="swpm_status_subscription_created">' . $status . '</span>';
+		} else if ( strtolower($status) == 'subscription' ) {
+			$column_value = '<span class="swpm_status_subscription">' . $status . '</span>';
+		} else {
+			$column_value = '<span class="swpm_status_general">' . $status . '</span>';
 		}
 		return $column_value;
 	}

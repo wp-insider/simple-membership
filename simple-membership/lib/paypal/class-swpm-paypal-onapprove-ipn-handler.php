@@ -321,8 +321,8 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 		$ipn['plan_id'] = isset($txn_data['plan_id']) ? $txn_data['plan_id'] : '';
 		$ipn['create_time'] = isset($txn_data['create_time']) ? $txn_data['create_time'] : '';
 
-		$ipn['status'] = __('Subscription created', 'simple-membership');
-		$ipn['payment_status'] = __('Subscription created', 'simple-membership');
+		$ipn['status'] = __('subscription created', 'simple-membership');
+		$ipn['payment_status'] = __('subscription created', 'simple-membership');
 		$ipn['subscription_status'] = isset($txn_data['status']) ? $txn_data['status'] : '';//Can be used to check if the subscription is active or not (in the webhook handler)
 
 		//Amount and currency.

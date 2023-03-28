@@ -2378,7 +2378,7 @@ msgstr ""
 
 #: lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php:324
 #: lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php:325
-msgid "Subscription created"
+msgid "subscription created"
 msgstr ""
 
 #: lib/paypal/class-swpm-paypal-webhook.php:310

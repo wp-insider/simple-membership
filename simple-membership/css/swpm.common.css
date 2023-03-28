@@ -198,3 +198,44 @@
     margin: 0;
     padding-bottom: 5px;
 }
+
+/* Payments menu CSS */
+.swpm_status_completed{
+	padding: 7px 15px;
+	width: auto;
+	display: inline-block;
+	text-align: center;
+	min-width: 80px;
+	border-radius: 4px;
+	background-color: #b6e4b6;
+}
+
+.swpm_status_refunded{
+	padding: 7px 15px;
+	width: auto;
+	display: inline-block;
+	text-align: center;
+	min-width: 80px;
+	border-radius: 4px;
+	background-color: #e4d4b6;
+}
+
+.swpm_status_general{
+	padding: 7px 15px;
+	width: auto;
+	display: inline-block;
+	text-align: center;
+	min-width: 80px;
+	border-radius: 4px;
+	background-color: #dedede;
+}
+
+.swpm_status_subscription, .swpm_status_subscription_created{
+	padding: 7px 15px;
+	width: auto;
+	display: inline-block;
+	text-align: center;
+	min-width: 80px;
+	border-radius: 4px;
+	background-color: #b6dee4;
+}

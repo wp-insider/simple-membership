@@ -426,7 +426,17 @@ class SwpmMiscUtils {
 		return SwpmUtils::_( 'Please' ) . ' <a class="swpm-renewal-link" href="' . $renewal . '">' . SwpmUtils::_( 'renew' ) . '</a> ' . SwpmUtils::_( ' your account to gain access to this content.' );
 	}
 
+	public static function compare_url_without_http( $url1, $url2 ) {
+		$url1 = str_replace( 'http://', '', $url1 );
+		$url1 = str_replace( 'https://', '', $url1 );
+		$url2 = str_replace( 'http://', '', $url2 );
+		$url2 = str_replace( 'https://', '', $url2 );
+		return self::compare_url( $url1, $url2 );
+	}
+
 	public static function compare_url( $url1, $url2 ) {
+		//See also compare_url_without_http() method above.
+		
 		$url1 = trailingslashit( strtolower( $url1 ) );
 		$url2 = trailingslashit( strtolower( $url2 ) );
 		if ( $url1 == $url2 ) {

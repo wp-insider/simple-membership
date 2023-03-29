@@ -280,17 +280,17 @@ class SwpmAccessControl {
         //Check if the current page is the membership renewal page.
         $renewal_url = SwpmSettings::get_instance()->get_value('renewal-page-url');        
         if (empty($renewal_url)) {return false;}
-        if (SwpmMiscUtils::compare_url($renewal_url, $current_page_url)) {return true;}
+        if (SwpmMiscUtils::compare_url_without_http($renewal_url, $current_page_url)) {return true;}
 
         //Check if the current page is the membership logn page.
         $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
         if (empty($login_page_url)) {return false;}
-        if (SwpmMiscUtils::compare_url($login_page_url, $current_page_url)) {return true;}
+        if (SwpmMiscUtils::compare_url_without_http($login_page_url, $current_page_url)) {return true;}
 
         //Check if the current page is the membership join page.
         $registration_page_url = SwpmSettings::get_instance()->get_value('registration-page-url');
         if (empty($registration_page_url)) {return false;}
-        if (SwpmMiscUtils::compare_url($registration_page_url, $current_page_url)) {return true;}
+        if (SwpmMiscUtils::compare_url_without_http($registration_page_url, $current_page_url)) {return true;}
         
         return false;
     }

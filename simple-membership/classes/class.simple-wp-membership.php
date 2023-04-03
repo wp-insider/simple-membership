@@ -34,7 +34,7 @@ include_once('shortcode-related/class.swpm-shortcodes-handler.php');
 include_once('class-swpm-member-subscriptions.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-main.php' );
-
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-block.php' );
 class SimpleWpMembership {
 
     public $execution_success_notice = false;

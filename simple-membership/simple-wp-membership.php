@@ -33,7 +33,6 @@ define( 'SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS', serialize( array( 'JPY', 'MGA'
 include_once( 'classes/class.simple-wp-membership.php' );
 include_once( 'classes/class.swpm-cronjob.php' );
 include_once( 'swpm-compat.php' );
-require_once SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-block.php';
 
 SwpmUtils::do_misc_initial_plugin_setup_tasks();
 

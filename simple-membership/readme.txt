@@ -169,13 +169,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
-- New Gutenberg Block for Payment Buttons.
 
 = WIP 4.3.2 =
 - Added CSS to highlight the order status in the payments menu.
 - Added a new utility function compare_url_without_http(). This function is used for matching the system generated pages.
 - Added a new CSS div for the activation required error message.
+- New Gutenberg Block for Payment Buttons.
 
 = 4.3.1 =
 - Updated the Turkish language translation file.

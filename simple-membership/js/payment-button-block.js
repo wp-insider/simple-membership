@@ -6,13 +6,13 @@
  * @since 4.3.3
  */
 
-let swpmElement       = wp.element.createElement,
-	registerBlockType = wp.blocks.registerBlockType,
-	ServerSideRender  = wp.serverSideRender,
-	SelectControl     = wp.components.SelectControl,
-	InspectorControls = wp.blockEditor.InspectorControls;
+let swpm_element           = wp.element.createElement,
+	swpm_registerBlockType = wp.blocks.registerBlockType,
+	swpm_serverSideRender  = wp.serverSideRender,
+	swpm_selectControl     = wp.components.SelectControl,
+	swpm_InspectorControls = wp.blockEditor.InspectorControls;
 
-registerBlockType(
+swpm_registerBlockType(
 	'simple-membership/payment-button',
 	{
 		title: swpm_block_button_str.title,
@@ -22,29 +22,29 @@ registerBlockType(
 
 		edit: function (props) {
 			return [
-			swpmElement(
-				ServerSideRender,
-				{
-					block: 'simple-membership/payment-button',
-					attributes: props.attributes,
-				}
-			),
-			swpmElement(
-				InspectorControls,
-				{},
-				swpmElement(
-					SelectControl,
+				swpm_element(
+					swpm_serverSideRender,
 					{
-						className: 'block-editor-block-card',
-						label: swpm_block_button_str.paymentButton,
-						value: props.attributes.btnId,
-						options: swpm_button_options,
-						onChange: (value) => {
-							props.setAttributes( {btnId: value} );
-						},
+						block: 'simple-membership/payment-button',
+						attributes: props.attributes,
 					}
-				)
-			),
+				),
+				swpm_element(
+					swpm_InspectorControls,
+					{},
+					swpm_element(
+						swpm_selectControl,
+						{
+							className: 'block-editor-block-card',
+							label: swpm_block_button_str.paymentButton,
+							value: props.attributes.btnId,
+							options: swpm_button_options,
+							onChange: (value) => {
+								props.setAttributes( {btnId: value} );
+							},
+						}
+					)
+				),
 			];
 		},
 

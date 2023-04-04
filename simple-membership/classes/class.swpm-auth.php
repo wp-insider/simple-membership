@@ -173,9 +173,9 @@ class SwpmAuth {
 				),
 				get_home_url()
 			);
-			$msg                 = sprintf( SwpmUtils::_( 'You need to activate your account. If you didn\'t receive an email then %s to resend the activation email.' ), '<a href="' . $resend_email_url . '">' . SwpmUtils::_( 'click here' ) . '</a>' );
-			$this->lastStatusMsg = $msg;
-			$can_login           = false;
+			$msg = sprintf( SwpmUtils::_( 'You need to activate your account. If you didn\'t receive an email then %s to resend the activation email.' ), '<a href="' . $resend_email_url . '">' . SwpmUtils::_( 'click here' ) . '</a>' );
+			$this->lastStatusMsg = '<div class="swpm_login_error_activation_required">' . $msg . '</div>';
+			$can_login = false;
 		}
 
 		if ( ! $can_login ) {

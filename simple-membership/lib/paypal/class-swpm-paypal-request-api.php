@@ -101,7 +101,7 @@ class SWPM_PayPal_Request_API {
 			'Content-Type' => 'application/json',
 			'Authorization' => 'Basic ' . $this->basic_auth_string,
 			'User-Agent' => $ua_string,
-			'PayPal-Partner-Attribution-Id' => 'TipsandTricks_SP',
+			'PayPal-Partner-Attribution-Id' => 'TipsandTricks_SP_PPCP',
 		);
 		return $headers;
 	}

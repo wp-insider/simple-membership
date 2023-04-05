@@ -4,8 +4,6 @@
  * Block class.
  *
  * Configures all gutenberg blocks for this plugin.
- *
- * @since 4.3.3
  */
 class SWPM_Blocks
 {
@@ -47,8 +45,6 @@ class SWPM_Blocks
 
     /**
      * Registers payment button block.
-     *
-     * @return void
      */
     public function register_payment_button_block()
     {
@@ -117,16 +113,17 @@ class SWPM_Blocks
                 case 'pp_buy_now_new':
                     $button_placeholder_image = SIMPLE_WP_MEMBERSHIP_URL . '/images/button-images/paypal-button-sample-image.png';
                     $output = '<div style="border: 1px solid #EEEEEE; padding: 10px 15px;" class="swpm-payment-block-sample-paypal-button">';
-                    $output .= '<div class="swpm-grey-box">'.__('This section shows a preview image of a PayPal button to demonstrate where it will appear on the front end.', 'simple-membership').'</div>';
+                    $output .= '<div class="swpm-grey-box">'.__('This section shows a preview image of a PayPal button to demonstrate where the PayPal button will appear on the front end.', 'simple-membership').'</div>';
                     $output .= '<img src="' . $button_placeholder_image . '" alt="PayPal Button Image" />';
                     $output .= '</div>';
                     break;
 
-                // TODO: Add placeholder images for other payment gateways.
+                // Add placeholder images for other payment gateways (if needed).
                 case 'pp_subscription':
                 case 'pp_buy_now':
                 case 'stripe_sca_buy_now':
                 case 'stripe_sca_subscription':
+                case 'braintree_buy_now':
                 default:
                     $sc_str = 'swpm_payment_button id="%d"';
                     $sc_str = sprintf($sc_str, $button_id);

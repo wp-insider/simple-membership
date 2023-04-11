@@ -2,8 +2,6 @@
  * Payment button block script.
  *
  * @package simple-membership
- *
- * @since 4.3.3
  */
 
 let swpm_element           = wp.element.createElement,

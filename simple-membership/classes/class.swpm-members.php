@@ -703,44 +703,293 @@ class SwpmMembers extends WP_List_Table {
 		echo '</div></div>'; //<!-- end of #poststuff #post-body -->
 	}
 
-	function show_all_members() {
+	function show_all_members()
+	{
 		ob_start();
-		$status = filter_input( INPUT_GET, 'status' );
+		$status = filter_input(INPUT_GET, 'status');
 		include_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_members_list.php';
 		$output = ob_get_clean();
 		return $output;
 	}
 
-	function handle_main_members_admin_menu() {
-		do_action( 'swpm_members_menu_start' );
+	public function send_email_menu()
+	{
+		$send_email_menu_data = SwpmSettings::get_instance()->get_value('send_email_menu_data');
+		if (empty($send_email_menu_data)) {
+			//No saved data found. initialize the array.
+			$send_email_menu_data = array();
+		}
+
+		if (isset($_POST['send_email_submit'])) {
+			$swpm_send_email_nonce = filter_input(INPUT_POST, 'swpm_send_email_nonce');
+			if (!wp_verify_nonce($swpm_send_email_nonce, 'swpm_send_email_nonce_action')) {
+				//Nonce check failed.
+				wp_die(__('Error! Nonce security verification failed for Bulk Change Membership Level action. Clear cache and try again.', 'simple-membership'));
+			}
+
+			$send_email_menu_data['send_email_enable_html'] = (isset($_POST['send_email_enable_html']) && $_POST['send_email_enable_html'] === 'on') ? 'on' : '';
+			$send_email_menu_data['send_email_subject'] = (isset($_POST['send_email_subject']) && $_POST['send_email_subject'] != '') ? sanitize_text_field($_POST['send_email_subject']) : '';
+			$send_email_menu_data['send_email_body'] = (isset($_POST['send_email_body']) && $_POST['send_email_body'] != '') ? stripslashes((string)$_POST['send_email_body']) : '';
+
+			$recipients = array();
+
+			/**
+			 * TODO: Need to use proper response message.
+			 */
+			$response_msg = "";
+			$response_type = "updated fade";
+
+			// Collect recipients
+			$target_recipients = $_POST['send_email_menu_target_recipients'];
+			if (isset($target_recipients) && $target_recipients === "membershipLevel" && !empty($_POST['send_email_membership_level'])) {
+				$members = SwpmMemberUtils::get_all_members_of_a_level($_POST['send_email_membership_level']);
+				foreach ($members as $member) {
+					$recipients[] = $member;
+				}
+			} else if (isset($target_recipients) && $target_recipients === "membersId" && !empty($_POST['send_email_members_id'])) {
+				// send mail to specified members by IDs
+				$IDs_str = $_POST['send_email_members_id'];
+				$IDs = explode(',', $IDs_str);
+				foreach ($IDs as $id) {
+					if ((int)trim($id)) {
+						$member_id = (int)trim($id);
+						$member = SwpmMemberUtils::get_user_by_id($member_id);
+						$recipients[] = $member;
+					}
+				}
+			} else {
+				$response_msg = __('No recipient selected', 'simple-membership');
+			}
+
+			if (!empty($recipients)) {
+				foreach ($recipients as $recipient) {
+					$headers = '';
+					$email_body = SwpmMiscUtils::replace_dynamic_tags($send_email_menu_data['send_email_body'], $recipient->member_id);
+
+					if (!empty($send_email_menu_data['send_email_enable_html'])) {
+						$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+						$email_body = nl2br($email_body);
+					}
+
+					wp_mail($recipient->email, $send_email_menu_data['send_email_subject'], $email_body, $headers);
+				}
+
+				$response_msg = __("Email Sent Successfully", "Simple Membership");
+			}
+
+			if ($response_msg) {
+				echo '<div id="response-message" class="' . $response_type . '"><p>';
+				echo $response_msg;
+				echo '</p></div>';
+			}
+
+			// Save the values for future
+			SwpmSettings::get_instance()->set_value('send_email_menu_data', $send_email_menu_data);
+			SwpmSettings::get_instance()->save();
+		}
+
+		$send_email_enable_html = isset($send_email_menu_data['send_email_enable_html']) && $send_email_menu_data['send_email_enable_html'] === 'on' ? 'checked="checked"' : '';
+		$send_email_subject = isset($send_email_menu_data['send_email_subject']) ? $send_email_menu_data['send_email_subject'] : '';
+		$send_email_body = isset($send_email_menu_data['send_email_body']) ? $send_email_menu_data['send_email_body'] : '';
+		?>
+		<div id="poststuff">
+			<div id="post-body">
+				<div class="postbox">
+					<h3 class="hndle"><label
+							for="title"><?php _e('Send Email to Members', 'simple-membership'); ?></label></h3>
+					<div class="inside">
+						<p><?php _e('Use the form to send email to group of members by membership level or by IDs of individual members.', 'simple-membership'); ?></p>
+						<form method="post" action="" class="form-table">
+							<table width="100%" border="0" cellspacing="0" cellpadding="6">
+								<tbody>
+								<tr valign="top">
+									<th width="25%"
+										align="left"><?php _e('Target Recipients: ', 'simple-membership'); ?></th>
+									<td align="left">
+										<div>
+											<label>
+												<input type="radio"
+													   id="target-recipients-option-1"
+													   name="send_email_menu_target_recipients"
+													   value="membershipLevel"
+													   checked>
+												<?php _e('Particular Membership level', 'simple-membership') ?>
+											</label>
+											<label style="margin-left: 12px">
+												<input type="radio"
+													   id="target-recipients-option-2"
+													   name="send_email_menu_target_recipients"
+													   value="membersId">
+												<?php _e('Individual Members', 'simple-membership') ?>
+											</label>
+										</div>
+										<div style="margin-top: 14px">
+											<div id="send-email-field-membership-level">
+												<select name="send_email_membership_level">
+													<option
+														value=""><?php _e('Select a level', 'simple-membership'); ?></option>
+													<?php echo SwpmUtils::membership_level_dropdown(); ?>
+												</select>
+												<p class="description"><?php _e('Select the membership level to whom the mail will be send to.', 'simple-membership'); ?></p>
+											</div>
+											<div id="send-email-field-members-id" style="display: none">
+												<input type="text" name="send_email_members_id" size="50"
+													   value=""/>
+												<p class="description"><?php _e('Enter member\'s ID separated by comma, to whom the mail will be send to.', 'simple-membership'); ?></p>
+											</div>
+										</div>
+									</td>
+								</tr>
+
+								<tr valign="top">
+									<th width="25%" align="left">
+										<?php _e('Email Subject: ', 'simple-membership'); ?>
+									</th>
+									<td align="left">
+										<input type="text" name="send_email_subject" size="50"
+											   value="<?php echo $send_email_subject; ?>"
+											   style="max-width: 100%;"/>
+										<p class="description"><?php _e('Enter email subject', 'simple-membership'); ?></p>
+									</td>
+								</tr>
+
+								<tr valign="top" id="send-email-html">
+									<th width="25%" align="left">
+										<?php _e('Allow HTML ', 'simple-membership'); ?>
+									</th>
+									<td align="left">
+										<input type="checkbox"
+											   name="send_email_enable_html" <?php echo $send_email_enable_html; ?> />
+										<p class="description"> <?php _e('Enables HTML support in emails. We recommend using plain text (non HTML) email as it has better email delivery rate.', 'simple-membership') ?> </p>
+									</td>
+								</tr>
+
+								<tr valign="top">
+									<th width="25%" align="left">
+										<?php _e('Email Body: ', 'simple-membership'); ?>
+									</th>
+									<td align="left">
+										<?php
+										$send_email_body_settings = array(
+											'textarea_name' => 'send_email_body',
+											'teeny' => true,
+											'default_editor' => !empty($send_email_enable_html) ? 'QuickTags' : '',
+											'textarea_rows' => 15,
+										);
+										wp_editor($send_email_body, "send_email_body", $send_email_body_settings);
+										?>
+										<p class="description">Specify the email body that will be sent to the members.
+											You can use the following email merge tags in this email:</p>
+										<ul class="description">
+											<?php foreach (SwpmUtils::email_merge_tags() as $tag => $desc) { ?>
+												<li><span style="
+														background-color: #eee;
+														padding: 2px 4px;
+														color: #6c6c6c;
+														cursor: pointer;"
+														  onclick="copyMergeTag(event)"
+													>{<?php echo $tag ?>}</span> - <span> <?php echo $desc ?> </span>
+												</li>
+											<?php } ?>
+										</ul>
+									</td>
+									</td>
+								</tr>
+
+								<tr valign="top">
+									<th width="25%" align="left">
+									</th>
+									<td align="left">
+										<input type="submit" class="button-primary" name="send_email_submit"
+											   value="<?php _e('Send Email', 'simple-membership'); ?>"/>
+									</td>
+								</tr>
+								<input type="hidden" name="swpm_send_email_nonce"
+									   value="<?php echo wp_create_nonce('swpm_send_email_nonce_action'); ?>"/>
+								</tbody>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			const recipientGroupRadio = document.querySelectorAll('input[name="send_email_menu_target_recipients"]');
+
+			const membershipLevelField = document.getElementById('send-email-field-membership-level');
+			const membersIdField = document.getElementById('send-email-field-members-id');
+			// Add event listener to each radio button
+			recipientGroupRadio.forEach((item) => {
+				item.addEventListener('change', toggleRecipientFieldType);
+			});
+
+			function toggleRecipientFieldType(event) {
+				if (event.target.value === 'membersId') {
+					membershipLevelField.style.display = 'none';
+					membersIdField.style.display = null;
+				} else {
+					membershipLevelField.style.display = null;
+					membersIdField.style.display = 'none';
+				}
+			}
+
+			function copyMergeTag(event) {
+				const element = event.target;
+				const text = element.innerText;
+				const range = document.createRange();
+				range.selectNodeContents(element);
+				const selection = window.getSelection();
+				navigator.clipboard.writeText(text);
+				selection.removeAllRanges();
+				selection.addRange(range);
+			}
+		</script>
+		<?php
+	}
+
+	public function set_default_editor($r)
+	{
+		$r = 'html';
+		return $r;
+	}
+
+	function handle_main_members_admin_menu()
+	{
+		do_action('swpm_members_menu_start');
 
 		//Check current_user_can() or die.
-		SwpmMiscUtils::check_user_permission_and_is_admin( 'Main Members Admin Menu' );
+		SwpmMiscUtils::check_user_permission_and_is_admin('Main Members Admin Menu');
 
-		$action   = filter_input( INPUT_GET, 'member_action' );
-		$action   = empty( $action ) ? filter_input( INPUT_POST, 'action' ) : $action;
+		$action = filter_input(INPUT_GET, 'member_action');
+		$action = empty($action) ? filter_input(INPUT_POST, 'action') : $action;
 		$selected = $action;
 		?>
 		<div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-			<h1><?php echo SwpmUtils::_( 'Simple WP Membership::Members' ); ?><!-- page title -->
-				<a href="admin.php?page=simple_wp_membership&member_action=add" class="add-new-h2"><?php echo SwpmUtils::_( 'Add New' ); ?></a>
-			</h1>
+		<h1><?php echo SwpmUtils::_('Simple WP Membership::Members'); ?><!-- page title -->
+			<a href="admin.php?page=simple_wp_membership&member_action=add"
+			   class="add-new-h2"><?php echo SwpmUtils::_('Add New'); ?></a>
+		</h1>
 
-			<h2 class="nav-tab-wrapper swpm-members-nav-tab-wrapper"><!-- start nav menu tabs -->
-				<a class="nav-tab <?php echo ( $selected == '' ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership"><?php echo SwpmUtils::_( 'Members' ); ?></a>
-				<a class="nav-tab <?php echo ( $selected == 'add' ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=add"><?php echo SwpmUtils::_( 'Add Member' ); ?></a>
-				<a class="nav-tab <?php echo ( $selected == 'bulk' ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=bulk"><?php echo SwpmUtils::_( 'Bulk Operation' ); ?></a>
-				<?php
-				if ( $selected == 'edit' ) {//Only show the "edit member" tab when a member profile is being edited from the admin side.
-					echo '<a class="nav-tab nav-tab-active" href="#">Edit Member</a>';
-				}
+		<h2 class="nav-tab-wrapper swpm-members-nav-tab-wrapper"><!-- start nav menu tabs -->
+			<a class="nav-tab <?php echo ($selected == '') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership"><?php echo SwpmUtils::_('Members'); ?></a>
+			<a class="nav-tab <?php echo ($selected == 'add') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership&member_action=add"><?php echo SwpmUtils::_('Add Member'); ?></a>
+			<a class="nav-tab <?php echo ($selected == 'bulk') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership&member_action=bulk"><?php echo SwpmUtils::_('Bulk Operation'); ?></a>
+			<a class="nav-tab <?php echo ($selected == 'send_email') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership&member_action=send_email"><?php echo SwpmUtils::_('Send Email'); ?></a>
+			<?php
+			if ($selected == 'edit') {//Only show the "edit member" tab when a member profile is being edited from the admin side.
+				echo '<a class="nav-tab nav-tab-active" href="#">Edit Member</a>';
+			}
 
-				//Trigger hooks that allows an extension to add extra nav tabs in the members menu.
-				do_action( 'swpm_members_menu_nav_tabs', $selected );
+			//Trigger hooks that allows an extension to add extra nav tabs in the members menu.
+			do_action('swpm_members_menu_nav_tabs', $selected);
 
-				$menu_tabs = apply_filters( 'swpm_members_additional_menu_tabs_array', array() );
-				foreach ( $menu_tabs as $member_action => $title ) {
+			$menu_tabs = apply_filters('swpm_members_additional_menu_tabs_array', array());
+			foreach ($menu_tabs as $member_action => $title) {
 					?>
 					<a class="nav-tab <?php echo ( $selected == $member_action ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=<?php echo $member_action; ?>" ><?php _e( $title, 'simple-membership' ); ?></a>
 					<?php
@@ -779,6 +1028,10 @@ class SwpmMembers extends WP_List_Table {
 				case 'bulk':
 					//Handle the bulk operation menu
 					$this->bulk_operation_menu();
+					break;
+				case 'send_email':
+					//Handle the send email operation menu
+					$this->send_email_menu();
 					break;
 				default:
 					//Show the members listing page by default.

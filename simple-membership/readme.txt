@@ -176,6 +176,7 @@ https://simple-membership-plugin.com/
 - Added a new CSS div for the activation required error message.
 - New Gutenberg Block for Payment Buttons.
 - Updated the system page URL check function to include the edit profile and the password reset pages.
+- New tab for sending emails has been implemented.
 
 = 4.3.1 =
 - Updated the Turkish language translation file.

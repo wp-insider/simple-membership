@@ -175,8 +175,9 @@ https://simple-membership-plugin.com/
 - Added a new utility function compare_url_without_http(). This function is used for matching the system generated pages.
 - Added a new CSS div for the activation required error message.
 - New Gutenberg Block for Payment Buttons.
-- Updated the system page URL check function to include the edit profile and the password reset pages.
+- Updated the system page URL check function to include the edit profile, join and the password reset pages.
 - New tab for sending emails has been implemented.
+
 
 = 4.3.1 =
 - Updated the Turkish language translation file.

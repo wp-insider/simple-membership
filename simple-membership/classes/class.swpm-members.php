@@ -703,44 +703,168 @@ class SwpmMembers extends WP_List_Table {
 		echo '</div></div>'; //<!-- end of #poststuff #post-body -->
 	}
 
-	function show_all_members() {
+	function show_all_members()
+	{
 		ob_start();
-		$status = filter_input( INPUT_GET, 'status' );
+		$status = filter_input(INPUT_GET, 'status');
 		include_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_members_list.php';
 		$output = ob_get_clean();
 		return $output;
 	}
 
-	function handle_main_members_admin_menu() {
-		do_action( 'swpm_members_menu_start' );
+	public function send_email_menu()
+	{
+		$send_email_menu_data = SwpmSettings::get_instance()->get_value('send_email_menu_data');
+		if (empty($send_email_menu_data)) {
+			// No saved data found. initialize the array.
+			$send_email_menu_data = array();
+		}
+
+		if (isset($_POST['send_email_submit'])) {
+			$swpm_send_email_nonce = filter_input(INPUT_POST, 'swpm_send_email_nonce');
+			if (!wp_verify_nonce($swpm_send_email_nonce, 'swpm_send_email_nonce_action')) {
+				// Nonce check failed.
+				wp_die(__('Error! Nonce security verification failed for Bulk Change Membership Level action. Clear cache and try again.', 'simple-membership'));
+			}
+
+			$send_email_menu_data['send_email_enable_html'] = (isset($_POST['send_email_enable_html']) && $_POST['send_email_enable_html'] === 'on') ? 'on' : '';
+			$send_email_menu_data['send_email_subject'] = (isset($_POST['send_email_subject']) && $_POST['send_email_subject'] != '') ? sanitize_text_field($_POST['send_email_subject']) : '';
+			$send_email_menu_data['send_email_body'] = (isset($_POST['send_email_body']) && $_POST['send_email_body'] != '') ? stripslashes(wp_kses_post($_POST['send_email_body'])) : '';
+
+			// Save the values for future
+			SwpmSettings::get_instance()->set_value('send_email_menu_data', $send_email_menu_data);
+			SwpmSettings::get_instance()->save();
+
+			$all_validations_passed = true;
+
+			$error_msg_array = array();
+			$recipients = array();
+
+			// Validate recipients
+			$target_recipients = sanitize_text_field($_POST['send_email_menu_target_recipients']);
+			if (isset($target_recipients) && $target_recipients === 'membership_level' && !empty($_POST['send_email_membership_level'])) {
+				// send mail to specified members by membership level.
+				$members = SwpmMemberUtils::get_all_members_of_a_level(sanitize_text_field($_POST['send_email_membership_level']));
+				foreach ($members as $member) {
+					$recipients[] = $member;
+				}
+			} elseif (isset($target_recipients) && $target_recipients === 'members_id' && !empty($_POST['send_email_members_id'])) {
+				// send mail to specified members by IDs
+				$ids_str = sanitize_text_field(stripslashes($_POST['send_email_members_id']));
+				$ids = explode(',', $ids_str);
+				foreach ($ids as $id) {
+					$member_id = (int)trim($id);
+					if ($member_id) {
+						$member = SwpmMemberUtils::get_user_by_id($member_id);
+						if (!$member) {
+							//echo '<br />Invalid ID. Continuing to the next item';
+							continue;
+						}
+						//echo '<br />Adding member row to the recipients list';
+						$recipients[] = $member;
+					}
+				}
+			} else {
+				$all_validations_passed = false;
+				$error_msg_array[] = __('No recipient selected. Plaese select email recipeint(s).', 'simple-membership');
+			}
+
+
+			// Validate email subject
+			if (empty ($send_email_menu_data['send_email_subject'])) {
+				$all_validations_passed = false;
+				$error_msg_array[] = __('The email subject field is empty. Please enter a value in the email subject field.', 'simple-membership');
+			}
+
+			// Validate email body
+			if (empty ($send_email_menu_data['send_email_body'])) {
+				$all_validations_passed = false;
+				$error_msg_array[] = __('The email body field is empty. Please enter a value in the email body field.', 'simple-membership');
+			}
+
+			// Validate recipient list
+			if (empty ($recipients)) {
+				$all_validations_passed = false;
+				$error_msg_array[] = __('Selected recipient(s) do not exists.', 'simple-membership');
+			}
+
+
+			if ($all_validations_passed) {
+				//All passed. Go ahead with the processing.
+				foreach ($recipients as $recipient) {
+					$headers = '';
+					$body = SwpmMiscUtils::replace_dynamic_tags($send_email_menu_data['send_email_body'], $recipient->member_id);
+					$subject = $send_email_menu_data['send_email_subject'];
+					if (!empty($send_email_menu_data['send_email_enable_html'])) {
+						$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+						$body = nl2br($body);
+					}
+					wp_mail($recipient->email, $subject , $body, $headers);
+					SwpmLog::log_simple_debug( 'Email Sent to : '.$recipient->email, true );
+				}
+				echo '<div id="response-message" class="updated fade"><p>';
+				_e('Email Sent Successfully', 'simple-membership');
+				echo '</p></div>';
+
+			} else {
+				echo '<div id="response-message" class="updated error"><p>';
+				_e('The following validation failed. Please correct it and try again.', 'simple-membership');
+				echo '</p><ol>';
+				foreach ($error_msg_array as $error_msg) {
+					echo '<li>' . $error_msg . '</li>';
+				}
+				echo '</ol>';
+				echo '</div>';
+			}
+		}
+
+		// render view.
+		include_once(SIMPLE_WP_MEMBERSHIP_PATH . "views/admin_send_email_menu.php");
+	}
+
+	public function set_default_editor($r)
+	{
+		$r = 'html';
+		return $r;
+	}
+
+	function handle_main_members_admin_menu()
+	{
+		do_action('swpm_members_menu_start');
 
 		//Check current_user_can() or die.
-		SwpmMiscUtils::check_user_permission_and_is_admin( 'Main Members Admin Menu' );
+		SwpmMiscUtils::check_user_permission_and_is_admin('Main Members Admin Menu');
 
-		$action   = filter_input( INPUT_GET, 'member_action' );
-		$action   = empty( $action ) ? filter_input( INPUT_POST, 'action' ) : $action;
+		$action = filter_input(INPUT_GET, 'member_action');
+		$action = empty($action) ? filter_input(INPUT_POST, 'action') : $action;
 		$selected = $action;
 		?>
 		<div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-			<h1><?php echo SwpmUtils::_( 'Simple WP Membership::Members' ); ?><!-- page title -->
-				<a href="admin.php?page=simple_wp_membership&member_action=add" class="add-new-h2"><?php echo SwpmUtils::_( 'Add New' ); ?></a>
-			</h1>
+		<h1><?php echo SwpmUtils::_('Simple WP Membership::Members'); ?><!-- page title -->
+			<a href="admin.php?page=simple_wp_membership&member_action=add"
+			   class="add-new-h2"><?php echo SwpmUtils::_('Add New'); ?></a>
+		</h1>
 
-			<h2 class="nav-tab-wrapper swpm-members-nav-tab-wrapper"><!-- start nav menu tabs -->
-				<a class="nav-tab <?php echo ( $selected == '' ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership"><?php echo SwpmUtils::_( 'Members' ); ?></a>
-				<a class="nav-tab <?php echo ( $selected == 'add' ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=add"><?php echo SwpmUtils::_( 'Add Member' ); ?></a>
-				<a class="nav-tab <?php echo ( $selected == 'bulk' ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=bulk"><?php echo SwpmUtils::_( 'Bulk Operation' ); ?></a>
-				<?php
-				if ( $selected == 'edit' ) {//Only show the "edit member" tab when a member profile is being edited from the admin side.
-					echo '<a class="nav-tab nav-tab-active" href="#">Edit Member</a>';
-				}
+		<h2 class="nav-tab-wrapper swpm-members-nav-tab-wrapper"><!-- start nav menu tabs -->
+			<a class="nav-tab <?php echo ($selected == '') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership"><?php echo SwpmUtils::_('Members'); ?></a>
+			<a class="nav-tab <?php echo ($selected == 'add') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership&member_action=add"><?php echo SwpmUtils::_('Add Member'); ?></a>
+			<a class="nav-tab <?php echo ($selected == 'bulk') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership&member_action=bulk"><?php echo SwpmUtils::_('Bulk Operation'); ?></a>
+			<a class="nav-tab <?php echo ($selected == 'send_email') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership&member_action=send_email"><?php echo SwpmUtils::_('Send Email'); ?></a>
+			<?php
+			if ($selected == 'edit') {//Only show the "edit member" tab when a member profile is being edited from the admin side.
+				echo '<a class="nav-tab nav-tab-active" href="#">Edit Member</a>';
+			}
 
-				//Trigger hooks that allows an extension to add extra nav tabs in the members menu.
-				do_action( 'swpm_members_menu_nav_tabs', $selected );
+			//Trigger hooks that allows an extension to add extra nav tabs in the members menu.
+			do_action('swpm_members_menu_nav_tabs', $selected);
 
-				$menu_tabs = apply_filters( 'swpm_members_additional_menu_tabs_array', array() );
-				foreach ( $menu_tabs as $member_action => $title ) {
+			$menu_tabs = apply_filters('swpm_members_additional_menu_tabs_array', array());
+			foreach ($menu_tabs as $member_action => $title) {
 					?>
 					<a class="nav-tab <?php echo ( $selected == $member_action ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=<?php echo $member_action; ?>" ><?php _e( $title, 'simple-membership' ); ?></a>
 					<?php
@@ -779,6 +903,10 @@ class SwpmMembers extends WP_List_Table {
 				case 'bulk':
 					//Handle the bulk operation menu
 					$this->bulk_operation_menu();
+					break;
+				case 'send_email':
+					//Handle the send email operation menu
+					$this->send_email_menu();
 					break;
 				default:
 					//Show the members listing page by default.

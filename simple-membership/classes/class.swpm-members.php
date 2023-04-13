@@ -712,7 +712,7 @@ class SwpmMembers extends WP_List_Table {
 		return $output;
 	}
 
-	public function send_email_menu()
+	public function send_direct_email_menu()
 	{
 		$send_email_menu_data = SwpmSettings::get_instance()->get_value('send_email_menu_data');
 		if (empty($send_email_menu_data)) {
@@ -785,13 +785,17 @@ class SwpmMembers extends WP_List_Table {
 			// Validate recipient list
 			if (empty ($recipients)) {
 				$all_validations_passed = false;
-				$error_msg_array[] = __('Selected recipient(s) do not exists.', 'simple-membership');
+				$error_msg_array[] = __('The recipients list is currently empty. There must be at least one recipient.', 'simple-membership');
 			}
 
 
 			if ($all_validations_passed) {
 				//All passed. Go ahead with the processing.
 				foreach ($recipients as $recipient) {
+					if( !isset( $recipient->email ) || empty( $recipient->email) ){
+						SwpmLog::log_simple_debug( 'Error sending direct email! Email value is empty for this member record.', false );
+						continue;
+					}
 					$headers = '';
 					$body = SwpmMiscUtils::replace_dynamic_tags($send_email_menu_data['send_email_body'], $recipient->member_id);
 					$subject = $send_email_menu_data['send_email_subject'];
@@ -800,7 +804,7 @@ class SwpmMembers extends WP_List_Table {
 						$body = nl2br($body);
 					}
 					wp_mail($recipient->email, $subject , $body, $headers);
-					SwpmLog::log_simple_debug( 'Email Sent to : '.$recipient->email, true );
+					SwpmLog::log_simple_debug( 'Sending direct email. Email sent to : '.$recipient->email, true );
 				}
 				echo '<div id="response-message" class="updated fade"><p>';
 				_e('Email Sent Successfully', 'simple-membership');
@@ -819,7 +823,7 @@ class SwpmMembers extends WP_List_Table {
 		}
 
 		// render view.
-		include_once(SIMPLE_WP_MEMBERSHIP_PATH . "views/admin_send_email_menu.php");
+		include_once(SIMPLE_WP_MEMBERSHIP_PATH . "views/admin_send_direct_email_menu.php");
 	}
 
 	public function set_default_editor($r)
@@ -854,7 +858,7 @@ class SwpmMembers extends WP_List_Table {
 			<a class="nav-tab <?php echo ($selected == 'bulk') ? 'nav-tab-active' : ''; ?>"
 			   href="admin.php?page=simple_wp_membership&member_action=bulk"><?php echo SwpmUtils::_('Bulk Operation'); ?></a>
 			<a class="nav-tab <?php echo ($selected == 'send_email') ? 'nav-tab-active' : ''; ?>"
-			   href="admin.php?page=simple_wp_membership&member_action=send_email"><?php echo SwpmUtils::_('Send Email'); ?></a>
+			   href="admin.php?page=simple_wp_membership&member_action=send_email"><?php echo SwpmUtils::_('Send Direct Email'); ?></a>
 			<?php
 			if ($selected == 'edit') {//Only show the "edit member" tab when a member profile is being edited from the admin side.
 				echo '<a class="nav-tab nav-tab-active" href="#">Edit Member</a>';
@@ -906,7 +910,7 @@ class SwpmMembers extends WP_List_Table {
 					break;
 				case 'send_email':
 					//Handle the send email operation menu
-					$this->send_email_menu();
+					$this->send_direct_email_menu();
 					break;
 				default:
 					//Show the members listing page by default.

@@ -702,10 +702,11 @@ abstract class SwpmUtils {
 		return false;
 	}
 
-    public static function email_merge_tags(){
+    public static function email_merge_tags()
+    {
         return array(
             "first_name" => __("Member’s first name", "simple-membership"),
-            "last_name" => __("Member’s first name", "simple-membership"),
+            "last_name" => __("Member’s last name", "simple-membership"),
             "email" => __("Member’s email address", "simple-membership"),
             "member_id" => __("Member ID", "simple-membership"),
             "user_name" => __("Member’s username", "simple-membership"),

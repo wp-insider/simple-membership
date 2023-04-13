@@ -705,19 +705,19 @@ abstract class SwpmUtils {
     public static function email_merge_tags()
     {
         return array(
-            "first_name" => __("Member’s first name", "simple-membership"),
-            "last_name" => __("Member’s last name", "simple-membership"),
-            "email" => __("Member’s email address", "simple-membership"),
+            "first_name" => __("Member's first name", "simple-membership"),
+            "last_name" => __("Member's last name", "simple-membership"),
+            "email" => __("Member's email address", "simple-membership"),
             "member_id" => __("Member ID", "simple-membership"),
-            "user_name" => __("Member’s username", "simple-membership"),
-            "account_state" => __("Account State", "simple-membership"),
-            "membership_level" => __("Membership Level ID", "simple-membership"),
-            "membership_level_name" => __("Membership Level Name", "simple-membership"),
+            "user_name" => __("Member's username", "simple-membership"),
+            "account_state" => __("Account status", "simple-membership"),
+            "membership_level" => __("Membership level ID", "simple-membership"),
+            "membership_level_name" => __("Membership level name", "simple-membership"),
             "phone" => __("Phone number (if available)", "simple-membership"),
             "member_since" => __("Member since date", "simple-membership"),
             "subscription_starts" => __("Subscription start date", "simple-membership"),
             "company_name" => __("Company name", "simple-membership"),
-            "primary_address" => __("Member’s address", "simple-membership"),
+            "primary_address" => __("Member's address", "simple-membership"),
         );
     }
 }

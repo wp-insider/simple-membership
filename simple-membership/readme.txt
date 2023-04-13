@@ -176,8 +176,7 @@ https://simple-membership-plugin.com/
 - Added a new CSS div for the activation required error message.
 - New Gutenberg Block for Payment Buttons.
 - Updated the system page URL check function to include the edit profile, join and the password reset pages.
-- New tab for sending emails has been implemented.
-
+- New feature to send direct email to a group of members (for example: send an email to all members of a membership level).
 
 = 4.3.1 =
 - Updated the Turkish language translation file.

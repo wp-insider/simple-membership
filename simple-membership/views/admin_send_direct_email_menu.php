@@ -1,10 +1,10 @@
 <?php
-$send_email_selected_target_recipients = isset( $send_email_menu_data['send_email_selected_target_recipients'] ) ? esc_attr($send_email_menu_data['send_email_selected_target_recipients']) : 'membership_level';
-$send_email_recipient_membership_level     = isset( $send_email_menu_data['send_email_membership_level'] ) ? esc_attr( $send_email_menu_data['send_email_membership_level'] ) : 0;
-$send_email_recipient_members_id     = isset( $send_email_menu_data['send_email_members_id'] ) ? esc_attr( $send_email_menu_data['send_email_members_id'] ) : '';
-$send_email_enable_html = isset( $send_email_menu_data['send_email_enable_html'] ) && esc_attr( $send_email_menu_data['send_email_enable_html'] ) === 'on' ? 'checked="checked"' : '';
-$send_email_subject     = isset( $send_email_menu_data['send_email_subject'] ) ? esc_attr( $send_email_menu_data['send_email_subject'] ) : '';
-$send_email_body        = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_post( $send_email_menu_data['send_email_body'] ) : '';
+$send_email_selected_target_recipients = isset( $send_email_menu_data['send_email_selected_target_recipients'] ) ? sanitize_text_field($send_email_menu_data['send_email_selected_target_recipients']) : 'membership_level';
+$send_email_recipient_membership_level = isset( $send_email_menu_data['send_email_membership_level'] ) ? sanitize_text_field( $send_email_menu_data['send_email_membership_level'] ) : 0;
+$send_email_recipient_members_id = isset( $send_email_menu_data['send_email_members_id'] ) ? sanitize_text_field( $send_email_menu_data['send_email_members_id'] ) : '';
+$send_email_enable_html = isset( $send_email_menu_data['send_email_enable_html'] ) && sanitize_text_field( $send_email_menu_data['send_email_enable_html'] ) === 'on' ? 'checked="checked"' : '';
+$send_email_subject = isset( $send_email_menu_data['send_email_subject'] ) ? sanitize_text_field( $send_email_menu_data['send_email_subject'] ) : '';
+$send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_post( $send_email_menu_data['send_email_body'] ) : '';
 ?>
 
 <div id="poststuff">
@@ -23,26 +23,15 @@ $send_email_body        = isset( $send_email_menu_data['send_email_body'] ) ? wp
 					<table width="100%" border="0" cellspacing="0" cellpadding="6">
 						<tbody>
 						<tr valign="top">
-							<th width="25%"
-								align="left"><?php _e( 'Target Recipients', 'simple-membership' ); ?></th>
+							<th width="25%" align="left"><?php _e( 'Target Recipients', 'simple-membership' ); ?></th>
 							<td align="left">
 								<div>
 									<label>
-										<input type="radio"
-											   id="target-recipients-option-1"
-											   name="send_email_menu_target_recipients"
-											   value="membership_level"
-												<?php echo $send_email_selected_target_recipients === "membership_level" ? 'checked' : '';?>
-										>
+										<input type="radio" id="target-recipients-option-1" name="send_email_menu_target_recipients" value="membership_level" <?php echo $send_email_selected_target_recipients === "membership_level" ? 'checked' : '';?>>
 										<?php _e( 'Send to Membership Level', 'simple-membership' ); ?>
 									</label>
 									<label style="margin-left: 12px">
-										<input type="radio"
-											   id="target-recipients-option-2"
-											   name="send_email_menu_target_recipients"
-											   value="members_id"
-												<?php echo $send_email_selected_target_recipients === "members_id" ? 'checked' : '';?>
-										>
+										<input type="radio" id="target-recipients-option-2" name="send_email_menu_target_recipients" value="members_id" <?php echo $send_email_selected_target_recipients === "members_id" ? 'checked' : '';?>>
 										<?php _e( 'Send to Member IDs', 'simple-membership' ); ?>
 									</label>
 								</div>
@@ -56,9 +45,8 @@ $send_email_body        = isset( $send_email_menu_data['send_email_body'] ) ? wp
 										<p class="description"><?php _e( 'Choose the membership level for email recipients.', 'simple-membership' ); ?></p>
 									</div>
 									<div id="send-email-field-members-id" style="<?php echo $send_email_selected_target_recipients !== 'members_id' ? 'display: none' : ''; ?>">
-										<input type="text" name="send_email_members_id" size="50"
-											   value="<?php echo esc_attr($send_email_recipient_members_id);?>"/>
-										<p class="description"><?php _e( "Enter member IDs separated by commas for recipients of the email.", "simple-membership" ); ?></p>
+										<input type="text" name="send_email_members_id" size="50" value="<?php echo esc_attr($send_email_recipient_members_id);?>" />
+										<p class="description"><?php _e( "Enter member IDs separated by comma to specify the recipients.", "simple-membership" ); ?></p>
 									</div>
 								</div>
 							</td>
@@ -69,9 +57,7 @@ $send_email_body        = isset( $send_email_menu_data['send_email_body'] ) ? wp
 								<?php _e( 'Email Subject', 'simple-membership' ); ?>
 							</th>
 							<td align="left">
-								<input type="text" name="send_email_subject" size="50"
-									   value="<?php echo esc_attr( $send_email_subject ); ?>"
-									   style="max-width: 100%;"/>
+								<input type="text" name="send_email_subject" size="50" value="<?php echo esc_attr( $send_email_subject ); ?>" />
 								<p class="description"><?php _e( 'Enter the subject for the email.', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
@@ -81,8 +67,7 @@ $send_email_body        = isset( $send_email_menu_data['send_email_body'] ) ? wp
 								<?php _e( 'Allow HTML', 'simple-membership' ); ?>
 							</th>
 							<td align="left">
-								<input type="checkbox"
-									   name="send_email_enable_html" <?php echo esc_attr( $send_email_enable_html ); ?> />
+								<input type="checkbox" name="send_email_enable_html" <?php echo esc_attr( $send_email_enable_html ); ?> />
 								<p class="description"> <?php _e( 'Enables HTML support in the email. For optimal email delivery rate, we suggest using plain text (non-HTML) email.', 'simple-membership' ); ?> </p>
 							</td>
 						</tr>

@@ -105,7 +105,7 @@ class SWPM_Send_Direct_Email_Menu{
 					SwpmLog::log_simple_debug( 'Sending direct email. Email sent to : '.$recipient->email, true );
 				}
 				echo '<div id="response-message" class="updated fade"><p>';
-				_e('Email Sent Successfully', 'simple-membership');
+				_e('Email Sent Successfully!', 'simple-membership');
 				echo '</p></div>';
 
 			} else {

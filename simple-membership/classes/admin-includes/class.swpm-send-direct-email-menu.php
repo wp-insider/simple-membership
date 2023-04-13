@@ -22,7 +22,10 @@ class SWPM_Send_Direct_Email_Menu{
 				// Nonce check failed.
 				wp_die(__('Error! Nonce security verification failed for Bulk Change Membership Level action. Clear cache and try again.', 'simple-membership'));
 			}
-
+			$target_recipients = isset( $_POST['send_email_menu_target_recipients'] ) ? sanitize_text_field($_POST['send_email_menu_target_recipients']) : 'membership_level';
+			$send_email_menu_data['send_email_selected_target_recipients'] = $target_recipients;
+			$send_email_menu_data['send_email_membership_level'] = (isset($_POST['send_email_membership_level']) && $_POST['send_email_membership_level'] != '' && $target_recipients === 'membership_level') ? sanitize_text_field($_POST['send_email_membership_level']) : '';
+			$send_email_menu_data['send_email_members_id'] = (isset($_POST['send_email_members_id']) && $_POST['send_email_members_id'] != '' && $target_recipients === 'members_id') ? sanitize_text_field($_POST['send_email_members_id']) : '';
 			$send_email_menu_data['send_email_enable_html'] = (isset($_POST['send_email_enable_html']) && $_POST['send_email_enable_html'] === 'on') ? 'on' : '';
 			$send_email_menu_data['send_email_subject'] = (isset($_POST['send_email_subject']) && $_POST['send_email_subject'] != '') ? sanitize_text_field($_POST['send_email_subject']) : '';
 			$send_email_menu_data['send_email_body'] = (isset($_POST['send_email_body']) && $_POST['send_email_body'] != '') ? stripslashes(wp_kses_post($_POST['send_email_body'])) : '';
@@ -37,14 +40,13 @@ class SWPM_Send_Direct_Email_Menu{
 			$recipients = array();
 
 			// Validate recipients
-			$target_recipients = sanitize_text_field($_POST['send_email_menu_target_recipients']);
-			if (isset($target_recipients) && $target_recipients === 'membership_level' && !empty($_POST['send_email_membership_level'])) {
+			if ( $target_recipients === 'membership_level' && !empty($_POST['send_email_membership_level'])) {
 				// send mail to specified members by membership level.
 				$members = SwpmMemberUtils::get_all_members_of_a_level(sanitize_text_field($_POST['send_email_membership_level']));
 				foreach ($members as $member) {
 					$recipients[] = $member;
 				}
-			} elseif (isset($target_recipients) && $target_recipients === 'members_id' && !empty($_POST['send_email_members_id'])) {
+			} elseif ( $target_recipients === 'members_id' && !empty($_POST['send_email_members_id'])) {
 				// send mail to specified members by IDs
 				$ids_str = sanitize_text_field(stripslashes($_POST['send_email_members_id']));
 				$ids = explode(',', $ids_str);

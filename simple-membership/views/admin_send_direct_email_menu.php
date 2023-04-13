@@ -1,9 +1,10 @@
 <?php
-
+$send_email_selected_target_recipients = isset( $send_email_menu_data['send_email_selected_target_recipients'] ) ? esc_attr($send_email_menu_data['send_email_selected_target_recipients']) : 'membership_level';
+$send_email_recipient_membership_level     = isset( $send_email_menu_data['send_email_membership_level'] ) ? esc_attr( $send_email_menu_data['send_email_membership_level'] ) : 0;
+$send_email_recipient_members_id     = isset( $send_email_menu_data['send_email_members_id'] ) ? esc_attr( $send_email_menu_data['send_email_members_id'] ) : '';
 $send_email_enable_html = isset( $send_email_menu_data['send_email_enable_html'] ) && esc_attr( $send_email_menu_data['send_email_enable_html'] ) === 'on' ? 'checked="checked"' : '';
 $send_email_subject     = isset( $send_email_menu_data['send_email_subject'] ) ? esc_attr( $send_email_menu_data['send_email_subject'] ) : '';
 $send_email_body        = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_post( $send_email_menu_data['send_email_body'] ) : '';
-
 ?>
 
 <div id="poststuff">
@@ -31,29 +32,32 @@ $send_email_body        = isset( $send_email_menu_data['send_email_body'] ) ? wp
 											   id="target-recipients-option-1"
 											   name="send_email_menu_target_recipients"
 											   value="membership_level"
-											   checked>
+												<?php echo $send_email_selected_target_recipients === "membership_level" ? 'checked' : '';?>
+										>
 										<?php _e( 'Send to Membership Level', 'simple-membership' ); ?>
 									</label>
 									<label style="margin-left: 12px">
 										<input type="radio"
 											   id="target-recipients-option-2"
 											   name="send_email_menu_target_recipients"
-											   value="members_id">
+											   value="members_id"
+												<?php echo $send_email_selected_target_recipients === "members_id" ? 'checked' : '';?>
+										>
 										<?php _e( 'Send to Member IDs', 'simple-membership' ); ?>
 									</label>
 								</div>
 								<div style="margin-top: 14px">
-									<div id="send-email-field-membership-level">
+									<div id="send-email-field-membership-level" style="<?php echo $send_email_selected_target_recipients !== 'membership_level' ? 'display: none' : ''; ?>">
 										<select name="send_email_membership_level">
 											<option
 												value=""><?php _e( 'Select a level', 'simple-membership' ); ?></option>
-											<?php echo SwpmUtils::membership_level_dropdown(); ?>
+											<?php echo SwpmUtils::membership_level_dropdown( esc_attr($send_email_recipient_membership_level)); ?>
 										</select>
 										<p class="description"><?php _e( 'Choose the membership level for email recipients.', 'simple-membership' ); ?></p>
 									</div>
-									<div id="send-email-field-members-id" style="display: none">
+									<div id="send-email-field-members-id" style="<?php echo $send_email_selected_target_recipients !== 'members_id' ? 'display: none' : ''; ?>">
 										<input type="text" name="send_email_members_id" size="50"
-											   value=""/>
+											   value="<?php echo esc_attr($send_email_recipient_members_id);?>"/>
 										<p class="description"><?php _e( "Enter member IDs separated by commas for recipients of the email.", "simple-membership" ); ?></p>
 									</div>
 								</div>

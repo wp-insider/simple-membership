@@ -4,6 +4,7 @@ include_once('class.swpm-protection-base.php');
 
 class SwpmProtection extends SwpmProtectionBase {
 
+    public $msg = "";
     private static $_this;
 
     private function __construct() {

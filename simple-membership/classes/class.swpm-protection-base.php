@@ -12,6 +12,9 @@ abstract class SwpmProtectionBase {
     protected $details;
     protected $options;
 
+    public $owning_level_id;
+    public $disable_bookmark;
+
     private function __construct() {
 
     }

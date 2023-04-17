@@ -32,7 +32,7 @@ swpm_registerBlockType(
 					{},
 					swpm_element(
 						'div',
-						{style: {padding: '16px'}},
+						{className: 'swpm-payment-block-ic-wrapper'},
 						swpm_element(
 							swpm_selectControl,
 							{

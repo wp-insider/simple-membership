@@ -31,16 +31,19 @@ swpm_registerBlockType(
 					swpm_InspectorControls,
 					{},
 					swpm_element(
-						swpm_selectControl,
-						{
-							className: 'block-editor-block-card',
-							label: swpm_block_button_str.paymentButton,
-							value: props.attributes.btnId,
-							options: swpm_button_options,
-							onChange: (value) => {
-								props.setAttributes( {btnId: value} );
-							},
-						}
+						'div',
+						{style: {padding: '16px'}},
+						swpm_element(
+							swpm_selectControl,
+							{
+								label: swpm_block_button_str.paymentButton,
+								value: props.attributes.btnId,
+								options: swpm_button_options,
+								onChange: (value) => {
+									props.setAttributes( {btnId: value} );
+								},
+							}
+						)
 					)
 				),
 			];

@@ -114,6 +114,11 @@ class SwpmLevelForm {
         $this->sanitized['protect_older_posts'] = empty($checked) ? 0 : 1;
     }
 
+	protected function after_activation_redirect_page() {
+		$url = filter_input(INPUT_POST, 'after_activation_redirect_page');
+		$this->sanitized['after_activation_redirect_page'] = sanitize_url($url);
+	}
+
     public function is_valid() {
         return count($this->errors) < 1;
     }

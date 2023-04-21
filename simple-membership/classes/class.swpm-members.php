@@ -703,44 +703,58 @@ class SwpmMembers extends WP_List_Table {
 		echo '</div></div>'; //<!-- end of #poststuff #post-body -->
 	}
 
-	function show_all_members() {
+	function show_all_members()
+	{
 		ob_start();
-		$status = filter_input( INPUT_GET, 'status' );
+		$status = filter_input(INPUT_GET, 'status');
 		include_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_members_list.php';
 		$output = ob_get_clean();
 		return $output;
 	}
 
-	function handle_main_members_admin_menu() {
-		do_action( 'swpm_members_menu_start' );
+	public function set_default_editor($r)
+	{
+		$r = 'html';
+		return $r;
+	}
+
+	function handle_main_members_admin_menu()
+	{
+		do_action('swpm_members_menu_start');
 
 		//Check current_user_can() or die.
-		SwpmMiscUtils::check_user_permission_and_is_admin( 'Main Members Admin Menu' );
+		SwpmMiscUtils::check_user_permission_and_is_admin('Main Members Admin Menu');
 
-		$action   = filter_input( INPUT_GET, 'member_action' );
-		$action   = empty( $action ) ? filter_input( INPUT_POST, 'action' ) : $action;
+		$action = filter_input(INPUT_GET, 'member_action');
+		$action = empty($action) ? filter_input(INPUT_POST, 'action') : $action;
 		$selected = $action;
 		?>
 		<div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-			<h1><?php echo SwpmUtils::_( 'Simple WP Membership::Members' ); ?><!-- page title -->
-				<a href="admin.php?page=simple_wp_membership&member_action=add" class="add-new-h2"><?php echo SwpmUtils::_( 'Add New' ); ?></a>
-			</h1>
+		<h1><?php echo SwpmUtils::_('Simple WP Membership::Members'); ?><!-- page title -->
+			<a href="admin.php?page=simple_wp_membership&member_action=add"
+			   class="add-new-h2"><?php echo SwpmUtils::_('Add New'); ?></a>
+		</h1>
 
-			<h2 class="nav-tab-wrapper swpm-members-nav-tab-wrapper"><!-- start nav menu tabs -->
-				<a class="nav-tab <?php echo ( $selected == '' ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership"><?php echo SwpmUtils::_( 'Members' ); ?></a>
-				<a class="nav-tab <?php echo ( $selected == 'add' ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=add"><?php echo SwpmUtils::_( 'Add Member' ); ?></a>
-				<a class="nav-tab <?php echo ( $selected == 'bulk' ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=bulk"><?php echo SwpmUtils::_( 'Bulk Operation' ); ?></a>
-				<?php
-				if ( $selected == 'edit' ) {//Only show the "edit member" tab when a member profile is being edited from the admin side.
-					echo '<a class="nav-tab nav-tab-active" href="#">Edit Member</a>';
-				}
+		<h2 class="nav-tab-wrapper swpm-members-nav-tab-wrapper"><!-- start nav menu tabs -->
+			<a class="nav-tab <?php echo ($selected == '') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership"><?php echo SwpmUtils::_('Members'); ?></a>
+			<a class="nav-tab <?php echo ($selected == 'add') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership&member_action=add"><?php echo SwpmUtils::_('Add Member'); ?></a>
+			<a class="nav-tab <?php echo ($selected == 'bulk') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership&member_action=bulk"><?php echo SwpmUtils::_('Bulk Operation'); ?></a>
+			<a class="nav-tab <?php echo ($selected == 'send_direct_email') ? 'nav-tab-active' : ''; ?>"
+			   href="admin.php?page=simple_wp_membership&member_action=send_direct_email"><?php echo SwpmUtils::_('Send Direct Email'); ?></a>
+			<?php
+			if ($selected == 'edit') {//Only show the "edit member" tab when a member profile is being edited from the admin side.
+				echo '<a class="nav-tab nav-tab-active" href="#">Edit Member</a>';
+			}
 
-				//Trigger hooks that allows an extension to add extra nav tabs in the members menu.
-				do_action( 'swpm_members_menu_nav_tabs', $selected );
+			//Trigger hooks that allows an extension to add extra nav tabs in the members menu.
+			do_action('swpm_members_menu_nav_tabs', $selected);
 
-				$menu_tabs = apply_filters( 'swpm_members_additional_menu_tabs_array', array() );
-				foreach ( $menu_tabs as $member_action => $title ) {
+			$menu_tabs = apply_filters('swpm_members_additional_menu_tabs_array', array());
+			foreach ($menu_tabs as $member_action => $title) {
 					?>
 					<a class="nav-tab <?php echo ( $selected == $member_action ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=<?php echo $member_action; ?>" ><?php _e( $title, 'simple-membership' ); ?></a>
 					<?php
@@ -779,6 +793,12 @@ class SwpmMembers extends WP_List_Table {
 				case 'bulk':
 					//Handle the bulk operation menu
 					$this->bulk_operation_menu();
+					break;
+				case 'send_direct_email':
+					//Handle the send email operation menu
+					include_once(SIMPLE_WP_MEMBERSHIP_PATH . "classes/admin-includes/class.swpm-send-direct-email-menu.php");
+					$send_direct_email_menu = new SWPM_Send_Direct_Email_Menu();
+					$send_direct_email_menu->handle_send_direct_email_menu();
 					break;
 				default:
 					//Show the members listing page by default.

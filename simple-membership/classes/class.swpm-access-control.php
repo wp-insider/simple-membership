@@ -276,22 +276,42 @@ class SwpmAccessControl {
      */
     public static function is_current_url_a_system_page(){
         $current_page_url = SwpmMiscUtils::get_current_page_url();
-        
+
+
         //Check if the current page is the membership renewal page.
         $renewal_url = SwpmSettings::get_instance()->get_value('renewal-page-url');        
-        if (empty($renewal_url)) {return false;}
-        if (SwpmMiscUtils::compare_url_without_http($renewal_url, $current_page_url)) {return true;}
+        if (!empty($renewal_url)) {
+            //The renewal page can be empty as it is an optional system page. So only check if it is not empty.
+            if (SwpmMiscUtils::compare_url_without_http($renewal_url, $current_page_url)) {return true;}
+        }
 
         //Check if the current page is the membership logn page.
         $login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
         if (empty($login_page_url)) {return false;}
         if (SwpmMiscUtils::compare_url_without_http($login_page_url, $current_page_url)) {return true;}
 
-        //Check if the current page is the membership join page.
+        //Check if the current page is the membership registration page.
         $registration_page_url = SwpmSettings::get_instance()->get_value('registration-page-url');
         if (empty($registration_page_url)) {return false;}
         if (SwpmMiscUtils::compare_url_without_http($registration_page_url, $current_page_url)) {return true;}
         
+        //Check if the current page is the join us page.
+        $join_us_page_url = SwpmSettings::get_instance()->get_value('join-us-page-url');
+        if (!empty($join_us_page_url)) {
+            //The join us page can be empty on some setup. So only check if it is not empty.
+            if (SwpmMiscUtils::compare_url_without_http($join_us_page_url, $current_page_url)) {return true;}
+        }
+
+        //Check if the current page is the edit profile page.
+        $profile_page_url = SwpmSettings::get_instance()->get_value('profile-page-url');
+        if (empty($profile_page_url)) {return false;}
+        if (SwpmMiscUtils::compare_url_without_http($profile_page_url, $current_page_url)) {return true;}
+
+        //Check if the current page is the password reset page.
+        $pw_reset_page_url = SwpmSettings::get_instance()->get_value('reset-page-url');
+        if (empty($pw_reset_page_url)) {return false;}
+        if (SwpmMiscUtils::compare_url_without_http($pw_reset_page_url, $current_page_url)) {return true;}
+                
         return false;
     }
     

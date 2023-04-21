@@ -88,6 +88,11 @@
     border-width: 1px;
 }
 
+/* Block related */
+.swpm-payment-block-ic-wrapper{
+    padding: 16px;
+}
+
 /* Membership buy buttons */
 .swpm-button-wrapper input[type="submit"]{
     width: auto !important;

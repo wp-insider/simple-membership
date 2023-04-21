@@ -111,7 +111,11 @@
                     echo esc_attr($member_current_expiry_date);
                     ?>
                     <p class="description indicator-hint">
-                        <?php echo SwpmUtils::_('This is calculated based on the current membership level assigned to this member and the expiry condition that you have set for that membership level.') ?>
+                        <?php 
+                        _e('This is calculated based on the current membership level assigned to this member and the expiry condition that you have set for that membership level.');
+                        _e(' To learn more about membership level configuration, refer to ', 'simple-membership');
+                        _e('<a href="https://simple-membership-plugin.com/adding-membership-access-levels-site/" target="_blank">this documentation</a>.', 'simple-membership');
+                        ?>
                     </p>
                 </td>
 	</tr>

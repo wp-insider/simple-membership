@@ -109,7 +109,7 @@ class SWPM_PayPal_JS_Button_Embed {
 		<script type="text/javascript">
 			var script = document.createElement( 'script' );
 			script.type = 'text/javascript';
-			script.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP' );
+			script.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP_PPCP' );
 			script.async = true;
 			script.src = '<?php echo esc_url_raw( $script_url ); ?>';
 			script.onload = function() {
@@ -135,7 +135,7 @@ class SWPM_PayPal_JS_Button_Embed {
 		<script type="text/javascript">
 			var script_sub = document.createElement( 'script' );
 			script_sub.type = 'text/javascript';
-			script_sub.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP' );
+			script_sub.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP_PPCP' );
 			script_sub.setAttribute( 'data-namespace', 'swpm_paypal_subscriptions' );//Use a different namespace for the subscription buttons.
 			script_sub.async = true;
 			script_sub.src = '<?php echo esc_url_raw( $script_url ); ?>';
@@ -156,7 +156,7 @@ class SWPM_PayPal_JS_Button_Embed {
 		$sdk_args = $this->generate_paypal_js_sdk_args();
 		$script_url = add_query_arg( $sdk_args, 'https://www.paypal.com/sdk/js' );
 
-		$output = '<script src="' . esc_url_raw( $script_url ) . '" data-partner-attribution-id="TipsandTricks_SP"></script>';
+		$output = '<script src="' . esc_url_raw( $script_url ) . '" data-partner-attribution-id="TipsandTricks_SP_PPCP"></script>';
 		return $output;
 	}
 

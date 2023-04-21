@@ -4,8 +4,8 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 5.0
 Requires PHP: 5.6
-Tested up to: 6.1
-Stable tag: 4.3.1
+Tested up to: 6.2
+Stable tag: 4.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,12 +169,15 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
-- New Gutenberg Block for Payment Buttons.
 
-= WIP 4.3.2 =
+= 4.3.2 =
 - Added CSS to highlight the order status in the payments menu.
 - Added a new utility function compare_url_without_http(). This function is used for matching the system generated pages.
+- Added a new CSS div for the activation required error message.
+- New Gutenberg Block for Payment Buttons.
+- Updated the system page URL check function to include the edit profile, join and the password reset pages.
+- New feature to send direct email to a group of members (for example: send an email to all members of a membership level).
+- Minor PHP 8.2 related deprecation notice fixes.
 
 = 4.3.1 =
 - Updated the Turkish language translation file.

@@ -63,7 +63,18 @@ class SwpmMembershipLevel {
             $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
             update_option('swpm_email_activation_lvl_'.$id, $email_activation, false);
 
+	        $after_activation_redirect_page = sanitize_url(filter_input(INPUT_POST, 'after_activation_redirect_page'));
+	        $after_activation_redirect_page_meta = array(
+		        'meta_key'=>'after_activation_redirect_page',
+		        'level_id'=> $id,
+		        'meta_label'=> 'After email activation redirect page URL',
+		        'meta_value'=> $after_activation_redirect_page,
+		        'meta_type'=> 'url',
+		        'meta_context'=> 'email-activation',
+	        );
+
             $custom = apply_filters('swpm_admin_add_membership_level', array());
+	        $custom[] = $after_activation_redirect_page_meta;
             $this->save_custom_fields($id, $custom);
             $message = array('succeeded' => true, 'message' => '<p>' . SwpmUtils::_('Membership Level Creation Successful.') . '</p>');
             SwpmTransfer::get_instance()->set('status', $message);
@@ -95,7 +106,17 @@ class SwpmMembershipLevel {
             $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
             update_option('swpm_email_activation_lvl_'.$id, $email_activation, false);
 
+	        $after_activation_redirect_page = sanitize_url(filter_input(INPUT_POST, 'after_activation_redirect_page'));
+	        $after_activation_redirect_page_meta = array(
+		        'meta_key'=>'after_activation_redirect_page',
+		        'level_id'=> $id,
+		        'meta_label'=> 'After email activation redirect page URL',
+		        'meta_value'=> $after_activation_redirect_page,
+		        'meta_type'=> 'url',
+		        'meta_context'=> 'email-activation',
+			);
             $custom = apply_filters('swpm_admin_edit_membership_level', array(), $id);
+			$custom[] = $after_activation_redirect_page_meta;
             $this->save_custom_fields($id, $custom);
             $message = array('succeeded' => true, 'message' => '<p>'. SwpmUtils::_('Membership Level Updated Successfully.') . '</p>');
             SwpmTransfer::get_instance()->set('status', $message);

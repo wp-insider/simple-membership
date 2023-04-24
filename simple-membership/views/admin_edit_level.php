@@ -94,17 +94,6 @@
 					</p>
 				</td>
 			</tr>
-			<tr>
-				<th scope="row">
-					<label for="after_activation_redirect_page"><?php echo SwpmUtils::_( 'Enable Redirect After Email Activation' ); ?></label>
-				</th>
-				<td>
-					<input class="regular-text" name="after_activation_redirect_page" type="text" value="<?php echo esc_url($after_activation_redirect_page); ?>">
-					<p class="description">
-						<?php echo SwpmUtils::_( 'This option can be used to redirect the users to a specific page after they click on the email activation link.' ); ?>
-					</p>
-				</td>
-			</tr>
 			<?php echo apply_filters( 'swpm_admin_edit_membership_level_ui', '', $id ); ?>
 			</tbody>
 		</table>

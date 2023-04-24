@@ -16,10 +16,7 @@ class SwpmTransfer {
     
     public static $default_level_fields = array(
         'alias' => '', 'role' => '',
-        'subscription_period' => '',
-        'subscription_duration_type' => SwpmMembershipLevel::NO_EXPIRY,
-	    'after_activation_redirect_page' => '',
-	    );
+        'subscription_period' => '', 'subscription_duration_type' => SwpmMembershipLevel::NO_EXPIRY);
     
     public $message;
     public static $admin_messages = array();

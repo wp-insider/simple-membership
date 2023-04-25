@@ -170,7 +170,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
-- Added new feature for after email activation redirection for particular membership level.
+- Added new feature to confiugre an "after email activation redirection" for any membership level.
 
 = 4.3.2 =
 - Added CSS to highlight the order status in the payments menu.

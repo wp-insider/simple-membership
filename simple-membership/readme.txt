@@ -171,7 +171,8 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - Added new feature to confiugre an "after email activation redirection" for any membership level.
-- Renamed the SimpleWpMembership::wp_logout() function to SimpleWpMembership::wp_logout_handler()
+- Renamed the SimpleWpMembership::wp_logout() function to SimpleWpMembership::wp_logout_handler().
+- The auth cookie will be set to session cookie if the 'force-wp-user-sync' feature is enable when 'remember me' is unchecked.
 
 = 4.3.2 =
 - Added CSS to highlight the order status in the payments menu.

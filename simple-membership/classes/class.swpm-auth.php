@@ -284,26 +284,32 @@ class SwpmAuth {
 	private function set_cookie( $remember = '', $secure = '' ) {
 		if ( $remember ) {
 			$expiration = time() + 1209600; //14 days
-			$expire     = $expiration + 43200; //12 hours grace period
+			$expire = $expiration + 43200; //12 hours grace period
 		} else {
 			$expiration = time() + 259200; //3 days.
-			$expire     = $expiration; //The minimum cookie expiration should be at least a few days.
+			$expire = $expiration; //The minimum cookie expiration should be at least a few days.
+			$force_wp_user_sync = SwpmSettings::get_instance()->get_value( 'force-wp-user-sync' );
+			if ( !empty( $force_wp_user_sync ) ) {
+				//Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
+				SwpmLog::log_auth_debug( 'The force_wp_user_sync option is enabled. Setting the cookie expiration to 0 to match with WP\'s cookie expiration (when "remember me" is not checked).', true );
+				$expire = 0;
+			}
 		}
 
 		$expire = apply_filters( 'swpm_auth_cookie_expiry_value', $expire );
 
-                if ( SwpmUtils::is_multisite_install() ) {
-                    //Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
-                    wp_cookie_constants();
-                }
+		if ( SwpmUtils::is_multisite_install() ) {
+			//Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
+			wp_cookie_constants();
+		}
                 
 		setcookie( 'swpm_in_use', 'swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Switch this to the following one.
-                setcookie( 'wp_swpm_in_use', 'wp_swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Prefix the cookie with 'wp' to exclude Batcache caching.
-                if ( function_exists( 'wp_cache_serve_cache_file' ) ) {//WP Super cache workaround
-                    $author_value = isset( $this->userData->user_name ) ? $this->userData->user_name : 'wp_swpm';
-                    $author_value = apply_filters( 'swpm_comment_author_cookie_value', $author_value );
-                    setcookie( "comment_author_", $author_value, $expire, COOKIEPATH, COOKIE_DOMAIN );
-                }
+		setcookie( 'wp_swpm_in_use', 'wp_swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Prefix the cookie with 'wp' to exclude Batcache caching.
+		if ( function_exists( 'wp_cache_serve_cache_file' ) ) {//WP Super cache workaround
+			$author_value = isset( $this->userData->user_name ) ? $this->userData->user_name : 'wp_swpm';
+			$author_value = apply_filters( 'swpm_comment_author_cookie_value', $author_value );
+			setcookie( "comment_author_", $author_value, $expire, COOKIEPATH, COOKIE_DOMAIN );
+		}
                 
 		$expiration_timestamp = SwpmUtils::get_expiration_timestamp( $this->userData );
 		$enable_expired_login = SwpmSettings::get_instance()->get_value( 'enable-expired-account-login', '' );

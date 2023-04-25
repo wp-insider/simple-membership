@@ -366,7 +366,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 			if ( $password_also_changed ) {
 				//Password was also changed. Logout the user's current session.
-				wp_logout(); //Log the user out from the WP user session also.
+				wp_logout(); //Log the user out from the WP user session also. It will trgger the swpm logout routine also.
 				SwpmLog::log_simple_debug( 'Member has updated the password from profile edit page. Logging the user out so he can re-login using the new password.', true );
 			}
 

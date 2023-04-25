@@ -75,7 +75,7 @@ class SimpleWpMembership {
 
         add_action('wp_login', array(&$this, 'wp_login_hook_handler'), 10, 2);
         add_action('wp_authenticate', array(&$this, 'wp_authenticate_handler'), 1, 2);
-        add_action('wp_logout', array(&$this, 'wp_logout'));
+        add_action('wp_logout', array(&$this, 'wp_logout_handler'));
         add_action('swpm_logout', array(&$this, 'swpm_do_user_logout'));
         add_action('user_register', array(&$this, 'swpm_handle_wp_user_registration'));
         add_action('profile_update', array(&$this, 'sync_with_wp_profile'), 10, 2);
@@ -410,7 +410,7 @@ class SimpleWpMembership {
         return ob_get_clean();
     }
 
-    public function wp_logout() {
+    public function wp_logout_handler() {
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
             $auth->logout();

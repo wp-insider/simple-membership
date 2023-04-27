@@ -365,8 +365,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$auth->reload_user_data();//Reload user data after update so the profile page reflects the new data.
 
 			if ( $password_also_changed ) {
-				//Password was also changed. Logout the user's current session.
-				wp_logout(); //Log the user out from the WP user session also. It will trgger the swpm logout routine also.
+				//Password was also changed. Clear the user's auth cookies.
+				$auth_object = SwpmAuth::get_instance();
+				$auth_object->clear_wp_user_auth_cookies(); //Clear the wp user auth cookies and destroy session.
+				$auth_object->swpm_clear_auth_cookies(); //Clear the swpm auth cookies. The user will be forced to login on the next page load.
 				SwpmLog::log_simple_debug( 'Member has updated the password from profile edit page. Logging the user out so he can re-login using the new password.', true );
 			}
 

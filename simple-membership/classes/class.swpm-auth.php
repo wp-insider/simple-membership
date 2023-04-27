@@ -262,9 +262,10 @@ class SwpmAuth {
 			//Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
 			wp_cookie_constants();
 		}
-                
-		setcookie( SIMPLE_WP_MEMBERSHIP_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
-		setcookie( SIMPLE_WP_MEMBERSHIP_SEC_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
+        
+		//Clear the auth cookies.
+		$this->swpm_clear_auth_cookies();
+
 		$this->userData      = null;
 		$this->isLoggedIn    = false;
 		$this->lastStatusMsg = SwpmUtils::_( 'Logged Out Successfully.' );
@@ -279,6 +280,7 @@ class SwpmAuth {
 	 */
 	public function logout_silent_and_redirect() {
 		$this->logout( false );//Logout without triggering the action hook.
+		$this->swpm_clear_auth_cookies();//Force clear the auth cookies.
 		$silent_logout_redirect_url = add_query_arg(
 			array(
 				'swpm_logged_out' => '1',
@@ -288,7 +290,7 @@ class SwpmAuth {
 		$redirect_url = apply_filters( 'swpm_logout_silent_and_redirect_url', $silent_logout_redirect_url );
 		SwpmLog::log_auth_debug( 'Silent logout completed. Redirecting to: ' . $redirect_url, true );
 		wp_redirect( trailingslashit( $redirect_url ) );
-		exit( 0 );		
+		exit( 0 );
 	}
 	
 	public function swpm_clear_auth_cookies() {
@@ -301,6 +303,16 @@ class SwpmAuth {
 		setcookie( SIMPLE_WP_MEMBERSHIP_SEC_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
 	}
 
+	public function clear_wp_user_auth_cookies(){
+		//This is useful in certain circumstances (instead of using the wp_logout).
+		if( function_exists('wp_destroy_current_session') ){
+			wp_destroy_current_session();
+		}
+		if( function_exists('wp_clear_auth_cookie') ){
+			wp_clear_auth_cookie();
+		}		
+	}
+	
 	private function set_cookie( $remember = '', $secure = '' ) {
 		if ( $remember ) {
 			$expiration = time() + 1209600; //14 days
@@ -385,9 +397,10 @@ class SwpmAuth {
 		$hash      = hash_hmac( 'md5', $username . '|' . $expiration, $key );
 		if ( $hmac != $hash ) {
 			$this->lastStatusMsg = SwpmUtils::_( 'Please login again.' );
-			SwpmLog::log_auth_debug( 'validate() - Bad Hash', true );
-                        do_action('swpm_validate_login_hash_mismatch');
-			wp_logout(); //Force logout of WP user session to clear the bad hash.
+			SwpmLog::log_auth_debug( 'Validate() - Bad hash. Going to clear the auth cookies to clear the bad hash.', true );
+            do_action('swpm_validate_login_hash_mismatch');
+			//Clear the auth cookies to clear the bad hash.
+			SwpmAuth::get_instance()->swpm_clear_auth_cookies();
 			return false;
 		}
 

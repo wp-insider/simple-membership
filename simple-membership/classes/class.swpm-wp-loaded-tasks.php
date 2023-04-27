@@ -42,7 +42,7 @@ class SwpmWpLoadedTasks {
 				/* SWPM user is logged in the system. Log him out. */
 				SwpmLog::log_auth_debug( 'synchronise_swpm_logout_for_wp_users() - Force wp user login sync is enabled. ', true );
 				SwpmLog::log_auth_debug( 'WP user session is logged out for this user. So logging out of the swpm session also.', true );
-				wp_logout();//This will trigger the swpm logout routine also.
+				SwpmAuth::get_instance()->logout_silent_and_redirect();
 			}
 		}
 	}

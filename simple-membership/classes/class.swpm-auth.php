@@ -253,7 +253,7 @@ class SwpmAuth {
 		return $this->lastStatusMsg;
 	}
 
-	public function logout() {
+	public function logout( $trigger_hook = true) {
 		if ( ! $this->isLoggedIn ) {
 			return;
 		}
@@ -268,7 +268,27 @@ class SwpmAuth {
 		$this->userData      = null;
 		$this->isLoggedIn    = false;
 		$this->lastStatusMsg = SwpmUtils::_( 'Logged Out Successfully.' );
-		do_action( 'swpm_logout' );
+		if ( $trigger_hook ) {
+			//Trigger action hook unless it is a silent logout.
+			do_action( 'swpm_logout' );
+		}
+	}
+
+	/*
+	 * This function is used to logout without triggering the action hook. Then redirect to a specific URL (to prevent any logout redirect loop).
+	 */
+	public function logout_silent_and_redirect() {
+		$this->logout( false );//Logout without triggering the action hook.
+		$silent_logout_redirect_url = add_query_arg(
+			array(
+				'logged_out' => '1',
+			),
+			SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL
+		);		
+		$redirect_url = apply_filters( 'swpm_logout_silent_and_redirect_url', $silent_logout_redirect_url );
+		SwpmLog::log_auth_debug( 'Silent logout completed. Redirecting to: ' . $redirect_url, true );
+		wp_redirect( trailingslashit( $redirect_url ) );
+		exit( 0 );		
 	}
 	
 	public function swpm_clear_auth_cookies() {

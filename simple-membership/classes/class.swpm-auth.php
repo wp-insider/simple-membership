@@ -281,7 +281,7 @@ class SwpmAuth {
 		$this->logout( false );//Logout without triggering the action hook.
 		$silent_logout_redirect_url = add_query_arg(
 			array(
-				'logged_out' => '1',
+				'swpm_logged_out' => '1',
 			),
 			SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL
 		);		

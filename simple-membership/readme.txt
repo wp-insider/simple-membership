@@ -175,6 +175,7 @@ https://simple-membership-plugin.com/
 - The auth cookie will be set to session cookie if the 'force-wp-user-sync' feature is enable when 'remember me' is unchecked.
 - The 'force-wp-user-sync' feature will be enabled by default on a new install of the plugin.
 - Added a silent logout option so the logout function can be called without triggering the action hook.
+- Added the 'swpm_subscription_payment_cancelled' hook to the cancel stripe subscription via URL feature.
 
 = 4.3.2 =
 - Added CSS to highlight the order status in the payments menu.

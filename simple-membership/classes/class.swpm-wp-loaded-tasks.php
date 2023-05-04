@@ -158,6 +158,10 @@ class SwpmWpLoadedTasks {
 			msg( $res );
 		}
 
+		$ipn_data = array();
+		$ipn_data['member_id'] = $member_id;
+		do_action( 'swpm_subscription_payment_cancelled', $ipn_data ); // Hook for subscription payment cancelled.
+
 		msg( SwpmUtils::_( 'Subscription has been cancelled.' ), false );
 
 	}

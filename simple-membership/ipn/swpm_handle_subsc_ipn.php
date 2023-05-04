@@ -322,7 +322,7 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		}
 
 		$ipn_data['member_id'] = $member_id;
-		do_action( 'swpm_subscription_payment_cancelled', $ipn_data ); // Hook for recurring payment received.
+		do_action( 'swpm_subscription_payment_cancelled', $ipn_data ); // Hook for subscription payment cancelled.
 	} else {
 		swpm_debug_log_subsc( 'No associated active member record found for this notification.', false );
 		return;

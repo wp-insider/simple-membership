@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.2
-Stable tag: 4.3.2
+Stable tag: 4.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,7 +169,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.3.3 =
+= 4.3.3 =
 - Added new feature to confiugre an "after email activation redirection" for any membership level.
 - Renamed the SimpleWpMembership::wp_logout() function to SimpleWpMembership::wp_logout_handler().
 - The auth cookie will be set to session cookie if the 'force-wp-user-sync' feature is enable when 'remember me' is unchecked.

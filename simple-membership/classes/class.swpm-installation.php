@@ -271,7 +271,8 @@ class SwpmInstallation {
             $settings->set_value('bulk-activate-notify-mail-subject', stripslashes($bulk_activate_email_subject));
             $settings->set_value('bulk-activate-notify-mail-body', stripslashes($bulk_activate_email_body));
 
-            $settings->set_value("force-wp-user-sync", "checked='checked'");//Enabled by default from v4.3.3
+            //Preparing it to be enabled by default in the feature.
+            //$settings->set_value("force-wp-user-sync", "checked='checked'");
         }
 
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {

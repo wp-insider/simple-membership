@@ -97,7 +97,7 @@ class SWPM_Blocks
     {
         $button_id = !empty($atts['btnId']) ? intval($atts['btnId']) : 0;
 
-        $is_backend = defined('REST_REQUEST') && REST_REQUEST === true && filter_input(INPUT_GET, 'context', FILTER_SANITIZE_STRING) === 'edit';
+        $is_backend = defined('REST_REQUEST') && REST_REQUEST === true && $_GET['context'] === 'edit';
 
         if ($is_backend) {
 

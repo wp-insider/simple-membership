@@ -120,8 +120,7 @@ class SwpmAuth {
 				return false;
 			}
 			if ( $this->check_constraints() ) {
-				$rememberme = filter_input( INPUT_POST, 'rememberme' );
-				$remember   = empty( $rememberme ) ? false : true;
+				$remember   = isset( $_POST['rememberme'] ) ? true : false;
 				$this->set_cookie( $remember );
 				$this->isLoggedIn    = true;
 				$this->lastStatusMsg = 'Logged In.';

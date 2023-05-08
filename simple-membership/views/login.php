@@ -39,7 +39,7 @@ else{
                 </div>
             <?php } ?>
             <div class="swpm-remember-me">
-                <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" id="swpm-rememberme" value="checked='checked'"></span>
+                <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" id="swpm-rememberme"></span>
                 <label for="swpm-rememberme" class="swpm-rememberme-label">
                     <span class="swpm-rember-label"> <?php echo SwpmUtils::_('Remember Me') ?></span>
                 </label>

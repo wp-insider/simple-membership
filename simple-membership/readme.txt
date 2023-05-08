@@ -169,6 +169,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Readability improvement for the 'remember me' checkbox field's code.
+
 = 4.3.3 =
 - Added new feature to confiugre an "after email activation redirection" for any membership level.
 - Renamed the SimpleWpMembership::wp_logout() function to SimpleWpMembership::wp_logout_handler().

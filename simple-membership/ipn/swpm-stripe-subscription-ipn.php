@@ -3,21 +3,21 @@
 class SwpmStripeSubscriptionIpnHandler {
 
 	public function __construct() {
-
+		//Handle the Stripe IPN and Webhooks. It handles the webhook for all recurring payment notification (Legacy and SCA ones).
 		$this->handle_stripe_ipn();
 	}
 
 	public function handle_stripe_ipn() {
 
 		/*
-		* [Imp] This comment explains how this script handles both the first time HTTP Post after payment and the webhooks.
+		* [Important] This comment explains how this script handles both the first time HTTP Post after payment and the webhooks.
 		* If the "hook" query arg is set then that means it is a webhook notification. It will be used for certain actions like (update, cancel, refund, etc). Others will be ignored.
 		* The first time payment in browser is handled via HTTP POST (when the "hook" query arg is not set).
 		*/
 
 		if ( isset( $_GET['hook'] ) ) {
 			// This is Webhook notification from Stripe.
-						// This webhook is used for all recurring payment notification (Legacy and SCA ones).
+			// This webhook is used for all recurring payment notification (Legacy and SCA ones).
 
 			// TODO: add Webhook Signing Secret verification
 			// To do this, we need to get customer ID, retreive its details from Stripe, get button_id from metadata
@@ -52,6 +52,14 @@ class SwpmStripeSubscriptionIpnHandler {
 
 			if ( $type == 'customer.subscription.updated' ) {
 				// Subscription updated webhook
+				// Check that the status is "active" or "trialing". That way we don't process the webhook for "canceled" or "past_due" status.
+				$status = isset($event_json->data->object->status)? $event_json->data->object->status : '';
+				SwpmLog::log_simple_debug( 'Stripe customer.subscription.updated webhook status: ' . $status, true );
+				if( $status != 'active' && $status != 'trialing' ) {
+					SwpmLog::log_simple_debug( 'Stripe customer.subscription.updated webhook status is not "active" or "trialing". Ignoring this webhook.', true );
+					http_response_code( 200 ); // Tells Stripe we received this notification
+					return;
+				}
 
 				// Let's form minimal ipn_data array
 				$customer                  = $event_json->data->object->customer;
@@ -139,7 +147,8 @@ class SwpmStripeSubscriptionIpnHandler {
 			}
 
 			//End of the webhook notification execution.
-						//Give 200 status then exit out.
+			//Give 200 status then exit out.
+			SwpmLog::log_simple_debug( 'End of Stripe subscription webhook processing. Webhook type: ' . $type, true);
 			http_response_code( 200 ); // Tells Stripe we received this notification
 			return;
 		}

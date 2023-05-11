@@ -172,6 +172,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - Readability improvement for the 'remember me' checkbox field's code.
 - Spanish language translation file updated.
+- Added more debug logging text to the Stripe webhook handling script.
 
 = 4.3.3 =
 - Added new feature to confiugre an "after email activation redirection" for any membership level.

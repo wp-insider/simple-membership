@@ -35,7 +35,7 @@ class SwpmStripeSCASubscriptionIpnHandler {
 			wp_die( esc_html( sprintf( 'Fatal Error! Payment button (ID: %d) does not exist. This request will fail.', $button_id ) ) );
 		}
 
-		$settings        = SwpmSettings::get_instance();
+		$settings = SwpmSettings::get_instance();
 		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
 		//API keys

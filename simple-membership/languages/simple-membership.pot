@@ -3867,6 +3867,9 @@ msgstr ""
 msgid "Please check at least one."
 msgstr ""
 
+msgid "Do you really want to delete the form?"
+msgstr ""
+
 #: === Partial protection addon strings ===
 msgid "You do not have permission to view this content."
 msgstr ""

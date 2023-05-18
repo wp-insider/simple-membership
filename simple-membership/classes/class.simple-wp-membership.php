@@ -540,7 +540,7 @@ class SimpleWpMembership {
         } else if ( is_array($extra) && !empty($extra) ) {
             $output .= '<ul>';
             foreach ($extra as $key => $value) {
-                $output .= '<li>' . $value . '</li>';
+                $output .= '<li class="' . esc_attr( $key ) . '">' . $value . '</li>';
             }
             $output .= '</ul>';
         }

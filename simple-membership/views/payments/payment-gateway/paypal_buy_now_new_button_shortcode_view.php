@@ -224,6 +224,12 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                 onError: function(err) {
                     console.error('An error prevented the user from checking out with PayPal. ' + JSON.stringify(err));
                     alert( '<?php echo esc_js(__("Error occurred during PayPal checkout process.", "simple-membership")); ?>\n\n' + JSON.stringify(err) );
+                },
+
+                // handle onCancel event
+                onCancel: function(data) {
+                    console.log('Checkout operation cancelled by the customer. Data: ' + JSON.stringify(data));
+                    //Return to the parent page which the button does by default.
                 }
             });
     

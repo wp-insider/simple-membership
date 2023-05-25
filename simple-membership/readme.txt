@@ -174,6 +174,7 @@ https://simple-membership-plugin.com/
 - Spanish language translation file updated.
 - Added more debug logging text to the Stripe webhook handling script.
 - Added CSS class to the notice message output.
+- Allow any field with class 'swpm-date-picker' to use the datepicker function in the members menu. 
 
 = 4.3.3 =
 - Added new feature to confiugre an "after email activation redirection" for any membership level.

@@ -860,6 +860,9 @@ class SimpleWpMembership {
     }
 
     public function registration_form($atts) {
+        //Trigger action hook
+        do_action( 'swpm_shortcode_registration_form_start', $atts );
+
         $output = "";
         
         //Check if the form has been submitted and there is a success message.
@@ -875,6 +878,9 @@ class SimpleWpMembership {
         
         $output .= $any_notice_output;
         $output .= SwpmFrontRegistration::get_instance()->regigstration_ui($level);
+
+        //Trigger action hook
+        do_action( 'swpm_shortcode_registration_form_end', $atts );
         return $output;
     }
 

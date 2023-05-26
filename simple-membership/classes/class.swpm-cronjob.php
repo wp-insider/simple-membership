@@ -36,6 +36,9 @@ class SwpmCronJob {
                 $query = "UPDATE {$wpdb->prefix}swpm_members_tbl
                 SET account_state='expired'  WHERE member_id IN (" . implode(',', $expired) . ")";
                 $wpdb->query($query);
+                
+                //Trigger an action hook
+                do_action('swpm_cronjob_account_status_updated_to_expired', $expired);
             }
         }
     }

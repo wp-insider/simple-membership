@@ -87,7 +87,14 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		);
 
 		//Trigger the account status refreshed action hook.
-		
+		do_action(
+			'swpm_account_status_refreshed',
+			array(
+				'member_id' => $swpm_id,
+				'from'      => $old_account_state,
+				'to'        => $account_state,
+			)
+		);
 
 		// Set Email details for the account upgrade notification.
 		$email   = $ipn_data['payer_email'];

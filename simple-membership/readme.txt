@@ -176,6 +176,7 @@ https://simple-membership-plugin.com/
 - Added CSS class to the notice message output.
 - Allow any field with class 'swpm-date-picker' to use the datepicker function in the members menu.
 - Added a new hook that gets triggered when the account status is updated to expired in the daily cronjob.
+- Added a new hook that gets triggered when an existing member pays for a membership and the account status is refreshed.
 
 = 4.3.3 =
 - Added new feature to confiugre an "after email activation redirection" for any membership level.

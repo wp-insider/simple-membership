@@ -51,6 +51,7 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 			return;
 		}
 		$old_membership_level = $resultset->membership_level;
+		$old_account_state    = $resultset->account_state;
 
 		// If the payment is for the same/existing membership level, then this is a renewal. Refresh the start date as appropriate.
 		$args                = array(
@@ -84,6 +85,9 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 				'to_level'   => $membership_level,
 			)
 		);
+
+		//Trigger the account status refreshed action hook.
+		
 
 		// Set Email details for the account upgrade notification.
 		$email   = $ipn_data['payer_email'];

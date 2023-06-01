@@ -248,6 +248,11 @@ class SimpleWpMembership {
             }
         }
 
+        //Admin user feedback notice
+        include_once SIMPLE_WP_MEMBERSHIP_PATH . 'classes/admin-includes/class.swpm-admin-user-feedback.php';
+        $user_feedback = new SWPM_Admin_User_Feedback();
+        $user_feedback->init();
+
         //Initialize the settings menu hooks.
         $swpm_settings_obj->init_config_hooks();
         $addon_saved = isset($_POST['swpm-addon-settings']) ? sanitize_text_field($_POST['swpm-addon-settings']) : '';

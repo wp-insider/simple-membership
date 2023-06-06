@@ -177,7 +177,7 @@ https://simple-membership-plugin.com/
 - Allow any field with class 'swpm-date-picker' to use the datepicker function in the members menu.
 - Added a new hook that gets triggered when the account status is updated to expired in the daily cronjob.
 - Added a new hook that gets triggered when an existing member pays for a membership and the account status is refreshed.
-- Added admin user feedback option.
+- The original transaction post ID is saved with the user profile for Stripe subscription transactions.
 
 = 4.3.3 =
 - Added new feature to confiugre an "after email activation redirection" for any membership level.

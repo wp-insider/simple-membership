@@ -61,17 +61,20 @@ class SwpmTransactions {
 		//The key that connects the 'swpm_transactions' CPT post and the the swpm_payments_tbl row.
 		update_post_meta( $post_id, 'db_row_id', $db_row_id );
 
-		//Check if this is a paypal subscription checkout.
-		if ( isset( $ipn_data['gateway']) && $ipn_data['gateway'] == 'paypal_subscription_checkout' ) {
-			//Save the swpm_transactions CPT post ID of the original checkout in the member's proifle. Useful to retreive some of the original checkout txn data (example: custom_field data).
-			$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $subscr_id );
-			if( ! $member_record ){
-				SwpmLog::log_simple_debug( 'Error! Could not find an existing member record for the given subscriber ID: ' . $subscr_id . '. This member profile may have been deleted.', false );
-			} else {
-				$member_id = $member_record->member_id;
-				$extra_info = SwpmMemberUtils::get_account_extra_info( $member_id );
-				$extra_info['orig_swpm_txn_cpt_id'] = $post_id;
-				SwpmMemberUtils::update_account_extra_info( $member_id, $extra_info );
+		//Save additional data based on the checkout gateway.
+		if( isset( $ipn_data['gateway'])) {
+			//Check if this is a PayPal subscription or a Stripe subscription checkout.
+			if ( $ipn_data['gateway'] == 'paypal_subscription_checkout' || $ipn_data['gateway'] == 'stripe-sca-subs' ) {
+				//Save the swpm_transactions CPT post ID of the original checkout in the member's proifle. Useful to retreive some of the original checkout txn data (example: custom_field data).
+				$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $subscr_id );
+				if( ! $member_record ){
+					SwpmLog::log_simple_debug( 'Error! Could not find an existing member record for the given subscriber ID: ' . $subscr_id . '. This member profile may have been deleted.', false );
+				} else {
+					$member_id = $member_record->member_id;
+					$extra_info = SwpmMemberUtils::get_account_extra_info( $member_id );
+					$extra_info['orig_swpm_txn_cpt_id'] = $post_id;
+					SwpmMemberUtils::update_account_extra_info( $member_id, $extra_info );
+				}
 			}
 		}
 

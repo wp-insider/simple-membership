@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.2
-Stable tag: 4.3.3
+Stable tag: 4.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,7 +169,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= 4.3.4 =
 - Readability improvement for the 'remember me' checkbox field's code.
 - Spanish language translation file updated.
 - Added more debug logging text to the Stripe webhook handling script.

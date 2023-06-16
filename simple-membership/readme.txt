@@ -169,6 +169,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Updated the German language translation file. Thanks to Stefan.
+
 = 4.3.4 =
 - Readability improvement for the 'remember me' checkbox field's code.
 - Spanish language translation file updated.

@@ -9,6 +9,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook-event-handler.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-functions.php' );//Misc project specific utility functions.
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/onboarding-related/class-swpm-paypal-onboarding.php' );//PPCP Onboarding related functions.
 
 /**
  * The Main class to handle the new PayPal library related tasks. 

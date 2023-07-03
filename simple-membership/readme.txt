@@ -170,6 +170,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
+- [TODO] PayPal Integration Onboarding CP1.
 - Updated the German language translation file. Thanks to Stefan.
 
 = 4.3.4 =

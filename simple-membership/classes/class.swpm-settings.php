@@ -1305,7 +1305,8 @@ class SwpmSettings {
 						echo '</span></p>';
 
 						//Show the onboarding link for sandbox account.
-						SWPM_PayPal_PPCP_Onboarding::output_sandbox_onboarding_link_code();
+						$ppcp_onboarding_instance = SWPM_PayPal_PPCP_Onboarding::get_instance();
+						$ppcp_onboarding_instance->output_sandbox_onboarding_link_code();
 					}
 					?>
 				</td>

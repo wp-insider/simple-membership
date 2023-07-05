@@ -4,15 +4,27 @@
  * A Helper class for PPCP Onboarding.
  */
 class SWPM_PayPal_PPCP_Onboarding {
-
+	protected static $instance;
 	public static $live_partner_id = '3FWGC6LFTMTUG';//Same as the merchant id of the live account.
 	public static $sandbox_partner_id = 'USVAEAM3FR5E2';//Same as the merchant id of the sandbox account.
 
 	public static $live_partner_client_id = 'TODO';
 	public static $sandbox_partner_client_id = 'AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
 
+	public static $account_connect_string = 'swpm_ppcp_account_connect';
+
 	public function __construct() {
-		//add_action( 'wp_loaded', array(&$this, 'handle_paypal_stuff' ) );
+		//NOP
+	}
+
+	/*
+	 * This needs to be a Singleton class. To make sure that the object and data is consistent throughout the onboarding process.
+	 */
+	public static function get_instance() {
+		if (null === self::$instance) {
+			self::$instance = new self();
+		}
+		return self::$instance;
 	}
 
 	public static function generate_seller_nonce() {
@@ -32,7 +44,6 @@ class SWPM_PayPal_PPCP_Onboarding {
 
 	public static function get_sandbox_signup_link(){
 
-		//TODO - Save the query args in options table (so the seller nonce and other details can be accessed easily after the onboarding process).
 		$seller_nonce = self::generate_seller_nonce();
 
 		$query_args = array();
@@ -55,21 +66,53 @@ class SWPM_PayPal_PPCP_Onboarding {
 		return $sandbox_singup_link;
 	}
 
-	public static function output_sandbox_onboarding_link_code() {
+	public function output_sandbox_onboarding_link_code() {
 		$sandbox_singup_link = self::get_sandbox_signup_link();
-
+		$wp_nonce = wp_create_nonce( self::$account_connect_string );
+		$ajax_post_url = admin_url('admin-ajax.php');
 		?>
 		<script>
 			function swpm_ppcp_sandbox_onboardedCallback(authCode, sharedId) {
 				console.log('SWPM PayPal Sandbox onboardedCallback');
 				console.log(authCode);
 				console.log(sharedId);
+				console.log('<?php echo $wp_nonce; ?>');
+				console.log('<?php echo $ajax_post_url; ?>')
 
+				data = JSON.stringify({
+						authCode: authCode,
+						sharedId: sharedId,
+						environment: 'sandbox',
+				});
+
+				const formData = new FormData();
+				formData.append('action', 'swpm_handle_onboarded_callback_data');
+				formData.append('data', data);
+				formData.append('_wpnonce', '<?php echo $wp_nonce; ?>');
+
+				//Post the AJAX request to the server.
+				fetch('<?php echo $ajax_post_url; ?>', {
+					method: 'POST',
+					body: formData,
+				}).then(response => response.json())
+				.then(result => {
+					//The AJAX post request was successful. Need to check if the processing was successful.
+					//The response.json() method is used to parse the response as JSON. Then, the result object contains the parsed JSON response.
+					if(result.success){
+						//All good.
+						console.log('Successfully processed the handle_onboarded_callback_data.');
+					} else {
+						alert("Error: " + result.msg);
+					}
+				}).catch(function(err) {
+					console.error(err);
+					alert("Something went wrong with the AJAX request on this server! See the console log for more details.");
+				})
+
+				return false;
 				//TODO - Send the authCode and sharedId to your server and do the next steps.
 				//The get_option('swpm_ppcp_sandbox_connect_query_args') will give you the query args that you sent to the PayPal onboarding page
 				//You can use the sellerNonce to identify the user.
-
-				
 			}
 		</script>
 		<a class="button button-primary direct" target="_blank"
@@ -77,7 +120,10 @@ class SWPM_PayPal_PPCP_Onboarding {
 			href="<?php echo esc_url_raw($sandbox_singup_link); ?>"
 			data-paypal-button="true">Activate PayPal Sandbox</a>
 		<script id="paypal-js" src="https://www.sandbox.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js"></script>
+
+		<a href="#" onclick="swpm_ppcp_sandbox_onboardedCallback('TESTSHAREDID','TESTOTHER')">Click Me to Test</a>
 		<?php
+		//TODO remove the ajax test link.
 
 	}
 }

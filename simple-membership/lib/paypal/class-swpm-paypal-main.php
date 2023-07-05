@@ -10,6 +10,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook-
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-functions.php' );//Misc project specific utility functions.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/onboarding-related/class-swpm-paypal-onboarding.php' );//PPCP Onboarding related functions.
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/onboarding-related/class-swpm-paypal-onboarding-serverside.php' );//PPCP Onboarding serverside helper.
 
 /**
  * The Main class to handle the new PayPal library related tasks. 
@@ -26,6 +27,10 @@ class SWPM_PayPal_Main {
 
 		//Initialize the PayPal OnApprove IPN Handler so it can handle the 'onApprove' ajax request.
 		new SWPM_PayPal_OnApprove_IPN_Handler();
+
+		//Initialize the PayPal onboarding serverside class so it can handle the 'onboardedCallback' ajax request.
+		new SWPM_PayPal_PPCP_Onboarding_Serverside();
+		
     }
 
 }

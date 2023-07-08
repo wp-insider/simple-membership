@@ -12,7 +12,7 @@ if ( is_wp_error( $is_valid_key ) ) {
         //So no need to display any message here (it will be displayed in the standard password reset shortcode).                
         return;
     }
-    $error_message = __("Error! The password reset key is invalid. Please generate a new request.", "simple-membership");
+    $error_message = __("Error! The password reset key is either invalid or expired. Please generate a new password reset request.", "simple-membership");
     echo '<div class="swpm-pw-reset-key-invalid-error swpm-red-error-text">';
     echo $error_message;
     echo '</div>';
@@ -38,26 +38,33 @@ if (!empty($force_strong_pass)) {
 
     <form id="swpm-password-reset-using-link" name="swpm-password-reset-using-link" class="swpm-validate-form" method="post" action="">
         <div class="swpm-pw-reset-widget-inside">
+        <?php 
+            $settings = SwpmSettings::get_instance();
+            $force_strong_pass = $settings->get_value('force-strong-passwords');
+            if( !empty($force_strong_pass) ) {
+                echo '<div class="swpm-pw-reset-strong-pass-message swpm-margin-top-10">';
+                _e('Password must be at least 8 characters long, contain at least 1 uppercase and 1 lowercase character, and at least 1 digit.', 'simple-membership');
+                echo '</div>';
+            }
+            ?>
             <div class="swpm-pw-reset-email swpm-margin-top-10">
-                <label for="swpm_new_password" class="swpm_label swpm-pw-reset-email-label"><?php echo SwpmUtils::_('New password') ?></label>
+                <label for="swpm_new_password" class="swpm_label swpm-pw-reset-email-label"><?php _e('New password', 'simple-membership') ?></label>
             </div>
             <div class="swpm-pw-reset-email-input swpm-margin-top-10">
                 <input type="password" name="swpm_new_password" class="<?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); ?>" id="swpm_new_password" value="" size="60" />
             </div>
 
-
             <div class="swpm-pw-reset-email swpm-margin-top-10">
-                <label for="swpm_reenter_new_password" class="swpm_label swpm-pw-reset-email-label"><?php echo SwpmUtils::_('Re-enter new password') ?></label>
+                <label for="swpm_reenter_new_password" class="swpm_label swpm-pw-reset-email-label"><?php _e('Re-enter new password', 'simple-membership') ?></label>
             </div>
             <div class="swpm-pw-reset-email-input swpm-margin-top-10">
                 <input type="password" name="swpm_reenter_new_password" class="<?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); ?>" id="swpm_reenter_new_password" value="" size="60" />
             </div>
 
-
             <input type="hidden" name="swpm_user_login" value="<?php echo esc_attr($user_login); ?>" />
             <div class="swpm-before-login-submit-section swpm-margin-top-10"><?php echo apply_filters('swpm_before_pass_reset_form_submit_button', ''); ?></div>
             <div class="swpm-pw-reset-submit-button swpm-margin-top-10">
-                <input type="submit" name="swpm-password-reset-using-link" class="swpm-pw-reset-submit" value="<?php echo SwpmUtils::_('Reset Password'); ?>" />
+                <input type="submit" name="swpm-password-reset-using-link" class="swpm-pw-reset-submit" value="<?php _e('Reset Password', 'simple-membership'); ?>" />
             </div>
         </div>
     </form>

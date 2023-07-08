@@ -172,6 +172,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - [TODO] PayPal Integration Onboarding CP1.
 - Updated the German language translation file. Thanks to Stefan.
+- Show strong password requirement message on the password reset page (if the feature is enabled)
 
 = 4.3.4 =
 - Readability improvement for the 'remember me' checkbox field's code.

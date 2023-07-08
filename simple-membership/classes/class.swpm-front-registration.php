@@ -526,16 +526,16 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			return false;
 		}
 	
-                $password_hash = SwpmUtils::encrypt_password( trim( $password ) );
-                $wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'password' => $password_hash ), array( 'member_id' => $user->member_id ) );
+		$password_hash = SwpmUtils::encrypt_password( trim( $password ) );
+		$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'password' => $password_hash ), array( 'member_id' => $user->member_id ) );
 
-                //Update wp user password
-                add_filter( 'send_password_change_email', array( &$this, 'dont_send_password_change_email' ), 1, 3 ); //Stop WordPress from sending a reset password email to admin.
-                SwpmUtils::update_wp_user( $user->user_name, array( 'plain_password' => $password ) );
+		//Update wp user password
+		add_filter( 'send_password_change_email', array( &$this, 'dont_send_password_change_email' ), 1, 3 ); //Stop WordPress from sending a reset password email to admin.
+		SwpmUtils::update_wp_user( $user->user_name, array( 'plain_password' => $password ) );
 
-                SwpmLog::log_simple_debug( 'Member password has been reset. Email: ' . $email, true );
+		SwpmLog::log_simple_debug( 'Member password has been reset. Email: ' . $email, true );
 
-                return true;
+		return true;
 	}
 
 	function dont_send_password_change_email( $send = false, $user = '', $userdata = '' ) {

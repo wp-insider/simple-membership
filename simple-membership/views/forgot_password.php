@@ -14,3 +14,14 @@
         </div>
     </form>
 </div>
+<div class="swpm_pass_reset_processing_msg_section">
+    <p id="swpm_pass_reset_processing_msg" hidden="hidden">
+        <?php _e('Processing password reset request...', 'simple-membership'); ?>
+    </p>
+</div>
+<script>
+  document.getElementById("swpm-pw-reset-form").addEventListener("submit", function() {
+  let p = document.getElementById('swpm_pass_reset_processing_msg');
+    p.removeAttribute("hidden");
+  });
+</script>

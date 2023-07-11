@@ -75,6 +75,7 @@ class SwpmShortcodesHandler {
 			$output  .= '<p>' . SwpmUtils::_( 'Your membership profile will be updated to reflect the payment.' ) . '</p>';
 			$output  .= SwpmUtils::_( 'Your profile username: ' ) . $username;
 			$output  .= '</div>';
+			$output = apply_filters( 'swpm_ty_page_registration_msg_to_logged_in_member', $output );
 			return $output;
 		}
 

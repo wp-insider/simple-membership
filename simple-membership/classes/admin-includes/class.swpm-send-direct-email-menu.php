@@ -10,7 +10,8 @@ class SWPM_Send_Direct_Email_Menu{
 	{
         do_action('swpm_send_direct_email_menu_start');
 
-		$send_email_menu_data = SwpmSettings::get_instance()->get_value('send_email_menu_data');
+		$settings = SwpmSettings::get_instance();
+		$send_email_menu_data = $settings->get_value('send_email_menu_data');
 		if (empty($send_email_menu_data)) {
 			// No saved data found. initialize the array.
 			$send_email_menu_data = array();
@@ -94,9 +95,15 @@ class SWPM_Send_Direct_Email_Menu{
 						SwpmLog::log_simple_debug( 'Error sending direct email! Email value is empty for this member record.', false );
 						continue;
 					}
-					$headers = '';
+
+					// Send the email
+					$from_address = $settings->get_value( 'email-from' );
+					$headers = 'From: ' . $from_address . "\r\n";
+
 					$body = SwpmMiscUtils::replace_dynamic_tags($send_email_menu_data['send_email_body'], $recipient->member_id);
 					$subject = $send_email_menu_data['send_email_subject'];
+
+					//Check if HTML email checkbox enabled for the direct email option.
 					if (!empty($send_email_menu_data['send_email_enable_html'])) {
 						$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 						$body = nl2br($body);

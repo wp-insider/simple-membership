@@ -150,7 +150,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		SwpmLog::log_simple_debug( 'Onboarding step: get_seller_account_status_data. Environment mode: ' . $environment_mode, true );
 
 		$api_base_url = $this->get_api_base_url_by_environment_mode( $environment_mode );
-		$partner_id = $this->get_partner_merchant_id_by_environment_mode( $environment_mode );
+		$partner_id = $this->get_partner_id_by_environment_mode( $environment_mode );
 
 		$url = trailingslashit( $api_base_url ) . 'v1/customer/partners/' . $partner_id . '/merchant-integrations/' . $seller_api_credentials['payer_id'];	
 		$args = array(
@@ -294,7 +294,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		SwpmLog::log_simple_debug( 'Onboarding step: get_seller_api_credentials_using_token. Environment mode: ' . $environment_mode, true );
 
 		$api_base_url = $this->get_api_base_url_by_environment_mode( $environment_mode );
-		$partner_merchant_id = $this->get_partner_merchant_id_by_environment_mode( $environment_mode );
+		$partner_merchant_id = $this->get_partner_id_by_environment_mode( $environment_mode );
 
 		$url = trailingslashit( $api_base_url ) . 'v1/customer/partners/' . $partner_merchant_id . '/merchant-integrations/credentials/';
 		$args = array(
@@ -362,7 +362,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		}
 	}
 
-	public function get_partner_merchant_id_by_environment_mode( $environment_mode = 'production' ) {
+	public function get_partner_id_by_environment_mode( $environment_mode = 'production' ) {
 		if ($environment_mode == 'production') {
 			return SWPM_PayPal_Main::$partner_id_production;
 		} else {

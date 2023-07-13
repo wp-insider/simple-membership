@@ -24,7 +24,7 @@ class SWPM_PayPal_Main {
 	public static $api_base_url_production = 'https://api-m.paypal.com';	
 	public static $api_base_url_sandbox = 'https://api-m.sandbox.paypal.com';
 	public static $partner_id_production = '3FWGC6LFTMTUG';//Same as the partner's merchant id of the live account.
-	public static $partner_id_sandbox = 'USVAEAM3FR5E2';//Same as the partner's merchant id of the sandbox account.
+	public static $partner_id_sandbox = '47CBLN36AR4Q4';// Same as the merchant id of the platform app sandbox account.
 	public static $partner_client_id_live = 'TODO';
 	public static $partner_client_id_sandbox = 'AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
 

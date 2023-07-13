@@ -5,8 +5,8 @@
  */
 class SWPM_PayPal_PPCP_Onboarding {
 	protected static $instance;
-	public static $live_partner_id = '3FWGC6LFTMTUG';//Same as the merchant id of the live account.
-	public static $sandbox_partner_id = 'USVAEAM3FR5E2';//Same as the merchant id of the sandbox account.
+	public static $live_partner_id = '3FWGC6LFTMTUG';//Same as the partner's merchant id of the live account.
+	public static $sandbox_partner_id = 'USVAEAM3FR5E2';//Same as the partner's merchant id of the sandbox account.
 
 	public static $live_partner_client_id = 'TODO';
 	public static $sandbox_partner_client_id = 'AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
@@ -121,7 +121,6 @@ class SWPM_PayPal_PPCP_Onboarding {
 			data-paypal-button="true">Activate PayPal Sandbox</a>
 		<script id="paypal-js" src="https://www.sandbox.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js"></script>
 
-		<a href="#" onclick="swpm_ppcp_sandbox_onboardedCallback('TESTSHAREDID','TESTOTHER')">Click Me to Test</a>
 		<?php
 		//TODO remove the ajax test link.
 

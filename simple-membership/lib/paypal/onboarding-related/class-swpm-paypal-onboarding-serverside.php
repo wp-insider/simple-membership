@@ -8,8 +8,9 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 	public $environment_mode = 'production'; //sandbox or production
 	public $sandbox_api_base_url = 'https://api-m.sandbox.paypal.com';
 	public $production_api_base_url = 'https://api-m.paypal.com';
-	public $partner_merchant_id_sandbox = 'USVAEAM3FR5E2';
-	public $partner_merchant_id_production = '3FWGC6LFTMTUG';
+	public static $live_partner_id = '3FWGC6LFTMTUG';//Same as the partner's merchant id of the live account.
+	public static $sandbox_partner_id = 'USVAEAM3FR5E2';//Same as the partner's merchant id of the sandbox account.
+
 	public $seller_nonce = '';
 
 	public function __construct() {
@@ -21,7 +22,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 	}
 
 	public function handle_onboarded_callback_data(){
-		//TODO - Handle the data sent by PayPal after the onboarding process.
+		//Handle the data sent by PayPal after the onboarding process.
 		//The get_option('swpm_ppcp_sandbox_connect_query_args') will give you the query args that you sent to the PayPal onboarding page
 
 		SwpmLog::log_simple_debug( 'Onboarding step: handle_onboarded_callback_data.', true );
@@ -40,7 +41,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
         $data_array = json_decode($data, true);
         SwpmLog::log_array_data_to_debug( $data_array, true );//Debugging purpose
 
-		// Check nonce.
+		//Check nonce.
         $nonce_string = SWPM_PayPal_PPCP_Onboarding::$account_connect_string;
 		if ( ! check_ajax_referer( $nonce_string, '_wpnonce', false ) ) {
 			wp_send_json(
@@ -68,8 +69,8 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			exit;
 		}
 
-		//TODO - Use the data to do the next steps.	
-		SwpmLog::log_simple_debug( 'Onboarding step: access token generated successfully. Token: ' . $access_token, true );//TODO - remove later.
+		//Get the seller API credentials using the access token.
+		//SwpmLog::log_simple_debug( 'Onboarding step: access token generated successfully. Token: ' . $access_token, true );//Debug purpose only
 		$seller_api_credentials = $this->get_seller_api_credentials_using_token( $access_token, $environment_mode );
 		if ( ! $seller_api_credentials ) {
 			//Failed to get seller API credentials.
@@ -80,9 +81,19 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 				)
 			);
 		}
-		SwpmLog::log_array_data_to_debug( $seller_api_credentials, true );//TODO - Debugging purpose
+		//SwpmLog::log_array_data_to_debug( $seller_api_credentials, true );//TODO - Debugging purpose
 
-		//TODO - Save the data to do the next steps.
+		//Save the credentials to the database.
+		$this->save_seller_api_credentials( $seller_api_credentials, $environment_mode);
+
+		//TODO - Create webhooks (if not already created)
+
+		//TODO ?? anything else to do?
+		//Cache delete (if any)?
+
+		
+		//TODO - check seller account status to see if all clear to use the account.
+
 
 
         SwpmLog::log_simple_debug( 'Succedssfully processed the handle_onboarded_callback_data.', true );
@@ -93,6 +104,78 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 
 	}
 
+
+	/*
+	 * Gets the seller's account status data. So we can check if payments_receivable flag is true and primary_email_confirmed flag is true
+	 * Returns an array with client_id and client_secret or false otherwise.
+	 */
+	public function get_seller_account_status_data($seller_api_credentials, $environment_mode = 'production'){
+		SwpmLog::log_simple_debug( 'Onboarding step: get_seller_account_status_data. Environment mode: ' . $environment_mode, true );
+
+		$api_base_url = $this->get_api_base_url_by_environment_mode( $environment_mode );
+		$partner_merchant_id = $this->get_partner_merchant_id_by_environment_mode( $environment_mode );
+
+		$url = trailingslashit( $api_base_url ) . 'v1/customer/partners/' . $partner_merchant_id . '/merchant-integrations/' . $seller_api_credentials['payer_id'];	
+		$args = array(
+			'method'  => 'GET',
+			'headers' => array(
+				'Authorization' => 'Bearer ' . $access_token,
+				'Content-Type'  => 'application/json',
+			),
+		);
+
+		$response = $this->send_request_by_url_and_args( $url, $args );
+
+		if ( is_wp_error( $response ) ) {
+			//WP could not post the request.
+			$error_msg = $response->get_error_message();//Get the error from the WP_Error object.
+			SwpmLog::log_simple_debug( 'Failed to post the request to the PayPal API. Error: ' . $error_msg, false );
+			return false;
+		}
+
+		$json = json_decode( $response['body'] );
+		$status_code = (int) wp_remote_retrieve_response_code( $response );
+
+		if ( ! isset( $json->client_id ) || ! isset( $json->client_secret ) ) {
+			//Seller API credentials not found. Log error.
+			if (isset( $json->error )) {
+				//Try to get the error descrption (if present)
+				$error_msg = isset($json->error_description)? $json->error_description : $json->error;
+			} else {
+				$error_msg = 'No client_id or client_secret found.';
+			}
+			SwpmLog::log_simple_debug( 'Failed to get seller API credentials. Status code: '.$status_code.', Error msg: ' . $error_msg, false );
+			return false;
+		}
+
+		//Success. return the credentials.
+		return array(
+			'client_id' => $json->client_id,
+			'client_secret' => $json->client_secret,
+			'payer_id' => $json->payer_id,
+		);
+
+	}
+
+	public function save_seller_api_credentials( $seller_api_credentials, $environment_mode = 'production' ) {
+		// Save the API credentials to the database.
+		$settings = SwpmSettings::get_instance();
+
+		if( $environment_mode == 'sandbox' ){
+			//Sandobx mode
+			$settings->set_value('paypal-sandbox-client-id', $seller_api_credentials['client_id']);
+			$settings->set_value('paypal-sandbox-secret-key', $seller_api_credentials['client_secret']);
+			$settings->set_value('paypal-sandbox-seller-merchant-id', $seller_api_credentials['payer_id']);//Seller Merchant ID
+		} else {
+			//Production mode
+			$settings->set_value('paypal-live-client-id', $seller_api_credentials['client_id']);
+			$settings->set_value('paypal-live-secret-key', $seller_api_credentials['client_secret']);
+			$settings->set_value('paypal-live-seller-merchant-id', $seller_api_credentials['payer_id']);//Seller Merchant ID
+		}
+
+		$settings->save();
+		SwpmLog::log_simple_debug( 'Seller API credentials (environment mode: '.$environment_mode.') saved successfully.', true );
+	}
 
 	/**
 	 * Generates a token using the shared_id and auth_token and seller_nonce. Used during the onboarding process.
@@ -239,9 +322,9 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 
 	public function get_partner_merchant_id_by_environment_mode( $environment_mode = 'production' ) {
 		if ($environment_mode == 'production') {
-			return $this->partner_merchant_id_production;
+			return self::$live_partner_id;
 		} else {
-			return $this->partner_merchant_id_sandbox;
+			return self::$sandbox_partner_id;
 		}
 	}
 

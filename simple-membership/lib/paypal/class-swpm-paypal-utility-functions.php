@@ -2,6 +2,14 @@
 
 class SWPM_PayPal_Utility_Functions{
     
+	public static function get_api_base_url_by_environment_mode( $environment_mode = 'production' ) {
+		if ($environment_mode == 'production') {
+			return SWPM_PayPal_Main::$api_base_url_production;
+		} else {
+			return SWPM_PayPal_Main::$api_base_url_sandbox;
+		}
+	}
+
     public static function create_product_params_from_button( $button_id ){
         $button_name = get_the_title( $button_id );
         $product_params = array(

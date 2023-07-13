@@ -9,6 +9,9 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook-event-handler.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-functions.php' );//Misc project specific utility functions.
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-bearer.php' );
+
+//Onboarding related includes
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/onboarding-related/class-swpm-paypal-onboarding.php' );//PPCP Onboarding related functions.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/onboarding-related/class-swpm-paypal-onboarding-serverside.php' );//PPCP Onboarding serverside helper.
 
@@ -17,6 +20,14 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/onboarding-related/class-s
  * It initializes when this file is inlcuded.
  */
 class SWPM_PayPal_Main {
+
+	public static $api_base_url_production = 'https://api-m.paypal.com';	
+	public static $api_base_url_sandbox = 'https://api-m.sandbox.paypal.com';
+	public static $partner_id_production = '3FWGC6LFTMTUG';//Same as the partner's merchant id of the live account.
+	public static $partner_id_sandbox = 'USVAEAM3FR5E2';//Same as the partner's merchant id of the sandbox account.
+	public static $partner_client_id_live = 'TODO';
+	public static $partner_client_id_sandbox = 'AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
+
 
     public function __construct() {
 

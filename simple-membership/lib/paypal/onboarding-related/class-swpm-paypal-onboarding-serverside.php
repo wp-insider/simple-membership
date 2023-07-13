@@ -5,14 +5,6 @@
  */
 class SWPM_PayPal_PPCP_Onboarding_Serverside {
 
-	public $environment_mode = 'production'; //sandbox or production
-	public $sandbox_api_base_url = 'https://api-m.sandbox.paypal.com';
-	public $production_api_base_url = 'https://api-m.paypal.com';
-	public static $live_partner_id = '3FWGC6LFTMTUG';//Same as the partner's merchant id of the live account.
-	public static $sandbox_partner_id = 'USVAEAM3FR5E2';//Same as the partner's merchant id of the sandbox account.
-
-	public $seller_nonce = '';
-
 	public function __construct() {
 
 		//Setup AJAX request handler for the onboarding process.
@@ -86,14 +78,28 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		//Save the credentials to the database.
 		$this->save_seller_api_credentials( $seller_api_credentials, $environment_mode);
 
+		//TODO - check seller account status to see if all clear to use the account.
+		$paypal_bearer = SWPM_PayPal_Bearer::get_instance();
+		$bearer_token = $paypal_bearer->create_new_bearer_token( $environment_mode );//Create a new bearer token.
+		if ( ! $bearer_token ) {
+			//Failed to create bearer token.
+			wp_send_json(
+				array(
+					'success' => false,
+					'msg'  => __( 'Failed to create new PayPal bearer token. check debug log file for any error message.', 'simple-membership' ),
+				)
+			);			
+		}
+		//TODO - use the bearer token to check the seller account status.
+		//SwpmLog::log_simple_debug( 'Onboarding step: bearer token created successfully. Token: ' . $bearer_token, true );//Debug purpose only
+		
+
 		//TODO - Create webhooks (if not already created)
 
 		//TODO ?? anything else to do?
 		//Cache delete (if any)?
-
 		
-		//TODO - check seller account status to see if all clear to use the account.
-
+		
 
 
         SwpmLog::log_simple_debug( 'Succedssfully processed the handle_onboarded_callback_data.', true );
@@ -314,17 +320,17 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 
 	public function get_api_base_url_by_environment_mode( $environment_mode = 'production' ) {
 		if ($environment_mode == 'production') {
-			return $this->production_api_base_url;
+			return SWPM_PayPal_Main::$api_base_url_production;
 		} else {
-			return $this->sandbox_api_base_url;
+			return SWPM_PayPal_Main::$api_base_url_sandbox;
 		}
 	}
 
 	public function get_partner_merchant_id_by_environment_mode( $environment_mode = 'production' ) {
 		if ($environment_mode == 'production') {
-			return self::$live_partner_id;
+			return SWPM_PayPal_Main::$partner_id_production;
 		} else {
-			return self::$sandbox_partner_id;
+			return SWPM_PayPal_Main::$partner_id_sandbox;
 		}
 	}
 

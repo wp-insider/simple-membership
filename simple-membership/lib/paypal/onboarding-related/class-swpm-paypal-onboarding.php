@@ -5,12 +5,6 @@
  */
 class SWPM_PayPal_PPCP_Onboarding {
 	protected static $instance;
-	public static $live_partner_id = '3FWGC6LFTMTUG';//Same as the partner's merchant id of the live account.
-	public static $sandbox_partner_id = 'USVAEAM3FR5E2';//Same as the partner's merchant id of the sandbox account.
-
-	public static $live_partner_client_id = 'TODO';
-	public static $sandbox_partner_client_id = 'AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
-
 	public static $account_connect_string = 'swpm_ppcp_account_connect';
 
 	public function __construct() {
@@ -47,11 +41,11 @@ class SWPM_PayPal_PPCP_Onboarding {
 		$seller_nonce = self::generate_seller_nonce();
 
 		$query_args = array();
-		$query_args['partnerId'] = self::$sandbox_partner_id;
+		$query_args['partnerId'] = SWPM_PayPal_Main::$partner_id_sandbox;
 		$query_args['product'] = 'PPCP';
 		$query_args['integrationType'] = 'FO';
 		$query_args['features'] = 'PAYMENT,REFUND';
-		$query_args['partnerClientId'] = self::$sandbox_partner_client_id;
+		$query_args['partnerClientId'] = SWPM_PayPal_Main::$partner_client_id_sandbox;
 		//$query_args['returnToPartnerUrl'] = '';
 		//$query_args['partnerLogoUrl'] = '';
 		$query_args['displayMode'] = 'minibrowser';

@@ -46,7 +46,7 @@ class SWPM_PayPal_PPCP_Onboarding {
 		$query_args['integrationType'] = 'FO';
 		$query_args['features'] = 'PAYMENT,REFUND';
 		$query_args['partnerClientId'] = SWPM_PayPal_Main::$partner_client_id_sandbox;
-		//$query_args['returnToPartnerUrl'] = '';
+		$query_args['returnToPartnerUrl'] = '';
 		//$query_args['partnerLogoUrl'] = '';
 		$query_args['displayMode'] = 'minibrowser';
 		$query_args['sellerNonce'] = $seller_nonce;
@@ -111,12 +111,11 @@ class SWPM_PayPal_PPCP_Onboarding {
 		</script>
 		<a class="button button-primary direct" target="_blank"
 			data-paypal-onboard-complete="swpm_ppcp_sandbox_onboardedCallback"
-			href="<?php echo esc_url_raw($sandbox_singup_link); ?>"
+			href="<?php echo ($sandbox_singup_link); ?>"
 			data-paypal-button="true">Activate PayPal Sandbox</a>
 		<script id="paypal-js" src="https://www.sandbox.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js"></script>
 
 		<?php
-		//TODO remove the ajax test link.
 
 	}
 }

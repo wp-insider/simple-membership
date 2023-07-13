@@ -74,6 +74,8 @@ class SWPM_PayPal_Bearer {
 		}		
 
 		$token = self::get_token_from_json ( $response['body'] );
+		//TODO save/cache the bearer token in the database.
+
 		return $token;
 	}
 

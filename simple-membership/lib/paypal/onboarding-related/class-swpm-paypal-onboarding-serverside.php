@@ -48,7 +48,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		//Get the environment mode.
 		$environment_mode = isset( $data_array['environment'] ) ? $data_array['environment'] : 'production';
 
-		//Generate the access token using the shared id and auth code.
+		//=== Generate the access token using the shared id and auth code. ===
         $access_token = $this->generate_token_using_shared_id( $data_array['sharedId'], $data_array['authCode'], $environment_mode);
 		if ( ! $access_token ) {
 			//Failed to generate token.
@@ -61,7 +61,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			exit;
 		}
 
-		//Get the seller API credentials using the access token.
+		//=== Get the seller API credentials using the access token. ===
 		//SwpmLog::log_simple_debug( 'Onboarding step: access token generated successfully. Token: ' . $access_token, true );//Debug purpose only
 		$seller_api_credentials = $this->get_seller_api_credentials_using_token( $access_token, $environment_mode );
 		if ( ! $seller_api_credentials ) {
@@ -78,7 +78,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		//Save the credentials to the database.
 		$this->save_seller_api_credentials( $seller_api_credentials, $environment_mode);
 
-		//TODO - check seller account status to see if all clear to use the account.
+		//=== Create a new bearer token ===
 		$paypal_bearer = SWPM_PayPal_Bearer::get_instance();
 		$bearer_token = $paypal_bearer->create_new_bearer_token( $environment_mode );//Create a new bearer token.
 		if ( ! $bearer_token ) {
@@ -90,19 +90,50 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 				)
 			);			
 		}
-		//TODO - use the bearer token to check the seller account status.
 		//SwpmLog::log_simple_debug( 'Onboarding step: bearer token created successfully. Token: ' . $bearer_token, true );//Debug purpose only
-		
+				
+		//TODO - SAVE/CACHE the bearer token to the database.
+
+		//=== Seller account status ===
+		$seller_account_status = $this->get_seller_account_status_data_using_bearer_token($bearer_token, $seller_api_credentials, $environment_mode );
+		SwpmLog::log_array_data_to_debug( $seller_account_status, true );//TODO - Debugging purpose
+		if( ! $seller_account_status ){
+			//Failed to get seller account status.
+			wp_send_json(
+				array(
+					'success' => false,
+					'msg'  => __( 'Failed to get seller account status. check debug log file for any error message.', 'simple-membership' ),
+				)
+			);			
+		}
+
+		if( ! $seller_account_status['payments_receivable'] ){
+			//Seller account is limited. Show a message to the seller.
+			wp_send_json(
+				array(
+					'success' => false,
+					'msg'  => __( 'Your PayPal account is limited so you cannot accept payment. Contact PaPal support or check your PayPal account inbox for an email from PayPal for the next steps to remove the account limit.', 'simple-membership' ),
+				)
+			);			
+		}
+		if( ! $seller_account_status['primary_email_confirmed'] ){
+			//Seller account is limited. Show a message to the seller.
+			wp_send_json(
+				array(
+					'success' => false,
+					'msg'  => __( 'Your PayPal account email is not confirmed. Check your PayPal account inbox for an email from PayPal to confirm your PayPal email address.', 'simple-membership' ),
+				)
+			);			
+		}
+
+
 
 		//TODO - Create webhooks (if not already created)
 
 		//TODO ?? anything else to do?
 		//Cache delete (if any)?
-		
-		
 
-
-        SwpmLog::log_simple_debug( 'Succedssfully processed the handle_onboarded_callback_data.', true );
+        SwpmLog::log_simple_debug( 'Successfully processed the handle_onboarded_callback_data.', true );
 
 		//If everything is processed successfully, send the success response.
 		wp_send_json( array( 'success' => true, 'msg' => 'Succedssfully processed the handle_onboarded_callback_data.' ) );
@@ -115,17 +146,17 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 	 * Gets the seller's account status data. So we can check if payments_receivable flag is true and primary_email_confirmed flag is true
 	 * Returns an array with client_id and client_secret or false otherwise.
 	 */
-	public function get_seller_account_status_data($seller_api_credentials, $environment_mode = 'production'){
+	public function get_seller_account_status_data_using_bearer_token($bearer_token, $seller_api_credentials, $environment_mode = 'production'){
 		SwpmLog::log_simple_debug( 'Onboarding step: get_seller_account_status_data. Environment mode: ' . $environment_mode, true );
 
 		$api_base_url = $this->get_api_base_url_by_environment_mode( $environment_mode );
-		$partner_merchant_id = $this->get_partner_merchant_id_by_environment_mode( $environment_mode );
+		$partner_id = $this->get_partner_merchant_id_by_environment_mode( $environment_mode );
 
-		$url = trailingslashit( $api_base_url ) . 'v1/customer/partners/' . $partner_merchant_id . '/merchant-integrations/' . $seller_api_credentials['payer_id'];	
+		$url = trailingslashit( $api_base_url ) . 'v1/customer/partners/' . $partner_id . '/merchant-integrations/' . $seller_api_credentials['payer_id'];	
 		$args = array(
 			'method'  => 'GET',
 			'headers' => array(
-				'Authorization' => 'Bearer ' . $access_token,
+				'Authorization' => 'Bearer ' . $bearer_token,
 				'Content-Type'  => 'application/json',
 			),
 		);
@@ -139,26 +170,31 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			return false;
 		}
 
-		$json = json_decode( $response['body'] );
+		$json = json_decode( wp_remote_retrieve_body( $response ) );
 		$status_code = (int) wp_remote_retrieve_response_code( $response );
+		if ( $status_code !== 200 ) {
+			//PayPal API returned an error.
+			$response_body = wp_remote_retrieve_body( $response );
+			SwpmLog::log_simple_debug( 'PayPal API returned an error. Status Code: ' . $status_code . ' Response Body: ' . $response_body, false );
+			return false;
+		}
 
-		if ( ! isset( $json->client_id ) || ! isset( $json->client_secret ) ) {
-			//Seller API credentials not found. Log error.
+		if ( ! isset( $json->payments_receivable ) || ! isset( $json->primary_email_confirmed ) ) {
+			//Seller status not found. Log error.
 			if (isset( $json->error )) {
 				//Try to get the error descrption (if present)
 				$error_msg = isset($json->error_description)? $json->error_description : $json->error;
 			} else {
-				$error_msg = 'No client_id or client_secret found.';
+				$error_msg = 'The payments_receivable and primary_email_confirmed flags are not set.';
 			}
-			SwpmLog::log_simple_debug( 'Failed to get seller API credentials. Status code: '.$status_code.', Error msg: ' . $error_msg, false );
+			SwpmLog::log_simple_debug( 'Failed to get seller PayPal account status. Status code: '.$status_code.', Error msg: ' . $error_msg, false );
 			return false;
 		}
 
 		//Success. return the credentials.
 		return array(
-			'client_id' => $json->client_id,
-			'client_secret' => $json->client_secret,
-			'payer_id' => $json->payer_id,
+			'payments_receivable' => $json->payments_receivable,
+			'primary_email_confirmed' => $json->primary_email_confirmed,
 		);
 
 	}

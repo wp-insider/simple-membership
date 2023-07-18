@@ -30,6 +30,7 @@ class SWPM_PayPal_Bearer {
 		$token_exists = $paypal_cache->has( self::BEARER_CACHE_KEY );
 		if ( $token_exists ) {
 			//A cached token exists. Check if it is expired.
+			//SwpmLog::log_simple_debug('Cached bearer token exists. Checking if it is valid.', true);
 			$token = $paypal_cache->get( self::BEARER_CACHE_KEY );
 			$is_valid_token = $this->is_valid_token( $token, $environment_mode );
 			if ( $is_valid_token ) {

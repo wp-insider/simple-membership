@@ -1,6 +1,9 @@
 <?php
 
 class SWPM_PayPal_Bearer {
+
+	const BEARER_CACHE_KEY = 'swpm-ppcp-bearer-cache-key';
+	const BEARER_CACHE_EXPIRATION = (8 * HOUR_IN_SECONDS);//Cache for 8 hours.
 	protected static $instance;
 
 	public function __construct() {
@@ -17,6 +20,31 @@ class SWPM_PayPal_Bearer {
 		return self::$instance;
 	}
 
+	/**
+	 * Check if a bearer token exists in the cache and if it is expired or not. Create a new one if needed.
+	 */
+	public function get_bearer_token( $environment_mode = '' ) {
+		$paypal_cache = SWPM_PayPal_Cache::get_instance();
+		
+		//Check if a cached token exists
+		$token_exists = $paypal_cache->has( self::BEARER_CACHE_KEY );
+		if ( $token_exists ) {
+			//A cached token exists. Check if it is expired.
+			$token = $paypal_cache->get( self::BEARER_CACHE_KEY );
+			$is_valid_token = $this->is_valid_token( $token, $environment_mode );
+			if ( $is_valid_token ) {
+				//The cached token is valid. Return it.
+				$token_string = $token['token_value'];
+				SwpmLog::log_simple_debug('Using the cached bearer token (since it is still valid).', true);
+				return $token_string;
+			}
+		}
+
+		//A token doesn't exist or it is expired. Create a new one. 
+		//It will save/cache the newly created token also.
+		$token_string = $this->create_new_bearer_token( $environment_mode );
+		return $token_string;
+	}
 
 	/**
 	 * Creates a new bearer token.
@@ -73,10 +101,46 @@ class SWPM_PayPal_Bearer {
 			return false;
 		}		
 
-		$token = self::get_token_from_json ( $response['body'] );
-		//TODO save/cache the bearer token in the database.
+		//Get the token string value from the response.
+		$token_string = self::get_token_from_json ( $response['body'] );
+		
+		//Cache/save the bearer token in the database.
+		self::cache_token( $token_string, $environment_mode );
 
-		return $token;
+		return $token_string;
+	}
+
+	public static function cache_token( $token_string, $environment_mode = 'prouction' ) {
+		$token = array(
+			'token_value' => $token_string,
+			'created_at' => time(),
+			'environment_mode' => $environment_mode,
+		);
+		$paypal_cache = SWPM_PayPal_Cache::get_instance();
+		$paypal_cache->set( self::BEARER_CACHE_KEY, $token, self::BEARER_CACHE_EXPIRATION );//Cache for 8 hours.
+	}
+
+	/**
+	 * Checks if token is expired or not
+	 * @return bool
+	 */
+	public function is_valid_token( $token, $environment_mode = 'production' ) {
+		$token_string = $token['token_value'];
+		$created_at = $token['created_at'];
+		$token_env_mode = $token['environment_mode'];
+
+		if( $token_env_mode != $environment_mode ){
+			//The token is not for the current environment mode. So it is not valid.
+			return false;
+		}
+
+		$expiry_timestamp = $created_at + self::BEARER_CACHE_EXPIRATION;
+		if ( time() > $expiry_timestamp ) {
+			//The token is expired.
+			return false;
+		}
+		
+		return true;
 	}
 
 	public static function get_token_from_json( $json ) {
@@ -100,7 +164,6 @@ class SWPM_PayPal_Bearer {
 	 * Performs a request to the PayPal API using URL and arguments.
 	 */
 	public static function send_request_by_url_and_args( $url, $args ) {
-
 		$args['timeout'] = 30;
 
 		$args = apply_filters( 'swpm_ppcp_onboarding_request_args', $args, $url );

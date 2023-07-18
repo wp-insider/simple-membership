@@ -80,7 +80,8 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 
 		//=== Create a new bearer token ===
 		$paypal_bearer = SWPM_PayPal_Bearer::get_instance();
-		$bearer_token = $paypal_bearer->create_new_bearer_token( $environment_mode );//Create a new bearer token.
+		//Create a new bearer token during onboarding (instead of trying to use one from the cache)
+		$bearer_token = $paypal_bearer->create_new_bearer_token( $environment_mode );
 		if ( ! $bearer_token ) {
 			//Failed to create bearer token.
 			wp_send_json(
@@ -91,8 +92,6 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			);			
 		}
 		//SwpmLog::log_simple_debug( 'Onboarding step: bearer token created successfully. Token: ' . $bearer_token, true );//Debug purpose only
-				
-		//TODO - SAVE/CACHE the bearer token to the database.
 
 		//=== Seller account status ===
 		$seller_account_status = $this->get_seller_account_status_data_using_bearer_token($bearer_token, $seller_api_credentials, $environment_mode );

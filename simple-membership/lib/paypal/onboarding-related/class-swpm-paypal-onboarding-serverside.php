@@ -125,14 +125,14 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			);			
 		}
 
+		//Webhooks will be created (if not already created) when the admin creates subsription payment buttons
 
+		//Save the onboarding complete flag to the database.
+		$settings = SwpmSettings::get_instance();
+		$settings->set_value('paypal-ppcp-onboarding-'.$environment_mode, 'completed');
+		$settings->save();
 
-		//TODO - Create webhooks (if not already created)
-
-		//TODO ?? anything else to do?
-		//Cache delete (if any)?
-
-        SwpmLog::log_simple_debug( 'Successfully processed the handle_onboarded_callback_data.', true );
+        SwpmLog::log_simple_debug( 'Successfully processed the handle_onboarded_callback_data. Environment mode: '.$environment_mode, true );
 
 		//If everything is processed successfully, send the success response.
 		wp_send_json( array( 'success' => true, 'msg' => 'Succedssfully processed the handle_onboarded_callback_data.' ) );

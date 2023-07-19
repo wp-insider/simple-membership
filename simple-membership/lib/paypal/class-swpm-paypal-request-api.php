@@ -114,8 +114,20 @@ class SWPM_PayPal_Request_API {
 	 */
 	private function get_headers_using_bearer_token() {	
 		//Get the bearer token at the time of the request (so if a cached token is used, it's validity gets checked before each request).
+		$environment_mode = $this->get_api_environment_mode();
+
+		//===Backwards compatibility. Check if the PPCP onboarding step is done for this environment mode.===
+		$settings = SwpmSettings::get_instance();
+		$onboarding_status = $settings->get_value('paypal-ppcp-onboarding-'.$environment_mode);
+		if( $onboarding_status != 'completed' ){
+			//The PPCP onboarding step is not done for this environment mode. Do the fallback header method.
+			return $this->get_headers();
+		}
+		//===End backwards compatibility===
+
+		//Get the bearer token using the PPCP method.
 		$bearer = SWPM_PayPal_Bearer::get_instance();
-		$bearer_token = $bearer->get_bearer_token( $this->environment_mode );
+		$bearer_token = $bearer->get_bearer_token( $environment_mode );
 
 		$headers = array(
 			'Content-Type' => 'application/json',

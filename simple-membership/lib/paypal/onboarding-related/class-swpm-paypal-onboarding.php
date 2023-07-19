@@ -116,6 +116,7 @@ class SWPM_PayPal_PPCP_Onboarding {
 		<script id="paypal-js" src="https://www.sandbox.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js"></script>
 
 		<?php
-
+		//Test
+		
 	}
 }

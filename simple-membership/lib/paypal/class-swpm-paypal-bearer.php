@@ -36,7 +36,7 @@ class SWPM_PayPal_Bearer {
 			if ( $is_valid_token ) {
 				//The cached token is valid. Return it.
 				$token_string = $token['token_value'];
-				SwpmLog::log_simple_debug('Using the cached bearer token (since it is still valid).', true);
+				SwpmLog::log_simple_debug('Using the cached bearer token (since it is still valid). Environment mode: ' . $environment_mode, true);
 				return $token_string;
 			}
 		}
@@ -74,6 +74,13 @@ class SWPM_PayPal_Bearer {
             $secret = $settings->get_value('paypal-live-secret-key');
         }
 
+		//Check if the client id and secret are set before trying to create a bearer token using those values.
+		if( empty( $client_id ) || empty( $secret ) ){
+			SwpmLog::log_simple_debug('PayPal API credentials are not set. Missing Client ID or Secret Key. Please set them in the plugin\'s payment settings page.', false);
+			return false;
+		}
+
+		//Get the API base URL based on the environment mode.
         $api_base_url = SWPM_PayPal_Utility_Functions::get_api_base_url_by_environment_mode($environment_mode);
 		$url = trailingslashit( $api_base_url ) . 'v1/oauth2/token?grant_type=client_credentials';
 

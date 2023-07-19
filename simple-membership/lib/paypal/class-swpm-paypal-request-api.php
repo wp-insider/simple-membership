@@ -94,6 +94,9 @@ class SWPM_PayPal_Request_API {
 		return $this->last_error;
 	}
 
+	/**
+	 * Headers to use when making API requests using basic auth. We don't use this normally (as we use the bearer token method).
+	 */
 	private function get_headers() {
 		$ua_string = $this->format_app_info_to_string( $this->app_info );
 
@@ -101,6 +104,22 @@ class SWPM_PayPal_Request_API {
 			'Content-Type' => 'application/json',
 			'Authorization' => 'Basic ' . $this->basic_auth_string,
 			'User-Agent' => $ua_string,
+			'PayPal-Partner-Attribution-Id' => 'TipsandTricks_SP_PPCP',
+		);
+		return $headers;
+	}
+
+	/**
+	 * Headers to use when making API requests using a bearer token.
+	 */
+	private function get_headers_using_bearer_token() {	
+		//Get the bearer token at the time of the request (so if a cached token is used, it's validity gets checked before each request).
+		$bearer = SWPM_PayPal_Bearer::get_instance();
+		$bearer_token = $bearer->get_bearer_token( $this->environment_mode );
+
+		$headers = array(
+			'Content-Type' => 'application/json',
+			'Authorization' => 'Bearer ' . $bearer_token,
 			'PayPal-Partner-Attribution-Id' => 'TipsandTricks_SP_PPCP',
 		);
 		return $headers;
@@ -119,7 +138,8 @@ class SWPM_PayPal_Request_API {
 
 		$this->before_request();
 
-		$headers = $this->get_headers();
+		//$headers = $this->get_headers();//This can be used for Basic auth headers
+		$headers = $this->get_headers_using_bearer_token();
 
 		$api_base_url = $this->get_api_base_url();
 		$request_url = $api_base_url . $endpoint; //Example: https://api-m.sandbox.paypal.com/v1/billing/plans
@@ -157,7 +177,7 @@ class SWPM_PayPal_Request_API {
 
 		$this->before_request();
 
-		$headers = $this->get_headers();
+		$headers = $this->get_headers_using_bearer_token();
 
 		$api_base_url = $this->get_api_base_url();
 		$request_url = $api_base_url . $endpoint; //Example: https://api-m.sandbox.paypal.com/v1/catalogs/products
@@ -190,7 +210,7 @@ class SWPM_PayPal_Request_API {
 
 		$this->before_request();
 
-		$headers = $this->get_headers();
+		$headers = $this->get_headers_using_bearer_token();
 
 		$api_base_url = $this->get_api_base_url();
 		$request_url = $api_base_url . $endpoint; //Example: https://api-m.sandbox.paypal.com/v1/catalogs/products

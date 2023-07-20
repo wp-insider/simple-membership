@@ -12,7 +12,7 @@ class SWPM_PayPal_Request_API {
 
 	public $environment_mode = 'production'; //sandbox or production
 	public $sandbox_api_base_url = 'https://api-m.sandbox.paypal.com';
-	public $production_api_base_url = 'https://api.paypal.com';
+	public $production_api_base_url = 'https://api-m.paypal.com';
 
 	public $last_error;
 

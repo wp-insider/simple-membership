@@ -94,8 +94,9 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     } else {
         //Check if this plan exists in the PayPal account.
         if( !SWPM_PayPal_Utility_Functions::check_billing_plan_exists( $plan_id ) ){
-            //The plan ID does not exist in the PayPal account. Maybe the plan was created earlier in a different mode. We need to create a new plan.
-            $ret = SWPM_PayPal_Utility_Functions::create_billing_plan_for_button( $button_id );
+            //The plan ID does not exist in the PayPal account. Maybe the plan was created earlier in a different mode or using a different paypal account. 
+            //We need to create a fresh new plan for this button.
+            $ret = SWPM_PayPal_Utility_Functions::create_billing_plan_fresh_new( $button_id );
             if( $ret['success'] === true ){
                 $plan_id = $ret['plan_id'];
                 SwpmLog::log_simple_debug( 'Created new PayPal subscription plan for button ID: ' . $button_id . ', Plan ID: ' . $plan_id, true );

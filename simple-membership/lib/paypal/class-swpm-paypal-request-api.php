@@ -273,6 +273,10 @@ class SWPM_PayPal_Request_API {
 
 		$return = json_decode( $res['body'] );
 
+		//Debug purposes
+		//$debug_response_body = var_export( $return, true );
+		//SwpmLog::log_simple_debug( 'PayPal API response body: ' . $debug_response_body, true );
+
 		return $return;
 	}
 

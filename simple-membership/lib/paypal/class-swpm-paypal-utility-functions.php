@@ -59,6 +59,20 @@ class SWPM_PayPal_Utility_Functions{
     }
 
     /**
+     * Force creates a new billing plan for the button (the paypal account connection or the mode may have changed)
+     */
+    public static function create_billing_plan_fresh_new( $button_id ){
+        //Reset any plan ID that may be saved for this button. 
+        //We need to create completely new plan (using the current PayPal account and mode)
+        update_post_meta($button_id, 'pp_subscription_plan_id', '');
+        update_post_meta($button_id, 'pp_subscription_plan_mode', '');
+
+        $ret = array();
+        $ret = self::create_billing_plan_for_button( $button_id );
+        return $ret;
+    }
+
+    /**
      * Checks if a billling plan exists for the given button ID. If not, it creates a new billing plan in PayPal. 
      * Returns the billing plan ID in an array.
      * @param mixed $button_id
@@ -129,7 +143,7 @@ class SWPM_PayPal_Utility_Functions{
         $paypal_req_api = $pp_api_injector->get_paypal_req_api();
         $paypal_mode = $paypal_req_api->get_api_environment_mode();
 
-        Swpmlog::log_simple_debug( "Billing plan with ID: ". $plan_id . " does not exist in PayPal. The check was done in mode: ".$paypal_mode.". Maybe the plan was originally created in a different environment mode.", true );
+        Swpmlog::log_simple_debug( "Billing plan with ID: ". $plan_id . " does not exist in PayPal. The check was done in mode: ".$paypal_mode.". Maybe the plan was originally created in a different environment mode or account.", true );
 		return false;
     }
 

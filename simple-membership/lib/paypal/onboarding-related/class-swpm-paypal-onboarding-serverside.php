@@ -151,14 +151,22 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		$api_base_url = $this->get_api_base_url_by_environment_mode( $environment_mode );
 		$partner_id = $this->get_partner_id_by_environment_mode( $environment_mode );
 
+		//Get the PayPal-Auth-Assertion parameter value
+		$pp_auth_assertion = SWPM_PayPal_Request_API::get_paypal_auth_assertion_value( $environment_mode );
+
 		$url = trailingslashit( $api_base_url ) . 'v1/customer/partners/' . $partner_id . '/merchant-integrations/' . $seller_api_credentials['payer_id'];	
 		$args = array(
 			'method'  => 'GET',
 			'headers' => array(
-				'Authorization' => 'Bearer ' . $bearer_token,
 				'Content-Type'  => 'application/json',
+				'Authorization' => 'Bearer ' . $bearer_token,
+				'PayPal-Auth-Assertion' => $pp_auth_assertion,
+				'PayPal-Partner-Attribution-Id' => 'TipsandTricks_SP_PPCP',
 			),
 		);
+		//TODO - Debug purpose only
+		SwpmLog::log_simple_debug( 'PayPal API request headers for getting seller account status: ', true );
+		SwpmLog::log_array_data_to_debug( $args, true);		
 
 		$response = $this->send_request_by_url_and_args( $url, $args );
 
@@ -244,6 +252,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 
 		$url = trailingslashit( $api_base_url ) . 'v1/oauth2/token/';
 
+		//Note: we don't have the seller merchant ID yet. So cannot use the auth assertion header.
 		$args = array(
 			'method'  => 'POST',
 			'headers' => array(
@@ -296,6 +305,8 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		$partner_merchant_id = $this->get_partner_id_by_environment_mode( $environment_mode );
 
 		$url = trailingslashit( $api_base_url ) . 'v1/customer/partners/' . $partner_merchant_id . '/merchant-integrations/credentials/';
+		
+		//Note: we don't have the seller merchant ID yet. So cannot use the auth assertion header.
 		$args = array(
 			'method'  => 'GET',
 			'headers' => array(

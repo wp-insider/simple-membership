@@ -10,6 +10,30 @@ class SWPM_PayPal_Utility_Functions{
 		}
 	}
 
+    public static function get_partner_client_id_by_environment_mode( $environment_mode = 'production' ) {
+        if ($environment_mode == 'production') {
+            return SWPM_PayPal_Main::$partner_client_id_live;
+        } else {
+            return SWPM_PayPal_Main::$partner_client_id_sandbox;
+        }
+    }
+
+    /**
+     * Gets the seller merchant ID (payer ID) by environment mode. 
+     * Used in the PayPal API calls (for setting PayPal-Auth-Assertion header value)
+     */
+    public static function get_seller_merchant_id_by_environment_mode( $environment_mode = 'production' ) {
+        $settings = SwpmSettings::get_instance();
+        $seller_merchant_id = '';
+
+        if ($environment_mode == 'production') {
+            $seller_merchant_id = $settings->get_value('paypal-live-seller-merchant-id');
+        } else {
+            $seller_merchant_id = $settings->get_value('paypal-sandbox-seller-merchant-id');
+        }
+        return $seller_merchant_id;
+    }
+
     public static function create_product_params_from_button( $button_id ){
         $button_name = get_the_title( $button_id );
         $product_params = array(

@@ -125,6 +125,9 @@ class SWPM_PayPal_Request_API {
 		}
 		//===End backwards compatibility===
 
+		//Get the PayPal-Auth-Assertion parameter value
+		$pp_auth_assertion = self::get_paypal_auth_assertion_value( $environment_mode );
+
 		//Get the bearer token using the PPCP method.
 		$bearer = SWPM_PayPal_Bearer::get_instance();
 		$bearer_token = $bearer->get_bearer_token( $environment_mode );
@@ -132,9 +135,25 @@ class SWPM_PayPal_Request_API {
 		$headers = array(
 			'Content-Type' => 'application/json',
 			'Authorization' => 'Bearer ' . $bearer_token,
+			'PayPal-Auth-Assertion' => $pp_auth_assertion,
 			'PayPal-Partner-Attribution-Id' => 'TipsandTricks_SP_PPCP',
 		);
+
+		//TODO - Debug purposes
+		//SwpmLog::log_array_data_to_debug( $headers, true);
+
 		return $headers;
+	}
+
+	public static function get_paypal_auth_assertion_value($environment_mode){
+		$partner_client_id = SWPM_PayPal_Utility_Functions::get_partner_client_id_by_environment_mode( $environment_mode );
+		$seller_merchant_id = SWPM_PayPal_Utility_Functions::get_seller_merchant_id_by_environment_mode( $environment_mode );
+		$jwt_header_data = array( 'alg' => 'none' );
+		$jwt_payload = array( 'iss' => $partner_client_id, 'payer_id' => $seller_merchant_id );
+		$pp_auth_assertion = base64_encode(json_encode($jwt_header_data)).'.'.base64_encode(json_encode($jwt_payload)).'.';//The signature is empty
+		//TODO - Debug purpose only
+		SwpmLog::log_simple_debug('Created auth assertion value using merchant ID: ' . $seller_merchant_id . ', client ID: ' . $partner_client_id, true);
+		return $pp_auth_assertion;
 	}
 
 	/**

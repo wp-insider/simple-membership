@@ -128,6 +128,11 @@ class SWPM_PayPal_Bearer {
 		$paypal_cache->set( self::BEARER_CACHE_KEY, $token, self::BEARER_CACHE_EXPIRATION );//Cache for 8 hours.
 	}
 
+	public static function delete_cached_token() {
+		$paypal_cache = SWPM_PayPal_Cache::get_instance();
+		$paypal_cache->delete( self::BEARER_CACHE_KEY );
+	}
+
 	/**
 	 * Checks if token is expired or not
 	 * @return bool

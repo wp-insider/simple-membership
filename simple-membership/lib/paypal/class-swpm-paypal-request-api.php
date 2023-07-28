@@ -125,17 +125,13 @@ class SWPM_PayPal_Request_API {
 		}
 		//===End backwards compatibility===
 
-		//Get the PayPal-Auth-Assertion parameter value
-		$pp_auth_assertion = self::get_paypal_auth_assertion_value( $environment_mode );
-
-		//Get the bearer token using the PPCP method.
+		//Get the bearer/access token.
 		$bearer = SWPM_PayPal_Bearer::get_instance();
 		$bearer_token = $bearer->get_bearer_token( $environment_mode );
 
 		$headers = array(
 			'Content-Type' => 'application/json',
 			'Authorization' => 'Bearer ' . $bearer_token,
-			'PayPal-Auth-Assertion' => $pp_auth_assertion,
 			'PayPal-Partner-Attribution-Id' => 'TipsandTricks_SP_PPCP',
 		);
 
@@ -290,13 +286,17 @@ class SWPM_PayPal_Request_API {
 			return false;
 		}
 
-		$return = json_decode( $res['body'] );
+		$response_body = json_decode( $res['body'] );
 
-		//Debug purposes
-		//$debug_response_body = var_export( $return, true );
-		//SwpmLog::log_simple_debug( 'PayPal API response body: ' . $debug_response_body, true );
+		//=== Debug purposes ===
+		//PayPal debug id
+		//$paypal_debug_id = wp_remote_retrieve_header( $res, 'paypal-debug-id' );
+		//SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API response: ' . $paypal_debug_id, true );		
+		//$response_body_var_exported = var_export( $response_body, true );
+		//SwpmLog::log_simple_debug( 'PayPal API response body: ' . $response_body_var_exported, true );
+		//=== End of debug purposes ===
 
-		return $return;
+		return $response_body;
 	}
 
 	private function format_app_info_to_string( $app_info ) {

@@ -79,19 +79,22 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		$this->save_seller_api_credentials( $seller_api_credentials, $environment_mode);
 
 		//=== Create a new bearer token ===
-		$paypal_bearer = SWPM_PayPal_Bearer::get_instance();
-		//Create a new bearer token during onboarding (instead of trying to use one from the cache)
-		$bearer_token = $paypal_bearer->create_new_bearer_token( $environment_mode );
-		if ( ! $bearer_token ) {
-			//Failed to create bearer token.
-			wp_send_json(
-				array(
-					'success' => false,
-					'msg'  => __( 'Failed to create new PayPal bearer token. check debug log file for any error message.', 'simple-membership' ),
-				)
-			);			
-		}
-		//SwpmLog::log_simple_debug( 'Onboarding step: bearer token created successfully. Token: ' . $bearer_token, true );//Debug purpose only
+		// $paypal_bearer = SWPM_PayPal_Bearer::get_instance();
+		// //Create a new bearer token during onboarding (instead of trying to use one from the cache)
+		// $bearer_token = $paypal_bearer->create_new_bearer_token( $environment_mode );
+		// if ( ! $bearer_token ) {
+		// 	//Failed to create bearer token.
+		// 	wp_send_json(
+		// 		array(
+		// 			'success' => false,
+		// 			'msg'  => __( 'Failed to create new PayPal bearer token. check debug log file for any error message.', 'simple-membership' ),
+		// 		)
+		// 	);			
+		// }
+
+		//Let's use the already generated access token throughout the onboarding process.
+		$bearer_token = $access_token;
+		//SwpmLog::log_simple_debug( 'Onboarding step: using access token from the previous step. Token: ' . $bearer_token, true );//Debug purpose only
 
 		//=== Seller account status ===
 		$seller_account_status = $this->get_seller_account_status_data_using_bearer_token($bearer_token, $seller_api_credentials, $environment_mode );
@@ -132,6 +135,9 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		$settings->set_value('paypal-ppcp-onboarding-'.$environment_mode, 'completed');
 		$settings->save();
 
+		//Delete any cached token using the old credentials (so it is forced to generate and cache a new one after onboarding (when new API call is made)))
+		SWPM_PayPal_Bearer::delete_cached_token();
+				
         SwpmLog::log_simple_debug( 'Successfully processed the handle_onboarded_callback_data. Environment mode: '.$environment_mode, true );
 
 		//If everything is processed successfully, send the success response.
@@ -151,22 +157,18 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		$api_base_url = $this->get_api_base_url_by_environment_mode( $environment_mode );
 		$partner_id = $this->get_partner_id_by_environment_mode( $environment_mode );
 
-		//Get the PayPal-Auth-Assertion parameter value
-		$pp_auth_assertion = SWPM_PayPal_Request_API::get_paypal_auth_assertion_value( $environment_mode );
-
 		$url = trailingslashit( $api_base_url ) . 'v1/customer/partners/' . $partner_id . '/merchant-integrations/' . $seller_api_credentials['payer_id'];	
 		$args = array(
 			'method'  => 'GET',
 			'headers' => array(
 				'Content-Type'  => 'application/json',
 				'Authorization' => 'Bearer ' . $bearer_token,
-				'PayPal-Auth-Assertion' => $pp_auth_assertion,
 				'PayPal-Partner-Attribution-Id' => 'TipsandTricks_SP_PPCP',
 			),
 		);
-		//TODO - Debug purpose only
-		SwpmLog::log_simple_debug( 'PayPal API request headers for getting seller account status: ', true );
-		SwpmLog::log_array_data_to_debug( $args, true);		
+		//Debug purpose only
+		//SwpmLog::log_simple_debug( 'PayPal API request headers for getting seller account status: ', true );
+		//SwpmLog::log_array_data_to_debug( $args, true);		
 
 		$response = $this->send_request_by_url_and_args( $url, $args );
 
@@ -361,6 +363,20 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		}
 
 		$response = wp_remote_get( $url, $args );
+
+		//=== Debug purposes ===
+		//PayPal debug id
+		$paypal_debug_id = wp_remote_retrieve_header( $response, 'paypal-debug-id' );
+		SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API response: ' . $paypal_debug_id, true );
+		//Debug the request body
+		//$response_body = wp_remote_retrieve_body( $response );
+		//$response_body_json_decoded = json_decode( $response_body );
+		//SwpmLog::log_array_data_to_debug( $response_body_json_decoded, true );
+		//Debug the full response (header and body)
+		//$response_full_var_exported = var_export( $response, true );
+		//SwpmLog::log_simple_debug( 'PayPal API response body: ' . $debug_api_response, true );
+		//=== End of debug purposes ===
+
 		return $response;
 	}
 

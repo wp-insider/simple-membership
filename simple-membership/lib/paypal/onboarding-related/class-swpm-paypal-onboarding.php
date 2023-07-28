@@ -42,7 +42,7 @@ class SWPM_PayPal_PPCP_Onboarding {
 
 		$query_args = array();
 		$query_args['partnerId'] = SWPM_PayPal_Main::$partner_id_sandbox;
-		$query_args['product'] = 'PPCP';
+		$query_args['product'] = 'EXPRESS_CHECKOUT';//'PPCP';
 		$query_args['integrationType'] = 'FO';
 		$query_args['features'] = 'PAYMENT,REFUND';
 		$query_args['partnerClientId'] = SWPM_PayPal_Main::$partner_client_id_sandbox;
@@ -53,7 +53,7 @@ class SWPM_PayPal_PPCP_Onboarding {
 
 		$base_url = 'https://www.sandbox.paypal.com/bizsignup/partner/entry';
 		$sandbox_singup_link = add_query_arg( $query_args, $base_url );
-		//Example URL = 'https://www.sandbox.paypal.com/bizsignup/partner/entry?partnerId=USVAEAM3FR5E2&product=ppcp&integrationType=FO&features=PAYMENT,REFUND&partnerClientId=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX&returnToPartnerUrl=&partnerLogoUrl=&displayMode=minibrowser&sellerNonce=a575ab0ee0';
+		//Example URL = 'https://www.sandbox.paypal.com/bizsignup/partner/entry?partnerId=USVAEAM3FR5E2&product=EXPRESS_CHECKOUT&integrationType=FO&features=PAYMENT,REFUND&partnerClientId=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX&returnToPartnerUrl=&partnerLogoUrl=&displayMode=minibrowser&sellerNonce=a575ab0ee0';
 		
 		update_option('swpm_ppcp_sandbox_connect_query_args', $query_args);
 

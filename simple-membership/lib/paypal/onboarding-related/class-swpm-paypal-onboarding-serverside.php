@@ -362,6 +362,11 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			$args['headers']['PayPal-Partner-Attribution-Id'] = 'TipsandTricks_SP_PPCP';
 		}
 
+		//=== Debug purposes ===
+		//SwpmLog::log_simple_debug( 'PayPal API request header: ', true );
+		//SwpmLog::log_array_data_to_debug( $args, true );
+		//=== End of debug purposes ===
+
 		$response = wp_remote_get( $url, $args );
 
 		//=== Debug purposes ===

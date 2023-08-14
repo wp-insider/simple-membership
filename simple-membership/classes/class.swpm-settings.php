@@ -154,6 +154,20 @@ class SwpmSettings {
 		);
 
 		add_settings_field(
+			'default-account-status-after-payment',
+			SwpmUtils::_( 'Default Account Status After Payment' ),
+			array( &$this, 'selectbox_callback' ),
+			'simple_wp_membership_settings',
+			'general-settings',
+			array(
+				'item'    => 'default-account-status-after-payment',
+				'options' => SwpmUtils::get_account_state_options(),
+				'default' => 'active',
+				'message' => SwpmUtils::_( 'The account status that will be applied to the profile after a payment. The default value should be active.' ),
+			)
+		);
+
+		add_settings_field(
 			'members-login-to-comment',
 			SwpmUtils::_( 'Members Must be Logged in to Comment' ),
 			array( &$this, 'checkbox_callback' ),
@@ -1550,6 +1564,7 @@ class SwpmSettings {
 		$output['password-reset-using-link'] = isset( $input['password-reset-using-link'] ) ? esc_attr( $input['password-reset-using-link'] ) : '';
 		$output['join-us-page-url']         = esc_url( $input['join-us-page-url'] );
 		$output['default-account-status']   = esc_attr( $input['default-account-status'] );
+		$output['default-account-status-after-payment']   = esc_attr( $input['default-account-status-after-payment'] );
 		$output['members-login-to-comment'] = isset( $input['members-login-to-comment'] ) ? esc_attr( $input['members-login-to-comment'] ) : '';
 		$output['password-visibility-login-form'] = isset( $input['password-visibility-login-form'] ) ? esc_attr( $input['password-visibility-login-form'] ) : '';
 

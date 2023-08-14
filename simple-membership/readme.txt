@@ -176,6 +176,7 @@ https://simple-membership-plugin.com/
 - After submitting the password reset form, a message displaying "Processing request" is shown. Thanks to Darwin for submitting this update.
 - Added a new filter hook for the Thank You page message.
 - Fixed a small bug with the newly added "Send Direct Email" feature. It was not setting the "From Email Address" field's value.
+- Added a new option labeled "Default Account Status After Payment". This should be helpful with certain types of manual approval configuration.
 
 = 4.3.4 =
 - Readability improvement for the 'remember me' checkbox field's code.

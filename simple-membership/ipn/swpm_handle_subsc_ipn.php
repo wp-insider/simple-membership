@@ -125,7 +125,7 @@ function swpm_handle_subsc_signup_stand_alone( $ipn_data, $subsc_ref, $unique_re
 		// End of existing user account upgrade/update.
 	} else {
 		// create new member account.
-		$default_account_status = $settings->get_value( 'default-account-status', 'active' );
+		$default_account_status = $settings->get_value( 'default-account-status-after-payment', 'active' );
 
 		$data              = array();
 		$data['user_name'] = '';
@@ -344,8 +344,8 @@ function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 	global $wpdb;
 	$email = isset( $ipn_data['payer_email'] ) ? $ipn_data['payer_email'] : '';
 	$subscr_id = $ipn_data['subscr_id'];
-	$account_state = SwpmSettings::get_instance()->get_value( 'default-account-status', 'active' );
-        $account_state = apply_filters( 'swpm_account_status_for_subscription_start_date_update', $account_state );
+	$account_state = SwpmSettings::get_instance()->get_value( 'default-account-status-after-payment', 'active' );
+    $account_state = apply_filters( 'swpm_account_status_for_subscription_start_date_update', $account_state );
 
 	if( empty( $subscr_id ) ) {
 		swpm_debug_log_subsc( 'Subscription ID is empty. A Subscription ID value is required to update the access start date.', false );

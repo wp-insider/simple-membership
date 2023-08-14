@@ -149,7 +149,7 @@ class SwpmSettings {
 				'item'    => 'default-account-status',
 				'options' => SwpmUtils::get_account_state_options(),
 				'default' => 'active',
-				'message' => SwpmUtils::_( 'Select the default account status for newly registered users. If you want to manually approve the members then you can set the status to "Pending".' ),
+				'message' => SwpmUtils::_( 'Select the default account status for newly registered users. The default value should be active. If you want to manually approve the members then read <a href="https://simple-membership-plugin.com/manually-approve-members-membership-site/" target="_blank">this documentation</a> to learn more.' ),
 			)
 		);
 

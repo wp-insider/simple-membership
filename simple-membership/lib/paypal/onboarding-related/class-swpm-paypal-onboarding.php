@@ -36,24 +36,37 @@ class SWPM_PayPal_PPCP_Onboarding {
 		return $seller_nonce;
 	}
 
+	public static function generate_return_url_after_onboarding( $environment_mode = 'production' ){
+		$base_url = admin_url('admin.php?page=simple_wp_membership_settings');
+		$query_args = array();
+		$query_args['tab'] = '2';
+		$query_args['swpm_ppcp_after_onboarding'] = '1';
+		$query_args['environment_mode'] = $environment_mode;
+		$return_url = add_query_arg( $query_args, $base_url );
+
+		//Encode the return URL so when it is used as a query arg, it does not break the URL.
+		$return_url_encoded = urlencode($return_url);
+		return $return_url_encoded;
+	}
+
 	public static function get_sandbox_signup_link(){
 
 		$seller_nonce = self::generate_seller_nonce();
 
 		$query_args = array();
 		$query_args['partnerId'] = SWPM_PayPal_Main::$partner_id_sandbox;
-		$query_args['product'] = 'EXPRESS_CHECKOUT';//'PPCP';
+		$query_args['product'] = 'PPCP';// 'EXPRESS_CHECKOUT';
 		$query_args['integrationType'] = 'FO';
 		$query_args['features'] = 'PAYMENT,REFUND';
 		$query_args['partnerClientId'] = SWPM_PayPal_Main::$partner_client_id_sandbox;
-		$query_args['returnToPartnerUrl'] = '';
+		$query_args['returnToPartnerUrl'] = self::generate_return_url_after_onboarding('sandbox');
 		//$query_args['partnerLogoUrl'] = '';
 		$query_args['displayMode'] = 'minibrowser';
 		$query_args['sellerNonce'] = $seller_nonce;
 
 		$base_url = 'https://www.sandbox.paypal.com/bizsignup/partner/entry';
 		$sandbox_singup_link = add_query_arg( $query_args, $base_url );
-		//Example URL = 'https://www.sandbox.paypal.com/bizsignup/partner/entry?partnerId=USVAEAM3FR5E2&product=EXPRESS_CHECKOUT&integrationType=FO&features=PAYMENT,REFUND&partnerClientId=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX&returnToPartnerUrl=&partnerLogoUrl=&displayMode=minibrowser&sellerNonce=a575ab0ee0';
+		//Example URL = 'https://www.sandbox.paypal.com/bizsignup/partner/entry?partnerId=USVAEAM3FR5E2&product=PPCP&integrationType=FO&features=PAYMENT,REFUND&partnerClientId=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX&returnToPartnerUrl=&partnerLogoUrl=&displayMode=minibrowser&sellerNonce=a575ab0ee0';
 		
 		update_option('swpm_ppcp_sandbox_connect_query_args', $query_args);
 
@@ -68,8 +81,8 @@ class SWPM_PayPal_PPCP_Onboarding {
 		<script>
 			function swpm_ppcp_sandbox_onboardedCallback(authCode, sharedId) {
 				console.log('SWPM PayPal Sandbox onboardedCallback');
-				console.log(authCode);
-				console.log(sharedId);
+				console.log('Auth Code: ' + authCode);
+				console.log('Shared ID: ' + sharedId);
 				console.log('<?php echo $wp_nonce; ?>');
 				console.log('<?php echo $ajax_post_url; ?>')
 

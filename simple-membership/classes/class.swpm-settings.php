@@ -1263,6 +1263,9 @@ class SwpmSettings {
 	public function paypal_ppcp_connection_settings_callback() {
 		echo '<h2 id="paypal-ppcp-connection-section">' . SwpmUtils::_( 'PayPal Account Setup' ) . '</h2>';
 
+		$ppcp_onboarding_instance = SWPM_PayPal_PPCP_Onboarding::get_instance();
+
+		//TODO - if all API credentials are missing, show a message.
 		$all_api_creds_missing = false;
 		if( empty( $this->get_value('paypal-sandbox-client-id')) && empty( $this->get_value('paypal-sandbox-secret-key')) && empty( $this->get_value('paypal-live-client-id')) && empty( $this->get_value('paypal-live-secret-key')) ){
 			$all_api_creds_missing = true;
@@ -1275,51 +1278,56 @@ class SwpmSettings {
 				<td>
 					<?php
 					//TODO - Check if the live account is connected
-					$live_account_connection_status = get_option( 'swpm_paypal_live_account_connection_status' );
+					$live_account_connection_status = 'connected';
+					if( empty( $this->get_value('paypal-live-client-id')) || empty( $this->get_value('paypal-live-secret-key')) ){
+						//Sandbox API keys are missing. Account is not connected.
+						$live_account_connection_status = 'not-connected';
+					}
+
 					if( $live_account_connection_status == 'connected'){
 						//Production account connected
-						echo '<span class="swpm-paypal-live-account-connection-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						_e( 'Live Account is connected. If you encounter any problems with the connection, you can disconnect it and then reconnect it again.', 'simple-membership' );
-						echo '</span>';
+						echo '<div class="swpm-paypal-live-account-connection-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
+						_e( 'Live account is connected. If you experience any issues, please disconnect and reconnect.', 'simple-membership' );
+						echo '</div>';
 						//TODO - Show disconnect option for live account.
+						//$ppcp_onboarding_instance->output_live_ac_disconnect_link();
 					} else {
 						//Production account is NOT connected.
-						if( empty( $this->get_value('paypal-live-client-id')) || empty( $this->get_value('paypal-live-secret-key')) ){
-							//Live API keys are missing. Need to connect account.
-							echo '<p><span class="swpm-paypal-live-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							_e( 'Live PayPal account is not connected.', 'simple-membership');
-							echo '</span></p>';
+						echo '<div class="swpm-paypal-live-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+						_e( 'Live PayPal account is not connected.', 'simple-membership');
+						echo '</div>';
 
-							//TODO - Show the onboarding link
-							//SWPM_PayPal_PPCP_Onboarding::output_live_onboarding_link_code();
-						}
+						//TODO - Show the onboarding link
+						//ppcp_onboarding_instance->output_live_onboarding_link_code();
 					}
 					?>
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php _e('Test/Sandbox Account Connnection Status', 'simple-membership'); ?></th>
+				<th scope="row"><?php _e('Sandbox Account Connnection Status', 'simple-membership'); ?></th>
 				<td>
 					<?php
-					//TODO - Check if the sandbox account is connected
-					$test_account_connection_status = get_option( 'swpm_paypal_test_account_connection_status' );
-					if( $test_account_connection_status == 'connected'){
+					//Check if the sandbox account is connected
+					$sandbox_account_connection_status = 'connected';
+					if( empty( $this->get_value('paypal-sandbox-client-id')) || empty( $this->get_value('paypal-sandbox-secret-key')) ){
+						//Sandbox API keys are missing. Account is not connected.
+						$sandbox_account_connection_status = 'not-connected';
+					}
+
+					if( $sandbox_account_connection_status == 'connected'){
 						//Test account connected
-						echo '<span class="swpm-paypal-test-account-connection-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						_e( 'Sandbox Account is connected. If you encounter any problems with the connection, you can disconnect it and then reconnect it again.', 'simple-membership' );
-						echo '</span>';
-						//TODO - Show disconnect option for sandbox account.
+						echo '<div class="swpm-paypal-test-account-connection-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
+						_e( 'Sandbox account is connected. If you experience any issues, please disconnect and reconnect.', 'simple-membership' );
+						echo '</div>';
+						//Show disconnect option for sandbox account.
+						$ppcp_onboarding_instance->output_sandbox_ac_disconnect_link();
 					} else {
-						//Test account is NOT connected.
-						//if( empty( $this->get_value('paypal-sandbox-client-id')) || empty( $this->get_value('paypal-sandbox-secret-key')) ){
-							//Sandbox API keys are missing. Need to connect account.
-						//}
-						echo '<p><span class="swpm-paypal-sandbox-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+						//Sandbox account is NOT connected.
+						echo '<div class="swpm-paypal-sandbox-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
 						_e( 'Sandbox PayPal account is not connected.', 'simple-membership');
-						echo '</span></p>';
+						echo '</div>';
 
 						//Show the onboarding link for sandbox account.
-						$ppcp_onboarding_instance = SWPM_PayPal_PPCP_Onboarding::get_instance();
 						$ppcp_onboarding_instance->output_sandbox_onboarding_link_code();
 					}
 					?>

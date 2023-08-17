@@ -80,11 +80,10 @@ class SWPM_PayPal_PPCP_Onboarding {
 		?>
 		<script>
 			function swpm_ppcp_sandbox_onboardedCallback(authCode, sharedId) {
-				console.log('SWPM PayPal Sandbox onboardedCallback');
-				console.log('Auth Code: ' + authCode);
-				console.log('Shared ID: ' + sharedId);
-				console.log('<?php echo $wp_nonce; ?>');
-				console.log('<?php echo $ajax_post_url; ?>')
+				//console.log('SWPM PayPal Sandbox onboardedCallback');
+				//console.log('Auth Code: ' + authCode);
+				//console.log('Shared ID: ' + sharedId);
+				//console.log('<?php echo $ajax_post_url; ?>')
 
 				data = JSON.stringify({
 						authCode: authCode,
@@ -130,5 +129,10 @@ class SWPM_PayPal_PPCP_Onboarding {
 
 		<?php
 
+	}
+
+	public function output_sandbox_ac_disconnect_link(){
+		$sandbox_disconnect_url = admin_url('admin.php?page=simple_wp_membership_settings&tab=2&swpm_ppcp_sandbox_disconnect=1');
+		echo '<a class="button" href="' . $sandbox_disconnect_url . '">Disconnect Sandbox Account</a>';	
 	}
 }

@@ -64,6 +64,15 @@ if (isset($_GET['swpm_ppcp_after_onboarding'])){
 	$onboarding_action_result .= '<p><a href="#paypal-ppcp-connection-section">Click here</a> to go to the PayPal Account Setup section below.</p>';
     echo '<div class="swpm-yellow-box"><p>' . $onboarding_action_result . '</p></div>';
 }
+if (isset($_GET['swpm_ppcp_sandbox_disconnect'])){
+    //Verify nonce
+    check_admin_referer( 'swpm_sandbox_ac_disconnect_nonce' );
+
+    SWPM_PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('sandbox');
+    $disconnect_action_result = '<p>PayPal sandbox account disconnected.</p>';
+	$disconnect_action_result .= '<p><a href="#paypal-ppcp-connection-section">Click here</a> to go to the PayPal Account Setup section below.</p>';
+    echo '<div class="swpm-yellow-box"><p>' . $disconnect_action_result . '</p></div>';
+}
 ?>
 
 <!-- render the rest of the settings fields for tab-2 -->

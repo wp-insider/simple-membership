@@ -228,6 +228,26 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		SwpmLog::log_simple_debug( 'Seller API credentials (environment mode: '.$environment_mode.') saved successfully.', true );
 	}
 
+	public static function reset_seller_api_credentials( $environment_mode = 'production' ) {
+		// Save the API credentials to the database.
+		$settings = SwpmSettings::get_instance();
+
+		if( $environment_mode == 'sandbox' ){
+			//Sandobx mode
+			$settings->set_value('paypal-sandbox-client-id', '');
+			$settings->set_value('paypal-sandbox-secret-key', '');
+			$settings->set_value('paypal-sandbox-seller-merchant-id', '');//Seller Merchant ID
+		} else {
+			//Production mode
+			$settings->set_value('paypal-live-client-id', '');
+			$settings->set_value('paypal-live-secret-key', '');
+			$settings->set_value('paypal-live-seller-merchant-id', '');//Seller Merchant ID
+		}
+
+		$settings->save();
+		SwpmLog::log_simple_debug( 'Seller API credentials (environment mode: '.$environment_mode.') reset/removed successfully.', true );
+	}
+
 	/**
 	 * Generates a token using the shared_id and auth_token and seller_nonce. Used during the onboarding process.
 	 *

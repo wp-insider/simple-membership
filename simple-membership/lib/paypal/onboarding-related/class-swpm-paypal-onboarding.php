@@ -133,6 +133,9 @@ class SWPM_PayPal_PPCP_Onboarding {
 
 	public function output_sandbox_ac_disconnect_link(){
 		$sandbox_disconnect_url = admin_url('admin.php?page=simple_wp_membership_settings&tab=2&swpm_ppcp_sandbox_disconnect=1');
-		echo '<a class="button" href="' . $sandbox_disconnect_url . '">Disconnect Sandbox Account</a>';	
+		$ac_disconnect_nonce = wp_create_nonce('swpm_sandbox_ac_disconnect_nonce');
+		$sandbox_disconnect_url_nonced = add_query_arg('_wpnonce', $ac_disconnect_nonce, $sandbox_disconnect_url);
+
+		echo '<a class="button" href="' . $sandbox_disconnect_url_nonced . '">Disconnect Sandbox Account</a>';	
 	}
 }

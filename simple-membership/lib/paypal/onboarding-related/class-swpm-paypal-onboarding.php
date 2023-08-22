@@ -83,7 +83,6 @@ class SWPM_PayPal_PPCP_Onboarding {
 				//console.log('SWPM PayPal Sandbox onboardedCallback');
 				//console.log('Auth Code: ' + authCode);
 				//console.log('Shared ID: ' + sharedId);
-				//console.log('<?php echo $ajax_post_url; ?>')
 
 				data = JSON.stringify({
 						authCode: authCode,
@@ -116,7 +115,7 @@ class SWPM_PayPal_PPCP_Onboarding {
 				})
 
 				return false;
-				//TODO - Send the authCode and sharedId to your server and do the next steps.
+				//Send the authCode and sharedId to your server and do the next steps.
 				//The get_option('swpm_ppcp_sandbox_connect_query_args') will give you the query args that you sent to the PayPal onboarding page
 				//You can use the sellerNonce to identify the user.
 			}

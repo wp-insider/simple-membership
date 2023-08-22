@@ -78,20 +78,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		//Save the credentials to the database.
 		$this->save_seller_api_credentials( $seller_api_credentials, $environment_mode);
 
-		//=== Create a new bearer token ===
-		// $paypal_bearer = SWPM_PayPal_Bearer::get_instance();
-		// //Create a new bearer token during onboarding (instead of trying to use one from the cache)
-		// $bearer_token = $paypal_bearer->create_new_bearer_token( $environment_mode );
-		// if ( ! $bearer_token ) {
-		// 	//Failed to create bearer token.
-		// 	wp_send_json(
-		// 		array(
-		// 			'success' => false,
-		// 			'msg'  => __( 'Failed to create new PayPal bearer token. check debug log file for any error message.', 'simple-membership' ),
-		// 		)
-		// 	);			
-		// }
-
+		//=== Bearer token ===
 		//Let's use the already generated access token throughout the onboarding process.
 		$bearer_token = $access_token;
 		//SwpmLog::log_simple_debug( 'Onboarding step: using access token from the previous step. Token: ' . $bearer_token, true );//Debug purpose only
@@ -244,6 +231,10 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			$settings->set_value('paypal-live-seller-merchant-id', '');//Seller Merchant ID
 		}
 
+		//Reset the onboarding complete flag (for the corresponding mode) to the database.
+		$settings->set_value('paypal-ppcp-onboarding-'.$environment_mode, '');
+
+		//Save the settings
 		$settings->save();
 		SwpmLog::log_simple_debug( 'Seller API credentials (environment mode: '.$environment_mode.') reset/removed successfully.', true );
 	}
@@ -264,7 +255,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			$query_args = get_option('swpm_ppcp_sandbox_connect_query_args');
 			$seller_nonce = isset($query_args['sellerNonce']) ? $query_args['sellerNonce'] : '';
 		} else {
-			//TODO - test after product account is created.
+			//TODO - test after production account is created.
 			$query_args = get_option('swpm_ppcp_production_connect_query_args');
 			$seller_nonce = isset($query_args['sellerNonce']) ? $query_args['sellerNonce'] : '';
 		}

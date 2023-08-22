@@ -96,6 +96,12 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			);			
 		}
 
+		//Save the seller paypal email to the database.
+		//The paypal email address of the seller will be available in the 'tracking_id' field of the seller_account_status array.
+		$seller_paypal_email = isset( $seller_account_status['tracking_id'] )? $seller_account_status['tracking_id'] : '';
+		$this->save_seller_paypal_email( $seller_paypal_email, $environment_mode );
+
+		//Check if the seller account is limited or not.
 		if( ! $seller_account_status['payments_receivable'] ){
 			//Seller account is limited. Show a message to the seller.
 			wp_send_json(
@@ -189,10 +195,27 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 
 		//Success. return the credentials.
 		return array(
+			'merchant_id' => $json->merchant_id,
+			'tracking_id' => $json->tracking_id,/* This will be the paypal account email address */
 			'payments_receivable' => $json->payments_receivable,
 			'primary_email_confirmed' => $json->primary_email_confirmed,
 		);
 
+	}
+
+	public function save_seller_paypal_email( $seller_paypal_email, $environment_mode = 'production' ) {
+		//This is saved as a separate method because the seller paypal email is not available in the get seller api credentials call.
+		//The seller paypal email is available in the get seller account status call.
+		$settings = SwpmSettings::get_instance();
+
+		if( $environment_mode == 'sandbox' ){
+			$settings->set_value('paypal-sandbox-seller-paypal-email', $seller_paypal_email);
+		} else {
+			$settings->set_value('paypal-live-seller-paypal-email', $seller_paypal_email);
+		}
+
+		$settings->save();
+		SwpmLog::log_simple_debug( 'Seller PayPal email address ('.$seller_paypal_email.') saved successfully (environment mode: '.$environment_mode.').', true );
 	}
 
 	public function save_seller_api_credentials( $seller_api_credentials, $environment_mode = 'production' ) {
@@ -224,11 +247,13 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			$settings->set_value('paypal-sandbox-client-id', '');
 			$settings->set_value('paypal-sandbox-secret-key', '');
 			$settings->set_value('paypal-sandbox-seller-merchant-id', '');//Seller Merchant ID
+			$settings->set_value('paypal-sandbox-seller-paypal-email', '');//Seller PayPal Email
 		} else {
 			//Production mode
 			$settings->set_value('paypal-live-client-id', '');
 			$settings->set_value('paypal-live-secret-key', '');
 			$settings->set_value('paypal-live-seller-merchant-id', '');//Seller Merchant ID
+			$settings->set_value('paypal-live-seller-paypal-email', '');//Seller PayPal Email
 		}
 
 		//Reset the onboarding complete flag (for the corresponding mode) to the database.

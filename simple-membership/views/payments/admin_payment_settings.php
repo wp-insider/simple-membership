@@ -59,7 +59,7 @@ if (isset($_GET['swpm_paypal_delete_webhook'])){
 }
 
 if (isset($_GET['swpm_ppcp_after_onboarding'])){
-    $environement_mode = isset($_GET['environment_mode']) ? $_GET['environment_mode'] : '';
+    $environment_mode = isset($_GET['environment_mode']) ? $_GET['environment_mode'] : '';
     $onboarding_action_result = '<p>PayPal merchant account connection setup completed for environment mode: '. $environment_mode .'</p>';
 	$onboarding_action_result .= '<p><a href="#paypal-ppcp-connection-section">Click here</a> to go to the PayPal Account Setup section below.</p>';
     echo '<div class="swpm-yellow-box"><p>' . $onboarding_action_result . '</p></div>';

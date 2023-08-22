@@ -135,6 +135,6 @@ class SWPM_PayPal_PPCP_Onboarding {
 		$ac_disconnect_nonce = wp_create_nonce('swpm_sandbox_ac_disconnect_nonce');
 		$sandbox_disconnect_url_nonced = add_query_arg('_wpnonce', $ac_disconnect_nonce, $sandbox_disconnect_url);
 
-		echo '<a class="button" href="' . $sandbox_disconnect_url_nonced . '">Disconnect Sandbox Account</a>';	
+		echo '<a class="button" href="' . $sandbox_disconnect_url_nonced . '" onclick="return confirm(\'Are you sure you want to disconnect the sandbox account?\')">Disconnect Sandbox Account</a>';	
 	}
 }

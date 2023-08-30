@@ -169,6 +169,11 @@ class SwpmInitTimeTasks {
 		$user_login = filter_input( INPUT_POST, 'swpm_user_login', FILTER_UNSAFE_RAW );
 		$user_login = sanitize_user( $user_login );
 
+		//Check 'swpm_user_login' matches with $_GET['login']
+		if( $user_login != $_GET['login'] ) {
+			$error_message = __("Error! Invalid password reset request.", 'simple-membership');
+		}
+
 		//Validate password reset key
         $is_valid_key = check_password_reset_key($_GET['key'], $_GET['login']);
         if ( is_wp_error( $is_valid_key ) ) {
@@ -183,7 +188,7 @@ class SwpmInitTimeTasks {
 		}
 
 		//Validate user exists
-		$user_data = get_user_by( "login", $user_login );
+		$user_data = get_user_by( "login", $_GET['login'] );
 		if( !$user_data ) {			
 			$error_message = __("Error! Invalid password reset request.", 'simple-membership');
 		}

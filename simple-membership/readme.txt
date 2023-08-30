@@ -177,6 +177,7 @@ https://simple-membership-plugin.com/
 - Added a new filter hook for the Thank You page message.
 - Fixed a small bug with the newly added "Send Direct Email" feature. It was not setting the "From Email Address" field's value.
 - Added a new option labeled "Default Account Status After Payment". This should be helpful with certain types of manual approval configuration.
+- Added validation to the password reset by link feature. Thanks to Rafie for pointing it out.
 
 = 4.3.4 =
 - Readability improvement for the 'remember me' checkbox field's code.

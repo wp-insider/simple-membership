@@ -104,8 +104,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 	}
 
 	public function register_front_end() {
-                //Trigger action hook
-                do_action( 'swpm_front_end_registration_form_submitted' );
+		//Trigger action hook
+		do_action( 'swpm_front_end_registration_form_submitted' );
 
 		//If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
 		$captcha_validation_output = apply_filters( 'swpm_validate_registration_form_submission', '' );
@@ -161,50 +161,57 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$this->email_activation = get_option( 'swpm_email_activation_lvl_' . $level_value );
 
 		//Crete the member profile and send notification
-		if ( $this->create_swpm_user() && $this->prepare_and_create_wp_user_front_end() && $this->send_reg_email() ) {
-			do_action( 'swpm_front_end_registration_complete' ); //Keep this action hook for people who are using it (so their implementation doesn't break).
-			do_action( 'swpm_front_end_registration_complete_user_data', $this->member_info );
+		if ( $this->create_swpm_user() ) {
+			//SWPM user creation was successful. Now create the corresponding WP user record and send the notification email.
+			if ( $this->prepare_and_create_wp_user_front_end() && $this->send_reg_email() ){
+				do_action( 'swpm_front_end_registration_complete' ); //Keep this action hook for people who are using it (so their implementation doesn't break).
+				do_action( 'swpm_front_end_registration_complete_user_data', $this->member_info );
 
-			//Check if there is after registration redirect
-			if ( ! $this->email_activation ) {
-				$after_rego_url = SwpmSettings::get_instance()->get_value( 'after-rego-redirect-page-url' );
-				$after_rego_url = apply_filters( 'swpm_after_registration_redirect_url', $after_rego_url );
-				if ( ! empty( $after_rego_url ) ) {
-					//Yes. Need to redirect to this after registration page
-					SwpmLog::log_simple_debug( 'After registration redirect is configured in settings. Redirecting user to: ' . $after_rego_url, true );
-					wp_redirect( $after_rego_url );
-					exit( 0 );
+				//Check if there is after registration redirect
+				if ( ! $this->email_activation ) {
+					$after_rego_url = SwpmSettings::get_instance()->get_value( 'after-rego-redirect-page-url' );
+					$after_rego_url = apply_filters( 'swpm_after_registration_redirect_url', $after_rego_url );
+					if ( ! empty( $after_rego_url ) ) {
+						//Yes. Need to redirect to this after registration page
+						SwpmLog::log_simple_debug( 'After registration redirect is configured in settings. Redirecting user to: ' . $after_rego_url, true );
+						wp_redirect( $after_rego_url );
+						exit( 0 );
+					}
 				}
+
+				//Set the registration complete message
+				if ( $this->email_activation ) {
+					$email_act_msg  = '<div class="swpm-registration-success-msg">';
+					$email_act_msg .= SwpmUtils::_( 'You need to confirm your email address. Please check your email and follow instructions to complete your registration.' );
+					$email_act_msg .= '</div>';
+									$email_act_msg = apply_filters( 'swpm_registration_email_activation_msg', $email_act_msg );//Can be added to the custom messages addon.
+					$message        = array(
+						'succeeded' => true,
+						'message'   => $email_act_msg,
+					);
+				} else {
+					$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );
+
+					// Allow hooks to change the value of login_page_url
+					$login_page_url = apply_filters('swpm_register_front_end_login_page_url', $login_page_url);
+
+					$after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_( 'Registration Successful. ' ) . SwpmUtils::_( 'Please' ) . ' <a href="' . $login_page_url . '">' . SwpmUtils::_( 'Log In' ) . '</a></div>';
+					$after_rego_msg = apply_filters( 'swpm_registration_success_msg', $after_rego_msg );
+					$message        = array(
+						'succeeded' => true,
+						'message'   => $after_rego_msg,
+					);
+				}
+				SwpmTransfer::get_instance()->set( 'status', $message );
+				return;
 			}
-
-			//Set the registration complete message
-			if ( $this->email_activation ) {
-				$email_act_msg  = '<div class="swpm-registration-success-msg">';
-				$email_act_msg .= SwpmUtils::_( 'You need to confirm your email address. Please check your email and follow instructions to complete your registration.' );
-				$email_act_msg .= '</div>';
-                                $email_act_msg = apply_filters( 'swpm_registration_email_activation_msg', $email_act_msg );//Can be added to the custom messages addon.
-				$message        = array(
-					'succeeded' => true,
-					'message'   => $email_act_msg,
-				);
-			} else {
-				$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );
-
-				// Allow hooks to change the value of login_page_url
-				$login_page_url = apply_filters('swpm_register_front_end_login_page_url', $login_page_url);
-
-				$after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_( 'Registration Successful. ' ) . SwpmUtils::_( 'Please' ) . ' <a href="' . $login_page_url . '">' . SwpmUtils::_( 'Log In' ) . '</a></div>';
-				$after_rego_msg = apply_filters( 'swpm_registration_success_msg', $after_rego_msg );
-				$message        = array(
-					'succeeded' => true,
-					'message'   => $after_rego_msg,
-				);
-			}
-			SwpmTransfer::get_instance()->set( 'status', $message );
-			return;
 		}
 	}
 
+	/*
+	 * This function creates/updates the SWPM user record in the database.
+	 * It returns true if the user creation was successful. Otherwise, it returns false.
+	 */
 	private function create_swpm_user() {
 		global $wpdb;
 		$member = SwpmTransfer::$default_fields;
@@ -222,7 +229,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$member_info = $form->get_sanitized_member_form_data();
 
 		//Check if the email belongs to an existing wp user account with admin role.
-                SwpmMemberUtils::check_and_die_if_email_belongs_to_admin_user($member_info['email']);
+        SwpmMemberUtils::check_and_die_if_email_belongs_to_admin_user($member_info['email']);
 
 		//Go ahead and create the SWPM user record.
 		$free_level                           = SwpmUtils::get_free_level();
@@ -238,27 +245,40 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		unset( $member_info['plain_password'] );
 
 		if ( SwpmUtils::is_paid_registration() ) {
-                        //Remove any empty values from the array. This will preserve address information if it was received via the payment gateway.
-                        $member_info = array_filter($member_info);
+			//Remove any empty values from the array. This will preserve address information if it was received via the payment gateway.
+			$member_info = array_filter($member_info);
 
-                        //Handle DB insert for paid registration scenario.
+			//Handle DB insert for paid registration scenario.
 			$member_info['reg_code'] = '';
 			$member_id = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
 			$code = isset( $_GET['code'] ) ? sanitize_text_field( stripslashes ( $_GET['code'] ) ) : '';
-			$wpdb->update(
-				$wpdb->prefix . 'swpm_members_tbl',
-				$member_info,
-				array(
+			//Update the member record in the database.
+			$query_result = $wpdb->update(
+				$wpdb->prefix . 'swpm_members_tbl',/*table*/
+				$member_info,/*data*/
+				array(/*where*/
 					'member_id' => $member_id,
 					'reg_code'  => $code,
 				)
 			);
 
-			$query                           = $wpdb->prepare( 'SELECT membership_level FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id=%d', $member_id );
+			//Verify that the update was successful. Otherwise, set error message and return false so the process stops here.
+			if ( $query_result === false ) {
+				SwpmLog::log_simple_debug( 'Error! Failed to update the member record on registration form submit. Check that the member ID ('.$member_id.') and the reg_code ('.$code.') are correct.', false );
+				$message = array(
+					'succeeded' => false,
+					'message'   => SwpmUtils::_( 'Unexpected Error! Failed to update the member record. Enable the debug log file then try the process again to get more details.' ),
+				);
+				SwpmTransfer::get_instance()->set( 'status', $message );
+				return false;
+			}
+
+			$query = $wpdb->prepare( 'SELECT membership_level FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id=%d', $member_id );
 			$member_info['membership_level'] = $wpdb->get_var( $query );
-			$last_insert_id                  = $member_id;
+			$last_insert_id = $member_id;
 		} elseif ( ! empty( $free_level ) ) {
 			$member_info['membership_level'] = $free_level;
+			//Create a new free member record in the database.
 			$wpdb->insert( $wpdb->prefix . 'swpm_members_tbl', $member_info );
 			$last_insert_id = $wpdb->insert_id;
 		} else {
@@ -270,7 +290,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			return false;
 		}
 		$member_info['plain_password'] = $plain_password;
-		$this->member_info             = $member_info;
+		$this->member_info = $member_info;
 		return true;
 	}
 

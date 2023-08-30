@@ -169,6 +169,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- [TODO] Readme - PayPal Integration Onboarding CP1.
+
 = 4.3.5 =
 - Updated the German language translation file. Thanks to Stefan.
 - Show strong password requirement message on the password reset page (if the feature is enabled). Thanks to Darwin for submitting this update.

@@ -348,7 +348,7 @@ class SwpmSettings {
 		);
 
 		//PayPal (PPCP) account connection settings (no heading). We will use our custom HTML code to render the section.
-		//add_settings_section( 'paypal-ppcp-connection-settings', '', array( &$this, 'paypal_ppcp_connection_settings_callback' ), 'simple_wp_membership_settings' );
+		add_settings_section( 'paypal-ppcp-connection-settings', '', array( &$this, 'paypal_ppcp_connection_settings_callback' ), 'simple_wp_membership_settings' );
 
 
 		//PayPal checkout (new) settings section.

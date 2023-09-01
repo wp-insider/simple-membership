@@ -40,7 +40,7 @@
     </p>
         <?php $post_list->prepare_items(); ?>   
         <?php $post_list->display(); ?>
-    <input type="hidden" name="list_type" value="<?php echo $post_list->type; ?>">
+    <input type="hidden" name="list_type" value="<?php echo esc_attr($post_list->type); ?>">
 </form>
 </div>
 

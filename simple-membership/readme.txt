@@ -171,6 +171,7 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - [TODO] Readme - PayPal Integration Onboarding CP1.
+- Added output escaping to the 'list_type' parameter in the 'Post and Page Protection' menu tab.
 
 = 4.3.5 =
 - Updated the German language translation file. Thanks to Stefan.

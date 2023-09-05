@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.2
-Stable tag: 4.3.5
+Stable tag: 4.3.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,7 +170,9 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
-- [TODO] Readme - PayPal Integration Onboarding CP1.
+- [TODO] Readme - PayPal PPCP Integration Onboarding and ACDC related work.
+
+= 4.3.6 =
 - Added output escaping to the 'list_type' parameter in the 'Post and Page Protection' menu tab.
 
 = 4.3.5 =

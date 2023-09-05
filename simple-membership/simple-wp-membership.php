@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Simple WordPress Membership
-Version: 4.3.5
+Version: 4.3.6
 Plugin URI: https://simple-membership-plugin.com/
 Author: smp7, wp.insider
 Author URI: https://simple-membership-plugin.com/
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Do not access this file directly.' );
 }
 
-define( 'SIMPLE_WP_MEMBERSHIP_VER', '4.3.5' );
+define( 'SIMPLE_WP_MEMBERSHIP_VER', '4.3.6' );
 define( 'SIMPLE_WP_MEMBERSHIP_DB_VER', '1.3' );
 define( 'SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url() );
 define( 'SIMPLE_WP_MEMBERSHIP_PATH', dirname( __FILE__ ) . '/' );
@@ -41,7 +41,7 @@ register_deactivation_hook( SIMPLE_WP_MEMBERSHIP_PATH . 'simple-wp-membership.ph
 
 add_action( 'swpm_login', 'SimpleWpMembership::swpm_login', 10, 3 );
 
-$simple_membership      = new SimpleWpMembership();
+$simple_membership = new SimpleWpMembership();
 $simple_membership_cron = new SwpmCronJob();
 
 //Add settings link in plugins listing page

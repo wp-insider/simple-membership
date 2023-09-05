@@ -23,7 +23,7 @@ class SWPM_PayPal_Bearer {
 	/**
 	 * Check if a bearer token exists in the cache and if it is expired or not. Create a new one if needed.
 	 */
-	public function get_bearer_token( $environment_mode = '' ) {
+	public function get_bearer_token( $environment_mode = 'production' ) {
 		$paypal_cache = SWPM_PayPal_Cache::get_instance();
 		
 		//Check if a cached token exists
@@ -92,7 +92,7 @@ class SWPM_PayPal_Bearer {
 			),
 		);
 
-		$response = self::send_request_by_url_and_args( $url, $args );
+		$response = SWPM_PayPal_Request_API::send_request_by_url_and_args( $url, $args );
 
 		if ( is_wp_error( $response ) ) {
 			//WP could not post the request.
@@ -163,29 +163,6 @@ class SWPM_PayPal_Bearer {
 			$token = isset( $json->access_token ) ? $json->access_token : $json->client_token;
 		}
 		return $token;
-	}
-
-	public static function get_api_base_url_by_environment_mode( $environment_mode = 'production' ) {
-		if ($environment_mode == 'production') {
-			return SWPM_PayPal_Main::$api_base_url_production;
-		} else {
-			return SWPM_PayPal_Main::$api_base_url_sandbox;
-		}
-	}
-
-	/**
-	 * Performs a request to the PayPal API using URL and arguments.
-	 */
-	public static function send_request_by_url_and_args( $url, $args ) {
-		$args['timeout'] = 30;
-
-		$args = apply_filters( 'swpm_ppcp_onboarding_request_args', $args, $url );
-		if ( ! isset( $args['headers']['PayPal-Partner-Attribution-Id'] ) ) {
-			$args['headers']['PayPal-Partner-Attribution-Id'] = 'TipsandTricks_SP_PPCP';
-		}
-
-		$response = wp_remote_get( $url, $args );
-		return $response;
 	}
 
 }

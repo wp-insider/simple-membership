@@ -310,4 +310,40 @@ class SWPM_PayPal_Request_API {
 		}
 		return "";
 	}
+
+	/**
+	 * Performs a direct request to the PayPal API using URL and arguments.
+	 */
+	public static function send_request_by_url_and_args( $url, $args ) {
+
+		$args['timeout'] = 30;
+
+		$args = apply_filters( 'swpm_paypal_api_request_by_url_args', $args, $url );
+		if ( ! isset( $args['headers']['PayPal-Partner-Attribution-Id'] ) ) {
+			$args['headers']['PayPal-Partner-Attribution-Id'] = 'TipsandTricks_SP_PPCP';
+		}
+
+		//=== Debug purposes ===
+		//SwpmLog::log_simple_debug( '----- PayPal API request header -----', true );
+		//SwpmLog::log_array_data_to_debug( $args, true );
+		//=== End of debug purposes ===
+
+		$response = wp_remote_get( $url, $args );
+
+		//=== Debug purposes ===
+		//PayPal debug id
+		$paypal_debug_id = wp_remote_retrieve_header( $response, 'paypal-debug-id' );
+		SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API response: ' . $paypal_debug_id, true );
+		//Debug the request body
+		//$response_body = wp_remote_retrieve_body( $response );
+		//$response_body_json_decoded = json_decode( $response_body );
+		//SwpmLog::log_array_data_to_debug( $response_body_json_decoded, true );
+		//Debug the full response (header and body)
+		//$response_full_var_exported = var_export( $response, true );
+		//SwpmLog::log_simple_debug( 'PayPal API response body: ' . $debug_api_response, true );
+		//=== End of debug purposes ===
+
+		return $response;
+	}
+
 }

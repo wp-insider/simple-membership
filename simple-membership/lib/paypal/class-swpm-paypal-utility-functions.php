@@ -10,9 +10,17 @@ class SWPM_PayPal_Utility_Functions{
 		}
 	}
 
+	public static function get_partner_id_by_environment_mode( $environment_mode = 'production' ) {
+		if ($environment_mode == 'production') {
+			return SWPM_PayPal_Main::$partner_id_production;
+		} else {
+			return SWPM_PayPal_Main::$partner_id_sandbox;
+		}
+	}
+
     public static function get_partner_client_id_by_environment_mode( $environment_mode = 'production' ) {
         if ($environment_mode == 'production') {
-            return SWPM_PayPal_Main::$partner_client_id_live;
+            return SWPM_PayPal_Main::$partner_client_id_production;
         } else {
             return SWPM_PayPal_Main::$partner_client_id_sandbox;
         }

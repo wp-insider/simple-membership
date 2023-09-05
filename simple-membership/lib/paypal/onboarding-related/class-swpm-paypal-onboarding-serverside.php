@@ -147,8 +147,8 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 	public function get_seller_account_status_data_using_bearer_token($bearer_token, $seller_api_credentials, $environment_mode = 'production'){
 		SwpmLog::log_simple_debug( 'Onboarding step: get_seller_account_status_data. Environment mode: ' . $environment_mode, true );
 
-		$api_base_url = $this->get_api_base_url_by_environment_mode( $environment_mode );
-		$partner_id = $this->get_partner_id_by_environment_mode( $environment_mode );
+		$api_base_url = SWPM_PayPal_Utility_Functions::get_api_base_url_by_environment_mode( $environment_mode );
+		$partner_id = SWPM_PayPal_Utility_Functions::get_partner_id_by_environment_mode( $environment_mode );
 
 		$url = trailingslashit( $api_base_url ) . 'v1/customer/partners/' . $partner_id . '/merchant-integrations/' . $seller_api_credentials['payer_id'];	
 		$args = array(
@@ -163,7 +163,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		//SwpmLog::log_simple_debug( 'PayPal API request headers for getting seller account status: ', true );
 		//SwpmLog::log_array_data_to_debug( $args, true);		
 
-		$response = $this->send_request_by_url_and_args( $url, $args );
+		$response = SWPM_PayPal_Request_API::send_request_by_url_and_args( $url, $args );
 
 		if ( is_wp_error( $response ) ) {
 			//WP could not post the request.
@@ -286,7 +286,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		}
 		SwpmLog::log_simple_debug( 'Seller nonce value: ' . $seller_nonce, true );
 
-		$api_base_url = $this->get_api_base_url_by_environment_mode( $environment_mode );
+		$api_base_url = SWPM_PayPal_Utility_Functions::get_api_base_url_by_environment_mode( $environment_mode );
 
 		$url = trailingslashit( $api_base_url ) . 'v1/oauth2/token/';
 
@@ -304,7 +304,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		);
 
 		//SwpmLog::log_array_data_to_debug( $args, true);//Debugging purpose
-		$response = $this->send_request_by_url_and_args( $url, $args );
+		$response = SWPM_PayPal_Request_API::send_request_by_url_and_args( $url, $args );
 		//SwpmLog::log_array_data_to_debug( $response, true);//Debugging purpose
 
 		if ( is_wp_error( $response ) ) {
@@ -339,8 +339,8 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 	public function get_seller_api_credentials_using_token($access_token, $environment_mode = 'production'){
 		SwpmLog::log_simple_debug( 'Onboarding step: get_seller_api_credentials_using_token. Environment mode: ' . $environment_mode, true );
 
-		$api_base_url = $this->get_api_base_url_by_environment_mode( $environment_mode );
-		$partner_merchant_id = $this->get_partner_id_by_environment_mode( $environment_mode );
+		$api_base_url = SWPM_PayPal_Utility_Functions::get_api_base_url_by_environment_mode( $environment_mode );
+		$partner_merchant_id = SWPM_PayPal_Utility_Functions::get_partner_id_by_environment_mode( $environment_mode );
 
 		$url = trailingslashit( $api_base_url ) . 'v1/customer/partners/' . $partner_merchant_id . '/merchant-integrations/credentials/';
 		
@@ -353,7 +353,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			),
 		);
 
-		$response = $this->send_request_by_url_and_args( $url, $args );
+		$response = SWPM_PayPal_Request_API::send_request_by_url_and_args( $url, $args );
 
 		if ( is_wp_error( $response ) ) {
 			//WP could not post the request.
@@ -384,57 +384,6 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			'payer_id' => $json->payer_id,
 		);
 
-	}
-
-	/**
-	 * Performs a request to the PayPal API using URL and arguments.
-	 */
-	public function send_request_by_url_and_args( $url, $args ) {
-
-		$args['timeout'] = 30;
-
-		$args = apply_filters( 'swpm_ppcp_onboarding_request_args', $args, $url );
-		if ( ! isset( $args['headers']['PayPal-Partner-Attribution-Id'] ) ) {
-			$args['headers']['PayPal-Partner-Attribution-Id'] = 'TipsandTricks_SP_PPCP';
-		}
-
-		//=== Debug purposes ===
-		//SwpmLog::log_simple_debug( '----- PayPal API request header -----', true );
-		//SwpmLog::log_array_data_to_debug( $args, true );
-		//=== End of debug purposes ===
-
-		$response = wp_remote_get( $url, $args );
-
-		//=== Debug purposes ===
-		//PayPal debug id
-		$paypal_debug_id = wp_remote_retrieve_header( $response, 'paypal-debug-id' );
-		SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API response: ' . $paypal_debug_id, true );
-		//Debug the request body
-		//$response_body = wp_remote_retrieve_body( $response );
-		//$response_body_json_decoded = json_decode( $response_body );
-		//SwpmLog::log_array_data_to_debug( $response_body_json_decoded, true );
-		//Debug the full response (header and body)
-		//$response_full_var_exported = var_export( $response, true );
-		//SwpmLog::log_simple_debug( 'PayPal API response body: ' . $debug_api_response, true );
-		//=== End of debug purposes ===
-
-		return $response;
-	}
-
-	public function get_api_base_url_by_environment_mode( $environment_mode = 'production' ) {
-		if ($environment_mode == 'production') {
-			return SWPM_PayPal_Main::$api_base_url_production;
-		} else {
-			return SWPM_PayPal_Main::$api_base_url_sandbox;
-		}
-	}
-
-	public function get_partner_id_by_environment_mode( $environment_mode = 'production' ) {
-		if ($environment_mode == 'production') {
-			return SWPM_PayPal_Main::$partner_id_production;
-		} else {
-			return SWPM_PayPal_Main::$partner_id_sandbox;
-		}
 	}
 
 }

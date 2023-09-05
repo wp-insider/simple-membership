@@ -11,6 +11,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-onapprov
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-functions.php' );//Misc project specific utility functions.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-cache.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-bearer.php' );
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-acdc-related.php' );
 
 //Onboarding related includes
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/onboarding-related/class-swpm-paypal-onboarding.php' );//PPCP Onboarding related functions.
@@ -26,7 +27,7 @@ class SWPM_PayPal_Main {
 	public static $api_base_url_sandbox = 'https://api-m.sandbox.paypal.com';
 	public static $partner_id_production = '3FWGC6LFTMTUG';//Same as the partner's merchant id of the live account.
 	public static $partner_id_sandbox = '47CBLN36AR4Q4';// Same as the merchant id of the platform app sandbox account.
-	public static $partner_client_id_live = 'TODO';
+	public static $partner_client_id_production = 'TODO';
 	public static $partner_client_id_sandbox = 'AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
 
 

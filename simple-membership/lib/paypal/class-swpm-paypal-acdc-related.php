@@ -2,6 +2,7 @@
 
 /**
  * PayPal ACDC Related Functions
+ * Documentation reference: https://developer.paypal.com/docs/multiparty/checkout/advanced/integrate/
  */
 class SWPM_PayPal_ACDC_Related {
 

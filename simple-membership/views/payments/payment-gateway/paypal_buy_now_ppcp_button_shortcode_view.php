@@ -102,7 +102,8 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 	$pp_js_button->set_settings_args( $settings_args );
 
 	//Load the JS SDK on footer (so it only loads once per page)
-	add_action( 'wp_footer', array( $pp_js_button, 'load_paypal_sdk' ) );
+	//Do not load this version of the JS SDK for ACDC buttons.
+	//add_action( 'wp_footer', array( $pp_js_button, 'load_paypal_sdk' ) );
 
 	//The on page embed button id is used to identify the button on the page. Useful when there are multiple buttons (of the same item/product) on the same page.
 	$on_page_embed_button_id = $pp_js_button->get_next_button_id();
@@ -117,24 +118,19 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 	$output = '';
 	ob_start();
 	?>
-	<link rel="stylesheet" type="text/css"
-		href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css" />
+	<link rel="stylesheet" type="text/css" href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css" />
 
 	<div class="swpm-button-wrapper swpm-paypal-buy-now-button-wrapper">
-		<!-- PayPal button container where the button will be rendered -->
-		<div id="<?php echo esc_attr( $on_page_embed_button_id ); ?>"
-			style="width: <?php echo esc_attr( $btn_width ); ?>px;">
-		</div>
-		<!-- Some additiona hidden input fields -->
-		<input type="hidden" id="<?php echo esc_attr( $on_page_embed_button_id . '-custom-field' ); ?>" name="custom"
-			value="<?php echo esc_attr( $custom_field_value ); ?>">
+		<script src="<?php echo $sdk_src_url; ?>" data-partner-attribution-id="TipsandTricks_SP_PPCP" data-client-token="<?php echo $client_token; ?>"></script>
 
-		<script src="<?php echo $sdk_src_url; ?>" data-partner-attribution-id="TipsandTricks_SP_PPCP"
-			data-client-token="<?php echo $client_token; ?>"></script>
+		<!-- Some additiona hidden input fields -->
+		<input type="hidden" id="<?php echo esc_attr( $on_page_embed_button_id . '-custom-field' ); ?>" name="custom" value="<?php echo esc_attr( $custom_field_value ); ?>">
+
 		<table border="0" align="center" valign="top" bgcolor="#FFFFFF" style="width: 39%">
 			<tr>
 				<td colspan="2">
-					<div id="paypal-button-container"></div>
+					<!-- PayPal button container where the button will be rendered -->
+					<div id="<?php echo esc_attr( $on_page_embed_button_id ); ?>" style="width: <?php echo esc_attr( $btn_width ); ?>px;"></div>
 				</td>
 			</tr>
 			<tr>
@@ -207,7 +203,8 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 						window.location.href = '/success.html';
 					});
 				}
-			}).render("#paypal-button-container");
+			//}).render("#paypal-button-container");
+			}).render('#<?php echo esc_js( $on_page_embed_button_id ); ?>');
 			if (paypal.HostedFields.isEligible()) {
 				paypal.HostedFields.render({
 					createOrder: function () {

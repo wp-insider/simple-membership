@@ -4,7 +4,14 @@
 <form action="" method="post" name="swpm-create-level" id="swpm-create-level" class="validate swpm-validate-form">
 <input name="action" type="hidden" value="createlevel" />
 <h3><?php echo SwpmUtils::_('Add Membership Level'); ?></h3>
-<p><?php echo SwpmUtils::_('Create new membership level.'); ?></p>
+<p>
+    <?php 
+    echo __('Create new membership level.', 'simple-membership');
+    echo __(' Refer to ', 'simple-membership');
+    echo '<a href="https://simple-membership-plugin.com/adding-membership-access-levels-site/" target="_blank">' . __('this documentation', 'simple-membership') . '</a>';
+    echo __(' to learn how a membership level works.', 'simple-membership');
+    ?>
+</p>
 <?php wp_nonce_field( 'create_swpmlevel_admin_end', '_wpnonce_create_swpmlevel_admin_end' ) ?>
 <table class="form-table">
     <tbody>

@@ -6,15 +6,24 @@
 <h2><?php echo  SwpmUtils::_('Edit membership level'); ?></h2>
 <p>
     <?php 
-    echo SwpmUtils::_('You can edit details of a selected membership level from this interface. ');
-    echo SwpmUtils::_('You are currently editing: '). stripslashes($alias);
+    echo __('You can edit details of a selected membership level from this interface. ', 'simple-membership');
+    echo __(' Refer to ', 'simple-membership');
+    echo '<a href="https://simple-membership-plugin.com/adding-membership-access-levels-site/" target="_blank">' . __('this documentation', 'simple-membership') . '</a>';
+    echo __(' to learn how a membership level works.', 'simple-membership');
     ?>
 </p>
+<?php 
+    echo '<p><strong>';
+    echo __('You are currently editing: ', 'simple-membership');
+    echo esc_attr(stripslashes($alias));
+    echo __(' (Level ID: ', 'simple-membership') . esc_attr($id) . ')';
+    echo '</strong></p>';
+?>
 <table class="form-table">
     <tbody>
 	<tr>
 		<th scope="row"><label for="alias"><?php echo  SwpmUtils::_('Membership Level Name'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
-		<td><input class="regular-text validate[required]" name="alias" type="text" id="alias" value="<?php echo stripslashes($alias);?>" aria-required="true" /></td>
+		<td><input class="regular-text validate[required]" name="alias" type="text" id="alias" value="<?php echo esc_attr(stripslashes($alias)); ?>" aria-required="true" /></td>
 	</tr>
 	<tr class="form-field form-required">
 		<th scope="row"><label for="role"><?php echo  SwpmUtils::_('Default WordPress Role'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
@@ -60,7 +69,7 @@
                 </p>
             </td>
 	</tr>
-    <?php echo  apply_filters('swpm_admin_edit_membership_level_ui', '', $id);?>
+    <?php echo apply_filters('swpm_admin_edit_membership_level_ui', '', $id); ?>
 </tbody>
 </table>
 <?php submit_button(SwpmUtils::_('Save Membership Level '), 'primary', 'editswpmlevel', true, array( 'id' => 'editswpmlevelsub' ) ); ?>

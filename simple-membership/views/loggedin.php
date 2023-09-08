@@ -1,4 +1,7 @@
 <?php
+//Trigger an action hook
+do_action('swpm_before_loggedin_widget');
+//Get the auth object
 $auth = SwpmAuth::get_instance();
 ?>
 <div class="swpm-login-widget-logged">

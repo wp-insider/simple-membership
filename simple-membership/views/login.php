@@ -1,5 +1,9 @@
 <?php
+//Trigger an action hook
+do_action('swpm_before_login_form_widget');
+//Get the auth object
 $auth = SwpmAuth::get_instance();
+//Get the settings object
 $setting = SwpmSettings::get_instance();
 $password_reset_url = $setting->get_value('reset-page-url');
 $join_url = $setting->get_value('join-us-page-url');

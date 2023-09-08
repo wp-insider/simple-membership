@@ -171,6 +171,8 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - [TODO] Readme - PayPal PPCP Integration Onboarding and ACDC related work.
+- Added a new action hook (swpm_before_login_form_widget) in the login.php file.
+- Added a new action hook (swpm_before_loggedin_widget) in the loggedin.php file.
 
 = 4.3.6 =
 - Added output escaping to the 'list_type' parameter in the 'Post and Page Protection' menu tab.

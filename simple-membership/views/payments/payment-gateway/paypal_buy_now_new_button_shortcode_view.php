@@ -25,6 +25,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
     //Get the Item name for this button. This will be used as the item name in the IPN.
     $button_cpt = get_post($button_id); //Retrieve the CPT for this button
     $item_name = htmlspecialchars($button_cpt->post_title);
+    $item_name = substr($item_name, 0, 127);//Limit the item name to 127 characters (PayPal limit)
 
     //User's IP address
     $user_ip = SwpmUtils::get_user_ip_address();
@@ -162,6 +163,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                                     currency_code: '<?php echo esc_js($currency); ?>',
                                 }
                             }]
+                            description: '<?php echo esc_js($item_name); ?>',
                         }]
                     };
                     return actions.order.create( order_data );

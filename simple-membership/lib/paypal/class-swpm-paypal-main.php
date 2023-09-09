@@ -38,8 +38,11 @@ class SWPM_PayPal_Main {
 			new SWPM_PayPal_Webhook_Event_Handler();
 		}
 
-		//Initialize the PayPal OnApprove IPN Handler so it can handle the 'onApprove' ajax request.
+		//Initialize the PayPal OnApprove IPN Handler so it can handle the 'onApprove' ajax request(s).
 		new SWPM_PayPal_OnApprove_IPN_Handler();
+
+		//Initialize the PayPal ACDC related class so it can handle the ajax request(s).
+		new SWPM_PayPal_ACDC_Related();
 
 		//Initialize the PayPal onboarding serverside class so it can handle the 'onboardedCallback' ajax request.
 		new SWPM_PayPal_PPCP_Onboarding_Serverside();

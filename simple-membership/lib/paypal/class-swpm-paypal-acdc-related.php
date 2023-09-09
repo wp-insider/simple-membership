@@ -7,8 +7,16 @@
 class SWPM_PayPal_ACDC_Related {
 
 	public function __construct() {
-
+		//Handle it at 'wp_loaded' since custom post types will also be available at that point.
+		add_action( 'wp_loaded', array(&$this, 'setup_acdc_related_ajax_request_actions' ) );
     }
+
+	public function setup_acdc_related_ajax_request_actions() {
+		//Handle the onApprove ajax request for ACDC 'Buy Now' type buttons order setup.
+		add_action( 'wp_ajax_swpm_acdc_setup_order', array(&$this, 'swpm_acdc_setup_order' ) );
+		add_action( 'wp_ajax_nopriv_swpm_acdc_setup_order', array(&$this, 'swpm_acdc_setup_order' ) );
+
+	}
 
 	public static function get_sdk_src_url_for_acdc( $environment_mode = 'production', $currency = 'USD' ){
 
@@ -104,4 +112,87 @@ class SWPM_PayPal_ACDC_Related {
 		return $client_token;
     }
 
+	/**
+	 * Handles the order setup for ACDC 'Buy Now' type buttons.
+	 */
+	public function swpm_acdc_setup_order(){
+		//Get the data from the request
+		$data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : array();
+		if ( empty( $data ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Empty data received.', 'simple-membership' ),
+				)
+			);
+		}
+		//TODO - Debugging purpose
+		SwpmLog::log_array_data_to_debug( $data, true );
+
+		$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';
+		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
+		SwpmLog::log_simple_debug( 'acdc_setup_order ajax request received for createOrder. Button ID: '.$button_id.', On Page Button ID: ' . $on_page_button_id, true );
+
+		// Check nonce.
+		if ( ! check_ajax_referer( $on_page_button_id, '_wpnonce', false ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
+		
+		//Get the Item name for this button. This will be used as the item name in the IPN.
+		$button_cpt = get_post($button_id); //Retrieve the CPT for this button
+		$item_name = htmlspecialchars($button_cpt->post_title);
+		$item_name = substr($item_name, 0, 127);//Limit the item name to 127 characters (PayPal limit)
+		//Get the payment amount for this button.
+		$payment_amount = get_post_meta($button_id, 'payment_amount', true);
+		//Get the currency for this button.
+		$currency = get_post_meta( $button_id, 'payment_currency', true );
+		$quantity = 1;
+		$digital_goods_enabled = 1;
+
+		$order_data = [
+			"intent" => "CAPTURE",
+			"purchase_units" => [
+				[
+					"amount" => [
+						"value" => $payment_amount,
+						"currency_code" => $currency,
+						"breakdown" => [
+							"item_total" => [
+								"currency_code" => $currency,
+								"value" => $payment_amount * $quantity,
+							]
+						]
+					],
+					"items" => [
+						[
+							"name" => $item_name,
+							"quantity" => $quantity,
+							// "category" => $js_digital_goods_enabled ? "PHYSICAL_GOODS" : "DIGITAL_GOODS", // Uncomment if necessary
+							"unit_amount" => [
+								"value" => $payment_amount,
+								"currency_code" => $currency,
+							]
+						]
+					],
+					"description" => $item_name,
+				]
+			]
+		];
+
+		//TODO - Create the order using the PayPal API.
+		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
+		//TODO - we have the $order_data array. Use that to create the order.
+		$paypal_order_id = '1234567890';
+
+
+		//If everything is processed successfully, send the success response.
+		wp_send_json( array( 'success' => true, 'order_id' => $paypal_order_id ) );
+		exit;
+	} 
 }

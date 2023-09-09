@@ -184,7 +184,8 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 				<button value="submit" id="submit" class="btn">Pay</button>
 			</form>
 		</div>
-		<script>
+		<script type="text/javascript">
+		jQuery(function ($) {
 			let orderId;
 			paypal.Buttons({
 				style: {
@@ -209,14 +210,35 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 			if (paypal.HostedFields.isEligible()) {
 				paypal.HostedFields.render({
 					createOrder: function () {
-						return fetch('/your-server/paypal/order', {
-							method: 'post'
-						}).then(function (res) {
-							return res.json();
-						}).then(function (orderData) {
-							orderId = orderData.id;
-							return orderId;
-						});
+						//Set up the transaction by creating a `paypal.Order`.
+						//The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
+						//TODO - AJAX request to create the order.
+						console.log('Setting up the order for ACDC.');
+
+                        var custom = document.getElementById('<?php echo esc_attr($on_page_embed_button_id."-custom-field"); ?>').value;
+                        data.custom_field = custom;
+                        data.button_id = '<?php echo esc_js($button_id); ?>';
+                        data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
+                        data.item_name = '<?php echo esc_js($item_name); ?>';
+                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_acdc_setup_order', data: data, _wpnonce: '<?php echo $nonce; ?>'}, function( response ) {
+                            console.log( 'Response from the server: ' + JSON.stringify( response ) );
+                            if ( response.success ) {
+                                //Success response.
+								//TODO - Store the order ID in a variable then return it for the SDK to use.
+								orderId = response.order_id;
+								console.log('Order ID: ' + orderId);
+								return response.order_id;
+                            } else {
+                                //Error response from the AJAX hanler. Show the error message.
+                                console.log( 'Error response: ' + JSON.stringify( response.err_msg ) );
+                                alert( JSON.stringify( response ) );
+                            }
+
+                            //Return the button and the spinner back to their orignal display state.
+                            //pp_button_container.show();//Show the buttons
+                            //pp_button_spinner_conainer.hide();//Hide the spinner.
+
+                        });
 					},
 					styles: {
 						'.valid': {
@@ -276,6 +298,7 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 			} else {
 				document.querySelector("#card-form").style = 'display: none';
 			}
+		});
 		</script>
 	</div><!-- end of .swpm-button-wrapper -->
 	<?php

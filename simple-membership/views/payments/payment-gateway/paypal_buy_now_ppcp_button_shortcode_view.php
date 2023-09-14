@@ -279,8 +279,11 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 							fetch('/your-server/api/order/' + orderId + '/capture/', {
 								method: 'post'
 							}).then(function (res) {
+								console.log( 'Capture response: ' +  JSON.stringify(res) );
 								return res.json();
 							}).then(function (orderData) {
+								console.log( 'Capture result from server: ', JSON.stringify(orderData) );
+
 								var errorDetail = Array.isArray(orderData.details) && orderData.details[0];
 								if (errorDetail) {
 									var msg = 'Sorry, your transaction could not be processed.';

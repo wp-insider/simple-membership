@@ -109,7 +109,7 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 	//The on page embed button id is used to identify the button on the page. Useful when there are multiple buttons (of the same item/product) on the same page.
 	$on_page_embed_button_id = $pp_js_button->get_next_button_id();
 	//Create nonce for this button. 
-	$nonce = wp_create_nonce( $on_page_embed_button_id );
+	$wp_nonce = wp_create_nonce( $on_page_embed_button_id );
 
 	$pp_acdc = new SWPM_PayPal_ACDC_Related();
 	$client_token = $pp_acdc->generarte_client_token( $environment_mode );
@@ -220,7 +220,7 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
                         data.button_id = '<?php echo esc_js($button_id); ?>';
                         data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
                         data.item_name = '<?php echo esc_js($item_name); ?>';
-                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_acdc_setup_order', data: data, _wpnonce: '<?php echo $nonce; ?>'}, function( response ) {
+                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_acdc_setup_order', data: data, _wpnonce: '<?php echo $wp_nonce; ?>'}, function( response ) {
                             console.log( 'Response from the server: ' + JSON.stringify( response ) );
                             if ( response.success ) {
                                 //Success response.
@@ -276,8 +276,14 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 								countryCodeAlpha2: document.getElementById('card-billing-address-country').value
 							}
 						}).then(function () {
-							fetch('/your-server/api/order/' + orderId + '/capture/', {
-								method: 'post'
+							const formData = new FormData();
+formData.append('action', 'swpm_acdc_capture_order');
+formData.append('order_id', orderId);
+formData.append('on_page_button_id', '<?php echo esc_js($on_page_embed_button_id); ?>');
+formData.append('_wpnonce', '<?php echo $wp_nonce; ?>');							
+							fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+								method: 'post',
+								body: formData,
 							}).then(function (res) {
 								console.log( 'Capture response: ' +  JSON.stringify(res) );
 								return res.json();
@@ -398,7 +404,7 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 								data.button_id = '<?php echo esc_js( $button_id ); ?>';
 								data.on_page_button_id = '<?php echo esc_js( $on_page_embed_button_id ); ?>';
 								data.item_name = '<?php echo esc_js( $item_name ); ?>';
-								jQuery.post('<?php echo admin_url( 'admin-ajax.php' ); ?>', { action: 'swpm_onapprove_create_order', data: data, txn_data: txn_data, _wpnonce: '<?php echo $nonce; ?>' }, function (response) {
+								jQuery.post('<?php echo admin_url( 'admin-ajax.php' ); ?>', { action: 'swpm_onapprove_create_order', data: data, txn_data: txn_data, _wpnonce: '<?php echo $wp_nonce; ?>' }, function (response) {
 									//console.log( 'Response from the server: ' + JSON.stringify( response ) );
 									if (response.success) {
 										//Success response.

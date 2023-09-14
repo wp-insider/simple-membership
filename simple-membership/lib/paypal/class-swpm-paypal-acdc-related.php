@@ -12,10 +12,13 @@ class SWPM_PayPal_ACDC_Related {
     }
 
 	public function setup_acdc_related_ajax_request_actions() {
-		//Handle the onApprove ajax request for ACDC 'Buy Now' type buttons order setup.
+		//Handle the ajax request for ACDC 'Buy Now' type buttons order setup.
 		add_action( 'wp_ajax_swpm_acdc_setup_order', array(&$this, 'swpm_acdc_setup_order' ) );
 		add_action( 'wp_ajax_nopriv_swpm_acdc_setup_order', array(&$this, 'swpm_acdc_setup_order' ) );
 
+		//Handle the ajax request for ACDC 'Buy Now' type buttons capture order.
+		add_action( 'wp_ajax_swpm_acdc_capture_order', array(&$this, 'swpm_acdc_capture_order' ) );
+		add_action( 'wp_ajax_nopriv_swpm_acdc_capture_order', array(&$this, 'swpm_acdc_capture_order' ) );		
 	}
 
 	public static function get_sdk_src_url_for_acdc( $environment_mode = 'production', $currency = 'USD' ){
@@ -195,4 +198,46 @@ class SWPM_PayPal_ACDC_Related {
 		wp_send_json( array( 'success' => true, 'order_id' => $paypal_order_id ) );
 		exit;
 	} 
+
+	/**
+	 * Handles the order capture for ACDC 'Buy Now' type buttons.
+	 */
+	public function swpm_acdc_capture_order(){
+		//Get the data from the request
+		$order_id = isset( $_POST['order_id'] ) ? sanitize_text_field($_POST['order_id']) : '';
+		if ( empty( $order_id ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Empty order ID received.', 'simple-membership' ),
+				)
+			);
+		}
+
+		$on_page_button_id = isset( $_POST['on_page_button_id'] ) ? sanitize_text_field( $_POST['on_page_button_id'] ) : '';
+		//$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';
+		SwpmLog::log_array_data_to_debug( 'Received request - swpm_acdc_capture_order. Order ID: ' . $order_id . ', on_page_button_id: ' . $on_page_button_id, true );
+
+		// Check nonce.
+		if ( ! check_ajax_referer( $on_page_button_id, '_wpnonce', false ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
+
+		//TODO - Capture the order using the PayPal API.
+		//https://developer.paypal.com/docs/api/orders/v2/#orders_capture
+
+		//TODO - Dummy data for now. Remove this later.
+		$order_data = array('order_id' => $order_id, 'captured' => 'success' );
+		
+		//If everything is processed successfully, send the success response.
+		wp_send_json( array( 'success' => true, 'orderData' => $order_data ) );
+		exit;
+
+	}
 }

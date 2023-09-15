@@ -291,10 +291,10 @@ class SWPM_PayPal_Request_API {
 		//=== Debug purposes ===
 		//SwpmLog::log_simple_debug( '----- PayPal REST API response output -----', true );
 		//PayPal debug id
-		//$paypal_debug_id = wp_remote_retrieve_header( $res, 'paypal-debug-id' );
-		//SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API response: ' . $paypal_debug_id, true );
-		//$response_body_var_exported = var_export( $response_body, true );
-		//SwpmLog::log_simple_debug( 'PayPal API response body: ' . $response_body_var_exported, true );
+		// $paypal_debug_id = wp_remote_retrieve_header( $res, 'paypal-debug-id' );
+		// SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API response: ' . $paypal_debug_id, true );
+		// $response_body_var_exported = var_export( $response_body, true );
+		// SwpmLog::log_simple_debug( 'PayPal API response body: ' . $response_body_var_exported, true );
 		//=== End of debug purposes ===
 
 		return $response_body;

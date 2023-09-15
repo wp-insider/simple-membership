@@ -119,6 +119,8 @@ class SWPM_PayPal_ACDC_Related {
 	 * Handles the order setup for ACDC 'Buy Now' type buttons.
 	 */
 	public function swpm_acdc_setup_order(){
+		SwpmLog::log_array_data_to_debug( 'Received request - swpm_acdc_setup_order', true);
+
 		//Get the data from the request
 		$data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : array();
 		if ( empty( $data ) ) {

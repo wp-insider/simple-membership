@@ -158,41 +158,29 @@ class SWPM_PayPal_ACDC_Related {
 		$quantity = 1;
 		$digital_goods_enabled = 1;
 
-		$order_data = [
-			"intent" => "CAPTURE",
-			"purchase_units" => [
-				[
-					"amount" => [
-						"value" => $payment_amount,
-						"currency_code" => $currency,
-						"breakdown" => [
-							"item_total" => [
-								"currency_code" => $currency,
-								"value" => $payment_amount * $quantity,
-							]
-						]
-					],
-					"items" => [
-						[
-							"name" => $item_name,
-							"quantity" => $quantity,
-							// "category" => $js_digital_goods_enabled ? "PHYSICAL_GOODS" : "DIGITAL_GOODS", // Uncomment if necessary
-							"unit_amount" => [
-								"value" => $payment_amount,
-								"currency_code" => $currency,
-							]
-						]
-					],
-					"description" => $item_name,
-				]
-			]
-		];
-
 		//TODO - Create the order using the PayPal API.
 		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
-		//TODO - we have the $order_data array. Use that to create the order.
-		$paypal_order_id = '1234567890';
-
+		$data = array(
+			'item_name' => $item_name,
+			'payment_amount' => $payment_amount,
+			'currency' => $currency,
+			'quantity' => $quantity,
+			'digital_goods_enabled' => $digital_goods_enabled,
+		);
+		$api_injector = new SWPM_PayPal_Request_API_Injector();
+		$response = $api_injector->create_paypal_order( $data );
+		if($response !== false){
+			$paypal_order_id = $response;
+		} else {
+			//Failed to create the order.
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Failed to create the order. Enable the debug logging feature to get more details.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
 
 		//If everything is processed successfully, send the success response.
 		wp_send_json( array( 'success' => true, 'order_id' => $paypal_order_id ) );

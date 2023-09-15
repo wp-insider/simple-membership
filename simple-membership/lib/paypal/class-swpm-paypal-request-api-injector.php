@@ -208,6 +208,53 @@ class SWPM_PayPal_Request_API_Injector {
             } else {
                 return false;
             }
-        }             
+        }
+        
+        public function create_paypal_order( $data ){
+            $payment_amount = isset($data['payment_amount']) ? $data['payment_amount'] : '';
+            $quantity = isset($data['quantity']) ? $data['quantity'] : 1;
+            $currency = isset($data['currency']) ? $data['currency'] : 'USD';
+            $item_name = isset($data['item_name']) ? $data['item_name'] : '';
+            //$digital_goods_enabled = isset($data['digital_goods_enabled']) ? $data['digital_goods_enabled'] : 1;
+            
+            $order_data = [
+                "intent" => "CAPTURE",
+                "purchase_units" => [
+                    [
+                        "amount" => [
+                            "value" => $payment_amount,
+                            "currency_code" => $currency,
+                            "breakdown" => [
+                                "item_total" => [
+                                    "currency_code" => $currency,
+                                    "value" => $payment_amount * $quantity,
+                                ]
+                            ]
+                        ],
+                        "items" => [
+                            [
+                                "name" => $item_name,
+                                "quantity" => $quantity,
+                                // "category" => $digital_goods_enabled ? "PHYSICAL_GOODS" : "DIGITAL_GOODS",
+                                "unit_amount" => [
+                                    "value" => $payment_amount,
+                                    "currency_code" => $currency,
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+
+            $endpoint = '/v2/checkout/orders';
+            $response = $this->paypal_req_api->post($endpoint, $order_data);
+            if ( $response !== false){
+                //Response is a success!
+                $created_order_id = $response->id;
+                return $created_order_id;
+            } else {
+                return false;
+            }
+        }
         
 }

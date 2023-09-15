@@ -263,6 +263,7 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 					}
 				}).then(function (cardFields) {
 					document.querySelector("#card-form").addEventListener('submit', (event) => {
+console.log('Card fields submitted.');
 						event.preventDefault();
 						cardFields.submit({
 							cardholderName: document.getElementById('card-holder-name').value,
@@ -279,7 +280,8 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 formData.append('action', 'swpm_acdc_capture_order');
 formData.append('order_id', orderId);
 formData.append('on_page_button_id', '<?php echo esc_js($on_page_embed_button_id); ?>');
-formData.append('_wpnonce', '<?php echo $wp_nonce; ?>');							
+formData.append('_wpnonce', '<?php echo $wp_nonce; ?>');
+console.log( 'Going to do capture order AJAX. Form Data: ' +  JSON.stringify(formData) );
 							fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
 								method: 'post',
 								body: formData,

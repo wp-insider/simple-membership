@@ -555,6 +555,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 		SwpmLog::log_simple_debug( 'Member password has been reset. Email: ' . $email, true );
 
+		//Trigger action hook
+		do_action( 'swpm_front_end_reset_password_using_link_completed', $user_data, $password);
+
 		return true;
 	}
 

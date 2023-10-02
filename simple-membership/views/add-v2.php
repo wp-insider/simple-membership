@@ -7,7 +7,7 @@ if (!empty($force_strong_pass)) {
 } else {
     $pass_class = "";
 }
-// Filter allowing to change the default value of user_name
+// Filter allowing to change the default value of user_name.
 $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
 ?>
 <div class="swpm-registration-widget-form">
@@ -58,7 +58,8 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
             </div>
             <?php
             apply_filters('swpm_registration_form_before_terms_and_conditions', '');
-            //check if we need to display Terms and Conditions checkbox
+            
+            // Check if we need to display Terms and Conditions checkbox.
             $terms_enabled = $settings->get_value('enable-terms-and-conditions');
             if (!empty($terms_enabled)) {
                 $terms_page_url = $settings->get_value('terms-and-conditions-page-url');
@@ -69,9 +70,8 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                         <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I accept the ') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
                     </div>
                 </div>
-            <?php
-            }
-            //check if we need to display Privacy Policy checkbox
+            <?php }
+            // Check if we need to display Privacy Policy checkbox.
             $pp_enabled = $settings->get_value('enable-privacy-policy');
             if (!empty($pp_enabled)) {
                 $pp_page_url = $settings->get_value('privacy-policy-page-url');
@@ -82,20 +82,14 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                         <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
                     </div>
                 </div>
-            <?php
-            }
-            ?>
+            <?php } ?>
+
             <div class="swpm-before-registration-submit-section" align="center"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
 
             <div class="swpm-registration-form-row swpm-registration-submit-section">
                 <div></div>
                 <div>
-                    <!-- <button type="submit" class="swpm-registration-submit" name="swpm_registration_submit">
-                        <?php echo SwpmUtils::_('Register') ?>
-                    </button> -->
-
                     <input type="submit" value="<?php echo SwpmUtils::_('Register') ?>" class="swpm-registration-submit" name="swpm_registration_submit" />
-
                 </div>
             </div>
         </div>
@@ -142,11 +136,6 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
         form#swpm-registration-form .swpm-registration-submit-section {
             margin-top: 20px;
         }
-
-
-        /* form#swpm-registration-form .swpm-registration-terms-row > div{
-            display: unset;
-        } */
 
         /* Media query for smaller screens */
         @media screen and (max-width: 767px) {

@@ -99,8 +99,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		}
 		ob_start();
 		extract( (array) $member, EXTR_SKIP );
-		// include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add.php';
-		include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add-v2.php';
+		include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add.php';
+		//include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add-v2.php';
 		return ob_get_clean();
 	}
 

@@ -208,6 +208,8 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 				},
 				onApprove: function (data, actions) {
 					return actions.order.capture().then(function (details) {
+						console.log('onApprove done. Details: ' + JSON.stringify(details));
+						alert('Transaction completed by ' + details.payer.name.given_name);
 						window.location.href = '/success.html';
 					});
 				}
@@ -216,34 +218,35 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 			if (paypal.HostedFields.isEligible()) {
 				paypal.HostedFields.render({
 					createOrder: function () {
-						//Set up the transaction by creating a `paypal.Order`.
-						//The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
+						console.log('Going to execute the create order code.');
+
+						// Set up the transaction by creating a `paypal.Order`.
+						// The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
 						console.log('Setting up the order for ACDC.');
 						let data = {};
 						data.button_id = '<?php echo esc_js($button_id); ?>';
 						data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
 						data.item_name = '<?php echo esc_js($item_name); ?>';
-						//console.log('Data: ' + JSON.stringify(data));
-                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_acdc_setup_order', data: data, _wpnonce: '<?php echo $wp_nonce; ?>'}, function( response ) {
-                            console.log( 'Response from the server: ' + JSON.stringify( response ) );
-                            if ( response.success ) {
-                                //Success response.
-								//TODO - Store the order ID in a variable then return it for the SDK to use.
-								orderId = response.order_id;
-								console.log('Order ID: ' + orderId);
-								return orderId;
-                            } else {
-                                //Error response from the AJAX hanler. Show the error message.
-                                console.log( 'Error response: ' + JSON.stringify( response.err_msg ) );
-                                alert( JSON.stringify( response ) );
-								return;
-                            }
+						//TODO - debug purpose only. Remove this later.
+						console.log('Data: ' + JSON.stringify(data));
 
-                            //Return the button and the spinner back to their orignal display state.
-                            //pp_button_container.show();//Show the buttons
-                            //pp_button_spinner_conainer.hide();//Hide the spinner.
-
-                        });
+						// Using fetch API for AJAX
+						let postData = 'action=swpm_acdc_setup_order&data=' + JSON.stringify(data) + '&_wpnonce=<?php echo $wp_nonce; ?>';
+						fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							},
+							body: postData
+						}).then(function(res) {
+							console.log('Create order response: ' + JSON.stringify(res));
+							return res.json();
+						}).then(function(orderData) {
+							console.log('Create order result from server: ', JSON.stringify(orderData));
+							orderId = orderData.order_id;
+							console.log('Returning the Order ID: ' + orderId);
+							return orderId;
+						});
 					},
 					styles: {
 						'.valid': {
@@ -299,7 +302,7 @@ console.log( 'Going to do capture order AJAX. Form Data: ' +  JSON.stringify(for
 							}).then(function (orderData) {
 								console.log( 'Capture result from server: ', JSON.stringify(orderData) );
 
-								var errorDetail = Array.isArray(orderData.details) && orderData.details[0];
+								var errorDetail = '';//Array.isArray(orderData.details) && orderData.details[0];
 								if (errorDetail) {
 									var msg = 'Sorry, your transaction could not be processed.';
 									if (errorDetail.description) msg += '' + errorDetail.description;

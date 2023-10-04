@@ -131,7 +131,13 @@ class SWPM_PayPal_ACDC_Related {
 				)
 			);
 		}
-		//TODO - Debugging purpose
+		
+		if( !is_array( $data ) ){
+			SwpmLog::log_simple_debug( 'Data is not an array format. Converting JSON to array data.', true );
+			$data = json_decode( $data, true);//Convert the JSON string to an array (Vanilla JS AJAX data will be in JSON format).			
+		}
+
+		//TODO - Debugging purpose.
 		SwpmLog::log_array_data_to_debug( $data, true );
 
 		$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';

@@ -84,7 +84,7 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                 </div>
             <?php } ?>
 
-            <div class="swpm-before-registration-submit-section" align="center"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
+            <div class="swpm-before-registration-submit-section"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
 
             <div class="swpm-registration-form-row swpm-registration-submit-section">
                 <div></div>
@@ -99,50 +99,13 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
     </form>
 
     <style>
-        form#swpm-registration-form .swpm-registration-form-row {
-            display: flex;
-            justify-content: space-between;
-            align-content: center;
+         form#swpm-registration-form .swpm-registration-form-row {
             margin-bottom: 6px;
         }
 
-        form#swpm-registration-form .swpm-registration-membership-level-row {
-            justify-content: start;
-        }
-
-        form#swpm-registration-form .swpm-registration-form-row>div>label {
-            display: block;
-        }
-
-        form#swpm-registration-form .swpm-registration-form-row>div>input:not([type="submit"]) {
-            width: 100%;
-        }
-
-        form#swpm-registration-form .swpm-registration-form-row>div {
-            display: flex;
-            align-items: center;
-        }
-
-        form#swpm-registration-form .swpm-registration-form-row>div:first-child {
-            /* for the first div element (label container) */
-            flex: 2;
-        }
-
-        form#swpm-registration-form .swpm-registration-form-row>div:last-child {
-            /* for the second div element (input container) */
-            flex: 3;
-        }
-
-        form#swpm-registration-form .swpm-registration-submit-section {
-            margin-top: 20px;
-        }
-
-        /* Media query for smaller screens */
-        @media screen and (max-width: 767px) {
-            form#swpm-registration-form .swpm-registration-form-row {
-                display: block;
-                margin-bottom: 10px;
-            }
+        form#swpm-registration-form .swpm-registration-form-row>div>input[type="submit"] {
+            margin-top: 12px;
+            /* padding: 4px 15px; */
         }
     </style>
 </div>

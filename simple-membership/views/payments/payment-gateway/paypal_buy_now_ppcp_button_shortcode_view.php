@@ -116,6 +116,12 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
     $currency = isset( $currency ) ? $currency : 'USD';
 	$sdk_src_url = SWPM_PayPal_ACDC_Related::get_sdk_src_url_for_acdc( $environment_mode, $currency );
 
+	//TODO - Remove this later. This is just for testing.
+	// echo '<br />------------Debug data------------<br />';
+	// echo '<p>Client Token: ' . $client_token . '</p>';
+	// echo '<p>SDK Source URL: ' . $sdk_src_url . '</p>';
+	// echo '<br />------------Debug data------------<br />';
+
 	$output = '';
 	ob_start();
 	?>
@@ -276,6 +282,8 @@ console.log('Card fields submitted.');
 								countryCodeAlpha2: document.getElementById('card-billing-address-country').value
 							}
 						}).then(function () {
+console.log('Going to execute the capture order code.');//<-- This is not executing.
+
 							const formData = new FormData();
 formData.append('action', 'swpm_acdc_capture_order');
 formData.append('order_id', orderId);
@@ -316,184 +324,4 @@ console.log( 'Going to do capture order AJAX. Form Data: ' +  JSON.stringify(for
 
 	return $output;
 
-	//******************************************************************/
-	/* OLD CODE BELOW */
-	/*******************************************************************/
-	$output = '';
-	ob_start();
-	?>
-
-	<div class="swpm-button-wrapper swpm-paypal-buy-now-button-wrapper">
-
-		<!-- PayPal button container where the button will be rendered -->
-		<div id="<?php echo esc_attr( $on_page_embed_button_id ); ?>"
-			style="width: <?php echo esc_attr( $btn_width ); ?>px;">
-		</div>
-		<!-- Some additiona hidden input fields -->
-		<input type="hidden" id="<?php echo esc_attr( $on_page_embed_button_id . '-custom-field' ); ?>" name="custom"
-			value="<?php echo esc_attr( $custom_field_value ); ?>">
-
-		<script type="text/javascript">
-			jQuery(function ($) {
-				$(document).on("swpm_paypal_sdk_loaded", function () {
-					//Anything that goes here will only be executed after the PayPal SDK is loaded.
-
-					var js_currency_code = '<?php echo esc_js( $currency ); ?>';
-					var js_payment_amount = <?php echo esc_js( $payment_amount ); ?>;
-					var js_quantity = 1;
-					var js_digital_goods_enabled = 1;
-
-					const paypalButtonsComponent = paypal.Buttons({
-						// optional styling for buttons
-						// https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
-						style: {
-							color: '<?php echo esc_js( $btn_color ); ?>',
-							shape: '<?php echo esc_js( $btn_shape ); ?>',
-							height: <?php echo esc_js( $btn_height ); ?>,
-							label: '<?php echo esc_js( $btn_type ); ?>',
-							layout: '<?php echo esc_js( $btn_layout ); ?>',
-						},
-
-						// set up the transaction
-						createOrder: function (data, actions) {
-							// Create the order
-							// https://developer.paypal.com/docs/api/orders/v2/#orders_create
-							var order_data = {
-								intent: 'CAPTURE',
-								purchase_units: [{
-									amount: {
-										value: js_payment_amount,
-										currency_code: '<?php echo esc_js( $currency ); ?>',
-										breakdown: {
-											item_total: {
-												currency_code: '<?php echo esc_js( $currency ); ?>',
-												value: js_payment_amount * js_quantity,
-											}
-										}
-									},
-									items: [{
-										name: '<?php echo esc_js( $item_name ); ?>',
-										quantity: js_quantity,
-										/*category: js_digital_goods_enabled ? 'PHYSICAL_GOODS' : 'DIGITAL_GOODS',*/
-										unit_amount: {
-											value: js_payment_amount,
-											currency_code: '<?php echo esc_js( $currency ); ?>',
-										}
-									}]
-								}]
-							};
-							return actions.order.create(order_data);
-						},
-
-						// notify the buyer that the subscription is successful
-						onApprove: function (data, actions) {
-							console.log('Successfully created a transaction.');
-
-							//Show the spinner while we process this transaction.
-							var pp_button_container = jQuery('#<?php echo esc_js( $on_page_embed_button_id ); ?>');
-							var pp_button_spinner_conainer = pp_button_container.siblings('.swpm-pp-button-spinner-container');
-							pp_button_container.hide();//Hide the buttons
-							pp_button_spinner_conainer.css('display', 'inline-block');//Show the spinner.
-
-							//Get the order/transaction details and send AJAX request to process the transaction.
-							actions.order.capture().then(function (txn_data) {
-								//console.log( 'Transaction details: ' + JSON.stringify( txn_data ) );
-
-								//Ajax request to process the transaction. This will process it similar to how an IPN request is handled.
-								var custom = document.getElementById('<?php echo esc_attr( $on_page_embed_button_id . "-custom-field" ); ?>').value;
-								data.custom_field = custom;
-								data.button_id = '<?php echo esc_js( $button_id ); ?>';
-								data.on_page_button_id = '<?php echo esc_js( $on_page_embed_button_id ); ?>';
-								data.item_name = '<?php echo esc_js( $item_name ); ?>';
-								jQuery.post('<?php echo admin_url( 'admin-ajax.php' ); ?>', { action: 'swpm_onapprove_create_order', data: data, txn_data: txn_data, _wpnonce: '<?php echo $wp_nonce; ?>' }, function (response) {
-									//console.log( 'Response from the server: ' + JSON.stringify( response ) );
-									if (response.success) {
-										//Success response.
-
-										//Redirect to the Thank you page URL if it is set.
-										return_url = '<?php echo esc_url_raw( $return_url ); ?>';
-										if (return_url) {
-											//redirect to the Thank you page URL.
-											console.log('Redirecting to the Thank you page URL: ' + return_url);
-											window.location.href = return_url;
-											return;
-										} else {
-											//No return URL is set. Just show a success message.
-											txn_success_msg = '<?php echo esc_attr( $txn_success_message ); ?>';
-											alert(txn_success_msg);
-										}
-
-									} else {
-										//Error response from the AJAX IPN hanler. Show the error message.
-										console.log('Error response: ' + JSON.stringify(response.err_msg));
-										alert(JSON.stringify(response));
-									}
-
-									//Return the button and the spinner back to their orignal display state.
-									pp_button_container.show();//Show the buttons
-									pp_button_spinner_conainer.hide();//Hide the spinner.
-
-								});
-
-							});
-						},
-
-						// handle unrecoverable errors
-						onError: function (err) {
-							console.error('An error prevented the user from checking out with PayPal. ' + JSON.stringify(err));
-							alert('<?php echo esc_js( __( "Error occurred during PayPal checkout process.", "simple-membership" ) ); ?>\n\n' + JSON.stringify(err));
-						},
-
-						// handle onCancel event
-						onCancel: function (data) {
-							console.log('Checkout operation cancelled by the customer. Data: ' + JSON.stringify(data));
-							//Return to the parent page which the button does by default.
-						}
-					});
-
-					paypalButtonsComponent
-						.render('#<?php echo esc_js( $on_page_embed_button_id ); ?>')
-						.catch((err) => {
-							console.error('PayPal Buttons failed to render');
-						});
-
-				});
-			});
-		</script>
-		<style>
-			@keyframes swpm-pp-button-spinner {
-				to {
-					transform: rotate(360deg);
-				}
-			}
-
-			.swpm-pp-button-spinner {
-				margin: 0 auto;
-				text-indent: -9999px;
-				vertical-align: middle;
-				box-sizing: border-box;
-				position: relative;
-				width: 60px;
-				height: 60px;
-				border-radius: 50%;
-				border: 5px solid #ccc;
-				border-top-color: #0070ba;
-				animation: swpm-pp-button-spinner .6s linear infinite;
-			}
-
-			.swpm-pp-button-spinner-container {
-				width: 100%;
-				text-align: center;
-				margin-top: 10px;
-				display: none;
-			}
-		</style>
-		<div class="swpm-pp-button-spinner-container">
-			<div class="swpm-pp-button-spinner"></div>
-		</div>
-	</div><!-- end of .swpm-button-wrapper -->
-	<?php
-	$output .= ob_get_clean();
-
-	return $output;
 }

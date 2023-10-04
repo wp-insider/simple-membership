@@ -231,7 +231,7 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 								//TODO - Store the order ID in a variable then return it for the SDK to use.
 								orderId = response.order_id;
 								console.log('Order ID: ' + orderId);
-								return response.order_id;
+								return orderId;
                             } else {
                                 //Error response from the AJAX hanler. Show the error message.
                                 console.log( 'Error response: ' + JSON.stringify( response.err_msg ) );

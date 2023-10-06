@@ -22,14 +22,14 @@ class SWPM_PayPal_ACDC_Related {
 	}
 
 	public static function get_sdk_src_url_for_acdc( $environment_mode = 'production', $currency = 'USD' ){
-
-        $client_id = SWPM_PayPal_Utility_Functions::get_partner_client_id_by_environment_mode( $environment_mode );
+		//Get the client ID and merchant ID based on the environment mode.
+		$client_id = SWPM_PayPal_Utility_Functions::get_seller_client_id_by_environment_mode( $environment_mode );
         $merchant_id = SWPM_PayPal_Utility_Functions::get_seller_merchant_id_by_environment_mode( $environment_mode );
 
 		$query_args = array();
 		$query_args['components'] = 'buttons,hosted-fields';
-		$query_args['client-id'] = $client_id;
-		$query_args['merchant-id'] = $merchant_id;
+		$query_args['client-id'] = $client_id;//Seller client ID
+		$query_args['merchant-id'] = $merchant_id;//Seller merchant ID
 		$query_args['currency'] = $currency;
 		$query_args['intent'] = 'capture';
 
@@ -166,6 +166,9 @@ class SWPM_PayPal_ACDC_Related {
 		$quantity = 1;
 		$digital_goods_enabled = 1;
 
+		//TODO - remove this later.
+		SwpmLog::log_simple_debug( 'acdc_setup_order - about to make API call...', true );
+
 		//TODO - Create the order using the PayPal API.
 		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
 		$data = array(
@@ -189,6 +192,8 @@ class SWPM_PayPal_ACDC_Related {
 			);
 			exit;
 		}
+
+		SwpmLog::log_simple_debug( 'acdc_setup_order - API call done. Sending AJAX response back.', true );
 
 		//If everything is processed successfully, send the success response.
 		wp_send_json( array( 'success' => true, 'order_id' => $paypal_order_id ) );

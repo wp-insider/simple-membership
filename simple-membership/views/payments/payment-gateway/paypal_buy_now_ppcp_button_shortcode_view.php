@@ -117,10 +117,18 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 	$sdk_src_url = SWPM_PayPal_ACDC_Related::get_sdk_src_url_for_acdc( $environment_mode, $currency );
 
 	//TODO - Remove this later. This is just for testing.
+	//Force Cache Delete on page load. Delete the bearer token from cache to make sure it generates a new one.
+	// $paypal_cache = SWPM_PayPal_Cache::get_instance();
+	// $paypal_cache->delete( SWPM_PayPal_Bearer::BEARER_CACHE_KEY );//Delete to reset the cache to make sure it generates a new one.
+
+	// $merchant_id = SWPM_PayPal_Utility_Functions::get_seller_merchant_id_by_environment_mode( $environment_mode );
 	// echo '<br />------------Debug data------------<br />';
+	// echo '<br />Client ID: ' . $sandbox_client_id;
+	// echo '<br />Merchant ID: ' . $merchant_id;
 	// echo '<p>Client Token: ' . $client_token . '</p>';
 	// echo '<p>SDK Source URL: ' . $sdk_src_url . '</p>';
 	// echo '<br />------------Debug data------------<br />';
+	//TODO - End debug code. Remove this later.
 
 	$output = '';
 	ob_start();

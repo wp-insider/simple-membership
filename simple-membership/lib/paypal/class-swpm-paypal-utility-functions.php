@@ -42,6 +42,18 @@ class SWPM_PayPal_Utility_Functions{
         return $seller_merchant_id;
     }
 
+    public static function get_seller_client_id_by_environment_mode( $environment_mode = 'production' ) {
+        $settings = SwpmSettings::get_instance();
+        $seller_client_id = '';
+
+        if ($environment_mode == 'production') {
+            $seller_client_id = $settings->get_value('paypal-live-client-id');
+        } else {
+            $seller_client_id = $settings->get_value('paypal-sandbox-client-id');
+        }
+        return $seller_client_id;
+    }
+
     public static function create_product_params_from_button( $button_id ){
         $button_name = get_the_title( $button_id );
         $product_params = array(

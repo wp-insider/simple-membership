@@ -177,6 +177,7 @@ https://simple-membership-plugin.com/
 - The edit membership level interface shows the currently editing membership level's ID.
 - Added a new action hook (swpm_front_end_reset_password_using_link_completed). Thanks to @MedTRGit.
 - Updated the translation POT file.
+- Refactored the Stripe session create code to a separate class.
 
 = 4.3.6 =
 - Added output escaping to the 'list_type' parameter in the 'Post and Page Protection' menu tab.

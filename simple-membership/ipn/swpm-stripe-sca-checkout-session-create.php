@@ -1,0 +1,208 @@
+<?php
+
+class SwpmStripeCheckoutSessionCreate{
+
+	public function __construct() {
+		//Our Stripe session create request comes via ajax.
+		if ( wp_doing_ajax() ) {
+            //check if this is session create request
+			$action = isset( $_POST['action'] ) ? sanitize_text_field( stripslashes ( $_POST['action'] ) ) : '';
+			if ( 'swpm_stripe_sca_create_checkout_session' === $action ) {
+                //handle session create request
+				add_action( 'wp_ajax_swpm_stripe_sca_create_checkout_session', array( $this, 'handle_session_create' ) );
+				add_action( 'wp_ajax_nopriv_swpm_stripe_sca_create_checkout_session', array( $this, 'handle_session_create' ) );
+			}
+		}
+    }
+
+	public function handle_session_create() {
+		$button_id = filter_input( INPUT_POST, 'swpm_button_id', FILTER_SANITIZE_NUMBER_INT );
+		if ( empty( $button_id ) ) {
+			wp_send_json( array( 'error' => 'No button ID provided' ) );
+		}
+
+        SwpmLog::log_simple_debug( 'Stripe SCA checkout session create request received. Processing request...', true );
+
+		//Check if payment_method_types is being used in the shortcode.
+		$payment_method_types = isset( $_POST['payment_method_types'] ) ? sanitize_text_field( stripslashes ( $_POST['payment_method_types'] ) ) : '';
+		if ( empty( $payment_method_types ) ) {
+        	//Use the default payment_method_types value.
+			$payment_method_types_array = array( 'card' );
+		} else {
+			//Use the payment_method_types specified in the shortcode (example value: card,us_bank_account
+			$payment_method_types_array = array_map( 'trim', explode (",", $payment_method_types) );
+        }
+                
+		$uniqid = isset( $_POST['swpm_uniqid'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_uniqid'] ) ) : '';
+		$uniqid = ! empty( $uniqid ) ? $uniqid : '';
+
+		$settings   = SwpmSettings::get_instance();
+		$button_cpt = get_post( $button_id ); //Retrieve the CPT for this button
+		$item_name  = htmlspecialchars( $button_cpt->post_title );
+
+		$plan_id = get_post_meta( $button_id, 'stripe_plan_id', true );
+
+		if ( empty( $plan_id ) ) {
+			//Payment amount and currency
+			$payment_amount = get_post_meta( $button_id, 'payment_amount', true );
+			if ( ! is_numeric( $payment_amount ) ) {
+				wp_send_json( array( 'error' => 'Error! The payment amount value of the button must be a numeric number. Example: 49.50' ) );
+			}
+
+			$payment_currency = get_post_meta( $button_id, 'payment_currency', true );
+			$payment_amount   = round( $payment_amount, 2 ); //round the amount to 2 decimal place.
+
+			$payment_amount = apply_filters( 'swpm_payment_amount_filter', $payment_amount, $button_id );
+
+			$zero_cents = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
+			if ( in_array( $payment_currency, $zero_cents ) ) {
+				//this is zero-cents currency, amount shouldn't be multiplied by 100
+				$price_in_cents = $payment_amount;
+			} else {
+				$price_in_cents = $payment_amount * 100; //The amount (in cents). This value is passed to Stripe API.
+			}
+			$payment_amount_formatted = SwpmMiscUtils::format_money( $payment_amount, $payment_currency );
+		}
+
+		//$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
+		//User's IP address
+		$user_ip = SwpmUtils::get_user_ip_address();
+		$_SESSION['swpm_payment_button_interaction'] = $user_ip;
+
+		//Get the button's level ID
+		$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
+
+		//Custom field data
+		$custom_field_value  = 'subsc_ref=' . $membership_level_id;
+		$custom_field_value .= '&user_ip=' . $user_ip;
+		if ( SwpmMemberUtils::is_member_logged_in() ) {
+			$custom_field_value .= '&swpm_id=' . SwpmMemberUtils::get_logged_in_members_id();
+		}
+		$custom_field_value = apply_filters( 'swpm_custom_field_value_filter', $custom_field_value );
+
+		//Sandbox settings
+		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
+
+		//API keys
+		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, ! $sandbox_enabled );
+
+		//Billing address
+		$billing_address = isset( $args['billing_address'] ) ? '1' : '';
+		//By default don't show the billing address in the checkout form.
+		//if billing_address parameter is not present in the shortcode, let's check button option
+		if ( $billing_address === '' ) {
+			$collect_address = get_post_meta( $button_id, 'stripe_collect_address', true );
+			if ( $collect_address === '1' ) {
+				//Collect Address enabled in button settings
+				$billing_address = 1;
+			}
+		}
+
+		$automatic_tax = false;
+                $automatic_tax_opt = get_post_meta( $button_id, 'stripe_automatic_tax', true );
+                if ( $automatic_tax_opt === '1' ) {
+                        $automatic_tax = true;
+                }
+
+		$ref_id = 'swpm_' . $uniqid . '|' . $button_id;
+
+		//Return, cancel, notifiy URLs
+		if ( empty( $plan_id ) ) {
+			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_buy_now=1&ref_id=%s', $ref_id );
+		} else {
+			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_subscription=1&ref_id=%s', $ref_id );
+		}
+
+		$current_url_posted = filter_input( INPUT_POST, 'swpm_page_url', FILTER_SANITIZE_URL );
+
+		$current_url = ! empty( $current_url_posted ) ? $current_url_posted : SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+
+		//prefill member email
+		$prefill_member_email = $settings->get_value( 'stripe-prefill-member-email' );
+
+		if ( $prefill_member_email ) {
+			$auth         = SwpmAuth::get_instance();
+			$member_email = $auth->get( 'email' );
+		}
+
+		SwpmMiscUtils::load_stripe_lib();
+
+		try {
+			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
+			\Stripe\Stripe::setApiVersion("2022-08-01");
+
+			if ( empty( $plan_id ) ) {
+				//this is one-off payment
+				$opts = array(
+					'payment_method_types'       => $payment_method_types_array,
+					'client_reference_id'        => $ref_id,
+					'billing_address_collection' => $billing_address ? 'required' : 'auto',					
+					'line_items' => array(
+						array(
+							'price_data'  => array(
+								'currency' => $payment_currency,
+								'unit_amount'      => $price_in_cents,
+								'product_data' => array(
+									'name'        => $item_name,
+									'description' => $payment_amount_formatted,
+								),
+							),
+							'quantity'    => 1
+						)
+					),					
+					'mode' => 'payment',
+					'success_url'                => $notify_url,
+					'cancel_url'                 => $current_url,
+				);
+			} else {
+				//this is subscription payment
+				$opts = array(
+					'payment_method_types'       => $payment_method_types_array,
+					'client_reference_id'        => $ref_id,
+					'billing_address_collection' => $billing_address ? 'required' : 'auto',					
+					'line_items' => array(
+						array(
+						'price' => $plan_id,
+						'quantity'    => 1
+						),
+						
+				),
+					'mode' => 'subscription',
+					'success_url'                => $notify_url,
+					'cancel_url'                 => $current_url,
+				);
+
+				$trial_period = get_post_meta( $button_id, 'stripe_trial_period', true );
+				$trial_period = absint( $trial_period );
+				if ( $trial_period ) {
+					$opts['subscription_data']['trial_period_days'] = $trial_period;
+				}
+			}
+
+			if ( ! empty( $item_logo ) ) {
+				$opts['line_items'][0]["product_data"]['images'] = array( $item_logo );
+			}
+
+			if ( ! empty( $member_email ) ) {
+				$opts['customer_email'] = $member_email;
+			}
+
+			if( $automatic_tax == true ) {
+				$opts["automatic_tax"] = array( "enabled" => true );
+			}
+			
+			$opts = apply_filters( 'swpm_stripe_sca_session_opts', $opts, $button_id );
+
+			$session = \Stripe\Checkout\Session::create( $opts );
+		} catch ( Exception $e ) {
+			$err = $e->getMessage();
+			wp_send_json( array( 'error' => 'Error occurred: ' . $err ) );
+		}
+
+        SwpmLog::log_simple_debug( 'Stripe SCA checkout session created successfully.', true );
+		wp_send_json( array( 'session_id' => $session->id ) );
+	}
+
+}
+
+new SwpmStripeCheckoutSessionCreate();

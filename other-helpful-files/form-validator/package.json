@@ -1,0 +1,18 @@
+{
+  "name": "form-validator",
+  "version": "1.0.0",
+  "description": "A form validator script for swpm forms",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "rollup -c -w"
+  },
+  "author": "Adil",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.5",
+    "rollup": "^4.1.1",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2"
+  }
+}

@@ -5,3 +5,5 @@
 /simple-membership/log*.txt
 
 .idea/
+
+node_modules

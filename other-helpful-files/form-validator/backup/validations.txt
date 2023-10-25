@@ -1,0 +1,38 @@
+Username:
+=======================
+* This field is required
+* Invalid Username
+Usernames can only contain: letters, numbers and .-_*@
+* Minimum 4 characters required
+
+Email:
+=======================
+* This field is required
+* Invalid email address
+
+TnC:
+=======================
+* This checkbox is required
+
+PP:
+=======================
+* This checkbox is required
+
+Password:
+=======================
+* This field is required
+* Password must contain at least:
+- a digit
+- an uppercase letter
+- a lowercase letter
+* Minimum 8 characters required
+
+PP and Terms
+=======================
+* This checkbox is required
+
+
+Libraries:
+https://zod.dev/
+https://jqueryvalidation.org/
+https://valibot.dev/

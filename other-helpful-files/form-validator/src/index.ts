@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const formData = {
         username: {
             value: "" as string | null,
-            eventListener: "keyup",
+            eventListener: "blur",
             active: true as boolean,
             isAsyncValidation: true as boolean,
             rule: string({
@@ -79,12 +79,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 .min(1, { message: validationMsg?.username?.required })
                 .refine(
                     async function (value) {
-                        const exists = await checkAvailability(
+                        const isAvailable = await checkAvailability(
                             value,
                             "username"
                         );
-
-                        return !exists; // Username exists, validation failed.
+                        return isAvailable;
                     },
                     {
                         message: validationMsg?.username?.exists,
@@ -93,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         email: {
             value: "" as string | null,
-            eventListener: "keyup",
+            eventListener: "blur",
             active: true as boolean,
             isAsyncValidation: true as boolean,
             rule: string({
@@ -104,9 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 .min(1, { message: validationMsg?.email?.required })
                 .refine(
                     async function (value) {
-                        const exists = await checkAvailability(value, "email");
-
-                        return !exists; // Username exists, validation failed.
+                        const isAvailable = await checkAvailability(value, "email");
+                        return isAvailable;
                     },
                     {
                         message: validationMsg?.email?.exists,
@@ -229,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const RegistrationFormSchema = object(RegistrationValidators);
 
-    const registrationForm = document.getElementById(formID);
+    const registrationForm = document.getElementById(formID) as HTMLFormElement;
 
     const fields: string[] = Object.keys(RegistrationValidators);
 
@@ -250,16 +248,31 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Listen to form submit.
      */
-    registrationForm?.addEventListener("submit", function (e) {
+    registrationForm?.addEventListener("submit", async function (e) {
         e.preventDefault();
+
+        let validationSucess = true;
+
         for (const key in formData) {
-            if (formData[key as keyof typeof formData].active) {
-                validateInput(
-                    key,
-                    formData[key as keyof typeof formData].value
-                );
+            if (!formData[key as keyof typeof formData].active) {
+                continue;
+            }
+
+            let isSuccess = await validateInput(
+                key,
+                formData[key as keyof typeof formData].value
+            );
+
+            if (!isSuccess) {
+                validationSucess = false
             }
         }
+
+        // Submits the form if all the validation is successful.
+        if (validationSucess) {
+            registrationForm.submit();
+        }
+
     });
 
     /**
@@ -270,6 +283,9 @@ document.addEventListener("DOMContentLoaded", function () {
      * @returns void
      */
     async function validateInput(field: string, value: any) {
+        
+        let isValidationSuccessful = false;
+        
         const fieldToValidate = RegistrationFormSchema.pick({ [field]: true });
 
         let parseResult;
@@ -288,8 +304,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const targetFieldDesc = getDescByField(field);
 
         if (!parseResult.success) {
-            console.log(field, parseResult);
-
             targetRow?.classList.add("error");
             const issues = parseResult.error.issues;
 
@@ -309,15 +323,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 targetFieldDesc.appendChild(errorLists);
             }
         } else {
-            console.log(field, parseResult);
-
             // Remove the error message.
             if (targetFieldDesc) {
                 targetFieldDesc.innerHTML = "";
             }
 
             targetRow?.classList.remove("error");
+            isValidationSuccessful = true;
         }
+
+        return isValidationSuccessful;
     }
 
     /**
@@ -338,8 +353,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         formData[field as keyof typeof formData].value = inputValue;
 
-        console.log(inputValue);
-
         // Validates the input value
         validateInput(field, inputValue);
     }
@@ -347,22 +360,66 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /**
  * Asynchronously checks whether the field value exists on the database.
- * 
- * @param value The value to retrieve 
- * @param field The field to retrieve the value of. 
+ *
+ * @param value The value to retrieve
+ * @param field The field to retrieve the value of.
  * @returns boolean
  */
 async function checkAvailability(value: string, field: string) {
+    // Checks whether the input field is empty or not. If empty, then return false in order to show no validation error.
+    if (value.trim() === "") {
+        return true;
+    }
+
+    // append the field value
+    swpmRegFormAjax.query_args.action =
+        field === "username"
+            ? "swpm_validate_user_name"
+            : "swpm_validate_email";
+    swpmRegFormAjax.query_args.fieldValue = value;
+
+    const queryString = new URLSearchParams(
+        swpmRegFormAjax.query_args
+    ).toString();
+    const apiUrl = swpmRegFormAjax.ajax_url + "?" + queryString;
+    console.log(apiUrl);
+
     return new Promise((resolve) => {
-        const database = {
-            username: "john",
-            email: "john@email.com",
-        };
-        setTimeout(() => {
-            const exists = value === database[field as keyof typeof database];
-            resolve(exists);
-        }, 1000);
+        fetch(apiUrl)
+            .then((response) => {
+                // Check if the response status is OK (status code 200)
+                if (response.ok) {
+                    // Parse the response body as JSON
+                    return response.json();
+                } else {
+                    // Handle the error if the response status is not OK
+                    throw new Error("Request failed");
+                }
+            })
+            .then((data) => {
+                // the response body contains an array with the target value as boolean at index 1.
+                const isAvailable = data[1]; 
+                
+                resolve(isAvailable);
+            })
+            .catch((error) => {
+                // Handle any errors that occurred during the fetch
+                console.error("Error: ", error);
+            });
     });
+
+
+    // return new Promise((resolve) => {
+    //     const database = {
+    //         username: "john",
+    //         email: "john@email.com",
+    //     };
+    //     setTimeout(() => {
+    //         const exists = value !== database[field as keyof typeof database];
+    //         resolve(exists);
+    //     }, 1000);
+    // });
+
 }
 
 /**

@@ -788,10 +788,72 @@ class SimpleWpMembership {
         wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.password-toggle', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-toggle.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
-        
+        wp_register_script('swpm-reg-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.reg-form-validator.js', null, wp_rand(0, 1000), true);
+
         //Stripe libraries
         wp_register_script("swpm.stripe", "https://js.stripe.com/v3/", array("jquery"), SIMPLE_WP_MEMBERSHIP_VER);
 	wp_register_style("swpm.stripe.style", "https://checkout.stripe.com/v3/checkout/button.css", array(), SIMPLE_WP_MEMBERSHIP_VER);
+    }
+
+    public static function enqueue_validation_scripts_v2($params){
+        $validation_messages = wp_json_encode(array(
+            "username" => array(
+                "required" => __("Username is required", "simple-membership"),
+                "invalid" => __("Invalid username", "simple-membership"),
+                "regex" => __("Usernames can only contain: letters, numbers and .-_*@", "simple-membership"),
+                "minLength" => __("Minimum 4 characters required", "simple-membership"),
+                "exists" => __("Username already exists", "simple-membership"),
+            ),
+            "email" => array(
+                "required" => __("Email is required", "simple-membership"),
+                "invalid" => __("Invalid email", "simple-membership"),
+                "exists" => __("Email already exists", "simple-membership"),
+            ),
+            "password" => array(
+                "required" => __("Password is required", "simple-membership"),
+                "invalid" => __("Invalid password", "simple-membership"),
+                "regex" => __("Must contain a digit, an uppercase and a lowercase letter", "simple-membership"),
+                "minLength" => __("Minimum 8 characters required", "simple-membership")
+            ),
+            "repass" => array(
+                "required" => __("Retype password is required", "simple-membership"),
+                "invalid" => __("Invalid password", "simple-membership"),
+                "mismatch" => __("Password don't match", "simple-membership"),
+                "minLength" => __("Minimum 8 characters required", "simple-membership")
+            ),
+            "firstname" => array(
+                "required" => __("First name is required", "simple-membership"),
+                "invalid" => __("Invalid name", "simple-membership")
+            ),
+            "lastname" => array(
+                "required" => __("Last name is required", "simple-membership"),
+                "invalid" => __("Invalid name", "simple-membership")
+            ),
+            "terms" => array(
+                "required" => __("You must accept the terms & conditions", "simple-membership")
+            ),
+            "pp" => array(
+                "required" => __("You must accept the privacy policy", "simple-membership")
+            )
+        ));
+        
+        wp_add_inline_script("swpm-reg-form-validator", "var validationMsg = $validation_messages", "before");
+        wp_add_inline_script("swpm-reg-form-validator", "var form_id = '".$params['form_id']."';", "before");
+        wp_add_inline_script("swpm-reg-form-validator", "var terms_enabled = ".$params['is_terms_enabled'].";", "before");
+        wp_add_inline_script("swpm-reg-form-validator", "var pp_enabled = ".$params['is_pp_enabled'].";", "before");
+        wp_add_inline_script("swpm-reg-form-validator", "var strong_password_enabled = ".$params['is_strong_password_enabled'].";", "before");
+
+        $ajax_url =  admin_url('admin-ajax.php');
+        wp_localize_script(
+            'swpm-reg-form-validator',
+            'swpmRegFormAjax',
+            array(
+                'ajax_url' => $ajax_url,
+                'query_args' => $params['query_args'],
+            )
+        );
+        
+        wp_enqueue_script('swpm-reg-form-validator');
     }
 
     public static function enqueue_validation_scripts( $additional_params = array() ) {

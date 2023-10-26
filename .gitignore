@@ -7,4 +7,4 @@
 .idea/
 
 node_modules
-other-helpful-files/form-validator/dist
+/other-helpful-files/form-validator/dist

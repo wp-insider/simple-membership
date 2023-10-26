@@ -3579,52 +3579,12 @@ const formID = typeof form_id !== "undefined" ? form_id : "swpm-registration-for
 const isTermsEnabled = typeof terms_enabled !== "undefined" ? terms_enabled : false;
 const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
 const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
-const validationMsg = {
-  username: {
-    required: "Username is required",
-    invalid: "Invalid username",
-    regex: "Usernames can only contain: letters, numbers and .-_*@",
-    minLength: "Minimum 4 characters required",
-    exists: "Username already exists"
-  },
-  email: {
-    required: "Email is required",
-    invalid: "Invalid email",
-    exists: "Email already exists"
-  },
-  password: {
-    required: "Password is required",
-    invalid: "Invalid password",
-    regex: "Must contain a digit, an uppercase and a lowercase letter",
-    minLength: "Minimum 8 characters required"
-  },
-  repass: {
-    required: "Retype password is required",
-    invalid: "Invalid password",
-    mismatch: "Password don't match",
-    minLength: "Minimum 8 characters required"
-  },
-  firstname: {
-    required: "First name is required",
-    invalid: "Invalid name"
-  },
-  lastname: {
-    required: "Last name is required",
-    invalid: "Invalid name"
-  },
-  terms: {
-    required: "You must accept the terms & conditions"
-  },
-  pp: {
-    required: "You must accept the privacy policy"
-  }
-};
 document.addEventListener("DOMContentLoaded", function() {
   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A;
   const formData = {
     username: {
       value: "",
-      eventListener: "keyup",
+      eventListener: "blur",
       active: true,
       isAsyncValidation: true,
       rule: stringType({
@@ -3634,11 +3594,11 @@ document.addEventListener("DOMContentLoaded", function() {
         message: (_c = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _c.regex
       }).min(4, { message: (_d = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _d.minLength }).min(1, { message: (_e = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _e.required }).refine(
         async function(value) {
-          const exists = await checkAvailability(
+          const isAvailable = await checkAvailability(
             value,
             "username"
           );
-          return !exists;
+          return isAvailable;
         },
         {
           message: (_f = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _f.exists
@@ -3647,7 +3607,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     email: {
       value: "",
-      eventListener: "keyup",
+      eventListener: "blur",
       active: true,
       isAsyncValidation: true,
       rule: stringType({
@@ -3655,8 +3615,8 @@ document.addEventListener("DOMContentLoaded", function() {
         invalid_type_error: (_h = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _h.invalid
       }).email({ message: (_i = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _i.invalid }).min(1, { message: (_j = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _j.required }).refine(
         async function(value) {
-          const exists = await checkAvailability(value, "email");
-          return !exists;
+          const isAvailable = await checkAvailability(value, "email");
+          return isAvailable;
         },
         {
           message: (_k = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _k.exists
@@ -3770,18 +3730,27 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
   });
-  registrationForm == null ? void 0 : registrationForm.addEventListener("submit", function(e) {
+  registrationForm == null ? void 0 : registrationForm.addEventListener("submit", async function(e) {
     e.preventDefault();
+    let validationSucess = true;
     for (const key in formData) {
-      if (formData[key].active) {
-        validateInput(
-          key,
-          formData[key].value
-        );
+      if (!formData[key].active) {
+        continue;
       }
+      let isSuccess = await validateInput(
+        key,
+        formData[key].value
+      );
+      if (!isSuccess) {
+        validationSucess = false;
+      }
+    }
+    if (validationSucess) {
+      registrationForm.submit();
     }
   });
   async function validateInput(field, value) {
+    let isValidationSuccessful = false;
     const fieldToValidate = RegistrationFormSchema.pick({ [field]: true });
     let parseResult;
     if (formData[field].isAsyncValidation) {
@@ -3796,7 +3765,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const targetRow = getRowByField(field);
     const targetFieldDesc = getDescByField(field);
     if (!parseResult.success) {
-      console.log(field, parseResult);
       targetRow == null ? void 0 : targetRow.classList.add("error");
       const issues = parseResult.error.issues;
       if (targetFieldDesc) {
@@ -3812,31 +3780,45 @@ document.addEventListener("DOMContentLoaded", function() {
         targetFieldDesc.appendChild(errorLists);
       }
     } else {
-      console.log(field, parseResult);
       if (targetFieldDesc) {
         targetFieldDesc.innerHTML = "";
       }
       targetRow == null ? void 0 : targetRow.classList.remove("error");
+      isValidationSuccessful = true;
     }
+    return isValidationSuccessful;
   }
   function handleDomEvent(e, field) {
     const target = e.target;
     const inputValue = target.type === "checkbox" ? target.checked : target.value;
     formData[field].value = inputValue;
-    console.log(inputValue);
     validateInput(field, inputValue);
   }
 });
 async function checkAvailability(value, field) {
+  if (value.trim() === "") {
+    return true;
+  }
+  swpmRegFormAjax.query_args.action = field === "username" ? "swpm_validate_user_name" : "swpm_validate_email";
+  swpmRegFormAjax.query_args.fieldValue = value;
+  const queryString = new URLSearchParams(
+    swpmRegFormAjax.query_args
+  ).toString();
+  const apiUrl = swpmRegFormAjax.ajax_url + "?" + queryString;
+  console.log(apiUrl);
   return new Promise((resolve) => {
-    const database = {
-      username: "john",
-      email: "john@email.com"
-    };
-    setTimeout(() => {
-      const exists = value === database[field];
-      resolve(exists);
-    }, 1e3);
+    fetch(apiUrl).then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Request failed");
+      }
+    }).then((data) => {
+      const isAvailable = data[1];
+      resolve(isAvailable);
+    }).catch((error) => {
+      console.error("Error: ", error);
+    });
   });
 }
 function getDescByField(field) {

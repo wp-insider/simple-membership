@@ -36,3 +36,89 @@ Libraries:
 https://zod.dev/
 https://jqueryvalidation.org/
 https://valibot.dev/
+
+
+
+
+      Array
+(
+    [level_identifier] => c81e728d9d4c2f636f067f89cc14862c
+    [user_name] => Adil Rabid
+    [email] => 
+    [password] => 181294
+    [password_re] => 
+    [first_name] => 
+    [last_name] => 
+    [swpm_membership_level] => 2
+    [swpm_level_hash] => bbcb81ad163daa497e950c73775f1732
+    [swpm_registration_submit] => Register
+    [action] => custom_posts
+)
+
+     Array
+(
+    [level_identifier] => c81e728d9d4c2f636f067f89cc14862c
+    [user_name] => Adil Rabid
+    [email] => 
+    [password] => 181294
+    [password_re] => 
+    [first_name] => 
+    [last_name] => 
+    [swpm_membership_level] => 2
+    [swpm_level_hash] => bbcb81ad163daa497e950c73775f1732
+    [action] => custom_posts
+)
+
+
+    return new Promise((resolve) => {
+        const database = {
+            username: "john",
+            email: "john@email.com",
+        };
+        setTimeout(() => {
+            const exists = value !== database[field as keyof typeof database];
+            resolve(exists);
+        }, 1000);
+    });
+
+
+    // const validationMsg = {
+//     username: {
+//         required: "Username is required",
+//         invalid: "Invalid username",
+//         regex: "Usernames can only contain: letters, numbers and .-_*@",
+//         minLength: "Minimum 4 characters required",
+//         exists: "Username already exists",
+//     },
+//     email: {
+//         required: "Email is required",
+//         invalid: "Invalid email",
+//         exists: "Email already exists",
+//     },
+//     password: {
+//         required: "Password is required",
+//         invalid: "Invalid password",
+//         regex: "Must contain a digit, an uppercase and a lowercase letter",
+//         minLength: "Minimum 8 characters required",
+//     },
+//     repass: {
+//         required: "Retype password is required",
+//         invalid: "Invalid password",
+//         mismatch: "Password don't match",
+//         minLength: "Minimum 8 characters required",
+//     },
+//     firstname: {
+//         required: "First name is required",
+//         invalid: "Invalid name",
+//     },
+//     lastname: {
+//         required: "Last name is required",
+//         invalid: "Invalid name",
+//     },
+//     terms: {
+//         required: "You must accept the terms & conditions",
+//     },
+//     pp: {
+//         required: "You must accept the privacy policy",
+//     },
+// };

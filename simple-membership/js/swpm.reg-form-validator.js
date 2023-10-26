@@ -3581,7 +3581,7 @@ const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
 const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
 document.addEventListener("DOMContentLoaded", function() {
   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A;
-  const formData = {
+  const formConfig = {
     username: {
       value: "",
       eventListener: "blur",
@@ -3615,8 +3615,13 @@ document.addEventListener("DOMContentLoaded", function() {
         invalid_type_error: (_h = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _h.invalid
       }).email({ message: (_i = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _i.invalid }).min(1, { message: (_j = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _j.required }).refine(
         async function(value) {
-          const isAvailable = await checkAvailability(value, "email");
-          return isAvailable;
+          const emailSchema = stringType().email(value);
+          const parseResult = emailSchema.safeParse(value);
+          if (parseResult.success) {
+            const isAvailable = await checkAvailability(value, "email");
+            return isAvailable;
+          }
+          return true;
         },
         {
           message: (_k = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _k.exists
@@ -3625,7 +3630,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     password: {
       value: "",
-      eventListener: "keyup",
+      eventListener: "input",
       active: true,
       isAsyncValidation: false,
       rule: isStrongPasswordEnabled ? stringType({
@@ -3640,7 +3645,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     repass: {
       value: "",
-      eventListener: "keyup",
+      eventListener: "input",
       active: true,
       isAsyncValidation: false,
       rule: stringType({
@@ -3657,7 +3662,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     firstname: {
       value: "",
-      eventListener: "keyup",
+      eventListener: "input",
       active: true,
       isAsyncValidation: false,
       rule: stringType({
@@ -3667,7 +3672,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     lastname: {
       value: "",
-      eventListener: "keyup",
+      eventListener: "input",
       active: true,
       isAsyncValidation: false,
       rule: stringType({
@@ -3705,25 +3710,25 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
   const RegistrationValidators = {
-    username: formData.username.rule,
-    email: formData.email.rule,
-    password: formData.password.rule,
-    repass: formData.repass.rule,
-    firstname: formData.firstname.rule,
-    lastname: formData.lastname.rule
+    username: formConfig.username.rule,
+    email: formConfig.email.rule,
+    password: formConfig.password.rule,
+    repass: formConfig.repass.rule,
+    firstname: formConfig.firstname.rule,
+    lastname: formConfig.lastname.rule
   };
   if (isTermsEnabled) {
-    RegistrationValidators["terms"] = formData.terms.rule;
+    RegistrationValidators["terms"] = formConfig.terms.rule;
   }
   if (isPPEnabled) {
-    RegistrationValidators["pp"] = formData.pp.rule;
+    RegistrationValidators["pp"] = formConfig.pp.rule;
   }
   const RegistrationFormSchema = objectType(RegistrationValidators);
   const registrationForm = document.getElementById(formID);
   const fields = Object.keys(RegistrationValidators);
   fields.forEach((field) => {
     var _a2;
-    const fieldOption = formData[field];
+    const fieldOption = formConfig[field];
     if (fieldOption.active) {
       (_a2 = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-registration-form-${field}`)) == null ? void 0 : _a2.addEventListener(fieldOption.eventListener, (e) => {
         handleDomEvent(e, field);
@@ -3733,13 +3738,13 @@ document.addEventListener("DOMContentLoaded", function() {
   registrationForm == null ? void 0 : registrationForm.addEventListener("submit", async function(e) {
     e.preventDefault();
     let validationSucess = true;
-    for (const key in formData) {
-      if (!formData[key].active) {
+    for (const key in formConfig) {
+      if (!formConfig[key].active) {
         continue;
       }
       let isSuccess = await validateInput(
         key,
-        formData[key].value
+        formConfig[key].value
       );
       if (!isSuccess) {
         validationSucess = false;
@@ -3753,7 +3758,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let isValidationSuccessful = false;
     const fieldToValidate = RegistrationFormSchema.pick({ [field]: true });
     let parseResult;
-    if (formData[field].isAsyncValidation) {
+    if (formConfig[field].isAsyncValidation) {
       parseResult = await fieldToValidate.safeParseAsync({
         [field]: value
       });
@@ -3791,44 +3796,47 @@ document.addEventListener("DOMContentLoaded", function() {
   function handleDomEvent(e, field) {
     const target = e.target;
     const inputValue = target.type === "checkbox" ? target.checked : target.value;
-    formData[field].value = inputValue;
+    formConfig[field].value = inputValue;
     validateInput(field, inputValue);
   }
-});
-async function checkAvailability(value, field) {
-  if (value.trim() === "") {
-    return true;
-  }
-  swpmRegFormAjax.query_args.action = field === "username" ? "swpm_validate_user_name" : "swpm_validate_email";
-  swpmRegFormAjax.query_args.fieldValue = value;
-  const queryString = new URLSearchParams(
-    swpmRegFormAjax.query_args
-  ).toString();
-  const apiUrl = swpmRegFormAjax.ajax_url + "?" + queryString;
-  console.log(apiUrl);
-  return new Promise((resolve) => {
-    fetch(apiUrl).then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error("Request failed");
-      }
-    }).then((data) => {
-      const isAvailable = data[1];
-      resolve(isAvailable);
-    }).catch((error) => {
-      console.error("Error: ", error);
+  async function checkAvailability(value, field) {
+    if (value.trim() === "") {
+      return true;
+    }
+    const queryArgs = swpmRegFormAjax.query_args;
+    const ajaxURL = swpmRegFormAjax.ajax_url;
+    if (field === "username") {
+      queryArgs.action = "swpm_validate_user_name";
+    } else {
+      queryArgs.action = "swpm_validate_email";
+    }
+    queryArgs.fieldValue = value;
+    const queryString = new URLSearchParams(queryArgs).toString();
+    const apiUrl = ajaxURL + "?" + queryString;
+    return new Promise((resolve) => {
+      fetch(apiUrl).then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Request failed");
+        }
+      }).then((data) => {
+        const isAvailable = data[1];
+        resolve(isAvailable);
+      }).catch((error) => {
+        console.error("Error: ", error);
+      });
     });
-  });
-}
-function getDescByField(field) {
-  const registrationForm = document.getElementById(formID);
-  const targetField = registrationForm == null ? void 0 : registrationForm.querySelector(
-    `.swpm-registration-${field}-row`
-  );
-  return targetField == null ? void 0 : targetField.querySelector(`.swpm-registration-form-desc`);
-}
-function getRowByField(field) {
-  const registrationForm = document.getElementById(formID);
-  return registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-registration-${field}-row`);
-}
+  }
+  function getDescByField(field) {
+    const registrationForm2 = document.getElementById(formID);
+    const targetField = registrationForm2 == null ? void 0 : registrationForm2.querySelector(
+      `.swpm-registration-${field}-row`
+    );
+    return targetField == null ? void 0 : targetField.querySelector(`.swpm-registration-form-desc`);
+  }
+  function getRowByField(field) {
+    const registrationForm2 = document.getElementById(formID);
+    return registrationForm2 == null ? void 0 : registrationForm2.querySelector(`.swpm-registration-${field}-row`);
+  }
+});

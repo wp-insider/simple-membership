@@ -4,65 +4,19 @@ import { string, object, literal, ZodType } from "zod";
  * Defining variables that would come from PHP.
  */
 // @ts-ignore
-const formID =
-    typeof form_id !== "undefined" ? form_id : "swpm-registration-form";
+const formID = typeof form_id !== "undefined" ? form_id : "swpm-registration-form";
 // @ts-ignore
-const isTermsEnabled =
-    typeof terms_enabled !== "undefined" ? terms_enabled : false;
+const isTermsEnabled = typeof terms_enabled !== "undefined" ? terms_enabled : false;
 // @ts-ignore
 const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
 // @ts-ignore
-const isStrongPasswordEnabled =
-    typeof strong_password_enabled !== "undefined"
-        ? strong_password_enabled
-        : false;
+const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled: false;
 // @ts-ignore
 const isCaptchaEnabled = false;
 
-// const validationMsg = {
-//     username: {
-//         required: "Username is required",
-//         invalid: "Invalid username",
-//         regex: "Usernames can only contain: letters, numbers and .-_*@",
-//         minLength: "Minimum 4 characters required",
-//         exists: "Username already exists",
-//     },
-//     email: {
-//         required: "Email is required",
-//         invalid: "Invalid email",
-//         exists: "Email already exists",
-//     },
-//     password: {
-//         required: "Password is required",
-//         invalid: "Invalid password",
-//         regex: "Must contain a digit, an uppercase and a lowercase letter",
-//         minLength: "Minimum 8 characters required",
-//     },
-//     repass: {
-//         required: "Retype password is required",
-//         invalid: "Invalid password",
-//         mismatch: "Password don't match",
-//         minLength: "Minimum 8 characters required",
-//     },
-//     firstname: {
-//         required: "First name is required",
-//         invalid: "Invalid name",
-//     },
-//     lastname: {
-//         required: "Last name is required",
-//         invalid: "Invalid name",
-//     },
-//     terms: {
-//         required: "You must accept the terms & conditions",
-//     },
-//     pp: {
-//         required: "You must accept the privacy policy",
-//     },
-// };
-
 document.addEventListener("DOMContentLoaded", function () {
     // Field options configuration object.
-    const formData = {
+    const formConfig = {
         username: {
             value: "" as string | null,
             eventListener: "blur",
@@ -103,8 +57,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 .min(1, { message: validationMsg?.email?.required })
                 .refine(
                     async function (value) {
-                        const isAvailable = await checkAvailability(value, "email");
-                        return isAvailable;
+                        const emailSchema = string().email(value);
+                        const parseResult = emailSchema.safeParse(value)
+                        if(parseResult.success){
+                            const isAvailable = await checkAvailability(value, "email");
+                            return isAvailable;
+                        }
+
+                        return true;
                     },
                     {
                         message: validationMsg?.email?.exists,
@@ -113,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         password: {
             value: "" as string | null,
-            eventListener: "keyup",
+            eventListener: "input",
             active: true as boolean,
             isAsyncValidation: false as boolean,
             rule: isStrongPasswordEnabled
@@ -133,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         repass: {
             value: "" as string | null,
-            eventListener: "keyup",
+            eventListener: "input",
             active: true as boolean,
             isAsyncValidation: false as boolean,
             rule: string({
@@ -152,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         firstname: {
             value: "" as string | null,
-            eventListener: "keyup",
+            eventListener: "input",
             active: true as boolean,
             isAsyncValidation: false as boolean,
             rule: string({
@@ -162,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         lastname: {
             value: "" as string | null,
-            eventListener: "keyup",
+            eventListener: "input",
             active: true as boolean,
             isAsyncValidation: false as boolean,
             rule: string({
@@ -195,34 +155,34 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     type RegistrationValidators = {
-        username: typeof formData.username.rule;
-        email: typeof formData.email.rule;
-        password: typeof formData.password.rule;
-        repass: typeof formData.repass.rule;
-        firstname: typeof formData.firstname.rule;
-        lastname: typeof formData.lastname.rule;
+        username: typeof formConfig.username.rule;
+        email: typeof formConfig.email.rule;
+        password: typeof formConfig.password.rule;
+        repass: typeof formConfig.repass.rule;
+        firstname: typeof formConfig.firstname.rule;
+        lastname: typeof formConfig.lastname.rule;
         [key: string]: ZodType<any>;
     };
 
     const RegistrationValidators: RegistrationValidators = {
-        username: formData.username.rule,
-        email: formData.email.rule,
-        password: formData.password.rule,
-        repass: formData.repass.rule,
-        firstname: formData.firstname.rule,
-        lastname: formData.lastname.rule,
+        username: formConfig.username.rule,
+        email: formConfig.email.rule,
+        password: formConfig.password.rule,
+        repass: formConfig.repass.rule,
+        firstname: formConfig.firstname.rule,
+        lastname: formConfig.lastname.rule,
     };
 
     if (isTermsEnabled) {
-        RegistrationValidators["terms"] = formData.terms.rule;
+        RegistrationValidators["terms"] = formConfig.terms.rule;
     }
 
     if (isPPEnabled) {
-        RegistrationValidators["pp"] = formData.pp.rule;
+        RegistrationValidators["pp"] = formConfig.pp.rule;
     }
 
     if (isCaptchaEnabled) {
-        RegistrationValidators["captcha"] = formData.pp.rule; // Todo: need to fix this.
+        RegistrationValidators["captcha"] = formConfig.pp.rule; // Todo: need to fix this.
     }
 
     const RegistrationFormSchema = object(RegistrationValidators);
@@ -235,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
      * Add event listeners to all the active fields.
      */
     fields.forEach((field) => {
-        const fieldOption = formData[field as keyof typeof formData];
+        const fieldOption = formConfig[field as keyof typeof formConfig];
         if (fieldOption.active) {
             registrationForm
                 ?.querySelector(`.swpm-registration-form-${field}`)
@@ -253,14 +213,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let validationSucess = true;
 
-        for (const key in formData) {
-            if (!formData[key as keyof typeof formData].active) {
+        for (const key in formConfig) {
+            if (!formConfig[key as keyof typeof formConfig].active) {
                 continue;
             }
 
             let isSuccess = await validateInput(
                 key,
-                formData[key as keyof typeof formData].value
+                formConfig[key as keyof typeof formConfig].value
             );
 
             if (!isSuccess) {
@@ -290,7 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let parseResult;
         // Check whether the validation involves asynchronous validation form server.
-        if (formData[field as keyof typeof formData].isAsyncValidation) {
+        if (formConfig[field as keyof typeof formConfig].isAsyncValidation) {
             parseResult = await fieldToValidate.safeParseAsync({
                 [field]: value,
             });
@@ -351,100 +311,91 @@ document.addEventListener("DOMContentLoaded", function () {
         const inputValue =
             target.type === "checkbox" ? target.checked : target.value;
 
-        formData[field as keyof typeof formData].value = inputValue;
+        formConfig[field as keyof typeof formConfig].value = inputValue;
 
         // Validates the input value
         validateInput(field, inputValue);
     }
-});
 
-/**
- * Asynchronously checks whether the field value exists on the database.
- *
- * @param value The value to retrieve
- * @param field The field to retrieve the value of.
- * @returns boolean
- */
-async function checkAvailability(value: string, field: string) {
-    // Checks whether the input field is empty or not. If empty, then return false in order to show no validation error.
-    if (value.trim() === "") {
-        return true;
+    /**
+     * Asynchronously checks whether the field value exists on the database.
+     *
+     * @param value The value to retrieve
+     * @param field The field to retrieve the value of.
+     * @returns boolean
+     */
+    async function checkAvailability(value: string, field: string) {
+        // Checks whether the input field is empty or not. If empty, then return false in order to show no validation error.
+        if (value.trim() === "") {
+            return true;
+        }
+   
+        // @ts-ignore
+        const queryArgs = swpmRegFormAjax.query_args;
+        // @ts-ignore
+        const ajaxURL = swpmRegFormAjax.ajax_url;
+
+        // choosing the ajax action.
+        if ( field === "username") {
+            queryArgs.action = "swpm_validate_user_name"
+        }else{
+            queryArgs.action = "swpm_validate_email"
+        }
+        
+        queryArgs.fieldValue = value;
+        const queryString = new URLSearchParams(queryArgs).toString();
+        const apiUrl = ajaxURL + "?" + queryString;
+        
+        return new Promise((resolve) => {
+            fetch(apiUrl)
+                .then((response) => {
+                    // Check if the response status is OK (status code 200)
+                    if (response.ok) {
+                        // Parse the response body as JSON
+                        return response.json();
+                    } else {
+                        // Handle the error if the response status is not OK
+                        throw new Error("Request failed");
+                    }
+                })
+                .then((data) => {
+                    // the response body contains an array with the target value as boolean at index 1.
+                    const isAvailable = data[1]; 
+                    
+                    resolve(isAvailable);
+                })
+                .catch((error) => {
+                    // Handle any errors that occurred during the fetch
+                    console.error("Error: ", error);
+                });
+        });
     }
 
-    // append the field value
-    swpmRegFormAjax.query_args.action =
-        field === "username"
-            ? "swpm_validate_user_name"
-            : "swpm_validate_email";
-    swpmRegFormAjax.query_args.fieldValue = value;
+    /**
+     * Returns the target description field.
+     *
+     * @param field string The field name
+     * @returns HTMLDivElement
+     */
+    function getDescByField(field: string) {
+        const registrationForm = document.getElementById(formID);
 
-    const queryString = new URLSearchParams(
-        swpmRegFormAjax.query_args
-    ).toString();
-    const apiUrl = swpmRegFormAjax.ajax_url + "?" + queryString;
-    console.log(apiUrl);
+        const targetField = registrationForm?.querySelector(
+            `.swpm-registration-${field}-row`
+        );
 
-    return new Promise((resolve) => {
-        fetch(apiUrl)
-            .then((response) => {
-                // Check if the response status is OK (status code 200)
-                if (response.ok) {
-                    // Parse the response body as JSON
-                    return response.json();
-                } else {
-                    // Handle the error if the response status is not OK
-                    throw new Error("Request failed");
-                }
-            })
-            .then((data) => {
-                // the response body contains an array with the target value as boolean at index 1.
-                const isAvailable = data[1]; 
-                
-                resolve(isAvailable);
-            })
-            .catch((error) => {
-                // Handle any errors that occurred during the fetch
-                console.error("Error: ", error);
-            });
-    });
+        return targetField?.querySelector(`.swpm-registration-form-desc`);
+    }
 
+    /**
+     * Returns the target field's row.
+     *
+     * @param field string The field name
+     * @returns HTMLDivElement
+     */
+    function getRowByField(field: string) {
+        const registrationForm = document.getElementById(formID);
+        return registrationForm?.querySelector(`.swpm-registration-${field}-row`);
+    }
 
-    // return new Promise((resolve) => {
-    //     const database = {
-    //         username: "john",
-    //         email: "john@email.com",
-    //     };
-    //     setTimeout(() => {
-    //         const exists = value !== database[field as keyof typeof database];
-    //         resolve(exists);
-    //     }, 1000);
-    // });
-
-}
-
-/**
- * Returns the target description field.
- *
- * @param field string The field name
- * @returns HTMLDivElement
- */
-function getDescByField(field: string) {
-    const registrationForm = document.getElementById(formID);
-
-    const targetField = registrationForm?.querySelector(
-        `.swpm-registration-${field}-row`
-    );
-
-    return targetField?.querySelector(`.swpm-registration-form-desc`);
-}
-
-/**
- * Returns the target field's row.
- *
- * @param field string The field name
- * @returns HTMLDivElement
- */
-function getRowByField(field: string) {
-    const registrationForm = document.getElementById(formID);
-    return registrationForm?.querySelector(`.swpm-registration-${field}-row`);
-}
+});

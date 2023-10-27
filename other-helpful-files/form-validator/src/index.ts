@@ -11,8 +11,6 @@ const isTermsEnabled = typeof terms_enabled !== "undefined" ? terms_enabled : fa
 const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
 // @ts-ignore
 const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled: false;
-// @ts-ignore
-const isCaptchaEnabled = false;
 
 document.addEventListener("DOMContentLoaded", function () {
     // Field options configuration object.
@@ -179,10 +177,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (isPPEnabled) {
         RegistrationValidators["pp"] = formConfig.pp.rule;
-    }
-
-    if (isCaptchaEnabled) {
-        RegistrationValidators["captcha"] = formConfig.pp.rule; // Todo: need to fix this.
     }
 
     const RegistrationFormSchema = object(RegistrationValidators);

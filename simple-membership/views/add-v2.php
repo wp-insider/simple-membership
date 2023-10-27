@@ -8,7 +8,8 @@ $pp_enabled = $settings->get_value('enable-privacy-policy');
 // Filter allowing to change the default value of user_name.
 $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
 
-$form_id = uniqid("swpm-registration-form-");
+// $form_id = uniqid("swpm-registration-form-");
+$form_id = "swpm-registration-form";
 
 // Let javascript know that the fields are enabled and need to be validated.
 $is_terms_enabled = empty($terms_enabled) ? 'false' : 'true';

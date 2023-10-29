@@ -1,0 +1,25 @@
+
+
+#) Test with keeping all the fields empty then try to submit the form. You will see the appropriate error messages.
+
+#) Test the username field with the following values and conditions:
+tes (just three characters to test if the minimim length is working)
+test#bla (test that it triggers error when it contains a special character #)
+test bla (test that it triggers error when it contains a space)
+test123 (test with an username that already exists in the database)
+test@test.com (test with an email to make sure it can accept an email address as username)
+test@alreadyexits.com (test the username field with an email that already exists in the database for the username field)
+
+#) Test the email field with the following values and conditions:
+test (test that it triggers error when it is not a valid email address)
+test@test (test that it triggers error when it is not a valid email address)
+test@alreadyexits.com (test with an email that already exists in the database for the email field)
+
+#) Password field:
+test the conditions with strong password option enabled and disabled
+test (test that it triggers error when it is less than 8 characters)
+test123 (test that it triggers error when it does not contain any special character)
+
+#) Test the password confirmation field with the following values and conditions:
+
+TODO

@@ -3584,7 +3584,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const formConfig = {
     username: {
       value: "",
-      eventListener: ["blur"],
+      eventListener: "blur",
       active: true,
       isAsyncValidation: true,
       rule: stringType({
@@ -3614,7 +3614,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     email: {
       value: "",
-      eventListener: ["blur"],
+      eventListener: "blur",
       active: true,
       isAsyncValidation: true,
       rule: stringType({
@@ -3640,7 +3640,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     password: {
       value: "",
-      eventListener: ["blur", "input"],
+      eventListener: "input",
       active: true,
       isAsyncValidation: false,
       rule: isStrongPasswordEnabled ? stringType({
@@ -3655,7 +3655,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     repass: {
       value: "",
-      eventListener: ["blur", "input"],
+      eventListener: "input",
       active: true,
       isAsyncValidation: false,
       rule: stringType({
@@ -3672,7 +3672,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     firstname: {
       value: "",
-      eventListener: ["input"],
+      eventListener: "input",
       active: true,
       isAsyncValidation: false,
       rule: stringType({
@@ -3682,7 +3682,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     lastname: {
       value: "",
-      eventListener: ["input"],
+      eventListener: "input",
       active: true,
       isAsyncValidation: false,
       rule: stringType({
@@ -3692,7 +3692,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     terms: {
       value: false,
-      eventListener: ["change"],
+      eventListener: "change",
       active: isTermsEnabled,
       isAsyncValidation: false,
       rule: literalType(true, {
@@ -3706,7 +3706,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     pp: {
       value: false,
-      eventListener: ["change"],
+      eventListener: "change",
       active: isPPEnabled,
       isAsyncValidation: false,
       rule: literalType(true, {
@@ -3737,13 +3737,11 @@ document.addEventListener("DOMContentLoaded", function() {
   const registrationForm = document.getElementById(formID);
   const fields = Object.keys(RegistrationValidators);
   fields.forEach((field) => {
+    var _a2;
     const fieldOption = formConfig[field];
     if (fieldOption.active) {
-      fieldOption.eventListener.forEach((eventListener) => {
-        var _a2;
-        (_a2 = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-registration-form-${field}`)) == null ? void 0 : _a2.addEventListener(eventListener, (e) => {
-          handleDomEvent(e, field);
-        });
+      (_a2 = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-registration-form-${field}`)) == null ? void 0 : _a2.addEventListener(fieldOption.eventListener, (e) => {
+        handleDomEvent(e, field);
       });
     }
   });
@@ -3764,8 +3762,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     if (validationSucess) {
       registrationForm.submit();
-    } else {
-      scrollToFirstErrorField();
     }
   });
   async function validateInput(field, value) {
@@ -3791,6 +3787,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const errorLists = document.createElement("ul");
         for (const i in issues) {
           const error = issues[i];
+          console.log(error);
           const errorMsg = error.message;
           const errorItem = document.createElement("li");
           errorItem.innerText = errorMsg;
@@ -3809,22 +3806,6 @@ document.addEventListener("DOMContentLoaded", function() {
       isValidationSuccessful = true;
     }
     return isValidationSuccessful;
-  }
-  function scrollToFirstErrorField() {
-    const registrationForm2 = document.getElementById(formID);
-    const firstErrorSection = registrationForm2 == null ? void 0 : registrationForm2.querySelector(
-      ".swpm-registration-form-row.error"
-    );
-    if (firstErrorSection) {
-      firstErrorSection.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-      const firstErrorField = firstErrorSection.querySelector(
-        ".swpm-registration-form-field"
-      );
-      firstErrorField.focus();
-    }
   }
   function handleDomEvent(e, field) {
     const target = e.target;

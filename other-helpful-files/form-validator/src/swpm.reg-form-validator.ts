@@ -10,32 +10,40 @@ const isTermsEnabled = typeof terms_enabled !== "undefined" ? terms_enabled : fa
 // @ts-ignore
 const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
 // @ts-ignore
-const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled: false;
+const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
 
 document.addEventListener("DOMContentLoaded", function () {
     // Field options configuration object.
     const formConfig = {
         username: {
             value: "" as string | null,
-            eventListener: "blur",
+            eventListener: ["blur"],
             active: true as boolean,
             isAsyncValidation: true as boolean,
             rule: string({
                 required_error: validationMsg?.username?.required,
                 invalid_type_error: validationMsg?.username?.invalid,
             })
+                .trim()
+                .min(1, { message: validationMsg?.username?.required })
                 .regex(/^(?=[a-zA-Z0-9.\-_*@]+$)/, {
                     message: validationMsg?.username?.regex,
                 })
                 .min(4, { message: validationMsg?.username?.minLength })
-                .min(1, { message: validationMsg?.username?.required })
                 .refine(
                     async function (value) {
-                        const isAvailable = await checkAvailability(
-                            value,
-                            "username"
+                        const usernameSchema = string().regex(
+                            /^(?=[a-zA-Z0-9.\-_*@]+$)/
                         );
-                        return isAvailable;
+                        const parseResult = usernameSchema.safeParse(value);
+                        if (parseResult.success) {
+                            const isAvailable = await checkAvailability(
+                                value,
+                                "username"
+                            );
+                            return isAvailable;
+                        }
+                        return true;
                     },
                     {
                         message: validationMsg?.username?.exists,
@@ -44,24 +52,27 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         email: {
             value: "" as string | null,
-            eventListener: "blur",
+            eventListener: ["blur"],
             active: true as boolean,
             isAsyncValidation: true as boolean,
             rule: string({
                 required_error: validationMsg?.email?.required,
                 invalid_type_error: validationMsg?.email?.invalid,
             })
-                .email({ message: validationMsg?.email?.invalid })
+                .trim()
                 .min(1, { message: validationMsg?.email?.required })
+                .email({ message: validationMsg?.email?.invalid })
                 .refine(
                     async function (value) {
-                        const emailSchema = string().email(value);
-                        const parseResult = emailSchema.safeParse(value)
-                        if(parseResult.success){
-                            const isAvailable = await checkAvailability(value, "email");
+                        const emailSchema = string().email();
+                        const parseResult = emailSchema.safeParse(value);
+                        if (parseResult.success) {
+                            const isAvailable = await checkAvailability(
+                                value,
+                                "email"
+                            );
                             return isAvailable;
                         }
-
                         return true;
                     },
                     {
@@ -71,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         password: {
             value: "" as string | null,
-            eventListener: "input",
+            eventListener: ["blur", "input"],
             active: true as boolean,
             isAsyncValidation: false as boolean,
             rule: isStrongPasswordEnabled
@@ -79,11 +90,11 @@ document.addEventListener("DOMContentLoaded", function () {
                       required_error: validationMsg?.password?.required,
                       invalid_type_error: validationMsg?.password?.invalid,
                   })
+                      .min(1, { message: validationMsg?.password?.required })
                       .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/, {
                           message: validationMsg?.password?.regex,
                       })
                       .min(8, { message: validationMsg?.password?.minLength })
-                      .min(1, { message: validationMsg?.password?.required })
                 : string({
                       required_error: validationMsg?.password?.required,
                       invalid_type_error: validationMsg?.password?.invalid,
@@ -91,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         repass: {
             value: "" as string | null,
-            eventListener: "input",
+            eventListener: ["blur", "input"],
             active: true as boolean,
             isAsyncValidation: false as boolean,
             rule: string({
@@ -110,27 +121,31 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         firstname: {
             value: "" as string | null,
-            eventListener: "input",
+            eventListener: ["input"],
             active: true as boolean,
             isAsyncValidation: false as boolean,
             rule: string({
                 required_error: validationMsg?.firstname?.required,
                 invalid_type_error: validationMsg?.firstname?.invalid,
-            }).optional(),
+            })
+                .trim()
+                .optional(),
         },
         lastname: {
             value: "" as string | null,
-            eventListener: "input",
+            eventListener: ["input"],
             active: true as boolean,
             isAsyncValidation: false as boolean,
             rule: string({
                 required_error: validationMsg?.lastname?.required,
                 invalid_type_error: validationMsg?.lastname?.invalid,
-            }).optional(),
+            })
+                .trim()
+                .optional(),
         },
         terms: {
             value: false as boolean,
-            eventListener: "change",
+            eventListener: ["change"],
             active: isTermsEnabled as boolean,
             isAsyncValidation: false as boolean,
             rule: literal(true, {
@@ -141,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         pp: {
             value: false as boolean,
-            eventListener: "change",
+            eventListener: ["change"],
             active: isPPEnabled as boolean,
             isAsyncValidation: false as boolean,
             rule: literal(true, {
@@ -187,15 +202,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /**
      * Add event listeners to all the active fields.
+     * A field could have multiple event listeners.
      */
     fields.forEach((field) => {
         const fieldOption = formConfig[field as keyof typeof formConfig];
         if (fieldOption.active) {
-            registrationForm
-                ?.querySelector(`.swpm-registration-form-${field}`)
-                ?.addEventListener(fieldOption.eventListener, (e) => {
-                    handleDomEvent(e, field);
-                });
+            fieldOption.eventListener.forEach((eventListener) => {
+                registrationForm
+                    ?.querySelector(`.swpm-registration-form-${field}`)
+                    ?.addEventListener(eventListener, (e) => {
+                        handleDomEvent(e, field);
+                    });
+            });
         }
     });
 
@@ -205,9 +223,12 @@ document.addEventListener("DOMContentLoaded", function () {
     registrationForm?.addEventListener("submit", async function (e) {
         e.preventDefault();
 
+        // The variable holds the overall validation status.
         let validationSucess = true;
 
         for (const key in formConfig) {
+            // Checks it the current field of iteration is not active.
+            // If so, then skip the validation check for this field as its not active.
             if (!formConfig[key as keyof typeof formConfig].active) {
                 continue;
             }
@@ -217,16 +238,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 formConfig[key as keyof typeof formConfig].value
             );
 
+            // Checks if the current field of iteration has any error.
             if (!isSuccess) {
-                validationSucess = false
+                validationSucess = false;
             }
         }
 
-        // Submits the form if all the validation is successful.
+        // Checks if all validations are successful.
         if (validationSucess) {
+            // Submits the form.
             registrationForm.submit();
+        } else {
+            // Scroll to first error field into view.
+            scrollToFirstErrorField();
         }
-
     });
 
     /**
@@ -237,9 +262,8 @@ document.addEventListener("DOMContentLoaded", function () {
      * @returns void
      */
     async function validateInput(field: string, value: any) {
-        
         let isValidationSuccessful = false;
-        
+
         const fieldToValidate = RegistrationFormSchema.pick({ [field]: true });
 
         let parseResult;
@@ -273,6 +297,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     const errorItem = document.createElement("li");
                     errorItem.innerText = errorMsg;
                     errorLists.appendChild(errorItem);
+
+                    // Check if its a 'required' error. If so, only show the 'required' error.
+                    if (error.code === "too_small" && error.minimum === 1) {
+                        /* 
+                            The validation rule for checking 'required' error, is to check to see if the value is
+                            minimum of 1 character. The error object includes properties (code: "too_small", minimum: 1)
+                            which is helpful for the check. Also the 'required' validation is executed first, so by 
+                            breaking the loop there will no other error messages other than only the "<field> is 
+                            required" message. 
+                        */
+                        break;
+                    }
                 }
                 targetFieldDesc.appendChild(errorLists);
             }
@@ -287,6 +323,29 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         return isValidationSuccessful;
+    }
+
+    /**
+     * Scroll into view to the first input field that is in error state.
+     */
+    function scrollToFirstErrorField() {
+        const registrationForm = document.getElementById(formID);
+        const firstErrorSection = registrationForm?.querySelector(
+            ".swpm-registration-form-row.error"
+        ) as HTMLElement;
+        if (firstErrorSection) {
+            firstErrorSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+
+            // smoothScrollToElement(firstErrorSection) // TODO: Need work on this later.
+
+            const firstErrorField = firstErrorSection.querySelector(
+                ".swpm-registration-form-field"
+            ) as HTMLInputElement;
+            firstErrorField.focus();
+        }
     }
 
     /**
@@ -319,27 +378,27 @@ document.addEventListener("DOMContentLoaded", function () {
      * @returns boolean
      */
     async function checkAvailability(value: string, field: string) {
-        // Checks whether the input field is empty or not. If empty, then return false in order to show no validation error.
-        if (value.trim() === "") {
-            return true;
-        }
-   
+        // // Checks whether the input field is empty or not. If empty, then return false in order to show no validation error.
+        // if (value.trim() === "") {
+        //     return true;
+        // }
+
         // @ts-ignore
         const queryArgs = swpmRegFormAjax.query_args;
         // @ts-ignore
         const ajaxURL = swpmRegFormAjax.ajax_url;
 
         // choosing the ajax action.
-        if ( field === "username") {
-            queryArgs.action = "swpm_validate_user_name"
-        }else{
-            queryArgs.action = "swpm_validate_email"
+        if (field === "username") {
+            queryArgs.action = "swpm_validate_user_name";
+        } else {
+            queryArgs.action = "swpm_validate_email";
         }
-        
+
         queryArgs.fieldValue = value;
         const queryString = new URLSearchParams(queryArgs).toString();
         const apiUrl = ajaxURL + "?" + queryString;
-        
+
         return new Promise((resolve) => {
             fetch(apiUrl)
                 .then((response) => {
@@ -354,8 +413,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then((data) => {
                     // the response body contains an array with the target value as boolean at index 1.
-                    const isAvailable = data[1]; 
-                    
+                    const isAvailable = data[1];
+
                     resolve(isAvailable);
                 })
                 .catch((error) => {
@@ -389,7 +448,48 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function getRowByField(field: string) {
         const registrationForm = document.getElementById(formID);
-        return registrationForm?.querySelector(`.swpm-registration-${field}-row`);
+        return registrationForm?.querySelector(
+            `.swpm-registration-${field}-row`
+        );
     }
 
+    /**
+     * Scroll to the target DOM element.
+     *
+     * @param element HTMLElement The element to scroll to.
+     */
+    const smoothScrollToElement = (element: HTMLElement) => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const startingY = window.pageYOffset;
+        const targetY = startingY + elementPosition;
+
+        const totalScrollDistance = targetY - startingY;
+        let currentScrollPosition = startingY;
+
+        const easeInOutQuad = (t, b, c, d) => {
+            // Function for smooth scroll animation
+            t /= d / 2;
+            if (t < 1) return (c / 2) * t * t + b;
+            t--;
+            return (-c / 2) * (t * (t - 2) - 1) + b;
+        };
+
+        const animationStartTime = performance.now();
+
+        const scroll = (timestamp) => {
+            const timeElapsed = timestamp - animationStartTime;
+            window.scrollTo(
+                0,
+                easeInOutQuad(timeElapsed, startingY, totalScrollDistance, 400)
+            ); // Adjust 1000 to control the scroll duration
+
+            if (timeElapsed < 400) {
+                requestAnimationFrame(scroll);
+            } else {
+                window.scrollTo(0, targetY);
+            }
+        };
+
+        requestAnimationFrame(scroll);
+    };
 });

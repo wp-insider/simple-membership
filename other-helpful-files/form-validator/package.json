@@ -5,14 +5,13 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite build --watch",
+    "dev:reg": "vite build --config vite.config-reg-form.js --watch",
+    "build:reg": "vite build --config vite.config-reg-form.js",
+    "dev:edit": "vite build --config vite.config.edit-form.js --watch",
+    "build:edit": "vite build --config vite.config.edit-form.js",
     
     "build:rollup": "rollup -c",
-    "dev:rollup": "rollup -c -w",
-    
-    "build:esbuild": "esbuild --bundle src/index.ts --outfile=../../simple-membership/js/swpm.reg-form-validator.js --watch",
-    "dev:esbuild": "npm run build:esbuild --watch"
+    "dev:rollup": "rollup -c -w"
   },
   "author": "Adil",
   "license": "ISC",

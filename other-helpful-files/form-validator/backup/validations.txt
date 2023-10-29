@@ -122,3 +122,49 @@ https://valibot.dev/
 //         required: "You must accept the privacy policy",
 //     },
 // };
+
+
+Bundler Configs:
+
+Vite:
+
+		// outDir: "./dist",
+		// lib: {
+		// 	name: "formvalidator",
+		// 	entry: "./src/index.ts",
+		// 	formats: ["esm", 'es', 'iife'],
+		// 	fileName: "bundle"
+		// }
+
+		// output: {
+		// 	format: "umd",
+		// 	strict: false,
+		// 	chunkFileNames: `[name].[hash].js`,
+		// 	entryFileNames: "[name].bundle.umd.js",
+		// 	dir: "dist"
+		// }
+
+
+        		input: {
+				'swpm.zod-validator': "./src/index.ts",
+				'swpm.reg-form-validator': "./src/reg-form.ts",
+				'swpm.edit-form-validator': "./src/edit-form.ts",
+			},
+
+esbuild:
+    "build:esbuild": "esbuild --bundle src/index.ts --outfile=../../simple-membership/js/swpm.reg-form-validator.js --watch",
+    "dev:esbuild": "npm run build:esbuild --watch"
+
+    import * as esbuild from 'esbuild'
+    import path from "path"
+
+    // const outDir = path.join(__dirname, '..', '..', 'simple-membership', 'js', 'swpm.reg-form-validator.js'),;
+    await esbuild.build({
+    entryPoints: ['src/index.ts'],
+    bundle: true,
+    minify: true,
+    sourcemap: false,
+    //   target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
+    target: 'chrome58',
+    outfile: 'dist/bundle-esbuild.js',
+    })

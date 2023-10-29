@@ -1,23 +1,20 @@
-// import path from 'path';
-// import typescript from "@rollup/plugin-typescript";
 const path = require('path');
 const typescript = require("@rollup/plugin-typescript");
 const resolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const terser = require('@rollup/plugin-terser');
-const babel = require('@rollup/plugin-babel');
 module.exports = [
 	{
-		input: './src/index.ts',
+		input: './src/reg-form.ts',
 		output: [
 			{
-				file: 'dist/index.js',
-				format: 'esm',
+				dir: 'dist',
+				format: 'es',
 				name: 'development',
 			},
 			{
 				file: path.join(__dirname, '..', '..', 'simple-membership', 'js', 'swpm.reg-form-validator.js'),
-				format: 'esm',
+				format: 'es',
 				name: 'production',
 				// plugins: [terser()], // Uncomment to enable minification
 			}
@@ -28,7 +25,6 @@ module.exports = [
 			typescript({
 				tsconfig: "./tsconfig.json"
 			}),
-			babel({ babelHelpers: 'bundled' })
 		]
 	}
 ]

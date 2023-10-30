@@ -3580,13 +3580,14 @@ const isTermsEnabled = typeof terms_enabled !== "undefined" ? terms_enabled : fa
 const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
 const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
 document.addEventListener("DOMContentLoaded", function() {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B;
   const formConfig = {
     username: {
       value: "",
       eventListener: ["blur"],
       active: true,
       isAsyncValidation: true,
+      isDirty: false,
       rule: stringType({
         required_error: (_a = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _a.required,
         invalid_type_error: (_b = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _b.invalid
@@ -3617,6 +3618,7 @@ document.addEventListener("DOMContentLoaded", function() {
       eventListener: ["blur"],
       active: true,
       isAsyncValidation: true,
+      isDirty: false,
       rule: stringType({
         required_error: (_g = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _g.required,
         invalid_type_error: (_h = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _h.invalid
@@ -3643,6 +3645,7 @@ document.addEventListener("DOMContentLoaded", function() {
       eventListener: ["blur", "input"],
       active: true,
       isAsyncValidation: false,
+      isDirty: false,
       rule: isStrongPasswordEnabled ? stringType({
         required_error: (_l = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _l.required,
         invalid_type_error: (_m = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _m.invalid
@@ -3658,6 +3661,7 @@ document.addEventListener("DOMContentLoaded", function() {
       eventListener: ["blur", "input"],
       active: true,
       isAsyncValidation: false,
+      isDirty: false,
       rule: stringType({
         required_error: (_t = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _t.required,
         invalid_type_error: (_u = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _u.invalid
@@ -3675,6 +3679,7 @@ document.addEventListener("DOMContentLoaded", function() {
       eventListener: ["input"],
       active: true,
       isAsyncValidation: false,
+      isDirty: false,
       rule: stringType({
         required_error: (_x = validationMsg == null ? void 0 : validationMsg.firstname) == null ? void 0 : _x.required,
         invalid_type_error: (_y = validationMsg == null ? void 0 : validationMsg.firstname) == null ? void 0 : _y.invalid
@@ -3685,6 +3690,7 @@ document.addEventListener("DOMContentLoaded", function() {
       eventListener: ["input"],
       active: true,
       isAsyncValidation: false,
+      isDirty: false,
       rule: stringType({
         required_error: (_z = validationMsg == null ? void 0 : validationMsg.lastname) == null ? void 0 : _z.required,
         invalid_type_error: (_A = validationMsg == null ? void 0 : validationMsg.lastname) == null ? void 0 : _A.invalid
@@ -3695,6 +3701,7 @@ document.addEventListener("DOMContentLoaded", function() {
       eventListener: ["change"],
       active: isTermsEnabled,
       isAsyncValidation: false,
+      isDirty: false,
       rule: literalType(true, {
         errorMap: () => {
           var _a2;
@@ -3709,6 +3716,7 @@ document.addEventListener("DOMContentLoaded", function() {
       eventListener: ["change"],
       active: isPPEnabled,
       isAsyncValidation: false,
+      isDirty: false,
       rule: literalType(true, {
         errorMap: () => {
           var _a2;
@@ -3719,7 +3727,7 @@ document.addEventListener("DOMContentLoaded", function() {
       })
     }
   };
-  const RegistrationValidators = {
+  const FormValidators = {
     username: formConfig.username.rule,
     email: formConfig.email.rule,
     password: formConfig.password.rule,
@@ -3728,14 +3736,14 @@ document.addEventListener("DOMContentLoaded", function() {
     lastname: formConfig.lastname.rule
   };
   if (isTermsEnabled) {
-    RegistrationValidators["terms"] = formConfig.terms.rule;
+    FormValidators["terms"] = formConfig.terms.rule;
   }
   if (isPPEnabled) {
-    RegistrationValidators["pp"] = formConfig.pp.rule;
+    FormValidators["pp"] = formConfig.pp.rule;
   }
-  const RegistrationFormSchema = objectType(RegistrationValidators);
+  const RegistrationFormSchema = objectType(FormValidators);
   const registrationForm = document.getElementById(formID);
-  const fields = Object.keys(RegistrationValidators);
+  const fields = Object.keys(FormValidators);
   fields.forEach((field) => {
     const fieldOption = formConfig[field];
     if (fieldOption.active) {
@@ -3745,6 +3753,11 @@ document.addEventListener("DOMContentLoaded", function() {
           handleDomEvent(e, field);
         });
       });
+    }
+  });
+  (_B = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-registration-form-password`)) == null ? void 0 : _B.addEventListener("input", () => {
+    if (formConfig.repass.isDirty) {
+      validateInput("repass", formConfig.repass.value);
     }
   });
   registrationForm == null ? void 0 : registrationForm.addEventListener("submit", async function(e) {
@@ -3770,6 +3783,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
   async function validateInput(field, value) {
     let isValidationSuccessful = false;
+    formConfig[field].isDirty = true;
     const fieldToValidate = RegistrationFormSchema.pick({ [field]: true });
     let parseResult;
     if (formConfig[field].isAsyncValidation) {
@@ -3833,8 +3847,8 @@ document.addEventListener("DOMContentLoaded", function() {
     validateInput(field, inputValue);
   }
   async function checkAvailability(value, field) {
-    const queryArgs = swpmRegFormAjax.query_args;
-    const ajaxURL = swpmRegFormAjax.ajax_url;
+    const queryArgs = swpmFormValidationAjax.query_args;
+    const ajaxURL = swpmFormValidationAjax.ajax_url;
     if (field === "username") {
       queryArgs.action = "swpm_validate_user_name";
     } else {

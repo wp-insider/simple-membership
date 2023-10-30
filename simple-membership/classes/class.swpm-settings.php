@@ -887,6 +887,30 @@ class SwpmSettings {
 			)
 		);
 
+		add_settings_field(
+			'payment-notification-forward-url',
+			SwpmUtils::_( 'Payment Notification Forward URL' ),
+			array( &$this, 'textfield_long_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'payment-notification-forward-url',
+				'message' => SwpmUtils::_( 'You can enter an URL here to forward the payment notification after the membership payment has been processed by this plugin. Useful if you want to forward the payment notification to an external script for further processing.' ),
+			)
+		);
+
+		add_settings_field(
+			'use-new-form-ui',
+			__( 'Use new form UI', 'simple-membership' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'use-new-form-ui',
+				'message' => __( 'Loads the new more user friendly ui of the registration and profile edit form.' ),
+			)
+		);
+
 		//Auto create SWPM user related settings section
 		add_settings_section( 'auto-create-swpm-user-settings', SwpmUtils::_( 'Create Member Accounts for New WP Users' ), array( &$this, 'advanced_settings_auto_create_swpm_uses_settings_callback' ), 'simple_wp_membership_settings' );
 
@@ -929,18 +953,6 @@ class SwpmSettings {
 				'options' => $status_array,
 				'default' => '',
 				'message' => SwpmUtils::_( 'When automatically creating a member account using this feature, the membership account status of the user will be set to the one you specify here.' ),
-			)
-		);
-
-		add_settings_field(
-			'payment-notification-forward-url',
-			SwpmUtils::_( 'Payment Notification Forward URL' ),
-			array( &$this, 'textfield_long_callback' ),
-			'simple_wp_membership_settings',
-			'advanced-settings',
-			array(
-				'item'    => 'payment-notification-forward-url',
-				'message' => SwpmUtils::_( 'You can enter an URL here to forward the payment notification after the membership payment has been processed by this plugin. Useful if you want to forward the payment notification to an external script for further processing.' ),
 			)
 		);
 
@@ -1655,6 +1667,7 @@ class SwpmSettings {
                 $output['hide-rego-form-to-logged-users']    = isset( $input['hide-rego-form-to-logged-users'] ) ? esc_attr( $input['hide-rego-form-to-logged-users'] ) : '';
 		$output['force-wp-user-sync']                = isset( $input['force-wp-user-sync'] ) ? esc_attr( $input['force-wp-user-sync'] ) : '';
 		$output['payment-notification-forward-url']  = esc_url( $input['payment-notification-forward-url'] );
+		$output['use-new-form-ui']            		 = isset( $input['use-new-form-ui'] ) ? esc_attr( $input['use-new-form-ui'] ) : '';
 
 		//Auto create swpm user related settings
 		$output['enable-auto-create-swpm-members']      = isset( $input['enable-auto-create-swpm-members'] ) ? esc_attr( $input['enable-auto-create-swpm-members'] ) : '';

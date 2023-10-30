@@ -17,6 +17,7 @@ $is_pp_enabled = empty($pp_enabled) ? 'false' : 'true';
 $is_strong_password_enabled = empty($force_strong_pass) ? 'false' : 'true';
 
 SimpleWpMembership::enqueue_validation_scripts_v2(
+    'swpm-reg-form-validator',
     array(
         'query_args' => array(
             'member_id' => filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT),
@@ -126,7 +127,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             margin-bottom: 6px;
         }
 
-        form.swpm-registration-form .swpm-registration-form-row>div>input[type="submit"] {
+        form.swpm-registration-form .swpm-registration-submit-section {
             margin-top: 12px;
         }
 

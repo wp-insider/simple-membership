@@ -4,5 +4,8 @@
         "editorError.background": "#f8699966",
         "editorError.foreground": "#be0202",
         /*"editorWarning.background": "#ffdda366",*/
-    }
+    },
+    "cSpell.words": [
+        "swpm"
+    ]
 }

@@ -10,7 +10,7 @@ export default defineConfig({
 		},
 
 		rollupOptions: {
-			input: "src/swpm.edit-form-validator.ts",
+			input: "src/swpm.profile-form-validator.ts",
 			output: [
 				// output bundle files to test folder
 				{
@@ -21,15 +21,9 @@ export default defineConfig({
 				// output bundle files to plugin's folder
 				{
 					format: 'es',
-					entryFileNames: "sub/../../../../simple-membership/js/[name].js",
+					entryFileNames: "dist/../../../../simple-membership/js/[name].js",
 				},
 			]
 		},
-		manualChunks(id) {
-			// Define manual chunks to prevent shared dependencies
-			if (id.includes('node_modules')) {
-			  return 'vendor';
-			}
-		  },
 	}
 });

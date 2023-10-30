@@ -3575,56 +3575,28 @@ ZodOptional.create;
 ZodNullable.create;
 ZodEffects.createWithPreprocess;
 ZodPipeline.create;
-const formID = typeof form_id !== "undefined" ? form_id : "swpm-registration-form";
-const isTermsEnabled = typeof terms_enabled !== "undefined" ? terms_enabled : false;
-const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
+const formID = typeof form_id !== "undefined" ? form_id : "swpm-profile-form";
 const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
 document.addEventListener("DOMContentLoaded", function() {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o;
+  let existingEmailValue = null;
   const formConfig = {
-    username: {
-      value: "",
-      eventListener: "blur",
-      active: true,
-      isAsyncValidation: true,
-      rule: stringType({
-        required_error: (_a = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _a.required,
-        invalid_type_error: (_b = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _b.invalid
-      }).trim().min(1, { message: (_c = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _c.required }).regex(/^(?=[a-zA-Z0-9.\-_*@]+$)/, {
-        message: (_d = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _d.regex
-      }).min(4, { message: (_e = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _e.minLength }).refine(
-        async function(value) {
-          const usernameSchema = stringType().regex(
-            /^(?=[a-zA-Z0-9.\-_*@]+$)/
-          );
-          const parseResult = usernameSchema.safeParse(value);
-          if (parseResult.success) {
-            const isAvailable = await checkAvailability(
-              value,
-              "username"
-            );
-            return isAvailable;
-          }
-          return true;
-        },
-        {
-          message: (_f = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _f.exists
-        }
-      )
-    },
     email: {
       value: "",
-      eventListener: "blur",
+      eventListener: ["blur"],
       active: true,
       isAsyncValidation: true,
+      isDirty: false,
       rule: stringType({
-        required_error: (_g = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _g.required,
-        invalid_type_error: (_h = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _h.invalid
-      }).trim().min(1, { message: (_i = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _i.required }).email({ message: (_j = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _j.invalid }).refine(
+        required_error: (_a = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _a.required,
+        invalid_type_error: (_b = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _b.invalid
+      }).trim().min(1, { message: (_c = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _c.required }).email({ message: (_d = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _d.invalid }).refine(
         async function(value) {
-          const emailSchema = stringType().email();
-          const parseResult = emailSchema.safeParse(value);
+          const parseResult = stringType().email().safeParse(value);
           if (parseResult.success) {
+            if (value === existingEmailValue) {
+              return true;
+            }
             const isAvailable = await checkAvailability(
               value,
               "email"
@@ -3634,118 +3606,77 @@ document.addEventListener("DOMContentLoaded", function() {
           return true;
         },
         {
-          message: (_k = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _k.exists
+          message: (_e = validationMsg == null ? void 0 : validationMsg.email) == null ? void 0 : _e.exists
         }
       )
     },
     password: {
       value: "",
-      eventListener: "input",
+      eventListener: ["blur", "input"],
       active: true,
       isAsyncValidation: false,
+      isDirty: false,
       rule: isStrongPasswordEnabled ? stringType({
-        required_error: (_l = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _l.required,
-        invalid_type_error: (_m = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _m.invalid
-      }).min(1, { message: (_n = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _n.required }).regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/, {
-        message: (_o = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _o.regex
-      }).min(8, { message: (_p = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _p.minLength }) : stringType({
-        required_error: (_q = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _q.required,
-        invalid_type_error: (_r = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _r.invalid
-      }).min(1, { message: (_s = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _s.required })
+        required_error: (_f = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _f.required,
+        invalid_type_error: (_g = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _g.invalid
+      }).regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/, {
+        message: (_h = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _h.regex
+      }).min(8, { message: (_i = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _i.minLength }).optional().or(literalType("")) : stringType({
+        required_error: (_j = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _j.required,
+        invalid_type_error: (_k = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _k.invalid
+      }).optional().or(literalType(""))
     },
     repass: {
       value: "",
-      eventListener: "input",
+      eventListener: ["blur", "input"],
       active: true,
       isAsyncValidation: false,
+      isDirty: false,
       rule: stringType({
-        required_error: (_t = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _t.required,
-        invalid_type_error: (_u = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _u.invalid
-      }).min(1, { message: (_v = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _v.required }).refine(
+        required_error: (_l = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _l.required,
+        invalid_type_error: (_m = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _m.invalid
+      }).refine(
         function(value) {
           return value === this.password.value;
         },
         {
-          message: (_w = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _w.mismatch
+          message: (_n = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _n.mismatch
         }
       )
-    },
-    firstname: {
-      value: "",
-      eventListener: "input",
-      active: true,
-      isAsyncValidation: false,
-      rule: stringType({
-        required_error: (_x = validationMsg == null ? void 0 : validationMsg.firstname) == null ? void 0 : _x.required,
-        invalid_type_error: (_y = validationMsg == null ? void 0 : validationMsg.firstname) == null ? void 0 : _y.invalid
-      }).trim().optional()
-    },
-    lastname: {
-      value: "",
-      eventListener: "input",
-      active: true,
-      isAsyncValidation: false,
-      rule: stringType({
-        required_error: (_z = validationMsg == null ? void 0 : validationMsg.lastname) == null ? void 0 : _z.required,
-        invalid_type_error: (_A = validationMsg == null ? void 0 : validationMsg.lastname) == null ? void 0 : _A.invalid
-      }).trim().optional()
-    },
-    terms: {
-      value: false,
-      eventListener: "change",
-      active: isTermsEnabled,
-      isAsyncValidation: false,
-      rule: literalType(true, {
-        errorMap: () => {
-          var _a2;
-          return {
-            message: (_a2 = validationMsg == null ? void 0 : validationMsg.terms) == null ? void 0 : _a2.required
-          };
-        }
-      })
-    },
-    pp: {
-      value: false,
-      eventListener: "change",
-      active: isPPEnabled,
-      isAsyncValidation: false,
-      rule: literalType(true, {
-        errorMap: () => {
-          var _a2;
-          return {
-            message: (_a2 = validationMsg == null ? void 0 : validationMsg.pp) == null ? void 0 : _a2.required
-          };
-        }
-      })
     }
   };
-  const RegistrationValidators = {
-    username: formConfig.username.rule,
+  const FormValidators = {
     email: formConfig.email.rule,
     password: formConfig.password.rule,
-    repass: formConfig.repass.rule,
-    firstname: formConfig.firstname.rule,
-    lastname: formConfig.lastname.rule
+    repass: formConfig.repass.rule
   };
-  if (isTermsEnabled) {
-    RegistrationValidators["terms"] = formConfig.terms.rule;
+  const FormSchema = objectType(FormValidators);
+  const profileForm = document.getElementById(formID);
+  const emailField = profileForm.querySelector(
+    `.swpm-profile-form-email`
+  );
+  if (emailField) {
+    existingEmailValue = emailField.value;
+    formConfig.email.value = existingEmailValue;
   }
-  if (isPPEnabled) {
-    RegistrationValidators["pp"] = formConfig.pp.rule;
-  }
-  const RegistrationFormSchema = objectType(RegistrationValidators);
-  const registrationForm = document.getElementById(formID);
-  const fields = Object.keys(RegistrationValidators);
+  const fields = Object.keys(FormValidators);
   fields.forEach((field) => {
-    var _a2;
     const fieldOption = formConfig[field];
     if (fieldOption.active) {
-      (_a2 = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-registration-form-${field}`)) == null ? void 0 : _a2.addEventListener(fieldOption.eventListener, (e) => {
-        handleDomEvent(e, field);
+      fieldOption.eventListener.forEach((eventListener) => {
+        var _a2;
+        (_a2 = profileForm == null ? void 0 : profileForm.querySelector(`.swpm-profile-form-${field}`)) == null ? void 0 : _a2.addEventListener(eventListener, (e) => {
+          handleDomEvent(e, field);
+        });
       });
     }
   });
-  registrationForm == null ? void 0 : registrationForm.addEventListener("submit", async function(e) {
+  (_o = profileForm == null ? void 0 : profileForm.querySelector(`.swpm-profile-form-password`)) == null ? void 0 : _o.addEventListener("input", () => {
+    if (formConfig.repass.isDirty) {
+      validateInput("repass", formConfig.repass.value);
+    }
+  });
+  profileForm == null ? void 0 : profileForm.addEventListener("submit", async function(e) {
     e.preventDefault();
     let validationSucess = true;
     for (const key in formConfig) {
@@ -3761,12 +3692,15 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
     if (validationSucess) {
-      registrationForm.submit();
+      profileForm.submit();
+    } else {
+      scrollToFirstErrorField();
     }
   });
   async function validateInput(field, value) {
     let isValidationSuccessful = false;
-    const fieldToValidate = RegistrationFormSchema.pick({ [field]: true });
+    formConfig[field].isDirty = true;
+    const fieldToValidate = FormSchema.pick({ [field]: true });
     let parseResult;
     if (formConfig[field].isAsyncValidation) {
       parseResult = await fieldToValidate.safeParseAsync({
@@ -3787,7 +3721,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const errorLists = document.createElement("ul");
         for (const i in issues) {
           const error = issues[i];
-          console.log(error);
           const errorMsg = error.message;
           const errorItem = document.createElement("li");
           errorItem.innerText = errorMsg;
@@ -3807,6 +3740,22 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     return isValidationSuccessful;
   }
+  function scrollToFirstErrorField() {
+    const profileForm2 = document.getElementById(formID);
+    const firstErrorSection = profileForm2 == null ? void 0 : profileForm2.querySelector(
+      ".swpm-profile-form-row.error"
+    );
+    if (firstErrorSection) {
+      firstErrorSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+      const firstErrorField = firstErrorSection.querySelector(
+        ".swpm-profile-form-field"
+      );
+      firstErrorField.focus();
+    }
+  }
   function handleDomEvent(e, field) {
     const target = e.target;
     const inputValue = target.type === "checkbox" ? target.checked : target.value;
@@ -3814,11 +3763,9 @@ document.addEventListener("DOMContentLoaded", function() {
     validateInput(field, inputValue);
   }
   async function checkAvailability(value, field) {
-    const queryArgs = swpmRegFormAjax.query_args;
-    const ajaxURL = swpmRegFormAjax.ajax_url;
-    if (field === "username") {
-      queryArgs.action = "swpm_validate_user_name";
-    } else {
+    const queryArgs = swpmFormValidationAjax.query_args;
+    const ajaxURL = swpmFormValidationAjax.ajax_url;
+    if (field === "email") {
       queryArgs.action = "swpm_validate_email";
     }
     queryArgs.fieldValue = value;
@@ -3840,16 +3787,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
   function getDescByField(field) {
-    const registrationForm2 = document.getElementById(formID);
-    const targetField = registrationForm2 == null ? void 0 : registrationForm2.querySelector(
-      `.swpm-registration-${field}-row`
+    const profileForm2 = document.getElementById(formID);
+    const targetField = profileForm2 == null ? void 0 : profileForm2.querySelector(
+      `.swpm-profile-${field}-row`
     );
-    return targetField == null ? void 0 : targetField.querySelector(`.swpm-registration-form-desc`);
+    return targetField == null ? void 0 : targetField.querySelector(`.swpm-profile-form-desc`);
   }
   function getRowByField(field) {
-    const registrationForm2 = document.getElementById(formID);
-    return registrationForm2 == null ? void 0 : registrationForm2.querySelector(
-      `.swpm-registration-${field}-row`
-    );
+    const profileForm2 = document.getElementById(formID);
+    return profileForm2 == null ? void 0 : profileForm2.querySelector(`.swpm-profile-${field}-row`);
   }
 });

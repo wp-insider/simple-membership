@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
             eventListener: ["blur"],
             active: true as boolean,
             isAsyncValidation: true as boolean,
+            isDirty: false as boolean,
             rule: string({
                 required_error: validationMsg?.username?.required,
                 invalid_type_error: validationMsg?.username?.invalid,
@@ -55,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
             eventListener: ["blur"],
             active: true as boolean,
             isAsyncValidation: true as boolean,
+            isDirty: false as boolean,
             rule: string({
                 required_error: validationMsg?.email?.required,
                 invalid_type_error: validationMsg?.email?.invalid,
@@ -85,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
             eventListener: ["blur", "input"],
             active: true as boolean,
             isAsyncValidation: false as boolean,
+            isDirty: false as boolean,
             rule: isStrongPasswordEnabled
                 ? string({
                       required_error: validationMsg?.password?.required,
@@ -105,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
             eventListener: ["blur", "input"],
             active: true as boolean,
             isAsyncValidation: false as boolean,
+            isDirty: false as boolean,
             rule: string({
                 required_error: validationMsg?.repass?.required,
                 invalid_type_error: validationMsg?.repass?.invalid,
@@ -124,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
             eventListener: ["input"],
             active: true as boolean,
             isAsyncValidation: false as boolean,
+            isDirty: false as boolean,
             rule: string({
                 required_error: validationMsg?.firstname?.required,
                 invalid_type_error: validationMsg?.firstname?.invalid,
@@ -136,6 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
             eventListener: ["input"],
             active: true as boolean,
             isAsyncValidation: false as boolean,
+            isDirty: false as boolean,
             rule: string({
                 required_error: validationMsg?.lastname?.required,
                 invalid_type_error: validationMsg?.lastname?.invalid,
@@ -148,6 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
             eventListener: ["change"],
             active: isTermsEnabled as boolean,
             isAsyncValidation: false as boolean,
+            isDirty: false as boolean,
             rule: literal(true, {
                 errorMap: () => ({
                     message: validationMsg?.terms?.required,
@@ -159,6 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
             eventListener: ["change"],
             active: isPPEnabled as boolean,
             isAsyncValidation: false as boolean,
+            isDirty: false as boolean,
             rule: literal(true, {
                 errorMap: () => ({
                     message: validationMsg?.pp?.required,
@@ -167,17 +175,11 @@ document.addEventListener("DOMContentLoaded", function () {
         },
     };
 
-    type RegistrationValidators = {
-        username: typeof formConfig.username.rule;
-        email: typeof formConfig.email.rule;
-        password: typeof formConfig.password.rule;
-        repass: typeof formConfig.repass.rule;
-        firstname: typeof formConfig.firstname.rule;
-        lastname: typeof formConfig.lastname.rule;
+    type FormValidatorsType = {
         [key: string]: ZodType<any>;
     };
 
-    const RegistrationValidators: RegistrationValidators = {
+    const FormValidators: FormValidatorsType = {
         username: formConfig.username.rule,
         email: formConfig.email.rule,
         password: formConfig.password.rule,
@@ -187,18 +189,18 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     if (isTermsEnabled) {
-        RegistrationValidators["terms"] = formConfig.terms.rule;
+        FormValidators["terms"] = formConfig.terms.rule;
     }
 
     if (isPPEnabled) {
-        RegistrationValidators["pp"] = formConfig.pp.rule;
+        FormValidators["pp"] = formConfig.pp.rule;
     }
 
-    const RegistrationFormSchema = object(RegistrationValidators);
+    const RegistrationFormSchema = object(FormValidators);
 
     const registrationForm = document.getElementById(formID) as HTMLFormElement;
 
-    const fields: string[] = Object.keys(RegistrationValidators);
+    const fields: string[] = Object.keys(FormValidators);
 
     /**
      * Add event listeners to all the active fields.
@@ -216,6 +218,22 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     });
+
+    /**
+     * The 'retype-password' field needs a special treatment.
+     * If user fills up the both the password and retype password correctly, and then if he/she changes
+     * the 'password' field, the "retype-password" won't show "Password didn't matched" error message
+     * until the user interacts with the 'retype-password' field or clicks the submit button. So to 
+     * prevent this and to enhance user experience, we also need to validate the 'retype-password'
+     * field whenever the 'password' is changed.
+     */
+    registrationForm
+        ?.querySelector(`.swpm-registration-form-password`)
+        ?.addEventListener("input", () => {
+            if (formConfig.repass.isDirty) {   
+                validateInput("repass", formConfig.repass.value);
+            }
+        });
 
     /**
      * Listen to form submit.
@@ -263,6 +281,9 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     async function validateInput(field: string, value: any) {
         let isValidationSuccessful = false;
+
+        // To ensure that the field was touched.
+        formConfig[field as keyof typeof formConfig].isDirty = true;
 
         const fieldToValidate = RegistrationFormSchema.pick({ [field]: true });
 
@@ -378,15 +399,10 @@ document.addEventListener("DOMContentLoaded", function () {
      * @returns boolean
      */
     async function checkAvailability(value: string, field: string) {
-        // // Checks whether the input field is empty or not. If empty, then return false in order to show no validation error.
-        // if (value.trim() === "") {
-        //     return true;
-        // }
-
         // @ts-ignore
-        const queryArgs = swpmRegFormAjax.query_args;
+        const queryArgs = swpmFormValidationAjax.query_args;
         // @ts-ignore
-        const ajaxURL = swpmRegFormAjax.ajax_url;
+        const ajaxURL = swpmFormValidationAjax.ajax_url;
 
         // choosing the ajax action.
         if (field === "username") {

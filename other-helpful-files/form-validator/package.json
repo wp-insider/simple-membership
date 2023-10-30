@@ -7,8 +7,8 @@
   "scripts": {
     "dev:reg": "vite build --config vite.config-reg-form.js --watch",
     "build:reg": "vite build --config vite.config-reg-form.js",
-    "dev:edit": "vite build --config vite.config.edit-form.js --watch",
-    "build:edit": "vite build --config vite.config.edit-form.js",
+    "dev:profile": "vite build --config vite.config.profile-form.js --watch",
+    "build:profile": "vite build --config vite.config.profile-form.js",
     
     "build:rollup": "rollup -c",
     "dev:rollup": "rollup -c -w"

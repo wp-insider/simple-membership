@@ -511,7 +511,13 @@ class SimpleWpMembership {
             ob_start();
             echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
             //Load the edit profile template
-            SwpmUtilsTemplate::swpm_load_template('edit.php', false);
+            // SwpmUtilsTemplate::swpm_load_template('edit.php', false);
+            $render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui');
+            if (!empty($render_new_form_ui)) {
+                SwpmUtilsTemplate::swpm_load_template('edit-v2.php', false);
+            }else{
+                SwpmUtilsTemplate::swpm_load_template('edit.php', false);
+            }
             return ob_get_clean();
         }
         //User is not logged into the site. Show appropriate message.
@@ -788,14 +794,15 @@ class SimpleWpMembership {
         wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.password-toggle', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-toggle.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
-        wp_register_script('swpm-reg-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.reg-form-validator.js', null, wp_rand(0, 1000), true);
+        wp_register_script('swpm-reg-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.reg-form-validator.js', null, SIMPLE_WP_MEMBERSHIP_VER, true);
+        wp_register_script('swpm-profile-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.profile-form-validator.js', null, SIMPLE_WP_MEMBERSHIP_VER, true);
 
         //Stripe libraries
         wp_register_script("swpm.stripe", "https://js.stripe.com/v3/", array("jquery"), SIMPLE_WP_MEMBERSHIP_VER);
 	wp_register_style("swpm.stripe.style", "https://checkout.stripe.com/v3/checkout/button.css", array(), SIMPLE_WP_MEMBERSHIP_VER);
     }
 
-    public static function enqueue_validation_scripts_v2($params){
+    public static function enqueue_validation_scripts_v2($handler, $params = null){
         $validation_messages = wp_json_encode(array(
             "username" => array(
                 "required" => __("Username is required", "simple-membership"),
@@ -837,24 +844,30 @@ class SimpleWpMembership {
             )
         ));
         
-        wp_add_inline_script("swpm-reg-form-validator", "var validationMsg = $validation_messages", "before");
-        wp_add_inline_script("swpm-reg-form-validator", "var form_id = '".$params['form_id']."';", "before");
-        wp_add_inline_script("swpm-reg-form-validator", "var terms_enabled = ".$params['is_terms_enabled'].";", "before");
-        wp_add_inline_script("swpm-reg-form-validator", "var pp_enabled = ".$params['is_pp_enabled'].";", "before");
-        wp_add_inline_script("swpm-reg-form-validator", "var strong_password_enabled = ".$params['is_strong_password_enabled'].";", "before");
+        wp_add_inline_script($handler, "var validationMsg = $validation_messages", "before");
+        wp_add_inline_script($handler, "var form_id = '".$params['form_id']."';", "before");
+
+        if (isset($params['is_terms_enabled'])) {
+            wp_add_inline_script($handler, "var terms_enabled = ".$params['is_terms_enabled'].";", "before");
+        }
+        if (isset($params['is_pp_enabled'])) {
+            wp_add_inline_script($handler, "var pp_enabled = ".$params['is_pp_enabled'].";", "before");
+        }
+
+        wp_add_inline_script($handler, "var strong_password_enabled = ".$params['is_strong_password_enabled'].";", "before");
 
         $ajax_url =  admin_url('admin-ajax.php');
         wp_localize_script(
-            'swpm-reg-form-validator',
-            'swpmRegFormAjax',
+            $handler,
+            'swpmFormValidationAjax',
             array(
                 'ajax_url' => $ajax_url,
                 'query_args' => $params['query_args'],
             )
         );
         
-        wp_enqueue_script('swpm-reg-form-validator');
-    }
+        wp_enqueue_script($handler);
+    }  
 
     public static function enqueue_validation_scripts( $additional_params = array() ) {
         //This function gets called from a shortcode. So use the below technique to make the inline script loading process work smoothly.

@@ -1,5 +1,5 @@
 import { string, object, literal, ZodType } from "zod";
-
+import { passwordStrength } from 'check-password-strength'
 /**
  * Defining variables that would come from PHP.
  */
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 invalid_type_error: validationMsg?.repass?.invalid,
             }).refine(
                 function (value) {
-                    return value === this.password.value;
+                    return value === getFormConfigFieldValue('password');
                 },
                 {
                     message: validationMsg?.repass?.mismatch,
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Grabs the saved email address of the member.
     const emailField = profileForm.querySelector(
-        `.swpm-profile-form-email`
+        `.swpm-form-email`
     ) as HTMLInputElement;
     if (emailField) {
         existingEmailValue = emailField.value;
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (fieldOption.active) {
             fieldOption.eventListener.forEach((eventListener) => {
                 profileForm
-                    ?.querySelector(`.swpm-profile-form-${field}`)
+                    ?.querySelector(`.swpm-form-${field}`)
                     ?.addEventListener(eventListener, (e) => {
                         handleDomEvent(e, field);
                     });
@@ -144,10 +144,17 @@ document.addEventListener("DOMContentLoaded", function () {
      * doing validation initially.
      */
     profileForm
-        ?.querySelector(`.swpm-profile-form-password`)
-        ?.addEventListener("input", () => {
+        ?.querySelector(`.swpm-form-password`)
+        ?.addEventListener("input", (e) => {
+
+            // Check if the form has a password strength showing option.
+            // const passStrengthCheckSection = document.getElementById(formID)?.querySelector(".swpm-form-row.error") as HTMLElement;
+            // if (passStrengthCheckSection) {
+            //     const strength = passwordStrength(getFormConfigFieldValue('password'));
+            // }
+
             if (formConfig.repass.isDirty) {   
-                validateInput("repass", formConfig.repass.value);
+                validateInput("repass", getFormConfigFieldValue('repass'));
             }
         });
 
@@ -268,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function scrollToFirstErrorField() {
         const profileForm = document.getElementById(formID);
         const firstErrorSection = profileForm?.querySelector(
-            ".swpm-profile-form-row.error"
+            ".swpm-form-row.error"
         ) as HTMLElement;
         if (firstErrorSection) {
             firstErrorSection.scrollIntoView({
@@ -277,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             const firstErrorField = firstErrorSection.querySelector(
-                ".swpm-profile-form-field"
+                ".swpm-form-field"
             ) as HTMLInputElement;
             firstErrorField.focus();
         }
@@ -361,10 +368,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const profileForm = document.getElementById(formID);
 
         const targetField = profileForm?.querySelector(
-            `.swpm-profile-${field}-row`
+            `.swpm-${field}-row`
         );
 
-        return targetField?.querySelector(`.swpm-profile-form-desc`);
+        return targetField?.querySelector(`.swpm-form-desc`);
     }
 
     /**
@@ -375,6 +382,19 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function getRowByField(field: string) {
         const profileForm = document.getElementById(formID);
-        return profileForm?.querySelector(`.swpm-profile-${field}-row`);
+        return profileForm?.querySelector(`.swpm-${field}-row`);
+    }
+
+    /**
+     * Get the value stored in the formConfig object by field name.
+     * 
+     * @param field The name of the field to get the value of.
+     * @returns 
+     */
+    function getFormConfigFieldValue(field: string): any {
+        if (formConfig[field as keyof typeof formConfig] !== undefined) {
+            return formConfig[field as keyof typeof formConfig].value;
+        }
+        return null;
     }
 });

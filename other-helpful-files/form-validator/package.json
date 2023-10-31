@@ -9,7 +9,6 @@
     "build:reg": "vite build --config vite.config-reg-form.js",
     "dev:profile": "vite build --config vite.config.profile-form.js --watch",
     "build:profile": "vite build --config vite.config.profile-form.js",
-    
     "build:rollup": "rollup -c",
     "dev:rollup": "rollup -c -w"
   },

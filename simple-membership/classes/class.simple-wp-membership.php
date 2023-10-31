@@ -794,8 +794,8 @@ class SimpleWpMembership {
         wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.password-toggle', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-toggle.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
-        wp_register_script('swpm-reg-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.reg-form-validator.js', null, SIMPLE_WP_MEMBERSHIP_VER, true);
-        wp_register_script('swpm-profile-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.profile-form-validator.js', null, SIMPLE_WP_MEMBERSHIP_VER, true);
+        wp_register_script('swpm-reg-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.reg-form-validator.js', null, wp_rand(1,1000), true);
+        wp_register_script('swpm-profile-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.profile-form-validator.js', null, wp_rand(1,1000), true);
 
         //Stripe libraries
         wp_register_script("swpm.stripe", "https://js.stripe.com/v3/", array("jquery"), SIMPLE_WP_MEMBERSHIP_VER);
@@ -853,8 +853,9 @@ class SimpleWpMembership {
         if (isset($params['is_pp_enabled'])) {
             wp_add_inline_script($handler, "var pp_enabled = ".$params['is_pp_enabled'].";", "before");
         }
-
-        wp_add_inline_script($handler, "var strong_password_enabled = ".$params['is_strong_password_enabled'].";", "before");
+        if (isset($params['is_strong_password_enabled'])) {
+            wp_add_inline_script($handler, "var strong_password_enabled = ".$params['is_strong_password_enabled'].";", "before");
+        }
 
         $ajax_url =  admin_url('admin-ajax.php');
         wp_localize_script(

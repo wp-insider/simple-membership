@@ -258,7 +258,13 @@ class SwpmMembers extends WP_List_Table {
 		$query  = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE  id !=1 ';
 		$levels = $wpdb->get_results( $query, ARRAY_A );
 
-                $add_user_template_path = apply_filters('swpm_admin_registration_add_user_template_path', SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_add.php');
+		$render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui');
+		if (!empty($render_new_form_ui)) {
+			$add_user_template_path = apply_filters('swpm_admin_registration_add_user_template_path', SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_add_v2.php');
+		}else{
+			$add_user_template_path = apply_filters('swpm_admin_registration_add_user_template_path', SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_add.php');
+		}
+		
 		include_once $add_user_template_path;
 
 		return false;
@@ -285,7 +291,14 @@ class SwpmMembers extends WP_List_Table {
 		$query  = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE  id !=1 ';
 		$levels = $wpdb->get_results( $query, ARRAY_A );
 
-                $edit_user_template_path = apply_filters('swpm_admin_registration_edit_user_template_path', SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_edit.php');
+
+		$render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui');
+		if (!empty($render_new_form_ui)) {
+			$edit_user_template_path = apply_filters('swpm_admin_registration_edit_user_template_path', SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_edit_v2.php');
+		}else{
+			$edit_user_template_path = apply_filters('swpm_admin_registration_edit_user_template_path', SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_edit.php');
+		}
+
 		include_once $edit_user_template_path;
 
 		return false;

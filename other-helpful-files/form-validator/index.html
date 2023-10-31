@@ -12,12 +12,12 @@
         /> -->
         <script src="./dist/index.js"></script>
         <style>
-            form#swpm-registration-form .swpm-registration-form-row {
+            form#swpm-registration-form .swpm-form-row {
                 margin-bottom: 6px;
             }
 
             form#swpm-registration-form
-                .swpm-registration-form-row
+                .swpm-form-row
                 > div
                 > input[type="submit"] {
                 margin-top: 12px;
@@ -26,21 +26,21 @@
 
             /* for errors */
             form#swpm-registration-form
-                .swpm-registration-form-row.error
-                .swpm-registration-form-field {
+                .swpm-form-row.error
+                .swpm-form-field {
                 border-color: #cc0000;
                 outline-color: #cc0000;
             }
 
             form#swpm-registration-form
-                .swpm-registration-form-row.error
-                .swpm-registration-form-desc {
+                .swpm-form-row.error
+                .swpm-form-desc {
                 color: #cc0000;
                 font-size: smaller;
             }
             form#swpm-registration-form
-                .swpm-registration-form-row.error
-                .swpm-registration-form-desc
+                .swpm-form-row.error
+                .swpm-form-desc
                 > ul {
                 list-style: none !important;
                 padding: 0 !important;
@@ -62,23 +62,23 @@
                     <input type="hidden" name="level_identifier" value="" />
                     <div>
                         <div
-                            class="swpm-registration-form-row swpm-registration-username-row"
+                            class="swpm-form-row swpm-registration-username-row"
                         >
                             <div><label for="username">Username</label></div>
                             <div>
                                 <input
                                     type="text"
                                     id="username"
-                                    class="swpm-registration-form-field swpm-registration-form-username"
+                                    class="swpm-form-field swpm-registration-form-username"
                                     value=""
                                     size="50"
                                     name="username"
                                 />
                             </div>
-                            <div class="swpm-registration-form-desc"></div>
+                            <div class="swpm-form-desc"></div>
                         </div>
                         <div
-                            class="swpm-registration-form-row swpm-registration-email-row"
+                            class="swpm-form-row swpm-registration-email-row"
                         >
                             <div><label for="email"> Email </label></div>
                             <div>
@@ -86,16 +86,16 @@
                                     type="text"
                                     autocomplete="off"
                                     id="email"
-                                    class="swpm-registration-form-field swpm-registration-form-email"
+                                    class="swpm-form-field swpm-registration-form-email"
                                     value=""
                                     size="50"
                                     name="email"
                                 />
                             </div>
-                            <div class="swpm-registration-form-desc"></div>
+                            <div class="swpm-form-desc"></div>
                         </div>
                         <div
-                            class="swpm-registration-form-row swpm-registration-password-row"
+                            class="swpm-form-row swpm-registration-password-row"
                         >
                             <div><label for="password"> Password </label></div>
                             <div>
@@ -103,16 +103,16 @@
                                     type="password"
                                     autocomplete="off"
                                     id="password"
-                                    class="swpm-registration-form-field swpm-registration-form-password"
+                                    class="swpm-form-field swpm-registration-form-password"
                                     value=""
                                     size="50"
                                     name="password"
                                 />
                             </div>
-                            <div class="swpm-registration-form-desc"></div>
+                            <div class="swpm-form-desc"></div>
                         </div>
                         <div
-                            class="swpm-registration-form-row swpm-registration-repass-row"
+                            class="swpm-form-row swpm-registration-repass-row"
                         >
                             <div>
                                 <label for="password_re">
@@ -124,16 +124,16 @@
                                     type="password"
                                     autocomplete="off"
                                     id="password_re"
-                                    class="swpm-registration-form-field swpm-registration-form-repass"
+                                    class="swpm-form-field swpm-registration-form-repass"
                                     value=""
                                     size="50"
                                     name="password_re"
                                 />
                             </div>
-                            <div class="swpm-registration-form-desc"></div>
+                            <div class="swpm-form-desc"></div>
                         </div>
                         <div
-                            class="swpm-registration-form-row swpm-registration-firstname-row"
+                            class="swpm-form-row swpm-registration-firstname-row"
                         >
                             <div>
                                 <label for="first_name"> First Name </label>
@@ -142,16 +142,16 @@
                                 <input
                                     type="text"
                                     id="first_name"
-                                    class="swpm-registration-form-field swpm-registration-form-firstname"
+                                    class="swpm-form-field swpm-registration-form-firstname"
                                     value=""
                                     size="50"
                                     name="first_name"
                                 />
                             </div>
-                            <div class="swpm-registration-form-desc"></div>
+                            <div class="swpm-form-desc"></div>
                         </div>
                         <div
-                            class="swpm-registration-form-row swpm-registration-lastname-row"
+                            class="swpm-form-row swpm-registration-lastname-row"
                         >
                             <div>
                                 <label for="last_name"> Last Name </label>
@@ -160,16 +160,16 @@
                                 <input
                                     type="text"
                                     id="last_name"
-                                    class="swpm-registration-form-field swpm-registration-form-lastname"
+                                    class="swpm-form-field swpm-registration-form-lastname"
                                     value=""
                                     size="50"
                                     name="last_name"
                                 />
                             </div>
-                            <div class="swpm-registration-form-desc"></div>
+                            <div class="swpm-form-desc"></div>
                         </div>
                         <div
-                            class="swpm-registration-form-row swpm-registration-membership-level-row"
+                            class="swpm-form-row swpm-registration-membership-level-row"
                         >
                             <div>
                                 <label for="membership_level">
@@ -192,7 +192,7 @@
                             </div>
                         </div>
                         <div
-                            class="swpm-registration-form-row swpm-registration-terms-row"
+                            class="swpm-form-row swpm-registration-terms-row"
                         >
                             <div>
                                 <label
@@ -200,7 +200,7 @@
                                         type="checkbox"
                                         id="swpm-accept-terms"
                                         name="accept_terms"
-                                        class="swpm-registration-form-field swpm-registration-form-terms"
+                                        class="swpm-form-field swpm-registration-form-terms"
                                         value="1"
                                     />I accept the
                                     <a href="javascript:void(0)" target="_blank"
@@ -208,10 +208,10 @@
                                     >
                                 </label>
                             </div>
-                            <div class="swpm-registration-form-desc"></div>
+                            <div class="swpm-form-desc"></div>
                         </div>
                         <div
-                            class="swpm-registration-form-row swpm-registration-pp-row"
+                            class="swpm-form-row swpm-registration-pp-row"
                         >
                             <div>
                                 <label
@@ -219,7 +219,7 @@
                                         type="checkbox"
                                         id="swpm-accept-pp"
                                         name="accept_pp"
-                                        class="swpm-registration-form-field swpm-registration-form-pp"
+                                        class="swpm-form-field swpm-registration-form-pp"
                                         value="1"
                                     />I agree to the
                                     <a href="javascript:void(0)" target="_blank"
@@ -227,7 +227,7 @@
                                     >
                                 </label>
                             </div>
-                            <div class="swpm-registration-form-desc"></div>
+                            <div class="swpm-form-desc"></div>
                         </div>
 
                         <div
@@ -235,7 +235,7 @@
                         ></div>
 
                         <div
-                            class="swpm-registration-form-row swpm-registration-submit-section"
+                            class="swpm-form-row swpm-registration-submit-section"
                         >
                             <div>
                                 <input

@@ -3667,7 +3667,7 @@ document.addEventListener("DOMContentLoaded", function() {
         invalid_type_error: (_u = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _u.invalid
       }).min(1, { message: (_v = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _v.required }).refine(
         function(value) {
-          return value === this.password.value;
+          return value === getFormConfigFieldValue("password");
         },
         {
           message: (_w = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _w.mismatch
@@ -3749,13 +3749,13 @@ document.addEventListener("DOMContentLoaded", function() {
     if (fieldOption.active) {
       fieldOption.eventListener.forEach((eventListener) => {
         var _a2;
-        (_a2 = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-registration-form-${field}`)) == null ? void 0 : _a2.addEventListener(eventListener, (e) => {
+        (_a2 = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-form-${field}`)) == null ? void 0 : _a2.addEventListener(eventListener, (e) => {
           handleDomEvent(e, field);
         });
       });
     }
   });
-  (_B = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-registration-form-password`)) == null ? void 0 : _B.addEventListener("input", () => {
+  (_B = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-form-password`)) == null ? void 0 : _B.addEventListener("input", () => {
     if (formConfig.repass.isDirty) {
       validateInput("repass", formConfig.repass.value);
     }
@@ -3827,7 +3827,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function scrollToFirstErrorField() {
     const registrationForm2 = document.getElementById(formID);
     const firstErrorSection = registrationForm2 == null ? void 0 : registrationForm2.querySelector(
-      ".swpm-registration-form-row.error"
+      ".swpm-form-row.error"
     );
     if (firstErrorSection) {
       firstErrorSection.scrollIntoView({
@@ -3835,7 +3835,7 @@ document.addEventListener("DOMContentLoaded", function() {
         block: "start"
       });
       const firstErrorField = firstErrorSection.querySelector(
-        ".swpm-registration-form-field"
+        ".swpm-form-field"
       );
       firstErrorField.focus();
     }
@@ -3875,14 +3875,18 @@ document.addEventListener("DOMContentLoaded", function() {
   function getDescByField(field) {
     const registrationForm2 = document.getElementById(formID);
     const targetField = registrationForm2 == null ? void 0 : registrationForm2.querySelector(
-      `.swpm-registration-${field}-row`
+      `.swpm-${field}-row`
     );
-    return targetField == null ? void 0 : targetField.querySelector(`.swpm-registration-form-desc`);
+    return targetField == null ? void 0 : targetField.querySelector(`.swpm-form-desc`);
   }
   function getRowByField(field) {
     const registrationForm2 = document.getElementById(formID);
-    return registrationForm2 == null ? void 0 : registrationForm2.querySelector(
-      `.swpm-registration-${field}-row`
-    );
+    return registrationForm2 == null ? void 0 : registrationForm2.querySelector(`.swpm-${field}-row`);
+  }
+  function getFormConfigFieldValue(field) {
+    if (formConfig[field] !== void 0) {
+      return formConfig[field].value;
+    }
+    return null;
   }
 });

@@ -32,40 +32,40 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 
 ?>
 <div class="swpm-registration-widget-form">
-    <form id="<?php echo $form_id ?>" class="swpm-registration-form" name="swpm-registration-form" method="post" action="">
+    <form id="<?php echo $form_id ?>" class="swpm-form" name="swpm-registration-form" method="post" action="">
         <input type="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
         <div>
-            <div class="swpm-registration-form-row swpm-registration-username-row" <?php apply_filters('swpm_registration_form_username_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-username-row" <?php apply_filters('swpm_registration_form_username_tr_attributes', ''); ?>>
                 <div><label for="user_name"><?php _e('Username', "simple-membership") ?></label></div>
-                <div><input type="text" id="user_name" class="swpm-registration-form-field swpm-registration-form-username" value="<?php echo esc_attr($user_name); ?>" name="user_name" <?php apply_filters('swpm_registration_form_username_input_attributes', ''); ?> /></div>
-                <div class="swpm-registration-form-desc"></div>
+                <div><input type="text" id="user_name" class="swpm-form-field swpm-form-username" value="<?php echo esc_attr($user_name); ?>" name="user_name" <?php apply_filters('swpm_registration_form_username_input_attributes', ''); ?> /></div>
+                <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-registration-form-row swpm-registration-email-row">
+            <div class="swpm-form-row swpm-email-row">
                 <div><label for="email"><?php _e('Email', "simple-membership") ?></label></div>
-                <div><input type="text" autocomplete="off" id="email" class="swpm-registration-form-field swpm-registration-form-email" value="<?php echo esc_attr($email); ?>" name="email" /></div>
-                <div class="swpm-registration-form-desc"></div>
+                <div><input type="text" autocomplete="off" id="email" class="swpm-form-field swpm-form-email" value="<?php echo esc_attr($email); ?>" name="email" /></div>
+                <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-registration-form-row swpm-registration-password-row">
+            <div class="swpm-form-row swpm-password-row">
                 <div><label for="password"><?php _e('Password', "simple-membership") ?></label></div>
-                <div><input type="password" autocomplete="off" id="password" class="swpm-registration-form-field swpm-registration-form-password <?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); ?>" value="" name="password" /></div>
-                <div class="swpm-registration-form-desc"></div>
+                <div><input type="password" autocomplete="off" id="password" class="swpm-form-field swpm-form-password <?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); ?>" value="" name="password" /></div>
+                <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-registration-form-row swpm-registration-repass-row">
+            <div class="swpm-form-row swpm-repass-row">
                 <div><label for="password_re"><?php _e('Repeat Password', "simple-membership") ?></label></div>
-                <div><input type="password" autocomplete="off" id="password_re" class="swpm-registration-form-field swpm-registration-form-repass" value="" name="password_re" /></div>
-                <div class="swpm-registration-form-desc"></div>
+                <div><input type="password" autocomplete="off" id="password_re" class="swpm-form-field swpm-form-repass" value="" name="password_re" /></div>
+                <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-registration-form-row swpm-registration-firstname-row" <?php apply_filters('swpm_registration_form_firstname_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-firstname-row" <?php apply_filters('swpm_registration_form_firstname_tr_attributes', ''); ?>>
                 <div><label for="first_name"><?php echo _e('First Name', "simple-membership") ?></label></div>
-                <div><input type="text" id="first_name" class="swpm-registration-form-field swpm-registration-form-firstname" value="<?php echo esc_attr($first_name); ?>" name="first_name" /></div>
-                <div class="swpm-registration-form-desc"></div>
+                <div><input type="text" id="first_name" class="swpm-form-field swpm-form-firstname" value="<?php echo esc_attr($first_name); ?>" name="first_name" /></div>
+                <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-registration-form-row swpm-registration-lastname-row" <?php apply_filters('swpm_registration_form_lastname_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-lastname-row" <?php apply_filters('swpm_registration_form_lastname_tr_attributes', ''); ?>>
                 <div><label for="last_name"><?php echo _e('Last Name', "simple-membership") ?></label></div>
-                <div><input type="text" id="last_name" class="swpm-registration-form-field swpm-registration-form-lastname" value="<?php echo esc_attr($last_name); ?>" name="last_name" /></div>
-                <div class="swpm-registration-form-desc"></div>
+                <div><input type="text" id="last_name" class="swpm-form-field swpm-form-lastname" value="<?php echo esc_attr($last_name); ?>" name="last_name" /></div>
+                <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-registration-form-row swpm-registration-membership-level-row" <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-membership-level-row" <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>>
                 <div><label for="membership_level"><?php _e('Membership Level', "simple-membership") ?></label></div>
                 <div>
                     <?php
@@ -90,30 +90,30 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             if (!empty($terms_enabled)) {
                 $terms_page_url = $settings->get_value('terms-and-conditions-page-url');
             ?>
-                <div class="swpm-registration-form-row swpm-registration-terms-row">
+                <div class="swpm-form-row swpm-terms-row">
                     <div>
-                        <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="swpm-registration-form-field swpm-registration-form-terms" value="1"> <?php echo SwpmUtils::_('I accept the ') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
+                        <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="swpm-form-field swpm-form-terms" value="1"> <?php echo SwpmUtils::_('I accept the ') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
                     </div>
-                    <div class="swpm-registration-form-desc"></div>
+                    <div class="swpm-form-desc"></div>
                 </div>
             <?php }
             // Check if we need to display Privacy Policy checkbox.
             if (!empty($pp_enabled)) {
                 $pp_page_url = $settings->get_value('privacy-policy-page-url');
             ?>
-                <div class="swpm-registration-form-row swpm-registration-pp-row">
+                <div class="swpm-form-row swpm-pp-row">
                     <div>
-                        <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="swpm-registration-form-field swpm-registration-form-pp" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
+                        <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="swpm-form-field swpm-form-pp" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
                     </div>
-                    <div class="swpm-registration-form-desc"></div>
+                    <div class="swpm-form-desc"></div>
                 </div>
             <?php } ?>
 
             <div class="swpm-before-registration-submit-section"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
 
-            <div class="swpm-registration-form-row swpm-registration-submit-section">
+            <div class="swpm-form-row swpm-submit-section">
                 <div>
-                    <button type="submit" class="swpm-registration-submit"><?php _e('Register', "simple-membership") ?></button>
+                    <button type="submit" class="swpm-submit"><?php _e('Register', "simple-membership") ?></button>
                     <input type="hidden" name="swpm_registration_submit" value="Register">
                 </div>
             </div>
@@ -123,25 +123,25 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
     </form>
 
     <style>
-        form.swpm-registration-form .swpm-registration-form-row {
+        form.swpm-form .swpm-form-row {
             margin-bottom: 6px;
         }
 
-        form.swpm-registration-form .swpm-registration-submit-section {
+        form.swpm-form .swpm-submit-section {
             margin-top: 12px;
         }
 
-        form.swpm-registration-form .swpm-registration-form-row.error .swpm-registration-form-field {
+        form.swpm-form .swpm-form-row.error .swpm-form-field {
             border-color: #cc0000 !important;
             outline-color: #cc0000 !important;
         }
 
-        form.swpm-registration-form .swpm-registration-form-row.error .swpm-registration-form-desc {
+        form.swpm-form .swpm-form-row.error .swpm-form-desc {
             color: #cc0000 !important;
             font-size: smaller !important;
         }
 
-        form.swpm-registration-form .swpm-registration-form-row.error .swpm-registration-form-desc>ul {
+        form.swpm-form .swpm-form-row.error .swpm-form-desc>ul {
             list-style: none !important;
             padding: 0 !important;
             margin: 4px 0 0 !important;

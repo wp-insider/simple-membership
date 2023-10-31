@@ -3637,7 +3637,7 @@ document.addEventListener("DOMContentLoaded", function() {
         invalid_type_error: (_m = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _m.invalid
       }).refine(
         function(value) {
-          return value === this.password.value;
+          return value === getFormConfigFieldValue("password");
         },
         {
           message: (_n = validationMsg == null ? void 0 : validationMsg.repass) == null ? void 0 : _n.mismatch
@@ -3653,7 +3653,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const FormSchema = objectType(FormValidators);
   const profileForm = document.getElementById(formID);
   const emailField = profileForm.querySelector(
-    `.swpm-profile-form-email`
+    `.swpm-form-email`
   );
   if (emailField) {
     existingEmailValue = emailField.value;
@@ -3665,15 +3665,15 @@ document.addEventListener("DOMContentLoaded", function() {
     if (fieldOption.active) {
       fieldOption.eventListener.forEach((eventListener) => {
         var _a2;
-        (_a2 = profileForm == null ? void 0 : profileForm.querySelector(`.swpm-profile-form-${field}`)) == null ? void 0 : _a2.addEventListener(eventListener, (e) => {
+        (_a2 = profileForm == null ? void 0 : profileForm.querySelector(`.swpm-form-${field}`)) == null ? void 0 : _a2.addEventListener(eventListener, (e) => {
           handleDomEvent(e, field);
         });
       });
     }
   });
-  (_o = profileForm == null ? void 0 : profileForm.querySelector(`.swpm-profile-form-password`)) == null ? void 0 : _o.addEventListener("input", () => {
+  (_o = profileForm == null ? void 0 : profileForm.querySelector(`.swpm-form-password`)) == null ? void 0 : _o.addEventListener("input", (e) => {
     if (formConfig.repass.isDirty) {
-      validateInput("repass", formConfig.repass.value);
+      validateInput("repass", getFormConfigFieldValue("repass"));
     }
   });
   profileForm == null ? void 0 : profileForm.addEventListener("submit", async function(e) {
@@ -3743,7 +3743,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function scrollToFirstErrorField() {
     const profileForm2 = document.getElementById(formID);
     const firstErrorSection = profileForm2 == null ? void 0 : profileForm2.querySelector(
-      ".swpm-profile-form-row.error"
+      ".swpm-form-row.error"
     );
     if (firstErrorSection) {
       firstErrorSection.scrollIntoView({
@@ -3751,7 +3751,7 @@ document.addEventListener("DOMContentLoaded", function() {
         block: "start"
       });
       const firstErrorField = firstErrorSection.querySelector(
-        ".swpm-profile-form-field"
+        ".swpm-form-field"
       );
       firstErrorField.focus();
     }
@@ -3789,12 +3789,18 @@ document.addEventListener("DOMContentLoaded", function() {
   function getDescByField(field) {
     const profileForm2 = document.getElementById(formID);
     const targetField = profileForm2 == null ? void 0 : profileForm2.querySelector(
-      `.swpm-profile-${field}-row`
+      `.swpm-${field}-row`
     );
-    return targetField == null ? void 0 : targetField.querySelector(`.swpm-profile-form-desc`);
+    return targetField == null ? void 0 : targetField.querySelector(`.swpm-form-desc`);
   }
   function getRowByField(field) {
     const profileForm2 = document.getElementById(formID);
-    return profileForm2 == null ? void 0 : profileForm2.querySelector(`.swpm-profile-${field}-row`);
+    return profileForm2 == null ? void 0 : profileForm2.querySelector(`.swpm-${field}-row`);
+  }
+  function getFormConfigFieldValue(field) {
+    if (formConfig[field] !== void 0) {
+      return formConfig[field].value;
+    }
+    return null;
   }
 });

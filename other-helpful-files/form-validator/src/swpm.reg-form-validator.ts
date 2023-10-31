@@ -4,13 +4,18 @@ import { string, object, literal, ZodType } from "zod";
  * Defining variables that would come from PHP.
  */
 // @ts-ignore
-const formID = typeof form_id !== "undefined" ? form_id : "swpm-registration-form";
+const formID =
+    typeof form_id !== "undefined" ? form_id : "swpm-registration-form";
 // @ts-ignore
-const isTermsEnabled = typeof terms_enabled !== "undefined" ? terms_enabled : false;
+const isTermsEnabled =
+    typeof terms_enabled !== "undefined" ? terms_enabled : false;
 // @ts-ignore
 const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
 // @ts-ignore
-const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
+const isStrongPasswordEnabled =
+    typeof strong_password_enabled !== "undefined"
+        ? strong_password_enabled
+        : false;
 
 document.addEventListener("DOMContentLoaded", function () {
     // Field options configuration object.
@@ -116,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 .min(1, { message: validationMsg?.repass?.required })
                 .refine(
                     function (value) {
-                        return value === this.password.value;
+                        return value === getFormConfigFieldValue("password");
                     },
                     {
                         message: validationMsg?.repass?.mismatch,
@@ -211,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (fieldOption.active) {
             fieldOption.eventListener.forEach((eventListener) => {
                 registrationForm
-                    ?.querySelector(`.swpm-registration-form-${field}`)
+                    ?.querySelector(`.swpm-form-${field}`)
                     ?.addEventListener(eventListener, (e) => {
                         handleDomEvent(e, field);
                     });
@@ -223,14 +228,14 @@ document.addEventListener("DOMContentLoaded", function () {
      * The 'retype-password' field needs a special treatment.
      * If user fills up the both the password and retype password correctly, and then if he/she changes
      * the 'password' field, the "retype-password" won't show "Password didn't matched" error message
-     * until the user interacts with the 'retype-password' field or clicks the submit button. So to 
+     * until the user interacts with the 'retype-password' field or clicks the submit button. So to
      * prevent this and to enhance user experience, we also need to validate the 'retype-password'
      * field whenever the 'password' is changed.
      */
     registrationForm
-        ?.querySelector(`.swpm-registration-form-password`)
+        ?.querySelector(`.swpm-form-password`)
         ?.addEventListener("input", () => {
-            if (formConfig.repass.isDirty) {   
+            if (formConfig.repass.isDirty) {
                 validateInput("repass", formConfig.repass.value);
             }
         });
@@ -352,7 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function scrollToFirstErrorField() {
         const registrationForm = document.getElementById(formID);
         const firstErrorSection = registrationForm?.querySelector(
-            ".swpm-registration-form-row.error"
+            ".swpm-form-row.error"
         ) as HTMLElement;
         if (firstErrorSection) {
             firstErrorSection.scrollIntoView({
@@ -363,7 +368,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // smoothScrollToElement(firstErrorSection) // TODO: Need work on this later.
 
             const firstErrorField = firstErrorSection.querySelector(
-                ".swpm-registration-form-field"
+                ".swpm-form-field"
             ) as HTMLInputElement;
             firstErrorField.focus();
         }
@@ -450,10 +455,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const registrationForm = document.getElementById(formID);
 
         const targetField = registrationForm?.querySelector(
-            `.swpm-registration-${field}-row`
+            `.swpm-${field}-row`
         );
 
-        return targetField?.querySelector(`.swpm-registration-form-desc`);
+        return targetField?.querySelector(`.swpm-form-desc`);
     }
 
     /**
@@ -464,9 +469,20 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function getRowByField(field: string) {
         const registrationForm = document.getElementById(formID);
-        return registrationForm?.querySelector(
-            `.swpm-registration-${field}-row`
-        );
+        return registrationForm?.querySelector(`.swpm-${field}-row`);
+    }
+
+    /**
+     * Get the value stored in the formConfig object by field name.
+     * 
+     * @param field The name of the field to get the value of.
+     * @returns 
+     */
+    function getFormConfigFieldValue(field: string): any {
+        if (formConfig[field as keyof typeof formConfig] !== undefined) {
+            return formConfig[field as keyof typeof formConfig].value;
+        }
+        return null;
     }
 
     /**

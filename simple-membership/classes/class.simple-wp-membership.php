@@ -794,15 +794,20 @@ class SimpleWpMembership {
         wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.password-toggle', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-toggle.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
-        wp_register_script('swpm-reg-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.reg-form-validator.js', null, wp_rand(1,1000), true);
-        wp_register_script('swpm-profile-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.profile-form-validator.js', null, wp_rand(1,1000), true);
+        wp_register_script('swpm-reg-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm-reg-form-validator.js', null, SIMPLE_WP_MEMBERSHIP_VER, true);
+        wp_register_script('swpm-profile-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm-profile-form-validator.js', null, SIMPLE_WP_MEMBERSHIP_VER, true);
 
         //Stripe libraries
         wp_register_script("swpm.stripe", "https://js.stripe.com/v3/", array("jquery"), SIMPLE_WP_MEMBERSHIP_VER);
 	wp_register_style("swpm.stripe.style", "https://checkout.stripe.com/v3/checkout/button.css", array(), SIMPLE_WP_MEMBERSHIP_VER);
     }
 
-    public static function enqueue_validation_scripts_v2($handler, $params = null){
+    public static function enqueue_validation_scripts_v2($handle, $params = null){
+
+        if ( ! wp_script_is( $handle, 'registered' ) ) {
+            wp_register_script($handle, SIMPLE_WP_MEMBERSHIP_URL . "/js/".$handle.".js", null, SIMPLE_WP_MEMBERSHIP_VER, true);
+        }
+
         $validation_messages = wp_json_encode(array(
             "username" => array(
                 "required" => __("Username is required", "simple-membership"),
@@ -843,31 +848,31 @@ class SimpleWpMembership {
                 "required" => __("You must accept the privacy policy", "simple-membership")
             )
         ));
-        
-        wp_add_inline_script($handler, "var validationMsg = $validation_messages", "before");
-        wp_add_inline_script($handler, "var form_id = '".$params['form_id']."';", "before");
-
-        if (isset($params['is_terms_enabled'])) {
-            wp_add_inline_script($handler, "var terms_enabled = ".$params['is_terms_enabled'].";", "before");
-        }
-        if (isset($params['is_pp_enabled'])) {
-            wp_add_inline_script($handler, "var pp_enabled = ".$params['is_pp_enabled'].";", "before");
-        }
-        if (isset($params['is_strong_password_enabled'])) {
-            wp_add_inline_script($handler, "var strong_password_enabled = ".$params['is_strong_password_enabled'].";", "before");
-        }
 
         $ajax_url =  admin_url('admin-ajax.php');
         wp_localize_script(
-            $handler,
+            $handle,
             'swpmFormValidationAjax',
             array(
                 'ajax_url' => $ajax_url,
                 'query_args' => $params['query_args'],
             )
         );
-        
-        wp_enqueue_script($handler);
+                
+        wp_add_inline_script($handle, "var validationMsg = $validation_messages", "before");
+        wp_add_inline_script($handle, "var form_id = '".$params['form_id']."';", "before");
+
+        if (isset($params['is_terms_enabled'])) {
+            wp_add_inline_script($handle, "var terms_enabled = ".$params['is_terms_enabled'].";", "before");
+        }
+        if (isset($params['is_pp_enabled'])) {
+            wp_add_inline_script($handle, "var pp_enabled = ".$params['is_pp_enabled'].";", "before");
+        }
+        if (isset($params['is_strong_password_enabled'])) {
+            wp_add_inline_script($handle, "var strong_password_enabled = ".$params['is_strong_password_enabled'].";", "before");
+        }
+
+        wp_enqueue_script($handle);
     }  
 
     public static function enqueue_validation_scripts( $additional_params = array() ) {

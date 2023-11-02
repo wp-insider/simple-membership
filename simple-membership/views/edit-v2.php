@@ -6,13 +6,6 @@ extract($user_data, EXTR_SKIP);
 $settings = SwpmSettings::get_instance();
 $force_strong_pass = $settings->get_value('force-strong-passwords');
 
-if (!empty($force_strong_pass)) {
-    $pass_class = apply_filters("swpm_profile_strong_pass_validation", "validate[custom[strongPass],minSize[8]]");
-} else {
-    $pass_class = "";
-}
-
-// $form_id = uniqid("swpm-registration-form-");
 $form_id = "swpm-profile-form";
 $is_strong_password_enabled = empty($force_strong_pass) ? 'false' : 'true';
 SimpleWpMembership::enqueue_validation_scripts_v2(
@@ -26,9 +19,6 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
         'is_strong_password_enabled' => $is_strong_password_enabled,
     )
 );
-//The admin ajax causes an issue with the JS validation if done on form submission. The edit profile doesn't need JS validation on email. There is PHP validation which will catch any email error.
-//SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.SwpmAuth::get_instance()->get('member_id'))));
-
 ?>
 <div class="swpm-edit-profile-form">
     <form id="<?php echo $form_id ?>" class="swpm-form" name="swpm-editprofile-form" method="post" action="">
@@ -46,7 +36,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             </div>
             <div class="swpm-form-row swpm-password-row">
                 <div><label for="password"><?php _e('Password', 'simple-membership'); ?></label></div>
-                <div><input type="password" id="password" value="" name="password" class="swpm-form-field swpm-form-password <?php echo $pass_class; ?>" autocomplete="off" placeholder="<?php _e('Leave empty to keep the current password', 'simple-membership'); ?>" /></div>
+                <div><input type="password" id="password" value="" name="password" class="swpm-form-field swpm-form-password" autocomplete="off" placeholder="<?php _e('Leave empty to keep the current password', 'simple-membership'); ?>" /></div>
                 <div class="swpm-form-desc"></div>
             </div>
             <div class="swpm-form-row swpm-repass-row">

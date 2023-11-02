@@ -47,7 +47,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             </div>
             <div class="swpm-form-row swpm-password-row">
                 <div><label for="password"><?php _e('Password', "simple-membership") ?></label></div>
-                <div><input type="password" autocomplete="off" id="password" class="swpm-form-field swpm-form-password <?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); ?>" value="" name="password" /></div>
+                <div><input type="password" autocomplete="off" id="password" class="swpm-form-field swpm-form-password" value="" name="password" /></div>
                 <div class="swpm-form-desc"></div>
             </div>
             <div class="swpm-form-row swpm-repass-row">

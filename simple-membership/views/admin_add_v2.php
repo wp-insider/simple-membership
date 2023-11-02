@@ -47,7 +47,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 <tr class="swpm-form-row swpm-repass-row">
                     <th scope="row"></th>
                     <td style="padding-top: 0;">
-                        <input class="swpm-form-field swpm-form-repass regular-text" name="password_re" type="password" id="pass2" autocomplete="off" placeholder="<?php _e('Retype Password', 'simple-membership')?>" />
+                        <input class="swpm-form-field swpm-form-repass regular-text" name="password_re" type="password" id="pass2" autocomplete="off" placeholder="<?php _e('Retype password', 'simple-membership')?>" />
                         <div class="swpm-form-desc"></div>
                         <div id="pass-strength-result"></div>
                         <p class="description indicator-hint"><?php _e('Hint: The password should be at least seven characters long. To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ).', 'simple-membership'); ?></p>

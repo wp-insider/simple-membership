@@ -10,7 +10,7 @@ export default defineConfig({
 		},
 
 		rollupOptions: {
-			input: "src/swpm.profile-form-validator.ts",
+			input: "src/swpm-profile-form-validator.ts",
 			output: [
 				// output bundle files to test folder
 				{

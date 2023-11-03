@@ -21,5 +21,16 @@ test (test that it triggers error when it is less than 8 characters)
 test123 (test that it triggers error when it does not contain any special character)
 
 #) Test the password confirmation field with the following values and conditions:
-
 TODO
+
+
+Admin Dashbaord Side
+===================
+If the add/edit member of admin dashbaord has been updated then do the above testing for the admin side as well.
+
+
+Form Builder
+================
+Active the form builder addon then test the above mentioned conditions for the form builder as well.
+
+

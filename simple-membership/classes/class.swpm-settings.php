@@ -901,13 +901,13 @@ class SwpmSettings {
 
 		add_settings_field(
 			'use-new-form-ui',
-			__( 'Use New Form UI', 'simple-membership' ),
+			__( 'Activate New Form and Validation Interface', 'simple-membership' ),
 			array( &$this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
 			'advanced-settings',
 			array(
 				'item'    => 'use-new-form-ui',
-				'message' => __( 'Loads the new more user friendly UI of the registration and edit profile form.' ),
+				'message' => __( 'Enable the improved user interface for registration and profile editing, featuring enhanced validation that adapts seamlessly across various devices and screen sizes.' ),
 			)
 		);
 

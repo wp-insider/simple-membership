@@ -181,6 +181,7 @@ https://simple-membership-plugin.com/
 - New UI added for registration ans edit profile form for both the client and admin side.
 - New settings field added to turn on/off new form UI.
 - Filter hooks updated to to customize password validation rules and message.
+- Updated the Swedish translation files.
 
 = 4.3.6 =
 - Added output escaping to the 'list_type' parameter in the 'Post and Page Protection' menu tab.

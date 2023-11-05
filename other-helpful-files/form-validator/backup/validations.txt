@@ -168,3 +168,9 @@ esbuild:
     target: 'chrome58',
     outfile: 'dist/bundle-esbuild.js',
     })
+
+
+rollup:
+    build script: 
+        "build:rollup": "rollup -c",
+        "dev:rollup": "rollup -c -w"

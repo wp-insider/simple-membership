@@ -1,15 +1,17 @@
 import { string, object, literal, ZodType } from "zod";
-import { passwordStrength } from 'check-password-strength'
+
 /**
  * Defining variables that would come from PHP.
  */
 // @ts-ignore
 const formID = typeof form_id !== "undefined" ? form_id : "swpm-profile-form";
 // @ts-ignore
-const isStrongPasswordEnabled =
-    typeof strong_password_enabled !== "undefined"
-        ? strong_password_enabled
-        : false;
+const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
+// @ts-ignore
+const passValidatorRegex = typeof custom_pass_validator !== "undefined" ? custom_pass_validator : /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/;
+
+// Convert the string or regex to a regular expression using the RegExp constructor.
+const passPattern = new RegExp(passValidatorRegex)
 
 document.addEventListener("DOMContentLoaded", function () {
     // The current email address of the user. This is utilized during email field validation.
@@ -62,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       required_error: validationMsg?.password?.required,
                       invalid_type_error: validationMsg?.password?.invalid,
                   })
-                      .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/, {
+                      .regex(passPattern, {
                           message: validationMsg?.password?.regex,
                       })
                       .min(8, { message: validationMsg?.password?.minLength })
@@ -104,12 +106,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const FormSchema = object(FormValidators);
 
+    // Get the target HTML form element to validate
     const profileForm = document.getElementById(formID) as HTMLFormElement;
 
     // Grabs the saved email address of the member.
-    const emailField = profileForm.querySelector(
-        `.swpm-form-email`
-    ) as HTMLInputElement;
+    const emailField = profileForm.querySelector(`.swpm-form-email`) as HTMLInputElement;
+    
     if (emailField) {
         existingEmailValue = emailField.value;
         formConfig.email.value = existingEmailValue;
@@ -146,13 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
     profileForm
         ?.querySelector(`.swpm-form-password`)
         ?.addEventListener("input", (e) => {
-
-            // Check if the form has a password strength showing option.
-            // const passStrengthCheckSection = document.getElementById(formID)?.querySelector(".swpm-form-row.error") as HTMLElement;
-            // if (passStrengthCheckSection) {
-            //     const strength = passwordStrength(getFormConfigFieldValue('password'));
-            // }
-
             if (formConfig.repass.isDirty) {   
                 validateInput("repass", getFormConfigFieldValue('repass'));
             }
@@ -293,7 +288,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Handles form inputs interactions.
      *
-     * @param e Event
+     * @param e Event to listen to
      * @param field string Field name.
      */
     function handleDomEvent(e: any, field: string) {

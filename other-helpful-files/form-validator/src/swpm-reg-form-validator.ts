@@ -4,18 +4,18 @@ import { string, object, literal, ZodType } from "zod";
  * Defining variables that would come from PHP.
  */
 // @ts-ignore
-const formID =
-    typeof form_id !== "undefined" ? form_id : "swpm-registration-form";
+const formID = typeof form_id !== "undefined" ? form_id : "swpm-registration-form";
 // @ts-ignore
-const isTermsEnabled =
-    typeof terms_enabled !== "undefined" ? terms_enabled : false;
+const isTermsEnabled = typeof terms_enabled !== "undefined" ? terms_enabled : false;
 // @ts-ignore
 const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
 // @ts-ignore
-const isStrongPasswordEnabled =
-    typeof strong_password_enabled !== "undefined"
-        ? strong_password_enabled
-        : false;
+const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
+// @ts-ignore
+const passValidatorRegex = typeof custom_pass_validator !== "undefined" ? custom_pass_validator : /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/;
+
+// Convert the string or regex to a regular expression using the RegExp constructor.
+const passPattern = new RegExp(passValidatorRegex)
 
 document.addEventListener("DOMContentLoaded", function () {
     // Field options configuration object.
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       invalid_type_error: validationMsg?.password?.invalid,
                   })
                       .min(1, { message: validationMsg?.password?.required })
-                      .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/, {
+                      .regex(passPattern, {
                           message: validationMsg?.password?.regex,
                       })
                       .min(8, { message: validationMsg?.password?.minLength })
@@ -203,6 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const RegistrationFormSchema = object(FormValidators);
 
+    // Get the target HTML form element to validate
     const registrationForm = document.getElementById(formID) as HTMLFormElement;
 
     const fields: string[] = Object.keys(FormValidators);
@@ -377,7 +378,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Handles form inputs interactions.
      *
-     * @param e Event
+     * @param e Event to listen to
      * @param field string Field name.
      */
     function handleDomEvent(e: any, field: string) {
@@ -387,8 +388,7 @@ document.addEventListener("DOMContentLoaded", function () {
          * For checkbox inputs, the value is fixed unlike text type inputs.
          * So to detect whether a checkbox is checked or not is to check its 'checked' status.
          */
-        const inputValue =
-            target.type === "checkbox" ? target.checked : target.value;
+        const inputValue = target.type === "checkbox" ? target.checked : target.value;
 
         formConfig[field as keyof typeof formConfig].value = inputValue;
 

@@ -2,6 +2,14 @@
 $settings = SwpmSettings::get_instance();
 
 $force_strong_pass = $settings->get_value('force-strong-passwords');
+$custom_pass_validator = "";
+$custom_pass_validator_msg = "";
+if (!empty($force_strong_pass)) {
+    // Leaving the value empty will take the default strong password validation rule and its message.
+    $custom_pass_validator = apply_filters( "swpm_registration_strong_pass_validation", "" );
+    $custom_pass_validator_msg = apply_filters( "swpm_registration_strong_pass_validation_msg", "" );
+}
+
 $terms_enabled = $settings->get_value('enable-terms-and-conditions');
 $pp_enabled = $settings->get_value('enable-privacy-policy');
 
@@ -27,6 +35,8 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
         'is_terms_enabled' => $is_terms_enabled,
         'is_pp_enabled' => $is_pp_enabled,
         'is_strong_password_enabled' => $is_strong_password_enabled,
+        'custom_pass_validator' => $custom_pass_validator,
+        'custom_pass_validator_msg' => $custom_pass_validator_msg,
     )
 );
 

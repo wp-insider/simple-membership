@@ -178,6 +178,9 @@ https://simple-membership-plugin.com/
 - Added a new action hook (swpm_front_end_reset_password_using_link_completed). Thanks to @MedTRGit.
 - Updated the translation POT file.
 - Refactored the Stripe session create code to a separate class.
+- New UI added for registration ans edit profile form for both the client and admin side.
+- New settings field added to turn on/off new form UI.
+- Filter hooks updated to to customize password validation rules and message.
 
 = 4.3.6 =
 - Added output escaping to the 'list_type' parameter in the 'Post and Page Protection' menu tab.

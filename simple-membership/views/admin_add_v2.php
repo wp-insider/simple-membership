@@ -74,7 +74,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
         </table>
         <?php include('admin_member_form_common_js.php'); ?>
         <input type="hidden" name="createswpmuser" value="Add New Member">
-        <?php submit_button(_e('Add New Member', 'simple-membership'), 'primary', null, true, array('id' => 'createswpmusersub')); ?>
+        <?php submit_button(__('Add New Member', 'simple-membership'), 'primary', null, true, array('id' => 'createswpmusersub')); ?>
     </form>
 
     <style>

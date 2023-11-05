@@ -901,13 +901,13 @@ class SwpmSettings {
 
 		add_settings_field(
 			'use-new-form-ui',
-			__( 'Use new form UI', 'simple-membership' ),
+			__( 'Use New Form UI', 'simple-membership' ),
 			array( &$this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
 			'advanced-settings',
 			array(
 				'item'    => 'use-new-form-ui',
-				'message' => __( 'Loads the new more user friendly ui of the registration and profile edit form.' ),
+				'message' => __( 'Loads the new more user friendly UI of the registration and edit profile form.' ),
 			)
 		);
 

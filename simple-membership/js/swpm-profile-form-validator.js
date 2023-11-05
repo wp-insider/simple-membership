@@ -3577,6 +3577,8 @@ ZodEffects.createWithPreprocess;
 ZodPipeline.create;
 const formID = typeof form_id !== "undefined" ? form_id : "swpm-profile-form";
 const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
+const passValidatorRegex = typeof custom_pass_validator !== "undefined" ? custom_pass_validator : /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/;
+const passPattern = new RegExp(passValidatorRegex);
 document.addEventListener("DOMContentLoaded", function() {
   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o;
   let existingEmailValue = null;
@@ -3619,7 +3621,7 @@ document.addEventListener("DOMContentLoaded", function() {
       rule: isStrongPasswordEnabled ? stringType({
         required_error: (_f = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _f.required,
         invalid_type_error: (_g = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _g.invalid
-      }).regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/, {
+      }).regex(passPattern, {
         message: (_h = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _h.regex
       }).min(8, { message: (_i = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _i.minLength }).optional().or(literalType("")) : stringType({
         required_error: (_j = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _j.required,
@@ -3652,9 +3654,7 @@ document.addEventListener("DOMContentLoaded", function() {
   };
   const FormSchema = objectType(FormValidators);
   const profileForm = document.getElementById(formID);
-  const emailField = profileForm.querySelector(
-    `.swpm-form-email`
-  );
+  const emailField = profileForm.querySelector(`.swpm-form-email`);
   if (emailField) {
     existingEmailValue = emailField.value;
     formConfig.email.value = existingEmailValue;

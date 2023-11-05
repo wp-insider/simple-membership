@@ -808,7 +808,7 @@ class SimpleWpMembership {
             wp_register_script($handle, SIMPLE_WP_MEMBERSHIP_URL . "/js/".$handle.".js", null, SIMPLE_WP_MEMBERSHIP_VER, true);
         }
 
-        $validation_messages = wp_json_encode(array(
+        $validation_messages = array(
             "username" => array(
                 "required" => __("Username is required", "simple-membership"),
                 "invalid" => __("Invalid username", "simple-membership"),
@@ -847,21 +847,23 @@ class SimpleWpMembership {
             "pp" => array(
                 "required" => __("You must accept the privacy policy", "simple-membership")
             )
-        ));
+        );
 
         $ajax_url =  admin_url('admin-ajax.php');
-        wp_localize_script(
-            $handle,
-            'swpmFormValidationAjax',
-            array(
-                'ajax_url' => $ajax_url,
-                'query_args' => $params['query_args'],
-            )
-        );
-                
-        wp_add_inline_script($handle, "var validationMsg = $validation_messages", "before");
+
+        wp_add_inline_script($handle, "var swpmFormValidationAjax = ".wp_json_encode(array(
+            'ajax_url' => $ajax_url,
+            'query_args' => $params['query_args'],
+        )), "before");
+       
         wp_add_inline_script($handle, "var form_id = '".$params['form_id']."';", "before");
 
+        if (isset($params['custom_pass_validator']) && !empty($params['custom_pass_validator'])) {
+            wp_add_inline_script($handle, "var custom_pass_validator = ".$params['custom_pass_validator'].";", "before");
+        }
+        if (isset($params['custom_pass_validator_msg']) && !empty($params['custom_pass_validator_msg'])) {
+            $validation_messages['password']['regex'] = $params['custom_pass_validator_msg'];
+        }
         if (isset($params['is_terms_enabled'])) {
             wp_add_inline_script($handle, "var terms_enabled = ".$params['is_terms_enabled'].";", "before");
         }
@@ -871,6 +873,8 @@ class SimpleWpMembership {
         if (isset($params['is_strong_password_enabled'])) {
             wp_add_inline_script($handle, "var strong_password_enabled = ".$params['is_strong_password_enabled'].";", "before");
         }
+
+        wp_localize_script($handle, "validationMsg",$validation_messages);
 
         wp_enqueue_script($handle);
     }  

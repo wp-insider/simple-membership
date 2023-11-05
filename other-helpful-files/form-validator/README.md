@@ -26,38 +26,43 @@ Make sure you have the following installed on your system:
    ```
 3. **Compile and bundle for production:**
 
-   To bundle and deploy the developed file, use any of the 'build' script listed in the package.json file's script section. For example to build the javascript file of the registration form, use the following command:
+   To bundle and deploy the developed file, use any of the 'build' script listed in the package.json file's script section. For example to build the bundled javascript file, use the following command:
    ```
    npm run build:reg
+
+   or
+
+   npm run build:profile
    ```
 4. **Compile and Hot-Reload for Development:**
 
    Use the following command to run the build command in the watch mode:
    ```
    npm run dev:reg
+
+   or
+
+   npm run dev:profile
    ```
 
 ## NPM Commands
 All the available build commands are listed below:
 
    ```
-   - npm run build:reg     : Builds the registration form validation script once.
-   - npm run dev:reg       : Builds the registration form validation script in watch mode.
-   - npm run build:profile : Builds the edit profile form validation script once.
-   - npm run dev:profile   : Builds the edit profile form validation script in watch mode.
+   npm run build:reg     : Builds the registration form validation script once.
+   npm run dev:reg       : Builds the registration form validation script in watch mode.
+   npm run build:profile : Builds the edit profile form validation script once.
+   npm run dev:profile   : Builds the edit profile form validation script in watch mode.
    ```
 
 ## Configuration Files
 This project uses the [Vite](https://vitejs.dev) and the bundler and build tool. The bundler takes the source files form the 'src' folder and dumps the output according to the specified configuration that is defined in the dedicated vite config files. See all the available configuration options [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ```
-- vite.config.reg-form.js     : Config files for the registration form.
-- vite.config.profile-form.js : Config files for the profile edit form.
+vite.config.reg-form.js     : Config files for the registration form.
+vite.config.profile-form.js : Config files for the profile edit form.
 ```
 
 ## Libraries and Packages
 All the validation scripts are build on top the [Zod](https://zod.dev/), which is a typeScript-first schema validation with static typed library.
-
-
-    Need to add more description here
       

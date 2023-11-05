@@ -111,7 +111,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 
         <div class="swpm-form-row swpm-submit-section">
             <div>
-                <button type="submit" class="swpm-submit"><?php _e('Update', 'simple-membership') ?></button>
+                <button type="submit" class="swpm-submit swpm-profile-submit-button"><?php _e('Update', 'simple-membership') ?></button>
                 <input type="hidden" value="Update" name="swpm_editprofile_submit">
             </div>
         </div>

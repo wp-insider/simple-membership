@@ -123,7 +123,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 
             <div class="swpm-form-row swpm-submit-section">
                 <div>
-                    <button type="submit" class="swpm-submit"><?php _e('Register', "simple-membership") ?></button>
+                    <button type="submit" class="swpm-submit swpm-registration-submit-button"><?php _e('Register', "simple-membership") ?></button>
                     <input type="hidden" name="swpm_registration_submit" value="Register">
                 </div>
             </div>

@@ -511,7 +511,13 @@ class SimpleWpMembership {
             ob_start();
             echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
             //Load the edit profile template
-            SwpmUtilsTemplate::swpm_load_template('edit.php', false);
+            // SwpmUtilsTemplate::swpm_load_template('edit.php', false);
+            $render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui');
+            if (!empty($render_new_form_ui)) {
+                SwpmUtilsTemplate::swpm_load_template('edit-v2.php', false);
+            }else{
+                SwpmUtilsTemplate::swpm_load_template('edit.php', false);
+            }
             return ob_get_clean();
         }
         //User is not logged into the site. Show appropriate message.
@@ -788,11 +794,90 @@ class SimpleWpMembership {
         wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.password-toggle', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-toggle.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
-        
+        wp_register_script('swpm-reg-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm-reg-form-validator.js', null, SIMPLE_WP_MEMBERSHIP_VER, true);
+        wp_register_script('swpm-profile-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm-profile-form-validator.js', null, SIMPLE_WP_MEMBERSHIP_VER, true);
+
         //Stripe libraries
         wp_register_script("swpm.stripe", "https://js.stripe.com/v3/", array("jquery"), SIMPLE_WP_MEMBERSHIP_VER);
 	wp_register_style("swpm.stripe.style", "https://checkout.stripe.com/v3/checkout/button.css", array(), SIMPLE_WP_MEMBERSHIP_VER);
     }
+
+    public static function enqueue_validation_scripts_v2($handle, $params = null){
+
+        if ( ! wp_script_is( $handle, 'registered' ) ) {
+            wp_register_script($handle, SIMPLE_WP_MEMBERSHIP_URL . "/js/".$handle.".js", null, SIMPLE_WP_MEMBERSHIP_VER, true);
+        }
+
+        $validation_messages = array(
+            "username" => array(
+                "required" => __("Username is required", "simple-membership"),
+                "invalid" => __("Invalid username", "simple-membership"),
+                "regex" => __("Usernames can only contain: letters, numbers and .-_*@", "simple-membership"),
+                "minLength" => __("Minimum 4 characters required", "simple-membership"),
+                "exists" => __("Username already exists", "simple-membership"),
+            ),
+            "email" => array(
+                "required" => __("Email is required", "simple-membership"),
+                "invalid" => __("Invalid email", "simple-membership"),
+                "exists" => __("Email already exists", "simple-membership"),
+            ),
+            "password" => array(
+                "required" => __("Password is required", "simple-membership"),
+                "invalid" => __("Invalid password", "simple-membership"),
+                "regex" => __("Must contain a digit, an uppercase and a lowercase letter", "simple-membership"),
+                "minLength" => __("Minimum 8 characters required", "simple-membership")
+            ),
+            "repass" => array(
+                "required" => __("Retype password is required", "simple-membership"),
+                "invalid" => __("Invalid password", "simple-membership"),
+                "mismatch" => __("Password don't match", "simple-membership"),
+                "minLength" => __("Minimum 8 characters required", "simple-membership")
+            ),
+            "firstname" => array(
+                "required" => __("First name is required", "simple-membership"),
+                "invalid" => __("Invalid name", "simple-membership")
+            ),
+            "lastname" => array(
+                "required" => __("Last name is required", "simple-membership"),
+                "invalid" => __("Invalid name", "simple-membership")
+            ),
+            "terms" => array(
+                "required" => __("You must accept the terms & conditions", "simple-membership")
+            ),
+            "pp" => array(
+                "required" => __("You must accept the privacy policy", "simple-membership")
+            )
+        );
+
+        $ajax_url =  admin_url('admin-ajax.php');
+
+        wp_add_inline_script($handle, "var swpmFormValidationAjax = ".wp_json_encode(array(
+            'ajax_url' => $ajax_url,
+            'query_args' => $params['query_args'],
+        )), "before");
+       
+        wp_add_inline_script($handle, "var form_id = '".$params['form_id']."';", "before");
+
+        if (isset($params['custom_pass_validator']) && !empty($params['custom_pass_validator'])) {
+            wp_add_inline_script($handle, "var custom_pass_validator = ".$params['custom_pass_validator'].";", "before");
+        }
+        if (isset($params['custom_pass_validator_msg']) && !empty($params['custom_pass_validator_msg'])) {
+            $validation_messages['password']['regex'] = $params['custom_pass_validator_msg'];
+        }
+        if (isset($params['is_terms_enabled'])) {
+            wp_add_inline_script($handle, "var terms_enabled = ".$params['is_terms_enabled'].";", "before");
+        }
+        if (isset($params['is_pp_enabled'])) {
+            wp_add_inline_script($handle, "var pp_enabled = ".$params['is_pp_enabled'].";", "before");
+        }
+        if (isset($params['is_strong_password_enabled'])) {
+            wp_add_inline_script($handle, "var strong_password_enabled = ".$params['is_strong_password_enabled'].";", "before");
+        }
+
+        wp_localize_script($handle, "validationMsg",$validation_messages);
+
+        wp_enqueue_script($handle);
+    }  
 
     public static function enqueue_validation_scripts( $additional_params = array() ) {
         //This function gets called from a shortcode. So use the below technique to make the inline script loading process work smoothly.

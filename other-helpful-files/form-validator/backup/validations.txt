@@ -1,0 +1,176 @@
+Username:
+=======================
+* This field is required
+* Invalid Username
+Usernames can only contain: letters, numbers and .-_*@
+* Minimum 4 characters required
+
+Email:
+=======================
+* This field is required
+* Invalid email address
+
+TnC:
+=======================
+* This checkbox is required
+
+PP:
+=======================
+* This checkbox is required
+
+Password:
+=======================
+* This field is required
+* Password must contain at least:
+- a digit
+- an uppercase letter
+- a lowercase letter
+* Minimum 8 characters required
+
+PP and Terms
+=======================
+* This checkbox is required
+
+
+Libraries:
+https://zod.dev/
+https://jqueryvalidation.org/
+https://valibot.dev/
+
+
+
+
+      Array
+(
+    [level_identifier] => c81e728d9d4c2f636f067f89cc14862c
+    [user_name] => Adil Rabid
+    [email] => 
+    [password] => 181294
+    [password_re] => 
+    [first_name] => 
+    [last_name] => 
+    [swpm_membership_level] => 2
+    [swpm_level_hash] => bbcb81ad163daa497e950c73775f1732
+    [swpm_registration_submit] => Register
+    [action] => custom_posts
+)
+
+     Array
+(
+    [level_identifier] => c81e728d9d4c2f636f067f89cc14862c
+    [user_name] => Adil Rabid
+    [email] => 
+    [password] => 181294
+    [password_re] => 
+    [first_name] => 
+    [last_name] => 
+    [swpm_membership_level] => 2
+    [swpm_level_hash] => bbcb81ad163daa497e950c73775f1732
+    [action] => custom_posts
+)
+
+
+    return new Promise((resolve) => {
+        const database = {
+            username: "john",
+            email: "john@email.com",
+        };
+        setTimeout(() => {
+            const exists = value !== database[field as keyof typeof database];
+            resolve(exists);
+        }, 1000);
+    });
+
+
+    // const validationMsg = {
+//     username: {
+//         required: "Username is required",
+//         invalid: "Invalid username",
+//         regex: "Usernames can only contain: letters, numbers and .-_*@",
+//         minLength: "Minimum 4 characters required",
+//         exists: "Username already exists",
+//     },
+//     email: {
+//         required: "Email is required",
+//         invalid: "Invalid email",
+//         exists: "Email already exists",
+//     },
+//     password: {
+//         required: "Password is required",
+//         invalid: "Invalid password",
+//         regex: "Must contain a digit, an uppercase and a lowercase letter",
+//         minLength: "Minimum 8 characters required",
+//     },
+//     repass: {
+//         required: "Retype password is required",
+//         invalid: "Invalid password",
+//         mismatch: "Password don't match",
+//         minLength: "Minimum 8 characters required",
+//     },
+//     firstname: {
+//         required: "First name is required",
+//         invalid: "Invalid name",
+//     },
+//     lastname: {
+//         required: "Last name is required",
+//         invalid: "Invalid name",
+//     },
+//     terms: {
+//         required: "You must accept the terms & conditions",
+//     },
+//     pp: {
+//         required: "You must accept the privacy policy",
+//     },
+// };
+
+
+Bundler Configs:
+
+Vite:
+
+		// outDir: "./dist",
+		// lib: {
+		// 	name: "formvalidator",
+		// 	entry: "./src/index.ts",
+		// 	formats: ["esm", 'es', 'iife'],
+		// 	fileName: "bundle"
+		// }
+
+		// output: {
+		// 	format: "umd",
+		// 	strict: false,
+		// 	chunkFileNames: `[name].[hash].js`,
+		// 	entryFileNames: "[name].bundle.umd.js",
+		// 	dir: "dist"
+		// }
+
+
+        		input: {
+				'swpm.zod-validator': "./src/index.ts",
+				'swpm.reg-form-validator': "./src/reg-form.ts",
+				'swpm.edit-form-validator': "./src/edit-form.ts",
+			},
+
+esbuild:
+    "build:esbuild": "esbuild --bundle src/index.ts --outfile=../../simple-membership/js/swpm.reg-form-validator.js --watch",
+    "dev:esbuild": "npm run build:esbuild --watch"
+
+    import * as esbuild from 'esbuild'
+    import path from "path"
+
+    // const outDir = path.join(__dirname, '..', '..', 'simple-membership', 'js', 'swpm.reg-form-validator.js'),;
+    await esbuild.build({
+    entryPoints: ['src/index.ts'],
+    bundle: true,
+    minify: true,
+    sourcemap: false,
+    //   target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
+    target: 'chrome58',
+    outfile: 'dist/bundle-esbuild.js',
+    })
+
+
+rollup:
+    build script: 
+        "build:rollup": "rollup -c",
+        "dev:rollup": "rollup -c -w"

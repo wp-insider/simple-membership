@@ -1,0 +1,30 @@
+{
+  "name": "form-validator",
+  "version": "1.0.0",
+  "description": "A form validator script for swpm forms",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev:reg": "vite build --config vite.config-reg-form.js --watch",
+    "build:reg": "vite build --config vite.config-reg-form.js",
+    "dev:profile": "vite build --config vite.config.profile-form.js --watch",
+    "build:profile": "vite build --config vite.config.profile-form.js"
+  },
+  "author": "Adil",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.5",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "esbuild": "0.19.4",
+    "rollup": "^4.1.1",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+}

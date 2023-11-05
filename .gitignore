@@ -5,3 +5,8 @@
 /simple-membership/log*.txt
 
 .idea/
+
+node_modules
+/other-helpful-files/form-validator/dist
+
+/simple-membership.zip

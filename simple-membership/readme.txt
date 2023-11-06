@@ -171,15 +171,15 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - [TODO] Readme - PayPal PPCP Integration Onboarding and ACDC related work.
-- [WIP] A new responsive registration form added.
+- Added new UI for registration and edit profile forms. Also added new validation script for them.
+- New settings field added to turn on/off the new UI for the registration and profile forms.
+- The goal with this new option is to offer a more mobile responsive UI for the registration and profile forms.
 - Added a new action hook (swpm_before_login_form_widget) in the login.php file.
 - Added a new action hook (swpm_before_loggedin_widget) in the loggedin.php file.
 - The edit membership level interface shows the currently editing membership level's ID.
 - Added a new action hook (swpm_front_end_reset_password_using_link_completed). Thanks to @MedTRGit.
 - Updated the translation POT file.
 - Refactored the Stripe session create code to a separate class.
-- New UI added for registration ans edit profile form for both the client and admin side.
-- New settings field added to turn on/off new form UI.
 - Filter hooks updated to to customize password validation rules and message.
 - Updated the Swedish translation files.
 

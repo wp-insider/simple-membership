@@ -44,10 +44,14 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 <div class="swpm-registration-widget-form">
     <form id="<?php echo $form_id ?>" class="swpm-form" name="swpm-registration-form" method="post" action="">
         <input type="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
-        <div>
+        <div class="swpm-registration-form-section">
             <div class="swpm-form-row swpm-username-row" <?php apply_filters('swpm_registration_form_username_tr_attributes', ''); ?>>
-                <div><label for="user_name"><?php _e('Username', "simple-membership") ?></label></div>
-                <div><input type="text" id="user_name" class="swpm-form-field swpm-form-username" value="<?php echo esc_attr($user_name); ?>" name="user_name" <?php apply_filters('swpm_registration_form_username_input_attributes', ''); ?> /></div>
+                <div class="swpm-form-username-label">
+                    <label for="user_name"><?php _e('Username', "simple-membership") ?></label>
+                </div>
+                <div class="swpm-form-username-input">
+                    <input type="text" id="user_name" class="swpm-form-field swpm-form-username" value="<?php echo esc_attr($user_name); ?>" name="user_name" <?php apply_filters('swpm_registration_form_username_input_attributes', ''); ?> />
+                </div>
                 <div class="swpm-form-desc"></div>
             </div>
             <div class="swpm-form-row swpm-email-row">

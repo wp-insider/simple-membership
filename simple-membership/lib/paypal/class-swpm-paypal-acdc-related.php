@@ -230,13 +230,25 @@ class SWPM_PayPal_ACDC_Related {
 			exit;
 		}
 
-		//TODO - Capture the order using the PayPal API.
-		//https://developer.paypal.com/docs/api/orders/v2/#orders_capture
+		// Capture the order using the PayPal API - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
+		$order_data = array( 'order_id' => $order_id );
+		$api_injector = new SWPM_PayPal_Request_API_Injector();
+		$response = $api_injector->capture_paypal_order( $order_data );
+		if($response !== false){
+			$paypal_capture_id = $response;
+		} else {
+			//Failed to capture the order.
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Failed to capture the order. Enable the debug logging feature to get more details.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
 
-		//TODO - Dummy data for now. Remove this later.
-		$order_data = array('order_id' => $order_id, 'captured' => 'success' );
-		
 		//If everything is processed successfully, send the success response.
+		$order_data = array('order_id' => $order_id, 'capture_id' => $paypal_capture_id, 'captured' => 'success' );
 		wp_send_json( array( 'success' => true, 'orderData' => $order_data ) );
 		exit;
 

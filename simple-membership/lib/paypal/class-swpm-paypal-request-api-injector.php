@@ -253,8 +253,32 @@ class SWPM_PayPal_Request_API_Injector {
                 $created_order_id = $response->id;
                 return $created_order_id;
             } else {
+                //The process_request_result() function has debug lines that can be uncommented to check further details.
+                //We can also pass the $additional_args['return_raw_response'] = true to the post() function to get the raw response.                
                 return false;
             }
+        }
+
+        public function capture_paypal_order( $order_data = array() ){
+            //Get the PayPal order ID from the data.
+            $order_id = isset($order_data['order_id']) ? $order_data['order_id'] : '';
+            if( empty($order_id) ){
+                return false;
+            }
+
+            $endpoint = '/v2/checkout/orders/' . $order_id . '/capture';
+            $response = $this->paypal_req_api->post($endpoint, $order_data);
+            if ( $response !== false){
+                //Response is a success!
+                $capture_id = $response->id;//Capture ID/Transaction ID.
+                return $capture_id;
+            } else {
+                //Failed to capture the order.
+                //The process_request_result() function has debug lines that can be uncommented to check further details.
+                //We can also pass the $additional_args['return_raw_response'] = true to the post() function to get the raw response.
+                return false;
+            }
+
         }
         
 }

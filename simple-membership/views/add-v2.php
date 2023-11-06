@@ -80,8 +80,10 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 <div class="swpm-form-desc"></div>
             </div>
             <div class="swpm-form-row swpm-membership-level-row" <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>>
-                <div><label for="membership_level"><?php _e('Membership Level', "simple-membership") ?></label></div>
-                <div>
+                <div class="swpm-form-membership-level-label">
+                    <label for="membership_level"><?php _e('Membership Level', "simple-membership") ?></label>
+                </div>
+                <div class="swpm-form-membership-level-value">
                     <?php
                     echo $membership_level_alias; //Show the level name in the form.
                     //Add the input fields for the level data.
@@ -104,7 +106,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             if (!empty($terms_enabled)) {
                 $terms_page_url = $settings->get_value('terms-and-conditions-page-url');
             ?>
-                <div class="swpm-form-row swpm-terms-row">
+                <div class="swpm-form-row swpm-terms-row" align="center">
                     <div>
                         <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="swpm-form-field swpm-form-terms" value="1"> <?php echo SwpmUtils::_('I accept the ') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
                     </div>
@@ -115,7 +117,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             if (!empty($pp_enabled)) {
                 $pp_page_url = $settings->get_value('privacy-policy-page-url');
             ?>
-                <div class="swpm-form-row swpm-pp-row">
+                <div class="swpm-form-row swpm-pp-row" align="center">
                     <div>
                         <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="swpm-form-field swpm-form-pp" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
                     </div>
@@ -123,9 +125,9 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
             <?php } ?>
 
-            <div class="swpm-before-registration-submit-section"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
+            <div class="swpm-before-registration-submit-section" align="center"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
 
-            <div class="swpm-form-row swpm-submit-section">
+            <div class="swpm-form-row swpm-submit-section" align="center">
                 <div>
                     <button type="submit" class="swpm-submit swpm-registration-submit-button"><?php _e('Register', "simple-membership") ?></button>
                     <input type="hidden" name="swpm_registration_submit" value="Register">
@@ -137,25 +139,30 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
     </form>
 
     <style>
-        form.swpm-form .swpm-form-row {
-            margin-bottom: 6px;
+        .swpm-registration-submit-button{
+            padding: 0.5em 1em;
+            min-width: 150px;
+            cursor: pointer;
+        }
+        .swpm-form .swpm-form-row {
+            margin-bottom: 0.8rem;
         }
 
-        form.swpm-form .swpm-submit-section {
-            margin-top: 12px;
+        .swpm-form .swpm-submit-section {
+            margin-top: 1rem;
         }
 
-        form.swpm-form .swpm-form-row.error .swpm-form-field {
+        .swpm-form .swpm-form-row.error .swpm-form-field {
             border-color: #cc0000 !important;
             outline-color: #cc0000 !important;
         }
 
-        form.swpm-form .swpm-form-row.error .swpm-form-desc {
+        .swpm-form .swpm-form-row.error .swpm-form-desc {
             color: #cc0000 !important;
             font-size: smaller !important;
         }
 
-        form.swpm-form .swpm-form-row.error .swpm-form-desc>ul {
+        .swpm-form .swpm-form-row.error .swpm-form-desc>ul {
             list-style: none !important;
             padding: 0 !important;
             margin: 4px 0 0 !important;

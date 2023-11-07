@@ -3579,7 +3579,8 @@ const formID = typeof form_id !== "undefined" ? form_id : "swpm-registration-for
 const isTermsEnabled = typeof terms_enabled !== "undefined" ? terms_enabled : false;
 const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
 const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
-const passValidatorRegex = typeof custom_pass_validator !== "undefined" ? custom_pass_validator : /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/;
+const passValidatorRegex = typeof custom_pass_pattern_validator !== "undefined" ? custom_pass_pattern_validator : /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/;
+const passValidatorMinLength = typeof custom_pass_min_length_validator !== "undefined" ? custom_pass_min_length_validator : 8;
 const passPattern = new RegExp(passValidatorRegex);
 document.addEventListener("DOMContentLoaded", function() {
   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B;
@@ -3653,7 +3654,7 @@ document.addEventListener("DOMContentLoaded", function() {
         invalid_type_error: (_m = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _m.invalid
       }).min(1, { message: (_n = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _n.required }).regex(passPattern, {
         message: (_o = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _o.regex
-      }).min(8, { message: (_p = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _p.minLength }) : stringType({
+      }).min(passValidatorMinLength, { message: (_p = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _p.minLength }) : stringType({
         required_error: (_q = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _q.required,
         invalid_type_error: (_r = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _r.invalid
       }).min(1, { message: (_s = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _s.required })

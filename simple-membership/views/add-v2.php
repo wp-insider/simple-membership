@@ -2,12 +2,19 @@
 $settings = SwpmSettings::get_instance();
 
 $force_strong_pass = $settings->get_value('force-strong-passwords');
-$custom_pass_validator = "";
-$custom_pass_validator_msg = "";
+$custom_pass_pattern_validator = "";
+$custom_pass_pattern_validator_msg = "";
+$custom_pass_min_length_validator = null;
+$custom_pass_min_length_validator_msg = "";
+
 if (!empty($force_strong_pass)) {
     // Leaving the value empty will take the default strong password validation rule and its message.
-    $custom_pass_validator = apply_filters( "swpm_registration_strong_pass_validation", "" );
-    $custom_pass_validator_msg = apply_filters( "swpm_registration_strong_pass_validation_msg", "" );
+    // filters for password pattern customization.
+    $custom_pass_pattern_validator = apply_filters( "swpm_reg_pass_pattern_validation", "" );
+    $custom_pass_pattern_validator_msg = apply_filters( "swpm_reg_pass_pattern_validation_msg", "" );
+    // filters for password min length customization.
+    $custom_pass_min_length_validator = apply_filters( "swpm_reg_pass_min_length_validation", null );
+    $custom_pass_min_length_validator_msg = apply_filters( "swpm_reg_pass_min_length_validation_msg", "" );
 }
 
 $terms_enabled = $settings->get_value('enable-terms-and-conditions');
@@ -35,8 +42,10 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
         'is_terms_enabled' => $is_terms_enabled,
         'is_pp_enabled' => $is_pp_enabled,
         'is_strong_password_enabled' => $is_strong_password_enabled,
-        'custom_pass_validator' => $custom_pass_validator,
-        'custom_pass_validator_msg' => $custom_pass_validator_msg,
+        'custom_pass_pattern_validator' => $custom_pass_pattern_validator,
+        'custom_pass_pattern_validator_msg' => $custom_pass_pattern_validator_msg,
+        'custom_pass_min_length_validator' => $custom_pass_min_length_validator,
+        'custom_pass_min_length_validator_msg' => $custom_pass_min_length_validator_msg,
     )
 );
 
@@ -46,41 +55,61 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
         <input type="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
         <div class="swpm-registration-form-section">
             <div class="swpm-form-row swpm-username-row" <?php apply_filters('swpm_registration_form_username_tr_attributes', ''); ?>>
-                <div class="swpm-form-username-label">
+                <div class="swpm-form-label-wrap swpm-form-username-label-wrap">
                     <label for="user_name"><?php _e('Username', "simple-membership") ?></label>
                 </div>
-                <div class="swpm-form-username-input">
+                <div class="swpm-form-input-wrap swpm-form-username-input-wrap">
                     <input type="text" id="user_name" class="swpm-form-field swpm-form-username" value="<?php echo esc_attr($user_name); ?>" name="user_name" <?php apply_filters('swpm_registration_form_username_input_attributes', ''); ?> />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
             <div class="swpm-form-row swpm-email-row">
-                <div><label for="email"><?php _e('Email', "simple-membership") ?></label></div>
-                <div><input type="text" autocomplete="off" id="email" class="swpm-form-field swpm-form-email" value="<?php echo esc_attr($email); ?>" name="email" /></div>
+                <div class="swpm-form-label-wrap swpm-form-email-label-wrap">
+                    <label for="email"><?php _e('Email', "simple-membership") ?></label>
+                </div>
+                <div class="swpm-form-input-wrap swpm-form-email-input-wrap">
+                    <input type="text" autocomplete="off" id="email" class="swpm-form-field swpm-form-email" value="<?php echo esc_attr($email); ?>" name="email" />
+                </div>
                 <div class="swpm-form-desc"></div>
             </div>
             <div class="swpm-form-row swpm-password-row">
-                <div><label for="password"><?php _e('Password', "simple-membership") ?></label></div>
-                <div><input type="password" autocomplete="off" id="password" class="swpm-form-field swpm-form-password" value="" name="password" /></div>
+                <div class="swpm-form-label-wrap swpm-form-password-label-wrap">
+                    <label for="password"><?php _e('Password', "simple-membership") ?></label>
+                </div>
+                <div class="swpm-form-input-wrap swpm-form-password-input-wrap">
+                    <input type="password" autocomplete="off" id="password" class="swpm-form-field swpm-form-password" value="" name="password" />
+                </div>
                 <div class="swpm-form-desc"></div>
             </div>
             <div class="swpm-form-row swpm-repass-row">
-                <div><label for="password_re"><?php _e('Repeat Password', "simple-membership") ?></label></div>
-                <div><input type="password" autocomplete="off" id="password_re" class="swpm-form-field swpm-form-repass" value="" name="password_re" /></div>
+                <div class="swpm-form-label-wrap swpm-form-repass-label-wrap">
+                    <label for="password_re"><?php _e('Repeat Password', "simple-membership") ?></label>
+                </div>
+                <div class="swpm-form-input-wrap swpm-form-repass-input-wrap">
+                    <input type="password" autocomplete="off" id="password_re" class="swpm-form-field swpm-form-repass" value="" name="password_re" />
+                </div>
                 <div class="swpm-form-desc"></div>
             </div>
             <div class="swpm-form-row swpm-firstname-row" <?php apply_filters('swpm_registration_form_firstname_tr_attributes', ''); ?>>
-                <div><label for="first_name"><?php echo _e('First Name', "simple-membership") ?></label></div>
-                <div><input type="text" id="first_name" class="swpm-form-field swpm-form-firstname" value="<?php echo esc_attr($first_name); ?>" name="first_name" /></div>
+                <div class="swpm-form-label-wrap swpm-form-firstname-label-wrap">
+                    <label for="first_name"><?php echo _e('First Name', "simple-membership") ?></label>
+                </div>
+                <div class="swpm-form-input-wrap swpm-form-firstname-input-wrap">
+                    <input type="text" id="first_name" class="swpm-form-field swpm-form-firstname" value="<?php echo esc_attr($first_name); ?>" name="first_name" />
+                </div>
                 <div class="swpm-form-desc"></div>
             </div>
             <div class="swpm-form-row swpm-lastname-row" <?php apply_filters('swpm_registration_form_lastname_tr_attributes', ''); ?>>
-                <div><label for="last_name"><?php echo _e('Last Name', "simple-membership") ?></label></div>
-                <div><input type="text" id="last_name" class="swpm-form-field swpm-form-lastname" value="<?php echo esc_attr($last_name); ?>" name="last_name" /></div>
+                <div class="swpm-form-label-wrap swpm-form-lastname-label-wrap">
+                    <label for="last_name"><?php echo _e('Last Name', "simple-membership") ?></label>
+                </div>
+                <div class="swpm-form-input-wrap swpm-form-lastname-input-wrap">
+                    <input type="text" id="last_name" class="swpm-form-field swpm-form-lastname" value="<?php echo esc_attr($last_name); ?>" name="last_name" />
+                </div>
                 <div class="swpm-form-desc"></div>
             </div>
             <div class="swpm-form-row swpm-membership-level-row" <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>>
-                <div class="swpm-form-membership-level-label">
+                <div class="swpm-form-label-wrap swpm-form-membership-level-label-wrap">
                     <label for="membership_level"><?php _e('Membership Level', "simple-membership") ?></label>
                 </div>
                 <div class="swpm-form-membership-level-value">
@@ -128,10 +157,8 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             <div class="swpm-before-registration-submit-section" align="center"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
 
             <div class="swpm-form-row swpm-submit-section" align="center">
-                <div>
-                    <button type="submit" class="swpm-submit swpm-registration-submit-button"><?php _e('Register', "simple-membership") ?></button>
-                    <input type="hidden" name="swpm_registration_submit" value="Register">
-                </div>
+                <button type="submit" class="swpm-submit swpm-registration-submit-button"><?php _e('Register', "simple-membership") ?></button>
+                <input type="hidden" name="swpm_registration_submit" value="Register">
             </div>
         </div>
 

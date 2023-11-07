@@ -858,12 +858,19 @@ class SimpleWpMembership {
        
         wp_add_inline_script($handle, "var form_id = '".$params['form_id']."';", "before");
 
-        if (isset($params['custom_pass_validator']) && !empty($params['custom_pass_validator'])) {
-            wp_add_inline_script($handle, "var custom_pass_validator = ".$params['custom_pass_validator'].";", "before");
+        if (isset($params['custom_pass_pattern_validator']) && !empty($params['custom_pass_pattern_validator'])) {
+            wp_add_inline_script($handle, "var custom_pass_pattern_validator = ".$params['custom_pass_pattern_validator'].";", "before");
         }
-        if (isset($params['custom_pass_validator_msg']) && !empty($params['custom_pass_validator_msg'])) {
-            $validation_messages['password']['regex'] = $params['custom_pass_validator_msg'];
+        if (isset($params['custom_pass_pattern_validator_msg']) && !empty($params['custom_pass_pattern_validator_msg'])) {
+            $validation_messages['password']['regex'] = $params['custom_pass_pattern_validator_msg'];
         }
+        if (isset($params['custom_pass_min_length_validator']) && !empty($params['custom_pass_min_length_validator'])) {
+            wp_add_inline_script($handle, "var custom_pass_min_length_validator = ".$params['custom_pass_min_length_validator'].";", "before");
+        }
+        if (isset($params['custom_pass_min_length_validator_msg']) && !empty($params['custom_pass_min_length_validator_msg'])) {
+            $validation_messages['password']['minLength'] = $params['custom_pass_min_length_validator_msg'];
+        }
+
         if (isset($params['is_terms_enabled'])) {
             wp_add_inline_script($handle, "var terms_enabled = ".$params['is_terms_enabled'].";", "before");
         }

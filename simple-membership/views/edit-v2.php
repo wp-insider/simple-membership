@@ -107,9 +107,15 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             </div>
             <?php apply_filters('swpm_edit_profile_form_after_membership_level', ''); ?>
         </div>
-        <?php apply_filters('swpm_edit_profile_form_before_submit', ''); ?>
+        <?php 
+        // Trigger action hook. Can be used to add content to the registration form.
+        do_action( 'swpm_before_profile_form_submit_section');
 
-        <div class="swpm-form-row swpm-submit-section">
+        // Trigger a filter hook.
+        apply_filters('swpm_edit_profile_form_before_submit', ''); 
+        ?>
+
+        <div class="swpm-form-row swpm-submit-section swpm-edit-profile-submit-section">
             <div>
                 <button type="submit" class="swpm-submit swpm-profile-submit-button swpm-submit-btn-default-style"><?php _e('Update', 'simple-membership') ?></button>
                 <input type="hidden" value="Update" name="swpm_editprofile_submit">
@@ -124,10 +130,10 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 
     <style>
         .swpm-form .swpm-form-row {
-            margin-bottom: 6px;
+            margin-bottom: 0.8rem;
         }
         .swpm-form .swpm-submit-section {
-            margin-top: 12px;
+            margin-top: 1rem;
         }
         .swpm-form .swpm-form-row.error .swpm-form-field {
             border-color: #cc0000 !important;

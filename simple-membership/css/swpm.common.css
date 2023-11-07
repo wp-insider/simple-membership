@@ -88,6 +88,13 @@
     border-width: 1px;
 }
 
+/* Default button style that we can use on registration, login, profile, password reset, form's submit button. */
+.swpm-submit-btn-default-style {
+    min-width: 150px;
+    padding: 0.5em 1em;
+    cursor: pointer;
+}
+
 /* Block related */
 .swpm-payment-block-ic-wrapper{
     padding: 16px;

@@ -135,29 +135,36 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             if (!empty($terms_enabled)) {
                 $terms_page_url = $settings->get_value('terms-and-conditions-page-url');
             ?>
-                <div class="swpm-form-row swpm-terms-row" align="center">
+                <div class="swpm-form-row swpm-terms-row">
                     <div>
                         <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="swpm-form-field swpm-form-terms" value="1"> <?php echo SwpmUtils::_('I accept the ') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
                     </div>
                     <div class="swpm-form-desc"></div>
                 </div>
-            <?php }
+            <?php 
+            }
             // Check if we need to display Privacy Policy checkbox.
             if (!empty($pp_enabled)) {
                 $pp_page_url = $settings->get_value('privacy-policy-page-url');
             ?>
-                <div class="swpm-form-row swpm-pp-row" align="center">
+                <div class="swpm-form-row swpm-pp-row">
                     <div>
                         <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="swpm-form-field swpm-form-pp" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
                     </div>
                     <div class="swpm-form-desc"></div>
                 </div>
-            <?php } ?>
+            <?php 
+            } 
+            ?>
 
+            <?php 
+            // Trigger action hook. Can be used to add content to the registration form.
+            do_action( 'swpm_before_registration_submit_section');
+            ?>
             <div class="swpm-before-registration-submit-section" align="center"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
 
-            <div class="swpm-form-row swpm-submit-section" align="center">
-                <button type="submit" class="swpm-submit swpm-registration-submit-button"><?php _e('Register', "simple-membership") ?></button>
+            <div class="swpm-form-row swpm-submit-section swpm-registration-submit-section">
+                <button type="submit" class="swpm-submit swpm-registration-submit-button swpm-submit-btn-default-style"><?php _e('Register', "simple-membership") ?></button>
                 <input type="hidden" name="swpm_registration_submit" value="Register">
             </div>
         </div>
@@ -166,10 +173,8 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
     </form>
 
     <style>
-        .swpm-registration-submit-button{
-            padding: 0.5em 1em;
-            min-width: 150px;
-            cursor: pointer;
+        .swpm-registration-submit-section{
+            text-align: center;
         }
         .swpm-form .swpm-form-row {
             margin-bottom: 0.8rem;

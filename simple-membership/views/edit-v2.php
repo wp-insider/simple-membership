@@ -168,10 +168,16 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             </div>
             <?php apply_filters('swpm_edit_profile_form_after_membership_level', ''); ?>
         </div>
-        <?php apply_filters('swpm_edit_profile_form_before_submit', ''); ?>
+        <?php 
+        // Trigger action hook. Can be used to add content to the registration form.
+        do_action( 'swpm_before_profile_form_submit_section');
 
-        <div class="swpm-form-row swpm-submit-section" align="center">
-            <button type="submit" class="swpm-submit swpm-profile-submit-button"><?php _e('Update', 'simple-membership') ?></button>
+        // Trigger a filter hook.
+        apply_filters('swpm_edit_profile_form_before_submit', ''); 
+        ?>
+
+        <div class="swpm-form-row swpm-submit-section swpm-edit-profile-submit-section">
+            <button type="submit" class="swpm-submit swpm-profile-submit-button swpm-submit-btn-default-style"><?php _e('Update', 'simple-membership') ?></button>
             <input type="hidden" value="Update" name="swpm_editprofile_submit">
         </div>
 
@@ -182,30 +188,20 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
     </form>
 
     <style>
-        .swpm-profile-submit-button{
-            padding: 0.5em 1em;
-            min-width: 150px;
-            cursor: pointer;
-        }
-
         .swpm-form .swpm-form-row {
             margin-bottom: 0.8rem;
         }
-
         .swpm-form .swpm-submit-section {
-            margin-top: 12px;
+            margin-top: 1rem;
         }
-
         .swpm-form .swpm-form-row.error .swpm-form-field {
             border-color: #cc0000 !important;
             outline-color: #cc0000 !important;
         }
-
         .swpm-form .swpm-form-row.error .swpm-form-desc {
             color: #cc0000 !important;
             font-size: smaller !important;
         }
-
         .swpm-form .swpm-form-row.error .swpm-form-desc>ul {
             list-style: none !important;
             padding: 0 !important;

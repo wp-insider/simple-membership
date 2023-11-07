@@ -111,7 +111,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 
         <div class="swpm-form-row swpm-submit-section">
             <div>
-                <button type="submit" class="swpm-submit swpm-profile-submit-button"><?php _e('Update', 'simple-membership') ?></button>
+                <button type="submit" class="swpm-submit swpm-profile-submit-button swpm-submit-btn-default-style"><?php _e('Update', 'simple-membership') ?></button>
                 <input type="hidden" value="Update" name="swpm_editprofile_submit">
             </div>
         </div>
@@ -123,25 +123,21 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
     </form>
 
     <style>
-        form.swpm-form .swpm-form-row {
+        .swpm-form .swpm-form-row {
             margin-bottom: 6px;
         }
-
-        form.swpm-form .swpm-submit-section {
+        .swpm-form .swpm-submit-section {
             margin-top: 12px;
         }
-
-        form.swpm-form .swpm-form-row.error .swpm-form-field {
+        .swpm-form .swpm-form-row.error .swpm-form-field {
             border-color: #cc0000 !important;
             outline-color: #cc0000 !important;
         }
-
-        form.swpm-form .swpm-form-row.error .swpm-form-desc {
+        .swpm-form .swpm-form-row.error .swpm-form-desc {
             color: #cc0000 !important;
             font-size: smaller !important;
         }
-
-        form.swpm-form .swpm-form-row.error .swpm-form-desc>ul {
+        .swpm-form .swpm-form-row.error .swpm-form-desc>ul {
             list-style: none !important;
             padding: 0 !important;
             margin: 4px 0 0 !important;

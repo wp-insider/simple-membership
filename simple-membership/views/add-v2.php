@@ -129,7 +129,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 
             <div class="swpm-form-row swpm-submit-section" align="center">
                 <div>
-                    <button type="submit" class="swpm-submit swpm-registration-submit-button"><?php _e('Register', "simple-membership") ?></button>
+                    <button type="submit" class="swpm-submit swpm-registration-submit-button swpm-submit-btn-default-style"><?php _e('Register', "simple-membership") ?></button>
                     <input type="hidden" name="swpm_registration_submit" value="Register">
                 </div>
             </div>
@@ -139,11 +139,6 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
     </form>
 
     <style>
-        .swpm-registration-submit-button{
-            padding: 0.5em 1em;
-            min-width: 150px;
-            cursor: pointer;
-        }
         .swpm-form .swpm-form-row {
             margin-bottom: 0.8rem;
         }

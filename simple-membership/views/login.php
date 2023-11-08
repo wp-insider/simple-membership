@@ -18,6 +18,13 @@ if ( empty( $display_password_toggle ) ){
 else{
     $display_password_toggle = true;
 }
+
+//CSS class for the login submit button
+$login_submit_class = 'swpm-login-form-submit';
+$render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui');
+if ( !empty( $render_new_form_ui ) ){
+    $login_submit_class .= ' swpm-submit-btn-default-style';
+}
 ?>
 <div class="swpm-login-widget-form">
     <form id="swpm-login-form" name="swpm-login-form" method="post" action="">
@@ -52,7 +59,7 @@ else{
             <div class="swpm-before-login-submit-section"><?php echo apply_filters('swpm_before_login_form_submit_button', ''); ?></div>
 
             <div class="swpm-login-submit">
-                <input type="submit" class="swpm-login-form-submit" name="swpm-login" value="<?php echo SwpmUtils::_('Log In') ?>"/>
+                <input type="submit" class="<?php echo esc_attr($login_submit_class); ?>" name="swpm-login" value="<?php echo SwpmUtils::_('Log In') ?>"/>
             </div>
             <div class="swpm-forgot-pass-link">
                 <a id="forgot_pass" class="swpm-login-form-pw-reset-link"  href="<?php echo $password_reset_url; ?>"><?php echo SwpmUtils::_('Forgot Password?') ?></a>

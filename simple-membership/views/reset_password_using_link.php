@@ -27,6 +27,14 @@ if (!empty($force_strong_pass)) {
 } else {
     $pass_class = "";
 }
+
+//CSS class for the pass reset submit button
+$pass_reset_submit_class = 'swpm-pw-reset-submit';
+$render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui');
+if ( !empty( $render_new_form_ui ) ){
+    $pass_reset_submit_class .= ' swpm-submit-btn-default-style';
+}
+
 ?>
 <div class="swpm-pw-reset-using-link-widget-form">
 
@@ -63,8 +71,8 @@ if (!empty($force_strong_pass)) {
 
             <input type="hidden" name="swpm_user_login" value="<?php echo esc_attr($user_login); ?>" />
             <div class="swpm-before-login-submit-section swpm-margin-top-10"><?php echo apply_filters('swpm_before_pass_reset_form_submit_button', ''); ?></div>
-            <div class="swpm-pw-reset-submit-button swpm-margin-top-10">
-                <input type="submit" name="swpm-password-reset-using-link" class="swpm-pw-reset-submit" value="<?php _e('Reset Password', 'simple-membership'); ?>" />
+            <div class="swpm-pw-reset-submit-button">
+                <input type="submit" name="swpm-password-reset-using-link" class="<?php echo esc_attr($pass_reset_submit_class); ?>" value="<?php _e('Reset Password', 'simple-membership'); ?>" />
             </div>
         </div>
     </form>

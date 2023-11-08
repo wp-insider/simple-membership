@@ -4,8 +4,8 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 5.0
 Requires PHP: 5.6
-Tested up to: 6.3
-Stable tag: 4.3.6
+Tested up to: 6.4
+Stable tag: 4.3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,10 +169,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
-- [TODO] Readme - PayPal PPCP Integration Onboarding and ACDC related work.
-- Added new UI for registration and edit profile forms. Also added new validation script for them.
-- New settings field added to turn on/off the new UI for the registration and profile forms.
+= 4.3.7 =
+- Added new form and validation Interface for registration and edit profile forms. 
+- New settings field added to turn on/off the new UI for the registration and profile forms. This option is located in the Advanced Settings menu.
 - The goal with this new option is to offer a more mobile responsive UI for the registration and profile forms.
 - Added a new action hook (swpm_before_login_form_widget) in the login.php file.
 - Added a new action hook (swpm_before_loggedin_widget) in the loggedin.php file.

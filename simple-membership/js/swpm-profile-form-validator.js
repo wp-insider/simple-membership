@@ -3577,7 +3577,8 @@ ZodEffects.createWithPreprocess;
 ZodPipeline.create;
 const formID = typeof form_id !== "undefined" ? form_id : "swpm-profile-form";
 const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
-const passValidatorRegex = typeof custom_pass_validator !== "undefined" ? custom_pass_validator : /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/;
+const passValidatorRegex = typeof custom_pass_pattern_validator !== "undefined" ? custom_pass_pattern_validator : /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/;
+const passValidatorMinLength = typeof custom_pass_min_length_validator !== "undefined" ? custom_pass_min_length_validator : 8;
 const passPattern = new RegExp(passValidatorRegex);
 document.addEventListener("DOMContentLoaded", function() {
   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o;
@@ -3623,7 +3624,7 @@ document.addEventListener("DOMContentLoaded", function() {
         invalid_type_error: (_g = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _g.invalid
       }).regex(passPattern, {
         message: (_h = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _h.regex
-      }).min(8, { message: (_i = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _i.minLength }).optional().or(literalType("")) : stringType({
+      }).min(passValidatorMinLength, { message: (_i = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _i.minLength }).optional().or(literalType("")) : stringType({
         required_error: (_j = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _j.required,
         invalid_type_error: (_k = validationMsg == null ? void 0 : validationMsg.password) == null ? void 0 : _k.invalid
       }).optional().or(literalType(""))

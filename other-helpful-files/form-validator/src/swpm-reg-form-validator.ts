@@ -12,7 +12,9 @@ const isPPEnabled = typeof pp_enabled !== "undefined" ? pp_enabled : false;
 // @ts-ignore
 const isStrongPasswordEnabled = typeof strong_password_enabled !== "undefined" ? strong_password_enabled : false;
 // @ts-ignore
-const passValidatorRegex = typeof custom_pass_validator !== "undefined" ? custom_pass_validator : /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/;
+const passValidatorRegex = typeof custom_pass_pattern_validator !== "undefined" ? custom_pass_pattern_validator : /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).+$/;
+// @ts-ignore
+const passValidatorMinLength = typeof custom_pass_min_length_validator !== "undefined" ? custom_pass_min_length_validator : 8;
 
 // Convert the string or regex to a regular expression using the RegExp constructor.
 const passPattern = new RegExp(passValidatorRegex)
@@ -102,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       .regex(passPattern, {
                           message: validationMsg?.password?.regex,
                       })
-                      .min(8, { message: validationMsg?.password?.minLength })
+                      .min(passValidatorMinLength, { message: validationMsg?.password?.minLength })
                 : string({
                       required_error: validationMsg?.password?.required,
                       invalid_type_error: validationMsg?.password?.invalid,

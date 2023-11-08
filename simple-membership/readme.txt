@@ -180,7 +180,7 @@ https://simple-membership-plugin.com/
 - Added a new action hook (swpm_front_end_reset_password_using_link_completed). Thanks to @MedTRGit.
 - Updated the translation POT file.
 - Refactored the Stripe session create code to a separate class.
-- Filter hooks updated to to customize password validation rules and message.
+- Filter hooks updated to to customize password validation rules and messages for the new form UI.
 - Updated the Swedish translation files.
 
 = 4.3.6 =

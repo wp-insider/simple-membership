@@ -123,11 +123,11 @@ abstract class SwpmUtils {
 
 	public static function get_account_state_options() {
 		return array(
-			'active'              => self::_( 'Active' ),
-			'inactive'            => self::_( 'Inactive' ),
-			'activation_required' => self::_( 'Activation Required' ),
-			'pending'             => self::_( 'Pending' ),
-			'expired'             => self::_( 'Expired' ),
+			'active'              => __( 'Active', 'simple-membership' ),
+			'inactive'            => __( 'Inactive', 'simple-membership' ),
+			'activation_required' => __( 'Activation Required', 'simple-membership' ),
+			'pending'             => __( 'Pending', 'simple-membership' ),
+			'expired'             => __( 'Expired', 'simple-membership' ),
 		);
 	}
 

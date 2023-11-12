@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.4
-Stable tag: 4.3.7
+Stable tag: 4.3.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,6 +170,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = 4.3.8 =
+- Minor translation related update in the admin edit member interface.
 - Fixed an issue with the new PayPal buy now type button not rendering correctly with the item description.
 
 = 4.3.7 =

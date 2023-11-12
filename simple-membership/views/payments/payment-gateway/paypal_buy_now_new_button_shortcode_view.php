@@ -157,12 +157,11 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                             items: [{
                                 name: '<?php echo esc_js($item_name); ?>',
                                 quantity: js_quantity,
-                                /*category: js_digital_goods_enabled ? 'PHYSICAL_GOODS' : 'DIGITAL_GOODS',*/
                                 unit_amount: {
                                     value: js_payment_amount,
                                     currency_code: '<?php echo esc_js($currency); ?>',
                                 }
-                            }]
+                            }],
                             description: '<?php echo esc_js($item_name); ?>',
                         }]
                     };

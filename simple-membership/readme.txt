@@ -169,6 +169,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= 4.3.8 =
+- Fixed an issue with the new PayPal buy now type button not rendering correctly with the item description.
+
 = 4.3.7 =
 - Added new form and validation Interface for registration and edit profile forms. 
 - New settings field added to turn on/off the new UI for the registration and profile forms. This option is located in the Advanced Settings menu.

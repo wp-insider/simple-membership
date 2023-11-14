@@ -334,10 +334,19 @@ class SimpleWpMembership {
         do_action('swpm_after_login');
         if (!SwpmUtils::is_ajax()) {
             //Redirection after login to make sure the page loads with all the correct variables set everywhere.
-            $redirect_url = SwpmMiscUtils::get_current_page_url();
+            //Check if "redirect_to" parameter is set (WP Login action can set this parameter). If so, use that URL.
+            if(isset($_REQUEST['redirect_to'])){
+                $redirect_url = sanitize_url($_REQUEST['redirect_to']);
+                SwpmLog::log_auth_debug("The redirect_to query parameter is set. Value: ". $redirect_url, true);
+            } else {
+                $redirect_url = SwpmMiscUtils::get_current_page_url();
+            }
+
+            //Check if the URL is still empty. If so, use the site home URL.
             if(empty($redirect_url)){
                 $redirect_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
             }
+
             $redirect_url = apply_filters('swpm_after_login_redirect_url', $redirect_url);
             SwpmLog::log_auth_debug("After triggering the default swpm_after_login_redirect_url hook. Redirect URL: ". $redirect_url, true);
             wp_redirect($redirect_url);

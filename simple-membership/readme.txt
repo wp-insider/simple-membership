@@ -169,6 +169,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.3.9 = 
+- Honor the 'redirect_to' parameter in the post login redirection function. Useful if your users are logging in via the WP Login form.
+
+
 = 4.3.8 =
 - Minor translation related update in the admin edit member interface.
 - Fixed an issue with the new PayPal buy now type button not rendering correctly with the item description.

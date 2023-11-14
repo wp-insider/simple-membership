@@ -170,8 +170,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 4.3.9 = 
-- Honor the 'redirect_to' parameter in the post login redirection function. Useful if your users are logging in via the WP Login form.
-
+- If WP Login form is used, our plugin will let WP handle the post-login redirection.
+- Honor the 'redirect_to' parameter in the post login redirection function.
 
 = 4.3.8 =
 - Minor translation related update in the admin edit member interface.

@@ -334,7 +334,15 @@ class SimpleWpMembership {
         do_action('swpm_after_login');
         if (!SwpmUtils::is_ajax()) {
             //Redirection after login to make sure the page loads with all the correct variables set everywhere.
-            //Check if "redirect_to" parameter is set (WP Login action can set this parameter). If so, use that URL.
+
+            if(isset($_REQUEST['wp-submit'])){
+                //This is a WP login form submission. 
+                //Just return from here. WP will handle the post-login redirection.
+                SwpmLog::log_auth_debug("The wp-submit query parameter is set. This is a WP login form submission. WP will handle any post login redirection.", true);
+                return;
+            }
+
+            //Check if "redirect_to" parameter is set. If so, use that URL.
             if(isset($_REQUEST['redirect_to'])){
                 $redirect_url = sanitize_url($_REQUEST['redirect_to']);
                 SwpmLog::log_auth_debug("The redirect_to query parameter is set. Value: ". $redirect_url, true);

@@ -172,6 +172,7 @@ https://simple-membership-plugin.com/
 = WIP 4.3.9 = 
 - If WP Login form is used, our plugin will let WP handle the post-login redirection.
 - Honor the 'redirect_to' parameter in the post login redirection function.
+- Added an empty check to the Stripe buy now IPN handling function.
 
 = 4.3.8 =
 - Minor translation related update in the admin edit member interface.

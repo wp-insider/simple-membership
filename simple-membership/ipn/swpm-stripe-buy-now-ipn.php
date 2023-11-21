@@ -11,6 +11,11 @@ class SwpmStripeBuyNowIpnHandler {
 		SwpmLog::log_simple_debug( 'Stripe Buy Now IPN received. Processing request...', true );
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 
+		if( !isset($_REQUEST['item_number']) || !isset($_REQUEST['item_price']) ){
+			SwpmLog::log_simple_debug( 'The Stripe Buy Now IPN request URL was accessed, but it is missing some required parameters. Aborting...', false );
+			wp_die( esc_html( 'The Stripe Buy Now IPN request URL was accessed, but it is missing some required parameters. Aborting...' ) );
+		}
+
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
 

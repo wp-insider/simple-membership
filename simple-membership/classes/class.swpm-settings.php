@@ -1766,9 +1766,9 @@ class SwpmSettings {
 					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';
 					break;
 				case 6:
-                                        //Blacklist & whitelist settings
-                                        include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';
-                                        break;                                    
+					//Blacklist & whitelist settings
+					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';
+					break;
 				case 7:
 					//Addon settings
 					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_addon_settings.php';

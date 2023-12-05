@@ -170,6 +170,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP 4.3.9 = 
+- [WIP TODO] Complete the migration of 'Payment Settings' tab to under the 'Payments' menu.
 - If WP Login form is used, our plugin will let WP handle the post-login redirection.
 - Honor the 'redirect_to' parameter in the post login redirection function.
 - Added an empty check to the Stripe buy now IPN handling function.

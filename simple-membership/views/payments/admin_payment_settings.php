@@ -74,7 +74,8 @@ if (isset($_GET['swpm_ppcp_sandbox_disconnect'])){
     echo '<div class="swpm-yellow-box"><p>' . $disconnect_action_result . '</p></div>';
 }
 ?>
-
+<!-- The following code will render the settings fields using the WordPress's settings functions. -->
+<!-- We can remove the fields that we don't want to be part of it from the 'swpm-settings-tab-2' registration call. -->
 <!-- render the rest of the settings fields for tab-2 -->
 <form action="options.php" method="POST">
     <input type="hidden" name="tab" value="2" />

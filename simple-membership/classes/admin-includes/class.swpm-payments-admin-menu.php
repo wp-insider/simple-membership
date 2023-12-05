@@ -25,6 +25,7 @@ class SwpmPaymentsAdminMenu {
             <!-- start nav menu tabs -->
             <h2 class="nav-tab-wrapper">
                 <a class="nav-tab <?php echo ($tab == '') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments"><?php _e('Transactions', 'simple-membership'); ?></a>
+                <a class="nav-tab <?php echo ($tab == 'payment_settings') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings"><?php _e('Payment Settings', 'simple-membership'); ?></a>
                 <a class="nav-tab <?php echo ($tab == 'payment_buttons') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons"><?php _e('Manage Payment Buttons', 'simple-membership'); ?></a>
                 <a class="nav-tab <?php echo ($tab == 'create_new_button') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=create_new_button"><?php _e('Create New Button', 'simple-membership'); ?></a>
                 <?php
@@ -65,6 +66,11 @@ class SwpmPaymentsAdminMenu {
 
             //Switch case for the various different tabs handled by the core plugin.
             switch ($tab) {
+                case 'payment_settings':
+                    include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/admin-includes/class.swpm-payment-settings-menu-tab.php');
+                    $payment_settings_tab = new SWPM_Payment_Settings_Menu_Tab();
+                    $payment_settings_tab->handle_payment_settings_menu_tab();
+                    break;                
                 case 'payment_buttons':
                     include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_payment_buttons.php');
                     break;

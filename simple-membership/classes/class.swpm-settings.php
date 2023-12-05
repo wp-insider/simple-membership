@@ -1352,7 +1352,6 @@ class SwpmSettings {
 	}
 
 	public function paypal_webhooks_settings_callback() {
-		echo '<h2 id="paypal-subscription-webhooks">' . SwpmUtils::_( 'PayPal Webhooks' ) . '</h2>';
 		echo '<p>' . SwpmUtils::_( 'The PayPal payment buttons that uses the new API require webhooks. The plugin will auto-create the required webhooks when you create a PayPal payment button.' ) . '</p>';
 		echo '<p>' . SwpmUtils::_( 'If you have issues with the webhooks, you can delete it and create again.' ) . '</p>';
 

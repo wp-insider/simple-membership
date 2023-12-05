@@ -174,6 +174,7 @@ https://simple-membership-plugin.com/
 - If WP Login form is used, our plugin will let WP handle the post-login redirection.
 - Honor the 'redirect_to' parameter in the post login redirection function.
 - Added an empty check to the Stripe buy now IPN handling function.
+- Payment Settings was moved to Payments page under Payment Settings tab.
 
 = 4.3.8 =
 - Minor translation related update in the admin edit member interface.

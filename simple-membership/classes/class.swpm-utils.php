@@ -21,25 +21,25 @@ abstract class SwpmUtils {
 			define( 'SWPM_MANAGEMENT_PERMISSION', $admin_dashboard_permission );
 		}
 
-                //Override the settings menu (options.php) update capability according to the role set in "Admin Dashboard Access Permission" option.
-                add_filter( 'option_page_capability_swpm-settings-tab-1', 'SwpmUtils::swpm_settings_update_capability' );
-                add_filter( 'option_page_capability_swpm-settings-tab-2', 'SwpmUtils::swpm_settings_update_capability' );
-                add_filter( 'option_page_capability_swpm-settings-tab-3', 'SwpmUtils::swpm_settings_update_capability' );
-                add_filter( 'option_page_capability_swpm-settings-tab-4', 'SwpmUtils::swpm_settings_update_capability' );
-                add_filter( 'option_page_capability_swpm-settings-tab-5', 'SwpmUtils::swpm_settings_update_capability' );
+		//Override the settings menu (options.php) update capability according to the role set in "Admin Dashboard Access Permission" option.
+		add_filter( 'option_page_capability_swpm-settings-tab-1', 'SwpmUtils::swpm_settings_update_capability' );
+		add_filter( 'option_page_capability_swpm-settings-tab-2', 'SwpmUtils::swpm_settings_update_capability' );
+		add_filter( 'option_page_capability_swpm-settings-tab-3', 'SwpmUtils::swpm_settings_update_capability' );
+		add_filter( 'option_page_capability_swpm-settings-tab-4', 'SwpmUtils::swpm_settings_update_capability' );
+		add_filter( 'option_page_capability_swpm-settings-tab-5', 'SwpmUtils::swpm_settings_update_capability' );
 
 	}
 
-        public static function swpm_settings_update_capability($capability){
-            if ( defined('SWPM_MANAGEMENT_PERMISSION') ){
-                //Use SWPM defined one.
-                $capability = SWPM_MANAGEMENT_PERMISSION;
-            } else {
-                //Use default.
-                $capability = 'manage_options';
-            }
-            return $capability;
-        }
+	public static function swpm_settings_update_capability($capability){
+		if ( defined('SWPM_MANAGEMENT_PERMISSION') ){
+			//Use SWPM defined one.
+			$capability = SWPM_MANAGEMENT_PERMISSION;
+		} else {
+			//Use default.
+			$capability = 'manage_options';
+		}
+		return $capability;
+	}
 
 	public static function subscription_type_dropdown( $selected ) {
 		return '<option ' . ( ( $selected == SwpmMembershipLevel::NO_EXPIRY ) ? 'selected="selected"' : '' ) . ' value="' . SwpmMembershipLevel::NO_EXPIRY . '">No Expiry</option>' .

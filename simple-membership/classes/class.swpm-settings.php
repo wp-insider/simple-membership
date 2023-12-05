@@ -327,140 +327,29 @@ class SwpmSettings {
 
 	private function tab_2() {
 		//Register settings sections and fileds for the payment settings tab.
-		register_setting( 'swpm-settings-tab-2', 'swpm-settings', array( $this, 'sanitize_tab_2' ) );
+		//register_setting( 'swpm-settings-tab-2', 'swpm-settings', array( $this, 'sanitize_tab_2' ) );
                 
 		//This settings section has no heading. Useful for hooking at this section and doing arbitrary request parameter checks and show response accordingly (on this settings tab)
-		add_settings_section( 'swpm-settings-tab-2-before-other-fields', '', array( &$this, 'swpm_settings_tab_2_before_fields_callback' ), 'simple_wp_membership_settings' );
+		//add_settings_section( 'swpm-settings-tab-2-before-other-fields', '', array( &$this, 'swpm_settings_tab_2_before_fields_callback' ), 'simple_wp_membership_settings' );
 
 		//Sandbox or Testmode payment settings section.
-		add_settings_section( 'testmode-payment-settings', SwpmUtils::_( 'Sandbox or Test Mode Payment Settings' ), array( &$this, 'testmode_payment_settings_callback' ), 'simple_wp_membership_settings' );
+		//add_settings_section( 'testmode-payment-settings', SwpmUtils::_( 'Sandbox or Test Mode Payment Settings' ), array( &$this, 'testmode_payment_settings_callback' ), 'simple_wp_membership_settings' );
 
-		add_settings_field(
-			'enable-sandbox-testing',
-			SwpmUtils::_( 'Enable Sandbox or Test Mode' ),
-			array( &$this, 'checkbox_callback' ),
-			'simple_wp_membership_settings',
-			'testmode-payment-settings',
-			array(
-				'item'    => 'enable-sandbox-testing',
-				'message' => SwpmUtils::_( 'Enable this option if you want to do sandbox payment testing.' ),
-			)
-		);
+		// add_settings_field(
+		// 	'enable-sandbox-testing',
+		// 	SwpmUtils::_( 'Enable Sandbox or Test Mode' ),
+		// 	array( &$this, 'checkbox_callback' ),
+		// 	'simple_wp_membership_settings',
+		// 	'testmode-payment-settings',
+		// 	array(
+		// 		'item'    => 'enable-sandbox-testing',
+		// 		'message' => SwpmUtils::_( 'Enable this option if you want to do sandbox payment testing.' ),
+		// 	)
+		// );
 
 		//PayPal (PPCP) account connection settings (no heading). We will use our custom HTML code to render the section.
 		//add_settings_section( 'paypal-ppcp-connection-settings', '', array( &$this, 'paypal_ppcp_connection_settings_callback' ), 'simple_wp_membership_settings' );
 
-
-		//PayPal checkout (new) settings section.
-		add_settings_section( 'paypal-checkout-settings', SwpmUtils::_( 'PayPal Settings' ), array( &$this, 'paypal_checkout_settings_callback' ), 'simple_wp_membership_settings' );
-
-		add_settings_field(
-			'paypal-live-client-id',
-			SwpmUtils::_( 'Live Client ID' ),
-			array( $this, 'textfield_long_callback' ),
-			'simple_wp_membership_settings',
-			'paypal-checkout-settings',
-			array(
-				'item'    => 'paypal-live-client-id',
-				'message' => SwpmUtils::_( 'Enter your PayPal Client ID for live mode.' ),
-			)
-		);
-		add_settings_field(
-			'paypal-live-secret-key',
-			SwpmUtils::_( 'Live Secret Key' ),
-			array( $this, 'textfield_long_callback' ),
-			'simple_wp_membership_settings',
-			'paypal-checkout-settings',
-			array(
-				'item'    => 'paypal-live-secret-key',
-				'message' => SwpmUtils::_( 'Enter your PayPal Secret Key for live mode.' ),
-			)
-		);
-		add_settings_field(
-			'paypal-sandbox-client-id',
-			SwpmUtils::_( 'Sandbox Client ID' ),
-			array( $this, 'textfield_long_callback' ),
-			'simple_wp_membership_settings',
-			'paypal-checkout-settings',
-			array(
-				'item'    => 'paypal-sandbox-client-id',
-				'message' => SwpmUtils::_( 'Enter your PayPal Client ID for sandbox mode.' ),
-			)
-		);
-		add_settings_field(
-			'paypal-sandbox-secret-key',
-			SwpmUtils::_( 'Sandbox Secret Key' ),
-			array( $this, 'textfield_long_callback' ),
-			'simple_wp_membership_settings',
-			'paypal-checkout-settings',
-			array(
-				'item'    => 'paypal-sandbox-secret-key',
-				'message' => SwpmUtils::_( 'Enter your PayPal Secret Key for sandbox mode.' ),
-			)
-		);
-
-		//PayPal checkout (new) Webhook settings section (no heading). This section will be used to add our custom HTML code to handle the webhook creation and status update.
-		add_settings_section( 'paypal-webhooks-settings', '', array( &$this, 'paypal_webhooks_settings_callback' ), 'simple_wp_membership_settings' );
-
-
-		//Stripe global settings section.
-		add_settings_section( 'stripe-global-settings', SwpmUtils::_( 'Stripe Global Settings' ), array( &$this, 'stripe_global_settings_callback' ), 'simple_wp_membership_settings' );
-                
-		add_settings_field(
-			'stripe-prefill-member-email',
-			SwpmUtils::_( 'Pre-fill Member Email Address' ),
-			array( $this, 'checkbox_callback' ),
-			'simple_wp_membership_settings',
-			'stripe-global-settings',
-			array(
-				'item'    => 'stripe-prefill-member-email',
-				'message' => SwpmUtils::_( 'Pre-fills the email address of the logged-in member on the Stripe checkout form when possible' ),
-			)
-		);
-		add_settings_field(
-			'stripe-test-public-key',
-			SwpmUtils::_( 'Test Publishable Key' ),
-			array( $this, 'textfield_long_callback' ),
-			'simple_wp_membership_settings',
-			'stripe-global-settings',
-			array(
-				'item'    => 'stripe-test-public-key',
-				'message' => SwpmUtils::_( 'Stripe API Test publishable key' ),
-			)
-		);
-		add_settings_field(
-			'stripe-test-secret-key',
-			SwpmUtils::_( 'Test Secret Key' ),
-			array( $this, 'textfield_long_callback' ),
-			'simple_wp_membership_settings',
-			'stripe-global-settings',
-			array(
-				'item'    => 'stripe-test-secret-key',
-				'message' => SwpmUtils::_( 'Stripe API Test secret key' ),
-			)
-		);
-		add_settings_field(
-			'stripe-live-public-key',
-			SwpmUtils::_( 'Live Publishable Key' ),
-			array( $this, 'textfield_long_callback' ),
-			'simple_wp_membership_settings',
-			'stripe-global-settings',
-			array(
-				'item'    => 'stripe-live-public-key',
-				'message' => SwpmUtils::_( 'Stripe API Live publishable key' ),
-			)
-		);
-		add_settings_field(
-			'stripe-live-secret-key',
-			SwpmUtils::_( 'Live Secret Key' ),
-			array( $this, 'textfield_long_callback' ),
-			'simple_wp_membership_settings',
-			'stripe-global-settings',
-			array(
-				'item'    => 'stripe-live-secret-key',
-				'message' => SwpmUtils::_( 'Stripe API Live secret key' ),
-			)
-		);
 	}
 
 	private function tab_3() {
@@ -1255,193 +1144,6 @@ class SwpmSettings {
 	public function testndebug_settings_callback() {
 		_e( 'Testing and Debug Related Settings.', 'simple-membership' );
 	}
-
-        public function swpm_settings_tab_2_before_fields_callback() {
-            	//Show settings updated message for tab 2
-		if ( isset( $_REQUEST['settings-updated'] ) ) {
-			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
-		}
-        }
-        
-	public function testmode_payment_settings_callback() {
-			_e( 'This section allows you to enable/disable sandbox or test mode for the payment buttons.', 'simple-membership' );
-	}
-
-	public function paypal_checkout_settings_callback() {
-		_e( 'Configure the PayPal API credentials for the new PayPal checkout.', 'simple-membership' );
-		echo '&nbsp;' . '<a href="https://simple-membership-plugin.com/getting-paypal-api-credentials" target="_blank">' . SwpmUtils::_( 'Read this documentation' ) . '</a> ' . SwpmUtils::_( 'to learn how to get your PayPal API credentials.' );
-	}
-
-	public function paypal_ppcp_connection_settings_callback() {
-		echo '<h2 id="paypal-ppcp-connection-section">' . SwpmUtils::_( 'PayPal Account Setup' ) . '</h2>';
-
-		$ppcp_onboarding_instance = SWPM_PayPal_PPCP_Onboarding::get_instance();
-
-		//TODO - if all API credentials are missing, show a message.
-		$all_api_creds_missing = false;
-		if( empty( $this->get_value('paypal-sandbox-client-id')) && empty( $this->get_value('paypal-sandbox-secret-key')) && empty( $this->get_value('paypal-live-client-id')) && empty( $this->get_value('paypal-live-secret-key')) ){
-			$all_api_creds_missing = true;
-		}
-		?>
-		<table class="form-table" role="presentation">
-		<tbody>
-			<tr>
-				<th scope="row"><?php _e('Live Account Connnection Status', 'simple-membership'); ?></th>
-				<td>
-					<?php
-					//TODO - Check if the live account is connected
-					$live_account_connection_status = 'connected';
-					if( empty( $this->get_value('paypal-live-client-id')) || empty( $this->get_value('paypal-live-secret-key')) ){
-						//Sandbox API keys are missing. Account is not connected.
-						$live_account_connection_status = 'not-connected';
-					}
-
-					if( $live_account_connection_status == 'connected'){
-						//Production account connected
-						echo '<div class="swpm-paypal-live-account-connection-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						_e( 'Live account is connected. If you experience any issues, please disconnect and reconnect.', 'simple-membership' );
-						echo '</div>';
-						//TODO - Show disconnect option for live account.
-						//$ppcp_onboarding_instance->output_live_ac_disconnect_link();
-					} else {
-						//Production account is NOT connected.
-						echo '<div class="swpm-paypal-live-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-						_e( 'Live PayPal account is not connected.', 'simple-membership');
-						echo '</div>';
-
-						//TODO - Show the onboarding link
-						//ppcp_onboarding_instance->output_live_onboarding_link_code();
-					}
-					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php _e('Sandbox Account Connnection Status', 'simple-membership'); ?></th>
-				<td>
-					<?php
-					//Check if the sandbox account is connected
-					$sandbox_account_connection_status = 'connected';
-					if( empty( $this->get_value('paypal-sandbox-client-id')) || empty( $this->get_value('paypal-sandbox-secret-key')) ){
-						//Sandbox API keys are missing. Account is not connected.
-						$sandbox_account_connection_status = 'not-connected';
-					}
-
-					if( $sandbox_account_connection_status == 'connected'){
-						//Test account connected
-						echo '<div class="swpm-paypal-test-account-connection-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						_e( 'Sandbox account is connected. If you experience any issues, please disconnect and reconnect.', 'simple-membership' );
-						echo '</div>';
-						//Show disconnect option for sandbox account.
-						$ppcp_onboarding_instance->output_sandbox_ac_disconnect_link();
-					} else {
-						//Sandbox account is NOT connected.
-						echo '<div class="swpm-paypal-sandbox-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-						_e( 'Sandbox PayPal account is not connected.', 'simple-membership');
-						echo '</div>';
-
-						//Show the onboarding link for sandbox account.
-						$ppcp_onboarding_instance->output_sandbox_onboarding_link_code();
-					}
-					?>
-				</td>
-			</tr>
-
-		</tbody>
-		</table>
-		<?php
-	}
-
-	public function paypal_webhooks_settings_callback() {
-		echo '<p>' . SwpmUtils::_( 'The PayPal payment buttons that uses the new API require webhooks. The plugin will auto-create the required webhooks when you create a PayPal payment button.' ) . '</p>';
-		echo '<p>' . SwpmUtils::_( 'If you have issues with the webhooks, you can delete it and create again.' ) . '</p>';
-
-		$all_api_creds_missing = false;
-		if( empty( $this->get_value('paypal-sandbox-client-id')) && empty( $this->get_value('paypal-sandbox-secret-key')) && empty( $this->get_value('paypal-live-client-id')) && empty( $this->get_value('paypal-live-secret-key')) ){
-			$all_api_creds_missing = true;
-		}
-		?>
-		<table class="form-table" role="presentation">
-		<tbody>
-			<tr>
-				<th scope="row">Live Webhook Status</th>
-				<td>
-					<?php
-					$production_webhook_id = get_option( 'swpm_paypal_webhook_id_production' );
-					if( !empty($production_webhook_id)){
-						//Production webhook exists
-						echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						_e( 'Live Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership' );
-						echo '</span>';
-					} else {
-						//Production webhook does not exist
-						if( empty( $this->get_value('paypal-live-client-id')) || empty( $this->get_value('paypal-live-secret-key')) ){
-							echo '<p><span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							_e( 'Live PayPal API credentials are not set. Please set the Live PayPal API credentials first.', 'simple-membership');
-							echo '</span></p>';
-						} else {
-							echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							_e( 'No webhook found. Use the following Create Live Webhook link to create a new webhook automatically.', 'simple-membership' );
-							echo '</span>';
-							$create_live_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_create_live_webhook=1' );
-							$create_live_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_live_webhook' ), $create_live_webhook_url );
-							echo '<p><a class="button swpm-paypal-create-live-webhook-btn" href="' . esc_url_raw( $create_live_webhook_url_nonced ) . '" target="_blank">'.SwpmUtils::_('Create Live Webhook').'</a></p>';
-						}
-					}
-					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">Test Webhook Status</th>
-				<td>
-					<?php
-					$sandbox_webhook_id = get_option( 'swpm_paypal_webhook_id_sandbox' );
-					if( !empty($sandbox_webhook_id)){
-						//Sandbox webhook exists
-						echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						_e( 'Sandbox Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership');
-						echo '</span>';
-					} else {
-						//Sandbox webhook does not exist
-						if( empty( $this->get_value('paypal-sandbox-client-id')) || empty( $this->get_value('paypal-sandbox-secret-key')) ){
-							echo '<p><span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							_e( 'Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal API credentials first.', 'simple-membership' );
-							echo '</span></p>';
-						} else {
-							echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							_e( 'No webhook found. Use the following Create Sandbox Webhook link to create a new webhook automatically.', 'simple-membership' );
-							echo '</span>';
-							$create_sandbox_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_create_sandbox_webhook=1' );
-							$create_sandbox_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_sandbox_webhook' ), $create_sandbox_webhook_url );
-							echo '<p><a class="button swpm-paypal-create-sandbox-webhook-btn" href="' . esc_url_raw( $create_sandbox_webhook_url_nonced ) . '" target="_blank">'.SwpmUtils::_('Create Sandbox Webhook').'</a></p>';
-						}
-					}
-					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php _e('Delete Webhooks', 'simple-membership'); ?></th>
-				<td>
-					<?php
-						if( $all_api_creds_missing ){
-							echo '<p><span class="swpm-paypal-delete-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp';
-							_e( 'PayPal API credentials are missing. Please set the PayPal API credentials.', 'simple-membership' ); 
-							echo '</span></p>';
-						} else {
-							$delete_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_delete_webhook=1' );
-							$delete_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_delete_webhook' ), $delete_webhook_url );
-							echo '<p><a class="button swpm-paypal-delete-webhook-btn" href="'.esc_url_raw($delete_webhook_url_nonced).'" target="_blank">'.SwpmUtils::_('Delete Webhooks').'</a></p>';					
-						}
-					?>
-				</td>
-			</tr>
-		</tbody>
-		</table>
-		<?php
-	}
-
-	public function stripe_global_settings_callback() {
-                _e( 'This section allows you to configure Stripe payment related settings.', 'simple-membership' );               
-	}
         
 	public function reg_email_settings_callback() {
 		_e( 'This email will be sent to your users when they complete the registration and become a member.', 'simple-membership' );
@@ -1591,25 +1293,9 @@ class SwpmSettings {
 	}
 
 	public function sanitize_tab_2( $input ) {
-		if ( empty( $this->settings ) ) {
-			$this->settings = (array) get_option( 'swpm-settings' );
-		}
-		$output = $this->settings;
-
-		$output['enable-sandbox-testing'] = isset( $input['enable-sandbox-testing'] ) ? esc_attr( $input['enable-sandbox-testing'] ) : '';
-
-		$output['paypal-live-client-id'] = sanitize_text_field( $input['paypal-live-client-id'] );
-		$output['paypal-live-secret-key'] = sanitize_text_field( $input['paypal-live-secret-key'] );
-		$output['paypal-sandbox-client-id'] = sanitize_text_field( $input['paypal-sandbox-client-id'] );
-		$output['paypal-sandbox-secret-key'] = sanitize_text_field( $input['paypal-sandbox-secret-key'] );
-
-		$output['stripe-prefill-member-email'] = isset( $input['stripe-prefill-member-email'] ) ? esc_attr( $input['stripe-prefill-member-email'] ) : 0;
-		$output['stripe-test-public-key'] = sanitize_text_field( $input['stripe-test-public-key'] );
-		$output['stripe-test-secret-key'] = sanitize_text_field( $input['stripe-test-secret-key'] );
-		$output['stripe-live-public-key'] = sanitize_text_field( $input['stripe-live-public-key'] );
-		$output['stripe-live-secret-key'] = sanitize_text_field( $input['stripe-live-secret-key'] );
-
-		return $output;
+		//This is the callback function for the second tab. 
+		//It sanitizes the input data for the second tab.
+		//This tab has been moved to the payments menu. In the future, we can remove this tab or re-use it for something else.
 	}
 
 	public function sanitize_tab_3( $input ) {

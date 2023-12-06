@@ -57,7 +57,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                 $live_wh_create_result .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
             }
             $live_wh_create_result .= isset($ret['msg']) ? $ret['msg'] : '';
-            $live_wh_create_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
+            //$live_wh_create_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
             echo '<div class="swpm-yellow-box"><p><strong>Create Live Webhook: </strong>' . $live_wh_create_result . '</p></div>';
 
         }
@@ -73,14 +73,14 @@ class SWPM_Payment_Settings_Menu_Tab {
                 $sandbox_wh_create_result .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
             }    
             $sandbox_wh_create_result .= isset($ret['msg']) ? $ret['msg'] : '';
-            $sandbox_wh_create_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
+            //$sandbox_wh_create_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
             echo '<div class="swpm-yellow-box"><p><strong>Create Sandbox Webhook: </strong>' . $sandbox_wh_create_result . '</p></div>';
         }
         if (isset($_GET['swpm_paypal_delete_webhook'])){
             check_admin_referer( 'swpm_paypal_delete_webhook' );
             $pp_webhook = new SWPM_PayPal_Webhook();
             $delete_action_result = $pp_webhook->check_and_delete_webhooks_for_both_modes();
-            $delete_action_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
+            //$delete_action_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
             echo '<div class="swpm-yellow-box"><p>' . $delete_action_result . '</p></div>';
         }
 
@@ -105,10 +105,10 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->set_value('enable-sandbox-testing' ,( isset($_POST['enable-sandbox-testing']) && esc_attr($_POST['enable-sandbox-testing']) == '1' ? "checked=\"checked\"" : ''));
 
             $settings->save();
-            echo '<div class="notice notice-success"><p>' . __('Test mode settings updated successfully ','simple-membership') . '</p></div>';
+            echo '<div class="notice notice-success"><p>' . __('Test mode settings updated successfully.', 'simple-membership') . '</p></div>';
         }
 
-        // Check stripe settings submit.
+        // Check PayPal settings submit.
         if (isset($_POST['swpm-paypal-settings-submit']) && check_admin_referer('swpm-paypal-settings-nonce')) {
             $settings->set_value('paypal-live-client-id' ,( isset($_POST['paypal-live-client-id']) ? sanitize_text_field($_POST['paypal-live-client-id']) : ''));
             $settings->set_value('paypal-live-secret-key' ,( isset($_POST['paypal-live-secret-key']) ? sanitize_text_field($_POST['paypal-live-secret-key']) : ''));
@@ -116,10 +116,10 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->set_value('paypal-sandbox-secret-key' ,( isset($_POST['paypal-sandbox-secret-key']) ? sanitize_text_field($_POST['paypal-sandbox-secret-key']) : ''));
 
             $settings->save();
-            echo '<div class="notice notice-success"><p>' . __('Paypal settings updated successfully ','simple-membership') . '</p></div>';
+            echo '<div class="notice notice-success"><p>' . __('PayPal API settings updated successfully.', 'simple-membership') . '</p></div>';
         }
         
-        // Check stripe settings submit.
+        // Check Stripe settings submit.
         if (isset($_POST['swpm-stripe-settings-submit']) && check_admin_referer('swpm-stripe-settings-nonce')) {
             $settings->set_value('stripe-prefill-member-email' ,( isset($_POST['stripe-prefill-member-email']) && esc_attr($_POST['stripe-prefill-member-email']) == '1' ? "checked=\"checked\"" : ''));
             $settings->set_value('stripe-test-public-key' ,( isset($_POST['stripe-test-public-key']) ? sanitize_text_field($_POST['stripe-test-public-key']) : ''));
@@ -128,7 +128,7 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->set_value('stripe-live-secret-key' ,( isset($_POST['stripe-live-secret-key']) ? sanitize_text_field($_POST['stripe-live-secret-key']) : ''));
 
             $settings->save();
-            echo '<div class="notice notice-success"><p>' . __('Stripe settings updated successfully ','simple-membership') . '</p></div>';
+            echo '<div class="notice notice-success"><p>' . __('Stripe settings updated successfully.', 'simple-membership') . '</p></div>';
         }
 
         //Switch case for the various different sub-tabs.
@@ -338,7 +338,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                                         echo '</span>';
                                         $create_live_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_create_live_webhook=1' );
                                         $create_live_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_live_webhook' ), $create_live_webhook_url );
-                                        echo '<p><a class="button swpm-paypal-create-live-webhook-btn" href="' . esc_url_raw( $create_live_webhook_url_nonced ) . '" target="_blank">'.SwpmUtils::_('Create Live Webhook').'</a></p>';
+                                        echo '<p><a class="button swpm-paypal-create-live-webhook-btn" href="' . esc_url_raw( $create_live_webhook_url_nonced ) . '">'.SwpmUtils::_('Create Live Webhook').'</a></p>';
                                     }
                                 }
                                 ?>
@@ -366,7 +366,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                                         echo '</span>';
                                         $create_sandbox_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_create_sandbox_webhook=1' );
                                         $create_sandbox_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_sandbox_webhook' ), $create_sandbox_webhook_url );
-                                        echo '<p><a class="button swpm-paypal-create-sandbox-webhook-btn" href="' . esc_url_raw( $create_sandbox_webhook_url_nonced ) . '" target="_blank">'.SwpmUtils::_('Create Sandbox Webhook').'</a></p>';
+                                        echo '<p><a class="button swpm-paypal-create-sandbox-webhook-btn" href="' . esc_url_raw( $create_sandbox_webhook_url_nonced ) . '">'.SwpmUtils::_('Create Sandbox Webhook').'</a></p>';
                                     }
                                 }
                                 ?>
@@ -383,7 +383,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                                     } else {
                                         $delete_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_delete_webhook=1' );
                                         $delete_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_delete_webhook' ), $delete_webhook_url );
-                                        echo '<p><a class="button swpm-paypal-delete-webhook-btn" href="'.esc_url_raw($delete_webhook_url_nonced).'" target="_blank">'.__('Delete Webhooks', 'simple-membership').'</a></p>';					
+                                        echo '<p><a class="button swpm-paypal-delete-webhook-btn" href="'.esc_url_raw($delete_webhook_url_nonced).'">'.__('Delete Webhooks', 'simple-membership').'</a></p>';					
                                     }
                                 ?>
                             </td>

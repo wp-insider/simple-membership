@@ -21,10 +21,10 @@ class SWPM_Payment_Settings_Menu_Tab {
         echo '<div class="swpm-grey-box">';
         echo '<p>';
         _e('You can create membership payment buttons from the ', 'simple-membership');
-        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" target="_blank">' . SwpmUtils::_('create new button tab') . '</a>';
+        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" target="_blank">' . __('create new button tab', 'simple-membership') . '</a>';
         _e(' of this plugin (useful if you want to offer paid memberships on the site).', 'simple-membership');
         _e(' Read the ', 'simple-membership');
-        echo '<a href="https://simple-membership-plugin.com/simple-membership-documentation/#membership-payment-options" target="_blank">' . SwpmUtils::_('membership payment section') . '</a>';
+        echo '<a href="https://simple-membership-plugin.com/simple-membership-documentation/#membership-payment-options" target="_blank">' . __('membership payment section', 'simple-membership') . '</a>';
         _e(' of our documentation to learn more about creating membership payment buttons.', 'simple-membership');
         echo '</p>';
         echo '</div>';
@@ -105,7 +105,6 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->set_value('enable-sandbox-testing' ,( isset($_POST['enable-sandbox-testing']) && esc_attr($_POST['enable-sandbox-testing']) == '1' ? "checked=\"checked\"" : ''));
 
             $settings->save();
-
             echo '<div class="notice notice-success"><p>' . __('Test mode settings updated successfully ','simple-membership') . '</p></div>';
         }
 
@@ -117,7 +116,6 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->set_value('paypal-sandbox-secret-key' ,( isset($_POST['paypal-sandbox-secret-key']) ? sanitize_text_field($_POST['paypal-sandbox-secret-key']) : ''));
 
             $settings->save();
-
             echo '<div class="notice notice-success"><p>' . __('Paypal settings updated successfully ','simple-membership') . '</p></div>';
         }
         
@@ -130,49 +128,29 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->set_value('stripe-live-secret-key' ,( isset($_POST['stripe-live-secret-key']) ? sanitize_text_field($_POST['stripe-live-secret-key']) : ''));
 
             $settings->save();
-
             echo '<div class="notice notice-success"><p>' . __('Stripe settings updated successfully ','simple-membership') . '</p></div>';
         }
 
-        ?>
+        //Switch case for the various different sub-tabs.
+        switch ($selected_subtab) {
+            case 'ps_general':
+                $this->handle_general_payment_settings_subtab();
+                break;
+            case 'ps_pp_api':
+                $this->handle_paypal_payment_settings_subtab();
+                break;
+            case 'ps_pp_webhooks':
+                $this->handle_paypal_webhook_settings_subtab();
+                break;
+            case 'ps_stripe':
+                $this->handle_stripe_payment_settings_subtab();
+                break;
+            default:
+                $this->handle_general_payment_settings_subtab();
+                break;
+        }
 
-        <div class="postbox-container">
-        <?php
-            //Switch case for the various different sub-tabs.
-            switch ($selected_subtab) {
-                case 'ps_general':
-                    $this->handle_general_payment_settings_subtab();
-                    break;
-                case 'ps_pp_api':
-                    $this->handle_paypal_payment_settings_subtab();
-                    ?>
-                    <!-- Paypal PPCP Connection postbox -->
-                    <!--
-                    <div class="postbox">
-                        <h2 id="paypal-ppcp-connection-section"><?php _e("PayPal Account Connection", 'simple-membership'); ?></h2>
-                        <div class="inside">
-                            <?php 
-                            $this->paypal_ppcp_connection_settings();
-                            ?>
-                        </div>
-                    </div>
-                    -->
-                    <?php
-                    break;
-                case 'ps_pp_webhooks':
-                    $this->handle_paypal_webhook_settings_subtab();
-                    break;
-                case 'ps_stripe':
-                    $this->handle_stripe_payment_settings_subtab();
-                    break;
-                default:
-                    $this->handle_general_payment_settings_subtab();
-                    break;
-            }
-        ?>
-        </div>
-
-        <?php 
+        //End of the payment settings menu tab.
         do_action('swpm_payment_settings_menu_tab_end');
     }
 
@@ -192,7 +170,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 
             <div class="inside">
                 <p>
-                    <?php _e( 'This section allows you to enable/disable sandbox or test mode for the payment buttons.', 'simple-membership' ); ?>
+                    <?php _e( 'This section allows you to enable/disable sandbox or test mode for the payment buttons and transactions.', 'simple-membership' ); ?>
                 </p>
                 <form action="" method="POST">
                     <table class="form-table">
@@ -210,7 +188,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                             </td>
                         </tr>
                     </table>
-                    <input type="submit" name="swpm-enable-test-mode-submit" class="button-primary" value="<?php _e('Save Changes')?>" />
+                    <input type="submit" name="swpm-enable-test-mode-submit" class="button-primary" value="<?php _e('Save Changes', 'simple-membership'); ?>" />
                     <?php wp_nonce_field('swpm-enable-test-mode-nonce');?>
                 </form>
             </div>
@@ -231,6 +209,19 @@ class SWPM_Payment_Settings_Menu_Tab {
         $paypal_sandbox_client_id = $settings->get_value( 'paypal-sandbox-client-id' );
         $paypal_sandbox_secret_key = $settings->get_value( 'paypal-sandbox-secret-key' );
         ?>
+
+        <!-- Paypal PPCP Connection postbox -->
+        <!--
+        <div class="postbox">
+            <h2 id="paypal-ppcp-connection-section"><?php _e("PayPal Account Connection", 'simple-membership'); ?></h2>
+            <div class="inside">
+                <?php 
+                $this->paypal_ppcp_connection_settings();
+                ?>
+            </div>
+        </div>
+        -->
+
         <!-- Paypal Settings postbox -->
         <div class="postbox">
             <h2><?php _e("PayPal Settings", 'simple-membership'); ?></h3>
@@ -246,57 +237,57 @@ class SWPM_Payment_Settings_Menu_Tab {
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Live Client ID', 'simple-membership');?>
+                                    <?php _e('Live Client ID', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input type="text" name="paypal-live-client-id" size="100" value="<?php echo $paypal_live_client_id; ?>">
                                 <p class="description">
-                                    <?php _e('Enter your PayPal Client ID for live mode.', 'simple-membership');?>
+                                    <?php _e('Enter your PayPal Client ID for live mode.', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Live Secret Key', 'simple-membership');?>
+                                    <?php _e('Live Secret Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input type="text" name="paypal-live-secret-key" size="100" value="<?php echo $paypal_live_secret_key; ?>">
                                 <p class="description">
-                                    <?php _e('Enter your PayPal Secret Key for live mode.', 'simple-membership');?>
+                                    <?php _e('Enter your PayPal Secret Key for live mode.', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Sandbox Client ID', 'simple-membership');?>
+                                    <?php _e('Sandbox Client ID', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input type="text" name="paypal-sandbox-client-id" size="100" value="<?php echo $paypal_sandbox_client_id; ?>">
                                 <p class="description">
-                                    <?php _e('Enter your PayPal Client ID for sandbox mode.', 'simple-membership');?>
+                                    <?php _e('Enter your PayPal Client ID for sandbox mode.', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Sandbox Secret Key', 'simple-membership');?>
+                                    <?php _e('Sandbox Secret Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input type="text" name="paypal-sandbox-secret-key" size="100" value="<?php echo $paypal_sandbox_secret_key; ?>">
                                 <p class="description">
-                                    <?php _e('Enter your PayPal Secret Key for sandbox mode.', 'simple-membership');?>
+                                    <?php _e('Enter your PayPal Secret Key for sandbox mode.', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                     </table>
-                    <input type="submit" name="swpm-paypal-settings-submit" class="button-primary" value="<?php _e('Save Changes')?>" />
+                    <input type="submit" name="swpm-paypal-settings-submit" class="button-primary" value="<?php _e('Save Changes', 'simple-membership'); ?>" />
                     <?php wp_nonce_field('swpm-paypal-settings-nonce');?>
                 </form>
             </div>
@@ -326,7 +317,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                 <table class="form-table" role="presentation">
                     <tbody>
                         <tr>
-                            <th scope="row"><?php _e('Live Webhook Status') ?></th>
+                            <th scope="row"><?php _e('Live Webhook Status', 'simple-membership'); ?></th>
                             <td>
                                 <?php
                                 $production_webhook_id = get_option( 'swpm_paypal_webhook_id_production' );
@@ -343,7 +334,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                                         echo '</span></p>';
                                     } else {
                                         echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-                                        _e( 'No webhook found. Use the following Create Live Webhook link to create a new webhook automatically.', 'simple-membership' );
+                                        _e( 'No webhook found. Use the following link to create a new webhook for live mode.', 'simple-membership' );
                                         echo '</span>';
                                         $create_live_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_create_live_webhook=1' );
                                         $create_live_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_live_webhook' ), $create_live_webhook_url );
@@ -354,7 +345,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><?php _e('Test Webhook Status') ?></th>
+                            <th scope="row"><?php _e('Test Webhook Status', 'simple-membership'); ?></th>
                             <td>
                                 <?php
                                 $sandbox_webhook_id = get_option( 'swpm_paypal_webhook_id_sandbox' );
@@ -371,7 +362,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                                         echo '</span></p>';
                                     } else {
                                         echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-                                        _e( 'No webhook found. Use the following Create Sandbox Webhook link to create a new webhook automatically.', 'simple-membership' );
+                                        _e( 'No webhook found. Use the following link to create a new webhook for test mode.', 'simple-membership' );
                                         echo '</span>';
                                         $create_sandbox_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_create_sandbox_webhook=1' );
                                         $create_sandbox_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_sandbox_webhook' ), $create_sandbox_webhook_url );
@@ -430,70 +421,70 @@ class SWPM_Payment_Settings_Menu_Tab {
                         <tr valign="top">
                             <th scope="row">
                                 <label for="">
-                                    <?php _e('Pre-fill Member Email Address', 'simple-membership');?>
+                                    <?php _e('Pre-fill Member Email Address', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input type="checkbox" name="stripe-prefill-member-email" value="1" <?php echo $stripe_prefill_member_email; ?>/>
                                 <p class="description">
-                                    <?php _e('Pre-fills the email address of the logged-in member on the Stripe checkout form when possible', 'simple-membership');?>
+                                    <?php _e('Pre-fills the email address of the logged-in member on the Stripe checkout form when possible', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Test Publishable Key', 'simple-membership');?>
+                                    <?php _e('Test Publishable Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input type="text" name="stripe-test-public-key" size="100" value="<?php echo $stripe_test_public_key; ?>">
                                 <p class="description">
-                                    <?php _e('Stripe API Test publishable key', 'simple-membership');?>
+                                    <?php _e('Stripe API Test publishable key', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Test Secret Key', 'simple-membership');?>
+                                    <?php _e('Test Secret Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input type="text" name="stripe-test-secret-key" size="100" value="<?php echo $stripe_test_secret_key; ?>">
                                 <p class="description">
-                                    <?php _e('Stripe API Test secret key', 'simple-membership');?>
+                                    <?php _e('Stripe API Test secret key', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Live Publishable Key', 'simple-membership');?>
+                                    <?php _e('Live Publishable Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input type="text" name="stripe-live-public-key" size="100" value="<?php echo $stripe_live_public_key; ?>">
                                 <p class="description">
-                                    <?php _e('Stripe API Live publishable key', 'simple-membership');?>
+                                    <?php _e('Stripe API Live publishable key', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Live Secret Key', 'simple-membership');?>
+                                    <?php _e('Live Secret Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input type="text" name="stripe-live-secret-key" size="100" value="<?php echo $stripe_live_secret_key; ?>">
                                 <p class="description">
-                                    <?php _e('Stripe API Live secret key', 'simple-membership');?>
+                                    <?php _e('Stripe API Live secret key', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                     </table>
-                    <input type="submit" name="swpm-stripe-settings-submit" class="button-primary" value="<?php _e('Save Changes')?>" />
+                    <input type="submit" name="swpm-stripe-settings-submit" class="button-primary" value="<?php _e('Save Changes', 'simple-membership'); ?>" />
                     <?php wp_nonce_field('swpm-stripe-settings-nonce');?>
                 </form>
             </div>

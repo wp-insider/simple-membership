@@ -99,7 +99,6 @@ class SWPM_Payment_Settings_Menu_Tab {
             $disconnect_action_result .= '<p><a href="#paypal-ppcp-connection-section">Click here</a> to go to the PayPal Account Setup section below.</p>';
             echo '<div class="swpm-yellow-box"><p>' . $disconnect_action_result . '</p></div>';
         }
-
         
         // Check test-mode settings submit.
         if (isset($_POST['swpm-enable-test-mode-submit']) && check_admin_referer('swpm-enable-test-mode-nonce')) {
@@ -150,6 +149,27 @@ class SWPM_Payment_Settings_Menu_Tab {
         $stripe_test_secret_key = $settings->get_value( 'stripe-test-secret-key' );
         $stripe_live_public_key = $settings->get_value( 'stripe-live-public-key' );
         $stripe_live_secret_key = $settings->get_value( 'stripe-live-secret-key' );
+
+
+        //TODO - COMPLETE THE CODE IMPLEMENTATION BELOW
+        //Switch case for the various different sub-tabs.
+        switch ($selected_subtab) {
+            case 'ps_general':
+                //$this->handle_general_subtab();
+                break;                
+            case 'ps_pp_api':
+                //$this->handle_paypal_api_subtab();
+                break;
+            case 'ps_pp_webhooks':
+                //$this->handle_paypal_webhook_subtab();
+                break;
+            case 'ps_stripe':
+                //$this->handle_stripe_settings_subtab();
+                break;
+            default:
+                //$this->handle_general_subtab();
+                break;
+        }
 
         ?>
 

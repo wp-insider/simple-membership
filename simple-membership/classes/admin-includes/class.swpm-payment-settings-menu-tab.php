@@ -17,10 +17,6 @@ class SWPM_Payment_Settings_Menu_Tab {
         //Check current_user_can() or die.
         SwpmMiscUtils::check_user_permission_and_is_admin('Payment Settings Menu Tab');
 
-        // $output = '';
-        // $tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
-        // $selected = $tab;
-        
         //Tab overview message and documentation link.
         echo '<div class="swpm-grey-box">';
         echo '<p>';
@@ -33,10 +29,20 @@ class SWPM_Payment_Settings_Menu_Tab {
         echo '</p>';
         echo '</div>';
 
-        //Any other arbitrary HTML code and forms can be added here. 
-        //We can also use settings section (with empty heading) inside the tab_2() method to render arbitrary HTML code. 
-        //However, you can't add forms in there since it will be wrapped by the main settings form. You can create links to use GET query arguments.
-        //See the "paypal-webhooks-settings" section for example.
+        //Sub nav tabs related code.
+        $subtab = isset($_GET['subtab']) ? sanitize_text_field($_GET['subtab']) : '';
+        $selected_subtab = $subtab;
+        ?>
+        <!-- start payment settings menu's sub nav tabs -->
+        <h3 class="nav-tab-wrapper">
+            <a class="nav-tab <?php echo ($subtab == '' || $subtab == 'ps_general') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_general"><?php _e('General', 'simple-membership'); ?></a>
+            <a class="nav-tab <?php echo ($subtab == 'ps_pp_api') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api"><?php _e('PayPal API', 'simple-membership'); ?></a>
+            <a class="nav-tab <?php echo ($subtab == 'ps_pp_webhooks') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks"><?php _e('PayPal Webhooks', 'simple-membership'); ?></a>
+            <a class="nav-tab <?php echo ($subtab == 'ps_stripe') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe"><?php _e('Stripe Settings', 'simple-membership'); ?></a>
+            <!-- See example in the "class.swpm-payments-admin-menu.php" file -->
+        </h3>
+        <br />
+        <?php
 
         //Handle the webhook create/delete requests
         if (isset($_GET['swpm_paypal_create_live_webhook'])){

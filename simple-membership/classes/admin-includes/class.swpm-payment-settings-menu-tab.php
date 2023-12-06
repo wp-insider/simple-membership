@@ -134,50 +134,62 @@ class SWPM_Payment_Settings_Menu_Tab {
             echo '<div class="notice notice-success"><p>' . __('Stripe settings updated successfully ','simple-membership') . '</p></div>';
         }
 
-        // Test-mode settings
-        $enable_sandbox_testing = $settings->get_value( 'enable-sandbox-testing' );
-
-        // Paypal settings
-        $paypal_live_client_id = $settings->get_value( 'paypal-live-client-id' );
-        $paypal_live_secret_key = $settings->get_value( 'paypal-live-secret-key' );
-        $paypal_sandbox_client_id = $settings->get_value( 'paypal-sandbox-client-id' );
-        $paypal_sandbox_secret_key = $settings->get_value( 'paypal-sandbox-secret-key' );
-        
-        // Stripe settings
-        $stripe_prefill_member_email = $settings->get_value( 'stripe-prefill-member-email' );
-        $stripe_test_public_key = $settings->get_value( 'stripe-test-public-key' );
-        $stripe_test_secret_key = $settings->get_value( 'stripe-test-secret-key' );
-        $stripe_live_public_key = $settings->get_value( 'stripe-live-public-key' );
-        $stripe_live_secret_key = $settings->get_value( 'stripe-live-secret-key' );
-
-
-        //TODO - COMPLETE THE CODE IMPLEMENTATION BELOW
-        //Switch case for the various different sub-tabs.
-        switch ($selected_subtab) {
-            case 'ps_general':
-                //$this->handle_general_subtab();
-                break;                
-            case 'ps_pp_api':
-                //$this->handle_paypal_api_subtab();
-                break;
-            case 'ps_pp_webhooks':
-                //$this->handle_paypal_webhook_subtab();
-                break;
-            case 'ps_stripe':
-                //$this->handle_stripe_settings_subtab();
-                break;
-            default:
-                //$this->handle_general_subtab();
-                break;
-        }
-
         ?>
 
-        <!-- Example of post box (This is just for example) -->
         <div class="postbox-container">
+        <?php
+            //Switch case for the various different sub-tabs.
+            switch ($selected_subtab) {
+                case 'ps_general':
+                    $this->handle_general_payment_settings_subtab();
+                    break;
+                case 'ps_pp_api':
+                    $this->handle_paypal_payment_settings_subtab();
+                    ?>
+                    <!-- Paypal PPCP Connection postbox -->
+                    <!--
+                    <div class="postbox">
+                        <h2 id="paypal-ppcp-connection-section"><?php _e("PayPal Account Connection", 'simple-membership'); ?></h2>
+                        <div class="inside">
+                            <?php 
+                            $this->paypal_ppcp_connection_settings();
+                            ?>
+                        </div>
+                    </div>
+                    -->
+                    <?php
+                    break;
+                case 'ps_pp_webhooks':
+                    $this->handle_paypal_webhook_settings_subtab();
+                    break;
+                case 'ps_stripe':
+                    $this->handle_stripe_payment_settings_subtab();
+                    break;
+                default:
+                    $this->handle_general_payment_settings_subtab();
+                    break;
+            }
+        ?>
+        </div>
+
+        <?php 
+        do_action('swpm_payment_settings_menu_tab_end');
+    }
+
+    /**
+     * Render general payment settings subtab view
+     *
+     * @return void
+     */
+    public function handle_general_payment_settings_subtab(){
+        $settings = SwpmSettings::get_instance();
+
+        // Test-mode settings
+        $enable_sandbox_testing = $settings->get_value( 'enable-sandbox-testing' );
+        ?>
         <div class="postbox">
             <h2><?php _e("Sandbox or Test Mode Payment Settings", 'simple-membership'); ?></h2>
-  
+
             <div class="inside">
                 <p>
                     <?php _e( 'This section allows you to enable/disable sandbox or test mode for the payment buttons.', 'simple-membership' ); ?>
@@ -203,19 +215,22 @@ class SWPM_Payment_Settings_Menu_Tab {
                 </form>
             </div>
         </div>
+        <?php
+    }
 
-        <!-- Paypal PPCP Connection postbox -->
-        <!--
-        <div class="postbox">
-            <h2 id="paypal-ppcp-connection-section"><?php _e("PayPal Account Connection", 'simple-membership'); ?></h2>
-            <div class="inside">
-                <?php 
-                $this->paypal_ppcp_connection_settings();
-                ?>
-            </div>
-        </div>
-        -->
-
+    /**
+     * Render paypal payment settings subtab view
+     *
+     * @return void
+     */
+    public function handle_paypal_payment_settings_subtab(){
+        $settings = SwpmSettings::get_instance();
+        // Paypal settings
+        $paypal_live_client_id = $settings->get_value( 'paypal-live-client-id' );
+        $paypal_live_secret_key = $settings->get_value( 'paypal-live-secret-key' );
+        $paypal_sandbox_client_id = $settings->get_value( 'paypal-sandbox-client-id' );
+        $paypal_sandbox_secret_key = $settings->get_value( 'paypal-sandbox-secret-key' );
+        ?>
         <!-- Paypal Settings postbox -->
         <div class="postbox">
             <h2><?php _e("PayPal Settings", 'simple-membership'); ?></h3>
@@ -286,17 +301,123 @@ class SWPM_Payment_Settings_Menu_Tab {
                 </form>
             </div>
         </div>
+        <?php
+    }
 
+    /**
+     * Render paypal webhook settings subtab view
+     *
+     * @return void
+     */
+    public function handle_paypal_webhook_settings_subtab(){
+        $settings = SwpmSettings::get_instance();
+                    
+        $all_api_creds_missing = false;
+        if( empty( $settings->get_value('paypal-sandbox-client-id')) && empty( $settings->get_value('paypal-sandbox-secret-key')) && empty( $settings->get_value('paypal-live-client-id')) && empty( $settings->get_value('paypal-live-secret-key')) ){
+            $all_api_creds_missing = true;
+        }
+        ?>
         <!-- Paypal Webhooks postbox -->
         <div class="postbox">
             <h2 id="paypal-subscription-webhooks"><?php _e("PayPal Webhooks", 'simple-membership'); ?></h2>
             <div class="inside">
-                <?php 
-                $this->paypal_webhooks_settings_section(); 
-                ?>
+                <p><?php _e( 'The PayPal payment buttons that uses the new API require webhooks. The plugin will auto-create the required webhooks when you create a PayPal payment button.', 'simple-membership'); ?></p>
+                <p><?php _e( 'If you have issues with the webhooks, you can delete it and create again.', 'simple-membership'); ?></p>
+                <table class="form-table" role="presentation">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><?php _e('Live Webhook Status') ?></th>
+                            <td>
+                                <?php
+                                $production_webhook_id = get_option( 'swpm_paypal_webhook_id_production' );
+                                if( !empty($production_webhook_id)){
+                                    //Production webhook exists
+                                    echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
+                                    _e( 'Live Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership' );
+                                    echo '</span>';
+                                } else {
+                                    //Production webhook does not exist
+                                    if( empty( $settings->get_value('paypal-live-client-id')) || empty( $settings->get_value('paypal-live-secret-key')) ){
+                                        echo '<p><span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+                                        _e( 'Live PayPal API credentials are not set. Please set the Live PayPal API credentials first.', 'simple-membership');
+                                        echo '</span></p>';
+                                    } else {
+                                        echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+                                        _e( 'No webhook found. Use the following Create Live Webhook link to create a new webhook automatically.', 'simple-membership' );
+                                        echo '</span>';
+                                        $create_live_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_create_live_webhook=1' );
+                                        $create_live_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_live_webhook' ), $create_live_webhook_url );
+                                        echo '<p><a class="button swpm-paypal-create-live-webhook-btn" href="' . esc_url_raw( $create_live_webhook_url_nonced ) . '" target="_blank">'.SwpmUtils::_('Create Live Webhook').'</a></p>';
+                                    }
+                                }
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><?php _e('Test Webhook Status') ?></th>
+                            <td>
+                                <?php
+                                $sandbox_webhook_id = get_option( 'swpm_paypal_webhook_id_sandbox' );
+                                if( !empty($sandbox_webhook_id)){
+                                    //Sandbox webhook exists
+                                    echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
+                                    _e( 'Sandbox Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership');
+                                    echo '</span>';
+                                } else {
+                                    //Sandbox webhook does not exist
+                                    if( empty( $settings->get_value('paypal-sandbox-client-id')) || empty( $settings->get_value('paypal-sandbox-secret-key')) ){
+                                        echo '<p><span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+                                        _e( 'Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal API credentials first.', 'simple-membership' );
+                                        echo '</span></p>';
+                                    } else {
+                                        echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
+                                        _e( 'No webhook found. Use the following Create Sandbox Webhook link to create a new webhook automatically.', 'simple-membership' );
+                                        echo '</span>';
+                                        $create_sandbox_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_create_sandbox_webhook=1' );
+                                        $create_sandbox_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_sandbox_webhook' ), $create_sandbox_webhook_url );
+                                        echo '<p><a class="button swpm-paypal-create-sandbox-webhook-btn" href="' . esc_url_raw( $create_sandbox_webhook_url_nonced ) . '" target="_blank">'.SwpmUtils::_('Create Sandbox Webhook').'</a></p>';
+                                    }
+                                }
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><?php _e('Delete Webhooks', 'simple-membership'); ?></th>
+                            <td>
+                                <?php
+                                    if( $all_api_creds_missing ){
+                                        echo '<p><span class="swpm-paypal-delete-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp';
+                                        _e( 'PayPal API credentials are missing. Please set the PayPal API credentials.', 'simple-membership' ); 
+                                        echo '</span></p>';
+                                    } else {
+                                        $delete_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_delete_webhook=1' );
+                                        $delete_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_delete_webhook' ), $delete_webhook_url );
+                                        echo '<p><a class="button swpm-paypal-delete-webhook-btn" href="'.esc_url_raw($delete_webhook_url_nonced).'" target="_blank">'.__('Delete Webhooks', 'simple-membership').'</a></p>';					
+                                    }
+                                ?>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+        <?php
+    }
 
+    /**
+     * Render stripe payment settings subtab view
+     *
+     * @return void
+     */
+    public function handle_stripe_payment_settings_subtab(){
+        $settings = SwpmSettings::get_instance();
+        // Stripe settings
+        $stripe_prefill_member_email = $settings->get_value( 'stripe-prefill-member-email' );
+        $stripe_test_public_key = $settings->get_value( 'stripe-test-public-key' );
+        $stripe_test_secret_key = $settings->get_value( 'stripe-test-secret-key' );
+        $stripe_live_public_key = $settings->get_value( 'stripe-live-public-key' );
+        $stripe_live_secret_key = $settings->get_value( 'stripe-live-secret-key' );
+        ?>
         <!-- Stripe Settings postbox -->
         <div class="postbox">
             <h2><?php _e("Stripe Global Settings", 'simple-membership'); ?></h2>   
@@ -377,11 +498,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                 </form>
             </div>
         </div>
-
-        </div>
-
-        <?php 
-        do_action('swpm_payment_settings_menu_tab_end');
+        <?php
     }
 
 	public function paypal_ppcp_connection_settings() {
@@ -462,96 +579,5 @@ class SWPM_Payment_Settings_Menu_Tab {
 		</table>
 		<?php
 	}
-
-	public function paypal_webhooks_settings_section() {
-		$settings = SwpmSettings::get_instance();
-
-		echo '<p>' . SwpmUtils::_( 'The PayPal payment buttons that uses the new API require webhooks. The plugin will auto-create the required webhooks when you create a PayPal payment button.' ) . '</p>';
-		echo '<p>' . SwpmUtils::_( 'If you have issues with the webhooks, you can delete it and create again.' ) . '</p>';
-
-		$all_api_creds_missing = false;
-		if( empty( $settings->get_value('paypal-sandbox-client-id')) && empty( $settings->get_value('paypal-sandbox-secret-key')) && empty( $settings->get_value('paypal-live-client-id')) && empty( $settings->get_value('paypal-live-secret-key')) ){
-			$all_api_creds_missing = true;
-		}
-		?>
-		<table class="form-table" role="presentation">
-		<tbody>
-			<tr>
-				<th scope="row">Live Webhook Status</th>
-				<td>
-					<?php
-					$production_webhook_id = get_option( 'swpm_paypal_webhook_id_production' );
-					if( !empty($production_webhook_id)){
-						//Production webhook exists
-						echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						_e( 'Live Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership' );
-						echo '</span>';
-					} else {
-						//Production webhook does not exist
-						if( empty( $settings->get_value('paypal-live-client-id')) || empty( $settings->get_value('paypal-live-secret-key')) ){
-							echo '<p><span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							_e( 'Live PayPal API credentials are not set. Please set the Live PayPal API credentials first.', 'simple-membership');
-							echo '</span></p>';
-						} else {
-							echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							_e( 'No webhook found. Use the following Create Live Webhook link to create a new webhook automatically.', 'simple-membership' );
-							echo '</span>';
-							$create_live_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_create_live_webhook=1' );
-							$create_live_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_live_webhook' ), $create_live_webhook_url );
-							echo '<p><a class="button swpm-paypal-create-live-webhook-btn" href="' . esc_url_raw( $create_live_webhook_url_nonced ) . '" target="_blank">'.SwpmUtils::_('Create Live Webhook').'</a></p>';
-						}
-					}
-					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">Test Webhook Status</th>
-				<td>
-					<?php
-					$sandbox_webhook_id = get_option( 'swpm_paypal_webhook_id_sandbox' );
-					if( !empty($sandbox_webhook_id)){
-						//Sandbox webhook exists
-						echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						_e( 'Sandbox Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership');
-						echo '</span>';
-					} else {
-						//Sandbox webhook does not exist
-						if( empty( $settings->get_value('paypal-sandbox-client-id')) || empty( $settings->get_value('paypal-sandbox-secret-key')) ){
-							echo '<p><span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							_e( 'Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal API credentials first.', 'simple-membership' );
-							echo '</span></p>';
-						} else {
-							echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-							_e( 'No webhook found. Use the following Create Sandbox Webhook link to create a new webhook automatically.', 'simple-membership' );
-							echo '</span>';
-							$create_sandbox_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_create_sandbox_webhook=1' );
-							$create_sandbox_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_sandbox_webhook' ), $create_sandbox_webhook_url );
-							echo '<p><a class="button swpm-paypal-create-sandbox-webhook-btn" href="' . esc_url_raw( $create_sandbox_webhook_url_nonced ) . '" target="_blank">'.SwpmUtils::_('Create Sandbox Webhook').'</a></p>';
-						}
-					}
-					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php _e('Delete Webhooks', 'simple-membership'); ?></th>
-				<td>
-					<?php
-						if( $all_api_creds_missing ){
-							echo '<p><span class="swpm-paypal-delete-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp';
-							_e( 'PayPal API credentials are missing. Please set the PayPal API credentials.', 'simple-membership' ); 
-							echo '</span></p>';
-						} else {
-							$delete_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_settings&tab=2&swpm_paypal_delete_webhook=1' );
-							$delete_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_delete_webhook' ), $delete_webhook_url );
-							echo '<p><a class="button swpm-paypal-delete-webhook-btn" href="'.esc_url_raw($delete_webhook_url_nonced).'" target="_blank">'.SwpmUtils::_('Delete Webhooks').'</a></p>';					
-						}
-					?>
-				</td>
-			</tr>
-		</tbody>
-		</table>
-		<?php
-	}
-
 }
 

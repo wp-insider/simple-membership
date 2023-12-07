@@ -3,6 +3,37 @@
 
 //The admin ajax causes an issue with the JS validation if done on form submission. The edit profile doesn't need JS validation on email. There is PHP validation which will catch any email error.
 //SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.$member_id)));
+
+function admin_edit_form_submit_notices() {
+    $message = SwpmTransfer::get_instance()->get('admin_edit_user_status');
+    $output = "";
+    if (empty($message)) {
+        // Nothing to show
+        return $output;
+    }
+
+    if ($message['succeeded']) {
+        $output .= "<div class='notice notice-success'>";
+        $output .= '<div>' .$message['message']. '</div>';
+    } else {
+        $output .= "<div class='swpm_error'>";
+        $output .= '<div style="color: #cc0000">' .$message['message']. '</div>';
+    }
+    $extra = isset($message['extra']) ? $message['extra'] : array();
+    if (is_string($extra)) {
+        $output .= $extra;
+    } else if (is_array($extra) && !empty($extra)) {
+        $output .= '<ol>';
+        foreach ($extra as $key => $value) {
+            $output .= '<li>' . $value . '</li>';
+        }
+        $output .= '</ol>';
+    }
+    $output .= "</div>";
+
+    return $output;
+}
+
 ?>
 <div class="wrap" id="swpm-profile-page" type="edit">
     <form action="" method="post" name="swpm-edit-user" id="swpm-edit-user" enctype="multipart/form-data" class="validate swpm-validate-form"<?php do_action('user_new_form_tag');?>>
@@ -13,6 +44,9 @@
         <?php echo  SwpmUtils::_('Edit existing member details.'); ?>
         <?php echo  SwpmUtils::_(' You are currently editing member with member ID: '); ?>
         <?php echo esc_attr($member_id); ?>
+    </p>
+    <p>
+        <?php echo admin_edit_form_submit_notices(); ?>
     </p>
     <table class="form-table">
         <tr class="form-field form-required swpm-admin-edit-username">

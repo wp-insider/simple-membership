@@ -65,8 +65,14 @@ class SwpmMembers extends WP_List_Table {
 	}
 
 	function column_account_state( $item ) {
-		$acc_state_str = ucfirst( $item['account_state'] );
-		return SwpmUtils::_( $acc_state_str );
+		$account_state_column_val = isset( $item['account_state'] ) ? $item['account_state'] : '';
+		if ($account_state_column_val == 'activation_required'){
+			//For better translation support.
+			$acc_state_str = __( 'Activation Required', 'simple-membership' );
+		} else {
+			$acc_state_str = __( ucfirst( $account_state_column_val ), 'simple-membership' );
+		}
+		return $acc_state_str;
 	}
 
 	function column_member_id( $item ) {

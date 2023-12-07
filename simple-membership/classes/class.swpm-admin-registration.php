@@ -149,10 +149,10 @@ class SwpmAdminRegistration extends SwpmRegistration {
 					'message'   => SwpmUtils::_( 'Please correct the following:' ),
 					'extra'     => $error,
 				);
-				SwpmTransfer::get_instance()->set( 'admin_edit_user_status', $message );
+				SwpmTransfer::get_instance()->set( 'status', $message );
 				return;
 			}
-			SwpmTransfer::get_instance()->set( 'admin_edit_user_status', $message );
+			SwpmTransfer::get_instance()->set( 'status', $message );
 			$send_notification = filter_input( INPUT_POST, 'account_status_change' );
 			if ( ! empty( $send_notification ) ) {
 				$settings     = SwpmSettings::get_instance();
@@ -187,7 +187,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			'message'   => SwpmUtils::_( 'Please correct the following:' ),
 			'extra'     => $form->get_errors(),
 		);
-		SwpmTransfer::get_instance()->set( 'admin_edit_user_status', $message );
+		SwpmTransfer::get_instance()->set( 'status', $message );
 	}
 
 }

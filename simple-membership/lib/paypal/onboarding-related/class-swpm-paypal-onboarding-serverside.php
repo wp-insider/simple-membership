@@ -120,11 +120,15 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 				)
 			);			
 		}
+		SwpmLog::log_simple_debug( 'PPCP_STANDARD vetting_status: ' . $seller_account_status['ppcp_standard_vetting_status'], true );
+		SwpmLog::log_simple_debug( 'CUSTOM_CARD_PROCESSING status: ' . $seller_account_status['custom_card_processing_status'], true );
 
 		//Webhooks will be created (if not already created) when the admin creates subsription payment buttons
 
-		//Save the onboarding complete flag to the database.
+		//Save the onboarding complete and other related flag to the database.
 		$settings = SwpmSettings::get_instance();
+		$settings->set_value('paypal-ppcp-vetting-status-'.$environment_mode, $seller_account_status['ppcp_standard_vetting_status']); // ACDC Related - PPCP_STANDARD vetting_status
+		$settings->set_value('paypal-ppcp-custom-card-processing-status-'.$environment_mode, $seller_account_status['custom_card_processing_status']); // ACDC Related - CUSTOM_CARD_PROCESSING Status
 		$settings->set_value('paypal-ppcp-onboarding-'.$environment_mode, 'completed');
 		$settings->save();
 
@@ -193,12 +197,47 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 			return false;
 		}
 
-		//Success. return the credentials.
+		// ACDC Related - Check 'PPCP_STANDARD' vetting_status & 'CUSTOM_CARD_PROCESSING' Status
+		// Check if products is set and is an array
+		$ppcp_standard_vetting_status = '';
+		if (isset($json->products) && is_array($json->products)) {
+			foreach ($json->products as $product) {
+				// Check if the name property exists and equals 'PPCP_STANDARD'
+				if (isset($product->name) && $product->name === 'PPCP_STANDARD') {
+					// Check if vetting_status property exists
+					if (isset($product->vetting_status)) {
+						$ppcp_standard_vetting_status = $product->vetting_status;
+						// Break the loop if the desired product is found
+						break;
+					}
+				}
+			}
+		}
+
+		// Check if capabilities is set and is an array
+		$custom_card_processing_status = '';
+		if (isset($json->capabilities) && is_array($json->capabilities)) {
+			foreach ($json->capabilities as $capability) {
+				// Check if the name property exists and equals 'CUSTOM_CARD_PROCESSING'
+				if (isset($capability->name) && $capability->name === 'CUSTOM_CARD_PROCESSING') {
+					// Check if status property exists
+					if (isset($capability->status)) {
+						$custom_card_processing_status = $capability->status;
+						// We found the status, no need to continue the loop
+						break;
+					}
+				}
+			}
+		}
+
+		//Success. return the data we will use.
 		return array(
 			'merchant_id' => $json->merchant_id,
 			'tracking_id' => $json->tracking_id,/* This will be the paypal account email address */
 			'payments_receivable' => $json->payments_receivable,
 			'primary_email_confirmed' => $json->primary_email_confirmed,
+			'ppcp_standard_vetting_status' => $ppcp_standard_vetting_status, // ACDC Related - PPCP_STANDARD vetting_status
+			'custom_card_processing_status' => $custom_card_processing_status, // ACDC Related - CUSTOM_CARD_PROCESSING Status
 		);
 
 	}

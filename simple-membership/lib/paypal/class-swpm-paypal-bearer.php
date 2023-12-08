@@ -133,8 +133,9 @@ class SWPM_PayPal_Bearer {
 		//Cache/save the bearer token in the database.
 		self::cache_token( $token_string, $environment_mode );
 
-		SwpmLog::log_simple_debug('Bearer token created successfully.', true);
-		SwpmLog::log_simple_debug('Token String: ' . $token_string, true);
+		//TODO - Debug purpose. Delete later
+		// SwpmLog::log_simple_debug('Bearer token created successfully.', true);
+		// SwpmLog::log_simple_debug('Token String: ' . $token_string, true);
 
 		return $token_string;
 	}

@@ -641,7 +641,7 @@ class SimpleWpMembership {
             }
 
             if (!empty($msg)) {//Show warning messages if any.
-                echo '<div id="message" class="notice notice-error">';
+                echo '<div id="message" class="notice notice-warning">';
                 echo $msg;
                 echo '</div>';
             }

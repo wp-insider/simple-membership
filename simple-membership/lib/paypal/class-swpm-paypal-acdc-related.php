@@ -112,6 +112,9 @@ class SWPM_PayPal_ACDC_Related {
         //Get the client_token string value from the response.
 		$json = json_decode( wp_remote_retrieve_body( $response ) );
         $client_token = isset( $json->client_token) ? $json->client_token : '';
+		//TODO - Debug logging. Delete later.
+        //SwpmLog::log_array_data_to_debug( 'generarte_client_token() - client token: ' . $client_token, true);
+
 		return $client_token;
     }
 
@@ -178,8 +181,14 @@ class SWPM_PayPal_ACDC_Related {
 			'quantity' => $quantity,
 			'digital_goods_enabled' => $digital_goods_enabled,
 		);
+		
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
-		$response = $api_injector->create_paypal_order( $data );
+		$response = $api_injector->create_paypal_order_by_url_and_args( $data );
+		//TODO - Debug logging. Delete later
+		// SwpmLog::log_simple_debug('--- Var Export Below ---', true);
+		// $debug = var_export($response, true);
+		// SwpmLog::log_simple_debug($debug, true);
+            
 		if($response !== false){
 			$paypal_order_id = $response;
 		} else {
@@ -193,6 +202,7 @@ class SWPM_PayPal_ACDC_Related {
 			exit;
 		}
 
+        SwpmLog::log_simple_debug( 'PayPal Order ID: ' . $paypal_order_id, true );
 		SwpmLog::log_simple_debug( 'acdc_setup_order - API call done. Sending AJAX response back.', true );
 
 		//If everything is processed successfully, send the success response.

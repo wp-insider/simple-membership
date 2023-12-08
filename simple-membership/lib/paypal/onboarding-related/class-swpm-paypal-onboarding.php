@@ -37,9 +37,9 @@ class SWPM_PayPal_PPCP_Onboarding {
 	}
 
 	public static function generate_return_url_after_onboarding( $environment_mode = 'production' ){
-		$base_url = admin_url('admin.php?page=simple_wp_membership_settings');
+		$pp_settings_base_path = SWPM_PayPal_Main::$pp_api_connection_settings_menu_page;
+		$base_url = admin_url($pp_settings_base_path);
 		$query_args = array();
-		$query_args['tab'] = '2';
 		$query_args['swpm_ppcp_after_onboarding'] = '1';
 		$query_args['environment_mode'] = $environment_mode;
 		$return_url = add_query_arg( $query_args, $base_url );
@@ -57,7 +57,7 @@ class SWPM_PayPal_PPCP_Onboarding {
 		$query_args['partnerId'] = SWPM_PayPal_Main::$partner_id_sandbox;
 		$query_args['product'] = 'PPCP';// 'EXPRESS_CHECKOUT';
 		$query_args['integrationType'] = 'FO';
-		$query_args['features'] = 'PAYMENT,REFUND';
+		$query_args['features'] = 'PAYMENT,REFUND,BILLING_AGREEMENT';
 		$query_args['partnerClientId'] = SWPM_PayPal_Main::$partner_client_id_sandbox;
 		$query_args['returnToPartnerUrl'] = self::generate_return_url_after_onboarding('sandbox');
 		//$query_args['partnerLogoUrl'] = '';
@@ -131,7 +131,8 @@ class SWPM_PayPal_PPCP_Onboarding {
 	}
 
 	public function output_sandbox_ac_disconnect_link(){
-		$sandbox_disconnect_url = admin_url('admin.php?page=simple_wp_membership_settings&tab=2&swpm_ppcp_sandbox_disconnect=1');
+		$disonnect_link_path = SWPM_PayPal_Main::$pp_api_connection_settings_menu_page . '&swpm_ppcp_sandbox_disconnect=1';
+		$sandbox_disconnect_url = admin_url($disonnect_link_path);
 		$ac_disconnect_nonce = wp_create_nonce('swpm_sandbox_ac_disconnect_nonce');
 		$sandbox_disconnect_url_nonced = add_query_arg('_wpnonce', $ac_disconnect_nonce, $sandbox_disconnect_url);
 

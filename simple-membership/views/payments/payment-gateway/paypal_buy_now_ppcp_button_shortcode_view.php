@@ -111,228 +111,240 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 	//Create nonce for this button. 
 	$wp_nonce = wp_create_nonce( $on_page_embed_button_id );
 
+	//TODO - Remove this later. This is just for testing.
+	//Force Cache Delete on page load. Delete the bearer token from cache to make sure it generates a new one.
+	$paypal_cache = SWPM_PayPal_Cache::get_instance();
+	$paypal_cache->delete( SWPM_PayPal_Bearer::BEARER_CACHE_KEY );//Delete to reset the cache to make sure it generates a new one.
+        
 	$pp_acdc = new SWPM_PayPal_ACDC_Related();
 	$client_token = $pp_acdc->generarte_client_token( $environment_mode );
-    $currency = isset( $currency ) ? $currency : 'USD';
+        $currency = isset( $currency ) ? $currency : 'USD';
 	$sdk_src_url = SWPM_PayPal_ACDC_Related::get_sdk_src_url_for_acdc( $environment_mode, $currency );
 
 	//TODO - Remove this later. This is just for testing.
 	//Force Cache Delete on page load. Delete the bearer token from cache to make sure it generates a new one.
-	// $paypal_cache = SWPM_PayPal_Cache::get_instance();
-	// $paypal_cache->delete( SWPM_PayPal_Bearer::BEARER_CACHE_KEY );//Delete to reset the cache to make sure it generates a new one.
+	//$paypal_cache = SWPM_PayPal_Cache::get_instance();
+	//$paypal_cache->delete( SWPM_PayPal_Bearer::BEARER_CACHE_KEY );//Delete to reset the cache to make sure it generates a new one.
 
-	// $merchant_id = SWPM_PayPal_Utility_Functions::get_seller_merchant_id_by_environment_mode( $environment_mode );
-	// echo '<br />------------Debug data------------<br />';
-	// echo '<br />Client ID: ' . $sandbox_client_id;
-	// echo '<br />Merchant ID: ' . $merchant_id;
-	// echo '<p>Client Token: ' . $client_token . '</p>';
-	// echo '<p>SDK Source URL: ' . $sdk_src_url . '</p>';
-	// echo '<br />------------Debug data------------<br />';
-	//TODO - End debug code. Remove this later.
+	$merchant_id = SWPM_PayPal_Utility_Functions::get_seller_merchant_id_by_environment_mode( $environment_mode );
+	echo '<br />------------Debug data------------<br />';
+        echo '<br />PayPal Button Container ID: ' . $on_page_embed_button_id;
+	echo '<br />Client ID: ' . $sandbox_client_id;
+	echo '<br />Merchant ID: ' . $merchant_id;
+	echo '<p>Client Token (generarte_client_token): ' . $client_token . '</p>';
 
+	echo '<br />------------Debug data------------<br />';
+        
+	//TODO - Hardcoding the SDK SRC URL for testing purpose.
+        //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,card-fields&client-id=AWhSWfRz8trG53XGB_NojvmgFCJErbtqfyKsggUIK4N2of5c9pktXmgOksLM0pztnnmaGxXgYBg4Qatq';//Vidya's client-ID
+        $sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,card-fields&client-id=AXXepw7uhkLrtey3bJFpNZQIigy15JsCfSBbZEno-lJiNs5Fqf2-_uqxGH6i8U-1Zc6k6QjSKVm48Wrg';//New account client-ID
+        //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AQ1G2q1dWrcPZzrioplED3qB0forkMUhS12VPcVoEvxSCHce7iNpAGgI12nUPNVgcQY7AuGp8iL6jAQQ';
+        //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
+        //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX&currency=USD&intent=capture';
+	//$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AQ1G2q1dWrcPZzrioplED3qB0forkMUhS12VPcVoEvxSCHce7iNpAGgI12nUPNVgcQY7AuGp8iL6jAQQ&merchant-id=6P8SX89ESHD56&currency=USD&intent=capture';
+        echo '<p>SDK Source URL: ' . $sdk_src_url . '</p>';
+        
+//        $paypal_cache = SWPM_PayPal_Cache::get_instance();
+//        //TODO - Debug purposes. 
+//        //Delete any old tokens.
+//        $paypal_cache->delete( self::BEARER_CACHE_KEY ); //TODO - Delete Later
+                        
+        //Get the bearer/access token.
+        $bearer = SWPM_PayPal_Bearer::get_instance();
+                
+        $bearer_access_token = $bearer->get_bearer_token( $environment_mode );
+        echo '<p>Bearer Access Token: ' . $bearer_access_token . '</p>';
+        //$client_token = $bearer_access_token;//Testing with bearer access token
+                
+        //Commented code
+        /*
+         * <script src="<?php echo $sdk_src_url; ?>" data-partner-attribution-id="TipsandTricks_SP_PPCP" data-client-token="<?php echo $client_token; ?>"></script>
+         * $sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AQ1G2q1dWrcPZzrioplED3qB0forkMUhS12VPcVoEvxSCHce7iNpAGgI12nUPNVgcQY7AuGp8iL6jAQQ&merchant-id=6P8SX89ESHD56&currency=USD&intent=capture';
+         */
 	$output = '';
 	ob_start();
 	?>
-	<link rel="stylesheet" type="text/css" href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css" />
+<!-- To be replaced with your own stylesheet -->
+<link rel="stylesheet" type="text/css" href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"/>
 
-	<div class="swpm-button-wrapper swpm-paypal-buy-now-button-wrapper">
-		<script src="<?php echo $sdk_src_url; ?>" data-partner-attribution-id="TipsandTricks_SP_PPCP" data-client-token="<?php echo $client_token; ?>"></script>
+<!-- Express fills in the clientId and clientToken variables -->
+<script src="<?php echo $sdk_src_url; ?>" data-partner-attribution-id="TipsandTricks_SP_PPCP" data-client-token="<?php echo $client_token; ?>"></script>
 
-		<!-- Some additiona hidden input fields -->
-		<input type="hidden" id="<?php echo esc_attr( $on_page_embed_button_id . '-custom-field' ); ?>" name="custom" value="<?php echo esc_attr( $custom_field_value ); ?>">
+<div class="swpm-button-wrapper swpm-paypal-buy-now-button-wrapper">
 
-		<table border="0" align="center" valign="top" bgcolor="#FFFFFF" style="width: 39%">
-			<tr>
-				<td colspan="2">
-					<!-- PayPal button container where the button will be rendered -->
-					<div id="<?php echo esc_attr( $on_page_embed_button_id ); ?>" style="width: <?php echo esc_attr( $btn_width ); ?>px;"></div>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">&nbsp;</td>
-			</tr>
-		</table>
-		<div align="center"> or </div>
-		<div class="card_container">
-			<form id="card-form">
-				<label for="card-number">Card Number</label>
-				<div id="card-number" class="card_field"></div>
-				<div>
-					<label for="expiration-date">Expiration Date</label>
-					<div id="expiration-date" class="card_field"></div>
-				</div>
-				<div>
-					<label for="cvv">CVV</label>
-					<div id="cvv" class="card_field"></div>
-				</div>
-				<label for="card-holder-name">Name on Card</label>
-				<input type="text" id="card-holder-name" name="card-holder-name" autocomplete="off"
-					placeholder="card holder name" />
-				<div>
-					<label for="card-billing-address-street">Billing Address</label>
-					<input type="text" id="card-billing-address-street" name="card-billing-address-street"
-						autocomplete="off" placeholder="street address" />
-				</div>
-				<div>
-					<label for="card-billing-address-unit">&nbsp;</label>
-					<input type="text" id="card-billing-address-unit" name="card-billing-address-unit" autocomplete="off"
-						placeholder="unit" />
-				</div>
-				<div>
-					<input type="text" id="card-billing-address-city" name="card-billing-address-city" autocomplete="off"
-						placeholder="city" />
-				</div>
-				<div>
-					<input type="text" id="card-billing-address-state" name="card-billing-address-state" autocomplete="off"
-						placeholder="state" />
-				</div>
-				<div>
-					<input type="text" id="card-billing-address-zip" name="card-billing-address-zip" autocomplete="off"
-						placeholder="zip / postal code" />
-				</div>
-				<div>
-					<input type="text" id="card-billing-address-country" name="card-billing-address-country"
-						autocomplete="off" placeholder="country code" />
-				</div>
-				<br /><br />
-				<button value="submit" id="submit" class="btn">Pay</button>
-			</form>
-		</div>
-		<script type="text/javascript">
-		jQuery(function ($) {
-			let orderId;
-			paypal.Buttons({
-				style: {
-					layout: 'horizontal'
-				},
-				createOrder: function (data, actions) {
-					return actions.order.create({
-						purchase_units: [{
-							amount: {
-								value: "1.00"
-							}
-						}]
-					});
-				},
-				onApprove: function (data, actions) {
-					return actions.order.capture().then(function (details) {
-						console.log('onApprove done. Details: ' + JSON.stringify(details));
-						alert('Transaction completed by ' + details.payer.name.given_name);
-						window.location.href = '/success.html';
-					});
-				}
-			//}).render("#paypal-button-container");
-			}).render('#<?php echo esc_js( $on_page_embed_button_id ); ?>');
-			if (paypal.HostedFields.isEligible()) {
-				paypal.HostedFields.render({
-					createOrder: function () {
-						console.log('Going to execute the create order code.');
+    <div id="paypal-button-container" class="paypal-button-container"></div>
+        <div id="checkout-form">
+        <div id="card-name-field-container"></div>
+        <div id="card-number-field-container"></div>
+        <div id="card-expiry-field-container"></div>
+        <div id="card-cvv-field-container"></div>
+        <button id="card-field-submit-button" type="button">Pay with Card</button>
+    </div>
 
-						// Set up the transaction by creating a `paypal.Order`.
-						// The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
-						console.log('Setting up the order for ACDC.');
-						let data = {};
-						data.button_id = '<?php echo esc_js($button_id); ?>';
-						data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
-						data.item_name = '<?php echo esc_js($item_name); ?>';
-						//TODO - debug purpose only. Remove this later.
-						console.log('Data: ' + JSON.stringify(data));
+<script type="text/javascript">
+// Render the button component
+paypal
+  .Buttons({
+    // optional styling for buttons
+    // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
+    style: {
+        color: '<?php echo esc_js($btn_color); ?>',
+        shape: '<?php echo esc_js($btn_shape); ?>',
+        height: <?php echo esc_js($btn_height); ?>,
+        label: '<?php echo esc_js($btn_type); ?>',
+        layout: '<?php echo esc_js($btn_layout); ?>',
+    },
+                
+    // Sets up the transaction when a payment button is clicked
+    createOrder: function (data) {
+        console.log('Going to execute the create order code for PayPal button.');
+        // The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
+        console.log('Setting up the order for PayPal button checkout.');
+        let dataObj = {};
+        dataObj.button_id = '<?php echo esc_js($button_id); ?>';
+        dataObj.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
+        dataObj.item_name = '<?php echo esc_js($item_name); ?>';
+        dataObj.payment_source = data.paymentSource;
+        console.log('dataObj: ' + JSON.stringify(dataObj));
 
-						// Using fetch API for AJAX
-						let postData = 'action=swpm_acdc_setup_order&data=' + JSON.stringify(data) + '&_wpnonce=<?php echo $wp_nonce; ?>';
-						fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/x-www-form-urlencoded'
-							},
-							body: postData
-						}).then(function(res) {
-							console.log('Create order response: ' + JSON.stringify(res));
-							return res.json();
-						}).then(function(orderData) {
-							console.log('Create order result from server: ', JSON.stringify(orderData));
-							orderId = orderData.order_id;
-							console.log('Returning the Order ID: ' + orderId);
-							return orderId;
-						});
-					},
-					styles: {
-						'.valid': {
-							'color': 'green'
-						},
-						'.invalid': {
-							'color': 'red'
-						}
-					},
-					fields: {
-						number: {
-							selector: "#card-number",
-							placeholder: "4111 1111 1111 1111"
-						},
-						cvv: {
-							selector: "#cvv",
-							placeholder: "123"
-						},
-						expirationDate: {
-							selector: "#expiration-date",
-							placeholder: "MM/YY"
-						}
-					}
-				}).then(function (cardFields) {
-					document.querySelector("#card-form").addEventListener('submit', (event) => {
-console.log('Card fields submitted.');
-						event.preventDefault();
-						cardFields.submit({
-							cardholderName: document.getElementById('card-holder-name').value,
-							billingAddress: {
-								streetAddress: document.getElementById('card-billing-address-street').value,
-								extendedAddress: document.getElementById('card-billing-address-unit').value,
-								region: document.getElementById('card-billing-address-state').value,
-								locality: document.getElementById('card-billing-address-city').value,
-								postalCode: document.getElementById('card-billing-address-zip').value,
-								countryCodeAlpha2: document.getElementById('card-billing-address-country').value
-							}
-						}).then(function () {
-console.log('Going to execute the capture order code.');//<-- This is not executing.
+        // Using fetch API for AJAX
+        let postData = 'action=swpm_acdc_setup_order&data=' + JSON.stringify(dataObj) + '&_wpnonce=<?php echo $wp_nonce; ?>';
+        console.log('Goign to send off Ajax request to the server that will create the order.');
+        console.log('Post Data: ' + postData);
+        //This alert will allow us to see the console log before going forward.
+        alert('About to send the ajax request');
+                                                
+        return fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: postData
+        })
+        .then((response) => response.json())
+        .then((order) => order.order_id);
+    },
+    // Finalize the transaction after payer approval
+    onApprove: function (data) {
+        return fetch(`myserver.com/api/orders/${data.orderID}/capture`, {
+          method: "POST",
+        })
+        .then((response) => response.json())
+        .then((orderData) => {
+          // Successful capture! For dev/demo purposes:
+          console.log("Capture result", orderData, JSON.stringify(orderData, null, 2));
+          var transaction = orderData.purchase_units[0].payments.captures[0];
+          // Show a success message within this page. For example:
+          // var element = document.getElementById('paypal-button-container');
+          // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+          // Or go to another URL: actions.redirect('thank_you.html');
+        });
+    },
+    onError: function (error) {
+        // Do something with the error from the SDK
+    }
+  })
+  .render("#paypal-button-container");
 
-							const formData = new FormData();
+// Create the Card Fields Component and define callbacks
+const cardField = paypal.CardFields({
+    createOrder: function (data) {
+        // The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
+        console.log('Setting up the order for ACDC checkout.');
+        let dataObj = {};
+        dataObj.button_id = '<?php echo esc_js($button_id); ?>';
+        dataObj.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
+        dataObj.item_name = '<?php echo esc_js($item_name); ?>';
+        dataObj.payment_source = data.paymentSource;
+        console.log('dataObj: ' + JSON.stringify(dataObj));
+
+        // Using fetch API for AJAX
+        let postData = 'action=swpm_acdc_setup_order&data=' + JSON.stringify(dataObj) + '&_wpnonce=<?php echo $wp_nonce; ?>';
+        console.log('Goign to send off Ajax request to the server that will create the order.');
+        console.log('Post Data: ' + postData);
+        //This alert will allow us to see the console log before going forward.
+        alert('About to send the ajax request');
+                                                
+        return fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
+            method: "post",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: postData
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then((orderData) => {
+            console.log('ACDC order-create response below.');
+            console.log(orderData);
+            return orderData.order_id;
+        });
+    },
+    onApprove: function (data) {
+        const { orderID } = data;
+        
+//<-- This was not executing becasue there was no "onApprove" in the previous code example.        
+console.log('Going to execute the capture order code.');
+console.log(data);
+console.log('Order ID: ' + orderID);
+const formData = new FormData();
 formData.append('action', 'swpm_acdc_capture_order');
-formData.append('order_id', orderId);
+formData.append('order_id', orderID);
 formData.append('on_page_button_id', '<?php echo esc_js($on_page_embed_button_id); ?>');
 formData.append('_wpnonce', '<?php echo $wp_nonce; ?>');
 console.log( 'Going to do capture order AJAX. Form Data: ' +  JSON.stringify(formData) );
-							fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
-								method: 'post',
-								body: formData,
-							}).then(function (res) {
-								console.log( 'Capture response: ' +  JSON.stringify(res) );
-								return res.json();
-							}).then(function (orderData) {
-								console.log( 'Capture result from server: ', JSON.stringify(orderData) );
 
-								var errorDetail = '';//Array.isArray(orderData.details) && orderData.details[0];
-								if (errorDetail) {
-									var msg = 'Sorry, your transaction could not be processed.';
-									if (errorDetail.description) msg += '' + errorDetail.description;
-									if (orderData.debug_id) msg += ' (' + orderData.debug_id + ')';
-									return alert(msg); // Show a failure message
-								}
-								alert('Transaction completed!');
-							})
-						}).catch(function (err) {
-							alert('Payment could not be captured! ' + JSON.stringify(err))
-						});
-					});
-				});
-			} else {
-				document.querySelector("#card-form").style = 'display: none';
-			}
-		});
-		</script>
-	</div><!-- end of .swpm-button-wrapper -->
-	<?php
-	$output .= ob_get_clean();
+        return fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
+            method: "post",
+            body: formData
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then((orderData) => {
+            // Redirect to success page
+            console.log('Capture response below.');
+            console.log(orderData);
+            alert('Capture successful.');
+        });
+    },
+    onError: function (error) {
+        // Do something with the error from the SDK
+        console.log('ACDC onError triggered for card checkout.');
+        console.log(error);
+    }
+});
 
-	return $output;
+// Render each field after checking for eligibility
+if (cardField.isEligible()) {
+    const nameField = cardField.NameField();
+    nameField.render('#card-name-field-container');
+
+    const numberField = cardField.NumberField();
+    numberField.render('#card-number-field-container');
+
+    const cvvField = cardField.CVVField();
+    cvvField.render('#card-cvv-field-container');
+
+    const expiryField = cardField.ExpiryField();
+    expiryField.render('#card-expiry-field-container');
+
+    // Add click listener to submit button and call the submit function on the CardField component
+    document.getElementById("card-field-submit-button").addEventListener("click", () => {
+        cardField
+        .submit()
+        .then(() => {
+            // submit successful
+        });
+    });
+};
+</script>
+
+</div><!-- end of .swpm-button-wrapper -->
+
+    <?php
+    $output .= ob_get_clean();
+    return $output;
 
 }

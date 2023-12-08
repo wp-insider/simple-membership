@@ -24,7 +24,19 @@ class SWPM_PayPal_Bearer {
 	 * Check if a bearer token exists in the cache and if it is expired or not. Create a new one if needed.
 	 */
 	public function get_bearer_token( $environment_mode = 'production' ) {
+		//TODO - Debug purposes. Delete Later.
+		//Testing with Hardcoded Token (this token will expire)
+		// $token_string = 'A21AAIqlY18iFaSC-S_-CRKPoMMp-xuIVVHj6MOgyosTMA6eSP2USVpYjOVe_DkXyD2uyZ00gnvZNhMoiJWD-Vve7QLijfKcg';
+		// SwpmLog::log_simple_debug('Using Token: ' . $token_string, true);
+		// SwpmLog::log_simple_debug('Environment mode: ' . $environment_mode, true);
+		// return $token_string;
+		//---------------------------
+	
 		$paypal_cache = SWPM_PayPal_Cache::get_instance();
+                
+		//TODO - Debug purposes. Delete later.
+        //Delete any old tokens.
+		$paypal_cache->delete( self::BEARER_CACHE_KEY ); //TODO - Delete Later
 		
 		//Check if a cached token exists
 		$token_exists = $paypal_cache->has( self::BEARER_CACHE_KEY );
@@ -64,7 +76,7 @@ class SWPM_PayPal_Bearer {
             }
         }
 
-        SwpmLog::log_simple_debug('Creating a new bearer token for environment mode: ' . $environment_mode, true);
+        SwpmLog::log_simple_debug('[New Token] Creating a new bearer token for environment mode: ' . $environment_mode, true);
 
         if( $environment_mode == 'sandbox' ){
             $client_id = $settings->get_value('paypal-sandbox-client-id');
@@ -92,6 +104,12 @@ class SWPM_PayPal_Bearer {
 			),
 		);
 
+		//TODO - Debug purpose. Delete later
+		// SwpmLog::log_simple_debug('Posting the request to the PayPal API to generate token. URL: ' . $url, true);
+		// SwpmLog::log_simple_debug('Client ID: ' . $client_id, true);
+		// SwpmLog::log_simple_debug('Secret Key: ' . $secret, true);
+		// SwpmLog::log_simple_debug('Environment mode: ' . $environment_mode, true);
+
 		$response = SWPM_PayPal_Request_API::send_request_by_url_and_args( $url, $args );
 
 		if ( is_wp_error( $response ) ) {
@@ -114,6 +132,9 @@ class SWPM_PayPal_Bearer {
 		
 		//Cache/save the bearer token in the database.
 		self::cache_token( $token_string, $environment_mode );
+
+		SwpmLog::log_simple_debug('Bearer token created successfully.', true);
+		SwpmLog::log_simple_debug('Token String: ' . $token_string, true);
 
 		return $token_string;
 	}

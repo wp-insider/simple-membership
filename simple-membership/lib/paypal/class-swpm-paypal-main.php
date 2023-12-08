@@ -30,6 +30,8 @@ class SWPM_PayPal_Main {
 	public static $partner_client_id_production = 'TODO';
 	public static $partner_client_id_sandbox = 'AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
 
+	public static $pp_api_connection_settings_menu_page = 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api';
+
 
     public function __construct() {
 

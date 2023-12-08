@@ -207,7 +207,7 @@ class SWPM_Payment_Settings_Menu_Tab {
         ?>
 
         <!-- Paypal PPCP Connection postbox -->
-
+        <!--
         <div class="postbox">
             <h2 id="paypal-ppcp-connection-section"><?php _e("PayPal Account Connection", 'simple-membership'); ?></h2>
             <div class="inside">
@@ -216,6 +216,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                 ?>
             </div>
         </div>
+        -->
 
 
         <!-- Paypal Settings postbox -->

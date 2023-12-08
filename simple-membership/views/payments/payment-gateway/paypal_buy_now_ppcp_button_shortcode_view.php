@@ -126,13 +126,12 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 	//$paypal_cache = SWPM_PayPal_Cache::get_instance();
 	//$paypal_cache->delete( SWPM_PayPal_Bearer::BEARER_CACHE_KEY );//Delete to reset the cache to make sure it generates a new one.
 
-	$merchant_id = SWPM_PayPal_Utility_Functions::get_seller_merchant_id_by_environment_mode( $environment_mode );
-	echo '<br />------------Debug data Start------------<br />';
-    echo '<br />PayPal Button Container ID: ' . $on_page_embed_button_id;
-	echo '<br />Client ID: ' . $sandbox_client_id;
-	echo '<br />Merchant ID: ' . $merchant_id;
-	//echo '<p>Client Token (generate_client_token): ' . $client_token . '</p>';
-	echo '<br />------------Debug data End------------<br />';
+	// $merchant_id = SWPM_PayPal_Utility_Functions::get_seller_merchant_id_by_environment_mode( $environment_mode );
+	// echo '<br />------------Debug data Start------------<br />';
+    // echo '<br />PayPal Button Container ID: ' . $on_page_embed_button_id;
+	// echo '<br />Client ID: ' . $sandbox_client_id;
+	// echo '<br />Merchant ID: ' . $merchant_id;
+	// echo '<br />------------Debug data End------------<br />';
         
 	//TODO - Hardcoding the SDK SRC URL for testing purpose.
     //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,card-fields&client-id=AWhSWfRz8trG53XGB_NojvmgFCJErbtqfyKsggUIK4N2of5c9pktXmgOksLM0pztnnmaGxXgYBg4Qatq';//Vidya's client-ID

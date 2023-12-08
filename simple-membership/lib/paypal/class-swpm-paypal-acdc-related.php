@@ -232,7 +232,7 @@ class SWPM_PayPal_ACDC_Related {
 
 		$on_page_button_id = isset( $_POST['on_page_button_id'] ) ? sanitize_text_field( $_POST['on_page_button_id'] ) : '';
 		//$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';
-		SwpmLog::log_array_data_to_debug( 'Received request - swpm_acdc_capture_order. Order ID: ' . $order_id . ', on_page_button_id: ' . $on_page_button_id, true );
+		SwpmLog::log_simple_debug( 'Received request - swpm_acdc_capture_order. Order ID: ' . $order_id . ', on_page_button_id: ' . $on_page_button_id, true );
 
 		// Check nonce.
 		if ( ! check_ajax_referer( $on_page_button_id, '_wpnonce', false ) ) {

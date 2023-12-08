@@ -217,47 +217,46 @@ class SWPM_PayPal_Request_API_Injector {
             $item_name = isset($data['item_name']) ? $data['item_name'] : '';
             //$digital_goods_enabled = isset($data['digital_goods_enabled']) ? $data['digital_goods_enabled'] : 1;
             
-//            $order_data = [
-//                "intent" => "CAPTURE",
-//                "purchase_units" => [
-//                    [
-//                        "amount" => [
-//                            "value" => $payment_amount,
-//                            "currency_code" => $currency,
-//                            "breakdown" => [
-//                                "item_total" => [
-//                                    "currency_code" => $currency,
-//                                    "value" => $payment_amount * $quantity,
-//                                ]
-//                            ]
-//                        ],
-//                        "items" => [
-//                            [
-//                                "name" => $item_name,
-//                                "quantity" => $quantity,
-//                                // "category" => $digital_goods_enabled ? "PHYSICAL_GOODS" : "DIGITAL_GOODS",
-//                                "unit_amount" => [
-//                                    "value" => $payment_amount,
-//                                    "currency_code" => $currency,
-//                                ]
-//                            ]
-//                        ]
-//                    ]
-//                ]
-//            ];
+           $order_data = [
+               "intent" => "CAPTURE",
+               "purchase_units" => [
+                   [
+                       "amount" => [
+                           "value" => $payment_amount,
+                           "currency_code" => $currency,
+                           "breakdown" => [
+                               "item_total" => [
+                                   "currency_code" => $currency,
+                                   "value" => $payment_amount * $quantity,
+                               ]
+                           ]
+                       ],
+                       "items" => [
+                           [
+                               "name" => $item_name,
+                               "quantity" => $quantity,
+                               "unit_amount" => [
+                                   "value" => $payment_amount,
+                                   "currency_code" => $currency,
+                               ]
+                           ]
+                       ]
+                   ]
+               ]
+           ];
 
-//A simple order data for testing            
-$order_data = [
-    "intent" => "CAPTURE",
-    "purchase_units" => [
-        [
-            amount => [
-            currency_code => "USD",
-            value => "100.00",
-            ],
-        ],
-    ],
-];
+            //A simple order data for testing            
+            // $order_data = [
+            //     "intent" => "CAPTURE",
+            //     "purchase_units" => [
+            //         [
+            //             amount => [
+            //             currency_code => "USD",
+            //             value => "100.00",
+            //             ],
+            //         ],
+            //     ],
+            // ];
             
             $environment_mode = 'sandbox';
             //Token
@@ -287,9 +286,9 @@ $order_data = [
             $response = SWPM_PayPal_Request_API::send_request_by_url_and_args( $url, $args );
             
             //TODO - Debug logging. Delete later
-            SwpmLog::log_simple_debug('--- Var Export Below ---', true);
-            $debug = var_export($response, true);
-            SwpmLog::log_simple_debug($debug, true);
+            // SwpmLog::log_simple_debug('--- Var Export Below ---', true);
+            // $debug = var_export($response, true);
+            // SwpmLog::log_simple_debug($debug, true);
             
             if ( $response !== false){
                 //Response is a success!

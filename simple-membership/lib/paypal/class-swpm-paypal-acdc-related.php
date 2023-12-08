@@ -25,16 +25,17 @@ class SWPM_PayPal_ACDC_Related {
 		//Get the client ID and merchant ID based on the environment mode.
 		$client_id = SWPM_PayPal_Utility_Functions::get_seller_client_id_by_environment_mode( $environment_mode );
         $merchant_id = SWPM_PayPal_Utility_Functions::get_seller_merchant_id_by_environment_mode( $environment_mode );
-		if(empty($merchant_id)){
-			$pp_acdc_error_str = __( 'Merchant ID is empty. PayPal ACDC option requires the merchant ID value. Please check the PayPal settings.', 'simple-membership' );
-			SwpmLog::log_simple_debug($pp_acdc_error_str, false);
-			wp_die($pp_acdc_error_str);
-		}
 
 		$query_args = array();
 		$query_args['components'] = 'buttons,card-fields';//'buttons,card-fields,hosted-fields'
 		$query_args['client-id'] = $client_id;//Seller client ID
-		$query_args['merchant-id'] = $merchant_id;//Seller merchant ID
+		if(!empty($merchant_id)){
+			$query_args['merchant-id'] = $merchant_id;//Seller merchant ID
+		} else {
+			//Merchant ID is not mandatory for 'card-fields' component.
+			$pp_acdc_msg_str = __( 'Note: Merchant ID value is empty so the SDK URL will not include this parameter.', 'simple-membership' );
+			SwpmLog::log_simple_debug($pp_acdc_msg_str, true);
+		}
 		$query_args['currency'] = $currency;
 		$query_args['intent'] = 'capture';
 

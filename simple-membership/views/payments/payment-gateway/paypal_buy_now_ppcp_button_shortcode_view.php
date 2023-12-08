@@ -118,7 +118,7 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
         
 	$pp_acdc = new SWPM_PayPal_ACDC_Related();
 	$client_token = $pp_acdc->generarte_client_token( $environment_mode );
-        $currency = isset( $currency ) ? $currency : 'USD';
+    $currency = isset( $currency ) ? $currency : 'USD';
 	$sdk_src_url = SWPM_PayPal_ACDC_Related::get_sdk_src_url_for_acdc( $environment_mode, $currency );
 
 	//TODO - Remove this later. This is just for testing.
@@ -128,7 +128,7 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 
 	$merchant_id = SWPM_PayPal_Utility_Functions::get_seller_merchant_id_by_environment_mode( $environment_mode );
 	echo '<br />------------Debug data------------<br />';
-        echo '<br />PayPal Button Container ID: ' . $on_page_embed_button_id;
+    echo '<br />PayPal Button Container ID: ' . $on_page_embed_button_id;
 	echo '<br />Client ID: ' . $sandbox_client_id;
 	echo '<br />Merchant ID: ' . $merchant_id;
 	echo '<p>Client Token (generarte_client_token): ' . $client_token . '</p>';
@@ -136,31 +136,28 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 	echo '<br />------------Debug data------------<br />';
         
 	//TODO - Hardcoding the SDK SRC URL for testing purpose.
-        //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,card-fields&client-id=AWhSWfRz8trG53XGB_NojvmgFCJErbtqfyKsggUIK4N2of5c9pktXmgOksLM0pztnnmaGxXgYBg4Qatq';//Vidya's client-ID
-        $sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,card-fields&client-id=AXXepw7uhkLrtey3bJFpNZQIigy15JsCfSBbZEno-lJiNs5Fqf2-_uqxGH6i8U-1Zc6k6QjSKVm48Wrg';//New account client-ID
-        //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AQ1G2q1dWrcPZzrioplED3qB0forkMUhS12VPcVoEvxSCHce7iNpAGgI12nUPNVgcQY7AuGp8iL6jAQQ';
-        //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
-        //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX&currency=USD&intent=capture';
-	//$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AQ1G2q1dWrcPZzrioplED3qB0forkMUhS12VPcVoEvxSCHce7iNpAGgI12nUPNVgcQY7AuGp8iL6jAQQ&merchant-id=6P8SX89ESHD56&currency=USD&intent=capture';
-        echo '<p>SDK Source URL: ' . $sdk_src_url . '</p>';
-        
-//        $paypal_cache = SWPM_PayPal_Cache::get_instance();
-//        //TODO - Debug purposes. 
-//        //Delete any old tokens.
-//        $paypal_cache->delete( self::BEARER_CACHE_KEY ); //TODO - Delete Later
+    //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,card-fields&client-id=AWhSWfRz8trG53XGB_NojvmgFCJErbtqfyKsggUIK4N2of5c9pktXmgOksLM0pztnnmaGxXgYBg4Qatq';//Vidya's client-ID
+    //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,card-fields&client-id=AXXepw7uhkLrtey3bJFpNZQIigy15JsCfSBbZEno-lJiNs5Fqf2-_uqxGH6i8U-1Zc6k6QjSKVm48Wrg';//New account client-ID
+    //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AQ1G2q1dWrcPZzrioplED3qB0forkMUhS12VPcVoEvxSCHce7iNpAGgI12nUPNVgcQY7AuGp8iL6jAQQ';
+    //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
+    //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX&currency=USD&intent=capture';
+    //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AQ1G2q1dWrcPZzrioplED3qB0forkMUhS12VPcVoEvxSCHce7iNpAGgI12nUPNVgcQY7AuGp8iL6jAQQ&merchant-id=6P8SX89ESHD56&currency=USD&intent=capture';
+    echo '<p>SDK Source URL: ' . $sdk_src_url . '</p>';
+
                         
-        //Get the bearer/access token.
-        $bearer = SWPM_PayPal_Bearer::get_instance();
-                
-        $bearer_access_token = $bearer->get_bearer_token( $environment_mode );
-        echo '<p>Bearer Access Token: ' . $bearer_access_token . '</p>';
-        //$client_token = $bearer_access_token;//Testing with bearer access token
-                
-        //Commented code
-        /*
-         * <script src="<?php echo $sdk_src_url; ?>" data-partner-attribution-id="TipsandTricks_SP_PPCP" data-client-token="<?php echo $client_token; ?>"></script>
-         * $sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AQ1G2q1dWrcPZzrioplED3qB0forkMUhS12VPcVoEvxSCHce7iNpAGgI12nUPNVgcQY7AuGp8iL6jAQQ&merchant-id=6P8SX89ESHD56&currency=USD&intent=capture';
-         */
+    //Get the bearer/access token.
+    $bearer = SWPM_PayPal_Bearer::get_instance();
+            
+    $bearer_access_token = $bearer->get_bearer_token( $environment_mode );
+    echo '<p>Bearer Access Token: ' . $bearer_access_token . '</p>';
+    //$client_token = $bearer_access_token;//Testing with bearer access token
+            
+    //Commented code
+    /*
+    * <script src="<?php echo $sdk_src_url; ?>" data-partner-attribution-id="TipsandTricks_SP_PPCP" data-client-token="<?php echo $client_token; ?>"></script>
+    * $sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AQ1G2q1dWrcPZzrioplED3qB0forkMUhS12VPcVoEvxSCHce7iNpAGgI12nUPNVgcQY7AuGp8iL6jAQQ&merchant-id=6P8SX89ESHD56&currency=USD&intent=capture';
+    */
+    
 	$output = '';
 	ob_start();
 	?>

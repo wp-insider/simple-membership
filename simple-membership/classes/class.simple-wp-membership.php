@@ -580,44 +580,54 @@ class SimpleWpMembership {
         return $output;
     }
     
-    /* If any message/notice was set during the execution then this function will output that message */
+    /**
+     * If any message/notice was set during the execution then this function will output that message.
+     *
+     * @return boolean
+    */
     public function notices() {
         $message = SwpmTransfer::get_instance()->get('status');
         $succeeded = false;
         if (empty($message)) {
             return false;
         }
+
+        $output = '';
         if ($message['succeeded']) {
-            echo "<div id='swpm_message' class='swpm_success'>";
+            $output .= '<div class="notice notice-success is-dismissible">';
             $succeeded = true;
         } else {
-            echo "<div id='swpm_message' class='swpm_error'>";
+            $output .= '<div class="notice notice-error is-dismissible">';
         }
-        echo $message['message'];
+        $output .= '<p><b>';
+        $output .= $message['message'];
+        $output .= '</b></p>';
         $extra = isset($message['extra']) ? $message['extra'] : array();
         if (is_string($extra)) {
-            echo $extra;
+            $output .= $extra;
         } else if (is_array($extra) && !empty($extra)) {
-            echo '<ul>';
+            $output .= '<ol style="margin-top: 0.5rem">';
             foreach ($extra as $key => $value) {
-                echo '<li>' . $value . '</li>';
+                $output .= '<li>' . $value . '</li>';
             }
-            echo '</ul>';
+            $output .= '</ol>';
         }
-        echo "</div>";
+        $output .= '</div>';
         if (isset($message['pass_reset_sent'])) {
             $succeeded = true;
         }
+
+        echo $output;
         return $succeeded;
     }
 
-    /*
+    /**
      * This function is hooked to WordPress's admin_notices action hook
      * It is used to show any plugin specific notices/warnings in the admin interface
      */
-
     public function do_admin_notices() {
-        $this->notices(); //Show any execution specific notices in the admin interface.
+        //Show any execution specific notices in the admin interface.
+        $this->notices();
         //Show any other general warnings/notices to the admin.
         if (SwpmMiscUtils::is_swpm_admin_page()) {
             //we are in an admin page for SWPM plugin.
@@ -627,11 +637,11 @@ class SimpleWpMembership {
             $settings = SwpmSettings::get_instance();
             $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
             if ($sandbox_enabled) {
-                $msg .= '<p>' . SwpmUtils::_('You have the sandbox payment mode enabled in plugin settings. Make sure to turn off the sandbox mode when you want to do live transactions.') . '</p>';
+                $msg .= '<p>' . __('You have the sandbox payment mode enabled in plugin settings. Make sure to turn off the sandbox mode when you want to do live transactions.', 'simple-membership') . '</p>';
             }
 
             if (!empty($msg)) {//Show warning messages if any.
-                echo '<div id="message" class="error">';
+                echo '<div id="message" class="notice notice-error">';
                 echo $msg;
                 echo '</div>';
             }

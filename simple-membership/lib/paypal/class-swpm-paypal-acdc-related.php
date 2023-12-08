@@ -25,9 +25,14 @@ class SWPM_PayPal_ACDC_Related {
 		//Get the client ID and merchant ID based on the environment mode.
 		$client_id = SWPM_PayPal_Utility_Functions::get_seller_client_id_by_environment_mode( $environment_mode );
         $merchant_id = SWPM_PayPal_Utility_Functions::get_seller_merchant_id_by_environment_mode( $environment_mode );
+		if(empty($merchant_id)){
+			$pp_acdc_error_str = __( 'Merchant ID is empty. PayPal ACDC option requires the merchant ID value. Please check the PayPal settings.', 'simple-membership' );
+			SwpmLog::log_simple_debug($pp_acdc_error_str, false);
+			wp_die($pp_acdc_error_str);
+		}
 
 		$query_args = array();
-		$query_args['components'] = 'buttons,hosted-fields';
+		$query_args['components'] = 'buttons,card-fields';//'buttons,card-fields,hosted-fields'
 		$query_args['client-id'] = $client_id;//Seller client ID
 		$query_args['merchant-id'] = $merchant_id;//Seller merchant ID
 		$query_args['currency'] = $currency;
@@ -35,7 +40,7 @@ class SWPM_PayPal_ACDC_Related {
 
 		$base_url = 'https://www.paypal.com/sdk/js';
 		$sdk_src_url = add_query_arg( $query_args, $base_url );
-		//Example URL = "https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=".$client_id."&merchant-id=".$merchant_id."&currency=USD&intent=capture";
+		//Example URL = "https://www.paypal.com/sdk/js?components=buttons,card-fields&client-id=".$client_id."&merchant-id=".$merchant_id."&currency=USD&intent=capture";
 
         //Encode the URL to prevent &currency=USD or other parameters from being converted to special symbol.
         $sdk_src_url = htmlspecialchars( $sdk_src_url, ENT_QUOTES, 'UTF-8' );
@@ -64,7 +69,7 @@ class SWPM_PayPal_ACDC_Related {
      * Generates a client token that is used in ACDC (Advanced Credit and Debit Card) flow.
      * PayPal requirement: A client token needs to be generated for each time the card fields render on the page.
      */
-    public function generarte_client_token( $environment_mode = 'production' ){
+    public function generate_client_token( $environment_mode = 'production' ){
         //Generate a customer ID.
         $customer_id = self::generate_customer_id();
 
@@ -113,7 +118,7 @@ class SWPM_PayPal_ACDC_Related {
 		$json = json_decode( wp_remote_retrieve_body( $response ) );
         $client_token = isset( $json->client_token) ? $json->client_token : '';
 		//TODO - Debug logging. Delete later.
-        //SwpmLog::log_array_data_to_debug( 'generarte_client_token() - client token: ' . $client_token, true);
+        //SwpmLog::log_array_data_to_debug( 'generate_client_token() - client token: ' . $client_token, true);
 
 		return $client_token;
     }

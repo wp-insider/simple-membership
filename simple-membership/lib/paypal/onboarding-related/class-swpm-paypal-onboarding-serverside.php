@@ -262,6 +262,10 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		//Save the settings
 		$settings->save();
 		SwpmLog::log_simple_debug( 'Seller API credentials (environment mode: '.$environment_mode.') reset/removed successfully.', true );
+
+		//Delete any cached token using the old credentials (so it is forced to generate and cache a new one after onboarding (when new API call is made)))
+		SWPM_PayPal_Bearer::delete_cached_token();
+		SwpmLog::log_simple_debug( 'Executed delete PayPal bearer cached token function (to clean it up).', true );
 	}
 
 	/**

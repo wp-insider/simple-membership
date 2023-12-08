@@ -57,7 +57,6 @@ class SWPM_Payment_Settings_Menu_Tab {
                 $live_wh_create_result .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
             }
             $live_wh_create_result .= isset($ret['msg']) ? $ret['msg'] : '';
-            //$live_wh_create_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
             echo '<div class="swpm-yellow-box"><p><strong>Create Live Webhook: </strong>' . $live_wh_create_result . '</p></div>';
 
         }
@@ -80,14 +79,12 @@ class SWPM_Payment_Settings_Menu_Tab {
             check_admin_referer( 'swpm_paypal_delete_webhook' );
             $pp_webhook = new SWPM_PayPal_Webhook();
             $delete_action_result = $pp_webhook->check_and_delete_webhooks_for_both_modes();
-            //$delete_action_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
             echo '<div class="swpm-yellow-box"><p>' . $delete_action_result . '</p></div>';
         }
 
         if (isset($_GET['swpm_ppcp_after_onboarding'])){
             $environment_mode = isset($_GET['environment_mode']) ? $_GET['environment_mode'] : '';
             $onboarding_action_result = '<p>PayPal merchant account connection setup completed for environment mode: '. $environment_mode .'</p>';
-            $onboarding_action_result .= '<p><a href="#paypal-ppcp-connection-section">Click here</a> to go to the PayPal Account Setup section below.</p>';
             echo '<div class="swpm-yellow-box"><p>' . $onboarding_action_result . '</p></div>';
         }
         if (isset($_GET['swpm_ppcp_sandbox_disconnect'])){
@@ -96,7 +93,6 @@ class SWPM_Payment_Settings_Menu_Tab {
 
             SWPM_PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('sandbox');
             $disconnect_action_result = '<p>PayPal sandbox account disconnected.</p>';
-            $disconnect_action_result .= '<p><a href="#paypal-ppcp-connection-section">Click here</a> to go to the PayPal Account Setup section below.</p>';
             echo '<div class="swpm-yellow-box"><p>' . $disconnect_action_result . '</p></div>';
         }
         

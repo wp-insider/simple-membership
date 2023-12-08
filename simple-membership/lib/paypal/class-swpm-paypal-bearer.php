@@ -64,7 +64,7 @@ class SWPM_PayPal_Bearer {
             }
         }
 
-        SwpmLog::log_simple_debug('Creating a new bearer token for environment mode: ' . $environment_mode, true);
+        SwpmLog::log_simple_debug('[New Token] Creating a new bearer token for environment mode: ' . $environment_mode, true);
 
         if( $environment_mode == 'sandbox' ){
             $client_id = $settings->get_value('paypal-sandbox-client-id');

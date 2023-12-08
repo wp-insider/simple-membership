@@ -209,6 +209,11 @@ class SWPM_PayPal_Request_API {
 		$api_base_url = $this->get_api_base_url();
 		$request_url = $api_base_url . $endpoint; //Example: https://api-m.sandbox.paypal.com/v1/catalogs/products
 
+		//TODO - Debug purposes. Delete later
+		// SwpmLog::log_simple_debug('API POST URL: ' . $request_url, true);
+		// SwpmLog::log_simple_debug('API POST params/body: ', true);
+		// SwpmLog::log_array_data_to_debug( $params, true);
+
 		$res = wp_remote_post(
 			$request_url,
 			array(

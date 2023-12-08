@@ -210,6 +210,100 @@ class SWPM_PayPal_Request_API_Injector {
             }
         }
         
+        public function create_paypal_order_by_url_and_args( $data ){
+            $payment_amount = isset($data['payment_amount']) ? $data['payment_amount'] : '';
+            $quantity = isset($data['quantity']) ? $data['quantity'] : 1;
+            $currency = isset($data['currency']) ? $data['currency'] : 'USD';
+            $item_name = isset($data['item_name']) ? $data['item_name'] : '';
+            //$digital_goods_enabled = isset($data['digital_goods_enabled']) ? $data['digital_goods_enabled'] : 1;
+            
+//            $order_data = [
+//                "intent" => "CAPTURE",
+//                "purchase_units" => [
+//                    [
+//                        "amount" => [
+//                            "value" => $payment_amount,
+//                            "currency_code" => $currency,
+//                            "breakdown" => [
+//                                "item_total" => [
+//                                    "currency_code" => $currency,
+//                                    "value" => $payment_amount * $quantity,
+//                                ]
+//                            ]
+//                        ],
+//                        "items" => [
+//                            [
+//                                "name" => $item_name,
+//                                "quantity" => $quantity,
+//                                // "category" => $digital_goods_enabled ? "PHYSICAL_GOODS" : "DIGITAL_GOODS",
+//                                "unit_amount" => [
+//                                    "value" => $payment_amount,
+//                                    "currency_code" => $currency,
+//                                ]
+//                            ]
+//                        ]
+//                    ]
+//                ]
+//            ];
+
+//A simple order data for testing            
+$order_data = [
+    "intent" => "CAPTURE",
+    "purchase_units" => [
+        [
+            amount => [
+            currency_code => "USD",
+            value => "100.00",
+            ],
+        ],
+    ],
+];
+            
+            $environment_mode = 'sandbox';
+            //Token
+            //Get the bearer/access token.
+            $bearer = SWPM_PayPal_Bearer::get_instance();
+            $bearer_token = $bearer->get_bearer_token( $environment_mode );
+            $access_token = $bearer_token;
+            
+            //Args
+            $args = array(
+                    'method'  => 'POST',
+                    'headers' => array(
+                            'Authorization' => 'Bearer ' . $access_token,
+                            'Content-Type'  => 'application/json',
+                            'PayPal-Partner-Attribution-Id' => 'TipsandTricks_SP_PPCP',
+                    ),
+            );
+
+            $args['body'] = wp_json_encode( $order_data );
+        
+            //PayPal create-order using URL and Args
+            //Get the API base URL.
+            $api_base_url = SWPM_PayPal_Utility_Functions::get_api_base_url_by_environment_mode( $environment_mode );            
+            $url = trailingslashit( $api_base_url ) . 'v2/checkout/orders';
+            
+            SwpmLog::log_simple_debug('Executing order create (v2/checkout/orders) using URL and args.', true);
+            $response = SWPM_PayPal_Request_API::send_request_by_url_and_args( $url, $args );
+            
+            //TODO - Debug logging. Delete later
+            SwpmLog::log_simple_debug('--- Var Export Below ---', true);
+            $debug = var_export($response, true);
+            SwpmLog::log_simple_debug($debug, true);
+            
+            if ( $response !== false){
+                //Response is a success!
+                $json_response_body = json_decode( wp_remote_retrieve_body( $response ) );
+                $created_order_id = $json_response_body->id;
+                SwpmLog::log_simple_debug('Order-create response. Order ID: '. $created_order_id, true);
+                return $created_order_id;
+            } else {
+                //The process_request_result() function has debug lines that can be uncommented to check further details.
+                //We can also pass the $additional_args['return_raw_response'] = true to the post() function to get the raw response.                
+                return false;
+            }
+        }
+        
         public function create_paypal_order( $data ){
             $payment_amount = isset($data['payment_amount']) ? $data['payment_amount'] : '';
             $quantity = isset($data['quantity']) ? $data['quantity'] : 1;

@@ -175,6 +175,7 @@ https://simple-membership-plugin.com/
 - Honor the 'redirect_to' parameter in the post login redirection function.
 - Added an empty check to the Stripe buy now IPN handling function.
 - Translation improvement for 'activation-required' account status display in the user's profile.
+- Better formatting for the admin edit interface error message.
 
 = 4.3.8 =
 - Minor translation related update in the admin edit member interface.

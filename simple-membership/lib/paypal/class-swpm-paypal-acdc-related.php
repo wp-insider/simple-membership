@@ -141,7 +141,7 @@ class SWPM_PayPal_ACDC_Related {
 		}
 		
 		if( !is_array( $data ) ){
-			SwpmLog::log_simple_debug( 'Data is not an array format. Converting JSON to array data.', true );
+			SwpmLog::log_simple_debug( 'Data is not in array format. Converting JSON to array data.', true );
 			$data = json_decode( $data, true);//Convert the JSON string to an array (Vanilla JS AJAX data will be in JSON format).			
 		}
 

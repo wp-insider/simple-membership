@@ -4145,7 +4145,6 @@ msgid "Subscribe Now"
 msgstr ""
 
 #: views/payments/payment-gateway/paypal_buy_now_new_button_shortcode_view.php:81
-#: views/payments/payment-gateway/paypal_buy_now_ppcp_button_shortcode_view.php:85
 #: views/payments/payment-gateway/paypal_subscription_new_button_shortcode_view.php:77
 msgid "Transaction completed successfully!"
 msgstr ""

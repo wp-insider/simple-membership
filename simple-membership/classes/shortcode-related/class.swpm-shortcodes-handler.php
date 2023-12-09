@@ -15,8 +15,8 @@ class SwpmShortcodesHandler {
 
 		add_shortcode( 'swpm_stripe_subscription_cancel_link', array( $this, 'swpm_stripe_cancel_subs_link_sc' ) );
 
-		//TODO - WIP (This will be moved to the shortcode implementation section later)
-		//include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_buy_now_ppcp_button_shortcode_view.php' );
+		//TODO - WIP (Later, this will be moved to the shortcode implementation section like the other ones)
+		//include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_advanced_buy_now_button_shortcode_view.php' );
 
 	}
 

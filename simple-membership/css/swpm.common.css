@@ -88,6 +88,18 @@
     border-width: 1px;
 }
 
+/* Wrap directly with this class (not to be used with a paragraph tag) */
+.swpm-blue-box {
+    margin: 10px 0px;
+    padding: 15px 10px;
+    background-color: #E7F4FE;
+    border-color: #AACEE6;
+    color: #1D263B;
+    border-radius: 3px 3px 3px 3px;
+    border-style: solid;
+    border-width: 1px;
+}
+
 /* Default button style that we can use on registration, login, profile, password reset, form's submit button. */
 .swpm-submit-btn-default-style {
     min-width: 150px;

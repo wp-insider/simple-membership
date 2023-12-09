@@ -187,6 +187,14 @@ class SWPM_Payment_Settings_Menu_Tab {
                     <input type="submit" name="swpm-enable-test-mode-submit" class="button-primary" value="<?php _e('Save Changes', 'simple-membership'); ?>" />
                     <?php wp_nonce_field('swpm-enable-test-mode-nonce');?>
                 </form>
+                <div class="swpm-blue-box">
+                    <?php
+                    echo '<strong>' . __('Note for Subscription/Recurring Payment Testing: ','simple-membership') . '</strong>';
+                    _e('Subscription plan modes cannot be switched between test and live modes. For testing, create all subscription plans and buttons in test mode. ', 'simple-membership'); 
+                    _e('Once testing is complete, switch the plugin to live mode and recreate the plans and buttons for live use. Avoid reusing test mode plans/buttons in live mode to prevent errors from the payment gateway. ', 'simple-membership');
+                    echo '<a href="https://simple-membership-plugin.com/payment-testing-checklist-for-simple-membership/" target="_blank">' . __('Read this payment testing checklist.', 'simple-membership') . '</a>';
+                    ?>
+                </div>
             </div>
         </div>
         <?php

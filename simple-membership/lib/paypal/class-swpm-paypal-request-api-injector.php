@@ -217,7 +217,8 @@ class SWPM_PayPal_Request_API_Injector {
             $item_name = isset($data['item_name']) ? $data['item_name'] : '';
             //$digital_goods_enabled = isset($data['digital_goods_enabled']) ? $data['digital_goods_enabled'] : 1;
             
-           $order_data = [
+            //https://developer.paypal.com/docs/api/orders/v2/#orders_create
+            $order_data = [
                "intent" => "CAPTURE",
                "purchase_units" => [
                    [
@@ -240,7 +241,8 @@ class SWPM_PayPal_Request_API_Injector {
                                    "currency_code" => $currency,
                                ]
                            ]
-                       ]
+                        ],
+                        "description" => $item_name,
                    ]
                ]
            ];

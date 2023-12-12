@@ -118,8 +118,6 @@ class SWPM_PayPal_ACDC_Related {
         //Get the client_token string value from the response.
 		$json = json_decode( wp_remote_retrieve_body( $response ) );
         $client_token = isset( $json->client_token) ? $json->client_token : '';
-		//TODO - Debug logging. Delete later.
-        //SwpmLog::log_array_data_to_debug( 'generate_client_token() - client token: ' . $client_token, true);
 
 		return $client_token;
     }
@@ -142,12 +140,9 @@ class SWPM_PayPal_ACDC_Related {
 		}
 		
 		if( !is_array( $data ) ){
-			SwpmLog::log_simple_debug( 'Data is not in array format. Converting JSON to array data.', true );
-			$data = json_decode( $data, true);//Convert the JSON string to an array (Vanilla JS AJAX data will be in JSON format).			
+			//Convert the JSON string to an array (Vanilla JS AJAX data will be in JSON format).
+			$data = json_decode( $data, true);		
 		}
-
-		//TODO - Debugging purpose.
-		SwpmLog::log_array_data_to_debug( $data, true );
 
 		$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';
 		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
@@ -175,11 +170,8 @@ class SWPM_PayPal_ACDC_Related {
 		$quantity = 1;
 		$digital_goods_enabled = 1;
 
-		//TODO - remove this later.
-		SwpmLog::log_simple_debug( 'acdc_setup_order - about to make API call...', true );
-
-		//TODO - Create the order using the PayPal API.
-		//https://developer.paypal.com/docs/api/orders/v2/#orders_create
+		// Create the order using the PayPal API.
+		// https://developer.paypal.com/docs/api/orders/v2/#orders_create
 		$data = array(
 			'item_name' => $item_name,
 			'payment_amount' => $payment_amount,
@@ -190,7 +182,6 @@ class SWPM_PayPal_ACDC_Related {
 		
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
 		$response = $api_injector->create_paypal_order_by_url_and_args( $data );
-		//TODO - Debug logging. Delete later
 		// SwpmLog::log_simple_debug('--- Var Export Below ---', true);
 		// $debug = var_export($response, true);
 		// SwpmLog::log_simple_debug($debug, true);
@@ -208,8 +199,7 @@ class SWPM_PayPal_ACDC_Related {
 			exit;
 		}
 
-        SwpmLog::log_simple_debug( 'PayPal Order ID: ' . $paypal_order_id, true );
-		SwpmLog::log_simple_debug( 'acdc_setup_order - API call done. Sending AJAX response back.', true );
+        SwpmLog::log_simple_debug( 'acdc_setup_order done. PayPal Order ID: ' . $paypal_order_id, true );
 
 		//If everything is processed successfully, send the success response.
 		wp_send_json( array( 'success' => true, 'order_id' => $paypal_order_id ) );

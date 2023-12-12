@@ -11,6 +11,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-onapprov
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-functions.php' );//Misc project specific utility functions.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-cache.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-bearer.php' );
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-ajax-create-capture-order.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-acdc-related.php' );
 
 //Onboarding related includes
@@ -39,6 +40,9 @@ class SWPM_PayPal_Main {
 			//Register action (to handle webhook) only on our webhook notification URL.
 			new SWPM_PayPal_Webhook_Event_Handler();
 		}
+
+		//Initialize the PayPal Ajax Create and Capture Order Class so it can handle the ajax request(s).
+		new SWPM_PayPal_Ajax_Create_Capture_Order();
 
 		//Initialize the PayPal OnApprove IPN Handler so it can handle the 'onApprove' ajax request(s).
 		new SWPM_PayPal_OnApprove_IPN_Handler();

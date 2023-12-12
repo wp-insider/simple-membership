@@ -104,7 +104,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
     //The on page embed button id is used to identify the button on the page. Useful when there are multiple buttons (of the same item/product) on the same page.
     $on_page_embed_button_id = $pp_js_button->get_next_button_id();
     //Create nonce for this button. 
-    $nonce = wp_create_nonce($on_page_embed_button_id);
+    $wp_nonce = wp_create_nonce($on_page_embed_button_id);
 
     $output = '';
     ob_start();
@@ -120,6 +120,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
     jQuery( function( $ ) {
         $( document ).on( "swpm_paypal_sdk_loaded", function() { 
             //Anything that goes here will only be executed after the PayPal SDK is loaded.
+            console.log('PayPal JS SDK is loaded.');
 
             var js_currency_code = '<?php echo esc_js($currency); ?>';
             var js_payment_amount = <?php echo esc_js($payment_amount); ?>;
@@ -139,33 +140,32 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
     
                 // set up the transaction
                 createOrder: function(data, actions) {
-                    // Create the order
-                    // https://developer.paypal.com/docs/api/orders/v2/#orders_create
-                    var order_data = {
-                        intent: 'CAPTURE',
-                        purchase_units: [{
-                            amount: {
-                                value: js_payment_amount,
-                                currency_code: '<?php echo esc_js($currency); ?>',
-                                breakdown: {
-                                    item_total: {
-                                        currency_code: '<?php echo esc_js($currency); ?>',
-                                        value: js_payment_amount * js_quantity,
-                                    }
-                                }
-                            },
-                            items: [{
-                                name: '<?php echo esc_js($item_name); ?>',
-                                quantity: js_quantity,
-                                unit_amount: {
-                                    value: js_payment_amount,
-                                    currency_code: '<?php echo esc_js($currency); ?>',
-                                }
-                            }],
-                            description: '<?php echo esc_js($item_name); ?>',
-                        }]
-                    };
-                    return actions.order.create( order_data );
+                    // Create the order in PayPal using the PayPal API.
+                    // https://developer.paypal.com/docs/checkout/standard/integrate/
+                    // The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
+                    console.log('Setting up the create-order call AJAX request.');
+                    let pp_bn_data = {};
+                    pp_bn_data.button_id = '<?php echo esc_js($button_id); ?>';
+                    pp_bn_data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
+                    pp_bn_data.item_name = '<?php echo esc_js($item_name); ?>';
+                    //console.log('pp_bn_data: ' + JSON.stringify(pp_bn_data));
+
+                    // Using fetch API for AJAX
+                    let post_data = 'action=swpm_pp_create_order&data=' + JSON.stringify(pp_bn_data) + '&_wpnonce=<?php echo $wp_nonce; ?>';
+
+                    return fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
+                        method: "post",
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: post_data
+                    })
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((order_data) => {
+                        return order_data.order_id;
+                    });
                 },
     
                 // notify the buyer that the subscription is successful
@@ -188,7 +188,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                         data.button_id = '<?php echo esc_js($button_id); ?>';
                         data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
                         data.item_name = '<?php echo esc_js($item_name); ?>';
-                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_onapprove_create_order', data: data, txn_data: txn_data, _wpnonce: '<?php echo $nonce; ?>'}, function( response ) {
+                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_onapprove_create_order', data: data, txn_data: txn_data, _wpnonce: '<?php echo $wp_nonce; ?>'}, function( response ) {
                             //console.log( 'Response from the server: ' + JSON.stringify( response ) );
                             if ( response.success ) {
                                 //Success response.
@@ -229,7 +229,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
 
                 // handle onCancel event
                 onCancel: function(data) {
-                    console.log('Checkout operation cancelled by the customer. Data: ' + JSON.stringify(data));
+                    console.log('Checkout operation cancelled by the customer.');
                     //Return to the parent page which the button does by default.
                 }
             });

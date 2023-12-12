@@ -56,8 +56,8 @@ class SWPM_Payment_Settings_Menu_Tab {
                 //Add an extra checkmark in the message for visual appeal.
                 $live_wh_create_result .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
             }
-            $live_wh_create_result .= isset($ret['msg']) ? $ret['msg'] : '';
-            echo '<div class="swpm-yellow-box"><p><strong>Create Live Webhook: </strong>' . $live_wh_create_result . '</p></div>';
+            $live_wh_create_result .= isset($ret['msg']) ? sanitize_text_field($ret['msg']) : '';
+            echo '<div class="swpm-yellow-box"><p><strong>Create Live Webhook: </strong>' . esc_attr($live_wh_create_result) . '</p></div>';
 
         }
         if (isset($_GET['swpm_paypal_create_sandbox_webhook'])){
@@ -71,9 +71,9 @@ class SWPM_Payment_Settings_Menu_Tab {
                 //Add an extra checkmark in the message for visual appeal.
                 $sandbox_wh_create_result .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
             }    
-            $sandbox_wh_create_result .= isset($ret['msg']) ? $ret['msg'] : '';
+            $sandbox_wh_create_result .= isset($ret['msg']) ? sanitize_text_field($ret['msg']) : '';
             //$sandbox_wh_create_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
-            echo '<div class="swpm-yellow-box"><p><strong>Create Sandbox Webhook: </strong>' . $sandbox_wh_create_result . '</p></div>';
+            echo '<div class="swpm-yellow-box"><p><strong>Create Sandbox Webhook: </strong>' . esc_attr($sandbox_wh_create_result) . '</p></div>';
         }
         if (isset($_GET['swpm_paypal_delete_webhook'])){
             check_admin_referer( 'swpm_paypal_delete_webhook' );
@@ -83,8 +83,8 @@ class SWPM_Payment_Settings_Menu_Tab {
         }
 
         if (isset($_GET['swpm_ppcp_after_onboarding'])){
-            $environment_mode = isset($_GET['environment_mode']) ? $_GET['environment_mode'] : '';
-            $onboarding_action_result = '<p>PayPal merchant account connection setup completed for environment mode: '. $environment_mode .'</p>';
+            $environment_mode = isset($_GET['environment_mode']) ? sanitize_text_field($_GET['environment_mode']) : '';
+            $onboarding_action_result = '<p>PayPal merchant account connection setup completed for environment mode: '. esc_attr($environment_mode) .'</p>';
             echo '<div class="swpm-yellow-box"><p>' . $onboarding_action_result . '</p></div>';
         }
         if (isset($_GET['swpm_ppcp_sandbox_disconnect'])){
@@ -93,12 +93,12 @@ class SWPM_Payment_Settings_Menu_Tab {
 
             SWPM_PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('sandbox');
             $disconnect_action_result = '<p>PayPal sandbox account disconnected.</p>';
-            echo '<div class="swpm-yellow-box"><p>' . $disconnect_action_result . '</p></div>';
+            echo '<div class="swpm-yellow-box"><p>' . esc_attr($disconnect_action_result) . '</p></div>';
         }
         
         // Check test-mode settings submit.
         if (isset($_POST['swpm-enable-test-mode-submit']) && check_admin_referer('swpm-enable-test-mode-nonce')) {
-            $settings->set_value('enable-sandbox-testing' ,( isset($_POST['enable-sandbox-testing']) && esc_attr($_POST['enable-sandbox-testing']) == '1' ? "checked=\"checked\"" : ''));
+            $settings->set_value('enable-sandbox-testing' ,(( isset($_POST['enable-sandbox-testing']) && $_POST['enable-sandbox-testing'] == '1' ) ? "checked=\"checked\"" : ''));
 
             $settings->save();
             echo '<div class="notice notice-success"><p>' . __('Test mode settings updated successfully.', 'simple-membership') . '</p></div>';

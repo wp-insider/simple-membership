@@ -171,11 +171,13 @@ https://simple-membership-plugin.com/
 
 = WIP 4.3.9 = 
 - [Moderate Change] The 'Payment Settings' tab has been moved to the 'Payments' menu.
+- The 'Payment Settings' menu has been divided into multiple sub-menus for better organization.
 - If WP Login form is used, our plugin will let WP handle the post-login redirection.
 - Honor the 'redirect_to' parameter in the post login redirection function.
 - Added an empty check to the Stripe buy now IPN handling function.
 - Translation improvement for 'activation-required' account status display in the user's profile.
 - Better formatting for the admin edit interface error message.
+- Added output escaping in the new PayPal API settings tab.
 
 = 4.3.8 =
 - Minor translation related update in the admin edit member interface.

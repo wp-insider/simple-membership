@@ -1,8 +1,8 @@
 <?php
 $send_email_selected_target_recipients = isset( $send_email_menu_data['send_email_selected_target_recipients'] ) ? sanitize_text_field($send_email_menu_data['send_email_selected_target_recipients']) : 'membership_level';
-$send_email_recipient_membership_level = isset( $send_email_menu_data['send_email_membership_level'] ) ? sanitize_text_field( $send_email_menu_data['send_email_membership_level'] ) : 0;
+$send_email_recipient_membership_level = isset( $send_email_menu_data['send_email_membership_level'] ) ? sanitize_text_field( $send_email_menu_data['send_email_membership_level'] ) : '';
 $send_email_recipient_members_id = isset( $send_email_menu_data['send_email_members_id'] ) ? sanitize_text_field( $send_email_menu_data['send_email_members_id'] ) : '';
-$send_email_recipient_account_state = isset( $send_email_menu_data['send_email_account_state'] ) ? sanitize_text_field( $send_email_menu_data['send_email_account_state'] ) : 0;
+$send_email_recipient_account_state = isset( $send_email_menu_data['send_email_account_state'] ) ? sanitize_text_field( $send_email_menu_data['send_email_account_state'] ) : '';
 $send_email_copy_author = isset( $send_email_menu_data['send_email_copy_author'] ) && sanitize_text_field( $send_email_menu_data['send_email_copy_author'] ) === 'on' ? 'checked="checked"' : '';
 $send_email_enable_html = isset( $send_email_menu_data['send_email_enable_html'] ) && sanitize_text_field( $send_email_menu_data['send_email_enable_html'] ) === 'on' ? 'checked="checked"' : '';
 $send_email_subject = isset( $send_email_menu_data['send_email_subject'] ) ? sanitize_text_field( $send_email_menu_data['send_email_subject'] ) : '';
@@ -36,32 +36,37 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 										<input type="radio" id="target-recipients-option-2" name="send_email_menu_target_recipients" value="members_id" <?php echo $send_email_selected_target_recipients === "members_id" ? 'checked' : '';?>>
 										<?php _e( 'Send to Member IDs', 'simple-membership' ); ?>
 									</label>
-									<label style="margin-left: 12px">			
-										<input type="checkbox" name="send_email_copy_author" <?php echo esc_attr( $send_email_copy_author); ?> />
-										<?php _e( 'Also Send Me a Copy', 'simple-membership' ); ?> 
-									</label>
 								</div>
 								<div style="margin-top: 14px">
 									<div id="send-email-field-membership-level" style="<?php echo $send_email_selected_target_recipients == 'members_id' ? 'display: none' : ''; ?>">  
 										<select name="send_email_membership_level">
 											<option value=""> <?php _e( 'Select a Level', 'simple-membership' ); ?></option>
 											<?php echo SwpmUtils::membership_level_dropdown( esc_attr($send_email_recipient_membership_level)); ?>
-											<option value="0" <?php echo ($send_email_recipient_membership_level == '0' ? 'selected="selected"' : ''); ?>><?php _e( 'All Levels', 'simple-membership' ); ?></option>
+											<option value="-1" <?php echo ($send_email_recipient_membership_level == -1 ? 'selected="selected"' : ''); ?>><?php _e( 'All Levels', 'simple-membership' ); ?></option>
 										</select>
 										<p class="description"><?php _e( 'Choose the membership level for email recipients.', 'simple-membership' ); ?></p>
 										<br>
 									</div>
 									<div id="send-email-field-account-state" style="<?php echo $send_email_selected_target_recipients == 'members_id' ? 'display: none' : ''; ?>">
 										<select name="send_email_account_state">
-										<option value=""> <?php _e( 'Select Account State', 'simple-membership' ); ?></option>
+											<option value=""> <?php _e( 'Select Account State', 'simple-membership' ); ?></option>
 											<?php echo SwpmUtils::account_state_dropdown( esc_attr($send_email_recipient_account_state), true );  ?>
-											<option value="all_states" <?php echo ($send_email_recipient_account_state == 'all_states' ? 'selected="selected"' : ''); ?>><?php _e( 'All States', 'simple-membership' ); ?></option>
+											<option value="all" <?php echo ($send_email_recipient_account_state == 'all' ? 'selected="selected"' : ''); ?>><?php _e( 'All States', 'simple-membership' ); ?></option>
 										</select>
 										<p class="description"><?php _e( 'Choose the account state for email recipients.', 'simple-membership' ); ?></p>
+										<br>
 									</div>
 									<div id="send-email-field-members-id" style="<?php echo $send_email_selected_target_recipients !== 'members_id' ? 'display: none' : ''; ?>">  
 										<input type="text" name="send_email_members_id" size="50" value="<?php echo esc_attr($send_email_recipient_members_id);?>" />
 										<p class="description"><?php _e( "Enter member IDs separated by comma to specify the recipients.", "simple-membership" ); ?></p>
+										<br>
+									</div>
+									<div id="send-email-copy-author-checkbox">
+										<label>			
+											<input type="checkbox" name="send_email_copy_author" <?php echo esc_attr( $send_email_copy_author); ?> />
+											<?php _e( 'Also Send Me a Copy', 'simple-membership' ); ?> 
+										</label>
+										<p class="description"><?php _e('Check this if you want to send a copy of the email to your own email address that you are sending to the target recipients.', 'simple-membership') ?></p>
 									</div>
 								</div>
 							</td>
@@ -126,12 +131,19 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 							<th width="25%" align="left">
 							</th>
 							<td align="left">
-								<div style="display: flex;">
-									<input type="submit" class="button-primary" name="send_email_submit" value="<?php _e( 'Send Direct Email', 'simple-membership' ); ?>" />
-									<input type="submit" class="button-secondary" name="list_email_submit" value="<?php _e( 'View Recipient List', 'simple-membership' ); ?>" style="margin-left: 8px" />
-								</div>
+								<input type="submit" class="button-primary" name="send_email_submit" value="<?php _e( 'Send Direct Email', 'simple-membership' ); ?>" />
 							</td>
 						</tr>
+
+						<tr valign="top">
+							<th width="25%" align="left">
+							</th>
+							<td align="left">
+								<input type="submit" class="button-secondary" name="list_recipient_list" value="<?php _e( 'View Recipient List', 'simple-membership' ); ?>"/>
+								<p class="description"><?php _e('Click to list the selected members as recipients. This is useful for cross checking all the email recipients before sending email.', 'simple-membership');?></p>
+							</td>
+						</tr>
+
 						<input type="hidden" name="swpm_send_email_nonce" value="<?php echo wp_create_nonce( 'swpm_send_email_nonce_action' ); ?>" />
 						</tbody>
 					</table>

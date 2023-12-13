@@ -17,7 +17,7 @@ class SWPM_Send_Direct_Email_Menu{
 			$send_email_menu_data = array();
 		}
 
-		if (isset($_POST['send_email_submit']) || isset($_POST['list_email_submit']) ) {
+		if (isset($_POST['send_email_submit']) || isset($_POST['list_recipient_list']) ) {
 			$swpm_send_email_nonce = filter_input(INPUT_POST, 'swpm_send_email_nonce');
 			if (!wp_verify_nonce($swpm_send_email_nonce, 'swpm_send_email_nonce_action')) {
 				// Nonce check failed.
@@ -48,10 +48,11 @@ class SWPM_Send_Direct_Email_Menu{
 			// Getting email author's info
 			$logged_in_user = wp_get_current_user();
 			$logged_in_user_email = $logged_in_user->user_email;
+			$logged_in_user_name = $logged_in_user->user_login;
 			// $logged_in_user_id = $logged_in_user->ID;
 
 			// Validate recipients
-			if ( $target_recipients === 'membership_level' && $_POST['send_email_membership_level'] !== '') {
+			if ( $target_recipients === 'membership_level' && !empty($_POST['send_email_membership_level'])) {
 				// send mail to specified members by membership level and account state.
 
 				$members = SwpmMemberUtils::get_all_members_of_a_level_and_a_state(sanitize_text_field($_POST['send_email_membership_level']), sanitize_text_field($_POST['send_email_account_state']));
@@ -124,11 +125,12 @@ class SWPM_Send_Direct_Email_Menu{
 						$body = nl2br($body);
 					}
 
-					if ( isset($_POST['list_email_submit']))  {
+					if ( isset($_POST['list_recipient_list']))  {
 						// Get the membership level name
 						$membership_level_name = SwpmMembershipLevelUtils::get_membership_level_name_of_a_member($recipient->member_id);
 						$list_of_recipients_to_display[] = array(
 							'id' => $recipient->member_id,
+							'user_name' => $recipient->user_name,
 							'email' => $recipient->email,
 							'membership_level' => $membership_level_name,
 							'account_state' => $recipient->account_state ? SwpmUtils::get_account_state_options()[$recipient->account_state] : 'N/A',
@@ -145,22 +147,22 @@ class SWPM_Send_Direct_Email_Menu{
 				// Check if need to include currently logged in user as recipient.
 				// If the author of the emails is not in the selected recipients, but a copy is requested, then send a copy.
 			    if(	$found_logged_in_user_in_receipients == false && isset($_POST['send_email_copy_author']) && sanitize_text_field($_POST['send_email_copy_author']) === 'on' ){
-					if ( isset($_POST['list_email_submit']))  {
+					if ( isset($_POST['list_recipient_list']))  {
 						$list_of_recipients_to_display[] = array(
 							'id' => 'N/A',
+							'user_name' => $logged_in_user_name,
 							'email' => $logged_in_user_email,
 							'membership_level' => 'N/A',
 							'account_state' => 'N/A',
 						);
 					}
 					else {
-						$subject .= " - AUTHOR'S COPY";
 						wp_mail($logged_in_user_email, $subject , $body, $headers);
 						SwpmLog::log_simple_debug( 'Sending direct email to current logged in user at '.$logged_in_user_email, true );
  				     }
 				}
 
-				if( isset($_POST['list_email_submit']) ) {
+				if( isset($_POST['list_recipient_list']) ) {
 					$recipients_count = count($list_of_recipients_to_display);
 					echo '<div class="postbox" style="margin:10px 0px 0px">';
 					echo '<div class="inside">';
@@ -170,6 +172,7 @@ class SWPM_Send_Direct_Email_Menu{
 					echo '<thead>
 							<tr style="text-align: left">
 								<th style="padding-bottom: 4px;">'.__('Recipient\'s Email', 'simple-membership').'</th>
+								<th style="padding-bottom: 4px;">'.__('Username', 'simple-membership').'</th>
 								<th style="padding-bottom: 4px;">'.__('Member ID', 'simple-membership').'</th>
 								<th style="padding-bottom: 4px;">'.__('Membership Level', 'simple-membership').'</th>
 								<th style="padding-bottom: 4px;">'.__('Account State', 'simple-membership').'</th>
@@ -179,6 +182,7 @@ class SWPM_Send_Direct_Email_Menu{
 					foreach ($list_of_recipients_to_display as $recipient) {
 						echo '<tr>
 								<td>'.esc_attr($recipient['email']).'</td>
+								<td>'.esc_attr($recipient['user_name']).'</td>
 								<td>'.esc_attr($recipient['id']).'</td>
 								<td>'.esc_attr($recipient['membership_level']).'</td>
 								<td>'.esc_attr($recipient['account_state']).'</td>

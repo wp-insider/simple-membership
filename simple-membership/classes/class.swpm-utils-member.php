@@ -155,8 +155,8 @@ class SwpmMemberUtils {
 
 	/**
 	 * Retrieves all members with a given membership level id and a given account state
-	 * '0' as $level_id represents all membership levels.
-	 * 'all_states' as $account_state represents all account states.
+	 * '-1' as $level_id represents all membership levels.
+	 * 'all' as $account_state represents all account states.
 	 * 
 	 * @param int|string $level_id Membership level id.
 	 * @param string $account_state Account state.
@@ -164,19 +164,32 @@ class SwpmMemberUtils {
 	 */
 	public static function get_all_members_of_a_level_and_a_state($level_id, $account_state) {
 		global $wpdb;
-		if ($level_id != '0'  && $account_state != 'all_states') {          
-			$query  = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE account_state = %s AND membership_level = %d",$account_state , $level_id);
+
+		$query  = "SELECT * FROM {$wpdb->prefix}swpm_members_tbl";
+		
+		// Check if 'WHERE' clause need to be used or not.
+		if($level_id != -1 || $account_state != 'all'){
+
+			$placeholders = array();
+			$where_clauses = array();
+			
+			if ($level_id != -1) {
+				$where_clauses[] = "membership_level = %d";
+				$placeholders[] = $level_id;
+			}
+			if ($account_state != 'all') {     
+				$where_clauses[] = "account_state = %s";
+				$placeholders[] = $account_state;
+			}
+			
+			$query .= " WHERE " . implode(" AND ", $where_clauses);
+			
+			// query preparation is not required as there are not placeholders.
+			$query = $wpdb->prepare($query, $placeholders);
 		}
-		else if ($level_id != '0'  && $account_state == 'all_states') {  
-			$query  = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE membership_level = %d", $level_id);
-		}
-		else if ($level_id == '0'  && $account_state != 'all_states') {     
-			$query  = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE account_state = %s", $account_state);
-		}
-		else if ($level_id == '0'  && $account_state == 'all_states') {
-			$query  = "SELECT * FROM {$wpdb->prefix}swpm_members_tbl"; // query preparation is not required as there are not placeholders.
-		}
+		
 		$result = $wpdb->get_results( $query );
+
 		return $result;
 	}
 

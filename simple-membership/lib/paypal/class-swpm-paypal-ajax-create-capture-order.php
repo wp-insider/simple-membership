@@ -76,14 +76,17 @@ class SWPM_PayPal_Ajax_Create_Capture_Order {
 			'digital_goods_enabled' => $digital_goods_enabled,
 		);
 		
+		//Set the additional args for the API call.
+		$additional_args = array();
+		$additional_args['return_response_body'] = true;
+
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
-		$response = $api_injector->create_paypal_order_by_url_and_args( $data );
-		// SwpmLog::log_simple_debug('--- Var Export Below ---', true);
-		// $debug = var_export($response, true);
-		// SwpmLog::log_simple_debug($debug, true);
+		$response = $api_injector->create_paypal_order_by_url_and_args( $data, $additional_args );
             
-		if($response !== false){
-			$paypal_order_id = $response;
+		//Check and return the response.
+		if( $response !== false ){
+			$order_data = json_decode( $response, true );
+			$paypal_order_id = isset( $order_data['id'] ) ? $order_data['id'] : '';
 		} else {
 			//Failed to create the order.
 			wp_send_json(
@@ -98,7 +101,7 @@ class SWPM_PayPal_Ajax_Create_Capture_Order {
         SwpmLog::log_simple_debug( 'PayPal Order ID: ' . $paypal_order_id, true );
 
 		//If everything is processed successfully, send the success response.
-		wp_send_json( array( 'success' => true, 'order_id' => $paypal_order_id ) );
+		wp_send_json( array( 'success' => true, 'order_id' => $paypal_order_id, 'order_data' => $order_data ) );
 		exit;
     }
 

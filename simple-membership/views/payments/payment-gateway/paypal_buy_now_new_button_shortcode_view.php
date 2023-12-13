@@ -137,12 +137,12 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                     label: '<?php echo esc_js($btn_type); ?>',
                     layout: '<?php echo esc_js($btn_layout); ?>',
                 },
-    
-                // set up the transaction
-                createOrder: function(data, actions) {
+
+                // Setup the transaction.
+                async createOrder() {
                     // Create the order in PayPal using the PayPal API.
                     // https://developer.paypal.com/docs/checkout/standard/integrate/
-                    // The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.
+                    // The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.                    
                     console.log('Setting up the create-order call AJAX request.');
                     let pp_bn_data = {};
                     pp_bn_data.button_id = '<?php echo esc_js($button_id); ?>';
@@ -153,19 +153,31 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                     // Using fetch API for AJAX
                     let post_data = 'action=swpm_pp_create_order&data=' + JSON.stringify(pp_bn_data) + '&_wpnonce=<?php echo $wp_nonce; ?>';
 
-                    return fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
-                        method: "post",
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: post_data
-                    })
-                    .then((res) => {
-                        return res.json();
-                    })
-                    .then((order_data) => {
-                        return order_data.order_id;
-                    });
+                    try {
+                        const response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
+                            method: "post",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: post_data
+                        });
+
+                        const response_data = await response.json();
+
+                        if (response_data.order_id) {
+                            console.log('Create-order API call to PayPal completed successfully.');
+                            //If we need to see the order details, uncomment the following line.
+                            //const order_data = response_data.order_data;
+                            //console.log('Order data: ' + JSON.stringify(order_data));
+                            return response_data.order_id;
+                        } else {
+                            const error_message = JSON.stringify(response_data);
+                            throw new Error(error_message);
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        alert('Could not initiate PayPal Checkout...\n\n' + error);
+                    }
                 },
     
                 // notify the buyer that the subscription is successful

@@ -178,6 +178,9 @@ https://simple-membership-plugin.com/
 - Translation improvement for 'activation-required' account status display in the user's profile.
 - Better formatting for the admin edit interface error message.
 - Added output escaping in the new PayPal API settings tab.
+- New option to send direct email based on member's account state.
+- New feature to send copy of email to the author in the send direct email page.
+- New feature to list email recipients in the send direct email page.
 
 = 4.3.8 =
 - Minor translation related update in the admin edit member interface.

@@ -210,7 +210,11 @@ class SWPM_PayPal_Request_API_Injector {
             }
         }
         
-        public function create_paypal_order_by_url_and_args( $data ){
+        /*
+        * Creates a PayPal order. Returns the order ID if successful.
+        * The $additional_args array can be used to pass additional arguments to the function to return the raw response or response body.
+        */
+        public function create_paypal_order_by_url_and_args( $data, $additional_args = array()){
             $payment_amount = isset($data['payment_amount']) ? $data['payment_amount'] : '';
             $quantity = isset($data['quantity']) ? $data['quantity'] : 1;
             $currency = isset($data['currency']) ? $data['currency'] : 'USD';
@@ -286,12 +290,17 @@ class SWPM_PayPal_Request_API_Injector {
             
             SwpmLog::log_simple_debug('Executing order create (v2/checkout/orders) using URL and args.', true);
             $response = SWPM_PayPal_Request_API::send_request_by_url_and_args( $url, $args );
+
+            //Check if we need to return the body or raw response instead of just the order ID.
+            if( isset($additional_args['return_raw_response']) && $additional_args['return_raw_response'] ){
+                //Return the raw response instead of just the order ID.
+                return $response;
+            } else if ( isset( $additional_args['return_response_body'] ) && $additional_args['return_response_body'] ){
+                //Return the response body instead of just the order ID.
+                return wp_remote_retrieve_body( $response );
+            }
             
-            //TODO - Debug logging. Delete later
-            // SwpmLog::log_simple_debug('--- Var Export Below ---', true);
-            // $debug = var_export($response, true);
-            // SwpmLog::log_simple_debug($debug, true);
-            
+            //Check and get the order ID from the response.
             if ( $response !== false){
                 //Response is a success!
                 $json_response_body = json_decode( wp_remote_retrieve_body( $response ) );
@@ -299,8 +308,7 @@ class SWPM_PayPal_Request_API_Injector {
                 SwpmLog::log_simple_debug('Order-create response. Order ID: '. $created_order_id, true);
                 return $created_order_id;
             } else {
-                //The process_request_result() function has debug lines that can be uncommented to check further details.
-                //We can also pass the $additional_args['return_raw_response'] = true to the post() function to get the raw response.                
+                //There was a WP Error with the remote request. Enable debug logging to get more details from the log file.             
                 return false;
             }
         }

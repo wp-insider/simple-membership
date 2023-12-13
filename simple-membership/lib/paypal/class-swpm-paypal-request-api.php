@@ -334,10 +334,17 @@ class SWPM_PayPal_Request_API {
 
 		$response = wp_remote_get( $url, $args );
 
+		if ( is_wp_error($response) ) {
+			// Error occurred with the API request. Lets log the error.
+			$error_message = $response->get_error_message();
+			SwpmLog::log_simple_debug( 'Error occurred with the PayPal API (by URL) request. Error message: ' . $error_message, false );
+			return false;
+		}
+
 		//=== Debug purposes ===
 		//PayPal debug id
 		$paypal_debug_id = wp_remote_retrieve_header( $response, 'paypal-debug-id' );
-		SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API (by URL) response: ' . $paypal_debug_id, true );
+		SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API (by URL) request: ' . $paypal_debug_id, true );
 		//-- Debug the request body --
 		// $response_body = wp_remote_retrieve_body( $response );
 		// $response_body_json_decoded = json_decode( $response_body );

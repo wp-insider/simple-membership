@@ -148,12 +148,9 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                     pp_bn_data.button_id = '<?php echo esc_js($button_id); ?>';
                     pp_bn_data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
                     pp_bn_data.item_name = '<?php echo esc_js($item_name); ?>';
-                    //console.log('pp_bn_data: ' + JSON.stringify(pp_bn_data));
-
-                    // Using fetch API for AJAX
                     let post_data = 'action=swpm_pp_create_order&data=' + JSON.stringify(pp_bn_data) + '&_wpnonce=<?php echo $wp_nonce; ?>';
-
                     try {
+                        // Using fetch for AJAX request. This is supported in all modern browsers.
                         const response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
                             method: "post",
                             headers: {

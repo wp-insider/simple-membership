@@ -131,7 +131,7 @@ abstract class SwpmUtils {
 		);
 	}
 
-	public static function account_state_dropdown( $selected = 'active' ) {
+	public static function account_state_dropdown( $selected = 'active' , $option_all = false) {
 		$options = self::get_account_state_options();
 		$html    = '';
 		foreach ( $options as $key => $value ) {
@@ -140,7 +140,7 @@ abstract class SwpmUtils {
 		return $html;
 	}
 
-	public static function membership_level_dropdown( $selected = 0 ) {
+	public static function membership_level_dropdown( $selected = 0, $option_all = false ) {
 		$options = '';
 		global $wpdb;
 		$query  = 'SELECT alias, id FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id != 1';

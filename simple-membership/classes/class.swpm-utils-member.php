@@ -153,6 +153,34 @@ class SwpmMemberUtils {
 		return $result;
 	}
 
+	/**
+	 * Retrieves all members with a given membership level id and a given account state
+	 * '0' as $level_id represents all membership levels.
+	 * 'all_states' as $account_state represents all account states.
+	 * 
+	 * @param int|string $level_id Membership level id.
+	 * @param string $account_state Account state.
+	 * @return object Members
+	 */
+	public static function get_all_members_of_a_level_and_a_state($level_id, $account_state) {
+		global $wpdb;
+		if ($level_id != '0'  && $account_state != 'all_states') {          
+			$query  = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE account_state = %s AND membership_level = %d",$account_state , $level_id);
+		}
+		else if ($level_id != '0'  && $account_state == 'all_states') {  
+			$query  = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE membership_level = %d", $level_id);
+		}
+		else if ($level_id == '0'  && $account_state != 'all_states') {     
+			$query  = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE account_state = %s", $account_state);
+		}
+		else if ($level_id == '0'  && $account_state == 'all_states') {
+			$query  = "SELECT * FROM {$wpdb->prefix}swpm_members_tbl"; // query preparation is not required as there are not placeholders.
+		}
+		$result = $wpdb->get_results( $query );
+		return $result;
+	}
+
+
 	/*
 	 * Use this function to update or set membership level of a member easily.
 	 */

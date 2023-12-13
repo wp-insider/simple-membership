@@ -2,6 +2,8 @@
 $send_email_selected_target_recipients = isset( $send_email_menu_data['send_email_selected_target_recipients'] ) ? sanitize_text_field($send_email_menu_data['send_email_selected_target_recipients']) : 'membership_level';
 $send_email_recipient_membership_level = isset( $send_email_menu_data['send_email_membership_level'] ) ? sanitize_text_field( $send_email_menu_data['send_email_membership_level'] ) : 0;
 $send_email_recipient_members_id = isset( $send_email_menu_data['send_email_members_id'] ) ? sanitize_text_field( $send_email_menu_data['send_email_members_id'] ) : '';
+$send_email_recipient_account_state = isset( $send_email_menu_data['send_email_account_state'] ) ? sanitize_text_field( $send_email_menu_data['send_email_account_state'] ) : 0;
+$send_email_copy_author = isset( $send_email_menu_data['send_email_copy_author'] ) && sanitize_text_field( $send_email_menu_data['send_email_copy_author'] ) === 'on' ? 'checked="checked"' : '';
 $send_email_enable_html = isset( $send_email_menu_data['send_email_enable_html'] ) && sanitize_text_field( $send_email_menu_data['send_email_enable_html'] ) === 'on' ? 'checked="checked"' : '';
 $send_email_subject = isset( $send_email_menu_data['send_email_subject'] ) ? sanitize_text_field( $send_email_menu_data['send_email_subject'] ) : '';
 $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_post( $send_email_menu_data['send_email_body'] ) : '';
@@ -15,7 +17,7 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 			<div class="inside">
 				<div class="swpm-grey-box">
 				<p>
-					<?php _e( 'This feature allows you to send emails to a group of members based on their membership level or individual member IDs.', 'simple-membership' ); ?>
+					<?php _e( 'This feature allows you to send emails to a group of members based on their membership level and account state or by individual member IDs.', 'simple-membership' ); ?>
 					<?php _e( 'Refer to <a href="https://simple-membership-plugin.com/send-a-quick-notification-email-to-your-members/" target="_blank">this documentation page</a> for more details.', 'simple-membership' ); ?>
 				</p>
 				</div>
@@ -28,23 +30,36 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 								<div>
 									<label>
 										<input type="radio" id="target-recipients-option-1" name="send_email_menu_target_recipients" value="membership_level" <?php echo $send_email_selected_target_recipients === "membership_level" ? 'checked' : '';?>>
-										<?php _e( 'Send to Membership Level', 'simple-membership' ); ?>
+										<?php _e( 'Send to Membership Level & Account State', 'simple-membership' );?>
 									</label>
 									<label style="margin-left: 12px">
 										<input type="radio" id="target-recipients-option-2" name="send_email_menu_target_recipients" value="members_id" <?php echo $send_email_selected_target_recipients === "members_id" ? 'checked' : '';?>>
 										<?php _e( 'Send to Member IDs', 'simple-membership' ); ?>
 									</label>
+									<label style="margin-left: 12px">			
+										<input type="checkbox" name="send_email_copy_author" <?php echo esc_attr( $send_email_copy_author); ?> />
+										<?php _e( 'Also Send Me a Copy', 'simple-membership' ); ?> 
+									</label>
 								</div>
 								<div style="margin-top: 14px">
-									<div id="send-email-field-membership-level" style="<?php echo $send_email_selected_target_recipients !== 'membership_level' ? 'display: none' : ''; ?>">
+									<div id="send-email-field-membership-level" style="<?php echo $send_email_selected_target_recipients == 'members_id' ? 'display: none' : ''; ?>">  
 										<select name="send_email_membership_level">
-											<option
-												value=""><?php _e( 'Select a level', 'simple-membership' ); ?></option>
+											<option value=""> <?php _e( 'Select a Level', 'simple-membership' ); ?></option>
 											<?php echo SwpmUtils::membership_level_dropdown( esc_attr($send_email_recipient_membership_level)); ?>
+											<option value="0" <?php echo ($send_email_recipient_membership_level == '0' ? 'selected="selected"' : ''); ?>><?php _e( 'All Levels', 'simple-membership' ); ?></option>
 										</select>
 										<p class="description"><?php _e( 'Choose the membership level for email recipients.', 'simple-membership' ); ?></p>
+										<br>
 									</div>
-									<div id="send-email-field-members-id" style="<?php echo $send_email_selected_target_recipients !== 'members_id' ? 'display: none' : ''; ?>">
+									<div id="send-email-field-account-state" style="<?php echo $send_email_selected_target_recipients == 'members_id' ? 'display: none' : ''; ?>">
+										<select name="send_email_account_state">
+										<option value=""> <?php _e( 'Select Account State', 'simple-membership' ); ?></option>
+											<?php echo SwpmUtils::account_state_dropdown( esc_attr($send_email_recipient_account_state), true );  ?>
+											<option value="all_states" <?php echo ($send_email_recipient_account_state == 'all_states' ? 'selected="selected"' : ''); ?>><?php _e( 'All States', 'simple-membership' ); ?></option>
+										</select>
+										<p class="description"><?php _e( 'Choose the account state for email recipients.', 'simple-membership' ); ?></p>
+									</div>
+									<div id="send-email-field-members-id" style="<?php echo $send_email_selected_target_recipients !== 'members_id' ? 'display: none' : ''; ?>">  
 										<input type="text" name="send_email_members_id" size="50" value="<?php echo esc_attr($send_email_recipient_members_id);?>" />
 										<p class="description"><?php _e( "Enter member IDs separated by comma to specify the recipients.", "simple-membership" ); ?></p>
 									</div>
@@ -69,7 +84,7 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 							<td align="left">
 								<input type="checkbox" name="send_email_enable_html" <?php echo esc_attr( $send_email_enable_html ); ?> />
 								<p class="description"> <?php _e( 'Enables HTML support in the email. For optimal email delivery rate, we suggest using plain text (non-HTML) email.', 'simple-membership' ); ?> </p>
-							</td>
+							</td>	
 						</tr>
 
 						<tr valign="top">
@@ -111,7 +126,10 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 							<th width="25%" align="left">
 							</th>
 							<td align="left">
-								<input type="submit" class="button-primary" name="send_email_submit" value="<?php _e( 'Send Direct Email', 'simple-membership' ); ?>" />
+								<div style="display: flex;">
+									<input type="submit" class="button-primary" name="send_email_submit" value="<?php _e( 'Send Direct Email', 'simple-membership' ); ?>" />
+									<input type="submit" class="button-secondary" name="list_email_submit" value="<?php _e( 'View Recipient List', 'simple-membership' ); ?>" style="margin-left: 8px" />
+								</div>
 							</td>
 						</tr>
 						<input type="hidden" name="swpm_send_email_nonce" value="<?php echo wp_create_nonce( 'swpm_send_email_nonce_action' ); ?>" />
@@ -125,7 +143,9 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 <script>
 	const recipientGroupRadio = document.querySelectorAll('input[name="send_email_menu_target_recipients"]');
 	const membershipLevelField = document.getElementById('send-email-field-membership-level');
+	const membershipAccountField = document.getElementById('send-email-field-account-state');
 	const membersIdField = document.getElementById('send-email-field-members-id');
+
 	// Add event listener to each radio button
 	recipientGroupRadio.forEach((item) => {
 		item.addEventListener('change', toggleRecipientFieldType);
@@ -134,9 +154,11 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 	function toggleRecipientFieldType(event) {
 		if (event.target.value === 'members_id') {
 			membershipLevelField.style.display = 'none';
+			membershipAccountField.style.display = 'none';
 			membersIdField.style.display = null;
 		} else {
 			membershipLevelField.style.display = null;
+			membershipAccountField.style.display = null;
 			membersIdField.style.display = 'none';
 		}
 	}

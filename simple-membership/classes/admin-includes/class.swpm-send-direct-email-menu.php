@@ -144,7 +144,7 @@ class SWPM_Send_Direct_Email_Menu{
 						// Send the Emails
 						wp_mail($recipient->email, $subject , $body, $headers);
 						SwpmLog::log_simple_debug( 'Sending direct email. Email sent to : '.$recipient->email, true );
- 				     } 
+ 				     }
 
 				} // end of foreach loop
 
@@ -162,7 +162,7 @@ class SWPM_Send_Direct_Email_Menu{
 					}
 					else {
 						wp_mail($logged_in_user_email, $subject , $body, $headers);
-						SwpmLog::log_simple_debug( 'Sending direct email to current logged in user at '.$logged_in_user_email, true );
+						SwpmLog::log_simple_debug( '[Send Me a Copy] Sending email to logged in WordPress user: '.$logged_in_user_email, true );
  				     }
 				}
 

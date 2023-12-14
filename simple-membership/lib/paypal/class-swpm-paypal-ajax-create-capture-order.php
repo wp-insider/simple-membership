@@ -131,8 +131,6 @@ class SWPM_PayPal_Ajax_Create_Capture_Order {
 			$data = json_decode( $data, true);		
 		}
 
-//SwpmLog::log_array_data_to_debug($data, true);//Debugging purpose.
-
 		//Get the order_id from data
 		$order_id = isset( $data['order_id'] ) ? sanitize_text_field($data['order_id']) : '';
 		if ( empty( $order_id ) ) {

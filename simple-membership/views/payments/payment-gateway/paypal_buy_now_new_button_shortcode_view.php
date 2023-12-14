@@ -196,11 +196,10 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                     pp_bn_data.button_id = '<?php echo esc_js($button_id); ?>';
                     pp_bn_data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
                     pp_bn_data.item_name = '<?php echo esc_js($item_name); ?>';
-// const custom_data = document.getElementById('<?php echo esc_attr($on_page_embed_button_id."-custom-field"); ?>').value;
-// pp_bn_data.custom_field = encodeURIComponent(custom_data);//Important to encode the custom field data.
-// console.log('Custom field data: ' + pp_bn_data.custom_field);//Debugging purpose.
+                    //Add custom_field data. It is important to encode the custom_field data so it doesn't mess up the data with & character.
+                    const custom_data = document.getElementById('<?php echo esc_attr($on_page_embed_button_id."-custom-field"); ?>').value;
+                    pp_bn_data.custom_field = encodeURIComponent(custom_data);
                     let post_data = 'action=swpm_pp_capture_order&data=' + JSON.stringify(pp_bn_data) + '&_wpnonce=<?php echo $wp_nonce; ?>';
-                    console.log('Post data: ' + post_data);//Debugging purpose.
                     try {
                         const response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
                             method: "post",
@@ -212,7 +211,8 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
 
                         const response_data = await response.json();
                         const txn_data = response_data.txn_data;
-                        const error_detail = txn_data?.details?.[0];                        
+                        const error_detail = txn_data?.details?.[0];
+                        
                         // Three cases to handle:
                         // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
                         // (2) Other non-recoverable errors -> Show a failure message

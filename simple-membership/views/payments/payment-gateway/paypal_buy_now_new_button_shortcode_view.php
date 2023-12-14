@@ -212,7 +212,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                         const response_data = await response.json();
                         const txn_data = response_data.txn_data;
                         const error_detail = txn_data?.details?.[0];
-                        
+                        const error_msg = response_data.error_msg;//Our custom error message.
                         // Three cases to handle:
                         // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
                         // (2) Other non-recoverable errors -> Show a failure message
@@ -239,11 +239,16 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                             // Recoverable INSTRUMENT_DECLINED -> call actions.restart()
                             console.log('Recoverable INSTRUMENT_DECLINED error. Calling actions.restart()');
                             return actions.restart();
+                        } else if ( error_msg && error_msg.trim() !== '' ) {
+                            //Our custom error message from the server.
+                            console.error('Error occurred during PayPal checkout process.');
+                            console.error( error_msg );
+                            alert( error_msg );
                         } else {
                             // Other non-recoverable errors -> Show a failure message
                             console.error('Non-recoverable error occurred during PayPal checkout process.');
                             console.error( error_detail );
-                            alert('Error occurred with the transaction. Enable debug logging to get more details.\n\n' + JSON.stringify(error_detail));
+                            //alert('Error occurred with the transaction. Enable debug logging to get more details.\n\n' + JSON.stringify(error_detail));
                         }
 
                         //Return the button and the spinner back to their orignal display state.

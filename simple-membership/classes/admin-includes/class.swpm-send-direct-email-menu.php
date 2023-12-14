@@ -8,14 +8,25 @@ class SWPM_Send_Direct_Email_Menu{
     
 	public function handle_send_direct_email_menu()
 	{
+		//Check current_user_can() or die.
+		SwpmMiscUtils::check_user_permission_and_is_admin('Send Direct Email Admin Menu');
+
+		//Triger action hook
         do_action('swpm_send_direct_email_menu_start');
 
+		// Get saved data
 		$settings = SwpmSettings::get_instance();
 		$send_email_menu_data = $settings->get_value('send_email_menu_data');
 		if (empty($send_email_menu_data)) {
 			// No saved data found. initialize the array.
 			$send_email_menu_data = array();
 		}
+
+		// Get WP user's info
+		$logged_in_user = wp_get_current_user();
+		$logged_in_user_email = isset($logged_in_user->user_email) ? $logged_in_user->user_email : '';
+		$logged_in_user_name = isset($logged_in_user->user_login) ? $logged_in_user->user_login : '';
+		// $logged_in_user_id = $logged_in_user->ID;		
 
 		if (isset($_POST['send_email_submit']) || isset($_POST['list_recipient_list']) ) {
 			$swpm_send_email_nonce = filter_input(INPUT_POST, 'swpm_send_email_nonce');
@@ -44,17 +55,10 @@ class SWPM_Send_Direct_Email_Menu{
 
 			$found_logged_in_user_in_receipients = false; // Set true if if logged in user is in the recipient list.
 			$list_of_recipients_to_display = array();
-			
-			// Getting email author's info
-			$logged_in_user = wp_get_current_user();
-			$logged_in_user_email = $logged_in_user->user_email;
-			$logged_in_user_name = $logged_in_user->user_login;
-			// $logged_in_user_id = $logged_in_user->ID;
 
 			// Validate recipients
 			if ( $target_recipients === 'membership_level' && !empty($_POST['send_email_membership_level'])) {
-				// send mail to specified members by membership level and account state.
-
+				// send mail to specified members by membership level and account status.
 				$members = SwpmMemberUtils::get_all_members_of_a_level_and_a_state(sanitize_text_field($_POST['send_email_membership_level']), sanitize_text_field($_POST['send_email_account_state']));
 				foreach ($members as $member) {
 					$recipients[] = $member;
@@ -192,7 +196,7 @@ class SWPM_Send_Direct_Email_Menu{
 					echo '</table>';
 					// echo '</div>'; // end of table wrap
 					echo '<p>' . __('Total email recipients :','simple-membership') . $recipients_count . '</p>';
-					echo '<p>'.__('Note: No emails has been sent yet, just showing recipient list.', 'simple-membership').'</p>';
+					echo '<p>'.__('Note: No emails have been sent; this is only a display of the recipient list.', 'simple-membership').'</p>';
 					echo '</div>';
 					echo '</div>';
 				}
@@ -212,7 +216,7 @@ class SWPM_Send_Direct_Email_Menu{
 				echo '</ol>';
 				echo '</div>';
 			}
-	}
+		}
 
 		// render view.
 		include_once(SIMPLE_WP_MEMBERSHIP_PATH . "views/admin_send_direct_email_menu.php");

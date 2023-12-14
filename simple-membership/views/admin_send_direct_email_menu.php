@@ -17,7 +17,7 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 			<div class="inside">
 				<div class="swpm-grey-box">
 				<p>
-					<?php _e( 'This feature allows you to send emails to a group of members based on their membership level and account state or by individual member IDs.', 'simple-membership' ); ?>
+					<?php _e( 'This feature allows you to send emails to a group of members based on their membership level and account status or by individual member IDs.', 'simple-membership' ); ?>
 					<?php _e( 'Refer to <a href="https://simple-membership-plugin.com/send-a-quick-notification-email-to-your-members/" target="_blank">this documentation page</a> for more details.', 'simple-membership' ); ?>
 				</p>
 				</div>
@@ -30,7 +30,7 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 								<div>
 									<label>
 										<input type="radio" id="target-recipients-option-1" name="send_email_menu_target_recipients" value="membership_level" <?php echo $send_email_selected_target_recipients === "membership_level" ? 'checked' : '';?>>
-										<?php _e( 'Send to Membership Level & Account State', 'simple-membership' );?>
+										<?php _e( 'Send to Membership Level & Account Status', 'simple-membership' );?>
 									</label>
 									<label style="margin-left: 12px">
 										<input type="radio" id="target-recipients-option-2" name="send_email_menu_target_recipients" value="members_id" <?php echo $send_email_selected_target_recipients === "members_id" ? 'checked' : '';?>>
@@ -49,11 +49,11 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 									</div>
 									<div id="send-email-field-account-state" style="<?php echo $send_email_selected_target_recipients == 'members_id' ? 'display: none' : ''; ?>">
 										<select name="send_email_account_state">
-											<option value=""> <?php _e( 'Select Account State', 'simple-membership' ); ?></option>
+											<option value=""> <?php _e( 'Select Account Status', 'simple-membership' ); ?></option>
 											<?php echo SwpmUtils::account_state_dropdown( esc_attr($send_email_recipient_account_state), true );  ?>
-											<option value="all" <?php echo ($send_email_recipient_account_state == 'all' ? 'selected="selected"' : ''); ?>><?php _e( 'All States', 'simple-membership' ); ?></option>
+											<option value="all" <?php echo ($send_email_recipient_account_state == 'all' ? 'selected="selected"' : ''); ?>><?php _e( 'All Status', 'simple-membership' ); ?></option>
 										</select>
-										<p class="description"><?php _e( 'Choose the account state for email recipients.', 'simple-membership' ); ?></p>
+										<p class="description"><?php _e( 'Choose the account status for email recipients.', 'simple-membership' ); ?></p>
 										<br>
 									</div>
 									<div id="send-email-field-members-id" style="<?php echo $send_email_selected_target_recipients !== 'members_id' ? 'display: none' : ''; ?>">  
@@ -66,7 +66,15 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 											<input type="checkbox" name="send_email_copy_author" <?php echo esc_attr( $send_email_copy_author); ?> />
 											<?php _e( 'Also Send Me a Copy', 'simple-membership' ); ?> 
 										</label>
-										<p class="description"><?php _e('Check this if you want to send a copy of the email to your own email address that you are sending to the target recipients.', 'simple-membership') ?></p>
+										<p class="description">
+											<?php 
+											_e('Check this if you want to send a copy of the email to your own email address', 'simple-membership');
+											echo ' (';
+											_e('Your current WP user account email address is: ', 'simple-membership');
+											echo (isset($logged_in_user_email) ? $logged_in_user_email : '');
+											echo ').';
+											?>
+										</p>
 									</div>
 								</div>
 							</td>
@@ -104,6 +112,9 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 									'default_editor' => ! empty( $send_email_enable_html ) ? 'QuickTags' : '',
 									'textarea_rows'  => 15,
 								);
+								//Trigger a filter to allow plugins/addons to modify the editor settings.
+								$send_email_body_settings = apply_filters( 'swpm_send_direct_email_body_settings', $send_email_body_settings );
+								//Render the editor
 								wp_editor( wp_kses_post( $send_email_body ), 'send_email_body', $send_email_body_settings );
 								?>
 								<p class="description">
@@ -132,6 +143,7 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 							</th>
 							<td align="left">
 								<input type="submit" class="button-primary" name="send_email_submit" value="<?php _e( 'Send Direct Email', 'simple-membership' ); ?>" />
+								<p class="description"><?php _e('This option will send the email if there are no validation errors.', 'simple-membership');?></p>
 							</td>
 						</tr>
 
@@ -140,7 +152,7 @@ $send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_p
 							</th>
 							<td align="left">
 								<input type="submit" class="button-secondary" name="list_recipient_list" value="<?php _e( 'View Recipient List', 'simple-membership' ); ?>"/>
-								<p class="description"><?php _e('Click to list the selected members as recipients. This is useful for cross checking all the email recipients before sending email.', 'simple-membership');?></p>
+								<p class="description"><?php _e('You can use this option to display a list of selected members as recipients for cross-checking email addresses before sending.', 'simple-membership');?></p>
 							</td>
 						</tr>
 

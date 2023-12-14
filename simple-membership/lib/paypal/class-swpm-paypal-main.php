@@ -9,6 +9,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-webhook-event-handler.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-onapprove-ipn-handler.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-functions.php' );//Misc project specific utility functions.
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-ipn-related.php' );//Misc IPN related utility functions.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-cache.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-bearer.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-ajax-create-capture-order.php' );
@@ -51,7 +52,7 @@ class SWPM_PayPal_Main {
 		new SWPM_PayPal_ACDC_Related();
 
 		//Initialize the PayPal onboarding serverside class so it can handle the 'onboardedCallback' ajax request.
-		new SWPM_PayPal_PPCP_Onboarding_Serverside();
+		new SWPM_PayPal_PPCP_Onboarding_Serverside();	
 		
     }
 

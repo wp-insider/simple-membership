@@ -237,9 +237,8 @@ class SWPM_PayPal_ACDC_Related {
 		}
 
 		// Capture the order using the PayPal API - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
-		$order_data = array( 'order_id' => $order_id );
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
-		$response = $api_injector->capture_paypal_order( $order_data );
+		$response = $api_injector->capture_paypal_order( $order_id );
 		if($response !== false){
 			$paypal_capture_id = $response;
 		} else {

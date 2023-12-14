@@ -179,9 +179,15 @@ class SWPM_PayPal_Request_API {
 			)
 		);
 
-		if( isset( $additional_args['return_raw_response'] ) && $additional_args['return_raw_response'] ){
+		//Check if we need to return the body or raw response
+		if( isset($additional_args['return_raw_response']) && $additional_args['return_raw_response'] ){
+			//Return the raw response
 			return $res;
+		} else if ( isset( $additional_args['return_response_body'] ) && $additional_args['return_response_body'] ){
+			//Return the response body
+			return wp_remote_retrieve_body( $res );
 		}
+		
 		$status_code = isset( $additional_args['status_code'] ) ? $additional_args['status_code'] : 200;
 		$return = $this->process_request_result( $res, $status_code );
 
@@ -222,9 +228,15 @@ class SWPM_PayPal_Request_API {
 			)
 		);
 
-		if( isset( $additional_args['return_raw_response'] ) && $additional_args['return_raw_response'] ){
+		//Check if we need to return the body or raw response
+		if( isset($additional_args['return_raw_response']) && $additional_args['return_raw_response'] ){
+			//Return the raw response
 			return $res;
+		} else if ( isset( $additional_args['return_response_body'] ) && $additional_args['return_response_body'] ){
+			//Return the response body
+			return wp_remote_retrieve_body( $res );
 		}
+
 		//POST success response status code is 201 by default
 		$status_code = isset( $additional_args['status_code'] ) ? $additional_args['status_code'] : 201;
 		$return = $this->process_request_result( $res, $status_code );
@@ -256,9 +268,15 @@ class SWPM_PayPal_Request_API {
 			)
 		);
 
-		if( isset( $additional_args['return_raw_response'] ) && $additional_args['return_raw_response'] ){
+		//Check if we need to return the body or raw response
+		if( isset($additional_args['return_raw_response']) && $additional_args['return_raw_response'] ){
+			//Return the raw response
 			return $res;
+		} else if ( isset( $additional_args['return_response_body'] ) && $additional_args['return_response_body'] ){
+			//Return the response body
+			return wp_remote_retrieve_body( $res );
 		}
+
 		//DELETE success response status code is 204 by default
 		$status_code = isset( $additional_args['status_code'] ) ? $additional_args['status_code'] : 204;
 		$return = $this->process_request_result( $res, $status_code );
@@ -273,6 +291,8 @@ class SWPM_PayPal_Request_API {
 		if (is_wp_error( $res )) {
 			$this->last_error['error_message'] = $res->get_error_message();
 			$this->last_error['error_code'] = $res->get_error_code();
+			//This usually means that WordPress failed to make the request to the API endpoint correctly. Log this error so the debug option can reveal the details.
+			SwpmLog::log_simple_debug( 'Error occurred with the PayPal API request. Error message: ' . $this->last_error['error_message'], false );
 			return false;
 		}
 
@@ -288,6 +308,8 @@ class SWPM_PayPal_Request_API {
 				//Empty body response.
 				$this->last_error['error_message'] = 'Error! The body of the response is empty. Check that the expected response status code is correct.';
 			}
+			//Log this error so the debug option can reveal the details.
+			SwpmLog::log_simple_debug( 'Error occurred with the PayPal API request. Error message: ' . $this->last_error['error_message'], false );
 			return false;
 		}
 
@@ -338,13 +360,16 @@ class SWPM_PayPal_Request_API {
 			// Error occurred with the API request. Lets log the error.
 			$error_message = $response->get_error_message();
 			SwpmLog::log_simple_debug( 'Error occurred with the PayPal API (by URL) request. Error message: ' . $error_message, false );
+			// Log the PayPal debug id for PayPal API Error.
+			$paypal_debug_id = wp_remote_retrieve_header( $response, 'paypal-debug-id' );
+			SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API response. URL: ' . $url . ', Debug ID: ' . $paypal_debug_id, false );			
 			return false;
 		}
 
 		//=== Debug purposes ===
 		//PayPal debug id
 		$paypal_debug_id = wp_remote_retrieve_header( $response, 'paypal-debug-id' );
-		SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API (by URL) request: ' . $paypal_debug_id, true );
+		SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API (by URL) request. URL: ' . $url . ', Debug ID: ' . $paypal_debug_id, true );
 		//-- Debug the request body --
 		// $response_body = wp_remote_retrieve_body( $response );
 		// $response_body_json_decoded = json_decode( $response_body );

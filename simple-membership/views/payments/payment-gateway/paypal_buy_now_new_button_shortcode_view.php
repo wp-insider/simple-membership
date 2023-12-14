@@ -143,7 +143,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                     // Create the order in PayPal using the PayPal API.
                     // https://developer.paypal.com/docs/checkout/standard/integrate/
                     // The server-side Create Order API is used to generate the Order. Then the Order-ID is returned.                    
-                    console.log('Setting up the create-order call AJAX request.');
+                    console.log('Setting up the AJAX request for create-order call.');
                     let pp_bn_data = {};
                     pp_bn_data.button_id = '<?php echo esc_js($button_id); ?>';
                     pp_bn_data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
@@ -177,8 +177,8 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                     }
                 },
     
-                // notify the buyer that the subscription is successful
-                onApprove: function(data, actions) {
+                // handle the onApprove event
+                async onApprove(data, actions) {
                     console.log('Successfully created a transaction.');
 
                     //Show the spinner while we process this transaction.
@@ -187,47 +187,73 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                     pp_button_container.hide();//Hide the buttons
                     pp_button_spinner_conainer.css('display', 'inline-block');//Show the spinner.
 
-                    //Get the order/transaction details and send AJAX request to process the transaction.
-                    actions.order.capture().then( function( txn_data ) {
-                        //console.log( 'Transaction details: ' + JSON.stringify( txn_data ) );
-
-                        //Ajax request to process the transaction. This will process it similar to how an IPN request is handled.
-                        var custom = document.getElementById('<?php echo esc_attr($on_page_embed_button_id."-custom-field"); ?>').value;
-                        data.custom_field = custom;
-                        data.button_id = '<?php echo esc_js($button_id); ?>';
-                        data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
-                        data.item_name = '<?php echo esc_js($item_name); ?>';
-                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_onapprove_create_order', data: data, txn_data: txn_data, _wpnonce: '<?php echo $wp_nonce; ?>'}, function( response ) {
-                            //console.log( 'Response from the server: ' + JSON.stringify( response ) );
-                            if ( response.success ) {
-                                //Success response.
-
-                                //Redirect to the Thank you page URL if it is set.
-                                return_url = '<?php echo esc_url_raw($return_url); ?>';
-                                if( return_url ){
-                                    //redirect to the Thank you page URL.
-                                    console.log('Redirecting to the Thank you page URL: ' + return_url);
-                                    window.location.href = return_url;
-                                    return;
-                                } else {
-                                    //No return URL is set. Just show a success message.
-                                    txn_success_msg = '<?php echo esc_attr($txn_success_message); ?>';
-                                    alert(txn_success_msg);
-                                }
-
-                            } else {
-                                //Error response from the AJAX IPN hanler. Show the error message.
-                                console.log( 'Error response: ' + JSON.stringify( response.err_msg ) );
-                                alert( JSON.stringify( response ) );
-                            }
-
-                            //Return the button and the spinner back to their orignal display state.
-                            pp_button_container.show();//Show the buttons
-                            pp_button_spinner_conainer.hide();//Hide the spinner.
-
+                    // Capture the order in PayPal using the PayPal API.
+                    // https://developer.paypal.com/docs/checkout/standard/integrate/
+                    // The server-side capture-order API is used. Then the Capture-ID is returned.
+                    console.log('Setting up the AJAX request for capture-order call.');
+                    let pp_bn_data = {};
+                    pp_bn_data.order_id = data.orderID;
+                    pp_bn_data.button_id = '<?php echo esc_js($button_id); ?>';
+                    pp_bn_data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
+                    pp_bn_data.item_name = '<?php echo esc_js($item_name); ?>';
+// const custom_data = document.getElementById('<?php echo esc_attr($on_page_embed_button_id."-custom-field"); ?>').value;
+// pp_bn_data.custom_field = encodeURIComponent(custom_data);//Important to encode the custom field data.
+// console.log('Custom field data: ' + pp_bn_data.custom_field);//Debugging purpose.
+                    let post_data = 'action=swpm_pp_capture_order&data=' + JSON.stringify(pp_bn_data) + '&_wpnonce=<?php echo $wp_nonce; ?>';
+                    console.log('Post data: ' + post_data);//Debugging purpose.
+                    try {
+                        const response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
+                            method: "post",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: post_data
                         });
 
-                    });
+                        const response_data = await response.json();
+                        const txn_data = response_data.txn_data;
+                        const error_detail = txn_data?.details?.[0];                        
+                        // Three cases to handle:
+                        // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+                        // (2) Other non-recoverable errors -> Show a failure message
+                        // (3) Successful transaction -> Show confirmation or thank you message
+
+                        if (response_data.capture_id) {
+                            // Successful transaction -> Show confirmation or thank you message
+                            console.log('Capture-order API call to PayPal completed successfully.');
+
+                            //Redirect to the Thank you page URL if it is set.
+                            return_url = '<?php echo esc_url_raw($return_url); ?>';
+                            if( return_url ){
+                                //redirect to the Thank you page URL.
+                                console.log('Redirecting to the Thank you page URL: ' + return_url);
+                                window.location.href = return_url;
+                                return;
+                            } else {
+                                //No return URL is set. Just show a success message.
+                                txn_success_msg = '<?php echo esc_attr($txn_success_message); ?>';
+                                alert(txn_success_msg);
+                            }
+
+                        } else if (error_detail?.issue === "INSTRUMENT_DECLINED") {
+                            // Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+                            console.log('Recoverable INSTRUMENT_DECLINED error. Calling actions.restart()');
+                            return actions.restart();
+                        } else {
+                            // Other non-recoverable errors -> Show a failure message
+                            console.error('Non-recoverable error occurred during PayPal checkout process.');
+                            console.error( error_detail );
+                            alert('Error occurred with the transaction. Enable debug logging to get more details.\n\n' + JSON.stringify(error_detail));
+                        }
+
+                        //Return the button and the spinner back to their orignal display state.
+                        pp_button_container.show();//Show the buttons
+                        pp_button_spinner_conainer.hide();//Hide the spinner.
+
+                    } catch (error) {
+                        console.error(error);
+                        alert('Sorry, your transaction could not be processed...\n\n' + error);
+                    }
                 },
     
                 // handle unrecoverable errors

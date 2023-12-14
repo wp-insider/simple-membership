@@ -300,7 +300,7 @@ class SWPM_PayPal_Request_API_Injector {
                 return wp_remote_retrieve_body( $response );
             }
             
-            //Check and get the order ID from the response.
+            //Return the standard response.
             if ( $response !== false){
                 //Response is a success!
                 $json_response_body = json_decode( wp_remote_retrieve_body( $response ) );
@@ -312,76 +312,34 @@ class SWPM_PayPal_Request_API_Injector {
                 return false;
             }
         }
-        
-        public function create_paypal_order( $data ){
-            $payment_amount = isset($data['payment_amount']) ? $data['payment_amount'] : '';
-            $quantity = isset($data['quantity']) ? $data['quantity'] : 1;
-            $currency = isset($data['currency']) ? $data['currency'] : 'USD';
-            $item_name = isset($data['item_name']) ? $data['item_name'] : '';
-            //$digital_goods_enabled = isset($data['digital_goods_enabled']) ? $data['digital_goods_enabled'] : 1;
-            
-            $order_data = [
-                "intent" => "CAPTURE",
-                "purchase_units" => [
-                    [
-                        "amount" => [
-                            "value" => $payment_amount,
-                            "currency_code" => $currency,
-                            "breakdown" => [
-                                "item_total" => [
-                                    "currency_code" => $currency,
-                                    "value" => $payment_amount * $quantity,
-                                ]
-                            ]
-                        ],
-                        "items" => [
-                            [
-                                "name" => $item_name,
-                                "quantity" => $quantity,
-                                // "category" => $digital_goods_enabled ? "PHYSICAL_GOODS" : "DIGITAL_GOODS",
-                                "unit_amount" => [
-                                    "value" => $payment_amount,
-                                    "currency_code" => $currency,
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ];
 
-            $endpoint = '/v2/checkout/orders';
-            $response = $this->paypal_req_api->post($endpoint, $order_data);
-            if ( $response !== false){
-                //Response is a success!
-                $created_order_id = $response->id;
-                return $created_order_id;
-            } else {
-                //The process_request_result() function has debug lines that can be uncommented to check further details.
-                //We can also pass the $additional_args['return_raw_response'] = true to the post() function to get the raw response.                
-                return false;
-            }
-        }
-
-        public function capture_paypal_order( $order_data = array() ){
-            //Get the PayPal order ID from the data.
-            $order_id = isset($order_data['order_id']) ? $order_data['order_id'] : '';
+        public function capture_paypal_order( $order_id, $additional_args = array() ){
             if( empty($order_id) ){
+                SwpmLog::log_simple_debug('Empty PayPal order ID received. cannot process this request.', false);
                 return false;
             }
+            $order_data = array( 'order_id' => $order_id );
 
+            //https://developer.paypal.com/docs/api/orders/v2/#orders_capture
             $endpoint = '/v2/checkout/orders/' . $order_id . '/capture';
-            $response = $this->paypal_req_api->post($endpoint, $order_data);
+            $response = $this->paypal_req_api->post($endpoint, $order_data, $additional_args);
+
+            //Check if we need to return the raw response or body (set in additional args).
+            if( isset($additional_args['return_raw_response']) || $additional_args['return_response_body'] ){
+                //Return whatever we got from the API call according to the additional args.
+                return $response;
+            }
+
+            //Return the standard response.
             if ( $response !== false){
                 //Response is a success!
                 $capture_id = $response->id;//Capture ID/Transaction ID.
                 return $capture_id;
             } else {
-                //Failed to capture the order.
-                //The process_request_result() function has debug lines that can be uncommented to check further details.
-                //We can also pass the $additional_args['return_raw_response'] = true to the post() function to get the raw response.
+                //Failed to capture the order. The process_request_result() function has debug lines to reveal more details.
                 return false;
             }
 
-        }
+        }        
         
 }

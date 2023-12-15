@@ -17,87 +17,10 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 	 * Setup the ajax request actions.
 	 */
 	public function setup_ajax_request_actions() {
-		//Handle the onApprove ajax request for 'Buy Now' type buttons
-		add_action( 'wp_ajax_swpm_onapprove_create_order', array(&$this, 'swpm_onapprove_create_order' ) );
-		add_action( 'wp_ajax_nopriv_swpm_onapprove_create_order', array(&$this, 'swpm_onapprove_create_order' ) );
-
 		//Handle the onApprove ajax request for 'Subscription' type buttons
 		add_action( 'wp_ajax_swpm_onapprove_create_subscription', array(&$this, 'swpm_onapprove_create_subscription' ) );
 		add_action( 'wp_ajax_nopriv_swpm_onapprove_create_subscription', array(&$this, 'swpm_onapprove_create_subscription' ) );
 	}
-
-	/**
-	 * Handle the onApprove ajax request for 'Buy Now' type buttons
-	 */
-	 public function swpm_onapprove_create_order(){
-
-		//Get the data from the request
-		$data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : array();
-		if ( empty( $data ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Empty data received.', 'simple-membership' ),
-				)
-			);
-		}
-		//SwpmLog::log_array_data_to_debug( $data, true );//Debugging purpose
-
-		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
-		SwpmLog::log_simple_debug( 'OnApprove ajax request received for createOrder. On Page Button ID: ' . $on_page_button_id, true );
-
-		// Check nonce.
-		if ( ! check_ajax_referer( $on_page_button_id, '_wpnonce', false ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'simple-membership' ),
-				)
-			);
-			exit;
-		}
-
-		//Get the transaction data from the request
-		$txn_data = isset( $_POST['txn_data'] ) ? stripslashes_deep( $_POST['txn_data'] ) : array();
-		if ( empty( $txn_data ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => __( 'Empty transaction data received.', 'simple-membership' ),
-				)
-			);
-		}
-		//SwpmLog::log_array_data_to_debug( $txn_data, true );//Debugging purpose.
-
-
-		//Create and save the IPN data array from the transaction data.
-		$this->ipn_data = SWPM_PayPal_Utility_IPN_Related::create_ipn_data_array_from_capture_order_txn_data( $data, $txn_data );
-		SwpmLog::log_array_data_to_debug( $this->ipn_data, true );//Debugging purpose.
-		
-		//Validate the buy now txn data before using it.
-		$validation_response = SWPM_PayPal_Utility_IPN_Related::validate_buy_now_checkout_txn_data( $data, $txn_data );
-		if( $validation_response !== true ){
-			wp_send_json(
-				array(
-					'success' => false,
-					'err_msg'  => $validation_response,
-				)
-			);
-			exit;
-		}
-
-		//Process the IPN data array
-		SwpmLog::log_simple_debug( 'Validation passed. Going to create/update member account and save transaction data.', true );
-		SWPM_PayPal_Utility_IPN_Related::create_membership_and_save_txn_data( $data, $txn_data, $this->ipn_data );
-
-		// Trigger the IPN processed action hook (so other plugins can can listen for this event).
-		do_action( 'swpm_paypal_buy_now_checkout_ipn_processed', $this->ipn_data );
-		do_action( 'swpm_payment_ipn_processed', $this->ipn_data );
-
-		//If everything is processed successfully, send the success response.
-		wp_send_json( array( 'success' => true ) );
-		exit;
-    }
 
 	/**
 	 * Handle the onApprove ajax request for 'Subscription' type buttons

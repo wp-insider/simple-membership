@@ -2,6 +2,7 @@
 
 /**
  * This clcass handles the ajax requests from the PayPal button's createOrder, captureOrder functions.
+ * On successful onApprove event, it creates the required $ipn_data array from the transaction so it can be fed into the existing IPN handler functions easily.
  */
 class SWPM_PayPal_Button_Ajax_Hander {
 

@@ -51,14 +51,13 @@ class SWPM_Payment_Settings_Menu_Tab {
             $ret = $pp_webhook->check_and_create_webhook_for_live_mode();
 
             //Create the response message.
-            $live_wh_create_result = '';
+            $pre_msg_html_markup = '';
             if( isset($ret['status']) && ($ret['status'] == 'yes' )){
                 //Add an extra checkmark in the message for visual appeal.
-                $live_wh_create_result .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
+                $pre_msg_html_markup .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
             }
-            $live_wh_create_result .= isset($ret['msg']) ? sanitize_text_field($ret['msg']) : '';
-            echo '<div class="swpm-yellow-box"><p><strong>Create Live Webhook: </strong>' . esc_attr($live_wh_create_result) . '</p></div>';
-
+            $live_wh_create_result_msg = isset($ret['msg']) ? sanitize_text_field($ret['msg']) : '';
+            echo '<div class="swpm-yellow-box"><p><strong>Create Live Webhook: </strong>' . $pre_msg_html_markup . esc_attr($live_wh_create_result_msg) . '</p></div>';
         }
         if (isset($_GET['swpm_paypal_create_sandbox_webhook'])){
             check_admin_referer( 'swpm_paypal_create_sandbox_webhook' );
@@ -66,14 +65,13 @@ class SWPM_Payment_Settings_Menu_Tab {
             $ret = $pp_webhook->check_and_create_webhook_for_sandbox_mode();
 
             //Create the response message.
-            $sandbox_wh_create_result = '';
+            $pre_msg_html_markup = '';
             if( isset($ret['status']) && ($ret['status'] == 'yes' )){
                 //Add an extra checkmark in the message for visual appeal.
-                $sandbox_wh_create_result .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
-            }    
-            $sandbox_wh_create_result .= isset($ret['msg']) ? sanitize_text_field($ret['msg']) : '';
-            //$sandbox_wh_create_result .= '<p><a href="#paypal-subscription-webhooks">Click here</a> to go to the webhook section below.</p>';
-            echo '<div class="swpm-yellow-box"><p><strong>Create Sandbox Webhook: </strong>' . esc_attr($sandbox_wh_create_result) . '</p></div>';
+                $pre_msg_html_markup = '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
+            }
+            $sandbox_wh_create_result_msg = isset($ret['msg']) ? sanitize_text_field($ret['msg']) : '';
+            echo '<div class="swpm-yellow-box"><p><strong>Create Sandbox Webhook: </strong>' . $pre_msg_html_markup . esc_attr($sandbox_wh_create_result_msg) . '</p></div>';
         }
         if (isset($_GET['swpm_paypal_delete_webhook'])){
             check_admin_referer( 'swpm_paypal_delete_webhook' );

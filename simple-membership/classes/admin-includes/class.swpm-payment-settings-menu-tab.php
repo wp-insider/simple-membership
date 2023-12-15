@@ -112,6 +112,13 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->save();
             echo '<div class="notice notice-success"><p>' . __('PayPal API settings updated successfully.', 'simple-membership') . '</p></div>';
         }
+
+        if (isset($_GET['swpm_paypal_delete_cache'])){
+            check_admin_referer( 'swpm_paypal_delete_cache' );
+            $paypal_cache = SWPM_PayPal_Cache::get_instance();
+            $paypal_cache->delete( SWPM_PayPal_Bearer::BEARER_CACHE_KEY );
+            echo '<div class="notice notice-success"><p>' . __('PayPal access token cache deleted successfully.', 'simple-membership') . '</p></div>';
+        }        
         
         // Check Stripe settings submit.
         if (isset($_POST['swpm-stripe-settings-submit']) && check_admin_referer('swpm-stripe-settings-nonce')) {
@@ -227,7 +234,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 
         <!-- Paypal Settings postbox -->
         <div class="postbox">
-            <h2><?php _e("PayPal Settings", 'simple-membership'); ?></h3>
+            <h2><?php _e("PayPal API Credentials", 'simple-membership'); ?></h3>
             <div class="inside">
                 <p>
                     <?php 	
@@ -295,6 +302,27 @@ class SWPM_Payment_Settings_Menu_Tab {
                 </form>
             </div>
         </div>
+
+        <div class="postbox">
+            <h2 id="paypal-delete-token-cache-section"><?php _e("Delete PayPal API Access Token Cache", 'simple-membership'); ?></h2>
+            <div class="inside">
+            <table class="form-table" role="presentation">
+                <tbody>
+                    <tr>
+                        <th scope="row"><?php _e('Delete PayPal Token Cache', 'simple-membership'); ?></th>
+                        <td>
+                            <?php
+                            $delete_cache_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api&swpm_paypal_delete_cache=1' );
+                            $delete_cache_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_delete_cache' ), $delete_cache_url );
+                            echo '<p><a class="button swpm-paypal-delete-cache-btn" href="'.esc_url_raw($delete_cache_url_nonced).'">'.__('Delete Token Cache', 'simple-membership').'</a></p>';
+                            echo '<p class="description">' . __('This will delete the PayPal API access token cache. This is useful if you are having issues with the PayPal API after changing/updating the API credentials.', 'simple-membership') . '</p>';
+                            ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>        
         <?php
     }
 
@@ -573,5 +601,6 @@ class SWPM_Payment_Settings_Menu_Tab {
 		</table>
 		<?php
 	}
+
 }
 

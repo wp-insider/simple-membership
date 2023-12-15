@@ -73,7 +73,6 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 				)
 			);
 		}
-		//SwpmLog::log_array_data_to_debug( $seller_api_credentials, true );//TODO - Debugging purpose
 
 		//Save the credentials to the database.
 		$this->save_seller_api_credentials( $seller_api_credentials, $environment_mode);
@@ -85,7 +84,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 
 		//=== Seller account status ===
 		$seller_account_status = $this->get_seller_account_status_data_using_bearer_token($bearer_token, $seller_api_credentials, $environment_mode );
-		SwpmLog::log_array_data_to_debug( $seller_account_status, true );//TODO - Debugging purpose
+		SwpmLog::log_array_data_to_debug( $seller_account_status, true );
 		if( ! $seller_account_status ){
 			//Failed to get seller account status.
 			wp_send_json(

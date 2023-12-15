@@ -121,8 +121,6 @@ class SWPM_PayPal_Webhook {
 
 		//$additional_args = array( 'return_raw_response' => '1', 'status_code' => '200' );
 		$response = $this->paypal_req_api->get($endpoint, $params );
-		
-		//var_dump( $response );//TODO - remove this line
 
 		if( $response !== false){
 			//Response is a success!

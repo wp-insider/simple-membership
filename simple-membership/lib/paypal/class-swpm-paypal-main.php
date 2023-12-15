@@ -12,7 +12,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-utility-ipn-related.php' );//Misc IPN related utility functions.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-cache.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-bearer.php' );
-include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-ajax-create-capture-order.php' );
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-button-ajax-handler.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-acdc-related.php' );
 
 //Onboarding related includes
@@ -43,7 +43,7 @@ class SWPM_PayPal_Main {
 		}
 
 		//Initialize the PayPal Ajax Create and Capture Order Class so it can handle the ajax request(s).
-		new SWPM_PayPal_Ajax_Create_Capture_Order();
+		new SWPM_PayPal_Button_Ajax_Hander();
 
 		//Initialize the PayPal OnApprove IPN Handler so it can handle the 'onApprove' ajax request(s).
 		new SWPM_PayPal_OnApprove_IPN_Handler();

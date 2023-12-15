@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This clcass handles the ajax requests from the PayPal button's createOrder, captureOrder etc functions.
+ * This clcass handles the ajax requests from the PayPal button's createOrder, captureOrder functions.
  */
 class SWPM_PayPal_Button_Ajax_Hander {
 

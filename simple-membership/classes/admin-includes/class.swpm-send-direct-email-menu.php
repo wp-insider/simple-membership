@@ -206,6 +206,10 @@ class SWPM_Send_Direct_Email_Menu{
 		$send_email_enable_html = isset( $send_email_menu_data['send_email_enable_html'] ) && sanitize_text_field( $send_email_menu_data['send_email_enable_html'] ) === 'on' ? 'checked="checked"' : '';
 		$send_email_subject = isset( $send_email_menu_data['send_email_subject'] ) ? sanitize_text_field( $send_email_menu_data['send_email_subject'] ) : '';
 		$send_email_body = isset( $send_email_menu_data['send_email_body'] ) ? wp_kses_post( $send_email_menu_data['send_email_body'] ) : '';
+		
+		// Get WP user's info
+		$logged_in_user = wp_get_current_user();
+		$logged_in_user_email = isset($logged_in_user->user_email) ? $logged_in_user->user_email : '';
 		?>
 
 		<div id="poststuff">
@@ -429,7 +433,7 @@ class SWPM_Send_Direct_Email_Menu{
 		echo '</tbody>';
 		echo '</table>';
 		// echo '</div>'; // end of table wrap
-		echo '<p>' . __('Total email recipients :','simple-membership') . $recipients_count . '</p>';
+		echo '<p>' . __('Total email recipients: ','simple-membership') . $recipients_count . '</p>';
 		echo '<p>'.__('Note: No emails have been sent; this is only a display of the recipient list.', 'simple-membership').'</p>';
 		echo '</div>';
 		echo '</div>';

@@ -171,7 +171,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = 4.3.9 = 
-- Note: The 'Payment Settings' tab has been moved to the 'Payments' menu. Allowing all payment configuration related functions to be under one menu.
+- Note: Significant updates have been made to the PayPal's new API related code in this release. Please take a backup of your site before updating.
+- The 'Payment Settings' tab has been moved to the 'Payments' menu. Allowing all payment configuration related functions to be under one menu.
 - The 'Payment Settings' menu has been divided into multiple sub-menus for better organization.
 - Added a new option in the PayPal API tab to allow manual deletion of the PayPal API access token cache.
 - The PayPal buy now (New API) button's JavaScript code has been updated to reflect the latest PayPal API related changes.

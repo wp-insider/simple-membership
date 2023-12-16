@@ -90,8 +90,8 @@ class SWPM_Payment_Settings_Menu_Tab {
             check_admin_referer( 'swpm_sandbox_ac_disconnect_nonce' );
 
             SWPM_PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('sandbox');
-            $disconnect_action_result = '<p>PayPal sandbox account disconnected.</p>';
-            echo '<div class="swpm-yellow-box"><p>' . esc_attr($disconnect_action_result) . '</p></div>';
+            $disconnect_action_result = __('PayPal sandbox account disconnected.', 'simple-membership');
+            echo '<div class="swpm-yellow-box"><p>' . $disconnect_action_result . '</p></div>';
         }
         
         // Check test-mode settings submit.
@@ -220,7 +220,7 @@ class SWPM_Payment_Settings_Menu_Tab {
         ?>
 
         <!-- Paypal PPCP Connection postbox -->
-        <!--
+        <!--         
         <div class="postbox">
             <h2 id="paypal-ppcp-connection-section"><?php _e("PayPal Account Connection", 'simple-membership'); ?></h2>
             <div class="inside">

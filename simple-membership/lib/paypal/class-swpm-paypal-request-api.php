@@ -371,7 +371,7 @@ class SWPM_PayPal_Request_API {
 			$args['headers']['PayPal-Partner-Attribution-Id'] = 'TipsandTricks_SP_PPCP';
 		}
 
-		//=== Debug purposes ===
+		//=== Debug purposes (Useful for PayPal Tech Support) ===
 		//SwpmLog::log_simple_debug( '----- PayPal API request header -----', true );
 		//SwpmLog::log_array_data_to_debug( $args, true );
 		//=== End of debug purposes ===
@@ -392,7 +392,7 @@ class SWPM_PayPal_Request_API {
 		//PayPal debug id
 		$paypal_debug_id = wp_remote_retrieve_header( $response, 'paypal-debug-id' );
 		SwpmLog::log_simple_debug( 'PayPal Debug ID from the REST API (by URL) request. Debug ID: ' . $paypal_debug_id . ', Request URL: ' . $url, true );
-		//-- Debug the request body --
+		//== Debug the request body (Useful for PayPal Tech Support) ==
 		// $response_body = wp_remote_retrieve_body( $response );
 		// $response_body_json_decoded = json_decode( $response_body );
 		// SwpmLog::log_array_data_to_debug( $response_body_json_decoded, true );

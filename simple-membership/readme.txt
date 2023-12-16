@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.4
-Stable tag: 4.3.8
+Stable tag: 4.3.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,7 @@ You can create a free forum user account and ask your questions.
 * Hide the admin toolbar from the frontend of your site.
 * Allow your members to delete their membership accounts.
 * Send quick notification email to your members.
+* Email all members by membership level, with an option to filter by account status.
 * Customize the password reset email for members.
 * Use Google reCAPTCHA on your member registration form.
 * Use Google reCAPTCHA on your member login and password reset form.
@@ -169,7 +170,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.3.9 = 
+= 4.3.9 = 
 - Note: The 'Payment Settings' tab has been moved to the 'Payments' menu. Allowing all payment configuration related functions to be under one menu.
 - The 'Payment Settings' menu has been divided into multiple sub-menus for better organization.
 - Added a new option in the PayPal API tab to allow manual deletion of the PayPal API access token cache.

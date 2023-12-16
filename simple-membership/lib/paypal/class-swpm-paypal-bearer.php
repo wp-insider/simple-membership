@@ -36,7 +36,7 @@ class SWPM_PayPal_Bearer {
 			if ( $is_valid_token ) {
 				//The cached token is valid. Return it.
 				$token_string = $token['token_value'];
-				SwpmLog::log_simple_debug('Using the cached PayPal access token (since it is still valid). Environment mode: ' . $environment_mode, true);
+				SwpmLog::log_simple_debug('Using the cached PayPal API access token (since it is still valid). Environment mode: ' . $environment_mode, true);
 				return $token_string;
 			}
 		}
@@ -64,7 +64,7 @@ class SWPM_PayPal_Bearer {
             }
         }
 
-        SwpmLog::log_simple_debug('[New Token] Creating a new PayPal access token for environment mode: ' . $environment_mode, true);
+        SwpmLog::log_simple_debug('[New Token] Creating a new PayPal API access token for environment mode: ' . $environment_mode, true);
 
         if( $environment_mode == 'sandbox' ){
             $client_id = $settings->get_value('paypal-sandbox-client-id');

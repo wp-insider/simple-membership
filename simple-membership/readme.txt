@@ -169,6 +169,8 @@ Please visit the memberhsip plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+= WIP =
+- Email validation issue fixed for unique registration form in the new form UI.
 
 = 4.3.9 = 
 - Note: Significant updates have been made to the PayPal's new API related code in this release. Please take a backup of your site before updating.

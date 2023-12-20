@@ -619,6 +619,46 @@ class SwpmMembers extends WP_List_Table {
 			echo $message;
 			echo '</strong></p></div>';
 		}
+
+		if ( isset( $_REQUEST['swpm_bulk_account_status_change_process'] ) ) {
+			//Check nonce
+			$swpm_bulk_change_level_nonce = filter_input( INPUT_POST, 'swpm_bulk_account_status_change_nonce' );
+			if ( ! wp_verify_nonce( $swpm_bulk_change_level_nonce, 'swpm_bulk_account_status_change_nonce_action' ) ) {
+				//Nonce check failed.
+				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Change Account Status action. Clear cache and try again.' ) );
+			}
+
+			$errorMsg      = '';
+			$from_level_id = sanitize_text_field( $_POST['swpm_bulk_account_status_change_level_of'] );
+			$to_account_status   = sanitize_text_field( $_POST['swpm_bulk_change_account_status_to'] );
+
+			if ( $from_level_id == 'please_select' ) {
+				$errorMsg = __( 'Error! Please select a membership level first.', 'simple-membership' );
+			}else if($to_account_status == 'please_select' || empty($to_account_status)){
+				$errorMsg = __( 'Error! Please select a account status.', 'simple-membership' );
+			}
+
+			if ( empty( $errorMsg ) ) { //No validation errors so go ahead
+				SwpmLog::log_simple_debug( 'Updating bulk account status value of membership level ID: ' . $from_level_id . ' to the account status of: ' . $to_account_status, true );
+				$member_records = SwpmMemberUtils::get_all_members_of_a_level( $from_level_id );
+				if ( $member_records ) {
+					foreach ( $member_records as $row ) {
+						$member_id = $row->member_id;
+						SwpmMemberUtils::update_account_state( $member_id, $to_account_status );
+					}
+				}
+			}
+
+			if ( ! empty( $errorMsg ) ) {
+				echo '<div id="message" class="notice notice-error"><p><strong>';
+				echo $errorMsg;
+				echo '</strong></p></div>';
+			}else{	
+				echo '<div id="message" class="notice notice-success"><p><strong>';
+				_e( 'Account status change operation completed successfully.', 'simple-membership');
+				echo '</strong></p></div>';
+			}
+		}
 		?>
 
 		<div class="postbox">
@@ -718,6 +758,54 @@ class SwpmMembers extends WP_List_Table {
 				$('#swpm_bulk_user_start_date_change_date').datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: "-100:+100"});
 			});
 		</script>
+
+		<div class="postbox">
+			<h3 class="hndle"><label for="title"><?php _e( 'Bulk Update Account Status of Members', 'simple-membership' ); ?></label></h3>
+			<div class="inside">
+				<p>
+					<?php _e( 'You can manually change the account status of any member by editing the record from the members menu. You can use the following option to bulk update the account status of users who belong to the level you select below.', 'simple-membership' ); ?>
+				</p>
+				<form method="post" action="">
+					<input type="hidden" name="swpm_bulk_account_status_change_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_account_status_change_nonce_action' ); ?>" />
+
+					<table width="100%" border="0" cellspacing="0" cellpadding="6">
+						<tr valign="top">
+							<td width="25%" align="left">
+								<strong><?php _e( 'Membership Level: ', 'simple-membership' ); ?></strong>
+							</td>
+							<td align="left">
+								<select name="swpm_bulk_account_status_change_level_of">
+									<option value="please_select"><?php _e( 'Select Level', 'simple-membership' ); ?></option>
+									<?php echo SwpmUtils::membership_level_dropdown(); ?>
+								</select>
+								<p class="description"><?php _e( 'Select the Membership level (the account status of all members who are in this level will be updated).', 'simple-membership' ); ?></p>
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<td width="25%" align="left">
+								<strong><?php _e( 'Account Status to Change to: ', 'simple-membership' ); ?></strong>
+							</td>
+							<td align="left">
+								<select name="swpm_bulk_change_account_status_to">
+									<option value="please_select"><?php _e( 'Select Target Status', 'simple-membership' ); ?></option>
+									<?php echo SwpmUtils::account_state_dropdown('please_select'); ?>
+								</select>
+								<p class="description"><?php _e( 'Select the new account status.', 'simple-membership' ); ?></p>
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<td width="25%" align="left">
+								<input type="submit" class="button" name="swpm_bulk_account_status_change_process" value="<?php _e( 'Bulk Change Account Status', 'simple-membership' ); ?>" />
+							</td>
+							<td align="left"></td>
+						</tr>
+
+					</table>
+				</form>
+			</div>
+		</div>
 		<?php
 		echo '</div></div>'; //<!-- end of #poststuff #post-body -->
 	}

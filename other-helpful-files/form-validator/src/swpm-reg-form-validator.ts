@@ -211,15 +211,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const fields: string[] = Object.keys(FormValidators);
 
     /**
-     * Add event listeners to all the active fields.
+     * Get the initial value and add event listeners to all the active fields.
      * A field could have multiple event listeners.
      */
     fields.forEach((field) => {
         const fieldOption = formConfig[field as keyof typeof formConfig];
         if (fieldOption.active) {
+            // Get the input field element.
+            let fieldElement = registrationForm?.querySelector(`.swpm-form-${field}`) as HTMLInputElement;
+            // Get the initial value of that field if present
+            if(fieldElement.value){
+                fieldOption.value = fieldElement.value;
+            }
+            
+            // Add event listener(s) to the element.
             fieldOption.eventListener.forEach((eventListener) => {
-                registrationForm
-                    ?.querySelector(`.swpm-form-${field}`)
+                fieldElement
                     ?.addEventListener(eventListener, (e) => {
                         handleDomEvent(e, field);
                     });

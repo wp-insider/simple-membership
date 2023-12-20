@@ -3750,9 +3750,12 @@ document.addEventListener("DOMContentLoaded", function() {
   fields.forEach((field) => {
     const fieldOption = formConfig[field];
     if (fieldOption.active) {
+      let fieldElement = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-form-${field}`);
+      if (fieldElement.value) {
+        fieldOption.value = fieldElement.value;
+      }
       fieldOption.eventListener.forEach((eventListener) => {
-        var _a2;
-        (_a2 = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-form-${field}`)) == null ? void 0 : _a2.addEventListener(eventListener, (e) => {
+        fieldElement == null ? void 0 : fieldElement.addEventListener(eventListener, (e) => {
           handleDomEvent(e, field);
         });
       });

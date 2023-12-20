@@ -71,7 +71,7 @@ class SWPM_PayPal_JS_Button_Embed {
 		}
 
 		// Enable Venmo by default (could be disabled by 'disable-funding' option).
-		$sdk_args['enable-funding']  = 'venmo';
+		$sdk_args['enable-funding']  = 'venmo';//We can add more funding options here (exmaple: venmo, paylater)
 		// Required for Venmo in sandbox.
 		if ( ! $args['is_live_mode'] ) {
 			$sdk_args['buyer-country']  = 'US';

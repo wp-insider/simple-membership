@@ -83,7 +83,7 @@ class SimpleWpMembership {
 
         //SWPM login/logout hooks.
         //Note: These should only handle/execute when the login or logout originates from our plugin's login/logout form to prevent loop.
-        add_action('swpm_login', array('SimpleWpMembership', 'swpm_login'), 10, 3 );
+        add_action('swpm_after_login_authentication', array('SimpleWpMembership', 'handle_after_login_authentication'), 10, 3 );
         add_action('swpm_logout', array(&$this, 'swpm_do_user_logout'));
 
         //AJAX hooks
@@ -293,8 +293,8 @@ class SimpleWpMembership {
         SwpmLog::writeall();
     }
 
-    public static function swpm_login($username, $pass, $rememberme = true) {
-        //The hook is triggered after authentication is successful in SWPM.
+    public static function handle_after_login_authentication($username, $pass, $rememberme = true) {
+        //This function is called after authentication is successful in SWPM.
         //This function should only handle/execute when the loign originates from our plugin's login form.
 
         if(isset($_REQUEST['wp-submit'])){

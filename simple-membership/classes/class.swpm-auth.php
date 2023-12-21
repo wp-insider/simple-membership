@@ -125,7 +125,7 @@ class SwpmAuth {
 				$this->isLoggedIn    = true;
 				$this->lastStatusMsg = 'Logged In.';
 				SwpmLog::log_auth_debug( 'Authentication successful for username: ' . $user . '. Executing swpm_login action hook.', true );
-				do_action( 'swpm_login', $user, $pass, $remember );
+				do_action( 'swpm_after_login_authentication', $user, $pass, $remember );
 				return true;
 			}
 		}

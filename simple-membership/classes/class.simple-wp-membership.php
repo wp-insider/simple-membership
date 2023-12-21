@@ -297,6 +297,16 @@ class SimpleWpMembership {
         //The hook is triggered after authentication is successful in SWPM.
         //This function should only handle/execute when the loign originates from our plugin's login form.
 
+        if(isset($_REQUEST['wp-submit'])){
+            //This is a WP login form submission. 
+            //Just return from here since this function's wp_signon call is only needed when the login request originates from our plugin's login form.
+            //WP will handle the full login operation and post-login redirection.
+            SwpmLog::log_auth_debug("The wp-submit query parameter is set. This login action originated from WP login form submission. WP will handle the main login operation and any post login redirection.", true);
+            //Trigger a separate hook for WP login form submission.
+            do_action('swpm_after_login_authentication_wp_login_form');
+            return;
+        }
+
         if (is_user_logged_in()) {
             $current_user = wp_get_current_user();
             SwpmLog::log_auth_debug("static function swpm_login(). User is logged in. WP Username: " . $current_user->user_login, true);
@@ -308,6 +318,7 @@ class SimpleWpMembership {
 
         add_filter('wordfence_ls_require_captcha', '__return_false');//For Wordfence plugin's captcha compatibility
 
+        //Try to login the user into WP user system.
         $user_obj = wp_signon(array('user_login' => $username, 'user_password' => $pass, 'remember' => $rememberme), is_ssl());
         if ($user_obj instanceof WP_User) {
             wp_set_current_user($user_obj->ID, $user_obj->user_login);
@@ -338,16 +349,10 @@ class SimpleWpMembership {
         }
 
         SwpmLog::log_auth_debug("Triggering swpm_after_login hook.", true);
-        do_action('swpm_after_login');
+        do_action('swpm_after_login');//This hook is triggered when login originates from our plugin's login form.
+
         if (!SwpmUtils::is_ajax()) {
             //Redirection after login to make sure the page loads with all the correct variables set everywhere.
-
-            if(isset($_REQUEST['wp-submit'])){
-                //This is a WP login form submission. 
-                //Just return from here. WP will handle the post-login redirection.
-                SwpmLog::log_auth_debug("The wp-submit query parameter is set. This is a WP login form submission. WP will handle any post login redirection.", true);
-                return;
-            }
 
             //Check if "redirect_to" parameter is set. If so, use that URL.
             if(isset($_REQUEST['redirect_to'])){

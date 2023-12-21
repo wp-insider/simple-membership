@@ -73,12 +73,18 @@ class SimpleWpMembership {
         add_action('load-toplevel_page_simple_wp_membership', array(&$this, 'admin_library'));
         add_action('load-wp-membership_page_simple_wp_membership_levels', array(&$this, 'admin_library'));
 
+        //Core WP hooks that we need to hook into
         add_action('wp_login', array(&$this, 'wp_login_hook_handler'), 10, 2);
         add_action('wp_authenticate', array(&$this, 'wp_authenticate_handler'), 1, 2);
         add_action('wp_logout', array(&$this, 'wp_logout_handler'));
-        add_action('swpm_logout', array(&$this, 'swpm_do_user_logout'));
+        add_action('password_reset', array(&$this, 'wp_password_reset_hook'), 10, 2);
         add_action('user_register', array(&$this, 'swpm_handle_wp_user_registration'));
-        add_action('profile_update', array(&$this, 'sync_with_wp_profile'), 10, 2);
+        add_action('profile_update', array(&$this, 'sync_with_wp_profile'), 10, 2);        
+
+        //SWPM login/logout hooks.
+        //Note: These should only handle/execute when the login or logout originates from our plugin's login/logout form to prevent loop.
+        add_action('swpm_login', array('SimpleWpMembership', 'swpm_login'), 10, 3 );
+        add_action('swpm_logout', array(&$this, 'swpm_do_user_logout'));
 
         //AJAX hooks
         add_action('wp_ajax_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
@@ -88,9 +94,7 @@ class SimpleWpMembership {
 
         //init is too early for settings api.
         add_action('admin_init', array(&$this, 'admin_init_hook'));
-        add_action('plugins_loaded', array(&$this, "plugins_loaded"));
-        add_action('password_reset', array(&$this, 'wp_password_reset_hook'), 10, 2);
-        
+        add_action('plugins_loaded', array(&$this, "plugins_loaded"));        
     }
 
     public function wp_head_callback() {
@@ -290,6 +294,9 @@ class SimpleWpMembership {
     }
 
     public static function swpm_login($username, $pass, $rememberme = true) {
+        //The hook is triggered after authentication is successful in SWPM.
+        //This function should only handle/execute when the loign originates from our plugin's login form.
+
         if (is_user_logged_in()) {
             $current_user = wp_get_current_user();
             SwpmLog::log_auth_debug("static function swpm_login(). User is logged in. WP Username: " . $current_user->user_login, true);
@@ -363,6 +370,8 @@ class SimpleWpMembership {
     }
 
     public function swpm_do_user_logout() {
+        //The hook is triggered after the user is logged out of SWPM.
+        //This function should only handle/execute when the logout originates from our plugin's logout form/link.
         if (is_user_logged_in()) {
             wp_logout();
             wp_set_current_user(0);

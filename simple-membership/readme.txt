@@ -173,6 +173,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - Added a new feature in the 'Bulk Operation' menu tab to allow bulk update members account status.
 - Improved the email validation in the new registration form UI.
+- Updated the Spanish language translation file.
 
 = 4.3.9 = 
 - Note: Significant updates have been made to the PayPal's new API related code in this release. Please take a backup of your site before updating.

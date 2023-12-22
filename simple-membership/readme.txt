@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.4
-Stable tag: 4.3.9
+Stable tag: 4.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,11 +170,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= 4.4.0 =
 - Added a new feature in the 'Bulk Operation' menu tab to allow bulk update members account status.
 - Improved the email validation in the new registration form UI.
 - Updated the Spanish language translation file.
 - Changed the aciton hook name 'swpm_login' to 'swpm_after_login_authentication' to describe the hook better.
+- The after login redirection feature won't be application when the login form originates from the WP Login form. 
+- This will remove confusion for some users when they login from the standard WP login form (not the simple membership's login form) and then the page redirects to the after login redirection URL.
 
 = 4.3.9 = 
 - Note: Significant updates have been made to the PayPal's new API related code in this release. Please take a backup of your site before updating.

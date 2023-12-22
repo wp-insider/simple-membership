@@ -309,7 +309,7 @@ class SimpleWpMembership {
 
         if (is_user_logged_in()) {
             $current_user = wp_get_current_user();
-            SwpmLog::log_auth_debug("static function swpm_login(). User is logged in. WP Username: " . $current_user->user_login, true);
+            SwpmLog::log_auth_debug("Static function handle_after_login_authentication(). User is logged in. WP Username: " . $current_user->user_login, true);
             if ($current_user->user_login == $username) {
                 return;
             }

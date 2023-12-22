@@ -43,22 +43,22 @@ class SwpmAuth {
 		global $wpdb;
 		$swpm_user_name = empty( $user ) ? apply_filters( 'swpm_user_name', filter_input( INPUT_POST, 'swpm_user_name' ) ) : $user;
 		$swpm_password  = empty( $pass ) ? filter_input( INPUT_POST, 'swpm_password' ) : $pass;
-                
-                if ( isset($_POST['swpm_user_name']) && empty ( $swpm_user_name )){
-                    //Login form was submitted but the username field was left empty.
-                    $this->isLoggedIn    = false;
-                    $this->userData      = null;
-                    $this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Username field cannot be empty.' ) . '</span>';
-                    return false;
-                }
-                if ( isset($_POST['swpm_password']) && empty ( $swpm_password )){
-                    //Login form was submitted but the password field was left empty.
-                    $this->isLoggedIn    = false;
-                    $this->userData      = null;
-                    $this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Password field cannot be empty.' ) . '</span>';
-                    return false;
-                }                
-                
+
+		if ( isset($_POST['swpm_user_name']) && empty ( $swpm_user_name )){
+			//Login form was submitted but the username field was left empty.
+			$this->isLoggedIn    = false;
+			$this->userData      = null;
+			$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Username field cannot be empty.' ) . '</span>';
+			return false;
+		}
+		if ( isset($_POST['swpm_password']) && empty ( $swpm_password )){
+			//Login form was submitted but the password field was left empty.
+			$this->isLoggedIn    = false;
+			$this->userData      = null;
+			$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Password field cannot be empty.' ) . '</span>';
+			return false;
+		}
+		
 		if ( ! empty( $swpm_user_name ) && ! empty( $swpm_password ) ) {
 			//SWPM member login request.
 			//Trigger action hook that can be used to check stuff before the login request is processed by the plugin.
@@ -124,7 +124,7 @@ class SwpmAuth {
 				$this->set_cookie( $remember );
 				$this->isLoggedIn    = true;
 				$this->lastStatusMsg = 'Logged In.';
-				SwpmLog::log_auth_debug( 'Authentication successful for username: ' . $user . '. Executing swpm_login action hook.', true );
+				SwpmLog::log_auth_debug( 'Authentication successful for username: ' . $user . '. Triggering swpm_after_login_authentication action hook.', true );
 				do_action( 'swpm_after_login_authentication', $user, $pass, $remember );
 				return true;
 			}

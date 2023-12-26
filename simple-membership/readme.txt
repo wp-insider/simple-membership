@@ -170,6 +170,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Added 'Cayman Islands' to the country list.
+
 = 4.4.0 =
 - Added a new feature in the 'Bulk Operation' menu tab to allow bulk update members account status.
 - Improved the email validation in the new registration form UI.

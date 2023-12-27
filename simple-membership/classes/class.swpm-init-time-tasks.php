@@ -15,7 +15,15 @@ class SwpmInitTimeTasks {
 		load_plugin_textdomain( 'simple-membership', false, SIMPLE_WP_MEMBERSHIP_DIRNAME . '/languages/' );
 
 		if ( ! isset( $_COOKIE['swpm_session'] ) ) { // give a unique ID to current session.
-			$uid                     = md5( microtime() );
+			$uid                     = '';
+			if (function_exists('session_create_id')){
+				$uid = md5( session_create_id('swpm-') );
+				// SwpmLog::log_auth_debug('Session ID generated with session_create_id() function.', true);
+			} else {
+				$uid = md5( microtime() );
+				// SwpmLog::log_auth_debug('Session ID generated with microtime() function. (old method)', true);
+			}
+			
 			$_COOKIE['swpm_session'] = $uid; // fake it for current session/
 			if ( ! headers_sent() ) {
 				setcookie( 'swpm_session', $uid, 0, '/' );

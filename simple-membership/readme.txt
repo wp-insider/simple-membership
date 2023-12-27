@@ -172,6 +172,7 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - Added 'Cayman Islands' to the country list.
+- Unique session ID generation process improved.
 
 = 4.4.0 =
 - Added a new feature in the 'Bulk Operation' menu tab to allow bulk update members account status.

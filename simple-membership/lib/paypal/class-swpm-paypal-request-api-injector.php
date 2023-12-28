@@ -219,7 +219,7 @@ class SWPM_PayPal_Request_API_Injector {
             $quantity = isset($data['quantity']) ? $data['quantity'] : 1;
             $currency = isset($data['currency']) ? $data['currency'] : 'USD';
             $item_name = isset($data['item_name']) ? $data['item_name'] : '';
-            //$digital_goods_enabled = isset($data['digital_goods_enabled']) ? $data['digital_goods_enabled'] : 1;
+            $digital_goods_enabled = isset($data['digital_goods_enabled']) ? $data['digital_goods_enabled'] : 1;
             
             //https://developer.paypal.com/docs/api/orders/v2/#orders_create
             $order_data = [
@@ -240,6 +240,7 @@ class SWPM_PayPal_Request_API_Injector {
                            [
                                "name" => $item_name,
                                "quantity" => $quantity,
+                               "category" => $digital_goods_enabled ? "DIGITAL_GOODS" : "PHYSICAL_GOODS",
                                "unit_amount" => [
                                    "value" => $payment_amount,
                                    "currency_code" => $currency,

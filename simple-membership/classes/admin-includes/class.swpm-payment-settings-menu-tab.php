@@ -97,8 +97,12 @@ class SWPM_Payment_Settings_Menu_Tab {
         // Check test-mode settings submit.
         if (isset($_POST['swpm-enable-test-mode-submit']) && check_admin_referer('swpm-enable-test-mode-nonce')) {
             $settings->set_value('enable-sandbox-testing' ,(( isset($_POST['enable-sandbox-testing']) && $_POST['enable-sandbox-testing'] == '1' ) ? "checked=\"checked\"" : ''));
-
             $settings->save();
+
+            //Live/Test mode settings updated/changed. Delete the PayPal access token cache.
+            SWPM_PayPal_Bearer::delete_cached_token();
+            SwpmLog::log_simple_debug('Live/Test mode settings updated. Deleted the PayPal access token cache so a new one is generated.', true);
+
             echo '<div class="notice notice-success"><p>' . __('Test mode settings updated successfully.', 'simple-membership') . '</p></div>';
         }
 
@@ -115,10 +119,9 @@ class SWPM_Payment_Settings_Menu_Tab {
 
         if (isset($_GET['swpm_paypal_delete_cache'])){
             check_admin_referer( 'swpm_paypal_delete_cache' );
-            $paypal_cache = SWPM_PayPal_Cache::get_instance();
-            $paypal_cache->delete( SWPM_PayPal_Bearer::BEARER_CACHE_KEY );
+            SWPM_PayPal_Bearer::delete_cached_token();
             echo '<div class="notice notice-success"><p>' . __('PayPal access token cache deleted successfully.', 'simple-membership') . '</p></div>';
-        }        
+        }
         
         // Check Stripe settings submit.
         if (isset($_POST['swpm-stripe-settings-submit']) && check_admin_referer('swpm-stripe-settings-nonce')) {

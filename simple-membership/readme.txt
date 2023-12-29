@@ -173,6 +173,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - Added 'Cayman Islands' to the country list.
 - Unique session ID generation process improved.
+- The PayPal Token cache will be deleted automatically if the Live/Test mode option is changed in the seeings menu.
 
 = 4.4.0 =
 - Added a new feature in the 'Bulk Operation' menu tab to allow bulk update members account status.

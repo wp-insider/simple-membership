@@ -264,9 +264,10 @@ class SWPM_PayPal_Request_API_Injector {
             //         ],
             //     ],
             // ];
-            
-            $environment_mode = 'sandbox';
-            //Token
+
+            //Get the environment mode.
+            $environment_mode = SWPM_PayPal_Utility_Functions::get_api_environment_mode_from_settings();
+
             //Get the bearer/access token.
             $bearer = SWPM_PayPal_Bearer::get_instance();
             $bearer_token = $bearer->get_bearer_token( $environment_mode );

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.4
-Stable tag: 4.4.0
+Stable tag: 4.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,10 +170,11 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
-- Added 'Cayman Islands' to the country list.
-- Unique session ID generation process improved.
+= 4.4.1 =
+- Added 'Cayman Islands' to the country dropdown list.
+- The unique session ID generation process improved.
 - The PayPal Token cache will be deleted automatically if the Live/Test mode option is changed in the seeings menu.
+- Fixed an issue with the PayPal test/live mode toggle issue with the new API.
 
 = 4.4.0 =
 - Added a new feature in the 'Bulk Operation' menu tab to allow bulk update members account status.

@@ -173,7 +173,7 @@ https://simple-membership-plugin.com/
 = 4.4.1 =
 - Added 'Cayman Islands' to the country dropdown list.
 - The unique session ID generation process improved.
-- The PayPal Token cache will be deleted automatically if the Live/Test mode option is changed in the seeings menu.
+- The PayPal Token cache will be deleted automatically if the Live/Test mode option is changed in the settings menu.
 - Fixed an issue with the PayPal test/live mode toggle issue with the new API.
 
 = 4.4.0 =

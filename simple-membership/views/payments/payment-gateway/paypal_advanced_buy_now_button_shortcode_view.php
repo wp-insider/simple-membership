@@ -258,7 +258,7 @@ const cardField = paypal.CardFields({
         console.log('Goign to send off Ajax request to the server that will create the order.');
         console.log('Post Data: ' + postData);
         //This alert will allow us to see the console log before going forward.
-        alert('About to send the ajax request');
+        //alert('About to send the ajax request');
                                                 
         return fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
             method: "post",
@@ -301,7 +301,9 @@ console.log( 'Going to do capture order AJAX. Form Data: ' +  JSON.stringify(for
             // Redirect to success page
             console.log('Capture response below.');
             console.log(orderData);
-            alert('Capture successful.');
+            console.log('Redirecting to Thank You Page. Thank you URL: ' . $return_url);
+            alert('Capture successful. Redirecting to Thank You Page.');
+            window.location.href = '<?php echo esc_js($return_url); ?>';
         });
     },
     onError: function (error) {

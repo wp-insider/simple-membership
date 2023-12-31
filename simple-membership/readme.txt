@@ -170,6 +170,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Minor spelling mistake fixed.
+
 = 4.4.1 =
 - Added 'Cayman Islands' to the country dropdown list.
 - The unique session ID generation process improved.

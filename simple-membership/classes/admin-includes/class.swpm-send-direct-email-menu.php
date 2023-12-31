@@ -81,7 +81,7 @@ class SWPM_Send_Direct_Email_Menu{
 				}
 			} else {
 				$all_validations_passed = false;
-				$error_msg_array[] = __('No recipient selected. Plaese select email recipeint(s).', 'simple-membership');
+				$error_msg_array[] = __('No recipient selected. Please select email recipient(s).', 'simple-membership');
 			}
 
 

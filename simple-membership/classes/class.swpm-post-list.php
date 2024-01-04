@@ -128,6 +128,7 @@ class SwpmPostList extends WP_List_Table {
         ));
         $filtered = filter_input_array(INPUT_POST, $args);
         $ids_in_page = $filtered['ids_in_page'];
+        //Add/remove the post/page IDs to the protection list and then save it in the database.
         $post->remove($ids_in_page, $type)->apply($ids, $type)->save();
         $message = array('succeeded' => true, 'message' => '<p class="swpm-green-box">' . SwpmUtils::_('Protection settings updated!') . '</p>');
         SwpmTransfer::get_instance()->set('status', $message);

@@ -113,14 +113,15 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 
 	//TODO - Remove this later. This is just for testing.
 	//Force Cache Delete on page load. Delete the bearer token from cache to make sure it generates a new one.
-	$paypal_cache = SWPM_PayPal_Cache::get_instance();
-	$paypal_cache->delete( SWPM_PayPal_Bearer::BEARER_CACHE_KEY );//Delete to reset the cache to make sure it generates a new one.
+	//SWPM_PayPal_Bearer::delete_cached_token();//Testing purpose only.
+
         
 	$pp_acdc = new SWPM_PayPal_ACDC_Related();
 	$client_token = $pp_acdc->generate_client_token( $environment_mode );
     $currency = isset( $currency ) ? $currency : 'USD';
 	$sdk_src_url = SWPM_PayPal_ACDC_Related::get_sdk_src_url_for_acdc( $environment_mode, $currency );
 
+    //return "";//TODO - remove later.
 	//TODO - Remove this later. This is just for testing.
 	//Force Cache Delete on page load. Delete the bearer token from cache to make sure it generates a new one.
 	//$paypal_cache = SWPM_PayPal_Cache::get_instance();
@@ -140,7 +141,8 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
     //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
     //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX&currency=USD&intent=capture';
     //$sdk_src_url = 'https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AQ1G2q1dWrcPZzrioplED3qB0forkMUhS12VPcVoEvxSCHce7iNpAGgI12nUPNVgcQY7AuGp8iL6jAQQ&merchant-id=6P8SX89ESHD56&currency=USD&intent=capture';
-    echo '<p>SDK Source URL: ' . $sdk_src_url . '</p>';
+    
+    //echo '<p>SDK Source URL: ' . $sdk_src_url . '</p>';
            
     //Get the bearer/access token.
     // $bearer = SWPM_PayPal_Bearer::get_instance();
@@ -256,7 +258,7 @@ const cardField = paypal.CardFields({
         console.log('Goign to send off Ajax request to the server that will create the order.');
         console.log('Post Data: ' + postData);
         //This alert will allow us to see the console log before going forward.
-        alert('About to send the ajax request');
+        //alert('About to send the ajax request');
                                                 
         return fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
             method: "post",
@@ -299,7 +301,9 @@ console.log( 'Going to do capture order AJAX. Form Data: ' +  JSON.stringify(for
             // Redirect to success page
             console.log('Capture response below.');
             console.log(orderData);
-            alert('Capture successful.');
+            console.log('Redirecting to Thank You Page. Thank you URL: ' . $return_url);
+            alert('Capture successful. Redirecting to Thank You Page.');
+            window.location.href = '<?php echo esc_js($return_url); ?>';
         });
     },
     onError: function (error) {

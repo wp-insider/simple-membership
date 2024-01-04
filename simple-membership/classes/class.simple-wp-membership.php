@@ -760,6 +760,7 @@ class SimpleWpMembership {
             $level_ids = $wpdb->get_col($query);
             foreach ($level_ids as $level) {
                 if (isset($swpm_protection_level[$level])) {
+                    //Apply the post ID to the protection list and then save it in the database.
                     SwpmPermission::get_instance($level)->apply(array($post_id), $post_type)->save();
                 } else {
                     SwpmPermission::get_instance($level)->remove(array($post_id), $post_type)->save();

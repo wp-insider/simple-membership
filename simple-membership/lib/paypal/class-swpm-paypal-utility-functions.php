@@ -2,6 +2,17 @@
 
 class SWPM_PayPal_Utility_Functions{
     
+    public static function get_api_environment_mode_from_settings(){
+        $settings = SwpmSettings::get_instance();
+        $sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );//The value will be checked="checked" or empty string.
+        if( !empty( $sandbox_enabled ) ){
+            $environment_mode = 'sandbox';
+        }else{
+            $environment_mode = 'production';
+        }
+        return $environment_mode;
+    }
+
 	public static function get_api_base_url_by_environment_mode( $environment_mode = 'production' ) {
 		if ($environment_mode == 'production') {
 			return SWPM_PayPal_Main::$api_base_url_production;

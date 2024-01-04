@@ -217,7 +217,7 @@ msgstr ""
 "cambio en lote de nivel de membresía. Vaciar el caché y vuelve a intentarlo."
 
 #: classes/admin-includes/class.swpm-send-direct-email-menu.php:68
-msgid "No recipient selected. Plaese select email recipeint(s)."
+msgid "No recipient selected. Please select email recipient(s)."
 msgstr ""
 "No se ha seleccionado ningún destinatario. Por favor, selecciona los "
 "destinatarios de correo electrónico."

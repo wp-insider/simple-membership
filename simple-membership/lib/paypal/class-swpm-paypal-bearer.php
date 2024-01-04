@@ -57,7 +57,8 @@ class SWPM_PayPal_Bearer {
 
         if( empty($environment_mode) ){
             //Get the environment mode from settings.
-            if( $settings->get_value('enable-sandbox-testing') == '1' ){
+			$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );//The value will be checked="checked" or empty string.
+            if( !empty($sandbox_enabled) ){
                 $environment_mode = 'sandbox';
             }else{
                 $environment_mode = 'production';

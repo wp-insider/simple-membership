@@ -346,10 +346,6 @@ class SwpmSettings {
 		// 		'message' => SwpmUtils::_( 'Enable this option if you want to do sandbox payment testing.' ),
 		// 	)
 		// );
-
-		//PayPal (PPCP) account connection settings (no heading). We will use our custom HTML code to render the section.
-		//add_settings_section( 'paypal-ppcp-connection-settings', '', array( &$this, 'paypal_ppcp_connection_settings_callback' ), 'simple_wp_membership_settings' );
-
 	}
 
 	private function tab_3() {

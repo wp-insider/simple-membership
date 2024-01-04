@@ -113,9 +113,9 @@ class SwpmStripeCheckoutSessionCreate{
 			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_subscription=1&ref_id=%s', $ref_id );
 		}
 
-		$current_url_posted = filter_input( INPUT_POST, 'swpm_page_url', FILTER_SANITIZE_URL );
-
-		$current_url = ! empty( $current_url_posted ) ? $current_url_posted : SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+		// The url to redirect to when user clicks on the back button in the stripe sca buy now button checkout page. If no url set, there will be no back button.
+		$cancel_url = get_post_meta( $button_id, 'cancel_url', true );
+		$cancel_url = ! empty( $cancel_url ) ? sanitize_text_field($cancel_url) : SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
 
 		//prefill member email
 		$prefill_member_email = $settings->get_value( 'stripe-prefill-member-email' );
@@ -152,7 +152,7 @@ class SwpmStripeCheckoutSessionCreate{
 					),					
 					'mode' => 'payment',
 					'success_url'                => $notify_url,
-					'cancel_url'                 => $current_url,
+					'cancel_url'                 => $cancel_url,
 				);
 			} else {
 				//this is subscription payment
@@ -169,7 +169,7 @@ class SwpmStripeCheckoutSessionCreate{
 				),
 					'mode' => 'subscription',
 					'success_url'                => $notify_url,
-					'cancel_url'                 => $current_url,
+					'cancel_url'                 => $cancel_url,
 				);
 
 				$trial_period = get_post_meta( $button_id, 'stripe_trial_period', true );

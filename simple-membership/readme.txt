@@ -172,6 +172,7 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - Minor spelling mistake fixed.
+- Option to add cancel URL for Stripe SCA buy now button.
 
 = 4.4.1 =
 - Added 'Cayman Islands' to the country dropdown list.

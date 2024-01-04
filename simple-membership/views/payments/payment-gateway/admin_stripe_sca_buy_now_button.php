@@ -171,6 +171,14 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
+					<th scope="row"><?php echo SwpmUtils::_( 'Cancel URL' ); ?></th>
+					<td>
+						<input type="text" size="100" name="cancel_url" value="" />
+						<p class="description">This is the URL the user will be redirected to when a payment is canceled. Enter the URL of your preferred page here.</p>
+					</td>
+				</tr>
+
+				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Button Image URL' ); ?></th>
 					<td>
 						<input type="text" size="100" name="button_image_url" value="" />
@@ -242,6 +250,7 @@ function swpm_save_new_stripe_sca_buy_now_button_data() {
 		add_post_meta( $button_id, 'stripe_use_global_keys', $stripe_use_global_keys );
 
 		add_post_meta( $button_id, 'return_url', trim( sanitize_text_field( $_REQUEST['return_url'] ) ) );
+		add_post_meta( $button_id, 'cancel_url', trim( sanitize_text_field( $_REQUEST['cancel_url'] ) ) );
 		add_post_meta( $button_id, 'button_image_url', esc_url( $_REQUEST['button_image_url'] ) );
 		//Redirect to the edit interface of this button with $button_id
 		//$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
@@ -299,6 +308,7 @@ function swpm_edit_stripe_sca_buy_now_button() {
 	$use_global_keys = empty( $use_global_keys ) ? false : true;
 
 	$return_url       = get_post_meta( $button_id, 'return_url', true );
+	$cancel_url       = get_post_meta( $button_id, 'cancel_url', true );
 	$button_image_url = get_post_meta( $button_id, 'button_image_url', true );
 	?>
 <div class="postbox">
@@ -453,6 +463,14 @@ function swpm_edit_stripe_sca_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
+					<th scope="row"><?php echo SwpmUtils::_( 'Cancel URL' ); ?></th>
+					<td>
+						<input type="text" size="100" name="cancel_url" value="<?php echo esc_url_raw($cancel_url); ?>" />
+						<p class="description">This is the URL the user will be redirected to when a payment is canceled. Enter the URL of your preferred page here.</p>
+					</td>
+				</tr>
+
+				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Button Image URL' ); ?></th>
 					<td>
 						<input type="text" size="100" name="button_image_url" value="<?php echo esc_url_raw($button_image_url); ?>" />
@@ -543,6 +561,7 @@ function swpm_edit_stripe_sca_buy_now_button_data() {
 		update_post_meta( $button_id, 'stripe_use_global_keys', $stripe_use_global_keys );
 
 		update_post_meta( $button_id, 'return_url', trim( sanitize_text_field( $_REQUEST['return_url'] ) ) );
+		update_post_meta( $button_id, 'cancel_url', trim( sanitize_text_field( $_REQUEST['cancel_url'] ) ) );
 		update_post_meta( $button_id, 'button_image_url', esc_url( $_REQUEST['button_image_url'] ) );
 
 		echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';

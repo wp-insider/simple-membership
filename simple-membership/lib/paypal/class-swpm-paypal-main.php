@@ -27,9 +27,11 @@ class SWPM_PayPal_Main {
 
 	public static $api_base_url_production = 'https://api-m.paypal.com';	
 	public static $api_base_url_sandbox = 'https://api-m.sandbox.paypal.com';
+	public static $signup_url_production = 'https://www.paypal.com/bizsignup/partner/entry';	
+	public static $signup_url_sandbox = 'https://www.sandbox.paypal.com/bizsignup/partner/entry';	
 	public static $partner_id_production = '3FWGC6LFTMTUG';//Same as the partner's merchant id of the live account.
 	public static $partner_id_sandbox = '47CBLN36AR4Q4';// Same as the merchant id of the platform app sandbox account.
-	public static $partner_client_id_production = 'TODO';
+	public static $partner_client_id_production = 'AWo6ovbrHzKZ3hHFJ7APISP4MDTjes-rJPrIgyFyKmbH-i8iaWQpmmaV5hyR21m-I6f_APG6n2rkZbmR'; //Platform app's client id.
 	public static $partner_client_id_sandbox = 'AeO65uHbDsjjFBdx3DO6wffuH2wIHHRDNiF5jmNgXOC8o3rRKkmCJnpmuGzvURwqpyIv-CUYH9cwiuhX';
 
 	public static $pp_api_connection_settings_menu_page = 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api';

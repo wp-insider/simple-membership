@@ -85,9 +85,18 @@ class SWPM_Payment_Settings_Menu_Tab {
             $onboarding_action_result = '<p>PayPal merchant account connection setup completed for environment mode: '. esc_attr($environment_mode) .'</p>';
             echo '<div class="swpm-yellow-box"><p>' . $onboarding_action_result . '</p></div>';
         }
-        if (isset($_GET['swpm_ppcp_sandbox_disconnect'])){
+
+        if (isset($_GET['swpm_ppcp_disconnect_production'])){
             //Verify nonce
-            check_admin_referer( 'swpm_sandbox_ac_disconnect_nonce' );
+            check_admin_referer( 'swpm_ac_disconnect_nonce_production' );
+
+            SWPM_PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('production');
+            $disconnect_action_result = __('PayPal account disconnected.', 'simple-membership');
+            echo '<div class="swpm-yellow-box"><p>' . $disconnect_action_result . '</p></div>';
+        }        
+        if (isset($_GET['swpm_ppcp_disconnect_sandbox'])){
+            //Verify nonce
+            check_admin_referer( 'swpm_ac_disconnect_nonce_sandbox' );
 
             SWPM_PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('sandbox');
             $disconnect_action_result = __('PayPal sandbox account disconnected.', 'simple-membership');
@@ -222,18 +231,15 @@ class SWPM_Payment_Settings_Menu_Tab {
         $paypal_sandbox_secret_key = $settings->get_value( 'paypal-sandbox-secret-key' );
         ?>
 
-        <!-- Paypal PPCP Connection postbox -->
-        <!--         
-        <div class="postbox">
+        <!-- PayPal PPCP Connection postbox -->
+        <!-- <div class="postbox">
             <h2 id="paypal-ppcp-connection-section"><?php _e("PayPal Account Connection", 'simple-membership'); ?></h2>
             <div class="inside">
                 <?php 
                 $this->paypal_ppcp_connection_settings();
                 ?>
             </div>
-        </div>
-        -->
-
+        </div> -->
 
         <!-- Paypal Settings postbox -->
         <div class="postbox">
@@ -531,7 +537,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 
 		$ppcp_onboarding_instance = SWPM_PayPal_PPCP_Onboarding::get_instance();
 
-		//TODO - if all API credentials are missing, show a message.
+		//If all API credentials are missing, show a message.
 		$all_api_creds_missing = false;
 		if( empty( $settings->get_value('paypal-sandbox-client-id')) && empty( $settings->get_value('paypal-sandbox-secret-key')) && empty( $settings->get_value('paypal-live-client-id')) && empty( $settings->get_value('paypal-live-secret-key')) ){
 			$all_api_creds_missing = true;
@@ -543,7 +549,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 				<th scope="row"><?php _e('Live Account Connnection Status', 'simple-membership'); ?></th>
 				<td>
 					<?php
-					//TODO - Check if the live account is connected
+					// Check if the live account is connected
 					$live_account_connection_status = 'connected';
 					if( empty( $settings->get_value('paypal-live-client-id')) || empty( $settings->get_value('paypal-live-secret-key')) ){
 						//Sandbox API keys are missing. Account is not connected.
@@ -555,16 +561,16 @@ class SWPM_Payment_Settings_Menu_Tab {
 						echo '<div class="swpm-paypal-live-account-connection-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
 						_e( 'Live account is connected. If you experience any issues, please disconnect and reconnect.', 'simple-membership' );
 						echo '</div>';
-						//TODO - Show disconnect option for live account.
-						//$ppcp_onboarding_instance->output_live_ac_disconnect_link();
+						// Show disconnect option for live account.
+						$ppcp_onboarding_instance->output_production_ac_disconnect_link();
 					} else {
 						//Production account is NOT connected.
 						echo '<div class="swpm-paypal-live-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
 						_e( 'Live PayPal account is not connected.', 'simple-membership');
 						echo '</div>';
 
-						//TODO - Show the onboarding link
-						//ppcp_onboarding_instance->output_live_onboarding_link_code();
+						// Show the onboarding link
+						$ppcp_onboarding_instance->output_production_onboarding_link_code();
 					}
 					?>
 				</td>

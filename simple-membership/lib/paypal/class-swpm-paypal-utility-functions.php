@@ -21,6 +21,13 @@ class SWPM_PayPal_Utility_Functions{
 		}
 	}
 
+	public static function get_signup_url_by_environment_mode( $environment_mode = 'production' ) {
+		if ($environment_mode == 'production') {
+			return SWPM_PayPal_Main::$signup_url_production;
+		} else {
+			return SWPM_PayPal_Main::$signup_url_sandbox;
+		}
+	}    
 	public static function get_partner_id_by_environment_mode( $environment_mode = 'production' ) {
 		if ($environment_mode == 'production') {
 			return SWPM_PayPal_Main::$partner_id_production;

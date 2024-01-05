@@ -334,13 +334,13 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		}
 
 		if ( isset( $response->verification_status ) && $response->verification_status !== 'SUCCESS' ) {
-			SwpmLog::log_simple_debug( 'Error! Webhook verification failed! Verification status: ' . $response->verification_status, false );
+			SwpmLog::log_simple_debug( 'Error! Webhook verification failed! Environment mode: '. $mode . ', Verification status: ' . $response->verification_status, false );
 			return false;
 		}
 
 		//If we are here then something went wrong. Log the error and return false.
 		//We can check the SWPM_PayPal_Request_API->last_error to find additional details if needed.
-		SwpmLog::log_simple_debug( 'Error! Webhook verification failed!', false );
+		SwpmLog::log_simple_debug( 'Error! Webhook verification failed! Environment mode: '. $mode, false );
 		return false;
 	}
 }

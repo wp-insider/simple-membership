@@ -15,7 +15,7 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 
 	public function handle_onboarded_callback_data(){
 		//Handle the data sent by PayPal after the onboarding process.
-		//The get_option('swpm_ppcp_sandbox_connect_query_args') will give you the query args that you sent to the PayPal onboarding page
+		//The get_option('swpm_ppcp_connect_query_args_'.$environment_mode) will give you the query args that you sent to the PayPal onboarding page
 
 		SwpmLog::log_simple_debug( 'Onboarding step: handle_onboarded_callback_data.', true );
 
@@ -31,7 +31,8 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		}
 
         $data_array = json_decode($data, true);
-        SwpmLog::log_array_data_to_debug( $data_array, true );//Debugging purpose
+		//TODO - Debugging purpose only
+        //SwpmLog::log_array_data_to_debug( $data_array, true );
 
 		//Check nonce.
         $nonce_string = SWPM_PayPal_PPCP_Onboarding::$account_connect_string;
@@ -319,11 +320,10 @@ class SWPM_PayPal_PPCP_Onboarding_Serverside {
 		SwpmLog::log_simple_debug( 'Onboarding step: generate_token_using_shared_id. Environment mode: ' . $environment_mode, true );
 
 		if( isset($environment_mode) && $environment_mode == 'sandbox' ){
-			$query_args = get_option('swpm_ppcp_sandbox_connect_query_args');
+			$query_args = get_option('swpm_ppcp_connect_query_args_'.$environment_mode);
 			$seller_nonce = isset($query_args['sellerNonce']) ? $query_args['sellerNonce'] : '';
 		} else {
-			//TODO - test after production account is created.
-			$query_args = get_option('swpm_ppcp_production_connect_query_args');
+			$query_args = get_option('swpm_ppcp_connect_query_args_'.$environment_mode);
 			$seller_nonce = isset($query_args['sellerNonce']) ? $query_args['sellerNonce'] : '';
 		}
 		SwpmLog::log_simple_debug( 'Seller nonce value: ' . $seller_nonce, true );

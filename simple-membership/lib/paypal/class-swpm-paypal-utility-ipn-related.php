@@ -123,7 +123,7 @@ class SWPM_PayPal_Utility_IPN_Related {
 					$status = $capture['status'];
 				}
 			}
-			if ( $status != 'COMPLETED' ) {
+			if ( strtolower($status) != strtolower('COMPLETED') ) {
 				//The order is not completed yet.
 				$validation_error_msg = 'Validation Error! The transaction status is not completed yet. Button ID: ' . $button_id . ', PayPal Capture ID: ' . $capture_id . ', Capture Status: ' . $status;
 				SwpmLog::log_simple_debug( $validation_error_msg, false );

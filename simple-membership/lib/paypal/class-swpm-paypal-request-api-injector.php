@@ -322,6 +322,9 @@ class SWPM_PayPal_Request_API_Injector {
             }
             $order_data = array( 'order_id' => $order_id );
 
+            //For the capture request, we need to pass the PayPal-Request-Id header.
+            $additional_args['PayPal-Request-Id'] = $order_id;
+
             //https://developer.paypal.com/docs/api/orders/v2/#orders_capture
             $endpoint = '/v2/checkout/orders/' . $order_id . '/capture';
             $response = $this->paypal_req_api->post($endpoint, $order_data, $additional_args);

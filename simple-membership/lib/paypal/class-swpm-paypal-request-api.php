@@ -208,8 +208,14 @@ class SWPM_PayPal_Request_API {
 
 		$this->before_request();
 
+		//Get the headers to use for the request.
 		$headers = $this->get_headers_using_bearer_token();
+		if( isset( $additional_args['PayPal-Request-Id'] ) ){
+			//Add the PayPal-Request-Id header if it's set.
+			$headers['PayPal-Request-Id'] = $additional_args['PayPal-Request-Id'];
+		}
 
+		//The request URL.
 		$api_base_url = $this->get_api_base_url();
 		$request_url = $api_base_url . $endpoint; //Example: https://api-m.sandbox.paypal.com/v1/catalogs/products
 

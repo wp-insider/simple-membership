@@ -105,7 +105,30 @@ class SWPM_PayPal_Utility_IPN_Related {
 				//Convert the object to an array.
 				$order_details = json_decode(json_encode($order_details), true);
 			}
-			//SwpmLog::log_array_data_to_debug( $order_details, true );//Debugging only.
+
+			// Debug purpose only.
+			// SwpmLog::log_simple_debug( 'PayPal Order Details: ', true );
+			// SwpmLog::log_array_data_to_debug( $order_details, true );
+
+			// Check that the order's capture status is COMPLETED.
+			$status = '';
+			// Check if the necessary keys and arrays exist and are not empty
+			if (!empty($order_details['purchase_units']) && !empty($order_details['purchase_units'][0]['payments']) && !empty($order_details['purchase_units'][0]['payments']['captures'])) {
+				// Access the first item in the 'captures' array
+				$capture = $order_details['purchase_units'][0]['payments']['captures'][0];
+				$capture_id = isset($capture['id']) ? $capture['id'] : '';
+				// Check if 'status' is set for the capture
+				if (isset($capture['status'])) {
+					// Extract the 'status' value
+					$status = $capture['status'];
+				}
+			}
+			if ( $status != 'COMPLETED' ) {
+				//The order is not completed yet.
+				$validation_error_msg = 'Validation Error! The transaction status is not completed yet. Button ID: ' . $button_id . ', PayPal Capture ID: ' . $capture_id . ', Capture Status: ' . $status;
+				SwpmLog::log_simple_debug( $validation_error_msg, false );
+				return $validation_error_msg;
+			}
 
 			//Check that the amount matches with what we expect.
 			$amount = isset($order_details['purchase_units'][0]['amount']['value']) ? $order_details['purchase_units'][0]['amount']['value'] : 0;

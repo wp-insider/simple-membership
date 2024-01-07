@@ -228,7 +228,7 @@ class SWPM_PayPal_Request_API {
 		);
 
 		//=== Debug purposes (Useful for PayPal Tech Support) ===
-		//SwpmLog::log_array_data_to_debug( $payload, true);
+		// SwpmLog::log_array_data_to_debug( $payload, true);
 		//=== End of debug purposes ===
 
 		//Make the request
@@ -327,7 +327,7 @@ class SWPM_PayPal_Request_API {
 		//=== Debug purposes (Useful for PayPal Tech Support) ===
 		// SwpmLog::log_simple_debug( '----- PayPal REST API response output -----', true );
 		// $paypal_debug_id_and_info = SWPM_PayPal_Request_API::get_paypal_debug_id_and_info($res, $additional_args);
-		// SwpmLog::log_simple_debug( $paypal_debug_id_and_info, false );
+		// SwpmLog::log_simple_debug( $paypal_debug_id_and_info, true );
 		// SwpmLog::log_array_data_to_debug( $response_body_json_decoded, true );
 		//=== End of debug purposes ===
 

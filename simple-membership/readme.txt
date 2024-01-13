@@ -174,6 +174,7 @@ https://simple-membership-plugin.com/
 - Added an option to specify a cancel URL for Stripe buy now button.
 - The PayPal order ID is also passed to the PayPal payment capture API call's header.
 - Added a check for the PayPal Buy Now payment capture status in the IPN handling script.
+- Updated the Spanish language translation file.
 - Minor spelling mistake fixed.
 
 = 4.4.1 =

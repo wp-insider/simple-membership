@@ -132,7 +132,7 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
         //API credentials are not configured. Show a warning message and return.
         echo '<div class="swpm-orange-box">';
         echo 'You need to configure your PayPal API credentials first. ';
-        echo '<a href="admin.php?page=simple_wp_membership_settings&tab=2" target="_blank">Click here</a> to configure your PayPal API credentials in the payment settings menu.';
+        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api" target="_blank">Click here</a> to configure your PayPal API credentials in the payment settings menu.';
         echo '</div>';
         return;
     }

@@ -140,7 +140,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 					<th scope="row"><?php echo SwpmUtils::_( 'Use Global API Keys Settings' ); ?></th>
 					<td>
 						<input type="checkbox" name="stripe_use_global_keys" value="1" <?php echo $use_global_keys ? ' checked' : ''; ?> />
-						<p class="description"><?php echo SwpmUtils::_( 'Use API keys from <a href="admin.php?page=simple_wp_membership_settings&tab=2" target="_blank">Payment Settings</a> tab.' ); ?></p>
+						<p class="description"><?php echo SwpmUtils::_( 'Use API keys from <a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe" target="_blank">Payment Settings</a> tab.' ); ?></p>
 					</td>
 				</tr>
 

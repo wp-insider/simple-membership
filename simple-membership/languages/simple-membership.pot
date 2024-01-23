@@ -4089,7 +4089,7 @@ msgstr ""
 #: views/payments/payment-gateway/admin_stripe_subscription_button.php:143
 msgid ""
 "Use API keys from <a href=\"admin.php?"
-"page=simple_wp_membership_settings&tab=2\" target=\"_blank\">Payment "
+"page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe\" target=\"_blank\">Payment "
 "Settings</a> tab."
 msgstr ""
 

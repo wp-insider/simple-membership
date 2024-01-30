@@ -170,6 +170,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Added Arabic translation files to the plugin. Thanks to @Adham.
+
 = 4.4.2 =
 - Added an option to specify a cancel URL for Stripe buy now button.
 - The PayPal order ID is also passed to the PayPal payment capture API call's header.

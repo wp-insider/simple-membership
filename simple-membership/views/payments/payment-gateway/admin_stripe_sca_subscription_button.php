@@ -188,8 +188,8 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 					<th scope="row"><?php echo SwpmUtils::_( 'Webhook Endpoint URL' ); ?></th>
 					<td>
 						<kbd><?php echo SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1&hook=1'; ?></kbd>
-						<p class="description">You should create a new Webhook in your Stripe account and put this URL there if you want the plugin to handle subscription expiration automatically.<br />
-							You can get more info in the <a href="https://simple-membership-plugin.com/create-stripe-subscription-button-membership-payment/" target="_blank">documentation</a>.
+						<p class="description">
+							You should create a new Webhook in your Stripe account and put this URL there. You can get more info in the <a href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/" target="_blank">documentation</a>.
 						</p>
 					</td>
 				</tr>

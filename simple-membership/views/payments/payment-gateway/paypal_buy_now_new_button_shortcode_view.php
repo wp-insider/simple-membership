@@ -169,11 +169,12 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                             return response_data.order_id;
                         } else {
                             const error_message = JSON.stringify(response_data);
+                            console.error('Error occurred during the create-order API call to PayPal. ' + error_message);
                             throw new Error(error_message);
                         }
                     } catch (error) {
                         console.error(error);
-                        alert('Could not initiate PayPal Checkout...\n\n' + error);
+                        alert('Could not initiate PayPal Checkout...\n\n' + JSON.stringify(error));
                     }
                 },
     
@@ -257,7 +258,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
 
                     } catch (error) {
                         console.error(error);
-                        alert('Sorry, your transaction could not be processed...\n\n' + error);
+                        alert('PayPal returned an error! Transaction could not be processed. Enable the debug logging feature to get more details...\n\n' + JSON.stringify(error));
                     }
                 },
     

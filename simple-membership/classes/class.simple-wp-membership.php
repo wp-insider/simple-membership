@@ -359,7 +359,17 @@ class SimpleWpMembership {
                 $redirect_url = sanitize_url($_REQUEST['redirect_to']);
                 SwpmLog::log_auth_debug("The redirect_to query parameter is set. Value: ". $redirect_url, true);
             } else {
+                //The 'redirect_to' parameter is not set. By default we will use the current page URL as the redirect URL.
                 $redirect_url = SwpmMiscUtils::get_current_page_url();
+
+                //Check if this is after an auto-login authentication (if yes, we need to override the URL).
+                if( isset( $_REQUEST['swpm_auto_login']) && $_REQUEST['swpm_auto_login'] == '1' ){
+                    //On some servers the current page URL may contain the 'swpm_auto_login' parameter (when the auto-login feature is used) . 
+                    //In that case, we don't want to create a loop of auto-login redirect.
+                    //We will use the site's login-page URL as the redirect URL for that condition.
+                    SwpmLog::log_auth_debug("This is after an auto-login authentication. Setting the login page URL as the redirect URL.", true);
+                    $redirect_url = SwpmSettings::get_instance()->get_value('login-page-url');
+                }                
             }
 
             //Check if the URL is still empty. If so, use the site home URL.

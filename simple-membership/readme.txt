@@ -173,6 +173,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - Added Arabic translation files to the plugin. Thanks to @Adham.
 - Updated the documentation link for the Stripe Subscription button configuration.
+- Enhanced the auto-login feature's redirect URL handling for better compatibility with some servers.
 
 = 4.4.2 =
 - Added an option to specify a cancel URL for Stripe buy now button.

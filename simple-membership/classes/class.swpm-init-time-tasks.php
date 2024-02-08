@@ -259,7 +259,7 @@ class SwpmInitTimeTasks {
 
 		if ( isset( $_REQUEST['swpm_auto_login'] ) && $_REQUEST['swpm_auto_login'] == '1' ) {
 			//Handle the auto login
-			SwpmLog::log_simple_debug( 'Handling auto login request...', true );
+			SwpmLog::log_simple_debug( 'Handling auto login request. The login related debug log file will contain additional details.', true );
 
 			$enable_auto_login = SwpmSettings::get_instance()->get_value( 'auto-login-after-rego' );
 			if ( empty( $enable_auto_login ) ) {

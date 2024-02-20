@@ -273,6 +273,8 @@ class SwpmInstallation {
 
             //Preparing it to be enabled by default in the feature.
             //$settings->set_value("force-wp-user-sync", "checked='checked'");
+
+            $settings->set_value("use-new-form-ui", "checked='checked'");
         }
 
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {

@@ -26,8 +26,9 @@ class SwpmStripeCheckoutSessionCreate{
 		//Check if payment_method_types is being used in the shortcode.
 		$payment_method_types = isset( $_POST['payment_method_types'] ) ? sanitize_text_field( stripslashes ( $_POST['payment_method_types'] ) ) : '';
 		if ( empty( $payment_method_types ) ) {
-        	//Use the default payment_method_types value.
-			$payment_method_types_array = array( 'card' );
+			//Use the empty value so it can be managed from the seller's Stripe account settings.
+			$payment_method_types_array = array();
+			//$payment_method_types_array = array( 'card' );//Legacy value
 		} else {
 			//Use the payment_method_types specified in the shortcode (example value: card,us_bank_account
 			$payment_method_types_array = array_map( 'trim', explode (",", $payment_method_types) );
@@ -134,7 +135,6 @@ class SwpmStripeCheckoutSessionCreate{
 			if ( empty( $plan_id ) ) {
 				//this is one-off payment
 				$opts = array(
-					'payment_method_types'       => $payment_method_types_array,
 					'client_reference_id'        => $ref_id,
 					'billing_address_collection' => $billing_address ? 'required' : 'auto',					
 					'line_items' => array(
@@ -157,7 +157,6 @@ class SwpmStripeCheckoutSessionCreate{
 			} else {
 				//this is subscription payment
 				$opts = array(
-					'payment_method_types'       => $payment_method_types_array,
 					'client_reference_id'        => $ref_id,
 					'billing_address_collection' => $billing_address ? 'required' : 'auto',					
 					'line_items' => array(
@@ -179,14 +178,22 @@ class SwpmStripeCheckoutSessionCreate{
 				}
 			}
 
+			//Set payment method types (if used in the shortcode). Otherwise, let Stripe use the default value.
+			if( !empty( $payment_method_types_array ) ) {
+				$opts['payment_method_types'] = $payment_method_types_array;
+			}
+
+			//Set the logo for the line item.
 			if ( ! empty( $item_logo ) ) {
 				$opts['line_items'][0]["product_data"]['images'] = array( $item_logo );
 			}
 
+			//Set the customer email.
 			if ( ! empty( $member_email ) ) {
 				$opts['customer_email'] = $member_email;
 			}
 
+			//Set the automatic tax feature.
 			if( $automatic_tax == true ) {
 				$opts["automatic_tax"] = array( "enabled" => true );
 			}

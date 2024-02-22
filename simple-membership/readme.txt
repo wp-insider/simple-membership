@@ -170,11 +170,12 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
-- Added Arabic translation files to the plugin. Thanks to @Adham.
+= 4.4.3 WIP =
+- The accepted payment method types can now be controlled from your Stripe account settings. This will allow you to enable/disable certain payment methods.
 - Updated the documentation link for the Stripe Subscription button configuration.
 - Enhanced the auto-login feature's redirect URL handling for better compatibility with some servers.
-- New form UI is the default UI now.
+- New registration and profile form UI and validation is the default UI for all new installs. The old UI can be enabled from the advanced settings menu.
+- Added Arabic translation files to the plugin. Thanks to @Adham.
 
 = 4.4.2 =
 - Added an option to specify a cancel URL for Stripe buy now button.

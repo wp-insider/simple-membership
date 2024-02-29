@@ -244,14 +244,15 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		$ipn['txn_type'] = 'pp_subscription_new';		
 		$ipn['custom'] = isset($data['custom_field']) ? $data['custom_field'] : '';
 		$ipn['item_number'] = isset($data['button_id']) ? $data['button_id'] : '';
-		$ipn['item_name'] = isset($data['item_name']) ? $data['item_name'] : '';
+		$ipn['item_name'] = isset($data['item_name']) ? $data['item_name'] : '';		
 
-		//This is the PayPal orderID value of the V2 order API. It's not the actual transaction ID of the payment. We can query the Orders API to retrieve the actual transaction ID (if needed).
-		$ipn['txn_id'] = isset($data['orderID']) ? $data['orderID'] : '';
-		$ipn['subscr_id'] = isset($data['subscriptionID']) ? $data['subscriptionID'] : '';
-
-		$ipn['plan_id'] = isset($txn_data['plan_id']) ? $txn_data['plan_id'] : '';
+		$ipn['plan_id'] = isset($txn_data['plan_id']) ? $txn_data['plan_id'] : '';//The plan ID of the subscription
+		$ipn['subscr_id'] = isset($data['subscriptionID']) ? $data['subscriptionID'] : '';//The subscription ID
 		$ipn['create_time'] = isset($txn_data['create_time']) ? $txn_data['create_time'] : '';
+
+		//The transaction ID is not available in the create/activate subscription response. So we will just use the order ID here.
+		//The subscription capture happens in the background. So if we want to use the get transactions list API to get the transaction ID of the first transaction, we will need to do that later using cronjob maybe.
+		$ipn['txn_id'] = isset($data['orderID']) ? $data['orderID'] : '';
 
 		$ipn['status'] = __('subscription created', 'simple-membership');
 		$ipn['payment_status'] = __('subscription created', 'simple-membership');

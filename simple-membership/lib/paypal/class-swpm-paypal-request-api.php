@@ -187,6 +187,7 @@ class SWPM_PayPal_Request_API {
 		}
 		
 		$status_code = isset( $additional_args['status_code'] ) ? $additional_args['status_code'] : 200;
+		//Return the response body as a JSON decoded object.
 		$return = $this->process_request_result( $res, $status_code, $additional_args );
 
 		return $return;
@@ -246,6 +247,7 @@ class SWPM_PayPal_Request_API {
 
 		//POST success response status code is 201 by default
 		$status_code = isset( $additional_args['status_code'] ) ? $additional_args['status_code'] : 201;
+		//Return the response body as a JSON decoded object.
 		$return = $this->process_request_result( $res, $status_code, $additional_args );
 
 		return $return;
@@ -289,12 +291,14 @@ class SWPM_PayPal_Request_API {
 
 		//DELETE action's success response status code is 204 by default
 		$status_code = isset( $additional_args['status_code'] ) ? $additional_args['status_code'] : 204;
+		//Return the response body as a JSON decoded object.
 		$return = $this->process_request_result( $res, $status_code, $additional_args );
 
 		return $return;
 	}
 	/*
 	 * Checks the response and if it finds any error, it stores the error details in the last_error var then returns false.
+	 * If the response is successful, it returns the response body as a JSON decoded object.
 	 * Minimizes the amount of response code check the source code has to do.
 	 */
 	private function process_request_result( $res, $status_code = 200, $additional_args = array() ) {

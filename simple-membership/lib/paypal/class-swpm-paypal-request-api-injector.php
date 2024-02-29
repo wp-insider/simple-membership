@@ -241,6 +241,41 @@ class SWPM_PayPal_Request_API_Injector {
             }
         } 
         
+
+        /*
+         * Gets a list of all the transactions of a paypal subscription.
+         * @return - an array of transactions object on success.
+         */
+        public function get_paypal_subscription_transactions_list( $sub_id, $start_time, $end_time = '' ){
+            //https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_transactions
+
+            $endpoint = '/v1/billing/subscriptions/'.$sub_id.'/transactions';
+
+            //If end_time is not provided, then use the current time.
+            if( empty($end_time) ){
+                $end_time = date('c');//Current time in ISO 8601 format (Example: 2024-02-27T03:28:34+00:00)
+            }
+
+            $params = array(
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+            );
+
+            //Do the API call.
+            $response = $this->paypal_req_api->get($endpoint, $params);
+
+            if ( $response !== false){
+                //Get the array of transactions.
+                $transactions = $response->transactions;
+                // foreach($transactions as $txn){
+                //    echo '<br />Txn ID: ' . $txn->id;
+                // }
+                return $transactions;
+            } else {
+                return false;
+            }
+        }
+
         /*
          * Show the details of a paypal order/transaction.
          * https://developer.paypal.com/docs/api/orders/v2/#orders_get

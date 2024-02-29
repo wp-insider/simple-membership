@@ -228,7 +228,8 @@ class SWPM_PayPal_Request_API {
 		);
 
 		//=== Debug purposes (Useful for PayPal Tech Support) ===
-		// SwpmLog::log_array_data_to_debug( $payload, true);
+		//SwpmLog::log_simple_debug( 'PayPal REST API request URL: ' . $request_url, true );
+		//SwpmLog::log_array_data_to_debug( $payload, true);
 		//=== End of debug purposes ===
 
 		//Make the request

@@ -77,37 +77,6 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     $txn_success_message = __('Transaction completed successfully!', 'simple-membership');
 
     /**********************
-     * PayPal Plan ID.
-     **********************/
-    //Get the plan ID (or create a new plan if needed) for the button.
-	$plan_id = get_post_meta( $button_id, 'pp_subscription_plan_id', true );
-    if( empty( $plan_id )){
-        //Need to create a new plan
-        $ret = SWPM_PayPal_Utility_Functions::create_billing_plan_for_button( $button_id );
-        if( $ret['success'] === true ){
-            $plan_id = $ret['plan_id'];
-            SwpmLog::log_simple_debug( 'Created new PayPal subscription plan for button ID: ' . $button_id . ', Plan ID: ' . $plan_id, true );
-        } else {
-			$error_msg = '<p class="swpm-red-box">Error! Could not create the PayPal subscription plan for the button. Error message: ' . esc_attr( $ret['error_message'] ) . '</p>';
-            return $error_msg;
-        }
-    } else {
-        //Check if this plan exists in the PayPal account.
-        if( !SWPM_PayPal_Utility_Functions::check_billing_plan_exists( $plan_id ) ){
-            //The plan ID does not exist in the PayPal account. Maybe the plan was created earlier in a different mode or using a different paypal account. 
-            //We need to create a fresh new plan for this button.
-            $ret = SWPM_PayPal_Utility_Functions::create_billing_plan_fresh_new( $button_id );
-            if( $ret['success'] === true ){
-                $plan_id = $ret['plan_id'];
-                SwpmLog::log_simple_debug( 'Created new PayPal subscription plan for button ID: ' . $button_id . ', Plan ID: ' . $plan_id, true );
-            } else {
-                $error_msg = '<p class="swpm-red-box">Error! Could not create the PayPal subscription plan for the button. Error message: ' . esc_attr( $ret['error_message'] ) . '</p>';
-                return $error_msg;
-            }            
-        }
-    }
-
-    /**********************
      * PayPal SDK Settings
      **********************/
     //Configure the paypal SDK settings and enqueue the code for SDK loading.
@@ -159,16 +128,47 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
                     layout: '<?php echo esc_js($btn_layout); ?>',
                 },
     
-                // set up the recurring transaction
-                createSubscription: function(data, actions) {
-                    // replace with your subscription plan id
-                    // https://developer.paypal.com/docs/subscriptions/#link-createplan
-                    return actions.subscription.create({
-                        plan_id: "<?php echo $plan_id; ?>"
-                    });
+                // Handle the createSubscription call
+                async createSubscription(data, actions) {
+                    console.log('createSubscription call triggered. Data: ' + JSON.stringify(data));
+
+                    //We will send ajax request that will create the subscription from the server side using PayPal API.
+                    let pp_sub_bn_data = {};
+                    pp_sub_bn_data.button_id = '<?php echo esc_js($button_id); ?>';
+                    pp_sub_bn_data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
+                    pp_sub_bn_data.item_name = '<?php echo esc_js($item_name); ?>';
+                    let post_data = 'action=swpm_pp_create_subscription&data=' + JSON.stringify(pp_sub_bn_data) + '&_wpnonce=<?php echo $nonce; ?>';
+                    try {
+                        // Using fetch for AJAX request. This is supported in all modern browsers.
+                        const response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
+                            method: "post",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: post_data
+                        });
+
+                        const response_data = await response.json();
+
+                        if (response_data.subscription_id) {
+                            console.log('Create-subscription API call to PayPal completed successfully.');
+                            //If we need to see the details, uncomment the following line.
+                            //console.log('Order data: ' + JSON.stringify(response_data.sub_data));
+
+                            //Return the subscription ID.
+                            return response_data.subscription_id;
+                        } else {
+                            const error_message = JSON.stringify(response_data);
+                            console.error('Error occurred during the create-subscription API call to PayPal. ' + error_message);
+                            throw new Error(error_message);
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        alert('Could not initiate PayPal subscription...\n\n' + JSON.stringify(error));
+                    }
                 },
     
-                // notify the buyer that the subscription is successful
+                // Notify the buyer that the subscription is successful
                 onApprove: function(data, actions) {
                     console.log('Successfully created a subscription.');
                     //console.log(JSON.stringify(data));

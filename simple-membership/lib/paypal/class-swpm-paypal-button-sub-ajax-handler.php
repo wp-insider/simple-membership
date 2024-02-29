@@ -18,13 +18,133 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 	 */
 	public function setup_ajax_request_actions() {
 		//Handle the create subscription via API ajax request
-		// add_action( 'wp_ajax_swpm_pp_create_subscription', array(&$this, 'swpm_pp_create_subscription' ) );
-		// add_action( 'wp_ajax_nopriv_swpm_pp_create_subscription', array(&$this, 'swpm_pp_create_subscription' ) );
+		add_action( 'wp_ajax_swpm_pp_create_subscription', array(&$this, 'swpm_pp_create_subscription' ) );
+		add_action( 'wp_ajax_nopriv_swpm_pp_create_subscription', array(&$this, 'swpm_pp_create_subscription' ) );
 
 		//Handle the onApprove ajax request for 'Subscription' type buttons
 		add_action( 'wp_ajax_swpm_onapprove_process_subscription', array(&$this, 'swpm_onapprove_process_subscription' ) );
 		add_action( 'wp_ajax_nopriv_swpm_onapprove_process_subscription', array(&$this, 'swpm_onapprove_process_subscription' ) );		
 	}
+
+
+	/**
+	 * Handle the create-subscription ajax request for 'Subscription' type buttons.
+	 */
+    public function swpm_pp_create_subscription(){
+		//We will create a plan for the button (if needed). Then create a subscription for the user and return the subscription ID.
+		//https://developer.paypal.com/docs/api/subscriptions/v1/#plans_create
+
+		//Get the data from the request
+		$data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : array();
+		if ( empty( $data ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Empty data received.', 'simple-membership' ),
+				)
+			);
+		}
+		
+		if( !is_array( $data ) ){
+			//Convert the JSON string to an array (Vanilla JS AJAX data will be in JSON format).
+			$data = json_decode( $data, true);		
+		}
+
+		$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';
+		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
+		SwpmLog::log_simple_debug( 'swpm_pp_create_subscription ajax request received for createSubscription. Button ID: '.$button_id.', On Page Button ID: ' . $on_page_button_id, true );
+
+		// Check nonce.
+		if ( ! check_ajax_referer( $on_page_button_id, '_wpnonce', false ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Nonce check failed. The page was most likely cached. Please reload the page and try again.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
+
+		/**************************
+		 * Get the PayPal Plan ID *
+		 **************************/
+		//Get the plan ID (or create a new plan if needed) for the button.
+		$plan_id = get_post_meta( $button_id, 'pp_subscription_plan_id', true );
+		$plan_create_error_msg = '';
+		if( empty( $plan_id )){
+			//Need to create a new plan
+			$ret = SWPM_PayPal_Utility_Functions::create_billing_plan_for_button( $button_id );
+			if( $ret['success'] === true ){
+				$plan_id = $ret['plan_id'];
+				SwpmLog::log_simple_debug( 'Created new PayPal subscription plan for button ID: ' . $button_id . ', Plan ID: ' . $plan_id, true );
+			} else {
+				$plan_create_error_msg = 'Error! Could not create the PayPal subscription plan for the button. Error message: ' . esc_attr( $ret['error_message'] );
+			}
+		} else {
+			//Check if this plan exists in the PayPal account.
+			if( !SWPM_PayPal_Utility_Functions::check_billing_plan_exists( $plan_id ) ){
+				//The plan ID does not exist in the PayPal account. Maybe the plan was created earlier in a different mode or using a different paypal account. 
+				//We need to create a fresh new plan for this button.
+				$ret = SWPM_PayPal_Utility_Functions::create_billing_plan_fresh_new( $button_id );
+				if( $ret['success'] === true ){
+					$plan_id = $ret['plan_id'];
+					SwpmLog::log_simple_debug( 'Created new PayPal subscription plan for button ID: ' . $button_id . ', Plan ID: ' . $plan_id, true );
+				} else {
+					$plan_create_error_msg = 'Error! Could not create the PayPal subscription plan for the button. Error message: ' . esc_attr( $ret['error_message'] );
+				}            
+			}
+		}
+
+		//Check if any error occurred while creating the plan.
+		if( !empty( $plan_create_error_msg ) ){
+			SwpmLog::log_simple_debug( $plan_create_error_msg, false );
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => $plan_create_error_msg,
+				)
+			);
+			exit;
+		}
+
+		/*************************************
+		 * Create the subscription on PayPal *
+		 ************************************/
+		//Going to create the subscription by making the PayPal API call.
+		$api_injector = new SWPM_PayPal_Request_API_Injector();
+
+		//Set the additional args for the API call.
+		$additional_args = array();
+		$additional_args['return_response_body'] = true;
+
+		$response = $api_injector->create_paypal_subscription_for_billing_plan( $plan_id, $data, $additional_args );
+
+		//We requested the full response body to be returned, so we need to JSON decode it.
+		if( $response !== false ){
+			//JSON decode the response body to an array.
+			$sub_data = json_decode( $response, true );
+			$paypal_sub_id = isset( $sub_data['id'] ) ? $sub_data['id'] : '';
+		} else {
+			//Failed to create the order.
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg'  => __( 'Failed to create the subscription using PayPal API. Enable the debug logging feature to get more details.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
+
+		//Uncomment the following line to see more details of the subscription data.
+		//SwpmLog::log_array_data_to_debug( $sub_data, true );
+
+		SwpmLog::log_simple_debug( 'PayPal Subscription ID: ' . $paypal_sub_id, true );
+
+		//If everything is processed successfully, send the success response.
+		wp_send_json( array( 'success' => true, 'subscription_id' => $paypal_sub_id, 'sub_data' => $sub_data ) );
+		exit;
+    }
+
 
 	/**
 	 * Handle the onApprove ajax request for 'Subscription' type buttons

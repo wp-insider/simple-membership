@@ -4,7 +4,7 @@
  * This clcass handles the ajax request from the PayPal OnApprove event (the onApprove event is triggered from the Button's JS code on successful transaction). 
  * It creates the required $ipn_data array from the transaction so it can be fed into the existing IPN handler functions easily.
  */
-class SWPM_PayPal_OnApprove_IPN_Handler {
+class SWPM_PayPal_Button_Sub_Ajax_Hander {
 
 	public $ipn_data  = array();
 
@@ -17,15 +17,19 @@ class SWPM_PayPal_OnApprove_IPN_Handler {
 	 * Setup the ajax request actions.
 	 */
 	public function setup_ajax_request_actions() {
+		//Handle the create subscription via API ajax request
+		// add_action( 'wp_ajax_swpm_pp_create_subscription', array(&$this, 'swpm_pp_create_subscription' ) );
+		// add_action( 'wp_ajax_nopriv_swpm_pp_create_subscription', array(&$this, 'swpm_pp_create_subscription' ) );
+
 		//Handle the onApprove ajax request for 'Subscription' type buttons
-		add_action( 'wp_ajax_swpm_onapprove_create_subscription', array(&$this, 'swpm_onapprove_create_subscription' ) );
-		add_action( 'wp_ajax_nopriv_swpm_onapprove_create_subscription', array(&$this, 'swpm_onapprove_create_subscription' ) );
+		add_action( 'wp_ajax_swpm_onapprove_process_subscription', array(&$this, 'swpm_onapprove_process_subscription' ) );
+		add_action( 'wp_ajax_nopriv_swpm_onapprove_process_subscription', array(&$this, 'swpm_onapprove_process_subscription' ) );		
 	}
 
 	/**
 	 * Handle the onApprove ajax request for 'Subscription' type buttons
 	 */
-    public function swpm_onapprove_create_subscription(){
+    public function swpm_onapprove_process_subscription(){
 
 		//Get the data from the request
 		$data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : array();

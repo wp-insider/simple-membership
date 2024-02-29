@@ -189,7 +189,7 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
                         data.button_id = '<?php echo esc_js($button_id); ?>';
                         data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
                         data.item_name = '<?php echo esc_js($item_name); ?>';
-                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_onapprove_create_subscription', data: data, txn_data: txn_data, _wpnonce: '<?php echo $nonce; ?>'}, function( response ) {
+                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_onapprove_process_subscription', data: data, txn_data: txn_data, _wpnonce: '<?php echo $nonce; ?>'}, function( response ) {
                             //console.log( 'Response from the server: ' + JSON.stringify( response ) );
                             if ( response.success ) {
                                 //Success response.

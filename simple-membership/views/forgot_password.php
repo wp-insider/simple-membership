@@ -10,14 +10,14 @@ if ( !empty( $render_new_form_ui ) ){
     <form id="swpm-pw-reset-form" name="swpm-reset-form" method="post" action="">
         <div class="swpm-pw-reset-widget-inside">
             <div class="swpm-pw-reset-email swpm-margin-top-10">
-                <label for="swpm_reset_email" class="swpm_label swpm-pw-reset-email-label"><?php echo SwpmUtils::_('Email Address') ?></label>
+                <label for="swpm_reset_email" class="swpm_label swpm-pw-reset-email-label"><?php _e('Email Address', 'simple-membership') ?></label>
             </div>
             <div class="swpm-pw-reset-email-input swpm-margin-top-10">
                 <input type="text" name="swpm_reset_email" class="swpm-text-field swpm-pw-reset-text" id="swpm_reset_email"  value="" size="60" />
             </div>
             <div class="swpm-before-login-submit-section"><?php echo apply_filters('swpm_before_pass_reset_form_submit_button', ''); ?></div>
             <div class="swpm-pw-reset-submit-button">
-                <input type="submit" name="swpm-reset" class="<?php echo esc_attr($pass_reset_submit_class); ?>" value="<?php echo SwpmUtils::_('Reset Password'); ?>" />
+                <input type="submit" name="swpm-reset" class="<?php echo esc_attr($pass_reset_submit_class); ?>" value="<?php _e('Reset Password', 'simple-membership'); ?>" />
             </div>
         </div>
     </form>

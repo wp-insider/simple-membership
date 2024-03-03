@@ -15,31 +15,31 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
         <input type ="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
         <table>
             <tr class="swpm-registration-username-row" <?php apply_filters('swpm_registration_form_username_tr_attributes', ''); ?>>
-                <td><label for="user_name"><?php echo SwpmUtils::_('Username') ?></label></td>
+                <td><label for="user_name"><?php _e('Username', 'simple-membership') ?></label></td>
                 <td><input type="text" id="user_name" class="validate[required,custom[noapostrophe],custom[SWPMUserName],minSize[4],ajax[ajaxUserCall]]" value="<?php echo esc_attr($user_name); ?>" size="50" name="user_name" <?php apply_filters('swpm_registration_form_username_input_attributes', ''); ?>/></td>
             </tr>
             <tr class="swpm-registration-email-row">
-                <td><label for="email"><?php echo SwpmUtils::_('Email') ?></label></td>
+                <td><label for="email"><?php _e('Email', 'simple-membership') ?></label></td>
                 <td><input type="text" autocomplete="off" id="email" class="validate[required,custom[email],ajax[ajaxEmailCall]]" value="<?php echo esc_attr($email); ?>" size="50" name="email" /></td>
             </tr>
             <tr class="swpm-registration-password-row">
-                <td><label for="password"><?php echo SwpmUtils::_('Password') ?></label></td>
+                <td><label for="password"><?php _e('Password', 'simple-membership') ?></label></td>
                 <td><input type="password" autocomplete="off" id="password" class="<?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); ?>" value="" size="50" name="password" /></td>
             </tr>
             <tr class="swpm-registration-password-retype-row">
-                <td><label for="password_re"><?php echo SwpmUtils::_('Repeat Password') ?></label></td>
+                <td><label for="password_re"><?php _e('Repeat Password', 'simple-membership') ?></label></td>
                 <td><input type="password" autocomplete="off" id="password_re" value="" size="50" name="password_re" /></td>
             </tr>
             <tr class="swpm-registration-firstname-row" <?php apply_filters('swpm_registration_form_firstname_tr_attributes', ''); ?>>
-                <td><label for="first_name"><?php echo SwpmUtils::_('First Name') ?></label></td>
+                <td><label for="first_name"><?php _e('First Name', 'simple-membership') ?></label></td>
                 <td><input type="text" id="first_name" value="<?php echo esc_attr($first_name); ?>" size="50" name="first_name" /></td>
             </tr>
             <tr class="swpm-registration-lastname-row" <?php apply_filters('swpm_registration_form_lastname_tr_attributes', ''); ?>>
-                <td><label for="last_name"><?php echo SwpmUtils::_('Last Name') ?></label></td>
+                <td><label for="last_name"><?php _e('Last Name', 'simple-membership') ?></label></td>
                 <td><input type="text" id="last_name" value="<?php echo esc_attr($last_name); ?>" size="50" name="last_name" /></td>
             </tr>
             <tr class="swpm-registration-membership-level-row" <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>>
-                <td><label for="membership_level"><?php echo SwpmUtils::_('Membership Level') ?></label></td>
+                <td><label for="membership_level"><?php _e('Membership Level', 'simple-membership') ?></label></td>
                 <td>
                     <?php
                     echo $membership_level_alias; //Show the level name in the form.
@@ -65,7 +65,7 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                 ?>
                 <tr>
                     <td colspan="2" style="text-align: center;">
-                        <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I accept the ') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
+                        <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="validate[required]" value="1"> <?php _e('I accept the ', 'simple-membership') ?> <a href="<?php echo esc_url($terms_page_url); ?>" target="_blank"><?php _e('Terms and Conditions', 'simple-membership') ?></a></label>
                     </td>
                 </tr>
                 <?php
@@ -77,7 +77,7 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                 ?>
                 <tr>
                     <td colspan="2" style="text-align: center;">
-                        <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
+                        <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="validate[required]" value="1"> <?php _e('I agree to the ', 'simple-membership') ?> <a href="<?php echo esc_url($pp_page_url); ?>" target="_blank"><?php _e('Privacy Policy', 'simple-membership') ?></a></label>
                     </td>
                 </tr>
                 <?php
@@ -88,7 +88,7 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
         <div class="swpm-before-registration-submit-section" align="center"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
 
         <div class="swpm-registration-submit-section" align="center">
-            <input type="submit" value="<?php echo SwpmUtils::_('Register') ?>" class="swpm-registration-submit" name="swpm_registration_submit" />
+            <input type="submit" value="<?php _e('Register', 'simple-membership') ?>" class="swpm-registration-submit" name="swpm_registration_submit" />
         </div>
 
         <input type="hidden" name="action" value="custom_posts" />

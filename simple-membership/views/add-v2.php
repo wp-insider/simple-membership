@@ -137,7 +137,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             ?>
                 <div class="swpm-form-row swpm-terms-row">
                     <div>
-                        <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="swpm-form-field swpm-form-terms" value="1"> <?php echo SwpmUtils::_('I accept the ') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
+                        <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="swpm-form-field swpm-form-terms" value="1"> <?php _e('I accept the ', 'simple-membership') ?> <a href="<?php echo esc_url($terms_page_url); ?>" target="_blank"><?php _e('Terms and Conditions', 'simple-membership') ?></a></label>
                     </div>
                     <div class="swpm-form-desc"></div>
                 </div>
@@ -149,7 +149,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             ?>
                 <div class="swpm-form-row swpm-pp-row">
                     <div>
-                        <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="swpm-form-field swpm-form-pp" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
+                        <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="swpm-form-field swpm-form-pp" value="1"> <?php _e('I agree to the ', 'simple-membership') ?> <a href="<?php echo esc_url($pp_page_url); ?>" target="_blank"><?php _e('Privacy Policy', 'simple-membership') ?></a></label>
                     </div>
                     <div class="swpm-form-desc"></div>
                 </div>

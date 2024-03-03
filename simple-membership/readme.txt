@@ -176,6 +176,7 @@ https://simple-membership-plugin.com/
 - Enhanced the auto-login feature's redirect URL handling for better compatibility with some servers.
 - New registration and profile form UI and validation is the default UI for all new installs. The old UI can be enabled from the advanced settings menu.
 - Added Arabic translation files to the plugin. Thanks to @Adham.
+- Some output escaping related functions added to registration form for security.
 
 = 4.4.2 =
 - Added an option to specify a cancel URL for Stripe buy now button.

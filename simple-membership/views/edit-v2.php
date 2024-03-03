@@ -48,14 +48,14 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 <div class="swpm-form-label-wrap swpm-form-username-label-wrap">
                     <label for="user_name"><?php _e('Username', 'simple-membership'); ?></label>
                 </div>
-                <div class="swpm-form-input-wrap swpm-form-username-input-wrap"><?php echo $user_name ?></div>
+                <div class="swpm-form-input-wrap swpm-form-username-input-wrap"><?php echo esc_attr($user_name) ?></div>
             </div>
             <div class="swpm-form-row swpm-email-row">
                 <div class="swpm-form-label-wrap swpm-form-email-label-wrap">
                     <label for="email"><?php _e('Email', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-email-input-wrap">
-                    <input type="text" id="email" name="email" autocomplete="off" class="swpm-form-field swpm-form-email" value="<?php echo $email; ?>" />
+                    <input type="text" id="email" name="email" autocomplete="off" class="swpm-form-field swpm-form-email" value="<?php echo esc_attr($email); ?>" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -82,7 +82,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="first_name"><?php _e('First Name', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-firstname-input-wrap">
-                    <input type="text" id="first_name" value="<?php echo $first_name; ?>" name="first_name" class="swpm-form-field swpm-form-firstname" />
+                    <input type="text" id="first_name" value="<?php echo esc_attr($first_name); ?>" name="first_name" class="swpm-form-field swpm-form-firstname" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -91,7 +91,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="last_name"><?php _e('Last Name', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-lastname-input-wrap">
-                    <input type="text" id="last_name" value="<?php echo $last_name; ?>" name="last_name" class="swpm-form-field swpm-form-lastname" />
+                    <input type="text" id="last_name" value="<?php echo esc_attr($last_name); ?>" name="last_name" class="swpm-form-field swpm-form-lastname" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -100,7 +100,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="phone"><?php _e('Phone', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-phone-input-wrap">
-                    <input type="text" id="phone" value="<?php echo $phone; ?>" name="phone" class="swpm-form-field swpm-form-phone" />
+                    <input type="text" id="phone" value="<?php echo esc_attr($phone); ?>" name="phone" class="swpm-form-field swpm-form-phone" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -109,7 +109,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="address_street"><?php _e('Street', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-street-input-wrap">
-                    <input type="text" id="address_street" value="<?php echo $address_street; ?>" name="address_street" class="swpm-form-field swpm-form-street" />
+                    <input type="text" id="address_street" value="<?php echo esc_attr($address_street); ?>" name="address_street" class="swpm-form-field swpm-form-street" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -118,7 +118,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="address_city"><?php _e('City', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-city-input-wrap">
-                    <input type="text" id="address_city" value="<?php echo $address_city; ?>" name="address_city" class="swpm-form-field swpm-form-city" />
+                    <input type="text" id="address_city" value="<?php echo esc_attr($address_city); ?>" name="address_city" class="swpm-form-field swpm-form-city" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -127,7 +127,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="address_state"><?php _e('State', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-state-input-wrap">
-                    <input type="text" id="address_state" value="<?php echo $address_state; ?>" name="address_state" class="swpm-form-field swpm-form-state" />
+                    <input type="text" id="address_state" value="<?php echo esc_attr($address_state); ?>" name="address_state" class="swpm-form-field swpm-form-state" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -136,7 +136,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="address_zipcode"><?php _e('Zipcode', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-zipcode-input-wrap">
-                    <input type="text" id="address_zipcode" value="<?php echo $address_zipcode; ?>" name="address_zipcode" class="swpm-form-field swpm-form-zipcode" />
+                    <input type="text" id="address_zipcode" value="<?php echo esc_attr($address_zipcode); ?>" name="address_zipcode" class="swpm-form-field swpm-form-zipcode" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -154,7 +154,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="company_name"><?php _e('Company Name', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-company-input-wrap">
-                    <input type="text" id="company_name" value="<?php echo $company_name; ?>" name="company_name" class="swpm-form-field swpm-form-company" />
+                    <input type="text" id="company_name" value="<?php echo esc_attr($company_name); ?>" name="company_name" class="swpm-form-field swpm-form-company" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -163,7 +163,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="membership_level"><?php _e('Membership Level', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-membership-level-input-wrap">
-                    <?php echo $membership_level_alias; ?>
+                    <?php echo esc_attr($membership_level_alias); ?>
                 </div>
             </div>
             <?php apply_filters('swpm_edit_profile_form_after_membership_level', ''); ?>

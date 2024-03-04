@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.4
-Stable tag: 4.4.2
+Stable tag: 4.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,13 +170,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= 4.4.3 WIP =
+= 4.4.3 =
 - The accepted payment method types can now be controlled from your Stripe account settings. This will allow you to enable/disable certain payment methods.
 - Updated the documentation link for the Stripe Subscription button configuration.
 - Enhanced the auto-login feature's redirect URL handling for better compatibility with some servers.
 - New registration and profile form UI and validation is the default UI for all new installs. The old UI can be enabled from the advanced settings menu.
 - Added Arabic translation files to the plugin. Thanks to @Adham.
-- Some output escaping related functions added to registration form for security.
+- Added output escaping to the new registration and edit profile forms.
 
 = 4.4.2 =
 - Added an option to specify a cancel URL for Stripe buy now button.

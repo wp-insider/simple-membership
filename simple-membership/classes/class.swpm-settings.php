@@ -786,7 +786,7 @@ class SwpmSettings {
 
 		add_settings_field(
 			'use-new-form-ui',
-			__( 'Activate New Form and Validation Interface (Beta)', 'simple-membership' ),
+			__( 'Activate New Form and Validation Interface', 'simple-membership' ),
 			array( &$this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
 			'advanced-settings',

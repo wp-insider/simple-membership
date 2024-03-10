@@ -273,6 +273,7 @@ https://simple-membership-plugin.com/
 - New feature to send direct email to a group of members (for example: send an email to all members of a membership level).
 - Minor PHP 8.2 related deprecation notice fixes.
 
+Full changelog available at [change-log-of-old-versions.txt](https://plugins.svn.wordpress.org/simple-membership/trunk/change-log-old-versions.txt)
 
 == Upgrade Notice ==
 If you are using the form builder addon, then that addon will need to be upgraded to v1.1 also.

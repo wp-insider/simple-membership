@@ -170,6 +170,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Cancel URL option added for Stripe SCA Subscript button.
+
 = 4.4.3 =
 - The accepted payment method types can now be controlled from your Stripe account settings. This will allow you to enable/disable certain payment methods.
 - Updated the documentation link for the Stripe Subscription button configuration.

@@ -59,12 +59,8 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
         </th>
         <td>
             <input name="email_activation" type="checkbox" value="1" <?php echo $is_email_activation_conflicting ? 'disabled' : checked($email_activation) ;?>>
-            <p class="description">
-                <?php echo  SwpmUtils::_('Enable new user activation via email. When enabled, members will need to click on an activation link that is sent to their email address to activate the account. Useful for free membership.');?>
-                <?php echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . SwpmUtils::_('View Documentation') . '.</a>'; ?>
-                <?php echo '<br><strong>'.SwpmUtils::_('Note:').'</strong> '.SwpmUtils::_('If enabled, decryptable member password is temporarily stored in the database until the account is activated.'); ?>
-            </p>
             <?php if ($is_email_activation_conflicting) { ?>
+                <!-- Display a warning message if manual approval and email activation both enabled at the same time (they are mutually exclusive) -->
                 <div class="swpm-yellow-box">
                     <p>
                         <b><?php _e( "Attention: ", 'simple-membership')?></b>
@@ -74,6 +70,11 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
                     </p>
                 </div>
             <?php } ?>
+            <p class="description">
+                <?php echo  SwpmUtils::_('Enable new user activation via email. When enabled, members will need to click on an activation link that is sent to their email address to activate the account. Useful for free membership.');?>
+                <?php echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . SwpmUtils::_('View Documentation') . '.</a>'; ?>
+                <?php echo '<br><strong>'.SwpmUtils::_('Note:').'</strong> '.SwpmUtils::_('If enabled, decryptable member password is temporarily stored in the database until the account is activated.'); ?>
+            </p>
             <br />
             <label for="after_activation_redirect_page"><?php echo SwpmUtils::_( 'After Email Activation Redirection Page (optional)' ); ?></label>
             <input class="regular-text" name="after_activation_redirect_page" type="text" value="<?php echo esc_url( $after_activation_redirect_page ); ?>">

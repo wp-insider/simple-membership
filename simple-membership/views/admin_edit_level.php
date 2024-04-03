@@ -65,7 +65,7 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
                 <?php echo '<br><strong>'.SwpmUtils::_('Note:').'</strong> '.SwpmUtils::_('If enabled, decryptable member password is temporarily stored in the database until the account is activated.'); ?>
             </p>
             <?php if ($is_email_activation_conflicting) { ?>
-                <div class="swpm-orange-box">
+                <div class="swpm-yellow-box">
                     <p>
                         <b><?php _e( "Attention: ", 'simple-membership')?></b>
                         <?php _e( "Your current setting for the default account status is 'pending' as found in the", 'simple-membership');?> 

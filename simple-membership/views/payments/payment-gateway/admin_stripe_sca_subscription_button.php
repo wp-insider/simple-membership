@@ -210,13 +210,13 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 	</div><!-- end of Stripe API Keys box -->
 
 	<div class="postbox">
-		<h3 class="hndle"><label for="title"><?php echo SwpmUtils::_( 'Optional Details' ); ?></label></h3>
+		<h3 class="hndle"><label for="title"><?php _e( 'Optional Details' , 'simple-membership'); ?></label></h3>
 		<div class="inside">
 
 			<table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Collect Customer Address' ); ?></th>
+					<th scope="row"><?php _e( 'Collect Customer Address' , 'simple-membership'); ?></th>
 					<td>
 						<input type="checkbox" name="collect_address" value="1" <?php echo ( $edit ? ( ( isset( $opts['stripe_collect_address'][0] ) && $opts['stripe_collect_address'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
 						<p class="description">Enable this option if you want to collect customer address during Stripe checkout.</p>
@@ -224,7 +224,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Enable Automatic Tax' ); ?></th>
+					<th scope="row"><?php _e( 'Enable Automatic Tax' , 'simple-membership'); ?></th>
 					<td>
 					<input type="checkbox" name="automatic_tax" value="1" <?php echo ( $edit ? ( ( isset( $opts['stripe_automatic_tax'][0] ) && $opts['stripe_automatic_tax'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
 						<p class="description">Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.</p>
@@ -232,7 +232,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Return URL' ); ?></th>
+					<th scope="row"><?php _e( 'Return URL' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="return_url" value="<?php echo ( $edit ? $opts['return_url'][0] : '' ); ?>" />
 						<p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
@@ -240,7 +240,15 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Button Image URL' ); ?></th>
+					<th scope="row"><?php _e( 'Cancel URL' , 'simple-membership'); ?></th>
+					<td>
+						<input type="text" size="100" name="cancel_url" value="<?php echo esc_url_raw($edit ? $opts['cancel_url'][0] : ''); ?>" />
+						<p class="description">This is the URL the user will be redirected to when a payment is canceled. Enter the URL of your preferred page here.</p>
+					</td>
+				</tr>
+
+				<tr valign="top">
+					<th scope="row"><?php _e( 'Button Image URL' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="button_image_url" value="<?php echo ( $edit ? $opts['button_image_url'][0] : '' ); ?>" />
 						<p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
@@ -328,6 +336,10 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 		update_post_meta( $button_id, 'button_type', $button_type );
 		update_post_meta( $button_id, 'membership_level_id', sanitize_text_field( $_REQUEST['membership_level_id'] ) );
 		update_post_meta( $button_id, 'return_url', trim( sanitize_text_field( $_REQUEST['return_url'] ) ) );
+
+		$cancel_url = isset($_POST['cancel_url']) && !empty($_POST['cancel_url']) ? trim(sanitize_text_field($_POST['cancel_url'])) : '';
+		update_post_meta( $button_id, 'cancel_url',  $cancel_url );
+
 		update_post_meta( $button_id, 'button_image_url', trim( sanitize_text_field( $_REQUEST['button_image_url'] ) ) );
 		update_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
 		update_post_meta( $button_id, 'stripe_automatic_tax', isset( $_POST['automatic_tax'] ) ? '1' : '' );

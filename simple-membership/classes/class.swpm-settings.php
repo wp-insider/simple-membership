@@ -105,39 +105,6 @@ class SwpmSettings {
 				'message' => SwpmUtils::_( 'Enables or disables "more" tag protection in the posts and pages. Anything after the More tag is protected. Anything before the more tag is teaser content.' ),
 			)
 		);
-		add_settings_field(
-			'hide-adminbar',
-			SwpmUtils::_( 'Hide Adminbar' ),
-			array( &$this, 'checkbox_callback' ),
-			'simple_wp_membership_settings',
-			'general-settings',
-			array(
-				'item'    => 'hide-adminbar',
-				'message' => SwpmUtils::_( 'WordPress shows an admin toolbar to the logged in users of the site. Check this if you want to hide that admin toolbar in the frontend of your site.' ),
-			)
-		);
-		add_settings_field(
-			'show-adminbar-admin-only',
-			SwpmUtils::_( 'Show Adminbar to Admin' ),
-			array( &$this, 'checkbox_callback' ),
-			'simple_wp_membership_settings',
-			'general-settings',
-			array(
-				'item'    => 'show-adminbar-admin-only',
-				'message' => SwpmUtils::_( 'Use this option if you want to show the admin toolbar to admin users only. The admin toolbar will be hidden for all other users.' ),
-			)
-		);
-		add_settings_field(
-			'disable-access-to-wp-dashboard',
-			SwpmUtils::_( 'Disable Access to WP Dashboard' ),
-			array( &$this, 'checkbox_callback' ),
-			'simple_wp_membership_settings',
-			'general-settings',
-			array(
-				'item'    => 'disable-access-to-wp-dashboard',
-				'message' => SwpmUtils::_( 'WordPress allows a standard wp user to be able to go to the wp-admin URL and access his profile from the wp dashboard. Using this option will prevent any non-admin users from going to the wp dashboard.' ),
-			)
-		);
 
 		add_settings_field(
 			'default-account-status',
@@ -796,6 +763,42 @@ class SwpmSettings {
 			)
 		);
 
+		add_settings_field(
+			'hide-adminbar',
+			__( 'Hide Adminbar' , 'simple-membership'),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'hide-adminbar',
+				'message' => __( 'WordPress shows an admin toolbar to the logged in users of the site. Check this if you want to hide that admin toolbar in the frontend of your site.' , 'simple-membership'),
+			)
+		);
+
+		add_settings_field(
+			'show-adminbar-admin-only',
+			__( 'Show Adminbar to Admin' , 'simple-membership'),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'show-adminbar-admin-only',
+				'message' => __( 'Use this option if you want to show the admin toolbar to admin users only. The admin toolbar will be hidden for all other users.' , 'simple-membership'),
+			)
+		);
+
+		add_settings_field(
+			'disable-access-to-wp-dashboard',
+			__( 'Disable Access to WP Dashboard' , 'simple-membership'),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'disable-access-to-wp-dashboard',
+				'message' => __( 'WordPress allows a standard wp user to be able to go to the wp-admin URL and access his profile from the wp dashboard. Using this option will prevent any non-admin users from going to the wp dashboard.' , 'simple-membership'),
+			)
+		);
+
 		//Auto create SWPM user related settings section
 		add_settings_section( 'auto-create-swpm-user-settings', SwpmUtils::_( 'Create Member Accounts for New WP Users' ), array( &$this, 'advanced_settings_auto_create_swpm_uses_settings_callback' ), 'simple_wp_membership_settings' );
 
@@ -1263,10 +1266,6 @@ class SwpmSettings {
 		$output = $this->settings;
 		//general settings block
 
-		$output['hide-adminbar']                  = isset( $input['hide-adminbar'] ) ? esc_attr( $input['hide-adminbar'] ) : '';
-		$output['show-adminbar-admin-only']       = isset( $input['show-adminbar-admin-only'] ) ? esc_attr( $input['show-adminbar-admin-only'] ) : '';
-		$output['disable-access-to-wp-dashboard'] = isset( $input['disable-access-to-wp-dashboard'] ) ? esc_attr( $input['disable-access-to-wp-dashboard'] ) : '';
-
 		$output['protect-everything']     = isset( $input['protect-everything'] ) ? esc_attr( $input['protect-everything'] ) : '';
 		$output['enable-free-membership'] = isset( $input['enable-free-membership'] ) ? esc_attr( $input['enable-free-membership'] ) : '';
 		$output['enable-moretag']         = isset( $input['enable-moretag'] ) ? esc_attr( $input['enable-moretag'] ) : '';
@@ -1349,6 +1348,9 @@ class SwpmSettings {
 		$output['force-wp-user-sync']                = isset( $input['force-wp-user-sync'] ) ? esc_attr( $input['force-wp-user-sync'] ) : '';
 		$output['payment-notification-forward-url']  = esc_url( $input['payment-notification-forward-url'] );
 		$output['use-new-form-ui']            		 = isset( $input['use-new-form-ui'] ) ? esc_attr( $input['use-new-form-ui'] ) : '';
+		$output['hide-adminbar']                  = isset( $input['hide-adminbar'] ) ? esc_attr( $input['hide-adminbar'] ) : '';
+		$output['show-adminbar-admin-only']       = isset( $input['show-adminbar-admin-only'] ) ? esc_attr( $input['show-adminbar-admin-only'] ) : '';
+		$output['disable-access-to-wp-dashboard'] = isset( $input['disable-access-to-wp-dashboard'] ) ? esc_attr( $input['disable-access-to-wp-dashboard'] ) : '';
 
 		//Auto create swpm user related settings
 		$output['enable-auto-create-swpm-members']      = isset( $input['enable-auto-create-swpm-members'] ) ? esc_attr( $input['enable-auto-create-swpm-members'] ) : '';

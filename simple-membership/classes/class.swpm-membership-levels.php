@@ -161,6 +161,22 @@ class SwpmMembershipLevels extends WP_List_Table {
         $membership = $wpdb->get_row($query, ARRAY_A);
         extract($membership, EXTR_SKIP);
         $email_activation = get_option('swpm_email_activation_lvl_'.$id);
+
+        if (SwpmSettings::get_instance()->get_value( 'default-account-status' ) == 'pending' && checked($email_activation, true, false)) {
+            $warning = '<div class="notice notice-warning">';
+            $warning .= '<p>';
+            $warning .= '<b>';
+            $warning .= __( "Warning: ", 'simple-membership');
+            $warning .= '</b>';
+            $warning .= __( "Default account status is set to 'pending' in the", 'simple-membership');
+            $warning .= ' <a href="admin.php?page=simple_wp_membership_settings">'. __('general settings menu', 'simple-membership') .'</a> ';
+            $warning .= __( "and this is a conflict with email activation turned on.", 'simple-membership');
+            $warning .= '</b>';
+            $warning .= '</div>';
+
+            echo $warning;
+        }
+
         $custom_fields = SwpmMembershipLevelCustom::get_instance_by_id($id);
         $after_activation_redirect_page = sanitize_url($custom_fields->get('after_activation_redirect_page'));
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_edit_level.php');

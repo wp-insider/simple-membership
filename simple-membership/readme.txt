@@ -173,6 +173,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - Cancel URL option added for Stripe SCA Subscript button.
 - Some settings of general settings has moved to advanced settings. 
+- A warning message is displayed in the edit membership level if default account status is set to 'pending' and email activation is turned on at the same time. 
 
 = 4.4.3 =
 - The accepted payment method types can now be controlled from your Stripe account settings. This will allow you to enable/disable certain payment methods.

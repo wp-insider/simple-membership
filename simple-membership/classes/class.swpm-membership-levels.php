@@ -166,11 +166,11 @@ class SwpmMembershipLevels extends WP_List_Table {
             $warning = '<div class="notice notice-warning">';
             $warning .= '<p>';
             $warning .= '<b>';
-            $warning .= __( "Warning: ", 'simple-membership');
+            $warning .= __( "Attention: ", 'simple-membership');
             $warning .= '</b>';
-            $warning .= __( "Default account status is set to 'pending' in the", 'simple-membership');
-            $warning .= ' <a href="admin.php?page=simple_wp_membership_settings">'. __('general settings menu', 'simple-membership') .'</a> ';
-            $warning .= __( "and this is a conflict with email activation turned on.", 'simple-membership');
+            $warning .= __( "Your current setting for the default account status is 'pending' as found in the", 'simple-membership');
+            $warning .= ' <a href="admin.php?page=simple_wp_membership_settings">'. __('general settings menu', 'simple-membership') .'</a>. ';
+            $warning .= __( "This configuration conflicts with the email activation feature. To enable email activation, set the default account status back to the default setting of 'active'.", 'simple-membership');
             $warning .= '</b>';
             $warning .= '</div>';
 

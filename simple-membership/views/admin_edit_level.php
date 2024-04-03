@@ -1,4 +1,7 @@
-<?php SimpleWpMembership::enqueue_validation_scripts(); ?>
+<?php
+SimpleWpMembership::enqueue_validation_scripts();
+$is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'default-account-status' ) == 'pending' && checked($email_activation, true, false) ? true : false;
+?>
 <div class="wrap" id="swpm-level-page">
 <form action="" method="post" name="swpm-edit-level" id="swpm-edit-level" class="validate swpm-validate-form"<?php do_action('level_edit_form_tag');?>>
 <input name="action" type="hidden" value="editlevel" />
@@ -50,24 +53,34 @@
                     <input type="text" class="swpm-date-picker" value="<?php echo  checked(SwpmMembershipLevel::FIXED_DATE,$subscription_duration_type,false)? $subscription_period: "";?>" name="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>" id="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>"> <?php echo  SwpmUtils::_('(Access expires on a fixed date)')?></p>                                
         </td>        
     </tr>
-            <tr>
-            <th scope="row">
-                <label for="email_activation"><?php echo  SwpmUtils::_('Email Activation'); ?></label>
-            </th>
-            <td>
-                <input name="email_activation" type="checkbox" value="1" <?php checked($email_activation);?>>
-                <p class="description">
-                    <?php echo  SwpmUtils::_('Enable new user activation via email. When enabled, members will need to click on an activation link that is sent to their email address to activate the account. Useful for free membership.');?>
-                    <?php echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . SwpmUtils::_('View Documentation') . '.</a>'; ?>
-                    <?php echo '<br><strong>'.SwpmUtils::_('Note:').'</strong> '.SwpmUtils::_('If enabled, decryptable member password is temporarily stored in the database until the account is activated.'); ?>
-                </p>
-                <br />
-                <label for="after_activation_redirect_page"><?php echo SwpmUtils::_( 'After Email Activation Redirection Page (optional)' ); ?></label>
-                <input class="regular-text" name="after_activation_redirect_page" type="text" value="<?php echo esc_url( $after_activation_redirect_page ); ?>">
-                <p class="description">
-                    <?php echo SwpmUtils::_( 'This option can be used to redirect the users to a designated page after they click on the email activation link and activate the account.' ); ?>
-                </p>
-            </td>
+    <tr>
+        <th scope="row">
+            <label for="email_activation"><?php echo  SwpmUtils::_('Email Activation'); ?></label>
+        </th>
+        <td>
+            <input name="email_activation" type="checkbox" value="1" <?php echo $is_email_activation_conflicting ? 'disabled' : checked($email_activation) ;?>>
+            <p class="description">
+                <?php echo  SwpmUtils::_('Enable new user activation via email. When enabled, members will need to click on an activation link that is sent to their email address to activate the account. Useful for free membership.');?>
+                <?php echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . SwpmUtils::_('View Documentation') . '.</a>'; ?>
+                <?php echo '<br><strong>'.SwpmUtils::_('Note:').'</strong> '.SwpmUtils::_('If enabled, decryptable member password is temporarily stored in the database until the account is activated.'); ?>
+            </p>
+            <?php if ($is_email_activation_conflicting) { ?>
+                <div class="swpm-orange-box">
+                    <p>
+                        <b><?php _e( "Attention: ", 'simple-membership')?></b>
+                        <?php _e( "Your current setting for the default account status is 'pending' as found in the", 'simple-membership');?> 
+                        <a href="admin.php?page=simple_wp_membership_settings"><?php _e('general settings menu', 'simple-membership') ?></a> 
+                        <?php _e( "This configuration conflicts with the email activation feature. To enable email activation, set the default account status back to the default setting of 'active'.", 'simple-membership');?>
+                    </p>
+                </div>
+            <?php } ?>
+            <br />
+            <label for="after_activation_redirect_page"><?php echo SwpmUtils::_( 'After Email Activation Redirection Page (optional)' ); ?></label>
+            <input class="regular-text" name="after_activation_redirect_page" type="text" value="<?php echo esc_url( $after_activation_redirect_page ); ?>">
+            <p class="description">
+                <?php echo SwpmUtils::_( 'This option can be used to redirect the users to a designated page after they click on the email activation link and activate the account.' ); ?>
+            </p>
+        </td>
 	</tr>
     <?php echo apply_filters('swpm_admin_edit_membership_level_ui', '', $id); ?>
 </tbody>

@@ -242,7 +242,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Cancel URL' , 'simple-membership'); ?></th>
 					<td>
-						<input type="text" size="100" name="cancel_url" value="<?php echo esc_url_raw($edit ? $opts['cancel_url'][0] : ''); ?>" />
+						<input type="text" size="100" name="cancel_url" value="<?php echo $edit && isset($opts['cancel_url'][0]) && !empty($opts['cancel_url'][0]) ? esc_url_raw($opts['cancel_url'][0] ) : '' ?>" />
 						<p class="description">This is the URL the user will be redirected to when a payment is canceled. Enter the URL of your preferred page here.</p>
 					</td>
 				</tr>

@@ -266,3 +266,34 @@
 	border-radius: 4px;
 	background-color: #b6dee4;
 }
+
+.swpm-active-subs-table{
+    width: 100%;
+}
+
+.swpm-active-subs-table td, .swpm-active-subs-table th{
+    text-align: left !important;
+    padding: 6px 10px;
+}
+.swpm_cancel_subscription_form{
+    margin-bottom: 0 !important;
+}
+
+.swpm_cancel_subscription_button{
+	padding: 8px 15px;
+	text-align: center;
+	border-radius: 4px;
+	background-color: #ff6a6a !important;
+    border: none !important; 
+    outline: none !important; 
+    cursor: pointer;
+    color: white !important;
+    text-shadow: 0.5px 0.5px gray;
+    font-size: 0.7rem;
+    margin: auto;
+}
+
+.swpm_cancel_subscription_button:hover{
+	background-color: #d95e5e;
+    transition: 200ms;
+}

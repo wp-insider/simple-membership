@@ -6,6 +6,7 @@ class SWPM_Member_Subscriptions {
 	private $active_subs_count = 0;
 	private $subs_count        = 0;
 	private $subs              = array();
+	private $active_subs       = array();
 	private $member_id;
 
 	public function __construct( $member_id ) {
@@ -55,10 +56,6 @@ class SWPM_Member_Subscriptions {
 
 			$sub['status'] = $status;
 
-			if ( $this->is_active( $status ) ) {
-				$this->active_subs_count++;
-			}
-
 			$cancel_token = get_post_meta( $post_id, 'subscr_cancel_token', true );
 
 			if ( empty( $cancel_token ) ) {
@@ -74,11 +71,20 @@ class SWPM_Member_Subscriptions {
 
 			$sub['payment_button_id'] = get_post_meta( $post_id, 'payment_button_id', true );
 
+			if ( $this->is_active( $status ) ) {
+				$this->active_subs_count++;
+				$this->active_subs[ $sub_id ] = $sub;
+			}
+
 			$this->subs[ $sub_id ] = $sub;
 		}
 
 		$this->recheck_status_if_needed();
 
+	}
+
+	public function get_active_subscriptions(){
+		return $this->active_subs;
 	}
 
 	public function get_active_subs_count() {

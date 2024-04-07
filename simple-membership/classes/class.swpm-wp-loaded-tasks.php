@@ -20,9 +20,13 @@ class SwpmWpLoadedTasks {
 		$cancel_sub_action = filter_input( INPUT_POST, 'swpm_do_cancel_sub', FILTER_SANITIZE_NUMBER_INT );
 
 		if ( ! empty( $cancel_sub_action ) ) {
-			$this->do_cancel_sub();
+			if ( ! SwpmMemberUtils::is_member_logged_in() ) {
+				//member not logged in
+				SWPM_Utils_Subscriptions::cancel_msg( __( 'You are not logged in.', 'simple-membership' ) );
+			}
+			$member_id = SwpmMemberUtils::get_logged_in_members_id();
+			(new SWPM_Utils_Subscriptions( $member_id ))->load()->handle_cancel_sub();
 		}
-
 	}
 
 	/*
@@ -110,61 +114,5 @@ class SwpmWpLoadedTasks {
 			require_once SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-checkout-session-create.php';
 		}
 	}
-
-	private function do_cancel_sub() {
-
-		function msg( $msg, $is_error = true ) {
-			echo $msg;
-			echo '<br><br>';
-			echo SwpmUtils::_( 'You will be redirected to the previous page in a few seconds. If not, please <a href="">click here</a>.' );
-			echo '<script>function toPrevPage(){window.location = window.location.href;}setTimeout(toPrevPage,5000);</script>';
-			if ( ! $is_error ) {
-				wp_die( '', SwpmUtils::_( 'Success!' ), array( 'response' => 200 ) );
-			}
-			wp_die();
-		}
-
-		$token = isset( $_POST['swpm_cancel_sub_token'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_cancel_sub_token'] ) ) : '';
-		if ( empty( $token ) ) {
-			//no token
-			msg( SwpmUtils::_( 'No token provided.' ) );
-		}
-
-		//check nonce
-		$nonce = isset( $_POST['swpm_cancel_sub_nonce'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_cancel_sub_nonce'] ) ) : '';
-		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, $token ) ) {
-			//nonce check failed
-			msg( SwpmUtils::_( 'Nonce check failed.' ) );
-		}
-
-		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
-			//member not logged in
-			msg( SwpmUtils::_( 'You are not logged in.' ) );
-		}
-
-		$member_id = SwpmMemberUtils::get_logged_in_members_id();
-
-		$subs = new SWPM_Member_Subscriptions( $member_id );
-
-		$sub = $subs->find_by_token( $token );
-
-		if ( empty( $sub ) ) {
-			//no subscription found
-			return false;
-		}
-
-		$res = $subs->cancel( $sub['sub_id'] );
-
-		if ( $res !== true ) {
-			msg( $res );
-		}
-
-		$ipn_data = array();
-		$ipn_data['member_id'] = $member_id;
-		do_action( 'swpm_subscription_payment_cancelled', $ipn_data ); // Hook for subscription payment cancelled.
-
-		msg( SwpmUtils::_( 'Subscription has been cancelled.' ), false );
-
-	}
-
+	
 }

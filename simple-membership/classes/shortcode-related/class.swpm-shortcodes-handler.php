@@ -174,8 +174,8 @@ class SwpmShortcodesHandler {
 		}
 		$member_id = SwpmMemberUtils::get_logged_in_members_id();
 
-		$subs = new SWPM_Member_Subscriptions( $member_id );
-
+		$subs = (new SWPM_Utils_Subscriptions( $member_id ))->load_stripe_subscriptions();
+		
 		if ( empty( $subs->get_active_subs_count() ) ) {
 			//no active subscriptions found
 			return SwpmUtils::_( 'No active subscriptions' );
@@ -258,18 +258,26 @@ class SwpmShortcodesHandler {
 	}
 
 	public function handle_show_active_subscription_and_cancel_button($atts){
+		$atts = shortcode_atts(
+			array(
+				'merchant_id' => '',
+			),
+			$atts
+		);
 
 		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
 			//member not logged in
 			return '<p>'.__( 'You are not logged-in as a member', 'simple-membership' ).'</p>';
 		}
 		$member_id = SwpmMemberUtils::get_logged_in_members_id();		
-		$subscriptions = $this->get_active_subscriptions($member_id);
+		$subscriptions = new SWPM_Utils_Subscriptions( $member_id );
+		$subscriptions = $subscriptions->load();
+		$active_subscriptions = $subscriptions->get_active_subscriptions();
 		
 		$output = '';
 		$output .= '<div class="swpm-active-subs-table-wrap">';
 
-		if (count($subscriptions)) {
+		if (count($active_subscriptions)) {
 			$output .= '<table class="swpm-active-subs-table">';
 			
 			// Header section
@@ -281,11 +289,11 @@ class SwpmShortcodesHandler {
 			$output .= '</thead>';
 
 			$output .= '<tbody>';
-			foreach ($subscriptions as $subscription) {
+			foreach ($active_subscriptions as $subscription) {
 				$output .= '<tr>';
 				$output .= '<td><div>'. esc_attr($subscription['plan']).'</div></td>';
 				$output .= '<td>';
-				$output .= $this->get_cancel_subscription_form($subscription);
+				$output .= SWPM_Utils_Subscriptions::get_cancel_subscription_form($atts, $subscription);
 				$output .= '</td>';
 				$output .= '</tr>';
 			}
@@ -297,53 +305,7 @@ class SwpmShortcodesHandler {
 		}
 
 		$output .= '</div>';
-
-		return $output;
-	}
-
-	public function get_active_subscriptions($member_id){
-		$subscriptions = new SWPM_Member_Subscriptions( $member_id );
-
-		if ( empty( $subscriptions->get_active_subs_count() ) ) {
-			return array();
-		}
-
-		$active_subs = $subscriptions->get_active_subscriptions();
 		
-		$active_subs_data = array();
-		foreach ($active_subs as $active_sub) {
-			$sub['post_id'] = $active_sub['post_id'];
-			$sub['sub_id'] = $active_sub['sub_id'];
-			$sub['cancel_token'] = $active_sub['cancel_token'];
-			$sub['payment_button_id'] = $active_sub['payment_button_id'];
-			$sub['is_live'] = $active_sub['is_live'];
-			$sub['plan'] = get_the_title($active_sub['payment_button_id']);
-			$sub['type'] = get_post_meta($active_sub['payment_button_id'], 'button_type', true);
-
-			array_push($active_subs_data, $sub);
-		}
-
-		// echo "<pre>".print_r($subscriptions->get_active_subscriptions(), true)."</pre><br><pre>". print_r($active_subs_data, true) ."</pre>";
-		return $active_subs_data;
-	}
-
-	public function get_cancel_subscription_form($subscription){
-		ob_start();
-		if ($subscription['type'] == 'stripe_sca_subscription') {
-			$token = $subscription['cancel_token'];
-		?>
-		<form method="post" class="swpm_cancel_subscription_form">
-			<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
-			<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo $token ?>">
-			<input type="hidden" name="swpm_cancel_sub_id" value="<?php echo $subscription['sub_id'] ?>">
-			<button type="submit" class="swpm_cancel_subscription_button" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?' )?> ')">
-				<?php _e('Cancel Subscription') ?>
-			</button>
-		</form>
-		<?php
-		}
-		$output = ob_get_clean();
-
 		return $output;
 	}
 }

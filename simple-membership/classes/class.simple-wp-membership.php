@@ -31,7 +31,7 @@ include_once('class.swpm-permission-collection.php');
 include_once('class.swpm-auth-permission-collection.php');
 include_once('class.swpm-transactions.php');
 include_once('shortcode-related/class.swpm-shortcodes-handler.php');
-include_once('class-swpm-member-subscriptions.php');
+include_once('class.swpm-utils-subscription.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-main.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-block.php' );

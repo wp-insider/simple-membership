@@ -286,7 +286,10 @@ class SWPM_PayPal_Request_API_Injector {
             //A successful cancel request returns the HTTP '204 No Content' status code with no JSON response body.
             //We need to setup the additional args to return the raw response (so the post function doesn't try to process the response using the usual method).
             $additional_args = array('return_raw_response' => true);
-            $params = array();
+            //We also need to pass the reason for the cancellation.
+            $params = array('reason' => 'User requested to cancel the subscription.');
+
+            //Do the API call.
             $response = $this->paypal_req_api->post($endpoint, $params, $additional_args);
 
             if(isset($response['response']['code']) && $response['response']['code'] == 204){

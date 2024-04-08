@@ -284,8 +284,8 @@ class SwpmShortcodesHandler {
 			// Header section
 			$output .= '<thead>';
 			$output .= '<tr>';
-			$output .= '<th>'. __('Active Subscription').'</th>';
-			$output .= '<th>'. __('Action') .'</th>';
+			$output .= '<th>'. __('Subscription', 'simple-membership').'</th>';
+			$output .= '<th>'. __('Action', 'simple-membership') .'</th>';
 			$output .= '</tr>';
 			$output .= '</thead>';
 

@@ -363,24 +363,26 @@ class SWPM_Utils_Subscriptions
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
 		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
 		if( $sub_details !== false ){
-			SwpmLog::log_array_data_to_debug($sub_details, true);
+			//SwpmLog::log_array_data_to_debug($sub_details, true);
+
 			//Log debug that we found a subscription with the given subscription_id
-			SwpmLog::log_simple_debug("PayPal PPCP subscription details found for subscription ID: $subscription_id", true);
-			//Call the cancel subscription API
-			// TODO: FIXME: cancel_paypal_subscription() method failing!
+			SwpmLog::log_simple_debug("PayPal PPCP subscription details found for subscription ID: " . $subscription_id, true);
+			//Make the API call to cancel the PPCP subscription
 			$cancel_succeeded = $api_injector->cancel_paypal_subscription( $subscription_id );
 			if( $cancel_succeeded ){
-				SwpmLog::log_simple_debug("PayPal PPCP subscription cancelled successfully!", true);
+				SwpmLog::log_simple_debug("PayPal PPCP subscription cancelled successfully.", true);
 				return true;
 			}else{
-				SwpmLog::log_simple_debug("PayPal PPCP subscription cancellation failed!", false);
+				SwpmLog::log_simple_debug("PayPal PPCP subscription cancellation failed.", false);
 				return __("PayPal PPCP subscription cancellation failed!", 'simple-membership');
 			}
 		}
 
-		SwpmLog::log_simple_debug("PayPal PPCP subscription details could not be found for subscription ID: $subscription_id", false);
+		//Could not find the subscription details for the given subscription ID
+		$not_found_error_msg = __("Error! PayPal PPCP subscription details could not be found for subscription ID: ", 'simple-membership') . $subscription_id;
+		SwpmLog::log_simple_debug($not_found_error_msg, false);
 
-		return __("PayPal PPCP subscription details could not", 'simple-membership');
+		return $not_found_error_msg;
 	}
 
 	public function cancel_subscription_paypal_standard($sub_id){

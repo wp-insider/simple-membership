@@ -239,7 +239,7 @@ class SWPM_PayPal_Request_API_Injector {
             } else {
                 return false;
             }
-        } 
+        }
         
 
         /*
@@ -272,6 +272,28 @@ class SWPM_PayPal_Request_API_Injector {
                 // }
                 return $transactions;
             } else {
+                return false;
+            }
+        }
+
+        /*
+         * Cancel a paypal subscription (for the given subscription ID).
+         * https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_cancel
+         */
+        public function cancel_paypal_subscription( $sub_id ){
+            $endpoint = '/v1/billing/subscriptions/' . $sub_id . '/cancel';
+
+            //A successful cancel request returns the HTTP '204 No Content' status code with no JSON response body.
+            //We need to setup the additional args to return the raw response (so the post function doesn't try to process the response using the usual method).
+            $additional_args = array('return_raw_response' => true);
+            $params = array();
+            $response = $this->paypal_req_api->post($endpoint, $params, $additional_args);
+
+            if(isset($response['response']['code']) && $response['response']['code'] == 204){
+                //The subscription was successfully cancelled.
+                return true;
+            } else {
+                //Failed to cancel the subscription.
                 return false;
             }
         }

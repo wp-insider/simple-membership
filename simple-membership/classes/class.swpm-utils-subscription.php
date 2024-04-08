@@ -65,10 +65,6 @@ class SWPM_Utils_Subscriptions
 		$this->subs_count = count($subscriptions);
 
 		foreach ($subscriptions as $subscription) {
-			// echo "<pre> Subscription ID: " . $subscription->ID . "</pre>";
-			// echo "<pre>" . print_r( $subscription , true) . "</pre>";
-			// echo "<pre>" . print_r( get_post_meta( $subscription->ID ) , true) . "</pre>";
-
 			$sub            = array();
 			$post_id        = $subscription->ID;
 			
@@ -79,9 +75,22 @@ class SWPM_Utils_Subscriptions
 
 			$sub['gateway'] = get_post_meta($post_id, 'gateway', true);
 
-			// TODO: Need to fix this, assuming all pp subs active
-			$status = $sub['gateway'] == 'paypal_subscription_checkout' ? 'active' : get_post_meta($post_id, 'subscr_status', true);
-
+			$status = '';
+			switch($sub['gateway']){
+				case 'stripe-sca-subs':
+					$status = get_post_meta($post_id, 'subscr_status', true);
+					break;
+				case 'paypal_subscription_checkout':
+					$status = get_post_meta($post_id, 'subscr_status', true);
+					$sub_details = (new SWPM_PayPal_Request_API_Injector())->get_paypal_subscription_details( $sub_id );
+					if( $sub_details !== false ){
+						$status = strtolower($sub_details->status);
+					}
+					break;
+				case 'paypal':
+					$status = 'active'; // TODO: Need to fix this, assuming all pp subs active
+					break;
+			}
 			$sub['status'] = $status;
 
 			$cancel_token = get_post_meta($post_id, 'subscr_cancel_token', true);
@@ -101,9 +110,8 @@ class SWPM_Utils_Subscriptions
 			$sub['payment_button_id'] = $payment_button_id;
 
 			$sub['plan'] = get_the_title($payment_button_id);
-			// echo "<pre> Payment button id: " . $payment_button_id . "</pre>";
-			// echo "<pre> Subscription plan: " . $sub['plan'] . "</pre>";
-			// $sub['type'] = get_post_meta($payment_button_id, 'button_type', true);
+			// echo "Sub details";
+			// echo "<pre>" . print_r($sub, true) . "</pre>";
 
 			if ($this->is_active($status)) {
 				$this->active_subs_count++;
@@ -112,8 +120,6 @@ class SWPM_Utils_Subscriptions
 
 			$this->subs[$sub_id] = $sub;
 		}
-
-		// return $this->subs;
 
 		// $this->recheck_status_if_needed();
 
@@ -353,10 +359,28 @@ class SWPM_Utils_Subscriptions
 		return true;
 	}
 
-	public function cancel_subscription_paypal_ppcp($sub_id){
-		// TODO
+	public function cancel_subscription_paypal_ppcp($subscription_id){
+		$api_injector = new SWPM_PayPal_Request_API_Injector();
+		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
+		if( $sub_details !== false ){
+			SwpmLog::log_array_data_to_debug($sub_details, true);
+			//Log debug that we found a subscription with the given subscription_id
+			SwpmLog::log_simple_debug("PayPal PPCP subscription details found for subscription ID: $subscription_id", true);
+			//Call the cancel subscription API
+			// TODO: FIXME: cancel_paypal_subscription() method failing!
+			$cancel_succeeded = $api_injector->cancel_paypal_subscription( $subscription_id );
+			if( $cancel_succeeded ){
+				SwpmLog::log_simple_debug("PayPal PPCP subscription cancelled successfully!", true);
+				return true;
+			}else{
+				SwpmLog::log_simple_debug("PayPal PPCP subscription cancellation failed!", false);
+				return __("PayPal PPCP subscription cancellation failed!", 'simple-membership');
+			}
+		}
 
-		return true;
+		SwpmLog::log_simple_debug("PayPal PPCP subscription details could not be found for subscription ID: $subscription_id", false);
+
+		return __("PayPal PPCP subscription details could not", 'simple-membership');
 	}
 
 	public function cancel_subscription_paypal_standard($sub_id){
@@ -412,12 +436,27 @@ class SWPM_Utils_Subscriptions
 
 		return $output;
 	}
+	
+	public static function get_paypal_ppcp_cancel_form(&$atts, &$subscription){
+		$token = $subscription['cancel_token'];
+		ob_start();
+		?>
+		<form method="post" class="swpm_cancel_subscription_form">
+			<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
+			<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo $token ?>">
+			<input type="hidden" name="swpm_cancel_sub_id" value="<?php echo esc_attr($subscription['sub_id']) ?>">
+			<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">
+			<button type="submit" class="swpm_cancel_subscription_button" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?' )?> ')">
+				<?php _e('Cancel Subscription') ?>
+			</button>
+		</form>
+		<?php
+		$output = ob_get_clean();
 
-	public static function get_paypal_standard_cancel_form(&$atts, &$subscription){
-		// TODO
+		return $output;
 	}
 
-	public static function get_paypal_ppcp_cancel_form(&$atts, &$subscription){
+	public static function get_paypal_standard_cancel_form(&$atts, &$subscription){
 		$settings = SwpmSettings::get_instance();
 		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 		$merchant_id = $atts['merchant_id'];

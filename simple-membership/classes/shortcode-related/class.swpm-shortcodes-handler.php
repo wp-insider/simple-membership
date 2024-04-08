@@ -252,7 +252,7 @@ class SwpmShortcodesHandler {
 
 		} else {
 			//The user is NOT logged-in
-			$output .= '<p>' . SwpmUtils::_( 'You are not logged-in as a member' ) . '</p>';
+			$output .= '<p>' . __( 'You are not logged-in as a member.', 'simple-membership' ) . '</p>';
 		}
 		return $output;
 	}
@@ -267,9 +267,10 @@ class SwpmShortcodesHandler {
 
 		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
 			//member not logged in
-			return '<p>'.__( 'You are not logged-in as a member', 'simple-membership' ).'</p>';
+			return '<p>'.__( 'You are not logged-in as a member.', 'simple-membership' ).'</p>';
 		}
-		$member_id = SwpmMemberUtils::get_logged_in_members_id();		
+		$member_username = SwpmMemberUtils::get_logged_in_members_username();
+		$member_id = SwpmMemberUtils::get_logged_in_members_id();
 		$subscriptions = new SWPM_Utils_Subscriptions( $member_id );
 		$subscriptions = $subscriptions->load();
 		$active_subscriptions = $subscriptions->get_active_subscriptions();
@@ -284,7 +285,7 @@ class SwpmShortcodesHandler {
 			$output .= '<thead>';
 			$output .= '<tr>';
 			$output .= '<th>'. __('Active Subscription').'</th>';
-			$output .= '<th>'. __('Actions') .'</th>';
+			$output .= '<th>'. __('Action') .'</th>';
 			$output .= '</tr>';
 			$output .= '</thead>';
 
@@ -301,7 +302,7 @@ class SwpmShortcodesHandler {
 
 			$output .= '</table>';
 		}else{
-			$output .= '<p>'.__( 'No active subscriptions found!', 'simple-membership' ).'</p>';
+			$output .= '<p>'.__( 'Active subscription not detected for the member account with the username: ', 'simple-membership' ). $member_username . '</p>';
 		}
 
 		$output .= '</div>';

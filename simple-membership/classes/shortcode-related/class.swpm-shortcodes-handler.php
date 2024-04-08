@@ -258,13 +258,6 @@ class SwpmShortcodesHandler {
 	}
 
 	public function handle_show_active_subscription_and_cancel_button($atts){
-		$atts = shortcode_atts(
-			array(
-				'merchant_id' => '',
-			),
-			$atts
-		);
-
 		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
 			//member not logged in
 			return '<p>'.__( 'You are not logged-in as a member.', 'simple-membership' ).'</p>';

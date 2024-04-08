@@ -1,12 +1,18 @@
 <?php
-
+/**
+ * Utility class for handling subscription related tasks.
+ * 
+ * Loads and manages subscriptions associated with a member through different gateways.
+ */
 class SWPM_Utils_Subscriptions
 {
 
 	private $member_id;
 	private $active_statuses   = array('trialing', 'active');
+
 	private $active_subs_count = 0;
 	private $subs_count        = 0;
+
 	private $subs              = array();
 	private $active_subs       = array();
 
@@ -78,17 +84,15 @@ class SWPM_Utils_Subscriptions
 			$status = '';
 			switch($sub['gateway']){
 				case 'stripe-sca-subs':
-					$status = get_post_meta($post_id, 'subscr_status', true);
+					$status = get_post_meta($post_id, 'subscr_status', true); //TODO: Need some re-work
 					break;
+				case 'paypal':
 				case 'paypal_subscription_checkout':
 					$status = get_post_meta($post_id, 'subscr_status', true);
 					$sub_details = (new SWPM_PayPal_Request_API_Injector())->get_paypal_subscription_details( $sub_id );
 					if( $sub_details !== false ){
 						$status = strtolower($sub_details->status);
 					}
-					break;
-				case 'paypal':
-					$status = 'active'; // TODO: Need to fix this, assuming all pp subs active
 					break;
 			}
 			$sub['status'] = $status;
@@ -119,9 +123,8 @@ class SWPM_Utils_Subscriptions
 			}
 
 			$this->subs[$sub_id] = $sub;
+			$this->subs_count++;
 		}
-
-		// $this->recheck_status_if_needed();
 
 		return $this;
 	}
@@ -205,19 +208,36 @@ class SWPM_Utils_Subscriptions
 		return $this;
 	}
 
+	/**
+	 * Get the lists of active subscriptions' details only.
+	 *
+	 * @return array
+	 */
 	public function get_active_subscriptions()
 	{
 		return $this->active_subs;
 	}
 
+	/**
+	 * Get the active subscriptions count.
+	 *
+	 * @return int
+	 */
 	public function get_active_subs_count()
 	{
 		return $this->active_subs_count;
 	}
 
+	/**
+	 * Checks if subscription status of active.
+	 *
+	 * @param string $status Subscription status.
+	 * 
+	 * @return boolean True if 'active' or 'trialing', false otherwise.
+	 */
 	public function is_active($status)
 	{
-		return  in_array($status, $this->active_statuses, true);
+		return in_array($status, $this->active_statuses, true);
 	}
 
 	private function recheck_status_if_needed()
@@ -248,6 +268,14 @@ class SWPM_Utils_Subscriptions
 		}
 	}
 
+	/**
+	 * Generates HTML form for the 'swpm_stripe_subscription_cancel_link' shortcode.
+	 *
+	 * @param array $args
+	 * @param boolean $sub_id The subscription ID.
+	 * 
+	 * @return string HTML as string for string sca subscription cancel form.
+	 */
 	public function get_stripe_subs_cancel_url($args, $sub_id = false)
 	{
 		if (empty($this->active_subs_count)) {
@@ -271,6 +299,13 @@ class SWPM_Utils_Subscriptions
 		return $out;
 	}
 
+	/**
+	 * Searches subscription details by token
+	 *
+	 * @param string $token Subscription cancel token.
+	 * 
+	 * @return array Subscription details.
+	 */
 	public function find_by_token($token)
 	{
 		foreach ($this->subs as $sub_id => $sub) {
@@ -280,6 +315,11 @@ class SWPM_Utils_Subscriptions
 		}
 	}
 
+	/**
+	 * Handles subscription cancellation task after the subscription cancel from is submitted.
+	 *
+	 * @return void
+	 */
 	public function handle_cancel_sub() {
 		
 		$token = isset( $_POST['swpm_cancel_sub_token'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_cancel_sub_token'] ) ) : '';
@@ -311,11 +351,9 @@ class SWPM_Utils_Subscriptions
 			case 'stripe-sca-subs':
 				$res = $this->cancel_subscription_stripe_sca( $sub['sub_id'] );
 				break;
-			case 'paypal_subscription_checkout':
-				$res = $this->cancel_subscription_paypal_ppcp( $sub['sub_id'] );
-				break;
 			case 'paypal':
-				$res = $this->cancel_subscription_paypal_standard( $sub['sub_id'] );
+			case 'paypal_subscription_checkout':
+				$res = $this->cancel_subscription_paypal( $sub['sub_id'] );
 				break;
 			default:
 				$res = false;
@@ -335,6 +373,13 @@ class SWPM_Utils_Subscriptions
 
 	}
 
+	/**
+	 * Triggers the subscription cancellation api for Stripe SCA.
+	 *
+	 * @param string $sub_id The subscription ID.
+	 * 
+	 * @return bool|string True on success, Error message string on failure.
+	 */
 	public function cancel_subscription_stripe_sca($sub_id)
 	{
 		$sub = $this->subs[$sub_id];
@@ -359,12 +404,17 @@ class SWPM_Utils_Subscriptions
 		return true;
 	}
 
-	public function cancel_subscription_paypal_ppcp($subscription_id){
+	/**
+	 * Triggers the subscription cancellation api for both PayPal PPCP and PayPal Standard.
+	 *
+	 * @param string $subscription_id The subscription ID.
+	 * 
+	 * @return bool|string True on success, Error message string on failure.
+	 */
+	public function cancel_subscription_paypal($subscription_id){
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
 		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
 		if( $sub_details !== false ){
-			//SwpmLog::log_array_data_to_debug($sub_details, true);
-
 			//Log debug that we found a subscription with the given subscription_id
 			SwpmLog::log_simple_debug("PayPal PPCP subscription details found for subscription ID: " . $subscription_id, true);
 			//Make the API call to cancel the PPCP subscription
@@ -385,12 +435,14 @@ class SWPM_Utils_Subscriptions
 		return $not_found_error_msg;
 	}
 
-	public function cancel_subscription_paypal_standard($sub_id){
-		// TODO
-
-		return true;
-	}
-
+	/**
+	 * Shows feedback message after subscription cancel request. 
+	 *
+	 * @param string $msg Success or error message.
+	 * @param boolean $is_error Whether it is an error message or not.
+	 * 
+	 * @return void
+	 */
 	public static function cancel_msg( $msg, $is_error = true ) {
 		echo $msg;
 		echo '<br><br>';
@@ -402,87 +454,28 @@ class SWPM_Utils_Subscriptions
 		wp_die();
 	}
 
+	/**
+	 * The HTML form for subscription cancellation of all gateways.
+	 * Used by the 'swpm_show_active_subscription_and_cancel_button' shortcode.
+
+	 * @param array $atts Shortcode attributes.
+	 * @param array $subscription Subscription Details.
+	 * 
+	 * @return string HTML of cancel form as string.
+	 */
 	public static function get_cancel_subscription_form(&$atts, &$subscription){
-		$output = '';
-
-		switch($subscription['gateway']){
-			case 'stripe-sca-subs':
-				$output = self::get_stripe_sca_cancel_form($atts, $subscription);
-				break;
-			case 'paypal_subscription_checkout':
-				$output = self::get_paypal_ppcp_cancel_form($atts, $subscription);
-				break;
-			case 'paypal':
-				$output = self::get_paypal_standard_cancel_form($atts, $subscription);
-				break;
-		}
-
-		return $output;
-	}
-
-	public static function get_stripe_sca_cancel_form(&$atts, &$subscription){
 		$token = $subscription['cancel_token'];
 		ob_start();
 		?>
 		<form method="post" class="swpm_cancel_subscription_form">
 			<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
 			<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo $token ?>">
-			<input type="hidden" name="swpm_cancel_sub_id" value="<?php echo esc_attr($subscription['sub_id']) ?>">
 			<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">
-			<button type="submit" class="swpm_cancel_subscription_button" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?' )?> ')">
-				<?php _e('Cancel Subscription') ?>
+			<button type="submit" class="swpm_cancel_subscription_button" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
+				<?php _e('Cancel Subscription', 'simple-membership') ?>
 			</button>
 		</form>
 		<?php
-		$output = ob_get_clean();
-
-		return $output;
-	}
-	
-	public static function get_paypal_ppcp_cancel_form(&$atts, &$subscription){
-		$token = $subscription['cancel_token'];
-		ob_start();
-		?>
-		<form method="post" class="swpm_cancel_subscription_form">
-			<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
-			<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo $token ?>">
-			<input type="hidden" name="swpm_cancel_sub_id" value="<?php echo esc_attr($subscription['sub_id']) ?>">
-			<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">
-			<button type="submit" class="swpm_cancel_subscription_button" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?' )?> ')">
-				<?php _e('Cancel Subscription') ?>
-			</button>
-		</form>
-		<?php
-		$output = ob_get_clean();
-
-		return $output;
-	}
-
-	public static function get_paypal_standard_cancel_form(&$atts, &$subscription){
-		$settings = SwpmSettings::get_instance();
-		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
-		$merchant_id = $atts['merchant_id'];
-
-		ob_start(); ?>
-		
-		<?php if ( empty( $atts['merchant_id'] ) ) { ?>
-			<button type="submit" class="swpm_cancel_subscription_button" style="background-color: gray !important;" disabled="disabled" title="<?php _e('Merchant ID Could not be found! Specify it in the shortcode parameter first!', 'simple-membership') ?>">
-				<?php _e( 'Not configured', 'simple-membership') ?>
-			</button>
-		<?php } else { ?>
-			<div class="swpm-paypal-subscription-cancel-link">
-				<?php if ( $sandbox_enabled ) { ?>
-					<a class="swpm_cancel_subscription_button" href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=<?php echo esc_attr($merchant_id) ?>" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=<?php echo esc_attr($merchant_id) ?>">
-						<?php _e('Cancel Subscription', 'simple-membership')?>
-					</a>
-				<?php } else { ?>
-					<a class="swpm_cancel_subscription_button" href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=<?php echo esc_attr($merchant_id) ?>" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=<?php echo esc_attr($merchant_id) ?>">
-						<?php _e('Cancel Subscription', 'simple-membership')?>
-					</a>
-				<?php } ?>
-			</div>
-		<?php }
-
 		$output = ob_get_clean();
 
 		return $output;

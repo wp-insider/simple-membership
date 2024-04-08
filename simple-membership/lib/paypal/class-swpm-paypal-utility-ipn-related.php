@@ -36,6 +36,9 @@ class SWPM_PayPal_Utility_IPN_Related {
 		$ipn_data['txn_id'] = $txn_id;
 		$ipn_data['subscr_id'] = $txn_id;//Same as txn_id for one-time payments.
 
+		//This will save the button ID in the swpm_transactions CPT (for a reference to the button used for the payment)
+		$ipn_data['payment_button_id'] = isset($data['button_id']) ? $data['button_id'] : '';
+
 		$ipn_data['item_number'] = isset($data['button_id']) ? $data['button_id'] : '';
 		$ipn_data['item_name'] = isset($data['item_name']) ? $data['item_name'] : '';
 

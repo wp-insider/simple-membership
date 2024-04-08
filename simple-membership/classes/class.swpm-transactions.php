@@ -83,27 +83,27 @@ class SwpmTransactions {
 			update_post_meta( $post_id, 'subscr_id', $subscr_id );
 		}		
 
-                //Add the payment_button_id to the txn_data array so it can be saved to the swpm_transactions CPT.
+        //Add the payment_button_id to the txn_data array so it can be saved to the swpm_transactions CPT.
 		if ( isset( $ipn_data['payment_button_id'] ) ) {
 			$txn_data['payment_button_id'] = $ipn_data['payment_button_id'];
 		}
 
-                //Add the is_live to the txn_data array so it can be saved to the swpm_transactions CPT.
+        //Add the is_live to the txn_data array so it can be saved to the swpm_transactions CPT.
 		if ( isset( $ipn_data['is_live'] ) ) {
 			$txn_data['is_live'] = $ipn_data['is_live'];
 		}
 
-                //Add the custom value to the txn_data array so it can be saved to the swpm_transactions CPT.
+        //Add the custom value to the txn_data array so it can be saved to the swpm_transactions CPT.
 		if ( isset( $ipn_data['custom'] ) ) {
 			$txn_data['custom'] = $ipn_data['custom'];
 		}
 
-                //Save the $txn_data to the swpm_transactions CPT as post meta.
+        //Save the $txn_data to the swpm_transactions CPT as post meta.
 		foreach ( $txn_data as $key => $value ) {
 			update_post_meta( $post_id, $key, $value );
 		}
 
-                //Trigger the action hook.
+        //Trigger the action hook.
 		do_action( 'swpm_txn_record_saved', $txn_data, $db_row_id, $post_id );
 
 	}

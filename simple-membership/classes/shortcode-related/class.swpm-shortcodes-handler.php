@@ -170,18 +170,22 @@ class SwpmShortcodesHandler {
 
 		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
 			//member not logged in
-			return SwpmUtils::_( 'You are not logged-in as a member' );
+			$error_msg = '<div class="swpm-stripe-cancel-error-msg">' . __( 'You are not logged-in as a member', 'simple-membership' ) . '</div>';
+			return $error_msg;
 		}
-		$member_id = SwpmMemberUtils::get_logged_in_members_id();
 
+		//Get the member ID
+		$member_id = SwpmMemberUtils::get_logged_in_members_id();
 		$subs = (new SWPM_Utils_Subscriptions( $member_id ))->load_stripe_subscriptions();
-		
 		if ( empty( $subs->get_active_subs_count() ) ) {
 			//no active subscriptions found
-			return SwpmUtils::_( 'No active subscriptions' );
+			$error_msg = '<div class="swpm-stripe-cancel-error-msg">' . __( 'No active subscriptions', 'simple-membership' ) . '</div>';
+			return $error_msg;
 		}
 
-                $output = $subs->get_stripe_subs_cancel_url($args, false);
+        $output = $subs->get_stripe_subs_cancel_url($args, false);
+
+		$output = '<div class="swpm-stripe-subscription-cancel-link">' . $output . '</div>';
 
 		return $output;
 	}

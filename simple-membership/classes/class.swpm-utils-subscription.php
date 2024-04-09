@@ -16,8 +16,8 @@ class SWPM_Utils_Subscriptions
 	private $subs              = array();
 	private $active_subs       = array();
 
-	public $has_stripe_sca_api_keys = true;
-	public $has_paypal_ppcp_api_keys = true;
+	public $stripe_sca_api_key_error = "";
+	public $paypal_ppcp_api_key_error = "";
 
 	public function __construct($member_id)
 	{
@@ -102,7 +102,7 @@ class SWPM_Utils_Subscriptions
 					if (isset($stripe_sca_api_keys['secret']) && !empty($stripe_sca_api_keys['secret'])) {
 						$status = get_post_meta($post_id, 'subscr_status', true); //This can be replaced with api call.
 					}else{
-						$this->has_stripe_sca_api_keys = false;
+						$this->stripe_sca_api_key_error = __( 'Error: Stripe API keys are not configured on your site!', 'simple-membership' );
 					}
 					
 					break;
@@ -121,7 +121,7 @@ class SWPM_Utils_Subscriptions
 							$status = strtolower($sub_details->status);
 						}
 					}else{
-						$this->has_paypal_ppcp_api_keys = false;
+						$this->paypal_ppcp_api_key_error = __( 'Error: PayPal PPCP API keys are not configured on your site!', 'simple-membership' );
 					}
 
 					break;
@@ -155,7 +155,7 @@ class SWPM_Utils_Subscriptions
 
 
 	/**
-	 * Load stripe subscriptions only. (Old Method)
+	 * Load stripe subscriptions only. (Old method that is used by the stripe subscription cancel shortcode)
 	 *
 	 * @return SWPM_Utils_Subscriptions
 	 */
@@ -503,5 +503,13 @@ class SWPM_Utils_Subscriptions
 		$output = ob_get_clean();
 
 		return $output;
+	}
+
+	public function get_any_stripe_sca_api_key_error(){
+		return $this->stripe_sca_api_key_error;
+	}
+
+	public function get_any_paypal_ppcp_api_key_error(){
+		return $this->paypal_ppcp_api_key_error;
 	}
 }

@@ -299,15 +299,17 @@ class SwpmShortcodesHandler {
 		}
 		
 		/**
-		 * Display the api key error messages. 
-		 * The error message only shows when the subscription of corresponding gateway is present.
-		 * For example: If there is no strip sca subscription, stripe api error wont be shown.
+		 * Display any API key error messages (if subscription exists but api keys are not saved). 
+		 * The error message is only shown when the subscription of the corresponding payment gateway is present.
+		 * For example: If there are no stripe sca subscriptions, stripe api error wont be shown.
 		*/
-		 if (!$subscriptions->has_stripe_sca_api_keys) {
-			$output .= '<p class="swpm-active-subs-api-key-error-msg">'.__( 'Error: Stripe API keys isn\'t configured on your site!', 'simple-membership' ) . '</p>';
+		$any_stripe_api_key_error_msg = $subscriptions->get_any_stripe_sca_api_key_error();
+		if ( !empty( $any_stripe_api_key_error_msg ) ) {
+			$output .= '<p class="swpm-active-subs-api-key-error-msg">'. $any_stripe_api_key_error_msg . '</p>';
 		}
-		if (!$subscriptions->has_paypal_ppcp_api_keys) {
-			$output .= '<p class="swpm-active-subs-api-key-error-msg">'.__( 'Error: PayPal PPCP API keys isn\'t configured on your site!', 'simple-membership' ) . '</p>';
+		$any_paypal_api_key_error_msg = $subscriptions->get_any_paypal_ppcp_api_key_error();
+		if ( !empty( $any_paypal_api_key_error_msg ) ) {
+			$output .= '<p class="swpm-active-subs-api-key-error-msg">'. $any_paypal_api_key_error_msg . '</p>';
 		}
 		
 		$output .= '</div>';

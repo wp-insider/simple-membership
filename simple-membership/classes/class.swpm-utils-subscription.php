@@ -35,6 +35,7 @@ class SWPM_Utils_Subscriptions
 		
 		$subscr_id = SwpmMemberUtils::get_member_field_by_id($this->member_id, 'subscr_id');
 
+		//Get any swpm_transactions CPT posts that are associated with the given member ID OR the given subscr_id.
 		$subscriptions = get_posts(array(
 			'post_type'  => 'swpm_transactions',
 			'meta_query' => array(
@@ -61,7 +62,7 @@ class SWPM_Utils_Subscriptions
 					),
 					array(
 						'key'     => 'gateway',
-						'value'   =>  'paypal',
+						'value'   => 'paypal',
 						'compare' => '=',
 					),
 					array(

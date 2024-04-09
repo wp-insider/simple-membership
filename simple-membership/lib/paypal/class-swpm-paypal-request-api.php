@@ -87,7 +87,7 @@ class SWPM_PayPal_Request_API {
 
 	private function before_request() {
 		//Reset the last_error variable before making a request.
-		$this->last_error = array();
+		$this->last_error = array('error_message' => '');
 	}
 
 	public function get_last_error() {

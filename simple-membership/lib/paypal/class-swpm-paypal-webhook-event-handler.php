@@ -136,6 +136,7 @@ class SWPM_PayPal_Webhook_Event_Handler {
 
 				//Handle the account status update according to the membership level's expiry settings.
 				$ipn_data = array();
+				$ipn_data['subscr_id'] = $subscription_id;
 				$ipn_data['custom'] = 'swpm_id=' . $member_id;
 				swpm_handle_subsc_cancel_stand_alone( $ipn_data );
 				return;

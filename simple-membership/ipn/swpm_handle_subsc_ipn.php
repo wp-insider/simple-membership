@@ -332,8 +332,16 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 			// Make sure the cronjob to do expiry check and deactivate the member accounts treat this status as if it is "active".
 		}
 
+		//Update the swpm_transactions CPT record to mark the subscription as "Cancelled".
+		$swpm_txn_cpt_id = SwpmTransactions::get_original_swpm_txn_cpt_id_by_subscr_id( $subscr_id );
+		if ( ! empty( $swpm_txn_cpt_id ) ) {
+			swpm_debug_log_subsc( 'Updating the the swpm_transaction CPT record (Post ID: '.$swpm_txn_cpt_id.') to mark the subscription as "cancelled".', true );
+			update_post_meta( $swpm_txn_cpt_id, 'subscr_status', 'cancelled' );
+		}
+
+		// Trigger hook for subscription payment cancelled.
 		$ipn_data['member_id'] = $member_id;
-		do_action( 'swpm_subscription_payment_cancelled', $ipn_data ); // Hook for subscription payment cancelled.
+		do_action( 'swpm_subscription_payment_cancelled', $ipn_data ); 
 	} else {
 		swpm_debug_log_subsc( 'No associated active member record found for this notification.', false );
 		return;

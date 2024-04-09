@@ -8,6 +8,9 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 	public $ipn_data     = array();         // array contains the POST values for IPN
 	public $fields       = array();           // array holds the fields to submit to paypal
 	public $sandbox_mode = false;
+	public $paypal_url = '';
+	public $post_string = '';
+
 
 	public function __construct() {
 		$this->paypal_url   = 'https://www.paypal.com/cgi-bin/webscr';
@@ -231,6 +234,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		// Save the transaction data
 		$this->debug_log( 'Saving transaction data to the database table.', true );
 		$this->ipn_data['gateway'] = 'paypal';
+		$this->ipn_data['payment_button_id'] = $button_id;
 		$this->ipn_data['status']  = $this->ipn_data['payment_status'];
 
 		// If the value ipn_data['ip'] is empty, try to detect the customer IP address using the variable custom['user_ip']

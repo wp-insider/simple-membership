@@ -81,7 +81,7 @@ class SwpmTransactions {
 		//Save the subscr_id to the swpm_transactions CPT as post meta (so it can be used to query the CPT for a specific subscription).
 		if ( isset( $subscr_id ) && ! empty( $subscr_id ) ) {
 			update_post_meta( $post_id, 'subscr_id', $subscr_id );
-		}		
+		}
 
         //Add the payment_button_id to the txn_data array so it can be saved to the swpm_transactions CPT.
 		if ( isset( $ipn_data['payment_button_id'] ) ) {
@@ -151,59 +151,72 @@ class SwpmTransactions {
 		return $query_db;
 	}
 
-		/**
-		 * Get the custom field data of the original subscription checkout from the user profile (if available).
-		 * The Transaction CPT Post ID is saved in the member's profile when the subscription is created.
-		 * @param string $subscr_id
-		 * @return string
-		 */
-		public static function get_original_custom_value_from_transactions_cpt ( $subscr_id ) {
-			$extra_info = SwpmMemberUtils::get_account_extra_info_by_subscr_id( $subscr_id );
-			if( isset( $extra_info['orig_swpm_txn_cpt_id'] ) && !empty( $extra_info['orig_swpm_txn_cpt_id'] )){
-				$txn_cpt_post_id = $extra_info['orig_swpm_txn_cpt_id'];
-				//Example value: subsc_ref=2&orig_swpm_txn_cpt_id=123
-				$custom = get_post_meta( $txn_cpt_post_id, 'custom', true );
-				SwpmLog::log_simple_debug('Custom field data from the original subscription checkout: ' . $custom, true);
-			}
-			else{
-				$custom = '';
-				SwpmLog::log_simple_debug('Could not find the original subscription checkout custom field data.', true);
-			}
-			return $custom;
+	/**
+	 * Get the original subscription checkout transaction CPT Post ID by the subscriber ID.
+	 * Get's the original transaction CPT Post ID from the member's profile (we save it in the extra_info when the subscription is created).
+	 */
+	public static function get_original_swpm_txn_cpt_id_by_subscr_id ( $subscr_id ) {
+		$extra_info = SwpmMemberUtils::get_account_extra_info_by_subscr_id( $subscr_id );
+		if( isset( $extra_info['orig_swpm_txn_cpt_id'] ) && !empty( $extra_info['orig_swpm_txn_cpt_id'] )){
+			$txn_cpt_post_id = $extra_info['orig_swpm_txn_cpt_id'];
+			return $txn_cpt_post_id;
 		}
+		return '';
+	}
 
-        public static function get_original_custom_value_for_subscription_payment ( $subscr_id ) {
-            if ( isset ( $subscr_id )){
-                //Lets check if a proper custom field value is already saved in the CPT for this stripe subscription.
-                $txn_cpt_qry_args = array(
-                        'post_type'  => 'swpm_transactions',
-                        'orderby'    => 'post_id',
-                        'order'      => 'ASC',
-                        'meta_query' => array(
-                                array(
-                                        'key' => 'subscr_id',
-                                        'value' => $subscr_id
-                                ),
-                        )
-                );
-                $txn_cpt_qry = new WP_Query( $txn_cpt_qry_args );
+	/**
+	 * Get the custom field data of the original subscription checkout from the user profile (if available).
+	 * The Transaction CPT Post ID is saved in the member's profile when the subscription is created.
+	 * @param string $subscr_id
+	 * @return string
+	 */
+	public static function get_original_custom_value_from_transactions_cpt ( $subscr_id ) {
+		$extra_info = SwpmMemberUtils::get_account_extra_info_by_subscr_id( $subscr_id );
+		if( isset( $extra_info['orig_swpm_txn_cpt_id'] ) && !empty( $extra_info['orig_swpm_txn_cpt_id'] )){
+			$txn_cpt_post_id = $extra_info['orig_swpm_txn_cpt_id'];
+			//Example value: subsc_ref=2&orig_swpm_txn_cpt_id=123
+			$custom = get_post_meta( $txn_cpt_post_id, 'custom', true );
+			SwpmLog::log_simple_debug('Custom field data from the original subscription checkout: ' . $custom, true);
+		}
+		else{
+			$custom = '';
+			SwpmLog::log_simple_debug('Could not find the original subscription checkout custom field data.', true);
+		}
+		return $custom;
+	}
 
-                $found_posts = $txn_cpt_qry->found_posts;
-                if ( $found_posts ) {
-                    //Found a match so this is a subscription payment notification.
-                    //Read the posts array.
-                    $posts = $txn_cpt_qry->posts;
+	public static function get_original_custom_value_for_subscription_payment ( $subscr_id ) {
+		if ( isset ( $subscr_id )){
+			//Lets check if a proper custom field value is already saved in the CPT for this stripe subscription.
+			$txn_cpt_qry_args = array(
+					'post_type'  => 'swpm_transactions',
+					'orderby'    => 'post_id',
+					'order'      => 'ASC',
+					'meta_query' => array(
+							array(
+									'key' => 'subscr_id',
+									'value' => $subscr_id
+							),
+					)
+			);
+			$txn_cpt_qry = new WP_Query( $txn_cpt_qry_args );
 
-                    //The fist post entry will be the original stripe webhook notification.
-                    $first_entry = array_shift($posts);
-                    //Get the ID of the post.
-                    $cpt_post_id = $first_entry->ID;
-                    //Retrieve the original custom value saved for this post.
-                    $orig_custom_value = get_post_meta( $cpt_post_id, 'custom', true );
-                    return $orig_custom_value;
-                }
-            }
-            return '';
-        }
+			$found_posts = $txn_cpt_qry->found_posts;
+			if ( $found_posts ) {
+				//Found a match so this is a subscription payment notification.
+				//Read the posts array.
+				$posts = $txn_cpt_qry->posts;
+
+				//The fist post entry will be the original stripe webhook notification.
+				$first_entry = array_shift($posts);
+				//Get the ID of the post.
+				$cpt_post_id = $first_entry->ID;
+				//Retrieve the original custom value saved for this post.
+				$orig_custom_value = get_post_meta( $cpt_post_id, 'custom', true );
+				return $orig_custom_value;
+			}
+		}
+		return '';
+	}
 
 }

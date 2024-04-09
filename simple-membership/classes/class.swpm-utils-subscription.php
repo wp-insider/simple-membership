@@ -108,6 +108,8 @@ class SWPM_Utils_Subscriptions
 					
 					break;
 				case 'paypal':
+					//TODO - Keep it separate
+					break;
 				case 'paypal_subscription_checkout':
 					$paypal_ppcp_api_keys = array();
 					if ( $is_live ) {

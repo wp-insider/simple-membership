@@ -297,7 +297,19 @@ class SwpmShortcodesHandler {
 		}else{
 			$output .= '<p>'.__( 'Active subscription not detected for the member account with the username: ', 'simple-membership' ). $member_username . '</p>';
 		}
-
+		
+		/**
+		 * Display the api key error messages. 
+		 * The error message only shows when the subscription of corresponding gateway is present.
+		 * For example: If there is no strip sca subscription, stripe api error wont be shown.
+		*/
+		 if (!$subscriptions->has_stripe_sca_api_keys) {
+			$output .= '<p class="swpm-active-subs-api-key-error-msg">'.__( 'Error: Stripe API keys isn\'t configured on your site!', 'simple-membership' ) . '</p>';
+		}
+		if (!$subscriptions->has_paypal_ppcp_api_keys) {
+			$output .= '<p class="swpm-active-subs-api-key-error-msg">'.__( 'Error: PayPal PPCP API keys isn\'t configured on your site!', 'simple-membership' ) . '</p>';
+		}
+		
 		$output .= '</div>';
 		
 		return $output;

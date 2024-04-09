@@ -16,6 +16,9 @@ class SWPM_Utils_Subscriptions
 	private $subs              = array();
 	private $active_subs       = array();
 
+	public $has_stripe_sca_api_keys = true;
+	public $has_paypal_ppcp_api_keys = true;
+
 	public function __construct($member_id)
 	{
 		$this->member_id = $member_id;
@@ -28,6 +31,8 @@ class SWPM_Utils_Subscriptions
 	 */
 	public function load()
 	{
+		$settings = SwpmSettings::get_instance();
+		
 		$subscr_id = SwpmMemberUtils::get_member_field_by_id($this->member_id, 'subscr_id');
 
 		$subscriptions = get_posts(array(
@@ -79,20 +84,46 @@ class SWPM_Utils_Subscriptions
 
 			$sub['sub_id'] = $sub_id;
 
+			$is_live        = get_post_meta($post_id, 'is_live', true);
+			$is_live        = empty($is_live) ? false : true;
+			$sub['is_live'] = $is_live;
+
+			$payment_button_id = get_post_meta($post_id, 'payment_button_id', true);
+			$sub['payment_button_id'] = $payment_button_id;
+
 			$sub['gateway'] = get_post_meta($post_id, 'gateway', true);
 
 			$status = '';
+
+			// Check and get the subscription status based on the gateways.
 			switch($sub['gateway']){
 				case 'stripe-sca-subs':
-					$status = get_post_meta($post_id, 'subscr_status', true); //TODO: Need some re-work
+					$stripe_sca_api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button($sub['payment_button_id'], $sub['is_live']);
+					if (isset($stripe_sca_api_keys['secret']) && !empty($stripe_sca_api_keys['secret'])) {
+						$status = get_post_meta($post_id, 'subscr_status', true); //This can be replaced with api call.
+					}else{
+						$this->has_stripe_sca_api_keys = false;
+					}
+					
 					break;
 				case 'paypal':
 				case 'paypal_subscription_checkout':
-					$status = get_post_meta($post_id, 'subscr_status', true);
-					$sub_details = (new SWPM_PayPal_Request_API_Injector())->get_paypal_subscription_details( $sub_id );
-					if( $sub_details !== false ){
-						$status = strtolower($sub_details->status);
+					$paypal_ppcp_api_keys = array();
+					if ( $is_live ) {
+						$paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-live-secret-key');
+					} else {
+						$paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-sandbox-secret-key');
 					}
+
+					if (isset($paypal_ppcp_api_keys['secret']) && !empty($paypal_ppcp_api_keys['secret'])) {
+						$sub_details = (new SWPM_PayPal_Request_API_Injector())->get_paypal_subscription_details( $sub_id );
+						if( $sub_details !== false ){
+							$status = strtolower($sub_details->status);
+						}
+					}else{
+						$this->has_paypal_ppcp_api_keys = false;
+					}
+
 					break;
 			}
 			$sub['status'] = $status;
@@ -106,16 +137,9 @@ class SWPM_Utils_Subscriptions
 
 			$sub['cancel_token'] = $cancel_token;
 
-			$is_live        = get_post_meta($post_id, 'is_live', true);
-			$is_live        = empty($is_live) ? false : true;
-			$sub['is_live'] = $is_live;
-
-			$payment_button_id = get_post_meta($post_id, 'payment_button_id', true);
-			$sub['payment_button_id'] = $payment_button_id;
-
 			$sub['plan'] = get_the_title($payment_button_id);
-			// echo "Sub details";
-			// echo "<pre>" . print_r($sub, true) . "</pre>";
+
+			// echo "<pre>Subscription details: " . print_r($sub, true) . "</pre>";
 
 			if ($this->is_active($status)) {
 				$this->active_subs_count++;

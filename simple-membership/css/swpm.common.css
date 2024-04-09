@@ -292,3 +292,7 @@
 	background-color: #d95e5e;
     transition: 200ms;
 }
+
+.swpm-active-subs-api-key-error-msg{
+    color: #cc0000;
+}

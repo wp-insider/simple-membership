@@ -8,7 +8,7 @@ class SWPM_Utils_Subscriptions
 {
 
 	private $member_id;
-	private $active_statuses   = array('trialing', 'active');
+	public static $active_statuses   = array('trialing', 'active');
 
 	private $active_subs_count = 0;
 	private $subs_count        = 0;
@@ -57,17 +57,12 @@ class SWPM_Utils_Subscriptions
 					'relation' => 'OR',
 					array(
 						'key'     => 'gateway',
-						'value'   => 'stripe-sca-subs',
+						'value'   => 'stripe-sca-subs', // Stripe SCA
 						'compare' => '=',
 					),
 					array(
 						'key'     => 'gateway',
-						'value'   => 'paypal',
-						'compare' => '=',
-					),
-					array(
-						'key'     => 'gateway',
-						'value'   => 'paypal_subscription_checkout',
+						'value'   => 'paypal_subscription_checkout', // PayPal PPCP
 						'compare' => '=',
 					),
 				),
@@ -107,9 +102,6 @@ class SWPM_Utils_Subscriptions
 					}
 					
 					break;
-				case 'paypal':
-					//TODO - Keep it separate
-					break;
 				case 'paypal_subscription_checkout':
 					$paypal_ppcp_api_keys = array();
 					if ( $is_live ) {
@@ -141,8 +133,6 @@ class SWPM_Utils_Subscriptions
 			$sub['cancel_token'] = $cancel_token;
 
 			$sub['plan'] = get_the_title($payment_button_id);
-
-			// echo "<pre>Subscription details: " . print_r($sub, true) . "</pre>";
 
 			if ($this->is_active($status)) {
 				$this->active_subs_count++;
@@ -246,6 +236,16 @@ class SWPM_Utils_Subscriptions
 	}
 
 	/**
+	 * Get the lists of all subscriptions' details.
+	 *
+	 * @return array
+	 */
+	public function get_all_subscriptions()
+	{
+		return $this->subs;
+	}
+
+	/**
 	 * Get the active subscriptions count.
 	 *
 	 * @return int
@@ -256,15 +256,25 @@ class SWPM_Utils_Subscriptions
 	}
 
 	/**
+	 * Get subscriptions count.
+	 *
+	 * @return int
+	 */
+	public function get_all_subs_count()
+	{
+		return $this->subs_count;
+	}
+
+	/**
 	 * Checks if subscription status of active.
 	 *
 	 * @param string $status Subscription status.
 	 * 
 	 * @return boolean True if 'active' or 'trialing', false otherwise.
 	 */
-	public function is_active($status)
+	public static function is_active($status)
 	{
-		return in_array($status, $this->active_statuses, true);
+		return in_array($status, self::$active_statuses, true);
 	}
 
 	private function recheck_status_if_needed()
@@ -378,7 +388,6 @@ class SWPM_Utils_Subscriptions
 			case 'stripe-sca-subs':
 				$res = $this->cancel_subscription_stripe_sca( $sub['sub_id'] );
 				break;
-			case 'paypal':
 			case 'paypal_subscription_checkout':
 				$res = $this->cancel_subscription_paypal( $sub['sub_id'] );
 				break;
@@ -484,28 +493,41 @@ class SWPM_Utils_Subscriptions
 	/**
 	 * The HTML form for subscription cancellation of all gateways.
 	 * Used by the 'swpm_show_active_subscription_and_cancel_button' shortcode.
-
-	 * @param array $atts Shortcode attributes.
+	 * 
 	 * @param array $subscription Subscription Details.
 	 * 
 	 * @return string HTML of cancel form as string.
 	 */
-	public static function get_cancel_subscription_form(&$atts, &$subscription){
-		$token = $subscription['cancel_token'];
+	public static function get_cancel_subscription_form(&$subscription){		
+		if (self::is_active($subscription['status'])) {
+			// subscription is active!
+			$token = $subscription['cancel_token'];
+			ob_start();
+			?>
+			<form method="post" class="swpm_cancel_subscription_form">
+				<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
+				<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo $token ?>">
+				<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">
+				<button type="submit" class="swpm_cancel_subscription_button swpm_cancel_subscription_button_active" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
+					<?php _e('Cancel Subscription', 'simple-membership') ?>
+				</button>
+			</form>
+			<?php
+			return ob_get_clean();
+		}
+
+		// subscription is inactive!
 		ob_start();
 		?>
-		<form method="post" class="swpm_cancel_subscription_form">
-			<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
-			<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo $token ?>">
-			<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">
-			<button type="submit" class="swpm_cancel_subscription_button" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
-				<?php _e('Cancel Subscription', 'simple-membership') ?>
-			</button>
-		</form>
+		<button 
+			type="button" 
+			class="swpm_cancel_subscription_button swpm_cancel_subscription_button_inactive" 
+			title="<?php _e('This subscription is currently inactive.', 'simple-membership') ?>"
+			disabled>
+			<?php echo esc_attr(ucfirst($subscription['status'])) ?>
+		</button>
 		<?php
-		$output = ob_get_clean();
-
-		return $output;
+		return ob_get_clean();
 	}
 
 	public function get_any_stripe_sca_api_key_error(){

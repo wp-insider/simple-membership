@@ -280,17 +280,26 @@
 	padding: 8px 15px;
 	text-align: center;
 	border-radius: 4px;
-	background-color: #ff6a6a;
     border: none; 
     outline: none; 
-    cursor: pointer;
-    color: white;
     margin: auto;
 }
 
-.swpm_cancel_subscription_button:hover{
-	background-color: #d95e5e;
+.swpm_cancel_subscription_button_active{
+	background-color: #ff6a6a;
+    cursor: pointer;
+    color: white;
+}
+
+.swpm_cancel_subscription_button_active:hover{
+    background-color: #d95e5e;
     transition: 200ms;
+}
+
+.swpm_cancel_subscription_button_inactive{
+    background-color: lightgray;
+    cursor: not-allowed;
+    color: white;
 }
 
 .swpm-active-subs-api-key-error-msg{

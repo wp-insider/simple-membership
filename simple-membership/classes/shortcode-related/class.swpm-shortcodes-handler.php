@@ -262,6 +262,10 @@ class SwpmShortcodesHandler {
 	}
 
 	public function handle_show_active_subscription_and_cancel_button($atts){
+		$atts = shortcode_atts(array(
+			'show_all_status' => ''
+		), $atts);
+
 		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
 			//member not logged in
 			return '<p>'.__( 'You are not logged-in as a member.', 'simple-membership' ).'</p>';
@@ -270,12 +274,19 @@ class SwpmShortcodesHandler {
 		$member_id = SwpmMemberUtils::get_logged_in_members_id();
 		$subscriptions = new SWPM_Utils_Subscriptions( $member_id );
 		$subscriptions = $subscriptions->load();
-		$active_subscriptions = $subscriptions->get_active_subscriptions();
-		
+
+		$is_show_all_subscriptions = !empty($atts['show_all_status']) && $atts['show_all_status'] == '1' ? true : false;
+
+		if ($is_show_all_subscriptions) {
+			$subscriptions_to_show = $subscriptions->get_all_subscriptions();
+		}else{
+			$subscriptions_to_show = $subscriptions->get_active_subscriptions();
+		}
+
 		$output = '';
 		$output .= '<div class="swpm-active-subs-table-wrap">';
 
-		if (count($active_subscriptions)) {
+		if (count($subscriptions_to_show)) {
 			$output .= '<table class="swpm-active-subs-table">';
 			
 			// Header section
@@ -287,11 +298,11 @@ class SwpmShortcodesHandler {
 			$output .= '</thead>';
 
 			$output .= '<tbody>';
-			foreach ($active_subscriptions as $subscription) {
+			foreach ($subscriptions_to_show as $subscription) {
 				$output .= '<tr>';
 				$output .= '<td><div>'. esc_attr($subscription['plan']).'</div></td>';
 				$output .= '<td>';
-				$output .= SWPM_Utils_Subscriptions::get_cancel_subscription_form($atts, $subscription);
+				$output .= SWPM_Utils_Subscriptions::get_cancel_subscription_form($subscription);
 				$output .= '</td>';
 				$output .= '</tr>';
 			}

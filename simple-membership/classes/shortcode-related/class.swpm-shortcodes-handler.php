@@ -15,7 +15,7 @@ class SwpmShortcodesHandler {
 
 		add_shortcode( 'swpm_stripe_subscription_cancel_link', array( $this, 'swpm_stripe_cancel_subs_link_sc' ) );
 
-		add_shortcode( 'swpm_show_active_subscription_and_cancel_button', array( $this, 'handle_show_active_subscription_and_cancel_button' ) );
+		add_shortcode( 'swpm_show_subscriptions_and_cancel_link', array( $this, 'swpm_show_subscriptions_and_cancel_link' ) );
 
 		//TODO - WIP (Later, this will be moved to the shortcode implementation section like the other ones)
 		//include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_advanced_buy_now_button_shortcode_view.php' );
@@ -236,20 +236,20 @@ class SwpmShortcodesHandler {
 
 			//Set the default anchor text (if one is provided via the shortcode).
 			if ( empty( $anchor_text ) ) {
-				$anchor_text = SwpmUtils::_( 'Unsubscribe from PayPal' );
+				$anchor_text = __( 'Unsubscribe from PayPal', 'simple-membership' );
 			}
 
 			$output .= '<div class="swpm-paypal-subscription-cancel-link">';
 			$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 			if ( $sandbox_enabled ) {
 				//Sandbox mode
-				$output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" '. $window_target . esc_attr($link_css_class) .'>';
-				$output .= $anchor_text;
+				$output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" '. $window_target . esc_attr($link_css_class) .'>';
+				$output .= esc_attr($anchor_text);
 				$output .= '</a>';
 			} else {
 				//Live mode
-				$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" '.$window_target . esc_attr($link_css_class) .'>';
-				$output .= $anchor_text;
+				$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" '.$window_target . esc_attr($link_css_class) .'>';
+				$output .= esc_attr($anchor_text);
 				$output .= '</a>';
 			}
 			$output .= '</div>';
@@ -261,7 +261,7 @@ class SwpmShortcodesHandler {
 		return $output;
 	}
 
-	public function handle_show_active_subscription_and_cancel_button($atts){
+	public function swpm_show_subscriptions_and_cancel_link($atts){
 		$atts = shortcode_atts(array(
 			'show_all_status' => ''
 		), $atts);
@@ -310,7 +310,7 @@ class SwpmShortcodesHandler {
 
 			$output .= '</table>';
 		}else{
-			$output .= '<p>'.__( 'Active subscription not detected for the member account with the username: ', 'simple-membership' ). $member_username . '</p>';
+			$output .= '<p>'.__( 'Active subscription not detected for the member account with the username: ', 'simple-membership' ). esc_attr($member_username) . '</p>';
 		}
 		
 		/**

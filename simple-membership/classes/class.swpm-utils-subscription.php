@@ -316,7 +316,7 @@ class SWPM_Utils_Subscriptions
 	public function get_stripe_subs_cancel_url($args, $sub_id = false)
 	{
 		if (empty($this->active_subs_count)) {
-			return SwpmUtils::_('No active subscriptions');
+			return __('No active subscriptions', 'simple-membership');
 		}
 		if (false === $sub_id) {
 			$sub_id = array_key_first($this->subs);
@@ -327,9 +327,9 @@ class SWPM_Utils_Subscriptions
 
 		$nonce = wp_nonce_field($token, 'swpm_cancel_sub_nonce', false, false);
 
-		$anchor_text = isset($args['anchor_text']) ? $args['anchor_text'] : SwpmUtils::_('Cancel Subscription');
+		$anchor_text = isset($args['anchor_text']) ? $args['anchor_text'] : __('Cancel Subscription', 'simple-membership');
 		$out = '<form method="POST">%s<input type="hidden" name="swpm_cancel_sub_token" value="%s"></input>
-		<button type="submit" name="swpm_do_cancel_sub" value="1" onclick="return confirm(\'' . esc_js(SwpmUtils::_('Are you sure that you want to cancel the subscription?')) . '\');">' . $anchor_text . '</button></form>';
+		<button type="submit" name="swpm_do_cancel_sub" value="1" onclick="return confirm(\'' . esc_js(__('Are you sure that you want to cancel the subscription?', 'simple-membership')) . '\');">' . esc_attr($anchor_text) . '</button></form>';
 
 		$out = sprintf($out, $nonce, $token);
 

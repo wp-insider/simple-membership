@@ -243,12 +243,12 @@ class SwpmShortcodesHandler {
 			$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 			if ( $sandbox_enabled ) {
 				//Sandbox mode
-				$output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" '. $window_target . esc_attr($link_css_class) .'>';
+				$output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" '. $window_target . esc_attr($link_css_class) .'>';
 				$output .= $anchor_text;
 				$output .= '</a>';
 			} else {
 				//Live mode
-				$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . $merchant_id . '" '.$window_target . esc_attr($link_css_class) .'>';
+				$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" '.$window_target . esc_attr($link_css_class) .'>';
 				$output .= $anchor_text;
 				$output .= '</a>';
 			}

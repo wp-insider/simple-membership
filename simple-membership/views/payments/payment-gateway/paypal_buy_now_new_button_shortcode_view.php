@@ -117,8 +117,7 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
     <input type="hidden" id="<?php echo esc_attr($on_page_embed_button_id.'-custom-field'); ?>" name="custom" value="<?php echo esc_attr($custom_field_value); ?>">
 
     <script type="text/javascript">
-    jQuery( function( $ ) {
-        $( document ).on( "swpm_paypal_sdk_loaded", function() { 
+        document.addEventListener( "swpm_paypal_sdk_loaded", function() { 
             //Anything that goes here will only be executed after the PayPal SDK is loaded.
             console.log('PayPal JS SDK is loaded.');
 
@@ -281,7 +280,6 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                     console.error('PayPal Buttons failed to render');
                 });
 
-            });
         });
     </script>
     <style>

@@ -107,8 +107,8 @@ class SWPM_PayPal_JS_Button_Embed {
 		$script_url = add_query_arg( $sdk_args, 'https://www.paypal.com/sdk/js' );
 		?>
 		<script type="text/javascript">
-			wpsc_onDocumentReady(function(){
-				var script = document.createElement( 'script' );
+			swpm_load_paypal_sdk_onDomReady(function(){
+				const script = document.createElement( 'script' );
 				script.type = 'text/javascript';
 				script.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP_PPCP' );
 				script.async = true;
@@ -119,7 +119,7 @@ class SWPM_PayPal_JS_Button_Embed {
 				document.getElementsByTagName( 'head' )[0].appendChild( script );
 			})
 
-			function wpsc_onDocumentReady(callback) {
+			function swpm_load_paypal_sdk_onDomReady(callback) {
             	// If the document is already loaded, execute the callback immediately
 				if (document.readyState !== 'loading') {
 					callback();
@@ -145,8 +145,8 @@ class SWPM_PayPal_JS_Button_Embed {
 		$script_url = add_query_arg( $sdk_args, 'https://www.paypal.com/sdk/js' );
 		?>
 		<script type="text/javascript">
-			wpsc_onDocumentReady(function(){
-				var script_sub = document.createElement( 'script' );
+			swpm_load_paypal_subs_sdk_onDomReady(function(){
+				const script_sub = document.createElement( 'script' );
 				script_sub.type = 'text/javascript';
 				script_sub.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP_PPCP' );
 				script_sub.setAttribute( 'data-namespace', 'swpm_paypal_subscriptions' );//Use a different namespace for the subscription buttons.
@@ -158,7 +158,7 @@ class SWPM_PayPal_JS_Button_Embed {
 				document.getElementsByTagName( 'head' )[0].appendChild( script_sub );
 			})
 
-			function wpsc_onDocumentReady(callback) {
+			function swpm_load_paypal_subs_sdk_onDomReady(callback) {
             	// If the document is already loaded, execute the callback immediately
 				if (document.readyState !== 'loading') {
 					callback();

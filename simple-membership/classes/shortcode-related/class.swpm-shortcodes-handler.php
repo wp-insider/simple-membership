@@ -327,6 +327,10 @@ class SwpmShortcodesHandler {
 			$output .= '<p class="swpm-active-subs-api-key-error-msg">'. $any_paypal_api_key_error_msg . '</p>';
 		}
 		
+		$output .= '<script>';
+		$output .= 'document.addEventListener( "swpm_paypal_subscriptions_complete", function(){ window.location = window.location.href });';
+		$output .= '</script>';
+
 		$output .= '</div>';
 		
 		return $output;

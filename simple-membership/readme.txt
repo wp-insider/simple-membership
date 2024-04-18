@@ -177,6 +177,7 @@ https://simple-membership-plugin.com/
 - A warning message is displayed when editing membership levels if both manual approval and email activation settings are enabled simultaneously.
 - New shortcode 'swpm_show_active_subscription_and_cancel_button' for displaying list of active subscription and their cancel form.
 - Some escaping functions added to paypal subscription cancel shortcode.
+- PayPal PPCP code converted to vanilla js.
 
 = 4.4.3 =
 - The accepted payment method types can now be controlled from your Stripe account settings. This will allow you to enable/disable certain payment methods.

@@ -152,7 +152,7 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
     public function swpm_onapprove_process_subscription(){
 
 		//Get the data from the request
-		$data = isset( $_POST['data'] ) ? stripslashes_deep( $_POST['data'] ) : array();
+		$data = isset( $_POST['data'] ) ? json_decode( stripslashes_deep( $_POST['data'] ), true ) : array();
 		if ( empty( $data ) ) {
 			wp_send_json(
 				array(
@@ -178,7 +178,8 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		}
 
 		//Get the transaction data from the request
-		$txn_data = isset( $_POST['txn_data'] ) ? stripslashes_deep( $_POST['txn_data'] ) : array();
+		$txn_data = isset( $_POST['txn_data'] ) ? json_decode( stripslashes_deep( $_POST['txn_data'] ), true ) : array();
+
 		if ( empty( $txn_data ) ) {
 			wp_send_json(
 				array(

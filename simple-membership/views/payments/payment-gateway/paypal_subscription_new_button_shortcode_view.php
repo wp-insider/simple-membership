@@ -102,10 +102,12 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     //Create nonce for this button. 
     $nonce = wp_create_nonce($on_page_embed_button_id);
 
+    $swpm_button_wrapper_id = 'swpm-button-wrapper-'.$button_id;
+
     $output = '';
     ob_start();
     ?>
-    <div class="swpm-button-wrapper swpm-paypal-subscription-button-wrapper">
+    <div id="<?php echo esc_attr($swpm_button_wrapper_id); ?>" class="swpm-button-wrapper swpm-paypal-subscription-button-wrapper">
 
     <!-- PayPal button container where the button will be rendered -->
     <div id="<?php echo esc_attr($on_page_embed_button_id); ?>" style="width: <?php echo esc_attr($btn_width); ?>px;"></div>
@@ -113,8 +115,7 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     <input type="hidden" id="<?php echo esc_attr($on_page_embed_button_id.'-custom-field'); ?>" name="custom" value="<?php echo esc_attr($custom_field_value); ?>">
 
     <script type="text/javascript">
-    jQuery( function( $ ) {
-        $( document ).on( "swpm_paypal_sdk_subscriptions_loaded", function() { 
+        document.addEventListener( "swpm_paypal_sdk_subscriptions_loaded", function() { 
             //Anything that goes here will only be executed after the PayPal SDK is loaded.
 
             const paypalSubButtonsComponent = swpm_paypal_subscriptions.Buttons({
@@ -129,8 +130,8 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
                 },
     
                 // Handle the createSubscription call
-                async createSubscription(data, actions) {
-                    console.log('createSubscription call triggered. Data: ' + JSON.stringify(data));
+                createSubscription: async function(data, actions) {
+                    // console.log('createSubscription call triggered. Data: ' + JSON.stringify(data));
 
                     //We will send ajax request that will create the subscription from the server side using PayPal API.
                     let pp_sub_bn_data = {};
@@ -174,26 +175,44 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
                     //console.log(JSON.stringify(data));
 
                     //Show the spinner while we process this transaction.
-                    var pp_button_container = jQuery('#<?php echo esc_js($on_page_embed_button_id); ?>');
-                    var pp_button_spinner_conainer = pp_button_container.siblings('.swpm-pp-button-spinner-container');
-                    pp_button_container.hide();//Hide the buttons
-                    pp_button_spinner_conainer.css('display', 'inline-block');//Show the spinner.
+                    const pp_button_container = document.getElementById('<?php echo esc_js($on_page_embed_button_id); ?>');
+                    const pp_button_container_wrapper = document.getElementById('<?php echo esc_js($swpm_button_wrapper_id); ?>');
+                    const pp_button_spinner_container = pp_button_container_wrapper.querySelector('.swpm-pp-button-spinner-container');
+                    pp_button_container.style.display = 'none'; //Hide the buttons
+                    pp_button_spinner_container.style.display = 'inline-block'; //Show the spinner.
 
                     //Get the subscription details and send AJAX request to process the transaction.
-                    actions.subscription.get().then( function( txn_data ) {
+                    actions.subscription.get().then( async function( txn_data ) {
                         //console.log( 'Subscription details: ' + JSON.stringify( txn_data ) );
 
                         //Ajax request to process the transaction. This will process it similar to how an IPN request is handled.
-                        var custom = document.getElementById('<?php echo esc_attr($on_page_embed_button_id."-custom-field"); ?>').value;
+                        const custom = document.getElementById('<?php echo esc_attr($on_page_embed_button_id."-custom-field"); ?>').value;
                         data.custom_field = custom;
                         data.button_id = '<?php echo esc_js($button_id); ?>';
                         data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
                         data.item_name = '<?php echo esc_js($item_name); ?>';
-                        jQuery.post( '<?php echo admin_url('admin-ajax.php'); ?>', { action: 'swpm_onapprove_process_subscription', data: data, txn_data: txn_data, _wpnonce: '<?php echo $nonce; ?>'}, function( response ) {
+
+                        const post_data = new URLSearchParams({
+                            action: 'swpm_onapprove_process_subscription',
+                            data: JSON.stringify(data),
+                            txn_data: JSON.stringify(txn_data),
+                            _wpnonce: '<?php echo $nonce; ?>',
+                        }).toString();
+
+                        try {
+                            const requestUrl = "<?php echo admin_url( 'admin-ajax.php' ); ?>";
+                            const resp = await fetch( requestUrl, {
+                                method: "post",
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: post_data
+                            });
+
+                            const response = await resp.json();
+
                             //console.log( 'Response from the server: ' + JSON.stringify( response ) );
                             if ( response.success ) {
-                                //Success response.
-
                                 //Redirect to the Thank you page URL if it is set.
                                 return_url = '<?php echo esc_url_raw($return_url); ?>';
                                 if( return_url ){
@@ -201,24 +220,30 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
                                     console.log('Redirecting to the Thank you page URL: ' + return_url);
                                     window.location.href = return_url;
                                     return;
-                                } else {
-                                    //No return URL is set. Just show a success message.
-                                    txn_success_msg = '<?php echo esc_attr($txn_success_message); ?>';
-                                    alert(txn_success_msg);
                                 }
 
+                                //No return URL is set. Just show a success message.
+                                txn_success_msg = '<?php echo esc_attr($txn_success_message); ?>';
+                                
+                                alert(txn_success_msg);
+
+                                // Trigger a event on subscription complete 
+                                document.dispatchEvent(new Event('swpm_paypal_subscriptions_complete'));
+                        
                             } else {
-                                //Error response from the AJAX IPN hanler. Show the error message.
-                                console.log( 'Error response: ' + JSON.stringify( response.err_msg ) );
-                                alert( JSON.stringify( response ) );
+                                //Error response from the AJAX IPN hanler. Throw error.
+                                throw new Error(response.err_msg);
                             }
 
                             //Return the button and the spinner back to their orignal display state.
-                            pp_button_container.show();//Show the buttons
-                            pp_button_spinner_conainer.hide();//Hide the spinner.
+                            pp_button_container.style.display = 'block'; // Show the buttons
+                            pp_button_spinner_container.style.display = 'none'; // Hide the spinner
 
-                        });
-
+                        } catch (error) {
+                            // Show the error message.
+                            alert(error.message);
+                            console.error( error.message );
+                        }
                     });
                 },
     
@@ -234,8 +259,6 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
                 .catch((err) => {
                     console.error('PayPal Buttons failed to render');
                 });
-
-            });
         });
     </script>
     <style>

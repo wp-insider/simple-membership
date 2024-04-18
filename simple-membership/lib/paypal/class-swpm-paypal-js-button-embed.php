@@ -107,15 +107,27 @@ class SWPM_PayPal_JS_Button_Embed {
 		$script_url = add_query_arg( $sdk_args, 'https://www.paypal.com/sdk/js' );
 		?>
 		<script type="text/javascript">
-			var script = document.createElement( 'script' );
-			script.type = 'text/javascript';
-			script.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP_PPCP' );
-			script.async = true;
-			script.src = '<?php echo esc_url_raw( $script_url ); ?>';
-			script.onload = function() {
-				jQuery( function( $ ) { $( document ).trigger( 'swpm_paypal_sdk_loaded' ) } );
-			};
-			document.getElementsByTagName( 'head' )[0].appendChild( script );
+			swpm_load_paypal_sdk_onDomReady(function(){
+				const script = document.createElement( 'script' );
+				script.type = 'text/javascript';
+				script.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP_PPCP' );
+				script.async = true;
+				script.src = '<?php echo esc_url_raw( $script_url ); ?>';
+				script.onload = function() {
+					document.dispatchEvent(new Event('swpm_paypal_sdk_loaded'));
+				};
+				document.getElementsByTagName( 'head' )[0].appendChild( script );
+			})
+
+			function swpm_load_paypal_sdk_onDomReady(callback) {
+            	// If the document is already loaded, execute the callback immediately
+				if (document.readyState !== 'loading') {
+					callback();
+				} else {
+					// Otherwise, wait for the DOMContentLoaded event
+					document.addEventListener('DOMContentLoaded', callback);
+				}
+			}
 		</script>
 		<?php
 	}
@@ -124,7 +136,7 @@ class SWPM_PayPal_JS_Button_Embed {
 	 * Load the PayPal JS SDK Script for Subscription buttons in the footer. Loads the SDK with parameters useful for subscription buttons.
 	 * 
 	 * It will be called from the button's shortcode (using a hook) if at least one button is present on the page.
-	 * The button's JS code needs to be executed after the SDK is loaded. Check for 'swpm_paypal_sdk_loaded' event.
+	 * The button's JS code needs to be executed after the SDK is loaded. Check for 'swpm_paypal_sdk_subscriptions_loaded' event.
 	 */
 	public function load_paypal_sdk_for_subscriptions() {
 		$args = $this->settings_args_subscription;
@@ -133,16 +145,28 @@ class SWPM_PayPal_JS_Button_Embed {
 		$script_url = add_query_arg( $sdk_args, 'https://www.paypal.com/sdk/js' );
 		?>
 		<script type="text/javascript">
-			var script_sub = document.createElement( 'script' );
-			script_sub.type = 'text/javascript';
-			script_sub.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP_PPCP' );
-			script_sub.setAttribute( 'data-namespace', 'swpm_paypal_subscriptions' );//Use a different namespace for the subscription buttons.
-			script_sub.async = true;
-			script_sub.src = '<?php echo esc_url_raw( $script_url ); ?>';
-			script_sub.onload = function() {
-				jQuery( function( $ ) { $( document ).trigger( 'swpm_paypal_sdk_subscriptions_loaded' ) } );
-			};
-			document.getElementsByTagName( 'head' )[0].appendChild( script_sub );
+			swpm_load_paypal_subs_sdk_onDomReady(function(){
+				const script_sub = document.createElement( 'script' );
+				script_sub.type = 'text/javascript';
+				script_sub.setAttribute( 'data-partner-attribution-id', 'TipsandTricks_SP_PPCP' );
+				script_sub.setAttribute( 'data-namespace', 'swpm_paypal_subscriptions' );//Use a different namespace for the subscription buttons.
+				script_sub.async = true;
+				script_sub.src = '<?php echo esc_url_raw( $script_url ); ?>';
+				script_sub.onload = function() {
+					document.dispatchEvent(new Event('swpm_paypal_sdk_subscriptions_loaded'));
+				};
+				document.getElementsByTagName( 'head' )[0].appendChild( script_sub );
+			})
+
+			function swpm_load_paypal_subs_sdk_onDomReady(callback) {
+            	// If the document is already loaded, execute the callback immediately
+				if (document.readyState !== 'loading') {
+					callback();
+				} else {
+					// Otherwise, wait for the DOMContentLoaded event
+					document.addEventListener('DOMContentLoaded', callback);
+				}
+			}
 		</script>
 		<?php
 	}

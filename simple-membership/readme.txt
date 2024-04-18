@@ -176,7 +176,7 @@ https://simple-membership-plugin.com/
 - Some options (related to hiding the wp admin bar) of the general settings menu has been moved to the advanced settings tab.
 - A warning message is displayed when editing membership levels if both manual approval and email activation settings are enabled simultaneously.
 - New shortcode 'swpm_show_active_subscription_and_cancel_button' for displaying list of active subscription and their cancel form.
-- Some escaping functions added to paypal subscription cancel shortcode.
+- Some escaping functions added to shortcodes.
 - PayPal PPCP code converted to vanilla js.
 
 = 4.4.3 =

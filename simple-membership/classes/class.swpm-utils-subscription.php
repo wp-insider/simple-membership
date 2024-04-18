@@ -506,7 +506,7 @@ class SWPM_Utils_Subscriptions
 			?>
 			<form method="post" class="swpm_cancel_subscription_form">
 				<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
-				<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo $token ?>">
+				<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo esc_attr($token) ?>">
 				<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">
 				<button type="submit" class="swpm_cancel_subscription_button swpm_cancel_subscription_button_active" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
 					<?php _e('Cancel Subscription', 'simple-membership') ?>

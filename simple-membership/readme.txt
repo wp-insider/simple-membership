@@ -171,13 +171,12 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
-- TODO - <the new WIP subscription cancel shortcode work>
-- Cancel URL configuration option added for Stripe SCA Subscription  type buttons.
-- Some options (related to hiding the wp admin bar) of the general settings menu has been moved to the advanced settings tab.
+- Added a new shortcode that can show any active subscriptions and offer an option to cancel it for the logged-in member. It works for the New PayPal API and Stripe Subscription buttons.
+- Added an option to configure a Cancel URL for Stripe SCA Subscription type buttons.
+- Some options related to hiding the WP Admin Bar have been moved from the General Settings menu to the Advanced Settings tab.
 - A warning message is displayed when editing membership levels if both manual approval and email activation settings are enabled simultaneously.
-- New shortcode 'swpm_show_active_subscription_and_cancel_button' for displaying list of active subscription and their cancel form.
-- Some escaping functions added to shortcodes.
-- PayPal PPCP code converted to vanilla js.
+- Output escaping added to the shortcode output of the subscription cancel shortcode.
+- PayPal PPCP button's JS SDK related code has been converted to use vanilla JavaScript.
 
 = 4.4.3 =
 - The accepted payment method types can now be controlled from your Stripe account settings. This will allow you to enable/disable certain payment methods.

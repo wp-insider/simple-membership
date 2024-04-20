@@ -498,10 +498,11 @@ class SWPM_Utils_Subscriptions
 	 * 
 	 * @return string HTML of cancel form as string.
 	 */
-	public static function get_cancel_subscription_form(&$subscription){		
+	public static function get_cancel_subscription_output(&$subscription){		
 		if (self::is_active($subscription['status'])) {
-			// subscription is active!
+			// Subscription is active.
 			$token = $subscription['cancel_token'];
+			$cancel_form_output = '';
 			ob_start();
 			?>
 			<form method="post" class="swpm_cancel_subscription_form">
@@ -513,21 +514,22 @@ class SWPM_Utils_Subscriptions
 				</button>
 			</form>
 			<?php
-			return ob_get_clean();
+			$cancel_form_output = ob_get_clean();
+			return $cancel_form_output;
 		}
 
-		// subscription is inactive!
+		// Subscription is inactive.
+		$inactive_output = '';
 		ob_start();
 		?>
-		<button 
-			type="button" 
-			class="swpm_cancel_subscription_button swpm_cancel_subscription_button_inactive" 
-			title="<?php _e('This subscription is currently inactive.', 'simple-membership') ?>"
-			disabled>
-			<?php echo esc_attr(ucfirst($subscription['status'])) ?>
-		</button>
+		<div class="swpm_subscription_inactive">
+			<?php 
+			echo _e('Subscription Inactive', 'simple-membership');
+			?>
+		</div>
 		<?php
-		return ob_get_clean();
+		$inactive_output = ob_get_clean();
+		return $inactive_output;
 	}
 
 	public function get_any_stripe_sca_api_key_error(){

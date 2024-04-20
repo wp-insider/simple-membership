@@ -270,23 +270,28 @@ class SwpmShortcodesHandler {
 			//member not logged in
 			return '<p>'.__( 'You are not logged-in as a member.', 'simple-membership' ).'</p>';
 		}
+
+		//Get the member ID and load subscriptions utils class.
 		$member_username = SwpmMemberUtils::get_logged_in_members_username();
 		$member_id = SwpmMemberUtils::get_logged_in_members_id();
 		$subscriptions = new SWPM_Utils_Subscriptions( $member_id );
 		$subscriptions = $subscriptions->load();
 
-		$is_show_all_subscriptions = !empty($atts['show_all_status']) && $atts['show_all_status'] == '1' ? true : false;
+		//Check if we need to show all subscriptions or just the active ones
+		$show_all_subscriptions = !empty($atts['show_all_status']) ? true : false;
 
-		if ($is_show_all_subscriptions) {
-			$subscriptions_to_show = $subscriptions->get_all_subscriptions();
+		//Get the list of subscriptions
+		if ($show_all_subscriptions) {
+			$subscriptions_list = $subscriptions->get_all_subscriptions();
 		}else{
-			$subscriptions_to_show = $subscriptions->get_active_subscriptions();
+			$subscriptions_list = $subscriptions->get_active_subscriptions();
 		}
 
+		//Display the list of subscriptions
 		$output = '';
 		$output .= '<div class="swpm-active-subs-table-wrap">';
 
-		if (count($subscriptions_to_show)) {
+		if (count($subscriptions_list)) {
 			$output .= '<table class="swpm-active-subs-table">';
 			
 			// Header section
@@ -298,11 +303,11 @@ class SwpmShortcodesHandler {
 			$output .= '</thead>';
 
 			$output .= '<tbody>';
-			foreach ($subscriptions_to_show as $subscription) {
+			foreach ($subscriptions_list as $subscription) {
 				$output .= '<tr>';
-				$output .= '<td><div>'. esc_attr($subscription['plan']).'</div></td>';
+				$output .= '<td><span class="swpm-sub-name">'. esc_attr($subscription['plan']).'</span></td>';
 				$output .= '<td>';
-				$output .= SWPM_Utils_Subscriptions::get_cancel_subscription_form($subscription);
+				$output .= SWPM_Utils_Subscriptions::get_cancel_subscription_output($subscription);
 				$output .= '</td>';
 				$output .= '</tr>';
 			}
@@ -327,6 +332,8 @@ class SwpmShortcodesHandler {
 			$output .= '<p class="swpm-active-subs-api-key-error-msg">'. esc_attr($any_paypal_api_key_error_msg) . '</p>';
 		}
 		
+		//This is used to refresh the page so this shortcode is reloaded after a new subscription is added. 
+		//This is needed for the newly created subscription to show up in the list.
 		$output .= '<script>';
 		$output .= 'document.addEventListener( "swpm_paypal_subscriptions_complete", function(){ window.location = window.location.href });';
 		$output .= '</script>';

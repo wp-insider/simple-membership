@@ -33,7 +33,8 @@ class SWPM_Utils_Subscriptions
 	{
 		$settings = SwpmSettings::get_instance();
 		
-		$subscr_id = SwpmMemberUtils::get_member_field_by_id($this->member_id, 'subscr_id');
+		//Get the subscr_id (reference field's value) currently attached to this member's profile.
+		$subscr_id_attached_to_profile = SwpmMemberUtils::get_member_field_by_id($this->member_id, 'subscr_id');
 
 		//Get any swpm_transactions CPT posts that are associated with the given member ID OR the given subscr_id.
 		$subscriptions = get_posts(array(
@@ -49,7 +50,7 @@ class SWPM_Utils_Subscriptions
 					),
 					array(
 						'key'     => 'subscr_id',
-						'value'   => $subscr_id,
+						'value'   => $subscr_id_attached_to_profile,
 						'compare' => '=',
 					),
 				),
@@ -79,6 +80,13 @@ class SWPM_Utils_Subscriptions
 			$sub_id         = get_post_meta($post_id, 'subscr_id', true);
 
 			$sub['sub_id'] = $sub_id;
+
+			//Check if this subscription is the one that is currently attached to the member's profile.
+			if ( $sub_id == $subscr_id_attached_to_profile ) {
+				//This is the subscription that is currently attached to the member's profile.
+				//We will use it to show a msg for the subscription that is currently being used for membership access of this member.
+				$sub['is_attached_to_profile'] = 'yes';
+			}
 
 			$is_live        = get_post_meta($post_id, 'is_live', true);
 			$is_live        = empty($is_live) ? false : true;
@@ -505,11 +513,11 @@ class SWPM_Utils_Subscriptions
 			$cancel_form_output = '';
 			ob_start();
 			?>
-			<form method="post" class="swpm_cancel_subscription_form">
+			<form method="post" class="swpm-cancel-subscription-form">
 				<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
 				<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo esc_attr($token) ?>">
 				<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">
-				<button type="submit" class="swpm_cancel_subscription_button swpm_cancel_subscription_button_active" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
+				<button type="submit" class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
 					<?php _e('Cancel Subscription', 'simple-membership') ?>
 				</button>
 			</form>

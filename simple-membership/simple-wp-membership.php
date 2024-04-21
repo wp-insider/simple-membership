@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Do not access this file directly.' );
 }
 
-define( 'SIMPLE_WP_MEMBERSHIP_VER', '4.4.3' );
+define( 'SIMPLE_WP_MEMBERSHIP_VER', '4.4.3t1' );
 define( 'SIMPLE_WP_MEMBERSHIP_DB_VER', '1.3' );
 define( 'SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url() );
 define( 'SIMPLE_WP_MEMBERSHIP_PATH', dirname( __FILE__ ) . '/' );

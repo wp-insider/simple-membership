@@ -305,7 +305,14 @@ class SwpmShortcodesHandler {
 			$output .= '<tbody>';
 			foreach ($subscriptions_list as $subscription) {
 				$output .= '<tr>';
-				$output .= '<td><span class="swpm-sub-name">'. esc_attr($subscription['plan']).'</span></td>';
+				$output .= '<td>';
+				$output .= '<div class="swpm-sub-name">'. esc_attr($subscription['plan']).'</div>';
+				if( isset ( $subscription['is_attached_to_profile'] ) && $subscription['is_attached_to_profile'] == 'yes'  ){
+					//This subscription is attached to the profile currently. Show a message.
+					$output .= '<div class="swpm-sub-attached-to-profile">'. __('Currently providing your membership access.', 'simple-membership').'</div>';
+				}
+				$output .= '</td>';
+
 				$output .= '<td>';
 				$output .= SWPM_Utils_Subscriptions::get_cancel_subscription_output($subscription);
 				$output .= '</td>';

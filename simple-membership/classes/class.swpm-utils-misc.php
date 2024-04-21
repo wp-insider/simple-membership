@@ -9,7 +9,8 @@ class SwpmMiscUtils {
 
 		//Create join us page
 		$swpm_join_page_content  = '<p style="color:red;font-weight:bold;">This page and the content has been automatically generated for you to give you a basic idea of how a "Join Us" page should look like. You can customize this page however you like it by editing this page from your WordPress page editor.</p>';
-		$swpm_join_page_content .= '<p style="font-weight:bold;">If you end up changing the URL of this page then make sure to update the URL value in the settings menu of the plugin.</p>';
+		$swpm_join_page_content .= '<p style="font-weight:bold;">If you change the URL of this page, make sure to update the URL value in the settings menu of the plugin.</p>';
+		$swpm_join_page_content .= '<p style="font-weight:bold;">If you delete any of the essential pages required by the plugin, <a href="https://simple-membership-plugin.com/recreating-required-pages-simple-membership-plugin/" target="_blank">this documentation</a> will guide you in recreating them.</p>';
 		$swpm_join_page_content .= '<p style="border-top:1px solid #ccc;padding-top:10px;margin-top:10px;"></p>
 			<strong>Free Membership</strong>
 			<br />

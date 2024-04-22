@@ -197,6 +197,11 @@ class SwpmStripeCheckoutSessionCreate{
 			if( $automatic_tax == true ) {
 				$opts["automatic_tax"] = array( "enabled" => true );
 			}
+
+			$allow_promotion_codes = get_post_meta( $button_id, 'allow_promotion_codes', true );
+			if ( !empty($allow_promotion_codes) && $allow_promotion_codes == '1' ) {
+				$opts["allow_promotion_codes"] = true;
+			}
 			
 			$opts = apply_filters( 'swpm_stripe_sca_session_opts', $opts, $button_id );
 

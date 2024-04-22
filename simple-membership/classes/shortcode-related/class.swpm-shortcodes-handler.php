@@ -262,6 +262,8 @@ class SwpmShortcodesHandler {
 	}
 
 	public function swpm_show_subscriptions_and_cancel_link($atts){
+		$output = '';
+
 		$atts = shortcode_atts(array(
 			'show_all_status' => ''
 		), $atts);
@@ -275,7 +277,21 @@ class SwpmShortcodesHandler {
 		$member_username = SwpmMemberUtils::get_logged_in_members_username();
 		$member_id = SwpmMemberUtils::get_logged_in_members_id();
 		$subscriptions = new SWPM_Utils_Subscriptions( $member_id );
-		$subscriptions = $subscriptions->load();
+		$subscriptions = $subscriptions->load_subs_data();
+
+		/**
+		 * Display any API key error messages (if subscription exists but api keys are not saved). 
+		 * The error message is only shown when the subscription of the corresponding payment gateway is present.
+		 * For example: If there are no stripe sca subscriptions, stripe api error wont be shown.
+		*/
+		$any_stripe_api_key_error_msg = $subscriptions->get_any_stripe_sca_api_key_error();
+		if ( !empty( $any_stripe_api_key_error_msg ) ) {
+			$output .= '<p class="swpm-active-subs-api-key-error-msg">'. esc_attr($any_stripe_api_key_error_msg) . '</p>';
+		}
+		$any_paypal_api_key_error_msg = $subscriptions->get_any_paypal_ppcp_api_key_error();
+		if ( !empty( $any_paypal_api_key_error_msg ) ) {
+			$output .= '<p class="swpm-active-subs-api-key-error-msg">'. esc_attr($any_paypal_api_key_error_msg) . '</p>';
+		}
 
 		//Check if we need to show all subscriptions or just the active ones
 		$show_all_subscriptions = !empty($atts['show_all_status']) ? true : false;
@@ -288,7 +304,6 @@ class SwpmShortcodesHandler {
 		}
 
 		//Display the list of subscriptions
-		$output = '';
 		$output .= '<div class="swpm-active-subs-table-wrap">';
 
 		if (count($subscriptions_list)) {
@@ -323,20 +338,6 @@ class SwpmShortcodesHandler {
 			$output .= '</table>';
 		}else{
 			$output .= '<p>'.__( 'Active subscription not detected for the member account with the username: ', 'simple-membership' ). esc_attr($member_username) . '</p>';
-		}
-		
-		/**
-		 * Display any API key error messages (if subscription exists but api keys are not saved). 
-		 * The error message is only shown when the subscription of the corresponding payment gateway is present.
-		 * For example: If there are no stripe sca subscriptions, stripe api error wont be shown.
-		*/
-		$any_stripe_api_key_error_msg = $subscriptions->get_any_stripe_sca_api_key_error();
-		if ( !empty( $any_stripe_api_key_error_msg ) ) {
-			$output .= '<p class="swpm-active-subs-api-key-error-msg">'. esc_attr($any_stripe_api_key_error_msg) . '</p>';
-		}
-		$any_paypal_api_key_error_msg = $subscriptions->get_any_paypal_ppcp_api_key_error();
-		if ( !empty( $any_paypal_api_key_error_msg ) ) {
-			$output .= '<p class="swpm-active-subs-api-key-error-msg">'. esc_attr($any_paypal_api_key_error_msg) . '</p>';
 		}
 		
 		//This is used to refresh the page so this shortcode is reloaded after a new subscription is added. 

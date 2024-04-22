@@ -6,15 +6,12 @@
  */
 class SWPM_Utils_Subscriptions
 {
-
 	private $member_id;
-	public static $active_statuses   = array('trialing', 'active');
-
+	public static $active_statuses = array('trialing', 'active');
 	private $active_subs_count = 0;
-	private $subs_count        = 0;
-
-	private $subs              = array();
-	private $active_subs       = array();
+	private $active_subs = array();//Used to store active subscriptions data only.
+	private $subs_count = 0;
+	private $subs = array();//Used to store all subscriptions data.
 
 	public $stripe_sca_api_key_error = "";
 	public $paypal_ppcp_api_key_error = "";
@@ -25,11 +22,11 @@ class SWPM_Utils_Subscriptions
 	}
 
 	/**
-	 * Load all types of subscriptions.
+	 * Load the types of subscriptions that we want to show in the subscriptions list.
 	 *
 	 * @return SWPM_Utils_Subscriptions
 	 */
-	public function load()
+	public function load_subs_data()
 	{
 		$settings = SwpmSettings::get_instance();
 		
@@ -42,7 +39,7 @@ class SWPM_Utils_Subscriptions
 			'meta_query' => array(
 				'relation' => 'AND',
 				array(
-					'relation' => 'OR',
+					'relation' => 'OR',/* We are looking for subscriptions that are associated with the given member ID OR the given subscr_id */
 					array(
 						'key'     => 'member_id',
 						'value'   => $this->member_id,
@@ -55,15 +52,15 @@ class SWPM_Utils_Subscriptions
 					),
 				),
 				array(
-					'relation' => 'OR',
+					'relation' => 'OR',/* We are looking for subscriptions that are created using Stripe SCA or PayPal PPCP */
 					array(
 						'key'     => 'gateway',
-						'value'   => 'stripe-sca-subs', // Stripe SCA
+						'value'   => 'stripe-sca-subs',
 						'compare' => '=',
 					),
 					array(
 						'key'     => 'gateway',
-						'value'   => 'paypal_subscription_checkout', // PayPal PPCP
+						'value'   => 'paypal_subscription_checkout',
 						'compare' => '=',
 					),
 				),
@@ -97,9 +94,8 @@ class SWPM_Utils_Subscriptions
 
 			$sub['gateway'] = get_post_meta($post_id, 'gateway', true);
 
-			$status = '';
-
 			// Check and get the subscription status based on the gateways.
+			$status = '';
 			switch($sub['gateway']){
 				case 'stripe-sca-subs':
 					$stripe_sca_api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button($sub['payment_button_id'], $sub['is_live']);

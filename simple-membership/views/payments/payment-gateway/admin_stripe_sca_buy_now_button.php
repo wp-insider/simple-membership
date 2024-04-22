@@ -98,6 +98,14 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
+					<th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
+					<td>
+						<input type="checkbox" name="allow_promotion_codes" value="1"/>
+						<p class="description"><?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
+					</td>
+				</tr>
+
+				<tr valign="top">
 					<th colspan="2">
 						<div class="swpm-grey-box"><?php echo SwpmUtils::_( 'Stripe API keys. You can get this from your Stripe account.' ); ?></div>
 					</th>
@@ -237,6 +245,8 @@ function swpm_save_new_stripe_sca_buy_now_button_data() {
 		add_post_meta( $button_id, 'payment_amount', trim( sanitize_text_field( $_REQUEST['payment_amount'] ) ) );
 		add_post_meta( $button_id, 'payment_currency', sanitize_text_field( $_REQUEST['payment_currency'] ) );
 
+		add_post_meta( $button_id, 'allow_promotion_codes', sanitize_text_field( $_REQUEST['allow_promotion_codes'] ) );
+
 		add_post_meta( $button_id, 'stripe_test_secret_key', trim( sanitize_text_field( $_REQUEST['stripe_test_secret_key'] ) ) );
 		add_post_meta( $button_id, 'stripe_test_publishable_key', trim( sanitize_text_field( $_REQUEST['stripe_test_publishable_key'] ) ) );
 		add_post_meta( $button_id, 'stripe_live_secret_key', trim( sanitize_text_field( $_REQUEST['stripe_live_secret_key'] ) ) );
@@ -283,6 +293,13 @@ function swpm_edit_stripe_sca_buy_now_button() {
 	$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 	$payment_amount      = get_post_meta( $button_id, 'payment_amount', true );
 	$payment_currency    = get_post_meta( $button_id, 'payment_currency', true );
+
+	$allow_promotion_codes    = get_post_meta( $button_id, 'allow_promotion_codes', true );
+	if ( $allow_promotion_codes == '1' ) {
+		$allow_promotion_codes = 'checked';
+	} else {
+		$allow_promotion_codes = '';
+	}
 
 	$stripe_test_secret_key      = get_post_meta( $button_id, 'stripe_test_secret_key', true );
 	$stripe_test_publishable_key = get_post_meta( $button_id, 'stripe_test_publishable_key', true );
@@ -386,6 +403,14 @@ function swpm_edit_stripe_sca_buy_now_button() {
 							<option value="VND" <?php echo ( $payment_currency == 'VND' ) ? 'selected="selected"' : ''; ?>>Vietnamese Dong</option>
 						</select>
 						<p class="description">Select the currency for this payment button.</p>
+					</td>
+				</tr>
+
+				<tr valign="top">
+					<th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
+					<td>
+						<input type="checkbox" name="allow_promotion_codes" value="1" <?php echo esc_attr($allow_promotion_codes) ?> />
+						<p class="description"><?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
@@ -530,6 +555,8 @@ function swpm_edit_stripe_sca_buy_now_button_data() {
 		update_post_meta( $button_id, 'payment_amount', trim( sanitize_text_field( $_REQUEST['payment_amount'] ) ) );
 		update_post_meta( $button_id, 'payment_currency', sanitize_text_field( $_REQUEST['payment_currency'] ) );
 
+		update_post_meta( $button_id, 'allow_promotion_codes', isset( $_POST['allow_promotion_codes'] ) ? '1' : '' );
+		
 		$stripe_test_secret_key = isset( $_POST['stripe_test_secret_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_secret_key'] ) ) : '';
 		$stripe_test_publishable_key = isset( $_POST['stripe_test_publishable_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_publishable_key'] ) ) : '';	
 

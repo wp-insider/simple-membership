@@ -98,14 +98,6 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
-					<td>
-						<input type="checkbox" name="allow_promotion_codes" value="1"/>
-						<p class="description"><?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
-					</td>
-				</tr>
-
-				<tr valign="top">
 					<th colspan="2">
 						<div class="swpm-grey-box"><?php echo SwpmUtils::_( 'Stripe API keys. You can get this from your Stripe account.' ); ?></div>
 					</th>
@@ -169,6 +161,14 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 						<p class="description">Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.</p>
 					</td>
 				</tr>
+
+				<tr valign="top">
+					<th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
+					<td>
+						<input type="checkbox" name="allow_promotion_codes" value="1"/>
+						<p class="description"><?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
+					</td>
+				</tr>				
 
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Return URL' ); ?></th>
@@ -407,14 +407,6 @@ function swpm_edit_stripe_sca_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
-					<td>
-						<input type="checkbox" name="allow_promotion_codes" value="1" <?php echo esc_attr($allow_promotion_codes) ?> />
-						<p class="description"><?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
-					</td>
-				</tr>
-
-				<tr valign="top">
 					<th colspan="2">
 						<div class="swpm-grey-box"><?php echo SwpmUtils::_( 'Stripe API keys. You can get this from your Stripe account.' ); ?></div>
 					</th>
@@ -478,6 +470,14 @@ function swpm_edit_stripe_sca_buy_now_button() {
 						<p class="description">Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.</p>
 					</td>
 				</tr>
+
+				<tr valign="top">
+					<th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
+					<td>
+						<input type="checkbox" name="allow_promotion_codes" value="1" <?php echo esc_attr($allow_promotion_codes) ?> />
+						<p class="description"><?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
+					</td>
+				</tr>				
 
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Return URL' ); ?></th>

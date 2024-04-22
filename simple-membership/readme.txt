@@ -177,7 +177,7 @@ https://simple-membership-plugin.com/
 - A warning message is displayed when editing membership levels if both manual approval and email activation settings are enabled simultaneously.
 - Output escaping added to the shortcode output of the subscription cancel shortcode.
 - PayPal PPCP button's JS SDK related code has been converted to use vanilla JavaScript.
-- Promo code feature added for Stripe SCA Buy Now button.
+- Stripe promotion code feature added for Stripe SCA Buy Now type buttons.
 
 = 4.4.3 =
 - The accepted payment method types can now be controlled from your Stripe account settings. This will allow you to enable/disable certain payment methods.

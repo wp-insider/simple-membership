@@ -98,9 +98,9 @@ class SwpmTransactions {
 			$txn_data['custom'] = $ipn_data['custom'];
 		}
 		
-		//Add the discount value to the txn_data array so it can be saved to the swpm_transactions CPT.
-		if ( isset( $ipn_data['discount'] ) ) {
-			$txn_data['discount'] = serialize($ipn_data['discount']);
+		//Add the discount_amount value to the txn_data array so it can be saved to the swpm_transactions CPT.
+		if ( isset( $ipn_data['discount_amount'] ) ) {
+			$txn_data['discount_amount'] = $ipn_data['discount_amount'];
 		}
 
         //Save the $txn_data to the swpm_transactions CPT as post meta.

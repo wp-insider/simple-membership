@@ -34,7 +34,9 @@ class SwpmStripeSCABuyNowIpnHandler {
 			wp_die( esc_html( sprintf( 'Fatal Error! Payment button (ID: %d) does not exist. This request will fail.', $button_id ) ) );
 		}
 
-		$settings        = SwpmSettings::get_instance();
+		$discount_amount = 0;
+
+		$settings = SwpmSettings::get_instance();
 		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
 		//API keys
@@ -42,8 +44,6 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
-
-		$discount_amount = 0;
 
 		try {
 			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
@@ -78,10 +78,11 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 			$pi = \Stripe\PaymentIntent::retrieve( $pi_id );
 
-			// Check if coupon/promo applied
+			// Check if any coupon/promo code was applied
 			if ($sess instanceof \Stripe\Checkout\Session && isset($sess->allow_promotion_codes) && $sess->allow_promotion_codes == '1') {
 				if (isset($sess->total_details) && isset($sess->total_details->amount_discount)) {
-					$discount_amount = round(floatval($sess->total_details->amount_discount));
+					$discount_amount_in_cents = floatval($sess->total_details->amount_discount);
+					SwpmLog::log_simple_debug( 'Discount amount (in cents) applied to this Stripe checkout session is: ' . $discount_amount_in_cents . ' (amount in cents).', true );
 				}
 			}
 
@@ -151,40 +152,60 @@ class SwpmStripeSCABuyNowIpnHandler {
 		$price_in_cents = floatval( $pi->amount_received );
 		$currency_code  = strtoupper( $pi->currency );
 
-		$zero_cents = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
-		if ( in_array( $currency_code, $zero_cents, true ) ) {
+		//Check and convert the amounts to dollars or equivalent (if needed).
+		$zero_cents_currency = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
+		if ( in_array( $currency_code, $zero_cents_currency, true ) ) {
+			// No decimal (zero cents) currency. Use the amount as is.
 			$payment_amount = $price_in_cents;
+			$discount_amount = $discount_amount_in_cents;
 		} else {
-			$payment_amount = $price_in_cents / 100;// The amount (in cents). This value is used in Stripe API.
-			
-			$discount_amount = $discount_amount / 100;
+			// Currency has decimal. Convert the amount to dollars or equivalent.
+			$payment_amount = $price_in_cents / 100;
+			$discount_amount = $discount_amount_in_cents / 100;
 		}
 
+		//Round to 2 decimal places. Round should be used when math operations are involved. We will compare the payment amount with the expected amount.
 		$payment_amount = floatval( $payment_amount );
+		$payment_amount = round( $payment_amount, 2 );
 
 		$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 
-		// Validate and verify some of the main values.
-		$true_payment_amount = get_post_meta( $button_id, 'payment_amount', true );
-		$true_payment_amount = apply_filters( 'swpm_payment_amount_filter', $true_payment_amount, $button_id );
-		$true_payment_amount = floatval( $true_payment_amount );
+		// === Validate and verify some of the main values ===
+		$expected_amount = get_post_meta( $button_id, 'payment_amount', true );
 
-		// SwpmLog::log_simple_debug( "Discount: ". $discount_amount , false );
-		$true_payment_amount = $true_payment_amount - $discount_amount;
+		// Check if this button has Stripe promo code enabled
+		$allow_promotion_codes = get_post_meta( $button_id, 'allow_promotion_codes', true );
+		if ( !empty($allow_promotion_codes) && $allow_promotion_codes == '1' ) {
+			// Promo code option is enabled for this button. Let's decuct any discount (if it was applied in the transation).
+			$expected_amount = $expected_amount - $discount_amount;
+			SwpmLog::log_simple_debug( 'Promo code is enabled for this button. Setting expected payment amount to: ' . $expected_amount . '. Discount amount: ' . $discount_amount, true );
+		}
+		$expected_amount = apply_filters( 'swpm_payment_amount_filter', $expected_amount, $button_id );
 
-		if ( $payment_amount !== $true_payment_amount ) {
-			// Fatal error. Payment amount may have been tampered with.
-			$error_msg = 'Fatal Error! Received payment amount (' . $payment_amount . ') does not match with the original amount (' . $true_payment_amount . ')';
+		//Round to 2 decimal places. Round should be used when math operations are involved. We will use this amount for comparison.
+		$expected_amount = floatval( $expected_amount );//Convert to float (in case it is a string)
+		$expected_amount = round( $expected_amount, 2 );
+		SwpmLog::log_simple_debug( 'Expected payment amount for this transaction: ' . $expected_amount, true );
+
+		// Check if the payment amount matches the expected amount
+		//Since floating-point numbers are not always stored exactly as they appear due to their binary representation, we will use a precision tolerance.
+		$precision = 0.01;//our precision tolerance.
+		if (abs($expected_amount - $payment_amount) >= $precision) {
+			//The difference is greater than the precision value.
+			//Fatal error. Payment amount may have been tampered with.
+			//Alternatively, we can also use ($payment_amount < $expected_amount) expression. 
+			$error_msg = 'Fatal Error! Received payment amount (' . $payment_amount . ') does not match with the expected amount (' . $expected_amount . ')';
 			SwpmLog::log_simple_debug( $error_msg, false );
 			wp_die( esc_html( $error_msg ) );
 		}
-		$true_currency_code = get_post_meta( $button_id, 'payment_currency', true );
-		if ( $currency_code !== $true_currency_code ) {
+		$expected_currency_code = get_post_meta( $button_id, 'payment_currency', true );
+		if ( $currency_code !== $expected_currency_code ) {
 			// Fatal error. Currency code may have been tampered with.
-			$error_msg = 'Fatal Error! Received currency code (' . $currency_code . ') does not match with the original code (' . $true_currency_code . ')';
+			$error_msg = 'Fatal Error! Received currency code (' . $currency_code . ') does not match with the expected currency code (' . $expected_currency_code . ')';
 			SwpmLog::log_simple_debug( $error_msg, false );
 			wp_die( esc_html( $error_msg ) );
 		}
+		//=== End of validation and verification ===
 
 		// Everything went ahead smoothly with the charge.
 		SwpmLog::log_simple_debug( 'Stripe SCA Buy Now charge successful.', true );
@@ -237,12 +258,9 @@ class SwpmStripeSCABuyNowIpnHandler {
 		}
 
 		$ipn_data['payment_button_id'] = $button_id;
-		$ipn_data['is_live']           = ! $sandbox_enabled;
+		$ipn_data['is_live'] = ! $sandbox_enabled;
 
-		$discount = array(
-			'discount_amount' => $discount_amount
-		);
-		$ipn_data['discount'] = $discount;
+		$ipn_data['discount_amount'] = $discount_amount;//Discount amount applied to the payment.
 
 		// Handle the membership signup related tasks.
 		swpm_handle_subsc_signup_stand_alone( $ipn_data, $membership_level_id, $txn_id, $swpm_id );

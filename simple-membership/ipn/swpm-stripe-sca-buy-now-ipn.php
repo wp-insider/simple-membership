@@ -43,7 +43,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
 
-		$discount = 0;
+		$discount_amount = 0;
 
 		try {
 			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
@@ -81,7 +81,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 			// Check if coupon/promo applied
 			if ($sess instanceof \Stripe\Checkout\Session && isset($sess->allow_promotion_codes) && $sess->allow_promotion_codes == '1') {
 				if (isset($sess->total_details) && isset($sess->total_details->amount_discount)) {
-					$discount = round(floatval($sess->total_details->amount_discount));
+					$discount_amount = round(floatval($sess->total_details->amount_discount));
 				}
 			}
 
@@ -157,7 +157,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 		} else {
 			$payment_amount = $price_in_cents / 100;// The amount (in cents). This value is used in Stripe API.
 			
-			$discount = $discount / 100;
+			$discount_amount = $discount_amount / 100;
 		}
 
 		$payment_amount = floatval( $payment_amount );
@@ -169,8 +169,8 @@ class SwpmStripeSCABuyNowIpnHandler {
 		$true_payment_amount = apply_filters( 'swpm_payment_amount_filter', $true_payment_amount, $button_id );
 		$true_payment_amount = floatval( $true_payment_amount );
 
-		// SwpmLog::log_simple_debug( "Discount: ". $discount , false );
-		$true_payment_amount = $true_payment_amount - $discount;
+		// SwpmLog::log_simple_debug( "Discount: ". $discount_amount , false );
+		$true_payment_amount = $true_payment_amount - $discount_amount;
 
 		if ( $payment_amount !== $true_payment_amount ) {
 			// Fatal error. Payment amount may have been tampered with.
@@ -239,7 +239,10 @@ class SwpmStripeSCABuyNowIpnHandler {
 		$ipn_data['payment_button_id'] = $button_id;
 		$ipn_data['is_live']           = ! $sandbox_enabled;
 
-		$ipn_data['discount']           = $discount;
+		$discount = array(
+			'discount_amount' => $discount_amount
+		);
+		$ipn_data['discount'] = $discount;
 
 		// Handle the membership signup related tasks.
 		swpm_handle_subsc_signup_stand_alone( $ipn_data, $membership_level_id, $txn_id, $swpm_id );

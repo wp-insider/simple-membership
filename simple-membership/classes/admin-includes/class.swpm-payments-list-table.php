@@ -6,6 +6,8 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 
 class SWPMPaymentsListTable extends WP_List_Table {
 
+	public $items = array();
+
 	public function __construct() {
 		global $status, $page;
 
@@ -36,7 +38,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 
 		// Build row actions
 		$actions = array(
-			/* 'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&edit_txn=%s">Edit</a>', $item['id']),//TODO - Will be implemented in a future date */
+			//'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&action=edit_txn&id=%s">Edit</a>', $item['id']),//TODO - Will be implemented in a future date
 			'delete' => sprintf( '<a href="admin.php?page=simple_wp_membership_payments&action=delete_txn&id=%s&_wpnonce=%s" onclick="return confirm(\'Are you sure you want to delete this record?\')">Delete</a>', $item['id'], wp_create_nonce( 'swpm_delete_txn_' . $item['id'] ) ),
 		);
 
@@ -78,7 +80,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 	}
 
 	function column_status( $item ) {
-		$status = $item['status'];
+		$status = ucfirst($item['status']);
 		$column_value = '';
 
 		if ( strtolower($status) == 'completed' ) {
@@ -106,17 +108,17 @@ class SWPMPaymentsListTable extends WP_List_Table {
 	function get_columns() {
 		$columns = array(
 			'cb'               => '<input type="checkbox" />', // Render a checkbox instead of text
-			'id'               => SwpmUtils::_( 'Row ID' ),
-			'email'            => SwpmUtils::_( 'Email Address' ),
-			'first_name'       => SwpmUtils::_( 'First Name' ),
-			'last_name'        => SwpmUtils::_( 'Last Name' ),
-			'member_profile'   => SwpmUtils::_( 'Member Profile' ),
-			'txn_date'         => SwpmUtils::_( 'Date' ),
-			'txn_id'           => SwpmUtils::_( 'Transaction ID' ),
-			'subscr_id'        => SwpmUtils::_( 'Subscriber ID' ),
-			'payment_amount'   => SwpmUtils::_( 'Amount' ),
-			'membership_level' => SwpmUtils::_( 'Membership Level' ),
-			'status'           => SwpmUtils::_( 'Status/Note' ),
+			'id'               => __( 'ID' , 'simple-membership'),
+			'email'            => __( 'Email Address' , 'simple-membership'),
+			'first_name'       => __( 'First Name' , 'simple-membership'),
+			'last_name'        => __( 'Last Name' , 'simple-membership'),
+			'member_profile'   => __( 'Member Profile' , 'simple-membership'),
+			'txn_date'         => __( 'Date' , 'simple-membership'),
+			'txn_id'           => __( 'Transaction ID' , 'simple-membership'),
+			'subscr_id'        => __( 'Subscriber ID' , 'simple-membership'),
+			'payment_amount'   => __( 'Amount' , 'simple-membership'),
+			'membership_level' => __( 'Membership Level' , 'simple-membership'),
+			'status'           => __( 'Status/Note' , 'simple-membership'),
 		);
 		return $columns;
 	}
@@ -219,27 +221,80 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		$search_term = isset( $_POST['swpm_txn_search'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_txn_search'] ) ) : '';
 		$search_term = trim( $search_term );
 
-		if ( $search_term ) {// Only load the searched records.
-			$like          = $wpdb->esc_like( $search_term );
-			$like          = '%' . $like . '%';
-			$prepare_query = $wpdb->prepare( "SELECT * FROM  {$wpdb->prefix}swpm_payments_tbl WHERE `email` LIKE %s OR `txn_id` LIKE %s OR `first_name` LIKE %s OR `last_name` LIKE %s OR `subscr_id` LIKE %s", $like, $like, $like, $like, $like );
-			$data          = $wpdb->get_results( $prepare_query, ARRAY_A );
-			$total_items   = count( $data );
-		} else { // Load all data in an optimized way (so it is only loading data for the current page)
-			$query       = "SELECT COUNT(*) FROM {$wpdb->prefix}swpm_payments_tbl";
-			$total_items = $wpdb->get_var( $query );
+		if ( $search_term ) {
+			// Only load the searched records.
 
-			// pagination requirement
-			$query = "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl ORDER BY $orderby_column $sort_order";
+			$search_str = esc_sql( $search_term );
+
+			// Get the post ids if searched transaction post type.
+			$post_ids = get_posts(
+				array(
+					'post_type'  => 'swpm_transactions',
+					'posts_per_page' => -1,
+					'fields'         => 'ids',
+					'meta_query' => array(
+						'relation' => 'OR',
+						array(
+							'key'     => 'email',
+							'value'   => $search_str,
+							'compare' => 'LIKE'
+						),						
+						array(
+							'key'     => 'txn_id',
+							'value'   => $search_str,
+							'compare' => 'LIKE'
+						),						
+						array(
+							'key'     => 'first_name',
+							'value'   => $search_str,
+							'compare' => 'LIKE'
+						),						
+						array(
+							'key'     => 'last_name',
+							'value'   => $search_str,
+							'compare' => 'LIKE'
+						),						
+						array(
+							'key'     => 'subscr_id',
+							'value'   => $search_str,
+							'compare' => 'LIKE'
+						),
+					),
+				)
+			);
+			
+			$total_items   = count( $post_ids );
+
+		} else { 
+			// Load all data in an optimized way (so it is only loading data for the current page)
+
+			// Get the total transaction post counts.
+			$transactions_count_query = "SELECT COUNT(*) FROM {$wpdb->prefix}posts WHERE post_type='swpm_transactions'";
+			$total_items = $wpdb->get_var( $transactions_count_query );
 
 			$offset = ( $current_page - 1 ) * $per_page;
-			$query .= ' LIMIT ' . (int) $offset . ',' . (int) $per_page;
 
-			$data = $wpdb->get_results( $query, ARRAY_A );
+			// pagination requirement
+			// $query = "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl ORDER BY $orderby_column $sort_order";
+			// $query .= ' LIMIT ' . (int) $offset . ',' . (int) $per_page;
+			// $data = $wpdb->get_results( $query, ARRAY_A );
+
+			// Get the post ids of all transaction post type with pagination.
+			$post_ids = get_posts(
+				array(
+					'post_type' => 'swpm_transactions',
+					'posts_per_page' => (int) $per_page,
+					'offset' => (int) $offset,
+					'fields' => 'ids',
+				)
+			);
 		}
 
+		$this->process_txn_records_from_post_ids($post_ids);
+		
 		// Now we add our *sorted* data to the items property, where it can be used by the rest of the class.
-		$this->items = $data;
+		// $this->items = $transaction_records;
+		// wp_die('<pre>'. print_r($transaction_records, true) .'</pre>');
 
 		// pagination requirement
 		$this->set_pagination_args(
@@ -249,6 +304,39 @@ class SWPMPaymentsListTable extends WP_List_Table {
 				'total_pages' => ceil( $total_items / $per_page ),   // WE have to calculate the total number of pages
 			)
 		);
+	}
+
+	/**
+	 * Populate the $items property with appropriate fields by their post ids.
+	 *
+	 * @param array $post_ids Post IDs of transaction post type.
+	 * 
+	 * @return void
+	 */
+	private function process_txn_records_from_post_ids(&$post_ids){
+		foreach ($post_ids as $post_id) {
+			array_push($this->items, array(
+				'id' => $post_id,
+				'db_row_id' => get_post_meta($post_id, 'db_row_id', true),
+				'email' => get_post_meta($post_id, 'email', true),
+				'first_name' => get_post_meta($post_id, 'first_name', true),
+				'last_name' => get_post_meta($post_id, 'last_name', true),
+				'member_id' => get_post_meta($post_id, 'member_id', true),
+				'membership_level' => get_post_meta($post_id, 'membership_level', true),
+				'txn_date' => get_post_meta($post_id, 'txn_date', true),
+				'txn_id' => get_post_meta($post_id, 'txn_id', true),
+				'subscr_id' => get_post_meta($post_id, 'subscr_id', true),
+				'reference' => get_post_meta($post_id, 'reference', true),
+				'payment_amount' => get_post_meta($post_id, 'payment_amount', true),
+				'gateway' => get_post_meta($post_id, 'gateway', true),
+				'status' => get_post_meta($post_id, 'status', true),
+				'ip_address' => get_post_meta($post_id, 'ip_address', true),
+				'payment_button_id' => get_post_meta($post_id, 'payment_button_id', true),
+				'is_live' => get_post_meta($post_id, 'is_live', true),
+				'discount_amount' => get_post_meta($post_id, 'discount_amount', true),
+				'custom' => get_post_meta($post_id, 'custom', true),
+			));
+		}
 	}
 
 }

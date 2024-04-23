@@ -87,6 +87,10 @@ class SwpmPaymentsAdminMenu {
                     include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_add_edit_transaction_manually.php');
                     swpm_handle_add_new_txn_manually();
                     break;
+                case 'edit_txn':
+                    include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_edit_transaction.php');
+                    swpm_handle_edit_txn();
+                    break;
                 default:
                     include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_all_payment_transactions.php');
                     break;

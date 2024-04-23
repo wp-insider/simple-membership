@@ -178,6 +178,7 @@ https://simple-membership-plugin.com/
 - Output escaping added to the shortcode output of the subscription cancel shortcode.
 - PayPal PPCP button's JS SDK related code has been converted to use vanilla JavaScript.
 - Stripe promotion code feature added for Stripe SCA Buy Now type buttons.
+- Transaction records can now be edited.
 
 = 4.4.3 =
 - The accepted payment method types can now be controlled from your Stripe account settings. This will allow you to enable/disable certain payment methods.

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.5
-Stable tag: 4.4.3
+Stable tag: 4.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,15 +170,17 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
-- Added a new shortcode that can show any active subscriptions and offer an option to cancel it for the logged-in member. It works for the New PayPal API and Stripe Subscription buttons.
+= 4.4.4 =
 - Added an option to configure a Cancel URL for Stripe SCA Subscription type buttons.
 - Some options related to hiding the WP Admin Bar have been moved from the General Settings menu to the Advanced Settings tab.
 - A warning message is displayed when editing membership levels if both manual approval and email activation settings are enabled simultaneously.
 - Output escaping added to the shortcode output of the subscription cancel shortcode.
-- PayPal PPCP button's JS SDK related code has been converted to use vanilla JavaScript.
+- PayPal PPCP button's JS SDK related code has been converted to use vanilla JavaScript to eliminate the dependency on jQuery.
 - Stripe promotion code feature added for Stripe SCA Buy Now type buttons.
-- Transaction records can be edited now.
+- The Payments menu now shows the transactions from the SWPM_Transactions custom post type. This will allow us to add more features to the transaction records in the future.
+- Added the option to edit a transaction record from the payments menu of the plugin.
+- Added a new shortcode that can show any active subscriptions and offer an option to cancel it for the logged-in member. It works for the New PayPal API and Stripe Subscription buttons.
+- [Documentation for the new subscription cancel shortcode](https://simple-membership-plugin.com/show-active-subscriptions-and-providing-a-cancellation-option/)
 
 = 4.4.3 =
 - The accepted payment method types can now be controlled from your Stripe account settings. This will allow you to enable/disable certain payment methods.
@@ -208,80 +210,6 @@ https://simple-membership-plugin.com/
 - Changed the aciton hook name 'swpm_login' to 'swpm_after_login_authentication' to describe the hook better.
 - The after login redirection feature won't be application when the login form originates from the WP Login form. 
 - This will remove confusion for some users when they login from the standard WP login form (not the simple membership's login form) and then the page redirects to the after login redirection URL.
-
-= 4.3.9 = 
-- Note: Significant updates have been made to the PayPal's new API related code in this release. Please take a backup of your site before updating.
-- The 'Payment Settings' tab has been moved to the 'Payments' menu. Allowing all payment configuration related functions to be under one menu.
-- The 'Payment Settings' menu has been divided into multiple sub-menus for better organization.
-- Added a new option in the PayPal API tab to allow manual deletion of the PayPal API access token cache.
-- The PayPal buy now (New API) button's JavaScript code has been updated to reflect the latest PayPal API related changes.
-- If WP Login form is used, our plugin will let WP handle the post-login redirection.
-- Honor the 'redirect_to' parameter in the post login redirection function.
-- Added an empty check to the Stripe buy now IPN handling function.
-- Translation improvement for 'activation-required' account status display in the user's profile.
-- Better formatting for the admin edit interface error message.
-- Added output escaping in the new PayPal API settings tab.
-- Added a new filter 'swpm_send_direct_email_body_settings'.
-- The following new options has been added in the 'Send Direct Email' feature. Thanks to Dennis.
-- Send Direct Email -> Send email based on member's account status.
-- Send Direct Email -> Send a copy of email to the site admin.
-- Send Direct Email -> List email recipients as a preview.
-
-= 4.3.8 =
-- Minor translation related update in the admin edit member interface.
-- Fixed an issue with the new PayPal buy now type button not rendering correctly with the item description.
-
-= 4.3.7 =
-- Added new form and validation Interface for registration and edit profile forms. 
-- New settings field added to turn on/off the new UI for the registration and profile forms. This option is located in the Advanced Settings menu.
-- The goal with this new option is to offer a more mobile responsive UI for the registration and profile forms.
-- Added a new action hook (swpm_before_login_form_widget) in the login.php file.
-- Added a new action hook (swpm_before_loggedin_widget) in the loggedin.php file.
-- The edit membership level interface shows the currently editing membership level's ID.
-- Added a new action hook (swpm_front_end_reset_password_using_link_completed). Thanks to @MedTRGit.
-- Updated the translation POT file.
-- Refactored the Stripe session create code to a separate class.
-- Filter hooks updated to to customize password validation rules and messages for the new form UI.
-- Updated the Swedish translation files.
-
-= 4.3.6 =
-- Added output escaping to the 'list_type' parameter in the 'Post and Page Protection' menu tab.
-
-= 4.3.5 =
-- Updated the German language translation file. Thanks to Stefan.
-- Show strong password requirement message on the password reset page (if the feature is enabled). Thanks to Darwin for submitting this update.
-- After submitting the password reset form, a message displaying "Processing request" is shown. Thanks to Darwin for submitting this update.
-- Added a new filter hook for the Thank You page message.
-- Fixed a small bug with the newly added "Send Direct Email" feature. It was not setting the "From Email Address" field's value.
-- Added a new option labeled "Default Account Status After Payment". This should be helpful with certain types of manual approval configuration.
-- Updated the code so it stops going forwared if the update user command fails.
-- Added validation to the password reset by link feature. Thanks to Rafie for the report.
-
-= 4.3.4 =
-- Readability improvement for the 'remember me' checkbox field's code.
-- Spanish language translation file updated.
-- Added more debug logging text to the Stripe webhook handling script.
-- Added CSS class to the notice message output.
-- Allow any field with class 'swpm-date-picker' to use the datepicker function in the members menu.
-- Added a new hook that gets triggered when the account status is updated to expired in the daily cronjob.
-- Added a new hook that gets triggered when an existing member pays for a membership and the account status is refreshed.
-- The original transaction post ID is saved with the user profile for Stripe subscription transactions.
-
-= 4.3.3 =
-- Added new feature to confiugre an "after email activation redirection" for any membership level.
-- Renamed the SimpleWpMembership::wp_logout() function to SimpleWpMembership::wp_logout_handler().
-- The auth cookie will be set to session cookie if the 'force-wp-user-sync' feature is enable when 'remember me' is unchecked.
-- Added a silent logout option so the logout function can be called without triggering the action hook.
-- Added the 'swpm_subscription_payment_cancelled' hook to the cancel stripe subscription via URL feature.
-
-= 4.3.2 =
-- Added CSS to highlight the order status in the payments menu.
-- Added a new utility function compare_url_without_http(). This function is used for matching the system generated pages.
-- Added a new CSS div for the activation required error message.
-- New Gutenberg Block for Payment Buttons.
-- Updated the system page URL check function to include the edit profile, join and the password reset pages.
-- New feature to send direct email to a group of members (for example: send an email to all members of a membership level).
-- Minor PHP 8.2 related deprecation notice fixes.
 
 Full changelog available at [change-log-of-old-versions.txt](https://plugins.svn.wordpress.org/simple-membership/trunk/change-log-old-versions.txt)
 

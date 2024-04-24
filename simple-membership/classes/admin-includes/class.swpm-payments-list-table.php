@@ -39,7 +39,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		// Build row actions
 		$actions = array(
 			// 'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&action=edit_txn&id=%s">Edit</a>', $item['id']),//TODO - Need to fix
-			'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&tab=edit_txn&id=%s"">Edit</a>', $item['id']),//TODO - Need to fix
+			'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&tab=edit_txn&id=%s"">Edit/View</a>', $item['id']),
 			'delete' => sprintf( '<a href="admin.php?page=simple_wp_membership_payments&action=delete_txn&id=%s&_wpnonce=%s" onclick="return confirm(\'Are you sure you want to delete this record?\')">Delete</a>', $item['id'], wp_create_nonce( 'swpm_delete_txn_' . $item['id'] ) ),
 		);
 

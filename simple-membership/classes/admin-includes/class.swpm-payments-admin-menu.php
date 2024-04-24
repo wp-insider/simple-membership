@@ -32,7 +32,7 @@ class SwpmPaymentsAdminMenu {
                 if ($tab == 'edit_button') {//Only show the "edit button" tab when a button is being edited.
                     echo '<a class="nav-tab nav-tab-active" href="#">Edit Button</a>';
                 }
-                if ($tab == 'add_new_txn') {//Only show the "add txn manually" tab when a transaction is being edited.
+                if ($tab == 'add_new_txn') {//Only show the "add txn manually" tab when a transaction is being added.
                     echo '<a class="nav-tab nav-tab-active" href="#">Add Transaction Manually</a>';
                 }                
                 if ($tab == 'edit_txn') {//Only show the "edit txn" tab when a transaction is being edited.

@@ -15,7 +15,8 @@
             <input name="swpm_txn_search" type="text" size="40" value="<?php echo isset($_POST['swpm_txn_search']) ? esc_attr($_POST['swpm_txn_search']) : ''; ?>"/>
             <input type="submit" name="swpm_txn_search_btn" class="button" value="<?php echo SwpmUtils::_('Search'); ?>" />
         </form>
-    </div></div>
+    </div>
+</div>
 
 <?php
 include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/admin-includes/class.swpm-payments-list-table.php');

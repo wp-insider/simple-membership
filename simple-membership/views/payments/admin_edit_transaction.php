@@ -79,38 +79,47 @@ function swpm_show_edit_txn_form($post)
 
 	$member_id = get_post_meta($post_id, 'member_id', true);
 	if (empty($member_id)) {
-		$member_id = 'N/A';
+		$member_id = '-';
 	}
 
 	$membership_level = get_post_meta($post_id, 'membership_level', true);
 	if (!empty($membership_level)) {
 		$membership_level = SwpmMembershipLevelUtils::get_membership_level_name_by_level_id($membership_level);
 	} else {
-		$membership_level = 'N/A';
+		$membership_level = '-';
 	}
 
 	$txn_date = get_post_meta($post_id, 'txn_date', true);
 	$txn_id = get_post_meta($post_id, 'txn_id', true);
 	$subscr_id = get_post_meta($post_id, 'subscr_id', true);
 	if (empty($subscr_id)) {
-		$subscr_id = 'N/A';
+		$subscr_id = '-';
 	}
 
+	//We will use this field to save any additional note or reference for the transaction.
 	$reference = get_post_meta($post_id, 'reference', true);
+	
 	$payment_amount = get_post_meta($post_id, 'payment_amount', true);
 
 	$gateway = get_post_meta($post_id, 'gateway', true);
 	if (!empty($gateway)) {
 		$gateway = SwpmUtils::get_formatted_payment_gateway_name($gateway);
 	} else {
-		$gateway = 'N/A';
+		$gateway = '-';
 	}
 
 	$status = get_post_meta($post_id, 'status', true);
 	$ip_address = get_post_meta($post_id, 'ip_address', true);
+
+	$payment_button_link_output = '';
 	$payment_button_id = get_post_meta($post_id, 'payment_button_id', true);
 	if (empty($payment_button_id)) {
-		$payment_button_id = 'N/A';
+		$payment_button_id = '-';
+	} else {
+		//Get the payment button type so we can link to the correct edit page for it to view the button configuration.
+		$button_type = get_post_meta($payment_button_id, 'button_type', true);
+		$payment_button_src = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . esc_attr($payment_button_id) . '&button_type=' . esc_attr($button_type);
+		$payment_button_link_output = '<a href="' . esc_url($payment_button_src) . '">' . __('(View Button Configuration)', 'simple-membership') . '</a>';
 	}
 
 	$is_live = get_post_meta($post_id, 'is_live', true);
@@ -127,7 +136,7 @@ function swpm_show_edit_txn_form($post)
 
 	$custom = get_post_meta($post_id, 'custom', true);
 	if (empty($custom)) {
-		$custom = 'N/A';
+		$custom = '-';
 	}
 ?>
 
@@ -188,22 +197,34 @@ function swpm_show_edit_txn_form($post)
 						<td><?php _e("Payment Amount", "simple-membership"); ?></td>
 						<td><input type="text" size="20" name="swpm_txn_payment_amount" value="<?php echo esc_attr($payment_amount); ?>" /></td>
 					</tr>
+					<?php 
+					// Only show the discount amount field if there is a discount amount.
+					if( !empty($discount_amount) && $discount_amount > 0 ) {
+					?>
 					<tr>
 						<td><?php _e("Discount Amount", "simple-membership"); ?></td>
 						<td><input type="text" size="20" name="swpm_txn_discount_amount" value="<?php echo esc_attr($discount_amount); ?>" /></td>
 					</tr>
+					<?php } ?>
 					<tr>
-						<td><?php _e("Reference", "simple-membership"); ?></td>
+						<td><?php _e("Note/Reference", "simple-membership"); ?></td>
 						<td><input type="text" size="20" name="swpm_txn_reference" value="<?php echo esc_attr($reference); ?>" /></td>
 					</tr>
 
 					<!-- Additional Data -->
 					<tr>
-						<td><?php _e("Payment Button ID", "simple-membership"); ?></td>
-						<td><?php echo esc_attr($payment_button_id); ?></td>
+						<td colspan="2">
+							<div style="border-bottom: 1px solid #dedede; height: 10px"></div>
+						</td>
 					</tr>
 					<tr>
-						<td><?php _e("Is Live", "simple-membership"); ?></td>
+						<td><?php _e("Payment Button ID", "simple-membership"); ?></td>
+						<td>
+							<?php echo esc_attr($payment_button_id) . ' ' . $payment_button_link_output; ?>
+						</td>
+					</tr>
+					<tr>
+						<td><?php _e("Live Mode Transaction?", "simple-membership"); ?></td>
 						<td><?php echo esc_attr($is_live); ?></td>
 					</tr>
 					<tr>

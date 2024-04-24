@@ -38,7 +38,8 @@ class SWPMPaymentsListTable extends WP_List_Table {
 
 		// Build row actions
 		$actions = array(
-			//'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&action=edit_txn&id=%s">Edit</a>', $item['id']),//TODO - Will be implemented in a future date
+			// 'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&action=edit_txn&id=%s">Edit</a>', $item['id']),//TODO - Need to fix
+			'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&tab=edit_txn&id=%s"">Edit</a>', $item['id']),//TODO - Need to fix
 			'delete' => sprintf( '<a href="admin.php?page=simple_wp_membership_payments&action=delete_txn&id=%s&_wpnonce=%s" onclick="return confirm(\'Are you sure you want to delete this record?\')">Delete</a>', $item['id'], wp_create_nonce( 'swpm_delete_txn_' . $item['id'] ) ),
 		);
 
@@ -135,54 +136,55 @@ class SWPMPaymentsListTable extends WP_List_Table {
 
 	function get_bulk_actions() {
 		$actions = array(
-			'delete' => SwpmUtils::_( 'Delete' ),
+			'delete' => __( 'Delete', 'simple-membership' ),
 		);
 		return $actions;
 	}
 
-	function process_bulk_action() {
+	public function process_bulk_action() {
 		// Detect when a bulk action is being triggered...
 		if ( 'delete' === $this->current_action() ) {
-			$records_to_delete = array_map( 'sanitize_text_field', $_GET['transaction'] );
-			if ( empty( $records_to_delete ) ) {
-				echo '<div id="message" class="updated fade"><p>Error! You need to select multiple records to perform a bulk action!</p></div>';
+			if ( empty( $_GET['transaction'] ) ) {
+				echo '<div id="message" class="notice notice-error"><p>'.__('Error! You need to select multiple records to perform a bulk action!', 'simple-membership').'</p></div>';
 				return;
 			}
+			$records_to_delete = array_map( 'sanitize_text_field', $_GET['transaction'] );
 
 			$action = 'bulk-' . $this->_args['plural'];
 			check_admin_referer( $action );
 
-			foreach ( $records_to_delete as $record_id ) {
-				if ( ! is_numeric( $record_id ) ) {
-					wp_die( 'Error! ID must be numeric.' );
-				}
-				global $wpdb;
-				$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'swpm_payments_tbl WHERE id = %d', $record_id ) );
+			foreach ( $records_to_delete as $post_id ) {
+				$this->delete_record($post_id);
 			}
-			echo '<div id="message" class="updated fade"><p>Selected records deleted successfully!</p></div>';
+
+			echo '<div id="message" class="notice notice-success"><p>'.__('Selected records deleted successfully!', 'simple-membership').'</p></div>';
 		}
 	}
 
-	function delete_record( $record_id ) {
-		global $wpdb;
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'swpm_payments_tbl WHERE id = %d', $record_id ) );
-		// also delete record from swpm_transactions CPT
-		$trans = get_posts(
-			array(
-				'meta_key'       => 'db_row_id',
-				'meta_value'     => $record_id,
-				'posts_per_page' => 1,
-				'offset'         => 0,
-				'post_type'      => 'swpm_transactions',
-			)
-		);
-		wp_reset_postdata();
-		if ( empty( $trans ) ) {
-			return;
+	/**
+	 * Deletes a record by post id.
+	 *
+	 * @param int|string $post_id
+	 * 
+	 * @return bool TRUE if deletion successful, FALSE otherwise.
+	 */
+	public function delete_record( $post_id ) {
+		if ( ! is_numeric( $post_id ) ) {
+			wp_die( __('Error! ID must be numeric.', 'simple-membership') );
 		}
-		$trans = $trans[0];
-		wp_delete_post( $trans->ID, true );
+		// Delete the record form posts table
+		$deletion_result = wp_delete_post( $post_id, true );
 
+		// Delete the record from old custom swpm_payments_tbl table as well (if exists).
+		$db_row_id = get_post_meta($post_id, 'db_row_id', true);
+		if (!empty($db_row_id)) {
+			global $wpdb;
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'swpm_payments_tbl WHERE id = %d', $db_row_id ) );
+		}
+
+		wp_reset_postdata();
+
+		return $deletion_result instanceof \WP_Post ? true : false;
 	}
 
 	function prepare_items() {

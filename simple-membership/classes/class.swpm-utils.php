@@ -720,4 +720,19 @@ abstract class SwpmUtils {
             "primary_address" => __("Member's address", "simple-membership"),
         );
     }
+
+	// TODO: This needs to complete.
+	public static function get_formatted_payment_gateway_name($gateway){
+		switch ($gateway) {
+			case 'stripe-sca':
+				return 'Stripe';
+			case 'paypal':
+				return 'PayPal Standard';
+			case 'paypal_buy_now_checkout':
+			case 'paypal_subscription_checkout':
+				return 'PayPal PPCP';
+			default:
+				return $gateway;
+		}
+	}
 }

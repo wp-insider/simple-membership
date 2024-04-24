@@ -54,19 +54,19 @@ function swpm_handle_edit_txn()
 			update_post_meta($post->ID, 'reference', $reference);
 		}
 
-		// echo '<div class="swpm-orange-box">';
-		// _e('Transaction data updated successfully. ', 'simple-membership');
-		// echo '<a href="admin.php?page=simple_wp_membership_payments">'. __('View all transactions', 'simple-membership') .'</a>';
-		// echo '</div>';
+		echo '<div class="notice notice-success"><p>';
+		_e('Transaction data updated successfully. ', 'simple-membership');
+		echo '<a href="admin.php?page=simple_wp_membership_payments">'. __('View all transactions', 'simple-membership') .'</a>';
+		echo '</p></div>';
 
 		SwpmLog::log_simple_debug("Transaction data updated successfully.", true);
 
-		$redirect_to = admin_url(). "/admin.php?page=simple_wp_membership_payments";
-		SwpmMiscUtils::redirect_to_url($redirect_to);
-	} else {
-		//Show the transaction edit from.
-		swpm_show_edit_txn_form($post);
+		// $redirect_to = admin_url(). "/admin.php?page=simple_wp_membership_payments";
+		// SwpmMiscUtils::redirect_to_url($redirect_to);
 	}
+
+	//Show the transaction edit from.
+	swpm_show_edit_txn_form($post);
 }
 
 function swpm_show_edit_txn_form($post)

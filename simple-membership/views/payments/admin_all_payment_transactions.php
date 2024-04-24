@@ -39,11 +39,6 @@ if (isset($_REQUEST['action'])) { //Do list table form row action tasks
                 echo $success_msg;
             }
             break;
-        // case "edit_txn":
-        //     //Edit link was clicked for a row in list table
-        //     include_once(SIMPLE_WP_MEMBERSHIP_PATH . '/views/payments/admin_edit_transaction.php');
-        //     swpm_handle_edit_txn();
-        //     break;
         default:
             break;
     }

@@ -73,13 +73,33 @@ function swpm_show_edit_txn_form($post)
 {
 	$post_id = $post->ID;
 
+	$txn_date = get_post_meta($post_id, 'txn_date', true);
+	$txn_id = get_post_meta($post_id, 'txn_id', true);
+	$subscr_id = get_post_meta($post_id, 'subscr_id', true);
+	if (empty($subscr_id)) {
+		$subscr_id = '-';
+	}
+
 	$email = get_post_meta($post_id, 'email', true);
 	$first_name = get_post_meta($post_id, 'first_name', true);
 	$last_name = get_post_meta($post_id, 'last_name', true);
 
+	//Get the member ID that maybe associated with this transaction.
 	$member_id = get_post_meta($post_id, 'member_id', true);
-	if (empty($member_id)) {
+	if (empty($member_id) && !empty($subscr_id)){
+		//Try to get the member ID from the subscriber ID reference.
+		$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $subscr_id );
+		if ( $member_record ) {
+			$member_id = $member_record->member_id;
+		}
+	}
+	$profile_link_output = '';
+	if ( empty( $member_id ) ) {
+		//If we still can't find the member ID, set it to a dash. The corresponding member profile may have been deleted.
 		$member_id = '-';
+	} else {
+		$profile_url = 'admin.php?page=simple_wp_membership&member_action=edit&member_id=' . esc_attr($member_id);
+		$profile_link_output = '<a href="' . esc_url($profile_url) . '" target="_blank">' . __('(View Profile)', 'simple-membership') . '</a>';
 	}
 
 	$membership_level = get_post_meta($post_id, 'membership_level', true);
@@ -87,13 +107,6 @@ function swpm_show_edit_txn_form($post)
 		$membership_level = SwpmMembershipLevelUtils::get_membership_level_name_by_level_id($membership_level);
 	} else {
 		$membership_level = '-';
-	}
-
-	$txn_date = get_post_meta($post_id, 'txn_date', true);
-	$txn_id = get_post_meta($post_id, 'txn_id', true);
-	$subscr_id = get_post_meta($post_id, 'subscr_id', true);
-	if (empty($subscr_id)) {
-		$subscr_id = '-';
 	}
 
 	//We will use this field to save any additional note or reference for the transaction.
@@ -119,7 +132,7 @@ function swpm_show_edit_txn_form($post)
 		//Get the payment button type so we can link to the correct edit page for it to view the button configuration.
 		$button_type = get_post_meta($payment_button_id, 'button_type', true);
 		$payment_button_src = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . esc_attr($payment_button_id) . '&button_type=' . esc_attr($button_type);
-		$payment_button_link_output = '<a href="' . esc_url($payment_button_src) . '">' . __('(View Button Configuration)', 'simple-membership') . '</a>';
+		$payment_button_link_output = '<a href="' . esc_url($payment_button_src) . '" target="_blank">' . __('(View Button Configuration)', 'simple-membership') . '</a>';
 	}
 
 	$is_live = get_post_meta($post_id, 'is_live', true);
@@ -170,14 +183,6 @@ function swpm_show_edit_txn_form($post)
 						<td><?php echo ucfirst(esc_attr($status)); ?></td>
 					</tr>
 					<tr>
-						<td><?php _e("Member ID", "simple-membership"); ?></td>
-						<td><?php echo esc_attr($member_id); ?></td>
-					</tr>
-					<tr>
-						<td><?php _e("Membership Level", "simple-membership"); ?></td>
-						<td><?php echo esc_attr($membership_level); ?></td>
-					</tr>
-					<tr>
 						<td><?php _e("First Name", "simple-membership"); ?></td>
 						<td><input type="text" size="40" name="swpm_txn_first_name" value="<?php echo esc_attr($first_name); ?>" /></td>
 					</tr>
@@ -217,6 +222,14 @@ function swpm_show_edit_txn_form($post)
 							<div style="border-bottom: 1px solid #dedede; height: 10px"></div>
 						</td>
 					</tr>
+					<tr>
+						<td><?php _e("Member ID", "simple-membership"); ?></td>
+						<td><?php echo esc_attr($member_id) . ' ' . $profile_link_output; ?></td>
+					</tr>
+					<tr>
+						<td><?php _e("Membership Level", "simple-membership"); ?></td>
+						<td><?php echo esc_attr($membership_level); ?></td>
+					</tr>					
 					<tr>
 						<td><?php _e("Payment Button ID", "simple-membership"); ?></td>
 						<td>

@@ -72,7 +72,12 @@ class SwpmTransactions {
 				} else {
 					$member_id = $member_record->member_id;
 					$extra_info = SwpmMemberUtils::get_account_extra_info( $member_id );
+					//Check if the extra_info is an array. If not, initialize it as an array before adding the orig_swpm_txn_cpt_id.
+					if (!is_array($extra_info)) {
+						$extra_info = array(); // Initialize as array if not already
+					}					
 					$extra_info['orig_swpm_txn_cpt_id'] = $post_id;
+					//Update the member's extra_info with the orig_swpm_txn_cpt_id.
 					SwpmMemberUtils::update_account_extra_info( $member_id, $extra_info );
 				}
 			}

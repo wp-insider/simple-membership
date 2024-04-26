@@ -130,6 +130,10 @@ class SWPM_PayPal_Webhook_Event_Handler {
 				SwpmLog::log_simple_debug( 'This webhook status ('.$status.') has already been processed for this member (ID: '.$member_id.'). Nothing to do.', true );
 				return;
 			} else {
+				//Check if the extra_info is an array. If not, initialize it as an array before adding the last_webhook_status.
+				if (!is_array($extra_info)) {
+					$extra_info = array(); // Initialize as array if not already
+				}
 				//Save the last webhook status.
 				$extra_info['last_webhook_status'] = $status;
 				SwpmMemberUtils::update_account_extra_info( $member_id, $extra_info );

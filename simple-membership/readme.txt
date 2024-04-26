@@ -170,6 +170,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP 4.4.5 =
+- Minor PHP compatibility related improvements for PayPal and Stripe checkout.
+- Minor updates to the the debug log messaging for the refund/cancelation process.
+
 = 4.4.4 =
 - Added an option to configure a Cancel URL for Stripe SCA Subscription type buttons.
 - Some options related to hiding the WP Admin Bar have been moved from the General Settings menu to the Advanced Settings tab.

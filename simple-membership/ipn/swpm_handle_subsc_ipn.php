@@ -248,6 +248,8 @@ function swpm_handle_refund_using_parent_txn_id( $ipn_data ){
  */
 function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 
+	swpm_debug_log_subsc( "Refund/Cancellation Check - Let's see if a member's profile needs to be updated or deactivated.", true );
+
 	global $wpdb;
 
 	$swpm_id = '';
@@ -255,9 +257,6 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		$customvariables = SwpmTransactions::parse_custom_var( $ipn_data['custom'] );
 		$swpm_id = $customvariables['swpm_id'];
 	}
-
-	swpm_debug_log_subsc( 'Refund/Cancellation check - lets see if a member account needs to be deactivated.', true );
-	// swpm_debug_log_subsc("Parent txn id: " . $ipn_data['parent_txn_id'] . ", Subscr ID: " . $ipn_data['subscr_id'] . ", SWPM ID: " . $swpm_id, true);.
 
 	if ( ! empty( $swpm_id ) ) {
 		// This IPN has the SWPM ID. Retrieve the member record using member ID.
@@ -274,8 +273,9 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 			),
 			OBJECT
 		);
-	} else {
+	} else if ( isset($ipn_data['parent_txn_id']) && !empty($ipn_data['parent_txn_id'] )){
 		// Refund for a one time transaction. Use the parent transaction ID to retrieve the profile.
+		swpm_debug_log_subsc( 'Parent transaction ID is present. Goign to search for member account that might be associated with it. Parent Transaction ID: ' . $ipn_data['parent_txn_id'], true );
 		$subscr_id = $ipn_data['parent_txn_id'];
 		$resultset = $wpdb->get_row(
 			$wpdb->prepare(
@@ -284,6 +284,10 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 			),
 			OBJECT
 		);
+	} else {
+		// No member ID or subscriber ID or parent transaction ID found in the IPN data. Return from here.
+		swpm_debug_log_subsc( 'No member ID or subscriber ID or parent transaction ID found in the IPN data. Nothing to do here.', true );
+		return;
 	}
 
 	if ( $resultset ) {
@@ -343,7 +347,7 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		$ipn_data['member_id'] = $member_id;
 		do_action( 'swpm_subscription_payment_cancelled', $ipn_data ); 
 	} else {
-		swpm_debug_log_subsc( 'No associated active member record found for this notification.', false );
+		swpm_debug_log_subsc( 'No associated active member record found for this notification. The profile may have been updated/attached to another subscription or transaction.', true );
 		return;
 	}
 }
@@ -351,20 +355,20 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 	global $wpdb;
 	$email = isset( $ipn_data['payer_email'] ) ? $ipn_data['payer_email'] : '';
-	$subscr_id = $ipn_data['subscr_id'];
+	$subscr_id = isset( $ipn_data['subscr_id'] ) ? $ipn_data['subscr_id'] : '';
 	$account_state = SwpmSettings::get_instance()->get_value( 'default-account-status-after-payment', 'active' );
     $account_state = apply_filters( 'swpm_account_status_for_subscription_start_date_update', $account_state );
 
 	if( empty( $subscr_id ) ) {
-		swpm_debug_log_subsc( 'Subscription ID is empty. A Subscription ID value is required to update the access start date.', false );
+		swpm_debug_log_subsc( 'Subscription ID is empty in the IPN data. A Subscription ID value is required to update the access start date of a profile.', false );
 		return;
 	}
 	swpm_debug_log_subsc( 'Updating the access start date if applicable for this subscription payment. Subscriber ID: ' . $subscr_id . ', Email: ' . $email . ', Account status: ' . $account_state, true );
 
 	// We can also query using the email address or SWPM ID (if present in custom var).
 
-        //Try to find the profile with the given subscr_id. It will exact match subscr_id or match subscr_id|123
-        $query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s OR subscr_id LIKE %s", $subscr_id, $subscr_id.'|%' ), OBJECT );
+    //Try to find the profile with the given subscr_id. It will exact match subscr_id or match subscr_id|123
+    $query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s OR subscr_id LIKE %s", $subscr_id, $subscr_id.'|%' ), OBJECT );
 	if ( $query_db ) {
 		$swpm_id               = $query_db->member_id;
 		$current_primary_level = $query_db->membership_level;

@@ -33,6 +33,7 @@ class SwpmTransactions {
 		if( empty( $txn_data['member_id'] ) ){
 			$txn_data['member_id'] = isset ( $ipn_data['member_id'] ) ? $ipn_data['member_id'] : '';
 		}
+		//SwpmLog::log_simple_debug( 'Member ID value: ' . $txn_data['member_id'], true );
 
 		//Get the membership level reference.
 		$txn_data['membership_level'] = isset ( $custom_var['subsc_ref'] ) ? $custom_var['subsc_ref'] : '';

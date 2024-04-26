@@ -170,7 +170,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.4.5 =
+= WIP 4.4.5t1 =
 - Minor PHP compatibility related improvements for PayPal and Stripe checkout.
 - Minor updates to the the debug log messaging for the refund/cancelation process.
 - Added a link to the corresponding member profile in the newly added transaction view/edit interface.

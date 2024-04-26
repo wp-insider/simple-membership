@@ -174,6 +174,7 @@ https://simple-membership-plugin.com/
 - Minor PHP compatibility related improvements for PayPal and Stripe checkout.
 - Minor updates to the the debug log messaging for the refund/cancelation process.
 - Added a link to the corresponding member profile in the newly added transaction view/edit interface.
+- Added a link to the corresponding membership level in the newly added transaction view/edit interface.
 
 = 4.4.4 =
 - Added an option to configure a Cancel URL for Stripe SCA Subscription type buttons.

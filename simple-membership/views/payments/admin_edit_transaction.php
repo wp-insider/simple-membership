@@ -102,11 +102,17 @@ function swpm_show_edit_txn_form($post)
 		$profile_link_output = '<a href="' . esc_url($profile_url) . '" target="_blank">' . __('(View Profile)', 'simple-membership') . '</a>';
 	}
 
-	$membership_level = get_post_meta($post_id, 'membership_level', true);
-	if (!empty($membership_level)) {
-		$membership_level = SwpmMembershipLevelUtils::get_membership_level_name_by_level_id($membership_level);
+	$membership_level_link_output = '';
+	$membership_level_id = get_post_meta($post_id, 'membership_level', true);
+	if (!empty($membership_level_id)) {
+		//Get the membership level name.
+		$membership_level_name = SwpmMembershipLevelUtils::get_membership_level_name_by_level_id($membership_level_id);
+
+		//Generate the corresponding membership level view/edit link.
+		$membership_level_url = 'admin.php?page=simple_wp_membership_levels&level_action=edit&id=' . esc_attr($membership_level_id);
+		$membership_level_link_output = '<a href="' . esc_url($membership_level_url) . '" target="_blank">' . __('(View Membership Level)', 'simple-membership') . '</a>';
 	} else {
-		$membership_level = '-';
+		$membership_level_name = '-';
 	}
 
 	//We will use this field to save any additional note or reference for the transaction.
@@ -228,7 +234,7 @@ function swpm_show_edit_txn_form($post)
 					</tr>
 					<tr>
 						<td><?php _e("Membership Level", "simple-membership"); ?></td>
-						<td><?php echo esc_attr($membership_level); ?></td>
+						<td><?php echo esc_attr($membership_level_name) . ' ' . $membership_level_link_output; ?></td>
 					</tr>					
 					<tr>
 						<td><?php _e("Payment Button ID", "simple-membership"); ?></td>
@@ -241,7 +247,7 @@ function swpm_show_edit_txn_form($post)
 						<td><?php echo esc_attr($is_live); ?></td>
 					</tr>
 					<tr>
-						<td><?php _e("Custom", "simple-membership"); ?></td>
+						<td><?php _e("Custom (System Data)", "simple-membership"); ?></td>
 						<td><?php echo esc_attr($custom); ?></td>
 					</tr>
 

@@ -51,7 +51,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		global $wpdb;
 		$member_id = $item['member_id'];
 		$subscr_id = $item['subscr_id'];
-                $txn_id = $item['txn_id'];
+        $txn_id = $item['txn_id'];
 		$column_value = '';
 
 		if ( empty( $member_id ) ) {// Lets try to get the member id using unique reference
@@ -62,12 +62,12 @@ class SWPMPaymentsListTable extends WP_List_Table {
 					$member_id = $resultset->member_id;
 				}
 			} else if ( ! empty ( $txn_id ) ){
-                                //Fallback - lets try to find a member record using the "txn_id". See if this "txn_id" is found in the subscr_id of a member's profile.
-                                $resultset = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl where subscr_id=%s", $txn_id ), OBJECT );
+                //Fallback - lets try to find a member record using the "txn_id". See if this "txn_id" is found in the subscr_id of a member's profile.
+                $resultset = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl where subscr_id=%s", $txn_id ), OBJECT );
 				if ( $resultset ) {
 					// Found a record using the "txn_id" of the payments table.
 					$member_id = $resultset->member_id;
-				}                            
+				}
             }
 		}
 

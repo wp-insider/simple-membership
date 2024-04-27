@@ -277,7 +277,6 @@ class SwpmAccessControl {
     public static function is_current_url_a_system_page(){
         $current_page_url = SwpmMiscUtils::get_current_page_url();
 
-
         //Check if the current page is the membership renewal page.
         $renewal_url = SwpmSettings::get_instance()->get_value('renewal-page-url');        
         if (!empty($renewal_url)) {

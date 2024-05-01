@@ -170,6 +170,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Various translation related changes to the button configuration admin interface.
+
 = 4.4.5 =
 - Added a link to the corresponding member profile in the newly added transaction view/edit interface.
 - Added a link to the corresponding membership level in the newly added transaction view/edit interface.

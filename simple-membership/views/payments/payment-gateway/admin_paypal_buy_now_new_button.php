@@ -131,8 +131,8 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
     if ( empty($live_client_id) && empty($sandbox_client_id) ) {
         //API credentials are not configured. Show a warning message and return.
         echo '<div class="swpm-orange-box">';
-        echo 'You need to configure your PayPal API credentials first. ';
-        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api" target="_blank">Click here</a> to configure your PayPal API credentials in the payment settings menu.';
+        echo __('You need to configure your PayPal API credentials first. ', 'simple-membership');
+        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api" target="_blank">'.__('Click here', 'simple-membership').'</a> '. __('to configure your PayPal API credentials in the payment settings menu.', 'simple-membership');
         echo '</div>';
         return;
     }
@@ -140,12 +140,12 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
     ?>
 
     <div class="swpm-orange-box">
-        View the <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-buy-now-buttons-paypal-api/">documentation</a>&nbsp;
-        to learn how to create and use a PayPal Buy Now (New API) payment button.
+        <?php _e('View the', 'simple-membership') ?>  <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-buy-now-buttons-paypal-api/"><?php _e('documentation', 'simple-membership') ?></a>&nbsp; 
+        <?php _e('to learn how to create and use a PayPal Buy Now (New API) payment button.', 'simple-membership') ?>
     </div>
 
     <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Buy Now (New API) Button Configuration'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php _e('PayPal Buy Now (New API) Button Configuration', 'simple-membership'); ?></label></h3>
         <div class="inside">
 
             <form id="pp_buy_now_new_button_config_form" method="post">
@@ -157,37 +157,37 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
                     <?php if ($is_edit_mode) { ?>
                         <tr valign="top">
-                            <th scope="row"><?php echo SwpmUtils::_('Button ID'); ?></th>
+                            <th scope="row"><?php _e('Button ID', 'simple-membership'); ?></th>
                             <td>
                                 <input type="text" size="10" name="button_id" value="<?php echo $bt_opts['button_id']; ?>" readonly required />
-                                <p class="description">This is the ID of this payment button. It is automatically generated for you and it cannot be changed.</p>
+                                <p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
                             </td>
                         </tr>
                     <?php } ?>
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Button Title'); ?></th>
+                        <th scope="row"><?php _e('Button Title', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="button_name" value="<?php echo ($is_edit_mode ? $bt_opts['button_name'] : ''); ?>" required />
-                            <p class="description">Give this membership payment button a name. Example: Gold membership payment</p>
+                            <p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Membership Level'); ?></th>
+                        <th scope="row"><?php _e('Membership Level', 'simple-membership'); ?></th>
                         <td>
                             <select id="membership_level_id" name="membership_level_id">
                                 <?php echo ($is_edit_mode ? SwpmUtils::membership_level_dropdown($bt_opts['membership_level_id']) : SwpmUtils::membership_level_dropdown()); ?>
                             </select>
-                            <p class="description">Select the membership level this payment button is for.</p>
+                            <p class="description"><?php _e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Payment Details'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Payment Details', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Payment Currency'); ?></th>
+                        <th scope="row"><?php _e('Payment Currency', 'simple-membership'); ?></th>
                         <td>
                             <select id="payment_currency" name="payment_currency">
                                 <option value="USD" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'USD') ? 'selected="selected"' : ''; ?>>US Dollars ($)</option>
@@ -222,20 +222,20 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
                                 <option value="TRY" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'TRY') ? 'selected="selected"' : ''; ?>>Turkish Lira</option>
                                 <option value="VND" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'VND') ? 'selected="selected"' : ''; ?>>Vietnamese Dong</option>
                             </select>
-                            <p class="description">Select the currency for this payment button.</p>
+                            <p class="description"><?php _e('Select the currency for this payment button.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Payment Amount'); ?></th>
+                        <th scope="row"><?php _e('Payment Amount', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" min="0" step="0.01" size="10" name="payment_amount" value="<?php echo ($is_edit_mode ? $bt_opts['payment_amount'] : ''); ?>" required />
-                            <p class="description"><?php echo SwpmUtils::_('Enter payment amount. Example values: 9.90 or 25.00 or 299.90 etc (do not enter currency symbol).'); ?></p>
+                            <p class="description"><?php _e('Enter payment amount. Example values: 9.90 or 25.00 or 299.90 etc (do not enter currency symbol).', 'simple-membership'); ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Button Style Settings (Optional)'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Button Style Settings (Optional)', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
@@ -280,7 +280,7 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Button Width'); ?></th>
+                        <th scope="row"><?php _e('Button Width', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" step="1" min="0" size="10" name="pp_buy_now_new_btn_width" value="300" style="min-width: 150px;" />
                             <p class="description"><?php _e("Select button width.", "simple-membership"); ?></p>
@@ -301,7 +301,7 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Additional Settings (Optional)'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Additional Settings (Optional)', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
@@ -315,10 +315,10 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Return URL'); ?></th>
+                        <th scope="row"><?php _e('Return URL', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? $bt_opts['return_url'] : ''); ?>" />
-                            <p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
+                            <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
@@ -326,7 +326,7 @@ function render_save_edit_pp_buy_now_new_button_interface($bt_opts, $is_edit_mod
 
                 <p class="submit">
                     <?php wp_nonce_field('swpm_admin_add_edit_pp_buy_now_new_btn','swpm_admin_add_edit_pp_buy_now_new_btn') ?>
-                    <input type="submit" name="swpm_pp_buy_now_new_<?php echo ($is_edit_mode ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
+                    <input type="submit" name="swpm_pp_buy_now_new_<?php echo ($is_edit_mode ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php _e('Save Payment Data', 'simple-membership'); ?>" >
                 </p>
 
             </form>

@@ -153,8 +153,8 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
     if ( empty($live_client_id) && empty($sandbox_client_id) ) {
         //API credentials are not configured. Show a warning message and return.
         echo '<div class="swpm-orange-box">';
-        echo 'You need to configure your PayPal API credentials first. ';
-        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api" target="_blank">Click here</a> to configure your PayPal API credentials in the payment settings menu.';
+        echo __('You need to configure your PayPal API credentials first. ', 'simple-membership');
+        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api" target="_blank">'.__('Click here', 'simple-membership').'</a> ' . __('to configure your PayPal API credentials in the payment settings menu.', 'simple-membership');
         echo '</div>';
         return;
     }
@@ -162,12 +162,12 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
     ?>
 
     <div class="swpm-orange-box">
-        View the <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-subscription-buttons-paypal-api/">documentation</a>&nbsp;
-        to learn how to create and use a PayPal Subscription (New API) payment button.
+        <?php _e('View the', 'simple-membership') ?> <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-subscription-buttons-paypal-api/"><?php _e('documentation', 'simple-membership') ?></a>&nbsp;
+        <?php _e('to learn how to create and use a PayPal Subscription (New API) payment button.', 'simple-membership') ?>
     </div>
 
     <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('PayPal Subscription (New API) Button Configuration'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php _e('PayPal Subscription (New API) Button Configuration', 'simple-membership'); ?></label></h3>
         <div class="inside">
 
             <form id="pp_subscription_new_button_config_form" method="post">
@@ -179,28 +179,28 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
                     <?php if ($is_edit_mode) { ?>
                         <tr valign="top">
-                            <th scope="row"><?php echo SwpmUtils::_('Button ID'); ?></th>
+                            <th scope="row"><?php _e('Button ID', 'simple-membership'); ?></th>
                             <td>
                                 <input type="text" size="10" name="button_id" value="<?php echo $bt_opts['button_id']; ?>" readonly required />
-                                <p class="description">This is the ID of this payment button. It is automatically generated for you and it cannot be changed.</p>
+                                <p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
                             </td>
                         </tr>
                     <?php } ?>
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Button Title'); ?></th>
+                        <th scope="row"><?php _e('Button Title', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="button_name" value="<?php echo ($is_edit_mode ? $bt_opts['button_name'] : ''); ?>" required />
-                            <p class="description">Give this membership payment button a name. Example: Gold membership payment</p>
+                            <p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Membership Level'); ?></th>
+                        <th scope="row"><?php _e('Membership Level', 'simple-membership'); ?></th>
                         <td>
                             <select id="membership_level_id" name="membership_level_id">
                                 <?php echo ($is_edit_mode ? SwpmUtils::membership_level_dropdown($bt_opts['membership_level_id']) : SwpmUtils::membership_level_dropdown()); ?>
                             </select>
-                            <p class="description">Select the membership level this payment button is for.</p>
+                            <p class="description"><?php _e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
@@ -209,32 +209,32 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
 					if ( $is_edit_mode && !empty($bt_opts['pp_subscription_plan_id'])) {
                         ?>
                         <tr valign="top">
-                            <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('PayPal Billing Plan Details for This Button'); ?></div></th>
+                            <th colspan="2"><div class="swpm-grey-box"><?php _e('PayPal Billing Plan Details for This Button', 'simple-membership'); ?></div></th>
                         </tr>
 
                         <tr valign="top">
-                            <th scope="row"><?php echo SwpmUtils::_('Subscription Plan Mode'); ?></th>
+                            <th scope="row"><?php _e('Subscription Plan Mode', 'simple-membership'); ?></th>
                             <td>
                                 <input type="text" size="20" name="pp_subscription_plan_mode" value="<?php echo esc_attr($bt_opts['pp_subscription_plan_mode']); ?>" readonly />
-                                <p class="description">This is the paypal mode this subscription button was created in.</p>
+                                <p class="description"><?php _e('This is the paypal mode this subscription button was created in.', 'simple-membership') ?></p>
                             </td>
                         </tr>
                         <tr valign="top">
-                            <th scope="row"><?php echo SwpmUtils::_('Subscription Plan ID'); ?></th>
+                            <th scope="row"><?php _e('Subscription Plan ID', 'simple-membership'); ?></th>
                             <td>
                                 <input type="text" size="20" name="pp_subscription_plan_id" value="<?php echo esc_attr($bt_opts['pp_subscription_plan_id']); ?>" readonly />
-                                <p class="description">This is the paypal subscription plan ID.</p>
+                                <p class="description"><?php _e('This is the paypal subscription plan ID.', 'simple-membership') ?></p>
                             </td>
                         <?php                    
 					}
                     ?>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Subscription/Recurring Billing Details'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Subscription/Recurring Billing Details', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Payment Currency'); ?></th>
+                        <th scope="row"><?php _e('Payment Currency', 'simple-membership'); ?></th>
                         <td>
                             <select id="payment_currency" name="payment_currency">
                                 <option value="USD" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'USD') ? 'selected="selected"' : ''; ?>>US Dollars ($)</option>
@@ -269,20 +269,20 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                                 <option value="TRY" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'TRY') ? 'selected="selected"' : ''; ?>>Turkish Lira</option>
                                 <option value="VND" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'VND') ? 'selected="selected"' : ''; ?>>Vietnamese Dong</option>
                             </select>
-                            <p class="description">Select the currency for this payment button.</p>
+                            <p class="description"><?php _e('Select the currency for this payment button.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Recurring Billing Amount'); ?></th>
+                        <th scope="row"><?php _e('Recurring Billing Amount', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" min="0" step="0.01" size="10" name="recurring_billing_amount" value="<?php echo ($is_edit_mode ? $bt_opts['recurring_billing_amount'] : ''); ?>" required />
-                            <p class="description"><?php echo SwpmUtils::_('Amount to be charged on every billing cycle. If used with a trial period then this amount will be charged after the trial period is over. Example values: 9.90 or 25.00 or 299.90 etc (do not enter currency symbol).'); ?></p>
+                            <p class="description"><?php _e('Amount to be charged on every billing cycle. If used with a trial period then this amount will be charged after the trial period is over. Example values: 9.90 or 25.00 or 299.90 etc (do not enter currency symbol).', 'simple-membership'); ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Recurring Billing Cycle'); ?></th>
+                        <th scope="row"><?php _e('Recurring Billing Cycle', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" min="0" step="1" size="10" name="recurring_billing_cycle" value="<?php echo ($is_edit_mode ? $bt_opts['recurring_billing_cycle'] : ''); ?>" required />
                             <select id="recurring_billing_cycle_term" name="recurring_billing_cycle_term">
@@ -290,40 +290,40 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                                 <option value="M"<?php echo (isset($bt_opts['recurring_billing_cycle_term']) && $bt_opts['recurring_billing_cycle_term'] === 'M') ? ' selected' : ''; ?>>Month(s)</option>
                                 <option value="Y"<?php echo (isset($bt_opts['recurring_billing_cycle_term']) && $bt_opts['recurring_billing_cycle_term'] === 'Y') ? ' selected' : ''; ?>>Year(s)</option>
                             </select>
-                            <p class="description"><?php echo SwpmUtils::_('Set the interval of the recurring payment. Example value: 1 Month (if you want to charge every month)'); ?></p>
+                            <p class="description"><?php _e('Set the interval of the recurring payment. Example value: 1 Month (if you want to charge every month)', 'simple-membership'); ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Recurring Billing Cycle Count'); ?></th>
+                        <th scope="row"><?php _e('Recurring Billing Cycle Count', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="10" name="recurring_billing_cycle_count" value="<?php echo ($is_edit_mode ? $bt_opts['recurring_billing_cycle_count'] : ''); ?>" />
-                            <p class="description"><?php echo SwpmUtils::_('After how many cycles should billing stop. Leave this field empty (or enter 0) if you want the payment to continue until the subscription is canceled.'); ?></p>
+                            <p class="description"><?php _e('After how many cycles should billing stop. Leave this field empty (or enter 0) if you want the payment to continue until the subscription is canceled.', 'simple-membership'); ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Re-attempt on Failure'); ?></th>
+                        <th scope="row"><?php _e('Re-attempt on Failure', 'simple-membership'); ?></th>
                         <td>
                             <input type="checkbox" name="recurring_billing_reattempt" value="1" <?php echo (isset($bt_opts['recurring_billing_reattempt']) && !empty($bt_opts['recurring_billing_reattempt']) ) ? ' checked' : ''; ?> />
-                            <p class="description"><?php echo SwpmUtils::_('When checked, the payment will be re-attempted two more times if the payment fails. After the third failure, the subscription will be canceled.'); ?></p>
+                            <p class="description"><?php _e('When checked, the payment will be re-attempted two more times if the payment fails. After the third failure, the subscription will be canceled.', 'simple-membership'); ?></p>
                         </td>
                     </tr>                    
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Trial Billing Details (Leave empty if you are not offering a trial period)'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Trial Billing Details (Leave empty if you are not offering a trial period)', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Trial Billing Amount'); ?></th>
+                        <th scope="row"><?php _e('Trial Billing Amount', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" step="0.01" min="0" size="10" name="trial_billing_amount" value="<?php echo ($is_edit_mode ? $bt_opts['trial_billing_amount'] : ''); ?>" />
-                            <p class="description">Amount to be charged for the trial period. Enter 0 if you want to offer a free trial period.</p>
+                            <p class="description"><?php _e('Amount to be charged for the trial period. Enter 0 if you want to offer a free trial period.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Trial Billing Period'); ?></th>
+                        <th scope="row"><?php _e('Trial Billing Period', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" min="0" step="1" size="10" name="trial_billing_cycle" value="<?php echo ($is_edit_mode ? $bt_opts['trial_billing_cycle'] : ''); ?>" />
                             <select id="trial_billing_cycle_term" name="trial_billing_cycle_term">
@@ -331,12 +331,12 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                                 <option value="M"<?php echo (isset($bt_opts['trial_billing_cycle_term']) && $bt_opts['trial_billing_cycle_term'] === 'M') ? ' selected' : ''; ?>>Month(s)</option>
                                 <option value="Y"<?php echo (isset($bt_opts['trial_billing_cycle_term']) && $bt_opts['trial_billing_cycle_term'] === 'Y') ? ' selected' : ''; ?>>Year(s)</option>
                             </select>
-                            <p class="description">Length of the trial period</p>
+                            <p class="description"><?php _e('Length of the trial period', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Button Style Settings (Optional)'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Button Style Settings (Optional)', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
@@ -381,7 +381,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Button Width'); ?></th>
+                        <th scope="row"><?php _e('Button Width', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" step="1" min="0" size="10" name="pp_subscription_new_btn_width" value="300" style="min-width: 150px;" />
                             <p class="description"><?php _e("Select button width.", "simple-membership"); ?></p>
@@ -402,7 +402,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Additional Settings (Optional)'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Additional Settings (Optional)', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
@@ -416,10 +416,10 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Return URL'); ?></th>
+                        <th scope="row"><?php _e('Return URL', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? $bt_opts['return_url'] : ''); ?>" />
-                            <p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
+                            <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
@@ -427,7 +427,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
 
                 <p class="submit">
                     <?php wp_nonce_field('swpm_admin_add_edit_pp_subscription_new_btn','swpm_admin_add_edit_pp_subscription_new_btn') ?>
-                    <input type="submit" name="swpm_pp_subscription_new_<?php echo ($is_edit_mode ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
+                    <input type="submit" name="swpm_pp_subscription_new_<?php echo ($is_edit_mode ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php _e('Save Payment Data'); ?>" >
                 </p>
 
             </form>

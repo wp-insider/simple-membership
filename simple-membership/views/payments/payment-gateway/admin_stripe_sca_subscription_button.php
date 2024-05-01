@@ -9,8 +9,8 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 	if ( version_compare( PHP_VERSION, '5.6.0' ) < 0 ) {
 		//This server can't handle Stripe library
 		echo '<div class="swpm-red-box">';
-		echo '<p>The Stripe payment gateway libary requires at least PHP 5.6.0. Your server is using a very old version of PHP that Stripe does not support.</p>';
-		echo '<p>Request your hosting provider to upgrade your PHP to a more recent version then you will be able to use the Stripe gateway.<p>';
+		echo '<p>'.__('The Stripe payment gateway libary requires at least PHP 5.6.0. Your server is using a very old version of PHP that Stripe does not support.', 'simple-membership').'</p>';
+		echo '<p>'.__('Request your hosting provider to upgrade your PHP to a more recent version then you will be able to use the Stripe gateway.', 'simple-membership').'<p>';
 		echo '</div>';
 		return;
 	}
@@ -74,14 +74,14 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 	?>
 
 <div class="swpm-orange-box">
-	View the <a target="_blank" href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/">documentation</a>&nbsp;
-	to learn how to create a Stripe Subscription payment button and use it.
+	<?php _e('View the', 'simple-membership') ?> <a target="_blank" href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/"><?php _e('documentation', 'simple-membership') ?></a>&nbsp;
+	<?php _e('to learn how to create a Stripe Subscription payment button and use it.', 'simple-membership') ?>
 </div>
 
 <form id="stripe_sca_subsciption_button_config_form" method="post">
 
 	<div class="postbox">
-		<h3 class="hndle"><label for="title"><?php echo SwpmUtils::_( 'Stripe Subscription Button Configuration' ); ?></label></h3>
+		<h3 class="hndle"><label for="title"><?php _e( 'Stripe Subscription Button Configuration' , 'simple-membership'); ?></label></h3>
 		<div class="inside">
 			<table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 				<?php if ( ! $edit ) { ?>
@@ -89,47 +89,47 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				<input type="hidden" name="swpm_button_type_selected" value="1">
 				<?php } else { ?>
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Button ID' ); ?></th>
+					<th scope="row"><?php _e( 'Button ID' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="10" name="button_id" value="<?php echo $opts['button_id']; ?>" readonly required />
-						<p class="description">This is the ID of this payment button. It is automatically generated for you and it cannot be changed.</p>
+						<p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 				<?php } ?>
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Button Title' ); ?></th>
+					<th scope="row"><?php _e( 'Button Title' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="50" name="button_name" value="<?php echo ( $edit ? $opts['button_title'] : '' ); ?>" required />
-						<p class="description">Give this membership payment button a name. Example: Gold membership payment</p>
+						<p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Membership Level' ); ?></th>
+					<th scope="row"><?php _e( 'Membership Level' , 'simple-membership'); ?></th>
 					<td>
 						<select id="membership_level_id" name="membership_level_id">
 							<?php echo ( $edit ? SwpmUtils::membership_level_dropdown( $opts['membership_level_id'][0] ) : SwpmUtils::membership_level_dropdown() ); ?>
 						</select>
-						<p class="description">Select the membership level this payment button is for.</p>
+						<p class="description"><?php _e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Stripe API ID' ); ?></th>
+					<th scope="row"><?php _e( 'Stripe API ID' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" name="stripe_plan_id" value="<?php echo ( $edit ? $opts['stripe_plan_id'][0] : '' ); ?>" required />
 						<p class="description">
-							ID of the plan that you want subscribers to be assigned to. You can get more details in the
-							<a href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/" target="_blank">documentation</a>.
+							<?php _e('ID of the plan that you want subscribers to be assigned to. You can get more details in the', 'simple-membership') ?>
+							<a href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/" target="_blank"><?php _e('documentation', 'simple-membership') ?></a>.
 						</p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Trial Period' ); ?></th>
+					<th scope="row"><?php _e( 'Trial Period' , 'simple-membership'); ?></th>
 					<td>
-						<input type="number" min="0" name="stripe_trial_period" value="<?php echo $edit ? esc_attr( $opts['stripe_trial_period'][0] ) : ''; ?>" /> days
-						<p class="description">If you want to use a trial period then enter the number of days in this field. Subscriptions to this plan will automatically start after that. If left blank or 0, trial period is disabled.</p>
+						<input type="number" min="0" name="stripe_trial_period" value="<?php echo $edit ? esc_attr( $opts['stripe_trial_period'][0] ) : ''; ?>" /> <?php _e('days', 'simple-membership') ?>
+						<p class="description"><?php _e('If you want to use a trial period then enter the number of days in this field. Subscriptions to this plan will automatically start after that. If left blank or 0, trial period is disabled.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
@@ -139,57 +139,57 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 	</div><!-- end of main button configuration box -->
 
 	<div class="postbox">
-		<h3 class="hndle"><label for="title"><?php echo SwpmUtils::_( 'Stripe API Settings' ); ?></label></h3>
+		<h3 class="hndle"><label for="title"><?php _e( 'Stripe API Settings' , 'simple-membership'); ?></label></h3>
 		<div class="inside">
 
 			<table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Use Global API Keys Settings' ); ?></th>
+					<th scope="row"><?php _e( 'Use Global API Keys Settings' , 'simple-membership'); ?></th>
 					<td>
 						<input type="checkbox" name="stripe_use_global_keys" value="1" <?php echo $edit ? ( $use_global_keys ? ' checked' : '' ) : ' checked'; ?> />
-						<p class="description"><?php echo SwpmUtils::_( 'Use API keys from <a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe" target="_blank">Payment Settings</a> tab.' ); ?></p>
+						<p class="description"><?php _e( 'Use API keys from <a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe" target="_blank">Payment Settings</a> tab.', 'simple-membership' ); ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Test Publishable Key' ); ?></th>
+					<th scope="row"><?php _e( 'Test Publishable Key' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="stripe_test_publishable_key" value="<?php echo esc_attr( $edit ? $stripe_test_publishable_key : '' ); ?>" />
-						<p class="description">Enter your Stripe test publishable key.</p>
+						<p class="description"><?php _e('Enter your Stripe test publishable key.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Test Secret Key' ); ?></th>
+					<th scope="row"><?php _e( 'Test Secret Key' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="stripe_test_secret_key" value="<?php echo esc_attr( $edit ? $stripe_test_secret_key : '' ); ?>" />
-						<p class="description">Enter your Stripe test secret key.</p>
+						<p class="description"><?php _e('Enter your Stripe test secret key.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Live Publishable Key' ); ?></th>
+					<th scope="row"><?php _e( 'Live Publishable Key' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="stripe_live_publishable_key" value="<?php echo esc_attr( $edit ? $stripe_live_publishable_key : '' ); ?>" />
-						<p class="description">Enter your Stripe live publishable key.</p>
+						<p class="description"><?php _e('Enter your Stripe live publishable key.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Live Secret Key' ); ?></th>
+					<th scope="row"><?php _e( 'Live Secret Key' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="stripe_live_secret_key" value="<?php echo esc_attr( $edit ? $stripe_live_secret_key : '' ); ?>" />
-						<p class="description">Enter your Stripe live secret key.</p>
+						<p class="description"><?php _e('Enter your Stripe live secret key.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php echo SwpmUtils::_( 'Webhook Endpoint URL' ); ?></th>
+					<th scope="row"><?php _e( 'Webhook Endpoint URL' , 'simple-membership'); ?></th>
 					<td>
 						<kbd><?php echo SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1&hook=1'; ?></kbd>
 						<p class="description">
-							You should create a new Webhook in your Stripe account and put this URL there. You can get more info in the <a href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/" target="_blank">documentation</a>.
+							<?php _e('You should create a new Webhook in your Stripe account and put this URL there. You can get more info in the', 'simple-membership') ?> <a href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/" target="_blank"><?php _e('documentation', 'simple-membership') ?></a>.
 						</p>
 					</td>
 				</tr>
@@ -219,7 +219,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 					<th scope="row"><?php _e( 'Collect Customer Address' , 'simple-membership'); ?></th>
 					<td>
 						<input type="checkbox" name="collect_address" value="1" <?php echo ( $edit ? ( ( isset( $opts['stripe_collect_address'][0] ) && $opts['stripe_collect_address'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
-						<p class="description">Enable this option if you want to collect customer address during Stripe checkout.</p>
+						<p class="description"><?php _e('Enable this option if you want to collect customer address during Stripe checkout.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
@@ -227,7 +227,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 					<th scope="row"><?php _e( 'Enable Automatic Tax' , 'simple-membership'); ?></th>
 					<td>
 					<input type="checkbox" name="automatic_tax" value="1" <?php echo ( $edit ? ( ( isset( $opts['stripe_automatic_tax'][0] ) && $opts['stripe_automatic_tax'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
-						<p class="description">Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.</p>
+						<p class="description"><?php _e('Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
@@ -235,7 +235,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 					<th scope="row"><?php _e( 'Return URL' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="return_url" value="<?php echo ( $edit ? $opts['return_url'][0] : '' ); ?>" />
-						<p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
+						<p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
@@ -243,7 +243,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 					<th scope="row"><?php _e( 'Cancel URL' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="cancel_url" value="<?php echo $edit && isset($opts['cancel_url'][0]) && !empty($opts['cancel_url'][0]) ? esc_url_raw($opts['cancel_url'][0] ) : '' ?>" />
-						<p class="description">This is the URL the user will be redirected to when a payment is canceled. Enter the URL of your preferred page here.</p>
+						<p class="description"><?php _e('This is the URL the user will be redirected to when a payment is canceled. Enter the URL of your preferred page here.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
@@ -251,7 +251,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 					<th scope="row"><?php _e( 'Button Image URL' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="button_image_url" value="<?php echo ( $edit ? $opts['button_image_url'][0] : '' ); ?>" />
-						<p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
+						<p class="description"><?php _e('If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
@@ -261,7 +261,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 
 	<p class="submit">
 		<?php wp_nonce_field( 'swpm_admin_add_edit_stripe_sca_subs_btn', 'swpm_admin_add_edit_stripe_sca_subs_btn' ); ?>
-		<input type="submit" name="swpm_stripe_sca_subscription_<?php echo ( $edit ? 'edit' : 'save' ); ?>_submit" class="button-primary" value="<?php echo SwpmUtils::_( 'Save Payment Data' ); ?>">
+		<input type="submit" name="swpm_stripe_sca_subscription_<?php echo ( $edit ? 'edit' : 'save' ); ?>_submit" class="button-primary" value="<?php _e( 'Save Payment Data' , 'simple-membership'); ?>">
 	</p>
 
 </form>
@@ -395,7 +395,7 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 
 		if ( $edit ) {
 			if ( empty( $stripe_error_msg ) ) {
-				echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
+				echo '<div id="message" class="updated fade"><p>'.__('Payment button data successfully updated!', 'simple-membership').'</p></div>';
 			} else {
 				echo '<div id="message" class="error"><p>' . $stripe_error_msg . '</p></div>';
 			}

@@ -310,7 +310,8 @@ class SWPM_Utils_Subscriptions
 	}
 
 	/**
-	 * Generates HTML form for the 'swpm_stripe_subscription_cancel_link' shortcode. (Used in old stripe subscription cancel shortcode)
+	 * Generates HTML form for the 'swpm_stripe_subscription_cancel_link' shortcode. 
+	 * (Used by the old stripe subscription cancel shortcode). It will be removed in the future.
 	 *
 	 * @param array $args
 	 * @param boolean $sub_id The subscription ID.
@@ -501,7 +502,7 @@ class SWPM_Utils_Subscriptions
 
 	/**
 	 * The HTML form for subscription cancellation of all gateways.
-	 * Used by the 'swpm_show_active_subscription_and_cancel_button' shortcode.
+	 * Used by the 'swpm_show_subscriptions_and_cancel_link' shortcode.
 	 * 
 	 * @param array $subscription Subscription Details.
 	 * 

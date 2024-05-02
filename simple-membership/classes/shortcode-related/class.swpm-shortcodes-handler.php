@@ -39,8 +39,8 @@ class SwpmShortcodesHandler {
 			return '<p class="swpm-red-box">Error! You must specify a button ID with this shortcode. Check the usage documentation.</p>';
 		}
 
-                //Sanitize the arguments.
-                $args = array_map( 'esc_attr', $args );
+		//Add a quick escaping to the shortcode arguments.
+		$args = array_map( 'esc_attr', $args );
                         
 		$button_id = $id;
 		//$button = get_post($button_id); //Retrieve the CPT for this button
@@ -324,7 +324,7 @@ class SwpmShortcodesHandler {
 				$output .= '<div class="swpm-sub-name">'. esc_attr($subscription['plan']).'</div>';
 				if( isset ( $subscription['is_attached_to_profile'] ) && $subscription['is_attached_to_profile'] == 'yes'  ){
 					//This subscription is attached to the profile currently. Show a message.
-					$output .= '<div class="swpm-sub-attached-to-profile">'. __('Currently providing your membership access.', 'simple-membership').'</div>';
+					$output .= '<div class="swpm-sub-attached-to-profile">'. __('Currently used for your membership access.', 'simple-membership').'</div>';
 				}
 				$output .= '</td>';
 

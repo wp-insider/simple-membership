@@ -3023,7 +3023,7 @@ msgid "Action"
 msgstr ""
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:327
-msgid "Currently providing your membership access."
+msgid "Currently used for your membership access."
 msgstr ""
 
 #: classes/shortcode-related/class.swpm-shortcodes-handler.php:340

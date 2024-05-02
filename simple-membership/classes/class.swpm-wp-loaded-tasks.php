@@ -16,7 +16,7 @@ class SwpmWpLoadedTasks {
 		//IPN listener
 		$this->swpm_ipn_listener();
 
-		//Cancel stripe subscription action listener (Used by old subscription cancel shortcode)
+		//Cancel stripe subscription action listener (Used by the old Stripe subscription cancel shortcode). It will be removed in future.
 		$cancel_stripe_sub_action = filter_input( INPUT_POST, 'swpm_do_cancel_stripe_sub', FILTER_SANITIZE_NUMBER_INT );
 		if ( ! empty( $cancel_stripe_sub_action ) ) {
 			if ( ! SwpmMemberUtils::is_member_logged_in() ) {
@@ -27,7 +27,7 @@ class SwpmWpLoadedTasks {
 			(new SWPM_Utils_Subscriptions( $member_id ))->load_stripe_subscriptions()->handle_cancel_sub();
 		}
 
-		//Cancel subscription action listener
+		//Cancel subscription action listener (Used by the 'swpm_show_subscriptions_and_cancel_link' shortcode)
 		if ( isset($_POST['swpm_do_cancel_sub']) ) {
 			if ( ! SwpmMemberUtils::is_member_logged_in() ) {
 				//member not logged in

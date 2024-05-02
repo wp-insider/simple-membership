@@ -173,6 +173,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - Various translation related changes to the button configuration admin interface.
 - Generated a new translation POT file for the plugin.
+- Fixed an error with the cancel Stripe subscription shortcode.
 - Added output escaping to the PayPal cancel subscription shortcode.
 
 = 4.4.5 =

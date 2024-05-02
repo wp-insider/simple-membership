@@ -25,7 +25,7 @@ class SwpmWpLoadedTasks {
 				SWPM_Utils_Subscriptions::cancel_msg( __( 'You are not logged in.', 'simple-membership' ) );
 			}
 			$member_id = SwpmMemberUtils::get_logged_in_members_id();
-			(new SWPM_Utils_Subscriptions( $member_id ))->load()->handle_cancel_sub();
+			(new SWPM_Utils_Subscriptions( $member_id ))->load_stripe_subscriptions()->handle_cancel_sub();
 		}
 	}
 

@@ -14,7 +14,7 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     }
 
     //Get class option for button styling, set Stripe's default if none specified
-    $class = isset($args['class']) ? $args['class'] : '';
+    $class = isset($args['class']) ? sanitize_html_class($args['class']) : '';
 
     //Check new_window parameter
     $window_target = isset($args['new_window']) ? 'target="_blank"' : '';

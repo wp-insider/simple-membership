@@ -231,7 +231,7 @@ class SwpmShortcodesHandler {
 			if ( empty( $css_class ) ) {
 				$link_css_class = '';
 			} else {
-				$link_css_class = ' class="' . esc_js($css_class) . '"';
+				$link_css_class = ' class="' . sanitize_html_class($css_class) . '"';
 			}
 
 			//Set the default anchor text (if one is provided via the shortcode).

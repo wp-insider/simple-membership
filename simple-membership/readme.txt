@@ -172,6 +172,7 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - Various translation related changes to the button configuration admin interface.
+- Added output escaping to the PayPal cancel subscription shortcode
 
 = 4.4.5 =
 - Added a link to the corresponding member profile in the newly added transaction view/edit interface.

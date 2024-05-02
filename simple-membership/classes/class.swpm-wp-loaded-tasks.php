@@ -16,10 +16,19 @@ class SwpmWpLoadedTasks {
 		//IPN listener
 		$this->swpm_ipn_listener();
 
-		//Cancel subscirption action listener
-		$cancel_sub_action = filter_input( INPUT_POST, 'swpm_do_cancel_sub', FILTER_SANITIZE_NUMBER_INT );
+		//Cancel stripe subscription action listener (Used by old subscription cancel shortcode)
+		$cancel_stripe_sub_action = filter_input( INPUT_POST, 'swpm_do_cancel_stripe_sub', FILTER_SANITIZE_NUMBER_INT );
+		if ( ! empty( $cancel_stripe_sub_action ) ) {
+			if ( ! SwpmMemberUtils::is_member_logged_in() ) {
+				//member not logged in
+				SWPM_Utils_Subscriptions::cancel_msg( __( 'You are not logged in.', 'simple-membership' ) );
+			}
+			$member_id = SwpmMemberUtils::get_logged_in_members_id();
+			(new SWPM_Utils_Subscriptions( $member_id ))->load_stripe_subscriptions()->handle_cancel_sub();
+		}
 
-		if ( ! empty( $cancel_sub_action ) ) {
+		//Cancel subscription action listener
+		if ( isset($_POST['swpm_do_cancel_sub']) ) {
 			if ( ! SwpmMemberUtils::is_member_logged_in() ) {
 				//member not logged in
 				SWPM_Utils_Subscriptions::cancel_msg( __( 'You are not logged in.', 'simple-membership' ) );

@@ -310,7 +310,7 @@ class SWPM_Utils_Subscriptions
 	}
 
 	/**
-	 * Generates HTML form for the 'swpm_stripe_subscription_cancel_link' shortcode.
+	 * Generates HTML form for the 'swpm_stripe_subscription_cancel_link' shortcode. (Used in old stripe subscription cancel shortcode)
 	 *
 	 * @param array $args
 	 * @param boolean $sub_id The subscription ID.
@@ -332,8 +332,13 @@ class SWPM_Utils_Subscriptions
 		$nonce = wp_nonce_field($token, 'swpm_cancel_sub_nonce', false, false);
 
 		$anchor_text = isset($args['anchor_text']) ? $args['anchor_text'] : __('Cancel Subscription', 'simple-membership');
-		$out = '<form method="POST">%s<input type="hidden" name="swpm_cancel_sub_token" value="%s"></input>
-		<button type="submit" name="swpm_do_cancel_sub" value="1" onclick="return confirm(\'' . esc_js(__('Are you sure that you want to cancel the subscription?', 'simple-membership')) . '\');">' . esc_attr($anchor_text) . '</button></form>';
+
+		$out = '<form method="POST">';
+		$out .= '%s';
+		$out .= '<input type="hidden" name="swpm_cancel_sub_token" value="%s"></input>';
+		$out .= '<input type="hidden" name="swpm_cancel_sub_gateway" value="stripe-sca-subs">';
+		$out .= '<button type="submit" name="swpm_do_cancel_stripe_sub" value="1" onclick="return confirm(\'' . esc_js(__('Are you sure that you want to cancel the subscription?', 'simple-membership')) . '\');">' . esc_attr($anchor_text) . '</button>';
+		$out .= '</form>';
 
 		$out = sprintf($out, $nonce, $token);
 
@@ -513,7 +518,7 @@ class SWPM_Utils_Subscriptions
 				<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
 				<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo esc_attr($token) ?>">
 				<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">
-				<button type="submit" class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active" name="swpm_do_cancel_sub" value="1" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
+				<button type="submit" class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active" name="swpm_do_cancel_sub" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
 					<?php _e('Cancel Subscription', 'simple-membership') ?>
 				</button>
 			</form>

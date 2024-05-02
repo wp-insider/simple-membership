@@ -36,7 +36,7 @@ function swpm_create_new_stripe_buy_now_button() {
 					<th scope="row"><?php _e( 'Button Title' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="50" name="button_name" value="" required />
-						<p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?><?php _e('', 'simple-membership') ?></p>
+						<p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
 					</td>
 				</tr>
 

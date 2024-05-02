@@ -231,7 +231,7 @@ class SwpmShortcodesHandler {
 			if ( empty( $css_class ) ) {
 				$link_css_class = '';
 			} else {
-				$link_css_class = ' class="' . esc_attr($css_class) . '"';
+				$link_css_class = ' class="' . esc_js($css_class) . '"';
 			}
 
 			//Set the default anchor text (if one is provided via the shortcode).
@@ -243,12 +243,12 @@ class SwpmShortcodesHandler {
 			$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 			if ( $sandbox_enabled ) {
 				//Sandbox mode
-				$output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" '. $window_target . esc_attr($link_css_class) .'>';
+				$output .= '<a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" '. esc_js($window_target) . esc_attr($link_css_class) .'>';
 				$output .= esc_attr($anchor_text);
 				$output .= '</a>';
 			} else {
 				//Live mode
-				$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" '.$window_target . esc_attr($link_css_class) .'>';
+				$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" _fcksavedurl="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=' . esc_attr($merchant_id) . '" '. esc_js($window_target) . esc_attr($link_css_class) .'>';
 				$output .= esc_attr($anchor_text);
 				$output .= '</a>';
 			}

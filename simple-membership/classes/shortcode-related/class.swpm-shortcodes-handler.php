@@ -5,6 +5,7 @@ class SwpmShortcodesHandler {
 	public function __construct() {
 		//Register all the shortcodes here
 		add_shortcode( 'swpm_payment_button', array( &$this, 'swpm_payment_button_sc' ) );
+		
 		add_shortcode( 'swpm_thank_you_page_registration', array( &$this, 'swpm_ty_page_rego_sc' ) );
 
 		add_shortcode( 'swpm_show_expiry_date', array( &$this, 'swpm_show_expiry_date_sc' ) );

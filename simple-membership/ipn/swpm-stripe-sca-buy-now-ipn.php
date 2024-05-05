@@ -34,7 +34,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 			wp_die( esc_html( sprintf( 'Fatal Error! Payment button (ID: %d) does not exist. This request will fail.', $button_id ) ) );
 		}
 
-		$discount_amount = 0;
+		$discount_amount_in_cents = 0;
 
 		$settings = SwpmSettings::get_instance();
 		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );

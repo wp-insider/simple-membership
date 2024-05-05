@@ -7,16 +7,16 @@ add_filter('swpm_payment_button_shortcode_for_pp_buy_now_new', 'swpm_render_pp_b
 
 function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
 
-    $button_id = isset($args['id']) ? $args['id'] : '';
+    $button_id = isset($args['id']) ? sanitize_text_field($args['id']) : '';
     if (empty($button_id)) {
-        return '<p class="swpm-red-box">Error! swpm_render_pp_buy_now_new_button_sc_output() function requires the button ID value to be passed to it.</p>';
+        return '<p class="swpm-red-box">'.__('Error! swpm_render_pp_buy_now_new_button_sc_output() function requires the button ID value to be passed to it.', 'simple-membership').'</p>';
     }
 
     //Membership level for this button
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
     //Verify that this membership level exists (to prevent user paying for a level that has been deleted)
     if (!SwpmUtils::membership_level_id_exists($membership_level_id)) {
-        return '<p class="swpm-red-box">Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.</p>';
+        return '<p class="swpm-red-box">'.__('Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.', 'simple-membership').'</p>';
     }
 
     //Payment amount

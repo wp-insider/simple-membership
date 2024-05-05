@@ -971,7 +971,7 @@ class SwpmMiscUtils {
 		}
 		$countries_dropdown = '';
 		//let's add "(Please select)" option
-		$countries_dropdown .= "\r\n" . '<option value=""' . ( $country == '' ? ' selected' : '' ) . '>' . SwpmUtils::_( '(Please Select)' ) . '</option>';
+		$countries_dropdown .= "\r\n" . '<option value=""' . ( $country == '' ? ' selected' : '' ) . '>' . __( '(Please Select)', 'simple-membership' ) . '</option>';
 		if ( $guess_country == '' && $country != '' ) {
 			//since we haven't guessed the country name, let's add current value to the options
 			$countries_dropdown .= "\r\n" . '<option value="' . $country . '" selected>' . $country . '</option>';
@@ -980,7 +980,7 @@ class SwpmMiscUtils {
 			$country = $guess_country;
 		}
 		foreach ( $countries as $country_name ) {
-			$countries_dropdown .= "\r\n" . '<option value="' . $country_name . '"' . ( strtolower( $country_name ) == strtolower( $country ) ? ' selected' : '' ) . '>' . $country_name . '</option>';
+			$countries_dropdown .= "\r\n" . '<option value="' . $country_name . '"' . ( strtolower( $country_name ) == strtolower( $country ) ? ' selected' : '' ) . '>' . __($country_name, 'simple-membership') . '</option>';
 		}
 		return $countries_dropdown;
 	}

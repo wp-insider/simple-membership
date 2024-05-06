@@ -170,6 +170,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Added more output escaping to the payment button shortcode output.
+
 = 4.4.6 =
 - Various translation related changes to the button configuration admin interface.
 - Generated a new translation POT file for the plugin.

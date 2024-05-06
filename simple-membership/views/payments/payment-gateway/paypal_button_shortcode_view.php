@@ -67,29 +67,29 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
         $action_url='https://www.paypal.com/cgi-bin/webscr';
     }
 
-    $output.=sprintf('<form id="swpm-paypal-payment-form-%s" action="%s" method="post" %s>',$uniqid,$action_url,$window_target);
+    $output.= '<form id="swpm-paypal-payment-form-'.$uniqid.'" action="'.$action_url.'" method="post" '.$window_target.'>';
 
     $output .= '<input type="hidden" name="cmd" value="_xclick" />';
     $output .= '<input type="hidden" name="charset" value="utf-8" />';
     $output .= '<input type="hidden" name="bn" value="TipsandTricks_SP" />';
     $output .= '<input type="hidden" name="business" value="' . apply_filters('swpm_buy_now_button_paypal_email',$paypal_email) . '" />';
-    $output .= '<input type="hidden" name="amount" value="' . $payment_amount . '" />';
-    $output .= '<input type="hidden" name="currency_code" value="' . $payment_currency . '" />';
-    $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
+    $output .= '<input type="hidden" name="amount" value="' . esc_attr($payment_amount) . '" />';
+    $output .= '<input type="hidden" name="currency_code" value="' . esc_attr($payment_currency) . '" />';
+    $output .= '<input type="hidden" name="item_number" value="' . esc_attr($button_id) . '" />';
     $output .= '<input type="hidden" name="item_name" value="' . htmlspecialchars($button_cpt->post_title) . '" />';
 
     $output .= '<input type="hidden" name="no_shipping" value="1" />'; //Do not prompt for an address
 
-    $output .= '<input type="hidden" name="notify_url" value="' . $notify_url . '" />';
-    $output .= '<input type="hidden" name="return" value="' . $return_url . '" />';
-    $output .= '<input type="hidden" name="cancel_return" value="' . $cancel_url . '" />';
+    $output .= '<input type="hidden" name="notify_url" value="' . esc_url($notify_url) . '" />';
+    $output .= '<input type="hidden" name="return" value="' . esc_url($return_url) . '" />';
+    $output .= '<input type="hidden" name="cancel_return" value="' . esc_url($cancel_url) . '" />';
 
     $custom_field_value = urlencode($custom_field_value);//URL encode the custom field value so nothing gets lost when it is passed around.
     $output .= '<input type="hidden" name="custom" value="' . $custom_field_value . '" />';
 
     $checkout_logo_image_url = get_post_meta($button_id, 'checkout_logo_image_url', true);
     if (!empty($checkout_logo_image_url)) {
-        $output .= '<input type="hidden" name="image_url" value="' . $checkout_logo_image_url . '" />';
+        $output .= '<input type="hidden" name="image_url" value="' . esc_url($checkout_logo_image_url) . '" />';
     }
     
     //Filter to add additional payment input fields to the form (example: langauge code or country code etc).
@@ -97,10 +97,10 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
     
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
     if (!empty($button_image_url)) {
-        $output .= '<input type="image" src="' . $button_image_url . '" class="swpm-buy-now-button-submit" alt="' . SwpmUtils::_('Buy Now') . '"/>';
+        $output .= '<input type="image" src="' . esc_url($button_image_url) . '" class="swpm-buy-now-button-submit" alt="' . __('Buy Now', 'simple-membership') . '"/>';
     } else {
-        $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Buy Now');
-        $output .= '<input type="submit" class="swpm-buy-now-button-submit" value="' . $button_text . '" />';
+        $button_text = (isset($args['button_text'])) ? $args['button_text'] : __('Buy Now', 'simple-membership');
+        $output .= '<input type="submit" class="swpm-buy-now-button-submit" value="' . esc_attr($button_text) . '" />';
     }
 
     $output .= '</form>'; //End .form
@@ -189,17 +189,17 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
     $output .= '<input type="hidden" name="charset" value="utf-8" />';
     $output .= '<input type="hidden" name="bn" value="TipsandTricks_SP" />';
     $output .= '<input type="hidden" name="business" value="' . apply_filters('swpm_subscription_button_paypal_email',$paypal_email) . '" />';
-    $output .= '<input type="hidden" name="currency_code" value="' . $payment_currency . '" />';
-    $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
+    $output .= '<input type="hidden" name="currency_code" value="' . esc_attr($payment_currency) . '" />';
+    $output .= '<input type="hidden" name="item_number" value="' . esc_attr($button_id) . '" />';
     $output .= '<input type="hidden" name="item_name" value="' . htmlspecialchars($button_cpt->post_title) . '" />';
 
     //Check trial billing
     if (!empty($trial_billing_cycle)) {
-        $output .= '<input type="hidden" name="a1" value="' . $trial_billing_amount . '" /><input type="hidden" name="p1" value="' . $trial_billing_cycle . '" /><input type="hidden" name="t1" value="' . $trial_billing_cycle_term . '" />';
+        $output .= '<input type="hidden" name="a1" value="' . esc_attr($trial_billing_amount) . '" /><input type="hidden" name="p1" value="' . esc_attr($trial_billing_cycle) . '" /><input type="hidden" name="t1" value="' . esc_attr($trial_billing_cycle_term) . '" />';
     }
     //Main subscription billing
     if (!empty($billing_cycle)) {
-        $output .= '<input type="hidden" name="a3" value="' . $billing_amount . '" /><input type="hidden" name="p3" value="' . $billing_cycle . '" /><input type="hidden" name="t3" value="' . $billing_cycle_term . '" />';
+        $output .= '<input type="hidden" name="a3" value="' . esc_attr($billing_amount) . '" /><input type="hidden" name="p3" value="' . esc_attr($billing_cycle) . '" /><input type="hidden" name="t3" value="' . esc_attr($billing_cycle_term) . '" />';
     }
     //Re-attempt on failure
     if ($billing_reattempt != '') {
@@ -207,23 +207,23 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
     }
     //Reccurring times
     if ($billing_cycle_count > 1) { //do not include srt value if billing cycle count set to 1 or a negetive number.
-        $output .= '<input type="hidden" name="src" value="1" /><input type="hidden" name="srt" value="' . $billing_cycle_count . '" />';
+        $output .= '<input type="hidden" name="src" value="1" /><input type="hidden" name="srt" value="' . esc_attr($billing_cycle_count) . '" />';
     } else if (empty($billing_cycle_count)) {
         $output .= '<input type="hidden" name="src" value="1" />';
     }
 
     //Other required data
     $output .= '<input type="hidden" name="no_shipping" value="1" />'; //Do not prompt for an address    
-    $output .= '<input type="hidden" name="notify_url" value="' . $notify_url . '" />';
-    $output .= '<input type="hidden" name="return" value="' . $return_url . '" />';
-    $output .= '<input type="hidden" name="cancel_return" value="' . $cancel_url . '" />';
+    $output .= '<input type="hidden" name="notify_url" value="' . esc_url($notify_url) . '" />';
+    $output .= '<input type="hidden" name="return" value="' . esc_url($return_url) . '" />';
+    $output .= '<input type="hidden" name="cancel_return" value="' . esc_url($cancel_url) . '" />';
     
     $custom_field_value = urlencode($custom_field_value);//URL encode the custom field value so nothing gets lost when it is passed around.
     $output .= '<input type="hidden" name="custom" value="' . $custom_field_value . '" />';
 
     $checkout_logo_image_url = get_post_meta($button_id, 'checkout_logo_image_url', true);
     if (!empty($checkout_logo_image_url)) {
-        $output .= '<input type="hidden" name="image_url" value="' . $checkout_logo_image_url . '" />';
+        $output .= '<input type="hidden" name="image_url" value="' . esc_url($checkout_logo_image_url) . '" />';
     }
     
     //Filter to add additional payment input fields to the form (example: langauge code or country code etc).
@@ -232,10 +232,10 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
     //Submit button
     $button_image_url = get_post_meta($button_id, 'button_image_url', true);
     if (!empty($button_image_url)) {
-        $output .= '<input type="image" src="' . $button_image_url . '" class="swpm-subscription-button-submit" alt="' . SwpmUtils::_('Subscribe Now') . '"/>';
+        $output .= '<input type="image" src="' . esc_url($button_image_url) . '" class="swpm-subscription-button-submit" alt="' . __('Subscribe Now', 'simple-membership') . '"/>';
     } else {
-        $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Subscribe Now');
-        $output .= '<input type="submit" class="swpm-subscription-button-submit" value="' . $button_text . '" />';
+        $button_text = (isset($args['button_text'])) ? $args['button_text'] : __('Subscribe Now', 'simple-membership');
+        $output .= '<input type="submit" class="swpm-subscription-button-submit" value="' . esc_attr($button_text) . '" />';
     }
 
     $output .= '</form>'; //End .form

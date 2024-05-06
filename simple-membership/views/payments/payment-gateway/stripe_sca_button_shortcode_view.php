@@ -7,21 +7,21 @@ add_filter( 'swpm_payment_button_shortcode_for_stripe_sca_buy_now', 'swpm_render
 
 function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) {
 
-	$button_id = isset( $args['id'] ) ? $args['id'] : '';
+	$button_id = isset( $args['id'] ) ? sanitize_text_field($args['id']) : '';
 	if ( empty( $button_id ) ) {
 		return '<p class="swpm-red-box">Error! swpm_render_stripe_sca_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
 	}
 
 	//Get class option for button styling, set Stripe's default if none specified
-	$class = isset( $args['class'] ) ? $args['class'] : 'stripe-button-el';
+	$class = isset( $args['class'] ) ? sanitize_html_class($args['class']) : 'stripe-button-el';
 
 	//Check new_window parameter
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
-	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : SwpmUtils::_( 'Buy Now' );
+	$button_text   = ( isset( $args['button_text'] ) ) ? sanitize_text_field( $args['button_text'] ) : __( 'Buy Now', 'simple-membership' );
 
-        //Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account". 
-        //It can be used to enable ACH payment option.
-        $payment_method_types = isset( $args['payment_method_types'] ) ? $args['payment_method_types'] : '';
+	//Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account". 
+	//It can be used to enable ACH payment option.
+	$payment_method_types = isset( $args['payment_method_types'] ) ? $args['payment_method_types'] : '';
         
 	$item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
@@ -32,13 +32,13 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 	//Verify that this membership level exists (to prevent user paying for a level that has been deleted)
 	if ( ! \SwpmUtils::membership_level_id_exists( $membership_level_id ) ) {
-		return '<p class="swpm-red-box">Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.</p>';
+		return '<p class="swpm-red-box">'.__('Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.', 'simple-membership').'</p>';
 	}
 
 	//Payment amount and currency
 	$payment_amount = get_post_meta( $button_id, 'payment_amount', true );
 	if ( ! is_numeric( $payment_amount ) ) {
-		return '<p class="swpm-red-box">Error! The payment amount value of the button must be a numeric number. Example: 49.50 </p>';
+		return '<p class="swpm-red-box">'.__('Error! The payment amount value of the button must be a numeric number. Example: 49.50 ', 'simple-membership').'</p>';
 	}
 	$payment_currency = get_post_meta( $button_id, 'payment_currency', true );
 	$payment_amount   = round( $payment_amount, 2 ); //round the amount to 2 decimal place.
@@ -129,9 +129,9 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 
 	$button_image_url = get_post_meta( $button_id, 'button_image_url', true );
 	if ( ! empty( $button_image_url ) ) {
-		$output .= '<input type="image" src="' . $button_image_url . '" class="' . $class . '" alt="' . $button_text . '" title="' . $button_text . '" />';
+		$output .= '<input type="image" src="' . esc_url($button_image_url) . '" class="' . esc_attr($class) . '" alt="' . esc_attr($button_text) . '" title="' . esc_attr($button_text) . '" />';
 	} else {
-		$output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
+		$output .= "<button id='".esc_attr($button_id)."' type='submit' class='".esc_attr($class)."'><span>". esc_attr($button_text)."</span></button>";
 	}
 
 	//Filter to add additional payment input fields to the form.
@@ -147,21 +147,21 @@ add_filter( 'swpm_payment_button_shortcode_for_stripe_sca_subscription', 'swpm_r
 
 function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $args ) {
 
-	$button_id = isset( $args['id'] ) ? $args['id'] : '';
+	$button_id = isset( $args['id'] ) ? sanitize_html_class($args['id']) : '';
 	if ( empty( $button_id ) ) {
-		return '<p class="swpm-red-box">Error! swpm_render_stripe_sca_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
+		return '<p class="swpm-red-box">'.__('Error! swpm_render_stripe_sca_buy_now_button_sc_output() function requires the button ID value to be passed to it.', 'simple-membership').'</p>';
 	}
 
 	//Get class option for button styling, set Stripe's default if none specified
-	$class = isset( $args['class'] ) ? $args['class'] : 'stripe-button-el';
+	$class = isset( $args['class'] ) ? sanitize_html_class($args['class']) : 'stripe-button-el';
 
 	//Check new_window parameter
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
-	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : SwpmUtils::_( 'Buy Now' );
+	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : __( 'Buy Now' , 'simple-membership');
 
-        //Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account". 
-        //It can be used to enable ACH payment option.
-        $payment_method_types = isset( $args['payment_method_types'] ) ? $args['payment_method_types'] : '';
+	//Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account". 
+	//It can be used to enable ACH payment option.
+	$payment_method_types = isset( $args['payment_method_types'] ) ? $args['payment_method_types'] : '';
         
 	$item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
@@ -172,7 +172,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 	//Verify that this membership level exists (to prevent user paying for a level that has been deleted)
 	if ( ! \SwpmUtils::membership_level_id_exists( $membership_level_id ) ) {
-		return '<p class="swpm-red-box">Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.</p>';
+		return '<p class="swpm-red-box">'.__('Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.', 'simple-membership').'</p>';
 	}
 
 	//$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
@@ -275,9 +275,9 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 
 	$button_image_url = get_post_meta( $button_id, 'button_image_url', true );
 	if ( ! empty( $button_image_url ) ) {
-		$output .= '<input type="image" src="' . $button_image_url . '" class="' . $class . '" alt="' . $button_text . '" title="' . $button_text . '" />';
+		$output .= '<input type="image" src="' . esc_url($button_image_url) . '" class="' .esc_attr($class). '" alt="' . esc_attr($button_text) . '" title="' . esc_attr($button_text) . '" />';
 	} else {
-		$output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
+		$output .= "<button id='".esc_attr($button_id)."' type='submit' class='".esc_attr($class)."'><span>".esc_attr($button_text)."</span></button>";
 	}
 
 	//Filter to add additional payment input fields to the form.

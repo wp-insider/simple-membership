@@ -7,17 +7,17 @@ add_filter( 'swpm_payment_button_shortcode_for_stripe_buy_now', 'swpm_render_str
 
 function swpm_render_stripe_buy_now_button_sc_output( $button_code, $args ) {
 
-	$button_id = isset( $args['id'] ) ? $args['id'] : '';
+	$button_id = isset( $args['id'] ) ? sanitize_text_field($args['id']) : '';
 	if ( empty( $button_id ) ) {
 		return '<p class="swpm-red-box">Error! swpm_render_stripe_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
 	}
 
 	//Get class option for button styling, set Stripe's default if none specified
-	$class = isset( $args['class'] ) ? $args['class'] : 'stripe-button-el';
+	$class = isset( $args['class'] ) ? sanitize_html_class($args['class']) : 'stripe-button-el';
 
 	//Check new_window parameter
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
-	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : SwpmUtils::_( 'Buy Now' );
+	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : __( 'Buy Now', 'simple-membership' );
 
 	$item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
@@ -95,17 +95,17 @@ function swpm_render_stripe_buy_now_button_sc_output( $button_code, $args ) {
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
 	$output .= "<script src='https://checkout.stripe.com/checkout.js' class='stripe-button'
-        data-key='" . $api_keys['public'] . "'
+        data-key='".esc_attr($api_keys['public'])."'
         data-panel-label='Pay'
-        data-amount='{$price_in_cents}'
-		data-name='{$item_name}'";
+        data-amount='".esc_attr($price_in_cents)."'
+		data-name='".esc_attr($item_name)."'";
 	$output .= isset( $member_email ) ? sprintf( 'data-email="%s"', $member_email ) : '';
-	$output .= "data-description='{$payment_amount_formatted}'";
+	$output .= "data-description='".esc_attr($payment_amount_formatted)."'";
 	$output .= "data-locale='auto'";
-	$output .= "data-label='{$button_text}'"; //Stripe doesn't currenty support button image for their standard checkout.
-	$output .= "data-currency='{$payment_currency}'";
+	$output .= "data-label='".esc_attr($button_text)."'"; //Stripe doesn't currenty support button image for their standard checkout.
+	$output .= "data-currency='".esc_attr($payment_currency)."'";
 	if ( ! empty( $item_logo ) ) {//Show item logo/thumbnail in the stripe payment window
-		$output .= "data-image='{$item_logo}'";
+		$output .= "data-image='".esc_attr($item_logo)."'";
 	}
 	if ( ! empty( $billing_address ) ) {//Show billing address in the stipe payment window
 		$output .= "data-billing-address='true'";
@@ -123,17 +123,17 @@ function swpm_render_stripe_buy_now_button_sc_output( $button_code, $args ) {
 
 	$button_image_url = get_post_meta( $button_id, 'button_image_url', true );
 	if ( ! empty( $button_image_url ) ) {
-		$output .= '<input type="image" src="' . $button_image_url . '" class="' . $class . '" alt="' . $button_text . '" title="' . $button_text . '" />';
+		$output .= '<input type="image" src="' . esc_url($button_image_url) . '" class="' . esc_attr($class) . '" alt="' . esc_attr($button_text) . '" title="' . esc_attr($button_text) . '" />';
 	} else {
-		$output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
+		$output .= "<button id='".esc_attr($button_id)."' type='submit' class='".esc_attr($class)."'><span>".esc_attr($button_text)."</span></button>";
 	}
 
 	$output .= wp_nonce_field( 'stripe_payments', '_wpnonce', true, false );
-	$output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
-	$output .= "<input type='hidden' value='{$item_name}' name='item_name' />";
-	$output .= "<input type='hidden' value='{$payment_amount}' name='item_price' />";
-	$output .= "<input type='hidden' value='{$payment_currency}' name='currency_code' />";
-	$output .= "<input type='hidden' value='{$custom_field_value}' name='custom' />";
+	$output .= '<input type="hidden" name="item_number" value="' . esc_attr($button_id) . '" />';
+	$output .= "<input type='hidden' value='".esc_attr($item_name)."' name='item_name' />";
+	$output .= "<input type='hidden' value='".esc_attr($payment_amount)."' name='item_price' />";
+	$output .= "<input type='hidden' value='".esc_attr($payment_currency)."' name='currency_code' />";
+	$output .= "<input type='hidden' value='".esc_attr($custom_field_value)."' name='custom' />";
 
 	//Filter to add additional payment input fields to the form.
 	$output .= apply_filters( 'swpm_stripe_payment_form_additional_fields', '' );
@@ -148,17 +148,17 @@ add_filter( 'swpm_payment_button_shortcode_for_stripe_subscription', 'swpm_rende
 
 function swpm_render_stripe_subscription_button_sc_output( $button_code, $args ) {
 
-	$button_id = isset( $args['id'] ) ? $args['id'] : '';
+	$button_id = isset( $args['id'] ) ? sanitize_text_field($args['id']) : '';
 	if ( empty( $button_id ) ) {
 		return '<p class="swpm-red-box">Error! swpm_render_stripe_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
 	}
 
 	//Get class option for button styling, set Stripe's default if none specified
-	$class = isset( $args['class'] ) ? $args['class'] : 'stripe-button-el';
+	$class = isset( $args['class'] ) ? sanitize_html_class($args['class']) : 'stripe-button-el';
 
 	//Check new_window parameter
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
-	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : SwpmUtils::_( 'Buy Now' );
+	$button_text   = ( isset( $args['button_text'] ) ) ? sanitize_text_field( $args['button_text'] ) : __( 'Buy Now' , 'simple-membership');
 	$item_logo     = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
 	$settings   = SwpmSettings::get_instance();
@@ -220,7 +220,7 @@ function swpm_render_stripe_subscription_button_sc_output( $button_code, $args )
 		$result = StripeUtilFunctions::get_stripe_plan_info( $api_keys['secret'], $plan_id );
 		if ( $result['success'] === false ) {
 			// some error occurred, let's display it and stop processing the shortcode further
-			return '<p class="swpm-red-box">Stripe error occurred: ' . $result['error_msg'] . '</p>';
+			return '<p class="swpm-red-box">Stripe error occurred: ' . esc_attr($result['error_msg']) . '</p>';
 		} else {
 			// plan data has been successfully retreived
 			$plan_data = $result['plan_data'];
@@ -271,16 +271,16 @@ function swpm_render_stripe_subscription_button_sc_output( $button_code, $args )
 	$output .= "<form action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
 	$output .= "<script src='https://checkout.stripe.com/checkout.js' class='stripe-button'
-        data-key='" . $api_keys['public'] . "'
+        data-key='" . esc_attr($api_keys['public']) . "'
         data-panel-label='Sign Me Up!'
-		data-name='{$item_name}'";
-	$output .= isset( $member_email ) ? sprintf( 'data-email="%s"', $member_email ) : '';
-	$output .= "data-description='{$description}'";
+		data-name='".esc_attr($item_name)."'";
+	$output .= isset( $member_email ) ? 'data-email="'.esc_attr($member_email).'"' : '';
+	$output .= "data-description='".esc_attr($description)."'";
 	$output .= "data-locale='auto'";
-	$output .= "data-label='{$button_text}'"; //Stripe doesn't currenty support button image for their standard checkout.
-	$output .= "data-currency='{$payment_currency}'";
+	$output .= "data-label='".esc_attr($button_text)."'"; //Stripe doesn't currenty support button image for their standard checkout.
+	$output .= "data-currency='".esc_attr($payment_currency)."'";
 	if ( ! empty( $item_logo ) ) {//Show item logo/thumbnail in the stripe payment window
-		$output .= "data-image='{$item_logo}'";
+		$output .= "data-image='".esc_attr($item_logo)."'";
 	}
 	if ( ! empty( $billing_address ) ) {//Show billing address in the stipe payment window
 		$output .= "data-billing-address='true'";
@@ -291,17 +291,17 @@ function swpm_render_stripe_subscription_button_sc_output( $button_code, $args )
 
 	$button_image_url = get_post_meta( $button_id, 'button_image_url', true );
 	if ( ! empty( $button_image_url ) ) {
-		$output .= '<input type="image" src="' . $button_image_url . '" class="' . $class . '" alt="' . $button_text . '" title="' . $button_text . '" />';
+		$output .= '<input type="image" src="' . esc_url($button_image_url) . '" class="' . esc_attr($class) . '" alt="' . esc_attr($button_text) . '" title="' . esc_attr($button_text) . '" />';
 	} else {
-		$output .= "<button id='{$button_id}' type='submit' class='{$class}'><span>{$button_text}</span></button>";
+		$output .= "<button id='".esc_attr($button_id)."' type='submit' class='".esc_attr($class)."'><span>".esc_attr($button_text)."</span></button>";
 	}
 
 	$output .= wp_nonce_field( 'stripe_payments', '_wpnonce', true, false );
-	$output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
-	$output .= "<input type='hidden' value='{$item_name}' name='item_name' />";
-	$output .= "<input type='hidden' value='{$payment_amount}' name='item_price' />";
-	$output .= "<input type='hidden' value='{$payment_currency}' name='currency_code' />";
-	$output .= "<input type='hidden' value='{$custom_field_value}' name='custom' />";
+	$output .= '<input type="hidden" name="item_number" value="' . esc_attr($button_id) . '" />';
+	$output .= "<input type='hidden' value='".esc_attr($item_name)."' name='item_name' />";
+	$output .= "<input type='hidden' value='".esc_attr($payment_amount)."' name='item_price' />";
+	$output .= "<input type='hidden' value='".esc_attr($payment_currency)."' name='currency_code' />";
+	$output .= "<input type='hidden' value='".$custom_field_value."' name='custom' />";
 
 	//Filter to add additional payment input fields to the form.
 	$output .= apply_filters( 'swpm_stripe_payment_form_additional_fields', '' );

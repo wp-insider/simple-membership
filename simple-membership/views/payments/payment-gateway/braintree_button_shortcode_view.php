@@ -8,9 +8,9 @@ add_filter('swpm_payment_button_shortcode_for_braintree_buy_now', 'swpm_render_b
 function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
 {
 
-    $button_id = isset($args['id']) ? $args['id'] : '';
+    $button_id = isset($args['id']) ? sanitize_text_field($args['id']) : '';
     if (empty($button_id)) {
-        return '<p class="swpm-red-box">Error! swpm_render_braintree_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
+        return '<p class="swpm-red-box">'.__('Error! swpm_render_braintree_buy_now_button_sc_output() function requires the button ID value to be passed to it.', 'simple-membership').'</p>';
     }
 
     //Get class option for button styling, set Stripe's default if none specified
@@ -18,7 +18,7 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
 
     //Check new_window parameter
     $window_target = isset($args['new_window']) ? 'target="_blank"' : '';
-    $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Buy Now');
+    $button_text = (isset($args['button_text'])) ? sanitize_text_field($args['button_text']) : __('Buy Now', 'simple-membership');
     $billing_address = isset($args['billing_address']) ? '1' : '';; //By default don't show the billing address in the checkout form.
     $item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
@@ -29,13 +29,13 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
     //Verify that this membership level exists (to prevent user paying for a level that has been deleted)
     if (!SwpmUtils::membership_level_id_exists($membership_level_id)) {
-        return '<p class="swpm-red-box">Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.</p>';
+        return '<p class="swpm-red-box">'.__('Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.', 'simple-membership').'</p>';
     }
 
     //Payment amount and currency
     $payment_amount = get_post_meta($button_id, 'payment_amount', true);
     if (!is_numeric($payment_amount)) {
-        return '<p class="swpm-red-box">Error! The payment amount value of the button must be a numeric number. Example: 49.50 </p>';
+        return '<p class="swpm-red-box">'.__('Error! The payment amount value of the button must be a numeric number. Example: 49.50 ', 'simple-membership').'</p>';
     }
     $payment_amount = round($payment_amount, 2); //round the amount to 2 decimal place.
     $payment_currency = get_post_meta($button_id, 'currency_code', true);
@@ -84,9 +84,9 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
         $clientToken = Braintree_ClientToken::generate();
     } catch (Exception $e) {
         $e_class = get_class($e);
-        $ret = 'Braintree Pay Now button error: ' . $e_class;
+        $ret = __('Braintree Pay Now button error: ', 'simple-membership') . $e_class;
         if ($e_class == "Braintree\Exception\Authentication")
-            $ret .= "<br />API keys are incorrect. Double-check that you haven't accidentally tried to use your sandbox keys in production or vice-versa.";
+            $ret .= "<br />" . __("API keys are incorrect. Double-check that you haven't accidentally tried to use your sandbox keys in production or vice-versa.", 'simple-membership');
         return $ret;
     }
 
@@ -96,21 +96,21 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     $output = '';
     $output .= '<div class="swpm-button-wrapper swpm-braintree-buy-now-wrapper">';
     $output .= "<form id='swpm-braintree-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
-    $output .= '<div id="swpm-form-cont-' . $uniqid . '" class="swpm-braintree-form-container swpm-form-container-' . $button_id . '" style="display:none;"></div>';
-    $output .= '<div id="swpm-braintree-additional-fields-container-' . $uniqid . '" class="swpm-braintree-additional-fields-container swpm-braintree-additional-fields-container-' . $button_id . '" style="display:none;">';
-    $output .= '<p><input type="text" name="first_name" placeholder="First Name" value="' . (isset($member_first_name) ? $member_first_name : '') . '" required></p>';
-    $output .= '<p><input type="text" name="last_name" placeholder="Last Name" value="' . (isset($member_last_name) ? $member_last_name : '') . '" required></p>';
-    $output .= '<p><input type="text" name="member_email" placeholder="Email" value="' . (isset($member_email) ? $member_email : '') . '" required></p>';
+    $output .= '<div id="swpm-form-cont-' . $uniqid . '" class="swpm-braintree-form-container swpm-form-container-' . esc_attr($button_id) . '" style="display:none;"></div>';
+    $output .= '<div id="swpm-braintree-additional-fields-container-' . $uniqid . '" class="swpm-braintree-additional-fields-container swpm-braintree-additional-fields-container-' . esc_attr($button_id) . '" style="display:none;">';
+    $output .= '<p><input type="text" name="first_name" placeholder="First Name" value="' . (isset($member_first_name) ? esc_attr($member_first_name) : '') . '" required></p>';
+    $output .= '<p><input type="text" name="last_name" placeholder="Last Name" value="' . (isset($member_last_name) ? esc_attr($member_last_name) : '') . '" required></p>';
+    $output .= '<p><input type="text" name="member_email" placeholder="Email" value="' . (isset($member_email) ? esc_attr($member_email) : '') . '" required></p>';
     //apply filter to output additional form fields
     $coupon_input = '';
     $coupon_input = apply_filters('swpm_payment_form_additional_fields', $coupon_input, $button_id, $uniqid);
     if (!empty($coupon_input)) {
         $output .= $coupon_input;
     }
-    $output .= '<div id="swpm-braintree-amount-container-' . $uniqid . '" class="swpm-braintree-amount-container"><p>' . $payment_amount_formatted . '</p></div>';
+    $output .= '<di id="swpm-braintree-amount-container-' . $uniqid . '" class="swpm-braintree-amount-container"><p>' . $payment_amount_formatted . '</p></di(v>';
     $output .= '</div>';
-    $output .= '<button id="swpm-show-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-show-form-button-' . $button_id . ' ' . $class . '" type="button" onclick="swpm_braintree_show_form_' . $uniqid . '();"><span>' . $button_text . '</span></button>';
-    $output .= '<button id="swpm-submit-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-submit-form-button-' . $button_id . ' ' . $class . '" type="submit" style="display: none;"><span>' . $button_text . '</span></button>';
+    $output .= '<button id="swpm-show-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-show-form-button-' . esc_attr($button_id) . ' ' . esc_attr($class) . '" type="button" onclick="swpm_braintree_show_form_' . $uniqid . '();"><span>' . esc_attr($button_text) . '</span></button>';
+    $output .= '<button id="swpm-submit-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-submit-form-button-' . esc_attr($button_id) . ' ' . esc_attr($class) . '" type="submit" style="display: none;"><span>' . esc_attr($button_text) . '</span></button>';
     
     $output .= '<script src="https://js.braintreegateway.com/web/3.88.2/js/client.min.js"></script>';
     $output .= '<script src="https://js.braintreegateway.com/web/dropin/1.33.4/js/dropin.min.js"></script>';    
@@ -256,12 +256,12 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     $output .= $scr;
 
     $output .= wp_nonce_field('stripe_payments', '_wpnonce', true, false);
-    $output .= '<input type="hidden" name="item_number" value="' . $button_id . '" />';
+    $output .= '<input type="hidden" name="item_number" value="' . esc_attr($button_id) . '" />';
     $output .= '<input type="hidden" id="swpm-braintree-nonce-field-' . $uniqid . '" name="payment_method_nonce" value="" />';
-    $output .= "<input type='hidden' value='{$item_name}' name='item_name' />";
-    $output .= "<input type='hidden' value='{$payment_amount}' name='item_price' />";
-    $output .= "<input type='hidden' value='{$payment_currency}' name='currency_code' />";
-    $output .= "<input type='hidden' value='{$custom_field_value}' name='custom' />";
+    $output .= "<input type='hidden' value='".esc_attr($item_name)."' name='item_name' />";
+    $output .= "<input type='hidden' value='".esc_attr($payment_amount)."' name='item_price' />";
+    $output .= "<input type='hidden' value='".esc_attr($payment_currency)."' name='currency_code' />";
+    $output .= "<input type='hidden' value='".esc_attr($custom_field_value)."' name='custom' />";
 
     //Filter to add additional payment input fields to the form.
     $output .= apply_filters('swpm_braintree_payment_form_additional_fields', '');

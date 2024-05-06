@@ -6,13 +6,13 @@ add_filter('swpm_payment_button_shortcode_for_pp_smart_checkout', 'swpm_render_p
 
 function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
 
-    $button_id = isset($args['id']) ? $args['id'] : '';
+    $button_id = isset($args['id']) ? sanitize_text_field($args['id']) : '';
     if (empty($button_id)) {
-        return '<p class="swpm-red-box">Error! swpm_render_pp_smart_checkout_button_sc_output() function requires the button ID value to be passed to it.</p>';
+        return '<p class="swpm-red-box">'.__('Error! swpm_render_pp_smart_checkout_button_sc_output() function requires the button ID value to be passed to it.', 'simple-membership').'</p>';
     }
 
     //Check new_window parameter
-    $button_text = (isset($args['button_text'])) ? $args['button_text'] : SwpmUtils::_('Buy Now');
+    $button_text = (isset($args['button_text'])) ? sanitize_text_field($args['button_text']) : __('Buy Now', 'simple-membership');
     $billing_address = isset($args['billing_address']) ? '1' : '';
     ; //By default don't show the billing address in the checkout form.
     $item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
@@ -24,20 +24,20 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
     //Verify that this membership level exists (to prevent user paying for a level that has been deleted)
     if (!SwpmUtils::membership_level_id_exists($membership_level_id)) {
-        return '<p class="swpm-red-box">Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.</p>';
+        return '<p class="swpm-red-box">'.__('Error! The membership level specified in this button does not exist. You may have deleted this membership level. Edit the button and use the correct membership level.', 'simple-membership').'</p>';
     }
 
     //Payment amount and currency
     $payment_amount = get_post_meta($button_id, 'payment_amount', true);
     if (!is_numeric($payment_amount)) {
-        return '<p class="swpm-red-box">Error! The payment amount value of the button must be a numeric number. Example: 49.50 </p>';
+        return '<p class="swpm-red-box">'.__('Error! The payment amount value of the button must be a numeric number. Example: 49.50 ', 'simple-membership').'</p>';
     }
     $payment_amount = round($payment_amount, 2); //round the amount to 2 decimal place.
     $payment_amount_formatted = number_format($payment_amount, 2, '.', '');
     $payment_currency = get_post_meta($button_id, 'payment_currency', true);
 
     //Create the items_list for passing to PayPal API
-    $items_list = "{name: '".$item_name."', quantity: '1', price: '".$payment_amount."', currency: '".$payment_currency."'}";
+    $items_list = "{name: '".esc_attr($item_name)."', quantity: '1', price: '".esc_attr($payment_amount)."', currency: '".esc_attr($payment_currency)."'}";
     
     //Return, cancel, notifiy URLs
     $return_url = get_post_meta($button_id, 'return_url', true);
@@ -70,13 +70,13 @@ function swpm_render_pp_smart_checkout_button_sc_output($button_code, $args) {
     }
 
     $btn_layout = get_post_meta($button_id, 'pp_smart_checkout_btn_layout', true);
-    $btn_layout = empty($btn_layout) ? 'vertical' : $btn_layout;
+    $btn_layout = empty($btn_layout) ? 'vertical' : sanitize_text_field($btn_layout);
     $btn_size = get_post_meta($button_id, 'pp_smart_checkout_btn_size', true);
-    $btn_size = empty($btn_size) ? 'medium' : $btn_size;
+    $btn_size = empty($btn_size) ? 'medium' : sanitize_text_field($btn_size);
     $btn_shape = get_post_meta($button_id, 'pp_smart_checkout_btn_shape', true);
-    $btn_shape = empty($btn_shape) ? 'rect' : $btn_shape;
+    $btn_shape = empty($btn_shape) ? 'rect' : sanitize_text_field($btn_shape);
     $btn_color = get_post_meta($button_id, 'pp_smart_checkout_btn_color', true);
-    $btn_color = empty($btn_color) ? 'gold' : $btn_color;
+    $btn_color = empty($btn_color) ? 'gold' : sanitize_text_field($btn_color);
 
     $pm_str = '';
 

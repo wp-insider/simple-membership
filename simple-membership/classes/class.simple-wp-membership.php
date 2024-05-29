@@ -478,6 +478,10 @@ class SimpleWpMembership {
         $profile['first_name'] = $wp_user_data->user_firstname;
         $profile['last_name'] = $wp_user_data->user_lastname;
         $wpdb->update($wpdb->prefix . "swpm_members_tbl", $profile, array('member_id' => $profile['member_id']));
+        // TODO: Need to fix
+        //        SwpmAuth::get_instance()->update_auth_cookie_after_pass_change(array(
+        //            'password' => $profile['password'],
+        //        ));
     }
 
     function swpm_handle_wp_user_registration($user_id) {

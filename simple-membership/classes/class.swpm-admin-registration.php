@@ -90,6 +90,13 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		SwpmTransfer::get_instance()->set( 'status', $message );
 	}
 
+    /**
+     * Edit member profile handler of admin side.
+     *
+     * @param $id Member's ID (member_id) in 'swpm_members_tbl' table.
+     *
+     * @return void
+     */
 	public function edit_admin_end( $id ) {
 		//Check we are on the admin end and user has management permission
 		SwpmMiscUtils::check_user_permission_and_is_admin( 'member edit by admin' );
@@ -116,9 +123,33 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		if ( $form->is_valid() ) {
 			$member         = $form->get_sanitized_member_form_data();
 			$plain_password = isset( $member['plain_password'] ) ? $member['plain_password'] : '';
-			SwpmUtils::update_wp_user( $user_name, $member );
+
+            // Store authenticated member's id before update_wp_user() runs.
+            $authenticated_member_id = SwpmMemberUtils::get_logged_in_members_id();
+
+            SwpmUtils::update_wp_user( $user_name, $member );
 			unset( $member['plain_password'] );
 			$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', $member, array( 'member_id' => $id ) );
+
+            // Check if password has changed and if affected profile is current user. If so, then reassign member's auth cookies.
+            if(!empty($plain_password) && $authenticated_member_id == $id){
+                // First clear old cookies.
+                $auth_object = SwpmAuth::get_instance();
+                $auth_object->clear_wp_user_auth_cookies(); //Clear the wp user auth cookies and destroy session. New auth cookies will generate below.
+                $auth_object->swpm_clear_auth_cookies(); //Clear the swpm auth cookies. New auth cookies will generate below.
+                SwpmLog::log_simple_debug( 'Password has updated of member with id '.$id.' from admin profile edit page.', true );
+
+                // Secondly, assign new cookies, so no need to log in again.
+                $auth_object->update_auth_cookie_after_pass_change(array(
+                    'password' => $member['password'],
+                ), true);
+                $wp_user = SwpmMemberUtils::get_wp_user_from_swpm_user_id( $id );
+                $wp_user_id = $wp_user->ID;
+                wp_set_auth_cookie( $wp_user_id, true ); // Set new auth cookies (second parameter true means "remember me")
+                wp_set_current_user( $wp_user_id ); // Set the current user object
+                SwpmLog::log_auth_debug( 'Authentication cookies has reset as password was changed for member_id: '. $id, true );
+            }
+
 			// set previous membership level
 			$member['prev_membership_level'] = $prev_level;
 			$member['member_id'] = $id;

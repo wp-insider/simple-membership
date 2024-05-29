@@ -402,7 +402,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
                 // Secondly, assign new cookies, so no need to log in again.
                 $auth_object->update_auth_cookie_after_pass_change(array(
                     'password' => $member_info['password'],
-                ));
+                ), true);
                 $wp_user = SwpmMemberUtils::get_wp_user_from_swpm_user_id( $swpm_id );
                 $wp_user_id = $wp_user->ID;
                 wp_set_auth_cookie( $wp_user_id, true ); // Set new auth cookies (second parameter true means "remember me")

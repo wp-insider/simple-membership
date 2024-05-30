@@ -173,6 +173,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - Added more output escaping to the payment button shortcode output.
 - Manually transaction adding issue fixed.
+- No re-login required after member's password change.
 
 = 4.4.6 =
 - Various translation related changes to the button configuration admin interface.

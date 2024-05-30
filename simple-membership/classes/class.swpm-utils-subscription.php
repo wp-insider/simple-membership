@@ -69,10 +69,24 @@ class SWPM_Utils_Subscriptions
 
 		$this->subs_count = count($subscriptions);
 
+        // Hold the payment button ids of subscriptions.
+        // This is used for not to added subscription data of with same payment button id twice.
+        $subscription_payment_btn_ids = array();
+
 		foreach ($subscriptions as $subscription) {
 			$sub            = array();
 			$post_id        = $subscription->ID;
-			
+
+			$payment_button_id = get_post_meta($post_id, 'payment_button_id', true);
+			$sub['payment_button_id'] = $payment_button_id;
+
+            // Check if this subscription is already retrieved or not.
+            if (in_array($payment_button_id, $subscription_payment_btn_ids)){
+                continue;
+            }else{
+                array_push($subscription_payment_btn_ids, $payment_button_id);
+            }
+
 			$sub['post_id'] = $post_id;
 			$sub_id         = get_post_meta($post_id, 'subscr_id', true);
 
@@ -89,8 +103,6 @@ class SWPM_Utils_Subscriptions
 			$is_live        = empty($is_live) ? false : true;
 			$sub['is_live'] = $is_live;
 
-			$payment_button_id = get_post_meta($post_id, 'payment_button_id', true);
-			$sub['payment_button_id'] = $payment_button_id;
 
 			$sub['gateway'] = get_post_meta($post_id, 'gateway', true);
 

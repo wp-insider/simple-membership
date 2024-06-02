@@ -69,23 +69,12 @@ class SWPM_Utils_Subscriptions
 
 		$this->subs_count = count($subscriptions);
 
-        // Hold the payment button ids of subscriptions.
-        // This is used for not to added subscription data of with same payment button id twice.
-        $subscription_payment_btn_ids = array();
-
 		foreach ($subscriptions as $subscription) {
 			$sub            = array();
 			$post_id        = $subscription->ID;
 
 			$payment_button_id = get_post_meta($post_id, 'payment_button_id', true);
 			$sub['payment_button_id'] = $payment_button_id;
-
-            // Check if this subscription is already retrieved or not.
-            if (in_array($payment_button_id, $subscription_payment_btn_ids)){
-                continue;
-            }else{
-                array_push($subscription_payment_btn_ids, $payment_button_id);
-            }
 
 			$sub['post_id'] = $post_id;
 			$sub_id         = get_post_meta($post_id, 'subscr_id', true);
@@ -120,11 +109,29 @@ class SWPM_Utils_Subscriptions
 					break;
 				case 'paypal_subscription_checkout':
 					$paypal_ppcp_api_keys = array();
-					if ( $is_live ) {
+
+                    // Now two condition can happen.
+                    // 1. It's actually live. If so, $is_live === true
+					if ( $is_live === true ) {
 						$paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-live-secret-key');
-					} else {
-						$paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-sandbox-secret-key');
 					}
+                    // 2. It's actually sandbox. If so, $is_live === false
+                    else if ( $is_live === false ){
+                        $paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-sandbox-secret-key');
+                    }
+                    // 3. Compatibility Issue, post meta not found! If so, $is_live === ''
+                    else if ( $is_live === '' ) {
+                        // Check current api setup
+                        $is_sandbox_mode = $settings->get_value('enable-sandbox-testing') !== 1 ? true : false;
+                        if( $is_sandbox_mode ){
+                            $paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-sandbox-secret-key');
+                        } else {
+                            $paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-live-secret-key');
+                        }
+                    }
+                    else {
+                        $paypal_ppcp_api_keys['secret'] = null;
+                    }
 
 					if (isset($paypal_ppcp_api_keys['secret']) && !empty($paypal_ppcp_api_keys['secret'])) {
 						$sub_details = (new SWPM_PayPal_Request_API_Injector())->get_paypal_subscription_details( $sub_id );

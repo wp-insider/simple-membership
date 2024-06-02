@@ -241,12 +241,20 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 			$address_street .= ", " . $txn_data['subscriber']['shipping_address']['address']['address_line_2'];
 		}
 
+		//Set the gateway and txn_type values.
 		$ipn['gateway'] = 'paypal_subscription_checkout';
-		$ipn['txn_type'] = 'pp_subscription_new';		
+		$ipn['txn_type'] = 'pp_subscription_new';
+
+		//The custom field value.
 		$ipn['custom'] = isset($data['custom_field']) ? $data['custom_field'] : '';
 
 		//This will save the button ID (in the save_txn_record function) in the swpm_transactions CPT (for a reference to the button used for the payment)
 		$ipn['payment_button_id'] = isset($data['button_id']) ? $data['button_id'] : '';
+		
+		//If the subscription is for live mode or sandbox mode. We will use this to set the 'is_live' flag in the swpm_transactions CPT.
+		$settings = SwpmSettings::get_instance();
+		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
+		$ipn['is_live'] = !$sandbox_enabled;		
 
 		$ipn['item_number'] = isset($data['button_id']) ? $data['button_id'] : '';
 		$ipn['item_name'] = isset($data['item_name']) ? $data['item_name'] : '';		

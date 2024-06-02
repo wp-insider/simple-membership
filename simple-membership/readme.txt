@@ -174,6 +174,7 @@ https://simple-membership-plugin.com/
 - Added more output escaping to the payment button shortcode output.
 - Manually transaction adding issue fixed.
 - No re-login required after member's password change.
+- The PayPal PPCP subscriptions will also save the is_live parameter in the transaction record.
 
 = 4.4.6 =
 - Various translation related changes to the button configuration admin interface.

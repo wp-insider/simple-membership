@@ -264,7 +264,6 @@ class SwpmShortcodesHandler {
 
 	public function swpm_show_subscriptions_and_cancel_link($atts){
 		$output = '';
-
 		$atts = shortcode_atts(array(
 			'show_all_status' => ''
 		), $atts);

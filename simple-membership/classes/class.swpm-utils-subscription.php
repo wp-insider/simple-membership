@@ -89,9 +89,6 @@ class SWPM_Utils_Subscriptions
 			}
 
 			$is_live        = get_post_meta($post_id, 'is_live', true);
-			$is_live        = empty($is_live) ? false : true;
-			$sub['is_live'] = $is_live;
-
 
 			$sub['gateway'] = get_post_meta($post_id, 'gateway', true);
 
@@ -99,6 +96,9 @@ class SWPM_Utils_Subscriptions
 			$status = '';
 			switch($sub['gateway']){
 				case 'stripe-sca-subs':
+                    // In case of stripe, is_live value is saved as '1' or '';
+                    $sub['is_live'] = empty($is_live) ? false : true;
+
 					$stripe_sca_api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button($sub['payment_button_id'], $sub['is_live']);
 					if (isset($stripe_sca_api_keys['secret']) && !empty($stripe_sca_api_keys['secret'])) {
 						$status = get_post_meta($post_id, 'subscr_status', true); //This can be replaced with api call.
@@ -108,36 +108,33 @@ class SWPM_Utils_Subscriptions
 					
 					break;
 				case 'paypal_subscription_checkout':
-					$paypal_ppcp_api_keys = array();
+                    // In case of paypal, is_live value is saved as 'yes' or 'no';
+                    if($is_live === 'yes') {
+                        $sub['is_live'] = true;
+                    } else if ($is_live === 'no'){
+                        $sub['is_live'] = false;
+                    } else {
+                        // Compatibility issue. In the older version, the 'is_live' postmeta wasn't set. So as fallback use current mode.
+                        $sub['is_live'] = empty($settings->get_value('enable-sandbox-testing'));
+                    }
 
-                    // Now two condition can happen.
-                    // 1. It's actually live. If so, $is_live === true
-					if ( $is_live === true ) {
+					$paypal_ppcp_api_keys = array();
+					if ( $sub['is_live'] ) {
 						$paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-live-secret-key');
-					}
-                    // 2. It's actually sandbox. If so, $is_live === false
-                    else if ( $is_live === false ){
+					} else {
                         $paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-sandbox-secret-key');
-                    }
-                    // 3. Compatibility Issue, post meta not found! If so, $is_live === ''
-                    else if ( $is_live === '' ) {
-                        // Check current api setup
-                        $is_sandbox_mode = $settings->get_value('enable-sandbox-testing') !== 1 ? true : false;
-                        if( $is_sandbox_mode ){
-                            $paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-sandbox-secret-key');
-                        } else {
-                            $paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-live-secret-key');
-                        }
-                    }
-                    else {
-                        $paypal_ppcp_api_keys['secret'] = null;
                     }
 
 					if (isset($paypal_ppcp_api_keys['secret']) && !empty($paypal_ppcp_api_keys['secret'])) {
-						$sub_details = (new SWPM_PayPal_Request_API_Injector())->get_paypal_subscription_details( $sub_id );
-						if( $sub_details !== false ){
+                        $pp_api_injector = new SWPM_PayPal_Request_API_Injector();
+                        $pp_api_injector->set_mode_and_api_creds_based_on_mode($sub['is_live'] ? 'production': 'sandbox');
+						$sub_details = $pp_api_injector->get_paypal_subscription_details( $sub_id );
+						if( !empty($sub_details) ){
 							$status = strtolower($sub_details->status);
-						}
+						} else {
+                            // TODO: Update this error message.
+                            $this->paypal_ppcp_api_key_error = __( 'Error: Subscription Details not found for subscription id: '. $sub_id, 'simple-membership' );
+                        }
 					}else{
 						$this->paypal_ppcp_api_key_error = __( 'Error: PayPal PPCP API keys are not configured on your site!', 'simple-membership' );
 					}

@@ -304,3 +304,7 @@
 .swpm-active-subs-api-key-error-msg{
     color: #cc0000;
 }
+
+.swpm-cancel-subscription-form{
+    margin-bottom: 0;
+}

@@ -120,7 +120,7 @@ class SWPM_Utils_Subscriptions
                         $sub['is_live'] = empty($settings->get_value('enable-sandbox-testing'));
                     }
 
-					//Get the PayPal PPCP API keys based on the environment mode.
+					//Get the PayPal PPCP API keys based on the environment mode that this subscription was created in.
 					$paypal_ppcp_api_keys = array();
 					if ( $sub['is_live'] ) {
 						$paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-live-secret-key');

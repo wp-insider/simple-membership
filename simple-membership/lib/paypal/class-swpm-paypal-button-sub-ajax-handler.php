@@ -254,7 +254,7 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		//If the subscription is for live mode or sandbox mode. We will use this to set the 'is_live' flag in the swpm_transactions CPT.
 		$settings = SwpmSettings::get_instance();
 		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
-		$ipn['is_live'] = !empty($sandbox_enabled) ? 'yes' : 'no';
+		$ipn['is_live'] = empty($sandbox_enabled) ? 'yes' : 'no';//We need to save the environment (live or sandbox) of the subscription.
 
 		$ipn['item_number'] = isset($data['button_id']) ? $data['button_id'] : '';
 		$ipn['item_name'] = isset($data['item_name']) ? $data['item_name'] : '';		

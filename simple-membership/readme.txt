@@ -171,10 +171,11 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
+- The password update from profile edit page won't require a re-login anymore.
 - Added more output escaping to the payment button shortcode output.
-- Manually transaction adding issue fixed.
-- No re-login required after member's password change.
+- Fixed a minor issue with the manual transaction add feature.
 - The PayPal PPCP subscriptions will also save the is_live parameter in the transaction record.
+- Minor improvements to the newly added cancel subscription shortcode.
 
 = 4.4.6 =
 - Various translation related changes to the button configuration admin interface.

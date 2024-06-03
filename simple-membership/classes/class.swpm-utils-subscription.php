@@ -88,15 +88,17 @@ class SWPM_Utils_Subscriptions
 				$sub['is_attached_to_profile'] = 'yes';
 			}
 
-			$is_live        = get_post_meta($post_id, 'is_live', true);
+			//Get the environment mode (live or sandbox) of the subscription.
+			$is_live = get_post_meta($post_id, 'is_live', true);
 
+			//Get the gateway that was used to create this subscription.
 			$sub['gateway'] = get_post_meta($post_id, 'gateway', true);
 
 			// Check and get the subscription status based on the gateways.
 			$status = '';
 			switch($sub['gateway']){
 				case 'stripe-sca-subs':
-                    // In case of stripe, is_live value is saved as '1' or '';
+                    // In case of Stripe, is_live value is saved as '1' or '' in the post meta.
                     $sub['is_live'] = empty($is_live) ? false : true;
 
 					$stripe_sca_api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button($sub['payment_button_id'], $sub['is_live']);
@@ -108,16 +110,17 @@ class SWPM_Utils_Subscriptions
 					
 					break;
 				case 'paypal_subscription_checkout':
-                    // In case of paypal, is_live value is saved as 'yes' or 'no';
-                    if($is_live === 'yes') {
+                    // In case of PayPal PPCP, is_live value is saved as 'yes' or 'no'. We will use this value to determine the environment mode.
+                    if(isset($is_live) && $is_live == 'yes') {
                         $sub['is_live'] = true;
-                    } else if ($is_live === 'no'){
+                    } else if (isset($is_live) && $is_live == 'no'){
                         $sub['is_live'] = false;
                     } else {
-                        // Compatibility issue. In the older version, the 'is_live' postmeta wasn't set. So as fallback use current mode.
+                        // In the older version, the 'is_live' postmeta wasn't set. So as a fallback, use the currently set environment mode.
                         $sub['is_live'] = empty($settings->get_value('enable-sandbox-testing'));
                     }
 
+					//Get the PayPal PPCP API keys based on the environment mode.
 					$paypal_ppcp_api_keys = array();
 					if ( $sub['is_live'] ) {
 						$paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-live-secret-key');
@@ -125,18 +128,19 @@ class SWPM_Utils_Subscriptions
                         $paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-sandbox-secret-key');
                     }
 
+					//Get the subscription details from PayPal.
+					$environment_mode = $sub['is_live'] ? 'production': 'sandbox';
 					if (isset($paypal_ppcp_api_keys['secret']) && !empty($paypal_ppcp_api_keys['secret'])) {
                         $pp_api_injector = new SWPM_PayPal_Request_API_Injector();
-                        $pp_api_injector->set_mode_and_api_creds_based_on_mode($sub['is_live'] ? 'production': 'sandbox');
+                        $pp_api_injector->set_mode_and_api_creds_based_on_mode( $environment_mode );
 						$sub_details = $pp_api_injector->get_paypal_subscription_details( $sub_id );
 						if( !empty($sub_details) ){
 							$status = strtolower($sub_details->status);
 						} else {
-                            // TODO: Update this error message.
-                            $this->paypal_ppcp_api_key_error = __( 'Error: Subscription Details not found for subscription id: '. $sub_id, 'simple-membership' );
+                            $this->paypal_ppcp_api_key_error = __( 'Error: Subscription details for subscription id: '. $sub_id .' could not be retrieved from PayPal.', 'simple-membership' );
                         }
 					}else{
-						$this->paypal_ppcp_api_key_error = __( 'Error: PayPal PPCP API keys are not configured on your site!', 'simple-membership' );
+						$this->paypal_ppcp_api_key_error = __( 'Error: PayPal PPCP API credentials are not configured in the settings menu.', 'simple-membership' );
 					}
 
 					break;
@@ -226,8 +230,8 @@ class SWPM_Utils_Subscriptions
 
 			$sub['cancel_token'] = $cancel_token;
 
-			$is_live        = get_post_meta($post_id, 'is_live', true);
-			$is_live        = empty($is_live) ? false : true;
+			$is_live = get_post_meta($post_id, 'is_live', true);
+			$is_live = empty($is_live) ? false : true;
 			$sub['is_live'] = $is_live;
 
 			$sub['payment_button_id'] = get_post_meta($post_id, 'payment_button_id', true);

@@ -36,6 +36,7 @@ class SWPM_Utils_Subscriptions
 		//Get any swpm_transactions CPT posts that are associated with the given member ID OR the given subscr_id.
 		$subscriptions = get_posts(array(
 			'post_type'  => 'swpm_transactions',
+            'posts_per_page' => -1,
 			'meta_query' => array(
 				'relation' => 'AND',
 				array(
@@ -67,7 +68,14 @@ class SWPM_Utils_Subscriptions
 			),
 		));
 
-		$this->subs_count = count($subscriptions);
+        // As PayPal PPCP subscription creates two transaction post, we need to filter out other than the transaction with status of 'subscription created'.
+        $subscriptions = array_filter($subscriptions, function ($item){
+            if (strtolower($item->gateway) === 'paypal_subscription_checkout' && strtolower($item->status) !== 'subscription created' ){
+                return false;
+            }
+
+            return true;
+        });
 
 		foreach ($subscriptions as $subscription) {
 			$sub            = array();
@@ -159,12 +167,10 @@ class SWPM_Utils_Subscriptions
 			$sub['plan'] = get_the_title($payment_button_id);
 
 			if ($this->is_active($status)) {
-				$this->active_subs_count++;
 				$this->active_subs[$sub_id] = $sub;
 			}
 
 			$this->subs[$sub_id] = $sub;
-			$this->subs_count++;
 		}
 
 		return $this;
@@ -276,7 +282,7 @@ class SWPM_Utils_Subscriptions
 	 */
 	public function get_active_subs_count()
 	{
-		return $this->active_subs_count;
+		return count($this->active_subs);
 	}
 
 	/**
@@ -286,7 +292,7 @@ class SWPM_Utils_Subscriptions
 	 */
 	public function get_all_subs_count()
 	{
-		return $this->subs_count;
+		return count($this->subs);
 	}
 
 	/**
@@ -535,7 +541,7 @@ class SWPM_Utils_Subscriptions
 			$cancel_form_output = '';
 			ob_start();
 			?>
-			<form method="post" class="swpm-cancel-subscription-form">
+			<form method="post" class="swpm-cancel-subscription-form" style="margin-bottom: 0">
 				<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
 				<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo esc_attr($token) ?>">
 				<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">

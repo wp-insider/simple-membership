@@ -69,13 +69,7 @@ class SWPM_Utils_Subscriptions
 		));
 
         // As PayPal PPCP subscription creates two transaction post, we need to filter out other than the transaction with status of 'subscription created'.
-        $subscriptions = array_filter($subscriptions, function ($item){
-            if (strtolower($item->gateway) === 'paypal_subscription_checkout' && strtolower($item->status) !== 'subscription created' ){
-                return false;
-            }
-
-            return true;
-        });
+        $subscriptions = array_filter($subscriptions, array($this, 'filter_eligible_txn_posts_for_subscriptions'));
 
 		foreach ($subscriptions as $subscription) {
 			$sub            = array();
@@ -175,6 +169,15 @@ class SWPM_Utils_Subscriptions
 
 		return $this;
 	}
+
+    public function filter_eligible_txn_posts_for_subscriptions($item)
+    {
+        if (strtolower($item->gateway) === 'paypal_subscription_checkout' && strtolower($item->status) !== 'subscription created' ){
+            return false;
+        }
+
+        return true;
+    }
 
 
 	/**
@@ -541,7 +544,7 @@ class SWPM_Utils_Subscriptions
 			$cancel_form_output = '';
 			ob_start();
 			?>
-			<form method="post" class="swpm-cancel-subscription-form" style="margin-bottom: 0">
+			<form method="post" class="swpm-cancel-subscription-form">
 				<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
 				<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo esc_attr($token) ?>">
 				<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">

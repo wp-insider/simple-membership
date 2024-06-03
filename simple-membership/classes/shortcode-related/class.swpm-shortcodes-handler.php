@@ -276,19 +276,21 @@ class SwpmShortcodesHandler {
 		//Get the member ID and load subscriptions utils class.
 		$member_username = SwpmMemberUtils::get_logged_in_members_username();
 		$member_id = SwpmMemberUtils::get_logged_in_members_id();
-		$subscriptions = new SWPM_Utils_Subscriptions( $member_id );
-		$subscriptions = $subscriptions->load_subs_data();
+
+		//We will use this class to load the curated subscriptions list data so we can use it in this shortcode.
+		$subscriptions_utils = new SWPM_Utils_Subscriptions( $member_id );
+		$subscriptions_utils->load_subs_data();
 
 		/**
 		 * Display any API key error messages (if subscription exists but api keys are not saved). 
 		 * The error message is only shown when the subscription of the corresponding payment gateway is present.
 		 * For example: If there are no stripe sca subscriptions, stripe api error wont be shown.
 		*/
-		$any_stripe_api_key_error_msg = $subscriptions->get_any_stripe_sca_api_key_error();
+		$any_stripe_api_key_error_msg = $subscriptions_utils->get_any_stripe_sca_api_key_error();
 		if ( !empty( $any_stripe_api_key_error_msg ) ) {
 			$output .= '<p class="swpm-active-subs-api-key-error-msg">'. esc_attr($any_stripe_api_key_error_msg) . '</p>';
 		}
-		$any_paypal_api_key_error_msg = $subscriptions->get_any_paypal_ppcp_api_key_error();
+		$any_paypal_api_key_error_msg = $subscriptions_utils->get_any_paypal_ppcp_api_key_error();
 		if ( !empty( $any_paypal_api_key_error_msg ) ) {
 			$output .= '<p class="swpm-active-subs-api-key-error-msg">'. esc_attr($any_paypal_api_key_error_msg) . '</p>';
 		}
@@ -298,9 +300,9 @@ class SwpmShortcodesHandler {
 
 		//Get the list of subscriptions
 		if ($show_all_subscriptions) {
-			$subscriptions_list = $subscriptions->get_all_subscriptions();
+			$subscriptions_list = $subscriptions_utils->get_all_subscriptions();
 		}else{
-			$subscriptions_list = $subscriptions->get_active_subscriptions();
+			$subscriptions_list = $subscriptions_utils->get_active_subscriptions();
 		}
 
 		//Display the list of subscriptions

@@ -180,8 +180,6 @@ class SWPM_Utils_Subscriptions
 
 			$this->subs[$sub_id] = $sub;
 		}
-
-		return $this;
 	}
 
 	/**

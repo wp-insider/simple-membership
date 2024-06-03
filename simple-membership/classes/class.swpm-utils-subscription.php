@@ -68,7 +68,14 @@ class SWPM_Utils_Subscriptions
 			),
 		));
 
-		$this->subs_count = count($subscriptions);
+        // As PayPal PPCP subscription creates two transaction post, we need to filter out other than the transaction with status of 'subscription created'.
+        $subscriptions = array_filter($subscriptions, function ($item){
+            if (strtolower($item->gateway) === 'paypal_subscription_checkout' && strtolower($item->status) !== 'subscription created' ){
+                return false;
+            }
+
+            return true;
+        });
 
 		foreach ($subscriptions as $subscription) {
 			$sub            = array();

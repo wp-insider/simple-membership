@@ -68,18 +68,21 @@ class SWPM_Utils_Subscriptions
 			),
 		));
 
-        // As PayPal PPCP subscription creates two transaction post, we need to filter out other than the transaction with status of 'subscription created'.
-        $subscriptions = array_filter($subscriptions, array($this, 'filter_eligible_txn_posts_for_subscriptions'));
-
+		//Loop through the found subscriptions and get the details to create a curated list of subscriptions. 
+		//It will be used to show the subscriptions list later.
 		foreach ($subscriptions as $subscription) {
-			$sub            = array();
-			$post_id        = $subscription->ID;
+			if ( !is_numeric($subscription->ID) ) {
+				continue;
+			}
+
+			$sub = array();
+			$post_id = $subscription->ID;
 
 			$payment_button_id = get_post_meta($post_id, 'payment_button_id', true);
 			$sub['payment_button_id'] = $payment_button_id;
 
 			$sub['post_id'] = $post_id;
-			$sub_id         = get_post_meta($post_id, 'subscr_id', true);
+			$sub_id = get_post_meta($post_id, 'subscr_id', true);
 
 			$sub['sub_id'] = $sub_id;
 
@@ -95,6 +98,10 @@ class SWPM_Utils_Subscriptions
 
 			//Get the gateway that was used to create this subscription.
 			$sub['gateway'] = get_post_meta($post_id, 'gateway', true);
+			if( !isset($sub['gateway']) || empty($sub['gateway']) ){
+				//Gateway is not set. This is an invalid subscription. Skip it.
+				continue;
+			}
 
 			// Check and get the subscription status based on the gateways.
 			$status = '';
@@ -112,6 +119,13 @@ class SWPM_Utils_Subscriptions
 					
 					break;
 				case 'paypal_subscription_checkout':
+					//Check if this is a valid PayPal PPCP subscription created entry.
+					$txn_status = get_post_meta($post_id, 'status', true);
+					if( $txn_status != 'subscription created' ){
+						//This is not a PPCP subscription created entry. Nothing to do here. Go to the next entry.
+						continue;
+					}
+
                     // In case of PayPal PPCP, is_live value is saved as 'yes' or 'no'. We will use this value to determine the environment mode.
                     if(isset($is_live) && $is_live == 'yes') {
                         $sub['is_live'] = true;
@@ -169,16 +183,6 @@ class SWPM_Utils_Subscriptions
 
 		return $this;
 	}
-
-    public function filter_eligible_txn_posts_for_subscriptions($item)
-    {
-        if (strtolower($item->gateway) === 'paypal_subscription_checkout' && strtolower($item->status) !== 'subscription created' ){
-            return false;
-        }
-
-        return true;
-    }
-
 
 	/**
 	 * Load stripe subscriptions only. (Old method that is used by the stripe subscription cancel shortcode)

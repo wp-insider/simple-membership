@@ -1093,8 +1093,12 @@ class SimpleWpMembership {
     }
 
     public static function activate() {
+        //Schedule the cron event for account status and expiry checks. This cron event is also used by the ENB extension.
         wp_schedule_event(time(), 'daily', 'swpm_account_status_event');
+        //Schedule the pending account deletion cron event.
         wp_schedule_event(time(), 'daily', 'swpm_delete_pending_account_event');
+
+        //Run the standard installer steps
         include_once('class.swpm-installation.php');
         SwpmInstallation::run_safe_installer();
     }

@@ -269,6 +269,16 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		$swpm_id = $customvariables['swpm_id'];
 	}
 
+	/* Update the swpm_transactions CPT record to mark the subscription as "Cancelled". */
+	//We can have multiple subscriptions from the same user that is not connected to the current profile. We still want to update the transaction record of those subscriptions.
+	//So we will update the transaction record before we start looking for the member account.
+	$subscr_id = isset( $ipn_data['subscr_id'] ) ? $ipn_data['subscr_id'] : '';
+	if(empty($subscr_id)){
+		$subscr_id = isset( $ipn_data['parent_txn_id'] ) ? $ipn_data['parent_txn_id'] : '';
+	}
+	SwpmTransactions::set_subscription_status_post_meta_to_cancelled( $subscr_id );
+
+	/* Lets try to find the member account that is associated with this subscription (if any). */
 	if ( ! empty( $swpm_id ) ) {
 		// This IPN has the SWPM ID. Retrieve the member record using member ID.
 		swpm_debug_log_subsc( 'Member ID is present. Retrieving member account from the database. Member ID: ' . $swpm_id, true );

@@ -239,4 +239,14 @@ class SwpmTransactions {
 		return '';
 	}
 
+	public static function set_subscription_status_post_meta_to_cancelled( $subscr_id ) {
+		//Get the transaction row from the transactions table for the given subscription ID.
+		$swpm_txn_cpt_id = self::get_original_swpm_txn_cpt_id_by_subscr_id( $subscr_id );
+		if ( ! empty( $swpm_txn_cpt_id ) ) {
+			//Found the original subscription transaction CPT. Update the subscr_status meta value to "cancelled".
+			SwpmLog::log_simple_debug( 'Setting the the swpm_transaction CPT post meta (Post ID: '.$swpm_txn_cpt_id.') to mark the subscription as "cancelled".', true );
+			update_post_meta( $swpm_txn_cpt_id, 'subscr_status', 'cancelled' );
+		}
+	}
+
 }

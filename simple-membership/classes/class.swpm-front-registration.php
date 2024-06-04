@@ -399,14 +399,14 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			//SwpmLog::log_simple_debug("Updating member profile data with SWPM ID: " . $swpm_id, true);
 			$member_info = array_filter( $member_info );//Remove any null values.
 			$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', $member_info, array( 'member_id' => $swpm_id ) );
-			
+
 			//Reload user data after update so the profile page reflects the new data.
 			$auth->reload_user_data();
 
 			//Check if password was also changed.
 			if ( $password_also_changed ) {
 				//Password was also changed. Clear and reset the user's auth cookies so they can stay logged in.
-				SwpmLog::log_simple_debug( 'Member has updated the password from profile edit page.', true );
+				SwpmLog::log_simple_debug( 'Member has updated the password from the profile edit page. Member ID: ' . $swpm_id, true );
 
 				$auth_object = SwpmAuth::get_instance();
 				$swpm_user_name = $auth_object->get( 'user_name' );

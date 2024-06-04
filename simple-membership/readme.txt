@@ -171,12 +171,12 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
-- The password update from profile edit page won't require a re-login anymore.
 - Added more output escaping to the payment button shortcode output.
 - Fixed a minor issue with the manual transaction add feature.
+- Added architecture so the password update from profile edit page doesn't require a re-login.
 - The PayPal PPCP subscriptions will also save the is_live parameter in the transaction record.
 - Minor improvements to the newly added cancel subscription shortcode.
-- Changed the status of the 1st transaction of a Stripe subscription to 'Stripe subscription created' for better clarity.
+- Changed the status of the 1st transaction of a Stripe subscription to 'subscription created' for better clarity.
 
 = 4.4.6 =
 - Various translation related changes to the button configuration admin interface.

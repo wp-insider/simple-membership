@@ -136,7 +136,7 @@ class SWPM_Utils_Subscriptions
                             $stripe_sub = \Stripe\Subscription::retrieve($sub_id);
                             $status = $stripe_sub['status'];
                         } catch ( \Stripe\Exception\ApiErrorException $e){
-                            $this->paypal_ppcp_api_key_error = __( 'Error: Subscription details for subscription id: '. $sub_id .' could not be retrieved from Stripe.', 'simple-membership' );
+                            $this->stripe_sca_api_key_error = __( 'Error: Subscription details for subscription id: '. $sub_id .' could not be retrieved from Stripe.', 'simple-membership' );
                         }
 
                     }else{

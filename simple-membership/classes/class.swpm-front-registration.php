@@ -379,7 +379,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 					'message'   => $msg_str,
 				);
 				unset( $member_info['plain_password'] );
-				//Set the password chagned flag.
+				//Set the password changed flag.
 				$password_also_changed = true;
 			}
 
@@ -390,24 +390,22 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', $member_info, array( 'member_id' => $swpm_id ) );
 			$auth->reload_user_data();//Reload user data after update so the profile page reflects the new data.
 
+			//Check if password was also changed.
 			if ( $password_also_changed ) {
-				//Password was also changed. Clear and update user's auth cookies.
-
-                // First clear old cookies.
-				$auth_object = SwpmAuth::get_instance();
-				$auth_object->clear_wp_user_auth_cookies(); //Clear the wp user auth cookies and destroy session. New auth cookies will generate below.
-				$auth_object->swpm_clear_auth_cookies(); //Clear the swpm auth cookies. New auth cookies will generate below.
+				//Password was also changed. Clear and reset the user's auth cookies so they can stay logged in.
 				SwpmLog::log_simple_debug( 'Member has updated the password from profile edit page.', true );
 
-                // Secondly, assign new cookies, so no need to log in again.
-                $auth_object->update_auth_cookie_after_pass_change(array(
-                    'password' => $member_info['password'],
-                ), true);
-                $wp_user = SwpmMemberUtils::get_wp_user_from_swpm_user_id( $swpm_id );
-                $wp_user_id = $wp_user->ID;
-                wp_set_auth_cookie( $wp_user_id, true ); // Set new auth cookies (second parameter true means "remember me")
-                wp_set_current_user( $wp_user_id ); // Set the current user object
-                SwpmLog::log_auth_debug( 'Authentication cookies has reset as password was changed.', true );
+				$auth_object = SwpmAuth::get_instance();
+				$swpm_user_name = $auth_object->get( 'user_name' );
+				$user_info_params = array(
+					'member_id' => $swpm_id,
+					'user_name' => $swpm_user_name,
+					'new_enc_password' => $member_info['password'],
+				);
+				$auth_object->reset_auth_cookies_after_pass_change($user_info_params);
+
+				//Trigger action hook
+				do_action( 'swpm_front_end_profile_password_changed', $member_info );
 			}
 
 			SwpmTransfer::get_instance()->set( 'status', $message );

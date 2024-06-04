@@ -90,6 +90,8 @@ class SWPMPaymentsListTable extends WP_List_Table {
 			$column_value = '<span class="swpm_status_refunded">' . $status . '</span>';
 		} else if ( strtolower($status) == 'subscription created' ) {
 			$column_value = '<span class="swpm_status_subscription_created">' . $status . '</span>';
+		} else if ( strtolower($status) == 'stripe subscription created' ) {
+			$column_value = '<span class="swpm_status_subscription_created">' . $status . '</span>';
 		} else if ( strtolower($status) == 'subscription' ) {
 			$column_value = '<span class="swpm_status_subscription">' . $status . '</span>';
 		} else {

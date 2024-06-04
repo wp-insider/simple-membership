@@ -176,6 +176,7 @@ https://simple-membership-plugin.com/
 - Fixed a minor issue with the manual transaction add feature.
 - The PayPal PPCP subscriptions will also save the is_live parameter in the transaction record.
 - Minor improvements to the newly added cancel subscription shortcode.
+- Changed the status of the 1st transaction of a Stripe subscription to 'Stripe subscription created' for better clarity.
 
 = 4.4.6 =
 - Various translation related changes to the button configuration admin interface.

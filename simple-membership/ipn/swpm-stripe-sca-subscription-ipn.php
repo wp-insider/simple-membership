@@ -179,7 +179,7 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		$ipn_data['ip']               = $custom_var['user_ip'];
 		$ipn_data['custom']           = $custom;
 		$ipn_data['gateway']          = 'stripe-sca-subs';
-		$ipn_data['status']           = 'stripe subscription created';
+		$ipn_data['status']           = 'subscription created';
 
 		$bd_addr = $pm->billing_details->address;
 

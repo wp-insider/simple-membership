@@ -34,7 +34,9 @@ class SwpmWpLoadedTasks {
 				SWPM_Utils_Subscriptions::cancel_msg( __( 'You are not logged in.', 'simple-membership' ) );
 			}
 			$member_id = SwpmMemberUtils::get_logged_in_members_id();
-			(new SWPM_Utils_Subscriptions( $member_id ))->load_subs_data()->handle_cancel_sub();
+            $subscriptions_list = new SWPM_Utils_Subscriptions( $member_id );
+            $subscriptions_list->load_subs_data();
+            $subscriptions_list->handle_cancel_sub();
 		}
 	}
 

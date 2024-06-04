@@ -352,6 +352,14 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		unset( $user_data['permitted'] );
 		$form = new SwpmForm( $user_data );
 		if ( $form->is_valid() ) {
+			/********************************
+			//Profile update sequence:
+			1) Update the WP user entry with the new data.
+			2) Update the SWPM member entry with the new data.
+			3) Reload the user data so the profile page reflects the new data.
+			4) Reset the auth cookies (if the password was updated).
+			*********************************/
+
 			global $wpdb;
 			$msg_str = '<div class="swpm-profile-update-success">' . __( 'Profile updated successfully.', 'simple-membership' ) . '</div>';
 			$message = array(
@@ -359,6 +367,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 				'message'   => $msg_str,
 			);
 
+			//Get the sanitized member form data.
 			$member_info = $form->get_sanitized_member_form_data();
 
             //Check if membrship_level value has been posted.
@@ -367,7 +376,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
                 unset( $member_info['membership_level'] );
             }
 
-			SwpmUtils::update_wp_user( $auth->get( 'user_name' ), $member_info ); //Update corresponding wp user record.
+			//Update the corresponding wp user record.
+			SwpmUtils::update_wp_user( $auth->get( 'user_name' ), $member_info ); 
 
 			//Lets check if password was also changed.
 			$password_also_changed = false;
@@ -378,6 +388,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 					'succeeded' => true,
 					'message'   => $msg_str,
 				);
+				//unset the plain password from the member info array so it doesn't try to save it in the database.
 				unset( $member_info['plain_password'] );
 				//Set the password changed flag.
 				$password_also_changed = true;
@@ -388,7 +399,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			//SwpmLog::log_simple_debug("Updating member profile data with SWPM ID: " . $swpm_id, true);
 			$member_info = array_filter( $member_info );//Remove any null values.
 			$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', $member_info, array( 'member_id' => $swpm_id ) );
-			$auth->reload_user_data();//Reload user data after update so the profile page reflects the new data.
+			
+			//Reload user data after update so the profile page reflects the new data.
+			$auth->reload_user_data();
 
 			//Check if password was also changed.
 			if ( $password_also_changed ) {

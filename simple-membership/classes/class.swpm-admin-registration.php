@@ -137,11 +137,9 @@ class SwpmAdminRegistration extends SwpmRegistration {
             if( !empty($plain_password) && ($currently_logged_in_member_id == $id_of_profile_being_edited) ){
 				//The password has been updated and the profile being edited is the logged-in user's own profile.
 				$auth_object = SwpmAuth::get_instance();
-				$swpm_id = $id;
-				$swpm_user_name = $member['user_name'];
 				$user_info_params = array(
-					'member_id' => $swpm_id,
-					'user_name' => $swpm_user_name,
+					'member_id' => $id_of_profile_being_edited,
+					'user_name' => $user_name,
 					'new_enc_password' => $member['password'],
 				);
 				$auth_object->reset_auth_cookies_after_pass_change($user_info_params);

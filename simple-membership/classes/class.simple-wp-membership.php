@@ -79,7 +79,7 @@ class SimpleWpMembership {
         add_action('wp_logout', array(&$this, 'wp_logout_handler'));
         add_action('password_reset', array(&$this, 'wp_password_reset_hook'), 10, 2);
         add_action('user_register', array(&$this, 'swpm_handle_wp_user_registration'));
-        add_action('profile_update', array(&$this, 'sync_with_wp_profile'), 10, 2);        
+        add_action('profile_update', array(&$this, 'sync_with_wp_profile'), 10, 3);        
 
         //SWPM login/logout hooks.
         //Note: These should only handle/execute when the login or logout originates from our plugin's login/logout form to prevent loop.
@@ -463,21 +463,50 @@ class SimpleWpMembership {
         }
     }
 
-    public function sync_with_wp_profile($wp_user_id) {
+    public function sync_with_wp_profile($wp_user_id, $old_user_data, $userdata) {
+        //Reference - https://developer.wordpress.org/reference/hooks/profile_update/
+
+		$swpm_editprofile_submit = filter_input( INPUT_POST, 'swpm_editprofile_submit' );
+		if ( ! empty( $swpm_editprofile_submit ) ) {
+            //This is a SWPM profile update form submission. Nothing to do here.
+            SwpmLog::log_simple_debug( 'WP profile_update hook handler - SWPM profile update form submission detected. Nothing to do here.', true );
+            return;
+        }
+
         global $wpdb;
         $wp_user_data = get_userdata($wp_user_id);
         $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE " . ' user_name=%s', $wp_user_data->user_login);
         $profile = $wpdb->get_row($query, ARRAY_A);
         $profile = (array) $profile;
-        if (empty($profile)) {
+        if ( empty($profile) ) {
+            //No SWPM user found for this WP user. Nothing to do.
             return;
         }
+
+        //Useful for debugging purpose
+        //SwpmLog::log_simple_debug('WP User ID: ' . $wp_user_id, true);
+        //SwpmLog::log_array_data_to_debug($wp_user_data, true);
+        //SwpmLog::log_array_data_to_debug($userdata, true);
+
+        //Update the SWPM user profile with the latest WP user data that we received via the 'profile_update' action hook.  
         $profile['user_name'] = $wp_user_data->user_login;
         $profile['email'] = $wp_user_data->user_email;
-        $profile['password'] = $wp_user_data->user_pass;
         $profile['first_name'] = $wp_user_data->user_firstname;
         $profile['last_name'] = $wp_user_data->user_lastname;
+        $profile['password'] = $wp_user_data->user_pass;
         $wpdb->update($wpdb->prefix . "swpm_members_tbl", $profile, array('member_id' => $profile['member_id']));
+
+        //Since the encrypted/hashed password is getting updated with the one from WP User entry, the auth cookies need to be reset to keep the user logged in.     
+        $auth_object = SwpmAuth::get_instance();
+        $swpm_user_name = $profile['user_name'];
+        $user_info_params = array(
+            'member_id' => $profile['member_id'],
+            'user_name' => $swpm_user_name,
+            'new_enc_password' => $profile['password'],
+        );
+        $auth_object->reset_auth_cookies_after_pass_change($user_info_params);
+
+        SwpmLog::log_simple_debug( 'Completed the profile_update hook handling - SWPM user profile updated with the latest WP user data.', true );
     }
 
     function swpm_handle_wp_user_registration($user_id) {

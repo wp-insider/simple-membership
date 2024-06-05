@@ -309,7 +309,7 @@ class SwpmAuth {
 		}
 		if( function_exists('wp_clear_auth_cookie') ){
 			wp_clear_auth_cookie();
-		}		
+		}
 	}
 	
 	private function set_cookie( $remember = '', $secure = '' ) {
@@ -453,10 +453,14 @@ class SwpmAuth {
 		$hash      = hash_hmac( 'md5', $username . '|' . $expiration, $key );
 		if ( $hmac != $hash ) {
 			$this->lastStatusMsg = SwpmUtils::_( 'Please login again.' );
-			SwpmLog::log_auth_debug( 'Validate() - Bad hash. Going to clear the auth cookies to clear the bad hash.', true );
+			SwpmLog::log_auth_debug( 'Validate() function - Bad hash. Going to clear the auth cookies to clear the bad hash.', true );
+			SwpmLog::log_auth_debug( 'Validate() function - The user profile with the username: ' . $username . ' will be logged out.', true );
+			
             do_action('swpm_validate_login_hash_mismatch');
-			//Clear the auth cookies to clear the bad hash.
-			SwpmAuth::get_instance()->swpm_clear_auth_cookies();
+			//Clear the auth cookies of SWPM to clear the bad hash. This will log out the user.
+			$this->swpm_clear_auth_cookies();
+			//Clear the wp user auth cookies and destroy session as well.
+			$this->clear_wp_user_auth_cookies();
 			return false;
 		}
 

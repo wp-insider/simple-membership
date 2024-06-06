@@ -470,7 +470,7 @@ class SimpleWpMembership {
 		$swpm_editprofile_submit = filter_input( INPUT_POST, 'swpm_editprofile_submit' );
 		if ( ! empty( $swpm_editprofile_submit ) ) {
             //This is a SWPM profile update form submission. Nothing to do here.
-            SwpmLog::log_simple_debug( 'WP profile_update hook handler - SWPM profile update form submission detected. Nothing to do here.', true );
+            //SwpmLog::log_simple_debug( 'WP profile_update hook handler - SWPM profile update form submission detected. Nothing to do here.', true );
             return;
         }
 

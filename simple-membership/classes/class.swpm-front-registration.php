@@ -352,6 +352,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		unset( $user_data['permitted'] );
 		$form = new SwpmForm( $user_data );
 		if ( $form->is_valid() ) {
+			//Successful form submission. Proceed with the profile update.
+			
 			/********************************
 			//Profile update sequence:
 			1) Update the WP user entry with the new data.
@@ -421,10 +423,20 @@ class SwpmFrontRegistration extends SwpmRegistration {
 				do_action( 'swpm_front_end_profile_password_changed', $member_info );
 			}
 
+			//This message will be persistent (for this user's session) until the message is displayed.
 			SwpmTransfer::get_instance()->set( 'status', $message );
 
+			//Trigger action hook
 			do_action( 'swpm_front_end_profile_edited', $member_info );
-			return true; //Successful form submission.
+
+			//Do a page refresh to reflect the new data.
+			//This is specially useful when the user changes their password which will invalidate the current auth cookies and the nonce values. 
+			//A page refresh will generate new nonce values (using the new auth cookies) and the user can submit the profile form again without any issues.		
+			$current_page_url = SwpmMiscUtils::get_current_page_url();
+			SwpmMiscUtils::redirect_to_url( $current_page_url );
+
+			//Success. Profile updated.
+			return true; 
 		} else {
 			$msg_str = '<div class="swpm-profile-update-error">' . SwpmUtils::_( 'Please correct the following.' ) . '</div>';
 			$message = array(

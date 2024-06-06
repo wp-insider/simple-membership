@@ -208,11 +208,10 @@ class SWPM_PayPal_Utility_IPN_Related {
 
 	public static function is_txn_already_processed( $ipn_data ){
 		// Query the DB to check if we have already processed this transaction or not.
-		global $wpdb;
 		$txn_id = isset($ipn_data['txn_id']) ? $ipn_data['txn_id'] : '';
 		$payer_email = isset($ipn_data['payer_email']) ? $ipn_data['payer_email'] : '';
-		$txn_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE txn_id = %s and email = %s", $txn_id, $payer_email ), OBJECT );
-		if (!empty($txn_row)) {
+        $txn_row = SwpmTransactions::get_transaction_row_by_txn_id_and_email($txn_id, $payer_email);
+        if (!empty($txn_row)) {
 			// And if we have already processed it, do nothing and return true
 			SwpmLog::log_simple_debug( "This transaction has already been processed (Txn ID: ".$txn_id.", Payer Email: ".$payer_email."). This looks to be a duplicate notification. Nothing to do here.", true );
 			return true;

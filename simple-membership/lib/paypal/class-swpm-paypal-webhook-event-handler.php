@@ -293,10 +293,9 @@ class SWPM_PayPal_Webhook_Event_Handler {
 
 	public static function is_sale_completed_webhook_already_processed( $event ){
 		// Query the DB to check if we have already processed this transaction or not.
-		global $wpdb;
 		$txn_id = isset( $event['resource']['id'] ) ? $event['resource']['id'] : '';
 		$subscription_id = isset( $event['resource']['billing_agreement_id'] ) ? $event['resource']['billing_agreement_id'] : '';
-		$txn_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE txn_id = %s and subscr_id = %s", $txn_id, $subscription_id ), OBJECT );
+		$txn_row = SwpmTransactions::get_transaction_row_by_txn_id_and_subscription_id($txn_id, $subscription_id);
 		if (!empty($txn_row)) {
 			// And if we have already processed it, do nothing and return true
 			SwpmLog::log_simple_debug( "This webhook event has already been processed (Txn ID: ".$txn_id.", Subscr ID: ".$subscription_id."). This looks to be a duplicate webhook notification. Nothing to do.", true );

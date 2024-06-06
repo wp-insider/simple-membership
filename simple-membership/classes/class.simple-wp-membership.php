@@ -475,8 +475,8 @@ class SimpleWpMembership {
         }
 
         //Trigger a filter hook to allow any addon(s) to override the wp profile_update hook handling.
-        $overriden = apply_filters('swpm_wp_profile_update_hook_override', '');
-        if( !empty( $overriden ) ){
+        $overriden_msg = apply_filters('swpm_wp_profile_update_hook_override', '');
+        if( !empty( $overriden_msg ) ){
             //The WP profile_update hook handling has been overridden by an addon.
             SwpmLog::log_simple_debug( 'WP profile_update hook handling has been overridden by an addon. Nothing to do here.', true );
             return;

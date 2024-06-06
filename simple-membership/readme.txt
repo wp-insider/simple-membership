@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.5
-Stable tag: 4.4.6
+Stable tag: 4.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,13 +170,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
-- Added more output escaping to the payment button shortcode output.
-- Fixed a minor issue with the manual transaction add feature.
-- Added architecture so the password update from profile edit page doesn't require a re-login.
+= 4.4.7 =
 - The PayPal PPCP subscriptions will also save the is_live parameter in the transaction record.
 - Minor improvements to the newly added cancel subscription shortcode.
 - Changed the status of the 1st transaction of a Stripe subscription to 'subscription created' for better clarity.
+- Added more output escaping to the payment button shortcode output.
+- Fixed a minor issue with the manual transaction add feature.
+- Added architecture so the password update from profile edit page doesn't require a re-login.
 - The PayPal's new API button options have been moved to the top in the button creation interface.
 - Improved the 'profile_update' action hoook handling code - the user will remain logged-in after the password is changed from WP User profile page.
 - Added a new filter hook swpm_wp_profile_update_hook_override.

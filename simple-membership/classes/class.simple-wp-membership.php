@@ -466,6 +466,7 @@ class SimpleWpMembership {
     public function sync_with_wp_profile($wp_user_id, $old_user_data, $userdata) {
         //Reference - https://developer.wordpress.org/reference/hooks/profile_update/
 
+        //Check if the SWPM profile update form was submitted.
 		$swpm_editprofile_submit = filter_input( INPUT_POST, 'swpm_editprofile_submit' );
 		if ( ! empty( $swpm_editprofile_submit ) ) {
             //This is a SWPM profile update form submission. Nothing to do here.
@@ -473,6 +474,15 @@ class SimpleWpMembership {
             return;
         }
 
+        //Trigger a filter hook to allow any addon(s) to override the wp profile_update hook handling.
+        $overriden = apply_filters('swpm_wp_profile_update_hook_override', '');
+        if( !empty( $overriden ) ){
+            //The WP profile_update hook handling has been overridden by an addon.
+            SwpmLog::log_simple_debug( 'WP profile_update hook handling has been overridden by an addon. Nothing to do here.', true );
+            return;
+        }
+
+        //Retrieve the SWPM user profile for the given WP user ID.
         global $wpdb;
         $wp_user_data = get_userdata($wp_user_id);
         $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE " . ' user_name=%s', $wp_user_data->user_login);

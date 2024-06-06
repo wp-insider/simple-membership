@@ -179,6 +179,7 @@ https://simple-membership-plugin.com/
 - Changed the status of the 1st transaction of a Stripe subscription to 'subscription created' for better clarity.
 - The PayPal's new API button options have been moved to the top in the button creation interface.
 - Improved the 'profile_update' action hoook handling code - the user will remain logged-in after the password is changed from WP User profile page.
+- Added a new filter hook swpm_wp_profile_update_hook_override.
 
 = 4.4.6 =
 - Various translation related changes to the button configuration admin interface.

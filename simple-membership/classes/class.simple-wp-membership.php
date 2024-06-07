@@ -506,17 +506,24 @@ class SimpleWpMembership {
         $profile['password'] = $wp_user_data->user_pass;
         $wpdb->update($wpdb->prefix . "swpm_members_tbl", $profile, array('member_id' => $profile['member_id']));
 
-        //Since the encrypted/hashed password is getting updated with the one from WP User entry, the auth cookies need to be reset to keep the user logged in.     
-        $auth_object = SwpmAuth::get_instance();
-        $swpm_user_name = $profile['user_name'];
-        $user_info_params = array(
-            'member_id' => $profile['member_id'],
-            'user_name' => $swpm_user_name,
-            'new_enc_password' => $profile['password'],
-        );
-        $auth_object->reset_auth_cookies_after_pass_change($user_info_params);
+        //===============/
+        //TODO - Only reset SWPM auth cookies only since this is an update from WP end. WP will handle their cookie reset. 
+        //NOTE: This hook will be triggered for both 
+        //1) When admin is updating WP user profile from the WP user's menu. 
+        //2) When user is updating their own profile from the WP user's profile update interface.
+        //Otherwise any profile update from WP Admin by the site admin can cause logout. 
+        //===============/
+        //Since the encrypted/hashed password is getting updated with the one from WP User entry, the SWPM auth cookies need to be reset to keep the SWPM user logged in.     
+        // $auth_object = SwpmAuth::get_instance();
+        // $swpm_user_name = $profile['user_name'];
+        // $user_info_params = array(
+        //     'member_id' => $profile['member_id'],
+        //     'user_name' => $swpm_user_name,
+        //     'new_enc_password' => $profile['password'],
+        // );
+        // $auth_object->reset_swpm_auth_cookies_only($user_info_params);
 
-        SwpmLog::log_simple_debug( 'Completed the profile_update hook handling - SWPM user profile updated with the latest WP user data.', true );
+        SwpmLog::log_simple_debug( 'Completed the profile_update hook handling - SWPM user profile (Member ID: '.$profile['member_id'].') updated with the latest WP user data.', true );
     }
 
     function swpm_handle_wp_user_registration($user_id) {

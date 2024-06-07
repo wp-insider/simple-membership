@@ -360,11 +360,33 @@ class SwpmAuth {
 	}
 
 	/*
-	 * This function is used to reset the auth cookies after the user changes their password (from the profile page).
+	 * Important: This function should only be used after the users have changed their password. Otherwise it can have unintended consequences.
+	 * This function is used to reset the auth cookies after the user changes their password (from our plugin's profile page).
 	 */
 	public function reset_auth_cookies_after_pass_change($user_info, $remember='', $secure=''){
-		// First clear the old auth cookies for WP user and SWPM.
-		$this->clear_wp_user_auth_cookies(); //Clear the wp user auth cookies and destroy session. New auth cookies will generate below.
+		// Clear the old auth cookies for WP user and SWPM. Then set new auth cookies.
+
+		//Reset the auth cookies for SWPM user only.
+		$this->reset_swpm_auth_cookies_only($user_info, $remember, $secure);
+
+		//Clear the WP user auth cookies and destroy session. New auth cookies will be generate below.
+		$this->clear_wp_user_auth_cookies(); 
+		
+		// Set new auth cookies for WP user
+		$swpm_id = $user_info['member_id'];
+		$wp_user = SwpmMemberUtils::get_wp_user_from_swpm_user_id( $swpm_id );
+		$wp_user_id = $wp_user->ID;
+		wp_set_auth_cookie( $wp_user_id, true ); // Set new auth cookies (second parameter true means "remember me")
+		wp_set_current_user( $wp_user_id ); // Set the current user object
+		SwpmLog::log_auth_debug( 'Authentication cookies have been reset after the password update.', true );
+	}
+
+	/*
+	 * This function is used to reset the auth cookies of SWPM user only.
+	 * This is typically used after the user's password is updated in the members DB table (for example, after WP profile update hook is triggered).
+	 */
+	public function reset_swpm_auth_cookies_only($user_info, $remember='', $secure=''){
+		// First clear the old auth cookies for the SWPM user.
 		$this->swpm_clear_auth_cookies(); //Clear the swpm auth cookies. New auth cookies will generate below.
 
 		// Next, assign new cookies, so the user doesn't have to login again.
@@ -405,15 +427,7 @@ class SwpmAuth {
         $hash = hash_hmac( 'md5', $swpm_username . '|' . $expiration, $key );
         $auth_cookie = $swpm_username . '|' . $expiration . '|' . $hash;
         $auth_cookie_name = $secure ? SIMPLE_WP_MEMBERSHIP_SEC_AUTH : SIMPLE_WP_MEMBERSHIP_AUTH;
-        setcookie( $auth_cookie_name, $auth_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );		
-
-		// Set new auth cookies for WP user
-		$swpm_id = $user_info['member_id'];
-		$wp_user = SwpmMemberUtils::get_wp_user_from_swpm_user_id( $swpm_id );
-		$wp_user_id = $wp_user->ID;
-		wp_set_auth_cookie( $wp_user_id, true ); // Set new auth cookies (second parameter true means "remember me")
-		wp_set_current_user( $wp_user_id ); // Set the current user object
-		SwpmLog::log_auth_debug( 'Authentication cookies have been reset after the password update.', true );
+        setcookie( $auth_cookie_name, $auth_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
 	}
 
 	private function validate() {

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.5
-Stable tag: 4.4.7
+Stable tag: 4.4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,6 +169,11 @@ Please visit the membership plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 4.4.8 =
+- Rolled back one of the changes from the previous version that was causing an issue with the WP user profile update process.
+- If your site is experiencing any issue after the update and you need the older version 4.4.6 (before the profile update related improvements/changes), you can download it using the following link:
+- [Simple Membership Plugin v4.4.6](https://downloads.wordpress.org/plugin/simple-membership.4.4.6.zip)
 
 = 4.4.7 =
 - The PayPal PPCP subscriptions will also save the is_live parameter in the transaction record.

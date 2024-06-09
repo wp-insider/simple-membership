@@ -319,7 +319,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 	 */
 	private function process_txn_records_from_post_ids(&$post_ids){
 		foreach ($post_ids as $post_id) {
-			array_push($this->items, SwpmTransactions::get_all_post_meta_by_txn_post_id($post_id, 'array'));
+			array_push($this->items, SwpmTransactions::get_txn_post_meta_data_in_array_format($post_id));
 		}
 	}
 

@@ -269,6 +269,68 @@ class SwpmTransactions {
         return $result;
     }
 
+    public static function get_txn_posts_data_using_meta_query( array $meta_query )
+    {
+		$txn_posts = array();
+        // Get the post ids of all transaction post type with pagination.
+        $post_ids = get_posts(
+            array(
+                'post_type' => 'swpm_transactions',
+                'posts_per_page' => -1,
+                'fields' => 'ids',
+                'order_by' => 'ASC',
+                'meta_query' => $meta_query
+            )
+        );
+
+        if (count($post_ids) < 1) {
+			return $txn_posts;
+		}
+
+		foreach ($post_ids as $post_id){
+			$txn_posts[] = self::get_txn_post_meta_data_in_object_format($post_id);
+		}
+
+        wp_reset_postdata();
+
+        return $txn_posts;
+    }
+
+	/*
+	 * Get all the transaction meta data of a transaction in array format.
+	 * @param string $post_id The transaction post ID.
+	 * @return array
+	 */
+    public static function get_txn_post_meta_data_in_array_format( int $post_id){
+        $meta_data = array(
+            'id' => $post_id,
+            'db_row_id' => get_post_meta($post_id, 'db_row_id', true),
+            'email' => get_post_meta($post_id, 'email', true),
+            'first_name' => get_post_meta($post_id, 'first_name', true),
+            'last_name' => get_post_meta($post_id, 'last_name', true),
+            'member_id' => get_post_meta($post_id, 'member_id', true),
+            'membership_level' => get_post_meta($post_id, 'membership_level', true),
+            'txn_date' => get_post_meta($post_id, 'txn_date', true),
+            'txn_id' => get_post_meta($post_id, 'txn_id', true),
+            'subscr_id' => get_post_meta($post_id, 'subscr_id', true),
+            'reference' => get_post_meta($post_id, 'reference', true),
+            'payment_amount' => get_post_meta($post_id, 'payment_amount', true),
+            'gateway' => get_post_meta($post_id, 'gateway', true),
+            'status' => get_post_meta($post_id, 'status', true),
+            'ip_address' => get_post_meta($post_id, 'ip_address', true),
+            'payment_button_id' => get_post_meta($post_id, 'payment_button_id', true),
+            'is_live' => get_post_meta($post_id, 'is_live', true),
+            'discount_amount' => get_post_meta($post_id, 'discount_amount', true),
+            'custom' => get_post_meta($post_id, 'custom', true),
+        );
+        return $meta_data;
+    }
+
+	public static function get_txn_post_meta_data_in_object_format( int $post_id){
+		$meta_data_obj = (object) self::get_txn_post_meta_data_in_array_format($post_id);
+		return $meta_data_obj;
+	}
+
     /**
      * Get transaction cpt record from posts table by meta value.
      *

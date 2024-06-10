@@ -278,7 +278,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 
 			$offset = ( $current_page - 1 ) * $per_page;
 
-			// pagination requirement
+			// TODO: Old code. Need to remove
 			// $query = "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl ORDER BY $orderby_column $sort_order";
 			// $query .= ' LIMIT ' . (int) $offset . ',' . (int) $per_page;
 			// $data = $wpdb->get_results( $query, ARRAY_A );
@@ -287,7 +287,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 			$post_ids = get_posts(
 				array(
 					'post_type' => 'swpm_transactions',
-					'posts_per_page' => (int) $per_page,
+					'posts_per_page' => (int) $per_page, // pagination requirement
 					'offset' => (int) $offset,
 					'fields' => 'ids',
 				)
@@ -319,27 +319,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 	 */
 	private function process_txn_records_from_post_ids(&$post_ids){
 		foreach ($post_ids as $post_id) {
-			array_push($this->items, array(
-				'id' => $post_id,
-				'db_row_id' => get_post_meta($post_id, 'db_row_id', true),
-				'email' => get_post_meta($post_id, 'email', true),
-				'first_name' => get_post_meta($post_id, 'first_name', true),
-				'last_name' => get_post_meta($post_id, 'last_name', true),
-				'member_id' => get_post_meta($post_id, 'member_id', true),
-				'membership_level' => get_post_meta($post_id, 'membership_level', true),
-				'txn_date' => get_post_meta($post_id, 'txn_date', true),
-				'txn_id' => get_post_meta($post_id, 'txn_id', true),
-				'subscr_id' => get_post_meta($post_id, 'subscr_id', true),
-				'reference' => get_post_meta($post_id, 'reference', true),
-				'payment_amount' => get_post_meta($post_id, 'payment_amount', true),
-				'gateway' => get_post_meta($post_id, 'gateway', true),
-				'status' => get_post_meta($post_id, 'status', true),
-				'ip_address' => get_post_meta($post_id, 'ip_address', true),
-				'payment_button_id' => get_post_meta($post_id, 'payment_button_id', true),
-				'is_live' => get_post_meta($post_id, 'is_live', true),
-				'discount_amount' => get_post_meta($post_id, 'discount_amount', true),
-				'custom' => get_post_meta($post_id, 'custom', true),
-			));
+			array_push($this->items, SwpmTransactions::get_txn_post_meta_data_in_array_format($post_id));
 		}
 	}
 

@@ -132,12 +132,15 @@ class SwpmTransactions {
 	 * Use this function to update or set account status of a member easily.
 	 */
 	public static function update_transaction_status( $txn_row_id, $new_status = 'Completed' ) {
-		global $wpdb;
-		$payments_table_name = $wpdb->prefix . 'swpm_payments_tbl';
+        // TODO: Old Code. Need to remove.
+		// global $wpdb;
+        // $payments_table_name = $wpdb->prefix . 'swpm_payments_tbl';
+        // SwpmLog::log_simple_debug( 'Updating the payment status value of transaction to: ' . $new_status . '. Row ID: ' . $txn_row_id, true );
+        // $query = $wpdb->prepare( "UPDATE $payments_table_name SET status=%s WHERE id=%s", $new_status, $txn_row_id );
+        // $resultset = $wpdb->query( $query );
 
-		SwpmLog::log_simple_debug( 'Updating the payment status value of transaction to: ' . $new_status . '. Row ID: ' . $txn_row_id, true );
-		$query = $wpdb->prepare( "UPDATE $payments_table_name SET status=%s WHERE id=%s", $new_status, $txn_row_id );
-		$resultset = $wpdb->query( $query );
+        SwpmLog::log_simple_debug( 'Updating the payment status value of transaction to: ' . $new_status . '. Post ID: ' . $txn_row_id, true );
+        update_post_meta($txn_row_id, 'status', $new_status);
 	}
 
 	public static function parse_custom_var( $custom ) {

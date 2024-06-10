@@ -222,13 +222,14 @@ function swpm_handle_refund_using_parent_txn_id( $ipn_data ){
 		swpm_debug_log_subsc("Parent txn id field is empty. cannot process this request.", true);
 		return;
 	}
-	$txn_db_row = SwpmTransactions::get_transaction_row_by_txn_id( $parent_txn_id );
+	$txn_db_row = SwpmTransactions::get_transaction_row_by_txn_id( $parent_txn_id, true);
 	if( ! $txn_db_row ){
 		swpm_debug_log_subsc("No transaction record found for the transaction id: " . $parent_txn_id, true);
 		return;
 	}
 	//Mark the transaction as refunded.
 	$txn_row_id = $txn_db_row->id;
+	// Update the postmeta for the corresponding transaction cpt.
 	SwpmTransactions::update_transaction_status( $txn_row_id, 'Refunded' );
 
 	//Get the member's ID associated with this transaction

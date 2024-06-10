@@ -107,9 +107,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 
                 /*** Duplicate IPN check ***/
 		// Query the DB to check if we have already processed this transaction or not
-		global $wpdb;
-		$txn_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE txn_id = %s", $txn_id ), OBJECT );
-
+        $txn_row = SwpmTransactions::get_transaction_row_by_txn_id($txn_id);
 		// And if we have already processed it, do nothing and return true
 		if (!empty($txn_row)) {
 			$this->debug_log( "This transaction has already been processed (".$txn_id."). Nothing to do here.", true );

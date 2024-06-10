@@ -222,7 +222,7 @@ function swpm_handle_refund_using_parent_txn_id( $ipn_data ){
 		swpm_debug_log_subsc("Parent txn id field is empty. cannot process this request.", true);
 		return;
 	}
-	$txn_db_row = SwpmTransactions::get_transaction_row_by_txn_id( $parent_txn_id, true);
+	$txn_db_row = SwpmTransactions::get_transaction_row_by_txn_id( $parent_txn_id );
 	if( ! $txn_db_row ){
 		swpm_debug_log_subsc("No transaction record found for the transaction id: " . $parent_txn_id, true);
 		return;

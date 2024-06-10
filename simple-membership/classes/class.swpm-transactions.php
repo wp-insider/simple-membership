@@ -53,11 +53,12 @@ class SwpmTransactions {
 		}
 
 		$txn_data = array_filter( $txn_data );//Remove any null values.
-		
-		//Save the transaction record to the payments database table (this is for backwards compatibility).
-		$wpdb->insert( $wpdb->prefix . 'swpm_payments_tbl', $txn_data );
 
-		$db_row_id = $wpdb->insert_id;
+        // TODO: Old code. Need to remove.
+		//Save the transaction record to the payments database table (this is for backwards compatibility).
+		// $wpdb->insert( $wpdb->prefix . 'swpm_payments_tbl', $txn_data );
+		// $db_row_id = $wpdb->insert_id;
+        $db_row_id = 0; // TODO: This meta need to handled, its used in a hook below.
 
         /*** Save to the swpm_transactions CPT ***/
 		$post = array();
@@ -68,8 +69,9 @@ class SwpmTransactions {
 
 		$post_id = wp_insert_post( $post );
 
+        // TODO: Old code. Need to remove.
 		//The key that connects the 'swpm_transactions' CPT post and the the swpm_payments_tbl row.
-		update_post_meta( $post_id, 'db_row_id', $db_row_id );
+		// update_post_meta( $post_id, 'db_row_id', $db_row_id );
 
 		//Save additional data based on the checkout gateway.
 		if( isset( $ipn_data['gateway'])) {

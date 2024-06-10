@@ -453,20 +453,44 @@ class SwpmMembers extends WP_List_Table {
 		if ( ! $member ) {
 			return false;
 		}
+
+		// TODO: Old code, need to be  removed.
 		// let's check if Stripe subscription needs to be cancelled
 		global $wpdb;
-		$q = $wpdb->prepare(
-			'SELECT *
-		FROM  `' . $wpdb->prefix . 'swpm_payments_tbl`
-		WHERE email =  %s
-		AND (gateway =  "stripe" OR gateway = "stripe-sca-subs")
-		AND subscr_id != ""',
-			array( $member->email )
+		// $q = $wpdb->prepare(
+		// 	'SELECT *
+		// FROM  `' . $wpdb->prefix . 'swpm_payments_tbl`
+		// WHERE email =  %s
+		// AND (gateway =  "stripe" OR gateway = "stripe-sca-subs")
+		// AND subscr_id != ""',
+		// 	array( $member->email )
+		// );
+		// $res = $wpdb->get_results( $q, ARRAY_A );
+
+		$meta_query = array(
+			'relation' => 'AND',
+			array(
+				'relation' => 'AND',
+				array(
+					'key'     => 'email',
+					'value'   => $member->email,
+					'compare' => '='
+				),
+				array(
+					'key'     => 'subscr_id',
+					'value'   => '',
+					'compare' => '!='
+				),				
+				array(
+					'key'     => 'gateway',
+					'value'   => array('stripe', 'stripe-sca-subs'),
+					'compare' => 'IN'
+				),
+			),
 		);
+		$res = SwpmTransactions::get_all_txn_posts_using_meta_query_with_metadata($meta_query);
 
-		$res = $wpdb->get_results( $q, ARRAY_A );
-
-		if ( ! $res ) {
+		if ( empty($res) ) {
 			return false;
 		}
 

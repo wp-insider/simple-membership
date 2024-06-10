@@ -173,9 +173,11 @@ class SwpmTransactions {
 	public static function get_transaction_row_by_subscr_id (string $subscription_id, bool $return_post_metas = false)
     {
         $meta_query = array(
-            'key'     => 'subscr_id',
-            'value'   => $subscription_id,
-            'compare' => '='
+            array(
+				'key'     => 'subscr_id',
+				'value'   => $subscription_id,
+				'compare' => '='
+			)
         );
 
         if ($return_post_metas){
@@ -195,10 +197,12 @@ class SwpmTransactions {
 	public static function get_transaction_row_by_txn_id (string $txn_id, bool $return_post_metas = false)
     {
         $meta_query = array(
-            'key'     => 'txn_id',
-            'value'   => $txn_id,
-            'compare' => '='
-        );
+			array(
+				'key'     => 'txn_id',
+				'value'   => $txn_id,
+				'compare' => '='
+        	)
+		);
 
         if ($return_post_metas){
             return self::get_txn_post_using_meta_query_with_metadata( $meta_query );
@@ -282,7 +286,7 @@ class SwpmTransactions {
             array(
                 'post_type' => 'swpm_transactions',
                 'posts_per_page' => -1,
-                'meta_query' => array($meta_query)
+                'meta_query' => $meta_query
             )
         );
 
@@ -312,6 +316,39 @@ class SwpmTransactions {
         }
 
         return self::get_txn_post_meta_data_in_object_format($txn_post->ID);
+    }
+
+	/**
+     * Retrieve all transaction posts using meta query with metadata.
+     *
+     * @param array $meta_query
+     *
+     * @return array|null The retrieved posts as array of WP_Post object. NULL if no posts found.
+     */
+    public static function get_all_txn_posts_using_meta_query_with_metadata( array $meta_query )
+    {
+        // Get the transaction posts types.
+        $txn_posts = get_posts(
+            array(
+                'post_type' => 'swpm_transactions',
+                'posts_per_page' => -1,
+                'meta_query' => $meta_query
+            )
+        );
+
+        wp_reset_postdata();
+
+        if (count($txn_posts) < 1){
+            return null;
+        }
+
+		$result = array();
+
+		foreach ($txn_posts as $txn_post) {
+			$result[] = self::get_txn_post_meta_data_in_array_format($txn_post->ID);
+		}
+
+        return $result;
     }
 
 	/*

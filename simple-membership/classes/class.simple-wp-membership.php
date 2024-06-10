@@ -440,29 +440,6 @@ class SimpleWpMembership {
 
     public function login() {
         ob_start();
-        $test_res = SwpmTransactions::get_all_txn_posts_using_meta_query_with_metadata(array(
-			'relation' => 'AND',
-			array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'email',
-					'value'   => $member->email,
-					'compare' => '='
-				),
-				array(
-					'key'     => 'subscr_id',
-					'value'   => '',
-					'compare' => '!='
-				),				
-				array(
-					'key'     => 'gateway',
-					'value'   => array('stripe', 'stripe-sca-subs'),
-					'compare' => 'IN'
-				),
-			),
-		));
-        echo "<pre>" . print_r($test_res ,true) . "</pre>";
-
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
             //Load the template for logged-in member

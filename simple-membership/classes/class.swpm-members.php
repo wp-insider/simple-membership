@@ -454,9 +454,9 @@ class SwpmMembers extends WP_List_Table {
 			return false;
 		}
 
-		// TODO: Old code, need to be  removed.
+		// TODO: Old code, need to be removed.
 		// let's check if Stripe subscription needs to be cancelled
-		global $wpdb;
+		// global $wpdb;
 		// $q = $wpdb->prepare(
 		// 	'SELECT *
 		// FROM  `' . $wpdb->prefix . 'swpm_payments_tbl`
@@ -480,7 +480,7 @@ class SwpmMembers extends WP_List_Table {
 					'key'     => 'subscr_id',
 					'value'   => '',
 					'compare' => '!='
-				),				
+				),
 				array(
 					'key'     => 'gateway',
 					'value'   => array('stripe', 'stripe-sca-subs'),
@@ -501,16 +501,25 @@ class SwpmMembers extends WP_List_Table {
 				continue;
 			}
 
-			//let's find the payment button
-			$q        = $wpdb->prepare( "SELECT post_id FROM {$wpdb->prefix}postmeta WHERE meta_key='subscr_id' AND meta_value=%s", $sub['subscr_id'] );
-			$res_post = $wpdb->get_row( $q );
+            // TODO: Old code, need to be removed.
+			// let's find the payment button
+			// $q        = $wpdb->prepare( "SELECT post_id FROM {$wpdb->prefix}postmeta WHERE meta_key='subscr_id' AND meta_value=%s", $sub['subscr_id'] );
+			// $res_post = $wpdb->get_row( $q );
+			// if ( ! $res_post ) {
+			// 	//no button found
+			// 	continue;
+			// }
+			// $button_id = get_post_meta( $res_post->post_id, 'payment_button_id', true );
 
-			if ( ! $res_post ) {
-				//no button found
-				continue;
-			}
 
-			$button_id = get_post_meta( $res_post->post_id, 'payment_button_id', true );
+			// let's find the payment button.
+
+			$button_id = $sub['payment_button_id'];
+
+            if ( empty($button_id) ) {
+                // payment button id not found.
+                continue;
+            }
 
 			$button = get_post( $button_id );
 

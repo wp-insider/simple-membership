@@ -159,16 +159,235 @@ class SwpmTransactions {
 		return $customvariables;
 	}
 
-	public static function get_transaction_row_by_subscr_id ($subscr_id) {
-			global $wpdb;
-			$query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE subscr_id = %s", $subscr_id ), OBJECT );
-			return $query_db;
+    /**
+     * Get transaction cpt record from posts table by subscription id.
+     *
+     * @param string $subscription_id The subscription id.
+     * @param bool $return_post_metas Whether to also retrieve post meta associated with this post.
+     *
+     * @return object|null
+     */
+	public static function get_transaction_row_by_subscr_id (string $subscription_id, bool $return_post_metas = false)
+    {
+        $meta_query = array(
+            array(
+				'key'     => 'subscr_id',
+				'value'   => $subscription_id,
+				'compare' => '='
+			)
+        );
+
+        if ($return_post_metas){
+            return self::get_txn_post_using_meta_query_with_metadata( $meta_query );
+        }
+        return self::get_txn_post_using_meta_query($meta_query);
 	}
 
-	public static function get_transaction_row_by_txn_id ($txn_id) {
-		global $wpdb;
-		$query_db = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_payments_tbl WHERE txn_id = %s", $txn_id ), OBJECT );
-		return $query_db;
+    /**
+     * Get transaction cpt record from posts table by transaction id.
+     *
+     * @param string $txn_id The transaction id.
+     * @param bool $return_post_metas Whether to also retrieve post meta associated with this post.
+     *
+     * @return object|null
+     */
+	public static function get_transaction_row_by_txn_id (string $txn_id, bool $return_post_metas = false)
+    {
+        $meta_query = array(
+			array(
+				'key'     => 'txn_id',
+				'value'   => $txn_id,
+				'compare' => '='
+        	)
+		);
+
+        if ($return_post_metas){
+            return self::get_txn_post_using_meta_query_with_metadata( $meta_query );
+        }
+        return self::get_txn_post_using_meta_query($meta_query);
+	}
+
+    /**
+     * Get transaction cpt record from posts table by transaction id and email.
+     *
+     * @param string $txn_id The transaction id.
+     * @param string $email The payer email.
+     * @param bool $return_post_metas Whether to also retrieve post meta associated with this post.
+     *
+     * @return object|null
+     */
+    public static function get_transaction_row_by_txn_id_and_email(string $txn_id, string $email, bool $return_post_metas = false)
+    {
+        $meta_query = array(
+            'relation' => 'AND',
+            array(
+                'key'     => 'txn_id',
+                'value'   => $txn_id,
+                'compare' => '='
+            ),
+            array(
+                'key'     => 'email',
+                'value'   => $email,
+                'compare' => '='
+            ),
+        );
+
+        if ($return_post_metas){
+            return self::get_txn_post_using_meta_query_with_metadata( $meta_query );
+        }
+        return self::get_txn_post_using_meta_query($meta_query);
+    }
+
+    /**
+     * Get transaction cpt record from posts table by transaction id and subscription id.
+     *
+     * @param string $txn_id The transaction id.
+     * @param string $subscription_id The subscription id.
+     * @param bool $return_post_metas Whether to also retrieve post meta associated with this post.
+     *
+     * @return object|null
+     */
+    public static function get_transaction_row_by_txn_id_and_subscription_id(string $txn_id, string $subscription_id, bool $return_post_metas = false)
+    {
+        $meta_query = array(
+            'relation' => 'AND',
+            array(
+                'key'     => 'txn_id',
+                'value'   => $txn_id,
+                'compare' => '='
+            ),
+            array(
+                'key'     => 'subscr_id',
+                'value'   => $subscription_id,
+                'compare' => '='
+            ),
+        );
+
+        if ($return_post_metas){
+            return self::get_txn_post_using_meta_query_with_metadata( $meta_query );
+        }
+        return self::get_txn_post_using_meta_query($meta_query);
+    }
+
+    /**
+     * Retrieve first transaction post using meta query.
+     *
+     * @param array $meta_query
+     *
+     * @return object|null The retrieved post as WP_Post object. NULL if no posts found.
+     */
+    public static function get_txn_post_using_meta_query( array $meta_query )
+    {
+        // Get the transaction posts types.
+        $txn_posts = get_posts(
+            array(
+                'post_type' => 'swpm_transactions',
+                'posts_per_page' => -1,
+                'meta_query' => $meta_query
+            )
+        );
+
+        wp_reset_postdata();
+
+        if (count($txn_posts)){
+            return $txn_posts[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieve first transaction post using meta query with associated metadata.
+     *
+     * @param array $meta_query
+     *
+     * @return object|null Post data as object. NULL if posts not found.
+     */
+    public static function get_txn_post_using_meta_query_with_metadata( array $meta_query )
+    {
+        $txn_post = self::get_txn_post_using_meta_query($meta_query);
+
+        // Check if a matching transaction post found or not.
+        if (empty($txn_post)) {
+            return null;
+        }
+
+        return self::get_txn_post_meta_data_in_object_format($txn_post->ID);
+    }
+
+	/**
+     * Retrieve all transaction posts using meta query with metadata.
+     *
+     * @param array $meta_query
+     *
+     * @return array|null The retrieved posts as array of WP_Post object. NULL if no posts found.
+     */
+    public static function get_all_txn_posts_using_meta_query_with_metadata( array $meta_query )
+    {
+        // Get the transaction posts types.
+        $txn_posts = get_posts(
+            array(
+                'post_type' => 'swpm_transactions',
+                'posts_per_page' => -1,
+                'meta_query' => $meta_query
+            )
+        );
+
+        wp_reset_postdata();
+
+        if (count($txn_posts) < 1){
+            return null;
+        }
+
+		$result = array();
+
+		foreach ($txn_posts as $txn_post) {
+			$result[] = self::get_txn_post_meta_data_in_array_format($txn_post->ID);
+		}
+
+        return $result;
+    }
+
+	/*
+	 * Get all the transaction meta data of a transaction in array format.
+	 * @param string $post_id The transaction post ID.
+	 * @return array
+	 */
+    public static function get_txn_post_meta_data_in_array_format( int $post_id){
+        $meta_data = array(
+            'id' => $post_id,
+            'db_row_id' => get_post_meta($post_id, 'db_row_id', true),
+            'email' => get_post_meta($post_id, 'email', true),
+            'first_name' => get_post_meta($post_id, 'first_name', true),
+            'last_name' => get_post_meta($post_id, 'last_name', true),
+            'member_id' => get_post_meta($post_id, 'member_id', true),
+            'membership_level' => get_post_meta($post_id, 'membership_level', true),
+            'txn_date' => get_post_meta($post_id, 'txn_date', true),
+            'txn_id' => get_post_meta($post_id, 'txn_id', true),
+            'subscr_id' => get_post_meta($post_id, 'subscr_id', true),
+            'reference' => get_post_meta($post_id, 'reference', true),
+            'payment_amount' => get_post_meta($post_id, 'payment_amount', true),
+            'gateway' => get_post_meta($post_id, 'gateway', true),
+            'status' => get_post_meta($post_id, 'status', true),
+            'ip_address' => get_post_meta($post_id, 'ip_address', true),
+            'payment_button_id' => get_post_meta($post_id, 'payment_button_id', true),
+            'is_live' => get_post_meta($post_id, 'is_live', true),
+            'discount_amount' => get_post_meta($post_id, 'discount_amount', true),
+            'custom' => get_post_meta($post_id, 'custom', true),
+        );
+        return $meta_data;
+    }
+
+    /**
+     * Retrieve all the post metadata for a transaction post type by its id.
+     *
+     * @param int $post_id ID of transaction post
+     *
+     * @return object All associated post metas
+     */
+	public static function get_txn_post_meta_data_in_object_format( int $post_id){
+		$meta_data_obj = (object) self::get_txn_post_meta_data_in_array_format($post_id);
+		return $meta_data_obj;
 	}
 
 	/**

@@ -105,7 +105,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			array_push( $cart_items, $current_item );
 		}
 
-                /*** Duplicate IPN check ***/
+        /*** Duplicate IPN check ***/
 		// Query the DB to check if we have already processed this transaction or not
         $txn_row = SwpmTransactions::get_transaction_row_by_txn_id($txn_id);
 		// And if we have already processed it, do nothing and return true
@@ -113,7 +113,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			$this->debug_log( "This transaction has already been processed (".$txn_id."). Nothing to do here.", true );
 			return true;
 		}
-                /*** End of duplicate IPN check ***/
+        /*** End of duplicate IPN check ***/
 
 		$counter = 0;
 		foreach ( $cart_items as $current_cart_item ) {

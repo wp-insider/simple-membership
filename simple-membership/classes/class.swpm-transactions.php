@@ -292,8 +292,9 @@ class SwpmTransactions {
 
         wp_reset_postdata();
 
-        if (count($txn_posts)){
-            return $txn_posts[0];
+        if ( count( $txn_posts ) ){
+			$the_txn_post = isset($txn_posts[0]) ? $txn_posts[0] : null;
+            return $the_txn_post;
         }
 
         return null;

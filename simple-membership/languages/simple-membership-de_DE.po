@@ -629,7 +629,7 @@ msgstr "Bitte"
 
 #: classes/class.swpm-front-registration.php:196 classes/class.swpm-init-time-tasks.php:199 classes/class.swpm-utils-misc.php:414 views/login.php:47
 msgid "Log In"
-msgstr "anmelden"
+msgstr "Anmelden"
 
 #: classes/class.swpm-front-registration.php:215
 msgid "Please correct the following"

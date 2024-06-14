@@ -170,6 +170,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Minor update to the German language file.
+
 = 4.4.8 =
 - Rolled back one of the changes from the previous version that was causing an issue with the WP user profile update process.
 - If your site is experiencing any issue after the update and you need the older version 4.4.6 (before the profile update related improvements/changes), you can download it using the following link:

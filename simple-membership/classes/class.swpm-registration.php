@@ -50,6 +50,9 @@ abstract class SwpmRegistration {
 			$activation_link = apply_filters('swpm_send_reg_email_activation_link', $activation_link);
 
 			$member_info['activation_link'] = $activation_link;
+
+			//Debug purposes.
+			//SwpmLog::log_simple_debug( 'send_reg_email() - email activation link: ' . $activation_link, true );
 		}
 
 		$from_address                         = $settings->get_value( 'email-from' );

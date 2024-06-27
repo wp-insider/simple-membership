@@ -247,7 +247,26 @@ class SwpmMembers extends WP_List_Table {
 		return $this->add();
 	}
 
+    public static function membership_lvl_not_configured_msg_box()
+    {
+        $output = '<div class="swpm-orange-box">';
+        $output .= '<p>';
+        $output .= __("Each member account must be assigned a membership level. It appears that you haven't created any membership levels yet. Please create a membership level first before adding any member records.", 'simple-membership');
+        $output .= '</p>';
+        $output .= '<br />';
+        $output .= '<a href="'. admin_url() . 'admin.php?page=simple_wp_membership_levels&level_action=add" class="button button-primary">';
+        $output .= __('Create a Membership Label', 'simple-membership');
+        $output .= '</a>';
+        $output .= '</div>';
+        return $output;
+    }
+
 	function add() {
+        if(!SwpmMembershipLevelUtils::is_membership_level_configured()){
+            echo self::membership_lvl_not_configured_msg_box();
+            return;
+        }
+
 		$form = apply_filters( 'swpm_admin_registration_form_override', '' );
 		if ( ! empty( $form ) ) {
 			echo $form;
@@ -277,6 +296,11 @@ class SwpmMembers extends WP_List_Table {
 	}
 
 	function edit( $id ) {
+        if(!SwpmMembershipLevelUtils::is_membership_level_configured()){
+            echo self::membership_lvl_not_configured_msg_box();
+            return;
+        }
+
 		global $wpdb;
 		$id     = absint( $id );
 		$query  = "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = $id";

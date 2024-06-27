@@ -36,4 +36,39 @@ class SwpmMembershipLevelUtils {
         }
         return $levels_array; 
     }
+
+    /**
+     * Check if any membership level configured.
+     *
+     * @return bool
+     */
+    public static function is_membership_level_configured() {
+        $all_levels_array = SwpmMembershipLevelUtils::get_all_membership_levels_in_array();
+        if(!empty($all_levels_array)){
+            //Membership level has been configured.
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if a membership level exists by a membership level id.
+     *
+     * @param int $membership_lvl_id
+     *
+     * @return bool
+     */
+    public static function check_if_membership_level_exists(int $membership_lvl_id)
+    {
+        global $wpdb;
+
+        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $membership_lvl_id);
+        $membership_lvl = $wpdb->get_row($query);
+
+        if ($membership_lvl !== null) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -75,12 +75,17 @@ abstract class SwpmUtils {
 	}
 
 	public static function get_expiration_timestamp( $user ) {
-		//Check if the user object has a valid membership level assigned.
+		//Check and make sure that the user object has a valid membership level assigned.
         if ( !isset($user->membership_level) || !is_numeric($user->membership_level) || !SwpmMembershipLevelUtils::check_if_membership_level_exists($user->membership_level) ){
-            $member_id = isset($user->member_id) ? $user->member_id : '';
-			SwpmLog::log_simple_debug("Error! This member profile (Member ID: ". $member_id .") does not have a valid membership level assigned. Cannot calculate expiration timestamp.", false);
-            return;
+            //This is a critical error. The user object does not have a valid membership level assigned.
+			//Log this critical error and end the script with an error message.
+			$member_id = isset($user->member_id) ? $user->member_id : '';
+			$critical_error_msg = "Error! This member profile (Member ID: ". $member_id .") does not have a valid membership level assigned. The site admin needs to assign a valid membership level to this member profile.";
+			SwpmLog::log_simple_debug($critical_error_msg, false);
+            wp_die($critical_error_msg);
+			//The script will die here. So the following code will not be executed.
         }
+
 		//Get the permission object for the user's membership level
 		$permission = SwpmPermission::get_instance( $user->membership_level );
 		if ( SwpmMembershipLevel::FIXED_DATE == $permission->get( 'subscription_duration_type' ) ) {

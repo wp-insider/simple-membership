@@ -249,13 +249,18 @@ class SwpmMembers extends WP_List_Table {
 
     public static function membership_lvl_not_configured_msg_box()
     {
-        $output = '<div class="swpm-orange-box">';
+        $output = '<div class="swpm-yellow-box">';
         $output .= '<p>';
-        $output .= __("Each member account must be assigned a membership level. It appears that you haven't created any membership levels yet. Please create a membership level first before adding any member records.", 'simple-membership');
+        $output .= __("Each member account must be assigned a membership level. It appears that you don't have any membership levels configured. Please create a membership level first before adding or editing any member records.", 'simple-membership');
         $output .= '</p>';
+		$output .= '<p>';
+		$output .= __("Read the ", 'simple-membership');
+		$output .= '<a href="https://simple-membership-plugin.com/adding-membership-access-levels-site/" target="_blank">' . __("membership level documentation", 'simple-membership') . '</a>';
+		$output .= __(" to learn how to create a membership level.", 'simple-membership');
+		$output .= '</p>';
         $output .= '<br />';
         $output .= '<a href="'. admin_url() . 'admin.php?page=simple_wp_membership_levels&level_action=add" class="button button-primary">';
-        $output .= __('Create a Membership Label', 'simple-membership');
+        $output .= __('Create a Membership Level', 'simple-membership');
         $output .= '</a>';
         $output .= '</div>';
         return $output;

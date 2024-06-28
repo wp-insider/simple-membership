@@ -75,6 +75,10 @@ abstract class SwpmUtils {
 	}
 
 	public static function get_expiration_timestamp( $user ) {
+        if (!isset($user->membership_level) || !is_numeric($user->membership_level) || !SwpmMembershipLevelUtils::check_if_membership_level_exists($user->membership_level)){
+            SwpmLog::log_simple_debug("This member isn't assigned by a proper membership level.", false);
+            return;
+        }
 		$permission = SwpmPermission::get_instance( $user->membership_level );
 		if ( SwpmMembershipLevel::FIXED_DATE == $permission->get( 'subscription_duration_type' ) ) {
 			return strtotime( $permission->get( 'subscription_period' ) );

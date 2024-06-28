@@ -94,7 +94,7 @@ class SwpmMemberUtils {
 	}
 
 	public static function get_expiry_date_timestamp_by_user_id( $swpm_id ) {
-		$swpm_user        = self::get_user_by_id( $swpm_id );
+		$swpm_user = self::get_user_by_id( $swpm_id );
 		$expiry_timestamp = SwpmUtils::get_expiration_timestamp( $swpm_user );
 		return $expiry_timestamp;
 	}

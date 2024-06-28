@@ -75,10 +75,13 @@ abstract class SwpmUtils {
 	}
 
 	public static function get_expiration_timestamp( $user ) {
-        if (!isset($user->membership_level) || !is_numeric($user->membership_level) || !SwpmMembershipLevelUtils::check_if_membership_level_exists($user->membership_level)){
-            SwpmLog::log_simple_debug("This member isn't assigned by a proper membership level.", false);
+		//Check if the user object has a valid membership level assigned.
+        if ( !isset($user->membership_level) || !is_numeric($user->membership_level) || !SwpmMembershipLevelUtils::check_if_membership_level_exists($user->membership_level) ){
+            $member_id = isset($user->member_id) ? $user->member_id : '';
+			SwpmLog::log_simple_debug("Error! This member profile (Member ID: ". $member_id .") does not have a valid membership level assigned. Cannot calculate expiration timestamp.", false);
             return;
         }
+		//Get the permission object for the user's membership level
 		$permission = SwpmPermission::get_instance( $user->membership_level );
 		if ( SwpmMembershipLevel::FIXED_DATE == $permission->get( 'subscription_duration_type' ) ) {
 			return strtotime( $permission->get( 'subscription_period' ) );
@@ -163,7 +166,7 @@ abstract class SwpmUtils {
 
 	public static function get_membership_level_row_by_id( $level_id ) {
 		global $wpdb;
-		$query           = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id=%d', $level_id );
+		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id=%d', $level_id );
 		$level_resultset = $wpdb->get_row( $query );
 		return $level_resultset;
 	}

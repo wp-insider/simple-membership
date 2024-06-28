@@ -173,6 +173,8 @@ https://simple-membership-plugin.com/
 = WIP =
 - Minor update to the German language file.
 - Added a new filter hook 'swpm_after_email_activation_redirect_url' to allow customizing the email activation redirect URL.
+- Added a check in the member's add/edit interface to ensure a membership level exists before attempting to add or edit a member record.
+- If the site admin deletes the membership level of a member who then tries to log in, an appropriate error message will be displayed instead of a fatal error.
 
 = 4.4.8 =
 - Rolled back one of the changes from the previous version that was causing an issue with the WP user profile update process.

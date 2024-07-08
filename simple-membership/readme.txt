@@ -4,8 +4,8 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 5.0
 Requires PHP: 5.6
-Tested up to: 6.5
-Stable tag: 4.4.8
+Tested up to: 6.6
+Stable tag: 4.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,11 +170,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= 4.4.9 =
 - Minor update to the German language file.
 - Added a new filter hook 'swpm_after_email_activation_redirect_url' to allow customizing the email activation redirect URL.
 - Added a check in the member's add/edit interface to ensure a membership level exists before attempting to add or edit a member record.
 - If the site admin deletes the membership level of a member who then tries to log in, an appropriate error message will be displayed instead of a fatal error.
+- When the debug feature is enabled and the debug log file doesn't exist, it will create one automatically.
+- Added reCAPTCHA V3 support. You can now enable [reCAPTCHA V3 for the member registration](https://simple-membership-plugin.com/simple-membership-google-recaptcha-v3-integration/).
 
 = 4.4.8 =
 - Rolled back one of the changes from the previous version that was causing an issue with the WP user profile update process.

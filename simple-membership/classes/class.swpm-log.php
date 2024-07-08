@@ -27,21 +27,33 @@ class SwpmLog {
 		self::$log_auth_file = "log-auth-{$suffix}.txt";
 	}
 
+	/*
+	* This function will output the debug log file to the browser.
+	* $type = 'd' for the standard debug-log-file and 'a' for auth-log-file.
+	*/
 	public static function output_log( $type = 'd' ) {
 		if ( 'd' !== $type && 'a' !== $type ) {
+			//Invalid log file type.
 			return;
 		}
 		self::gen_log_file_names();
-		$log_file = 'd' === $type ? self::$log_file : self::$log_auth_file;
-                $log_file_full_path = SIMPLE_WP_MEMBERSHIP_PATH . $log_file;
-                
+		$log_file = ('d' === $type) ? self::$log_file : self::$log_auth_file;
+        $log_file_full_path = SIMPLE_WP_MEMBERSHIP_PATH . $log_file;
+
 		if ( ! file_exists( $log_file_full_path ) ) {
-                        $log_file_missing_msg = '<p>Could not find the log file. Reset the log file from the settings menu to regenerate it then try again. You can find the Reset Debug Log option in the Debug Settings section.</p>';
-                        $log_file_missing_msg .= '<p>If it still fails to open the log file after that, check if the plugin directory (' . SIMPLE_WP_MEMBERSHIP_PATH . ') is writeable on your server.</p>';
-                        wp_die( $log_file_missing_msg );
+			//Log file does not exist so we will call the reset log function to create a blank log file.
+			self::reset_swmp_log_files();
 		}
 
-                //Open the log file
+		//Check if the log file now exists.
+		if ( ! file_exists( $log_file_full_path ) ) {
+			//Log file still does not exist so we will show an error message.
+			$log_file_missing_msg = '<p>Could not find the log file. Reset the log file from the settings menu to regenerate it then try again. You can find the Reset Debug Log option in the Debug Settings section.</p>';
+			$log_file_missing_msg .= '<p>If it still fails to open the log file after that, check if the plugin directory (' . SIMPLE_WP_MEMBERSHIP_PATH . ') is writeable on your server.</p>';
+			wp_die( $log_file_missing_msg );
+		}
+
+        //Open the log file
 		$fp = fopen( $log_file_full_path, 'rb' );
 		if ( ! $fp ) {
 			wp_die( 'Can\'t open the log file.' );
@@ -97,7 +109,7 @@ class SwpmLog {
 	}
 
 	public static function log_simple_debug( $message, $success, $end = false ) {
-		$settings      = SwpmSettings::get_instance();
+		$settings = SwpmSettings::get_instance();
 		$debug_enabled = $settings->get_value( 'enable-debug' );
 		if ( empty( $debug_enabled ) ) {//Debug is not enabled
 			return;
@@ -109,7 +121,7 @@ class SwpmLog {
 
 		// Timestamp
 		$log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
-		$text          = '[' . $log_timestamp . '] - ' . ( ( $success ) ? 'SUCCESS: ' : 'FAILURE: ' ) . $message . "\n";
+		$text = '[' . $log_timestamp . '] - ' . ( ( $success ) ? 'SUCCESS: ' : 'FAILURE: ' ) . $message . "\n";
 		if ( $end ) {
 			$text .= "\n------------------------------------------------------------------\n\n";
 		}
@@ -120,7 +132,7 @@ class SwpmLog {
 	}
 
 	public static function log_array_data_to_debug( $array_to_write, $success, $end = false ) {
-		$settings      = SwpmSettings::get_instance();
+		$settings = SwpmSettings::get_instance();
 		$debug_enabled = $settings->get_value( 'enable-debug' );
 		if ( empty( $debug_enabled ) ) {//Debug is not enabled
 			return;
@@ -132,7 +144,7 @@ class SwpmLog {
 
 		// Timestamp
 		$log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
-		$text          = '[' . $log_timestamp . '] - ' . ( ( $success ) ? 'SUCCESS: ' : 'FAILURE: ' ) . "\n";
+		$text = '[' . $log_timestamp . '] - ' . ( ( $success ) ? 'SUCCESS: ' : 'FAILURE: ' ) . "\n";
 		ob_start();
 		print_r( $array_to_write );
 		$var = ob_get_contents();
@@ -161,7 +173,7 @@ class SwpmLog {
 
 		// Timestamp
 		$log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
-		$text          = '[' . $log_timestamp . '] - ' . ( ( $success ) ? 'SUCCESS: ' : 'FAILURE: ' ) . $message . "\n";
+		$text = '[' . $log_timestamp . '] - ' . ( ( $success ) ? 'SUCCESS: ' : 'FAILURE: ' ) . $message . "\n";
 		if ( $end ) {
 			$text .= "\n------------------------------------------------------------------\n\n";
 		}
@@ -172,7 +184,7 @@ class SwpmLog {
 	}
 
 	public static function log_auth_debug_array_data( $array_to_write, $success, $end = false ) {
-		$settings      = SwpmSettings::get_instance();
+		$settings = SwpmSettings::get_instance();
 		$debug_enabled = $settings->get_value( 'enable-debug' );
 		if ( empty( $debug_enabled ) ) {//Debug is not enabled
 			return;
@@ -214,9 +226,9 @@ class SwpmLog {
 			}
 
 			$log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
-			$text          = '[' . $log_timestamp . '] - SUCCESS: Log file reset';
-			$text         .= "\n------------------------------------------------------------------\n\n";
-			$fp            = fopen( $logfile, 'w' );
+			$text = '[' . $log_timestamp . '] - SUCCESS: Log file reset';
+			$text .= "\n------------------------------------------------------------------\n\n";
+			$fp = fopen( $logfile, 'w' );
 			if ( $fp != false ) {
 				@fwrite( $fp, $text );
 				@fclose( $fp );

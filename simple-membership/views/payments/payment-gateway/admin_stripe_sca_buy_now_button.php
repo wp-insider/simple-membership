@@ -245,13 +245,19 @@ function swpm_save_new_stripe_sca_buy_now_button_data() {
 		add_post_meta( $button_id, 'payment_amount', trim( sanitize_text_field( $_REQUEST['payment_amount'] ) ) );
 		add_post_meta( $button_id, 'payment_currency', sanitize_text_field( $_REQUEST['payment_currency'] ) );
 
-		add_post_meta( $button_id, 'allow_promotion_codes', sanitize_text_field( $_REQUEST['allow_promotion_codes'] ) );
+		//Stripe API Keys related data
+		$stripe_test_secret_key = isset($_REQUEST['stripe_test_secret_key']) ? trim(sanitize_text_field( $_REQUEST['stripe_test_secret_key'] )) : '';
+		add_post_meta( $button_id, 'stripe_test_secret_key', $stripe_test_secret_key );
+		$stripe_test_publishable_key = isset($_REQUEST['stripe_test_publishable_key']) ? trim(sanitize_text_field( $_REQUEST['stripe_test_publishable_key'] )) : '';
+		add_post_meta( $button_id, 'stripe_test_publishable_key', $stripe_test_publishable_key );
+		$stripe_live_secret_key = isset($_REQUEST['stripe_live_secret_key']) ? trim(sanitize_text_field( $_REQUEST['stripe_live_secret_key'] )) : '';
+		add_post_meta( $button_id, 'stripe_live_secret_key', $stripe_live_secret_key );
+		$stripe_live_publishable_key = isset($_REQUEST['stripe_live_publishable_key']) ? trim(sanitize_text_field( $_REQUEST['stripe_live_publishable_key'] )) : '';
+		add_post_meta( $button_id, 'stripe_live_publishable_key', $stripe_live_publishable_key );
 
-		add_post_meta( $button_id, 'stripe_test_secret_key', trim( sanitize_text_field( $_REQUEST['stripe_test_secret_key'] ) ) );
-		add_post_meta( $button_id, 'stripe_test_publishable_key', trim( sanitize_text_field( $_REQUEST['stripe_test_publishable_key'] ) ) );
-		add_post_meta( $button_id, 'stripe_live_secret_key', trim( sanitize_text_field( $_REQUEST['stripe_live_secret_key'] ) ) );
-		add_post_meta( $button_id, 'stripe_live_publishable_key', trim( sanitize_text_field( $_REQUEST['stripe_live_publishable_key'] ) ) );
-
+		$allow_promotion_codes = isset($_REQUEST['allow_promotion_codes']) ? sanitize_text_field( $_REQUEST['allow_promotion_codes'] ) : '';
+		add_post_meta( $button_id, 'allow_promotion_codes', $allow_promotion_codes );
+				
 		add_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
 		add_post_meta( $button_id, 'stripe_automatic_tax', isset( $_POST['automatic_tax'] ) ? '1' : '' );
 
@@ -294,7 +300,7 @@ function swpm_edit_stripe_sca_buy_now_button() {
 	$payment_amount      = get_post_meta( $button_id, 'payment_amount', true );
 	$payment_currency    = get_post_meta( $button_id, 'payment_currency', true );
 
-	$allow_promotion_codes    = get_post_meta( $button_id, 'allow_promotion_codes', true );
+	$allow_promotion_codes = get_post_meta( $button_id, 'allow_promotion_codes', true );
 	if ( $allow_promotion_codes == '1' ) {
 		$allow_promotion_codes = 'checked';
 	} else {

@@ -66,7 +66,7 @@
     }
     private function save($field){
         global $wpdb;
-        if (!isset($field['meta_key'])){retern;} // cannot continue without key field.
+        if (!isset($field['meta_key'])){return;} // cannot continue without key field.
         $meta_key = preg_replace('|[^A-Z0-9_]|i', '', $field['meta_key']);
         $query = $wpdb->prepare(
                 'REPLACE INTO ' . $wpdb->prefix. 'swpm_membership_meta_tbl

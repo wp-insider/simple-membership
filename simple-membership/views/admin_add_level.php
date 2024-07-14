@@ -23,6 +23,16 @@
             <th scope="row"><label for="role"><?php echo  SwpmUtils::_('Default WordPress Role'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
             <td><select  class="regular-text" name="role"><?php wp_dropdown_roles( 'subscriber' ); ?></select></td>
 	</tr>
+    <tr class="form-field">
+        <th scope="row"><label for="role"><?php _e('Default Account Status', 'simple-membership'); ?></label></th>
+        <td>
+            <select name="default_account_status">
+                <option value=""> <?php _e('Use global settings', 'simple-membership') ?> </option>
+                <?php echo SwpmUtils::account_state_dropdown('') ?>
+            </select>
+            <p><?php _e('Select the default account status for newly registered users for this membership level.', 'simple-membership'); ?></p>
+        </td>
+    </tr>
         <tr>
             <th scope="row"><label for="subscription_period"><?php echo  SwpmUtils::_('Access Duration'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label>
             </th>

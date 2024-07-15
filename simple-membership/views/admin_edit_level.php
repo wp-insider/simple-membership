@@ -39,7 +39,7 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
                 <option value=""> <?php _e('Use global settings', 'simple-membership') ?> </option>
 				<?php echo SwpmUtils::account_state_dropdown($default_account_status) ?>
             </select>
-            <p><?php _e('Select the default account status for newly registered users for this membership level.', 'simple-membership'); ?></p>
+            <p><?php _e('Select the default account status for newly registered users for this membership level. Note: this has no effect if email activation is turned on.', 'simple-membership'); ?></p>
         </td>
     </tr>
     <tr>

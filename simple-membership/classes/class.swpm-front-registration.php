@@ -267,7 +267,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		}
 
 		$member_info['account_state'] = $account_status;
-		// SwpmLog::log_simple_debug("Creating new swpm user. Account status: ". $account_status . " Membership Level: ".$membership_level_id, true);
+		 SwpmLog::log_simple_debug("Creating new swpm user. Account status: ". $account_status . " Membership Level: ".$membership_level_id, true);
 
 		$plain_password = $member_info['plain_password'];
 		unset( $member_info['plain_password'] );

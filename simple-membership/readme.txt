@@ -172,6 +172,7 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - PHP 8.2 compatibility improvements.
+- Per membership level default account status feature added.
 
 = 4.4.9 =
 - Minor update to the German language file.

@@ -241,14 +241,34 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 		//Go ahead and create the SWPM user record.
 		$free_level                           = SwpmUtils::get_free_level();
-		$account_status                       = SwpmSettings::get_instance()->get_value( 'default-account-status', 'active' );
 		$member_info['last_accessed_from_ip'] = SwpmUtils::get_user_ip_address();
 		$member_info['member_since']          = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
 		$member_info['subscription_starts']   = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
-		$member_info['account_state']         = $account_status;
+
+		$membership_level_id = filter_input( INPUT_POST, 'swpm_membership_level', FILTER_SANITIZE_NUMBER_INT );
+
+		/**
+		 * First Check if it is set to email activation, if so, assign 'activation_required' account status.
+		 * If not, check if per membership level default account status is set or not.
+		 * If so, use that settings, else use global settings.
+		 */
 		if ( $this->email_activation ) {
-			$member_info['account_state'] = 'activation_required';
+			$account_status = 'activation_required';
+		} else {
+			$custom_fields = SwpmMembershipLevelCustom::get_instance_by_id($membership_level_id);
+
+			// Get per membership level default account status settings,
+			$account_status = sanitize_text_field($custom_fields->get('default_account_status'));
+
+			if (empty( $account_status )){
+				// Use global settings.
+				$account_status = SwpmSettings::get_instance()->get_value( 'default-account-status', 'active' );
+			}
 		}
+
+		$member_info['account_state'] = $account_status;
+		// SwpmLog::log_simple_debug("Creating new swpm user. Account status: ". $account_status . " Membership Level: ".$membership_level_id, true);
+
 		$plain_password = $member_info['plain_password'];
 		unset( $member_info['plain_password'] );
 

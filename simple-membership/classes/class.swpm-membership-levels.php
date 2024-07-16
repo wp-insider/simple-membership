@@ -163,6 +163,7 @@ class SwpmMembershipLevels extends WP_List_Table {
         $email_activation = get_option('swpm_email_activation_lvl_'.$id);
         $custom_fields = SwpmMembershipLevelCustom::get_instance_by_id($id);
         $after_activation_redirect_page = sanitize_url($custom_fields->get('after_activation_redirect_page'));
+        $default_account_status = sanitize_text_field($custom_fields->get('default_account_status'));
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_edit_level.php');
         return false;
     }

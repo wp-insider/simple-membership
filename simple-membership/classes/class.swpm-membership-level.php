@@ -72,9 +72,19 @@ class SwpmMembershipLevel {
 		        'meta_type'=> 'url',
 		        'meta_context'=> 'email-activation',
 	        );
+	        $default_account_status = sanitize_text_field(filter_input(INPUT_POST, 'default_account_status'));
+	        $default_account_status_meta = array(
+		        'meta_key'=>'default_account_status',
+		        'level_id'=> $id,
+		        'meta_label'=> 'Default Account Status Meta',
+		        'meta_value'=> $default_account_status,
+		        'meta_type'=> 'text',
+		        'meta_context'=> 'account-status',
+	        );
 
             $custom = apply_filters('swpm_admin_add_membership_level', array());
 	        $custom[] = $after_activation_redirect_page_meta;
+	        $custom[] = $default_account_status_meta;
             $this->save_custom_fields($id, $custom);
             $message = array('succeeded' => true, 'message' => '<p>' . SwpmUtils::_('Membership Level Creation Successful.') . '</p>');
             SwpmTransfer::get_instance()->set('status', $message);
@@ -115,8 +125,20 @@ class SwpmMembershipLevel {
 		        'meta_type'=> 'url',
 		        'meta_context'=> 'email-activation',
 			);
+
+	        $default_account_status = sanitize_text_field(filter_input(INPUT_POST, 'default_account_status'));
+			$default_account_status_meta = array(
+				'meta_key'=>'default_account_status',
+				'level_id'=> $id,
+				'meta_label'=> 'Default Account Status Meta',
+				'meta_value'=> $default_account_status,
+				'meta_type'=> 'text',
+				'meta_context'=> 'account-status',
+			);
+
             $custom = apply_filters('swpm_admin_edit_membership_level', array(), $id);
 			$custom[] = $after_activation_redirect_page_meta;
+			$custom[] = $default_account_status_meta;
             $this->save_custom_fields($id, $custom);
             $message = array('succeeded' => true, 'message' => '<p>'. SwpmUtils::_('Membership Level Updated Successfully.') . '</p>');
             SwpmTransfer::get_instance()->set('status', $message);

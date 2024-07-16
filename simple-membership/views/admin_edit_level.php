@@ -32,6 +32,16 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
 		<th scope="row"><label for="role"><?php echo  SwpmUtils::_('Default WordPress Role'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
 		<td><select  class="regular-text" name="role"><?php wp_dropdown_roles( $role ); ?></select></td>
 	</tr>
+    <tr class="form-field">
+        <th scope="row"><label for="role"><?php _e('Default Account Status', 'simple-membership'); ?></label></th>
+        <td>
+            <select name="default_account_status">
+                <option value=""> <?php _e('Use global settings', 'simple-membership') ?> </option>
+				<?php echo SwpmUtils::account_state_dropdown($default_account_status) ?>
+            </select>
+            <p><?php _e('Select the default account status for newly registered users for this membership level. Note: this has no effect if email activation is turned on.', 'simple-membership'); ?></p>
+        </td>
+    </tr>
     <tr>
         <th scope="row"><label for="subscription_period"><?php echo  SwpmUtils::_('Access Duration'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label>
         </th>

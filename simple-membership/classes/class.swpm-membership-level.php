@@ -63,7 +63,7 @@ class SwpmMembershipLevel {
             $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
             update_option('swpm_email_activation_lvl_'.$id, $email_activation, false);
 
-	        $after_activation_redirect_page = sanitize_url(filter_input(INPUT_POST, 'after_activation_redirect_page'));
+	        $after_activation_redirect_page = isset( $_POST['after_activation_redirect_page'] ) && !empty($_POST['after_activation_redirect_page']) ? sanitize_url( $_POST['after_activation_redirect_page'] ) : "";
 	        $after_activation_redirect_page_meta = array(
 		        'meta_key'=>'after_activation_redirect_page',
 		        'level_id'=> $id,
@@ -72,7 +72,8 @@ class SwpmMembershipLevel {
 		        'meta_type'=> 'url',
 		        'meta_context'=> 'email-activation',
 	        );
-	        $default_account_status = sanitize_text_field(filter_input(INPUT_POST, 'default_account_status'));
+
+	        $default_account_status = isset( $_POST['default_account_status'] ) && !empty($_POST['default_account_status']) ? sanitize_text_field( $_POST['default_account_status'] ) : "";
 	        $default_account_status_meta = array(
 		        'meta_key'=>'default_account_status',
 		        'level_id'=> $id,
@@ -116,7 +117,7 @@ class SwpmMembershipLevel {
             $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
             update_option('swpm_email_activation_lvl_'.$id, $email_activation, false);
 
-	        $after_activation_redirect_page = sanitize_url(filter_input(INPUT_POST, 'after_activation_redirect_page'));
+	        $after_activation_redirect_page = isset( $_POST['after_activation_redirect_page'] ) && !empty($_POST['after_activation_redirect_page']) ? sanitize_url( $_POST['after_activation_redirect_page'] ) : "";
 	        $after_activation_redirect_page_meta = array(
 		        'meta_key'=>'after_activation_redirect_page',
 		        'level_id'=> $id,
@@ -126,7 +127,7 @@ class SwpmMembershipLevel {
 		        'meta_context'=> 'email-activation',
 			);
 
-	        $default_account_status = sanitize_text_field(filter_input(INPUT_POST, 'default_account_status'));
+			$default_account_status = isset( $_POST['default_account_status'] ) && !empty($_POST['default_account_status']) ? sanitize_text_field( $_POST['default_account_status'] ) : "";
 			$default_account_status_meta = array(
 				'meta_key'=>'default_account_status',
 				'level_id'=> $id,

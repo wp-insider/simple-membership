@@ -171,8 +171,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
-- PHP 8.2 compatibility improvements.
-- Per membership level default account status feature added.
+- Added membership level specific default account status feature.
+- PHP 8.2 compatibility related improvements.
 
 = 4.4.9 =
 - Minor update to the German language file.

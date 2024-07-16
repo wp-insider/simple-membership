@@ -32,16 +32,6 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
 		<th scope="row"><label for="role"><?php echo  SwpmUtils::_('Default WordPress Role'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
 		<td><select  class="regular-text" name="role"><?php wp_dropdown_roles( $role ); ?></select></td>
 	</tr>
-    <tr class="form-field">
-        <th scope="row"><label for="role"><?php _e('Default Account Status', 'simple-membership'); ?></label></th>
-        <td>
-            <select name="default_account_status">
-                <option value=""> <?php _e('Use global settings', 'simple-membership') ?> </option>
-				<?php echo SwpmUtils::account_state_dropdown($default_account_status) ?>
-            </select>
-            <p><?php _e('Select the default account status for newly registered users for this membership level. Note: this has no effect if email activation is turned on.', 'simple-membership'); ?></p>
-        </td>
-    </tr>
     <tr>
         <th scope="row"><label for="subscription_period"><?php echo  SwpmUtils::_('Access Duration'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label>
         </th>
@@ -63,6 +53,20 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
                     <input type="text" class="swpm-date-picker" value="<?php echo  checked(SwpmMembershipLevel::FIXED_DATE,$subscription_duration_type,false)? $subscription_period: "";?>" name="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>" id="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>"> <?php echo  SwpmUtils::_('(Access expires on a fixed date)')?></p>                                
         </td>        
     </tr>
+    <tr class="form-field">
+        <th scope="row"><label for="role"><?php _e('Default Account Status', 'simple-membership'); ?></label></th>
+        <td>
+            <select name="default_account_status">
+                <option value=""> <?php _e('Use global settings', 'simple-membership') ?> </option>
+				<?php echo SwpmUtils::account_state_dropdown($default_account_status) ?>
+            </select>
+            <p class="description">
+                <?php _e('Select the default account status for newly created members of this membership level. This option is useful if you want to manually approve members for certain membership levels. ', 'simple-membership'); ?>
+                <?php echo '<a href="https://simple-membership-plugin.com/manually-approve-members-membership-site/" target="_blank">' . __('View Documentation', 'simple-membership') . '</a>.'; ?>
+                <?php _e('Note: This setting has no effect if email activation is enabled.', 'simple-membership'); ?>
+            </p>
+        </td>
+    </tr>    
     <tr>
         <th scope="row">
             <label for="email_activation"><?php echo  SwpmUtils::_('Email Activation'); ?></label>
@@ -82,7 +86,7 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
             <?php } ?>
             <p class="description">
                 <?php echo  SwpmUtils::_('Enable new user activation via email. When enabled, members will need to click on an activation link that is sent to their email address to activate the account. Useful for free membership.');?>
-                <?php echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . SwpmUtils::_('View Documentation') . '.</a>'; ?>
+                <?php echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . SwpmUtils::_('View Documentation') . '</a>.'; ?>
                 <?php echo '<br><strong>'.SwpmUtils::_('Note:').'</strong> '.SwpmUtils::_('If enabled, decryptable member password is temporarily stored in the database until the account is activated.'); ?>
             </p>
             <br />

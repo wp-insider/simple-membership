@@ -3,16 +3,25 @@
 class SwpmTransfer {
 
     public static $default_fields = array(
-        'first_name' => '', 'last_name' => '',
-        'user_name' => '', 'email' => '',
+        'first_name' => '',
+        'last_name' => '',
+        'user_name' => '',
+        'email' => '',
         'password' => '',
-        'phone' => '', 'account_state' => '',
-        'member_since' => '', 'subscription_starts' => '',
-        'address_street' => '', 'address_city' => '',
-        'address_state' => '', 'address_zipcode' => '',
-        'company_name' => '', 'country' => '',
+        'phone' => '',
+        'account_state' => '',
+        'member_since' => '',
+        'subscription_starts' => '',
+        'address_street' => '',
+        'address_city' => '',
+        'address_state' => '',
+        'address_zipcode' => '',
+        'company_name' => '',
+        'country' => '',
         'gender' => 'not specified',
-        'membership_level' => '2');
+        'membership_level' => '2',
+        'notes' => ''
+    );
     
     public static $default_level_fields = array(
         'alias' => '', 'role' => '',

@@ -49,3 +49,12 @@
     <th scope="row"><label for="member_since"><?php echo SwpmUtils::_('Member Since') ?> </label></th>
     <td><input class="regular-text" name="member_since" type="text" id="member_since" value="<?php echo esc_attr($member_since); ?>" /></td>
 </tr>
+<tr class="swpm-form-row swpm-admin-notes-row">
+    <th scope="row">
+        <label for="admin_notes"><?php _e('Admin Notes', 'simple-membership') ?></label>
+    </th>
+    <td>
+        <textarea class="regular-text" name="notes" id="admin_notes" rows="4"><?php echo esc_attr($notes); ?></textarea>
+        <p class="swpm-form-desc"><?php _e('Use this field to save/add any notes about this user. This will only be visible to the admin.', 'simple-membership')?></p>
+    </td>
+</tr>

@@ -134,16 +134,6 @@
         </td>
 	</tr>
 
-    <tr class="swpm-admin-edit-admin-note">
-        <th scope="row">
-            <label for="admin_note"><?php _e('Admin Note', 'simple-membership') ?></label>
-        </th>
-        <td>
-            <textarea class="regular-text" name="notes" id="admin_note" rows="4"><?php echo esc_attr($notes); ?></textarea>
-            <p class="description"><?php _e('Use this field to save/add any notes about this user. This will only be visible to the admin.', 'simple-membership')?></p>
-        </td>
-    </tr>
-
     <?php if( isset($extra_info) && !empty($extra_info) ){ ?>
     <tr class="swpm-admin-edit-any-extra-info">
 		<th scope="row"><label for="extra_info"><?php echo  SwpmUtils::_('System-related Additional Data') ?> </label></th>

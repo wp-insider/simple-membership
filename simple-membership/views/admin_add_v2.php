@@ -70,17 +70,6 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     </td>
                 </tr>
                 <?php include('admin_member_form_common_part.php'); ?>
-
-                <tr class="swpm-form-row swpm-admin-note-row">
-                    <th scope="row">
-                        <label for="admin_note"><?php _e('Admin Note', 'simple-membership') ?></label>
-                    </th>
-                    <td>
-                        <textarea class="regular-text" name="notes" id="admin_note" rows="4"></textarea>
-                        <p class="swpm-form-desc"><?php _e('Use this field to save/add any notes about this user. This will only be visible to the admin.', 'simple-membership')?></p>
-                    </td>
-                </tr>
-
             </tbody>
         </table>
         <?php include('admin_member_form_common_js.php'); ?>

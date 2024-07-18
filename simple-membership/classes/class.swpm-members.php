@@ -97,32 +97,21 @@ class SwpmMembers extends WP_List_Table {
 		$admin_notes = isset($item['notes']) ? $item['notes'] : '';
 		if ( empty( $admin_notes ) ) {
 			//Admin notes not found for this member.
-			return '-';
+			return '&mdash;';
 		}
 
 		$member_id = intval($item['member_id']);
 		$notes_tooltip_id = 'swpm_note_tooltip_' . $member_id;
         ob_start();
         ?>
-        <div style="position: relative; width: 100%;">
-            <a
-                href="javascript:void(0)"
-                onclick="
-                        const tooltip = document.getElementById('<?php echo $notes_tooltip_id; ?>');
-                        if (tooltip.style.display == 'block'){
-                            tooltip.style.display = 'none';
-                        }else{
-                            tooltip.style.display = 'block';
-                        }
-                        "
-            >
-            <?php _e('Show/Hide Notes', 'simple-membership') ?>
-            </a>
-            <div class="swpm-tooltip-note-style-1" id="<?php echo esc_attr($notes_tooltip_id)?>" onclick="this.style.display='none'">
+        <div class="swpm-tooltip-notes-container">
+			<a href="javascript:void(0)" onclick="const tooltip=document.getElementById('<?php echo $notes_tooltip_id; ?>'); tooltip.style.display = (tooltip.style.display === 'block' ? 'none' : 'block');">
+    		<?php _e('Show/Hide Notes', 'simple-membership'); ?>
+			</a>
+            <div class="swpm-tooltip-notes-style-1" id="<?php echo esc_attr($notes_tooltip_id)?>" onclick="this.style.display='none'">
 				<?php echo esc_attr($admin_notes) ?>
 			</div>
         </div>
-
         <?php
 	    return ob_get_clean();
     }

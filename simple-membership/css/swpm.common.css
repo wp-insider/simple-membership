@@ -108,7 +108,11 @@
 }
 
 /* Tooltip or note styles that we can toggle on/off */
-.swpm-tooltip-note-style-1 {
+.swpm-tooltip-notes-container{
+    position: relative;
+    display: inline-block;
+}
+.swpm-tooltip-notes-style-1 {
     display: none;
     margin-top: 5px;
     padding: 4px 7px;

@@ -100,6 +100,15 @@ class SwpmMembers extends WP_List_Table {
 			return '&mdash;';
 		}
 
+		//Truncate the admin notes if it is too long.
+		$max_length = 256;
+		if (strlen($admin_notes) > $max_length) {
+			$admin_notes_text = substr($admin_notes, 0, $max_length) . ' ... ';
+		} else {
+			$admin_notes_text = $admin_notes;
+		}
+		
+		//Display the notes in a tooltip.
 		$member_id = intval($item['member_id']);
 		$notes_tooltip_id = 'swpm_note_tooltip_' . $member_id;
         ob_start();
@@ -109,7 +118,7 @@ class SwpmMembers extends WP_List_Table {
     		<?php _e('Show/Hide Notes', 'simple-membership'); ?>
 			</a>
             <div class="swpm-tooltip-notes-style-1" id="<?php echo esc_attr($notes_tooltip_id)?>" onclick="this.style.display='none'">
-				<?php echo esc_attr($admin_notes) ?>
+				<?php echo esc_attr($admin_notes_text) ?>
 			</div>
         </div>
         <?php

@@ -22,7 +22,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		//Check nonce
 		if ( ! isset( $_POST['_wpnonce_create_swpmuser_admin_end'] ) || ! wp_verify_nonce( $_POST['_wpnonce_create_swpmuser_admin_end'], 'create_swpmuser_admin_end' ) ) {
 			//Nonce check failed.
-			wp_die( SwpmUtils::_( 'Error! Nonce verification failed for user registration from admin end.' ) );
+			wp_die( __( 'Error! Nonce verification failed for user registration from admin end.', 'simple-membership' ) );
 		}
 
 		global $wpdb;
@@ -104,7 +104,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		//Check nonce
 		if ( ! isset( $_POST['_wpnonce_edit_swpmuser_admin_end'] ) || ! wp_verify_nonce( $_POST['_wpnonce_edit_swpmuser_admin_end'], 'edit_swpmuser_admin_end' ) ) {
 			//Nonce check failed.
-			wp_die( SwpmUtils::_( 'Error! Nonce verification failed for user edit from admin end.' ) );
+			wp_die( __( 'Error! Nonce verification failed for user edit from admin end.', 'simple-membership' ) );
 		}
 
 		$id_of_profile_being_edited = intval( $id );

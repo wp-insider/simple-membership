@@ -273,7 +273,8 @@ class SwpmForm {
     }
 
     protected function notes() {
-
+	    $admin_note = isset($_POST['notes']) ? sanitize_textarea_field(stripslashes($_POST['notes'])) : '';
+	    $this->sanitized['notes'] = $admin_note;
     }
 
     protected function profile_image() {

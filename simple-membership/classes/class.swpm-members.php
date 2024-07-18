@@ -100,38 +100,27 @@ class SwpmMembers extends WP_List_Table {
 			return '-';
 		}
 
-		$member_id = $item['member_id'];
+		$member_id = intval($item['member_id']);
+		$notes_tooltip_id = 'swpm_note_tooltip_' . $member_id;
         ob_start();
         ?>
         <div style="position: relative; width: 100%;">
             <a
                 href="javascript:void(0)"
                 onclick="
-                        const id = '<?php echo esc_attr($member_id)?>';
-                        const popup = document.getElementById('swpm_note_popup_'+id);
-                        if (popup.style.display === 'block'){
-                            popup.style.display = 'none';
+                        const tooltip = document.getElementById('<?php echo $notes_tooltip_id; ?>');
+                        if (tooltip.style.display == 'block'){
+                            tooltip.style.display = 'none';
                         }else{
-                            popup.style.display = 'block';
+                            tooltip.style.display = 'block';
                         }
                         "
             >
             <?php _e('Show/Hide Notes', 'simple-membership') ?>
             </a>
-            <div style="
-                    display: none;
-                    margin-top: 5px;
-                    padding: 5px;					
-                    white-space: pre-line;
-                    font-size: small;
-                    top: -100%;
-                    background-color: #2d2d2d;
-                    color: lightgray;
-                    z-index: 9999;
-                "
-                id="swpm_note_popup_<?php echo esc_attr($member_id)?>"
-                onclick="this.style.display = 'none'"
-            ><?php echo esc_attr($admin_note) ?></div>
+            <div class="swpm-tooltip-note-style-1" id="<?php echo esc_attr($notes_tooltip_id)?>" onclick="this.style.display='none'">
+				<?php echo esc_attr($admin_note) ?>
+			</div>
         </div>
 
         <?php

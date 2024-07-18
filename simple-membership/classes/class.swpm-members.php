@@ -27,7 +27,7 @@ class SwpmMembers extends WP_List_Table {
 			'subscription_starts' => __('Access Starts' , 'simple-membership'),
 			'account_state'       => __('Account State' , 'simple-membership'),
 			'last_accessed'       => __('Last Login Date' , 'simple-membership'),
-			'admin_note'          => __('Note' , 'simple-membership'),
+			'admin_notes'         => __('Notes' , 'simple-membership'),
 		);
 		return apply_filters( 'swpm_admin_members_table_columns', $columns );
 	}
@@ -93,9 +93,9 @@ class SwpmMembers extends WP_List_Table {
 		return $user_name;
 	}
 
-	function column_admin_note( $item ) {
-		$admin_note = isset($item['notes']) ? $item['notes'] : '';
-		if ( empty( $admin_note ) ) {
+	function column_admin_notes( $item ) {
+		$admin_notes = isset($item['notes']) ? $item['notes'] : '';
+		if ( empty( $admin_notes ) ) {
 			//Admin notes not found for this member.
 			return '-';
 		}
@@ -119,7 +119,7 @@ class SwpmMembers extends WP_List_Table {
             <?php _e('Show/Hide Notes', 'simple-membership') ?>
             </a>
             <div class="swpm-tooltip-note-style-1" id="<?php echo esc_attr($notes_tooltip_id)?>" onclick="this.style.display='none'">
-				<?php echo esc_attr($admin_note) ?>
+				<?php echo esc_attr($admin_notes) ?>
 			</div>
         </div>
 

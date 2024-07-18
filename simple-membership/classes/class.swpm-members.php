@@ -94,8 +94,9 @@ class SwpmMembers extends WP_List_Table {
 	}
 
 	function column_admin_note( $item ) {
-		$admin_note = $item['notes'];
+		$admin_note = isset($item['notes']) ? $item['notes'] : '';
 		if ( empty( $admin_note ) ) {
+			//Admin notes not found for this member.
 			return '-';
 		}
 
@@ -105,9 +106,7 @@ class SwpmMembers extends WP_List_Table {
         <div style="position: relative; width: 100%;">
             <a
                 href="javascript:void(0)"
-                title="<?php echo esc_attr($admin_note) ?>"
                 onclick="
-                        if(window.innerWidth > 768) return;
                         const id = '<?php echo esc_attr($member_id)?>';
                         const popup = document.getElementById('swpm_note_popup_'+id);
                         if (popup.style.display === 'block'){
@@ -117,24 +116,21 @@ class SwpmMembers extends WP_List_Table {
                         }
                         "
             >
-                <?php _e('Notes', 'simple-membership') ?>
+            <?php _e('Show/Hide Notes', 'simple-membership') ?>
             </a>
             <div style="
                     display: none;
                     margin-top: 5px;
+                    padding: 5px;					
                     white-space: pre-line;
                     font-size: small;
-                    padding: 4px 5px;
                     top: -100%;
                     background-color: #2d2d2d;
                     color: lightgray;
                     z-index: 9999;
-                    /*position: absolute;*/
-                    /*left: 0;*/
-                    /*right: 0;*/
                 "
-                 id="swpm_note_popup_<?php echo esc_attr($member_id)?>"
-                 onclick="this.style.display = 'none'"
+                id="swpm_note_popup_<?php echo esc_attr($member_id)?>"
+                onclick="this.style.display = 'none'"
             ><?php echo esc_attr($admin_note) ?></div>
         </div>
 

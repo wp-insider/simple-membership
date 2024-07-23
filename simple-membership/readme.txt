@@ -174,6 +174,7 @@ https://simple-membership-plugin.com/
 - Added membership level specific default account status feature.
 - PHP 8.2 compatibility related improvements.
 - New admin note feature added.
+- Added new 'login' API endpoint to the free SWPM API addon.
 
 = 4.4.9 =
 - Minor update to the German language file.

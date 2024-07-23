@@ -1,14 +1,12 @@
 <?php
 
 /**
- * Description of BRegistration
- *
- * @author nur
+ * Description of SwpmRegistration
  */
 abstract class SwpmRegistration {
 
-	protected $member_info     = array();
-	var $email_activation      = false;
+	protected $member_info = array();
+	var $email_activation = false;
 	protected static $_intance = null;
 
 	//public abstract static function get_instance();

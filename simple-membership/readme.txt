@@ -175,6 +175,7 @@ https://simple-membership-plugin.com/
 - PHP 8.2 compatibility related improvements.
 - New admin note feature added.
 - Added new 'login' API endpoint to the free SWPM API addon.
+- New two filter hooks added to mini login form shortcode.
 
 = 4.4.9 =
 - Minor update to the German language file.

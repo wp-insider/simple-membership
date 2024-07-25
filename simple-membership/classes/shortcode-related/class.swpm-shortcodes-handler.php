@@ -152,11 +152,13 @@ class SwpmShortcodesHandler {
 			$output  .= '<span class="swpm_mini_login_username">' . esc_attr($username) . '</span>';
 			$output  .= '<span class="swpm_mini_login_profile"> | <a href="' . esc_url($profile_page_url) . '">' . __( 'Profile', 'simple-membership') . '</a></span>';
 			$output  .= '<span class="swpm_mini_login_logout"> | <a href="' . esc_url($logout_url) . '">' . __( 'Logout', 'simple-membership') . '</a></span>';
+			$output = apply_filters( 'swpm_mini_login_output_when_logged_in', $output );
 		} else {
 			//User not logged in.
 			$output .= '<span class="swpm_mini_login_login_here"><a href="' . esc_url($filtered_login_url) . '">' . __( 'Login Here', 'simple-membership') . '</a></span>';
 			$output .= '<span class="swpm_mini_login_no_membership"> | ' . __( 'Not a member? ', 'simple-membership') . '</span>';
 			$output .= '<span class="swpm_mini_login_join_now"><a href="' . esc_url($join_page_url) . '">' . __( 'Join Now', 'simple-membership') . '</a></span>';
+			$output = apply_filters( 'swpm_mini_login_output_when_not_logged_in', $output );
 		}
 
 		$output .= '</div>';

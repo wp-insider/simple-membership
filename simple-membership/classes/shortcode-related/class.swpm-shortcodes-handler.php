@@ -141,28 +141,40 @@ class SwpmShortcodesHandler {
 
 		$filtered_login_url = apply_filters( 'swpm_get_login_link_url', $login_page_url ); //Addons can override the login URL value using this filter.
 
+		//Start building the output
 		$output = '<div class="swpm_mini_login_wrapper">';
 
 		//Check if the user is logged in or not
 		$auth = SwpmAuth::get_instance();
 		if ( $auth->is_logged_in() ) {
-			//User is logged in
+			//User is logged-in.
 			$username = $auth->get( 'user_name' );
-			$output  .= '<span class="swpm_mini_login_label">' . __( 'Logged in as: ', 'simple-membership') . '</span>';
-			$output  .= '<span class="swpm_mini_login_username">' . esc_attr($username) . '</span>';
-			$output  .= '<span class="swpm_mini_login_profile"> | <a href="' . esc_url($profile_page_url) . '">' . __( 'Profile', 'simple-membership') . '</a></span>';
-			$output  .= '<span class="swpm_mini_login_logout"> | <a href="' . esc_url($logout_url) . '">' . __( 'Logout', 'simple-membership') . '</a></span>';
-			$output = apply_filters( 'swpm_mini_login_output_when_logged_in', $output );
+			$mini_login_output_when_logged_in = '<span class="swpm_mini_login_label">' . __( 'Logged in as: ', 'simple-membership') . '</span>';
+			$mini_login_output_when_logged_in .= '<span class="swpm_mini_login_username">' . esc_attr($username) . '</span>';
+			$mini_login_output_when_logged_in .= '<span class="swpm_mini_login_profile"> | <a href="' . esc_url($profile_page_url) . '">' . __( 'Profile', 'simple-membership') . '</a></span>';
+			$mini_login_output_when_logged_in .= '<span class="swpm_mini_login_logout"> | <a href="' . esc_url($logout_url) . '">' . __( 'Logout', 'simple-membership') . '</a></span>';
+			
+			//Trigger filter to allow addons to modify this output.
+			$mini_login_output_when_logged_in = apply_filters( 'swpm_mini_login_output_when_logged_in', $mini_login_output_when_logged_in );
+			
+			//Add the logged-in output to the main output
+			$output .= $mini_login_output_when_logged_in;
 		} else {
-			//User not logged in.
-			$output .= '<span class="swpm_mini_login_login_here"><a href="' . esc_url($filtered_login_url) . '">' . __( 'Login Here', 'simple-membership') . '</a></span>';
-			$output .= '<span class="swpm_mini_login_no_membership"> | ' . __( 'Not a member? ', 'simple-membership') . '</span>';
-			$output .= '<span class="swpm_mini_login_join_now"><a href="' . esc_url($join_page_url) . '">' . __( 'Join Now', 'simple-membership') . '</a></span>';
-			$output = apply_filters( 'swpm_mini_login_output_when_not_logged_in', $output );
+			//User is NOT logged-in.
+			$mini_login_output_when_not_logged = '<span class="swpm_mini_login_login_here"><a href="' . esc_url($filtered_login_url) . '">' . __( 'Login Here', 'simple-membership') . '</a></span>';
+			$mini_login_output_when_not_logged .= '<span class="swpm_mini_login_no_membership"> | ' . __( 'Not a member? ', 'simple-membership') . '</span>';
+			$mini_login_output_when_not_logged .= '<span class="swpm_mini_login_join_now"><a href="' . esc_url($join_page_url) . '">' . __( 'Join Now', 'simple-membership') . '</a></span>';
+			
+			//Trigger filter to allow addons to modify this output.
+			$mini_login_output_when_not_logged = apply_filters( 'swpm_mini_login_output_when_not_logged_in', $mini_login_output_when_not_logged );
+
+			//Add the not logged-in output to the main output
+			$output .= $mini_login_output_when_not_logged;
 		}
 
-		$output .= '</div>';
+		$output .= '</div>';//end of .swpm_mini_login_wrapper
 
+		//Trigger filter to allow addons to modify the final output.
 		$output = apply_filters( 'swpm_mini_login_output', $output );
 
 		return $output;

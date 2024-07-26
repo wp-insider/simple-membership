@@ -178,6 +178,7 @@ https://simple-membership-plugin.com/
 - PHP 8.2 compatibility related improvements.
 - New two filter hooks added to the mini/compact login shortcode.
 - The custom messages addon can now be used to customize the output of the mini/compact login shortcode's output.
+- Added a new action hook "swpm_login_failed". This is equivalent to the "wp_login_failed" action hook.
 
 = 4.4.9 =
 - Minor update to the German language file.

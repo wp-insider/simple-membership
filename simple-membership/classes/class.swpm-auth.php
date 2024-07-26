@@ -244,10 +244,18 @@ class SwpmAuth {
 			return;
 		}
 		if ( $this->authenticate( $user, $pass ) && $this->validate() ) {
+			//Authentication successful.
 			$this->set_cookie( $remember, $secure );
 		} else {
+			//Authentication failed.
 			$this->isLoggedIn = false;
 			$this->userData   = null;
+
+			//Trigger login failed action hook. This is equivalent to the "wp_login_failed" action hook.
+			$username = sanitize_user( $user );
+			$error_msg = $this->lastStatusMsg;
+			$wp_error_obj = new WP_Error( 'swpm-login-failed', $error_msg );
+			do_action( 'swpm_login_failed', $username, $wp_error_obj );
 		}
 		return $this->lastStatusMsg;
 	}

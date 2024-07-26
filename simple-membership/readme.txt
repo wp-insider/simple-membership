@@ -83,6 +83,7 @@ You can create a free forum user account and ask your questions.
 * Search for a member's profile in your WP admin dashboard.
 * Filter members list by account status.
 * Filter members list by membership level.
+* Site admins can save private notes about members, providing a convenient way to keep track of important information.
 * Can be translated to any language.
 * Hide the admin toolbar from the frontend of your site.
 * Allow your members to delete their membership accounts.
@@ -172,10 +173,11 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - Added membership level specific default account status feature.
-- PHP 8.2 compatibility related improvements.
-- New admin note feature added.
+- New admin notes feature added. It can be used to save private notes about members.
 - Added new 'login' API endpoint to the free SWPM API addon.
-- New two filter hooks added to mini login form shortcode.
+- PHP 8.2 compatibility related improvements.
+- New two filter hooks added to the mini/compact login shortcode.
+- The custom messages addon can now be used to customize the output of the mini/compact login shortcode's output.
 
 = 4.4.9 =
 - Minor update to the German language file.

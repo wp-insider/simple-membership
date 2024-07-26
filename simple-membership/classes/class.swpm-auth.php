@@ -25,8 +25,11 @@ class SwpmAuth {
 
 	private function init() {
 		$valid = $this->validate();
-		//SwpmLog::log_auth_debug("init:". ($valid? "valid": "invalid"), true);
+		//SwpmLog::log_auth_debug("SwpmAuth::init() function.", true);
 		if ( ! $valid ) {
+			//This is run on every page load. So, we only want to run this when the user is not logged in or the auth cookies are not valid.
+			//This will perform certain login related validation tasks when the object is initialized. 
+			//The login() function will be called in addition to this when the login form is submitted.
 			$this->authenticate();
 		}
 	}
@@ -49,6 +52,7 @@ class SwpmAuth {
 			$this->isLoggedIn    = false;
 			$this->userData      = null;
 			$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Username field cannot be empty.' ) . '</span>';
+			$this->trigger_swpm_login_failed_hook($swpm_user_name);//Trigger login failed action hook.
 			return false;
 		}
 		if ( isset($_POST['swpm_password']) && empty ( $swpm_password )){
@@ -56,6 +60,7 @@ class SwpmAuth {
 			$this->isLoggedIn    = false;
 			$this->userData      = null;
 			$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Password field cannot be empty.' ) . '</span>';
+			$this->trigger_swpm_login_failed_hook($swpm_user_name);//Trigger login failed action hook.
 			return false;
 		}
 		
@@ -110,6 +115,7 @@ class SwpmAuth {
 				$this->isLoggedIn    = false;
 				$this->userData      = null;
 				$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'No user found with that username or email.' ) . '</span>';
+				$this->trigger_swpm_login_failed_hook($swpm_user_name);//Trigger login failed action hook.
 				return false;
 			}
 			$check = $this->check_password( $pass, $userData->password );
@@ -117,6 +123,7 @@ class SwpmAuth {
 				$this->isLoggedIn    = false;
 				$this->userData      = null;
 				$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . SwpmUtils::_( 'Password empty or invalid.' ) . '</span>';
+				$this->trigger_swpm_login_failed_hook($swpm_user_name);//Trigger login failed action hook.
 				return false;
 			}
 			if ( $this->check_constraints() ) {
@@ -241,6 +248,7 @@ class SwpmAuth {
 	public function login( $user, $pass, $remember = '', $secure = '' ) {
 		SwpmLog::log_auth_debug( 'SwpmAuth::login()', true );
 		if ( $this->isLoggedIn ) {
+			//Already logged in. Nothing to do here.
 			return;
 		}
 		if ( $this->authenticate( $user, $pass ) && $this->validate() ) {
@@ -249,13 +257,7 @@ class SwpmAuth {
 		} else {
 			//Authentication failed.
 			$this->isLoggedIn = false;
-			$this->userData   = null;
-
-			//Trigger login failed action hook. This is equivalent to the "wp_login_failed" action hook.
-			$username = sanitize_user( $user );
-			$error_msg = $this->lastStatusMsg;
-			$wp_error_obj = new WP_Error( 'swpm-login-failed', $error_msg );
-			do_action( 'swpm_login_failed', $username, $wp_error_obj );
+			$this->userData = null;
 		}
 		return $this->lastStatusMsg;
 	}
@@ -567,6 +569,13 @@ class SwpmAuth {
 			return true;
 		}
 		return false;
+	}
+
+	public function trigger_swpm_login_failed_hook($username) {
+		//Trigger login failed action hook. This is equivalent to the "wp_login_failed" action hook.
+		$error_msg = $this->lastStatusMsg;
+		$wp_error_obj = new WP_Error( 'swpm-login-failed', $error_msg );
+		do_action( 'swpm_login_failed', $username, $wp_error_obj );
 	}
 
 }

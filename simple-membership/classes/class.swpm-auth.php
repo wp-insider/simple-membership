@@ -361,6 +361,11 @@ class SwpmAuth {
 		return true;
 	}
 
+	/**
+	 * Note: This function is NOT called for our plugin's standard login form submission.
+	 * This is called for other methods of login authentication (for example, wp_authenticate_handler, auto_login, API addon etc).
+	 * Our standard login form submission uses the auth_init() to process the login request.
+	 */
 	public function login( $user, $pass, $remember = '', $secure = '' ) {
 		SwpmLog::log_auth_debug( 'SwpmAuth::login()', true );
 		if ( $this->isLoggedIn ) {

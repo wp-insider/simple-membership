@@ -63,8 +63,8 @@ class SimpleWpMembership {
         //TODO - refactor these shortcodes into the shortcodes handler class
         add_shortcode("swpm_registration_form", array(&$this, 'registration_form'));
         add_shortcode('swpm_profile_form', array(&$this, 'profile_form'));
-        add_shortcode('swpm_login_form', array(&$this, 'login'));
-        add_shortcode('swpm_reset_form', array(&$this, 'reset'));
+        add_shortcode('swpm_login_form', array(&$this, 'login_form_shortcode_output'));
+        add_shortcode('swpm_reset_form', array(&$this, 'reset_password_shortcode_output'));
 
         add_action('wp_head', array(&$this, 'wp_head_callback'));
         add_action('save_post', array(&$this, 'save_postdata'));
@@ -438,7 +438,7 @@ class SimpleWpMembership {
         }
     }
 
-    public function login() {
+    public function login_form_shortcode_output() {
         ob_start();
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
@@ -562,7 +562,7 @@ class SimpleWpMembership {
         SwpmMemberUtils::create_swpm_member_entry_from_array_data($fields);
     }
 
-    public function reset() {        
+    public function reset_password_shortcode_output() {        
         //Check if the form has been submitted and there is a success message.
         $any_notice_output = $this->capture_any_notice_output();
         if( !empty( $any_notice_output ) && $this->success_notice_pw_reset ){

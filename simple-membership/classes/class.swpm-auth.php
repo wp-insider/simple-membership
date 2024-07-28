@@ -1,12 +1,16 @@
 <?php
 
+/**
+ * This is a singleton class. It is responsible for handling various authentication related tasks of the plugin.
+ * It checks if the user is logged in or not. It checks if the login cookie is valid or not.
+ * It also handles the login form submission.
+ */
 class SwpmAuth {
-
+	private static $_this;
 	public $protected;
 	public $permitted;
 	private $isLoggedIn;
 	private $lastStatusMsg;
-	private static $_this;
 	public $userData;
 
 	private function __construct() {
@@ -23,23 +27,31 @@ class SwpmAuth {
 		$this->protected  = SwpmProtection::get_instance();
 	}
 
-	private function init() {
+	/**
+	 * Get the singleton instance of this class.
+	 */
+	public static function get_instance() {
+		if ( empty( self::$_this ) ) {
+			self::$_this = new SwpmAuth();
+			self::$_this->auth_init();
+		}
+		return self::$_this;
+	}
+
+	/**
+	 * This function is called when the object is initialized.
+	 * The singleton pattern is used to make sure that there is only one instance of this object per page load.
+	 * So this function is only called once per page load.
+	 */
+	private function auth_init() {
+		//SwpmLog::log_auth_debug("SwpmAuth::auth_init() function.", true);
 		$valid = $this->validate();
-		//SwpmLog::log_auth_debug("SwpmAuth::init() function.", true);
 		if ( ! $valid ) {
 			//This is run on every page load. So, we only want to run this when the user is not logged in or the auth cookies are not valid.
 			//This will perform certain login related validation tasks when the object is initialized. 
 			//The login() function will be called in addition to this when the login form is submitted.
 			$this->authenticate();
 		}
-	}
-
-	public static function get_instance() {
-		if ( empty( self::$_this ) ) {
-			self::$_this = new SwpmAuth();
-			self::$_this->init();
-		}
-		return self::$_this;
 	}
 
 	private function authenticate( $user = null, $pass = null ) {
@@ -139,20 +151,32 @@ class SwpmAuth {
 		return false;
 	}
 
+	/**
+	 * Checks if all the constraints are met for the user to be able to login.
+	 * Called on every page load via the auth_init()->validate()->check_constraints() function.
+	 * It updates the last accessed date and IP address for this member's login session.
+	 * It checks the account status to see if the user can login.
+	 * It also checks the member's account expiry and sets expiry status accordingly (as a failsafe to expiry cronjob).
+	 * It loads the membership level's permission object for this member.
+	 * @return bool
+	 */
 	private function check_constraints() {
+		//SwpmLog::log_auth_debug("SwpmAuth::check_constraints() function.", true);
 		if ( empty( $this->userData ) ) {
+			//No user data found. Can't proceed.
 			return false;
 		}
+
 		global $wpdb;
 		$enable_expired_login = SwpmSettings::get_instance()->get_value( 'enable-expired-account-login', '' );
 
 		//Update the last accessed date and IP address for this login attempt. $wpdb->update(table, data, where, format, where format)
 		$last_accessed_date = current_time( 'mysql' );
-		$last_accessed_ip   = SwpmUtils::get_user_ip_address();
+		$last_accessed_ip = SwpmUtils::get_user_ip_address();
 		$wpdb->update(
 			$wpdb->prefix . 'swpm_members_tbl',
 			array(
-				'last_accessed'         => $last_accessed_date,
+				'last_accessed' => $last_accessed_date,
 				'last_accessed_from_ip' => $last_accessed_ip,
 			),
 			array( 'member_id' => $this->userData->member_id ),
@@ -164,18 +188,18 @@ class SwpmAuth {
 		$can_login = true;
 		if ( $this->userData->account_state == 'inactive' && empty( $enable_expired_login ) ) {
 			$this->lastStatusMsg = SwpmUtils::_( 'Account is inactive.' );
-			$can_login           = false;
+			$can_login = false;
 		} elseif ( ( $this->userData->account_state == 'expired' ) && empty( $enable_expired_login ) ) {
 			$this->lastStatusMsg = SwpmUtils::_( 'Account has expired.' );
-			$can_login           = false;
+			$can_login = false;
 		} elseif ( $this->userData->account_state == 'pending' ) {
 			$this->lastStatusMsg = SwpmUtils::_( 'Account is pending.' );
-			$can_login           = false;
+			$can_login = false;
 		} elseif ( $this->userData->account_state == 'activation_required' ) {
-			$resend_email_url    = add_query_arg(
+			$resend_email_url = add_query_arg(
 				array(
 					'swpm_resend_activation_email' => '1',
-					'swpm_member_id'               => $this->userData->member_id,
+					'swpm_member_id' => $this->userData->member_id,
 				),
 				get_home_url()
 			);
@@ -186,25 +210,31 @@ class SwpmAuth {
 
 		if ( ! $can_login ) {
 			$this->isLoggedIn = false;
-			$this->userData   = null;
+			$this->userData = null;
 			return false;
 		}
 
+		//Check if the user's account has expired. 
 		if ( SwpmUtils::is_subscription_expired( $this->userData ) ) {
+			//The user's account has expired.
 			if ( $this->userData->account_state == 'active' ) {
+				//This is an additional check at login validation time to ensure the user account gets set to expired state even if the cronjob fails to do it.
 				$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'account_state' => 'expired' ), array( 'member_id' => $this->userData->member_id ), array( '%s' ), array( '%d' ) );
 			}
 			if ( empty( $enable_expired_login ) ) {
+				//Account has expired and expired login is not enabled.
 				$this->lastStatusMsg = SwpmUtils::_( 'Account has expired.' );
-				$this->isLoggedIn    = false;
-				$this->userData      = null;
+				$this->isLoggedIn = false;
+				$this->userData = null;
 				return false;
 			}
 		}
 
-		$this->permitted     = SwpmPermission::get_instance( $this->userData->membership_level );
+		//Load the membership level's permission object.
+		$this->permitted = SwpmPermission::get_instance( $this->userData->membership_level );
+
 		$this->lastStatusMsg = SwpmUtils::_( 'You are logged in as:' ) . $this->userData->user_name;
-		$this->isLoggedIn    = true;
+		$this->isLoggedIn  = true;
 		return true;
 	}
 
@@ -440,6 +470,13 @@ class SwpmAuth {
         setcookie( $auth_cookie_name, $auth_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
 	}
 
+	/**
+	 * This function is used to validate the login cookie.
+	 * It is called on every page load via the auth_init()->validate() function.
+	 * Checks if the login cookie exists and if it is valid.
+	 * It calls the check_constraints() function to check if the user can login which also updates the user's login date and IP. Also loads the permission object.
+	 * @return bool
+	 */
 	private function validate() {
 		$auth_cookie_name = is_ssl() ? SIMPLE_WP_MEMBERSHIP_SEC_AUTH : SIMPLE_WP_MEMBERSHIP_AUTH;
 		if ( ! isset( $_COOKIE[ $auth_cookie_name ] ) || empty( $_COOKIE[ $auth_cookie_name ] ) ) {

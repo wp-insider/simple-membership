@@ -6,9 +6,9 @@
  * It also handles the login form submission.
  */
 class SwpmAuth {
-	private static $_this;
-	public $protected;
-	public $permitted;
+	private static $_this; //Singleton instance of this class.
+	public $protected; //Protected content object.
+	public $permitted; //Permission object for the logged in user.
 	private $isLoggedIn;
 	private $lastStatusMsg;
 	public $userData;
@@ -23,8 +23,8 @@ class SwpmAuth {
 			setcookie( 'swpm-login-form-custom-msg', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN );
 		}
 		$this->isLoggedIn = false;
-		$this->userData   = null;
-		$this->protected  = SwpmProtection::get_instance();
+		$this->userData = null;
+		$this->protected = SwpmProtection::get_instance();
 	}
 
 	/**
@@ -58,7 +58,13 @@ class SwpmAuth {
 		if ( ! $login_session_valid ) {
 			// The user is not logged in, or the login session is invalid due to some other validation.
 			// In this case, we can check if the login form was submitted and process the login request.
-			$this->authenticate();
+			// Note: We will check if spwm_user_name or swpm_password is set inside the authenticate() function to know if the login form was submitted (keeping things backwards compatible).
+			$authenticate_response = $this->authenticate();
+
+			// if the SWPM plugin's login form was submitted and then the authenticate function returned false, then we will trigger the swpm_login_failed action hook.
+			if ( isset( $_POST['swpm-login']) && $authenticate_response === false ) {
+				$this->trigger_swpm_login_failed_hook();
+			}
 		}
 	}
 
@@ -624,6 +630,16 @@ class SwpmAuth {
 			return true;
 		}
 		return false;
+	}
+
+	public function trigger_swpm_login_failed_hook($username = '') {
+		//Trigger login failed action hook.
+		if( empty( $username ) ){
+			$username = isset( $_POST['swpm_user_name'] ) ? sanitize_text_field( $_POST['swpm_user_name'] ) : '';
+		}
+		$error_msg = $this->lastStatusMsg;
+		$wp_error_obj = new WP_Error( 'swpm-login-failed', $error_msg );
+		do_action( 'swpm_login_failed', $username, $wp_error_obj );
 	}
 
 	public function trigger_swpm_authenticate_failed_hook($username) {

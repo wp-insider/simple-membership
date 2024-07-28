@@ -171,6 +171,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= 4.5.1 WIP =
+- Updated the 'swpm_login_failed' action hook's trigger condition.
+
 = 4.5.0 =
 - Added membership level specific default account status feature.
 - New admin notes feature added. It can be used to save private notes about members.

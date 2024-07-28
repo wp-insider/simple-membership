@@ -61,8 +61,8 @@ class SwpmAuth {
 			// Note: We will check if spwm_user_name or swpm_password is set inside the authenticate() function to know if the login form was submitted (keeping things backwards compatible).
 			$authenticate_response = $this->authenticate();
 
-			// if the SWPM plugin's login form was submitted and then the authenticate function returned false, then we will trigger the swpm_login_failed action hook.
 			if ( isset( $_POST['swpm-login']) && $authenticate_response === false ) {
+				//SwpmLog::log_auth_debug( 'SwpmAuth::auth_init() - SWPM Login form was submitted and the authenticate function returned false. Triggering the swpm_login_failed action hook.', true );
 				$this->trigger_swpm_login_failed_hook();
 			}
 		}

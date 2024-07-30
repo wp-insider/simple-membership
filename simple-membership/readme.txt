@@ -174,6 +174,7 @@ https://simple-membership-plugin.com/
 = 4.5.1 WIP =
 - Updated the 'swpm_login_failed' action hook's trigger condition.
 - Renamed the login form and reset password shortcode functions for better clarity.
+- Stripe library update to v15.4.0.
 
 = 4.5.0 =
 - Added membership level specific default account status feature.

@@ -98,8 +98,14 @@ function swpm_show_edit_txn_form($post)
 		//If we still can't find the member ID, set it to a dash. The corresponding member profile may have been deleted.
 		$member_id = '-';
 	} else {
-		$profile_url = 'admin.php?page=simple_wp_membership&member_action=edit&member_id=' . esc_attr($member_id);
-		$profile_link_output = '<a href="' . esc_url($profile_url) . '" target="_blank">' . __('(View Profile)', 'simple-membership') . '</a>';
+		if( !SwpmMemberUtils::member_record_exists( $member_id ) ) {
+			//Looks like the profile may have been deleted. Add a note to the profile link.
+			$profile_link_output = ' <span style="color:red;">' . __('(Profile Deleted)', 'simple-membership') . '</span>';
+		} else {
+			//Generate the corresponding member profile view/edit link		
+			$profile_url = 'admin.php?page=simple_wp_membership&member_action=edit&member_id=' . esc_attr($member_id);
+			$profile_link_output = '<a href="' . esc_url($profile_url) . '" target="_blank">' . __('(View Profile)', 'simple-membership') . '</a>';
+		}
 	}
 
 	$membership_level_link_output = '';

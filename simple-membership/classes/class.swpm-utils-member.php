@@ -99,6 +99,14 @@ class SwpmMemberUtils {
 		return $expiry_timestamp;
 	}
 
+	public static function member_record_exists( $swpm_id ) {
+		// Checks if the SWPM user record exists for the given member ID.
+		global $wpdb;
+		$query = $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = %d", $swpm_id );
+		$count = $wpdb->get_var( $query );
+		return $count > 0;
+	}
+	
 	public static function get_user_by_id( $swpm_id ) {
 		//Retrieves the SWPM user record for the given member ID
 		global $wpdb;

@@ -276,7 +276,7 @@ class SwpmMembers extends WP_List_Table {
 			return $this->edit( absint( $record_id ) );
 		}
 
-		//This is an profile add action.
+		//This is a profile add action.
 		return $this->add();
 	}
 
@@ -340,9 +340,17 @@ class SwpmMembers extends WP_List_Table {
         }
 
 		global $wpdb;
-		$id     = absint( $id );
-		$query  = "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = $id";
+		$id = absint( $id );
+		$query = "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = $id";
 		$member = $wpdb->get_row( $query, ARRAY_A );
+		if ( ! $member ) {
+			//Member record not found. Show an error message.
+			$error_msg = __( 'Error! Member record not found. You may have deleted this member profile. ', 'simple-membership' );
+			$error_msg .= __( 'Please go back to the members menu and try to edit another member profile.', 'simple-membership' );
+			echo '<div class="swpm-erro-msg swpm-red-box"><p>' . $error_msg . '</p></div>';
+			return;
+		}
+
 		if ( isset( $_POST['editswpmuser'] ) ) {
 			$_POST['user_name'] = sanitize_text_field( $member['user_name'] );
 			$_POST['email']     = sanitize_email( $member['email'] );
@@ -369,7 +377,7 @@ class SwpmMembers extends WP_List_Table {
 
 		include_once $edit_user_template_path;
 
-		return false;
+		return;
 	}
 
 	function process_bulk_action() {

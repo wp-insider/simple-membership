@@ -171,10 +171,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= 4.5.1 WIP =
+= 4.5.1 =
+- Stripe library updated to the latest version (v15.4.0).
 - Updated the 'swpm_login_failed' action hook's trigger condition.
 - Renamed the login form and reset password shortcode function name for better clarity.
-- Stripe library update to the latest version (v15.4.0).
 - The edit profile interface in the admin dashboard will display an appropriate error message if an attempt is made to edit a profile that has been deleted.
 
 = 4.5.0 =

@@ -110,6 +110,11 @@ class SwpmFrontRegistration extends SwpmRegistration {
 	}
 
 	public function register_front_end() {
+		//Registration data update sequence:
+		//1. Save the data in the simple membership member table.
+		//2. Create a corresponding WP user account.
+		//3. Send the registration complete email.
+
 		//Trigger action hook
 		do_action( 'swpm_front_end_registration_form_submitted' );
 
@@ -221,6 +226,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
 	 * It returns true if the user creation was successful. Otherwise, it returns false.
 	 */
 	private function create_swpm_user() {
+		/*
+		 * Create the $member_info array with the sanitized form data. Then save the data in the members table.
+		 */
+
 		global $wpdb;
 		$member = SwpmTransfer::$default_fields;
 		$form   = new SwpmFrontForm( $member );
@@ -276,6 +285,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		unset( $member_info['plain_password'] );
 
 		if ( SwpmUtils::is_paid_registration() ) {
+			/* Paid membership registration path (the member's record is originally created after the payment). */
+
 			//Remove any empty values from the array. This will preserve address information if it was received via the payment gateway.
 			$member_info = array_filter($member_info);
 
@@ -283,7 +294,11 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$member_info['reg_code'] = '';
 			$member_id = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
 			$code = isset( $_GET['code'] ) ? sanitize_text_field( stripslashes ( $_GET['code'] ) ) : '';
-			//Update the member record in the database.
+
+			//Trigger the before member data save filter hook. It can be used to customize the member data before it gets saved in the database.
+			$member_info = apply_filters( 'swpm_registration_data_before_save', $member_info );
+
+			//Update the member's record in the database. 
 			$query_result = $wpdb->update(
 				$wpdb->prefix . 'swpm_members_tbl',/*table*/
 				$member_info,/*data*/
@@ -308,11 +323,18 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$member_info['membership_level'] = $wpdb->get_var( $query );
 			$last_insert_id = $member_id;
 		} elseif ( ! empty( $free_level ) ) {
+			/* Free account/membership registration path. */
+
 			$member_info['membership_level'] = $free_level;
-			//Create a new free member record in the database.
+
+			//Trigger the before member data save filter hook. It can be used to customize the member data before it gets saved in the database.
+			$member_info = apply_filters( 'swpm_registration_data_before_save', $member_info );
+
+			//Create a new member record in the database for the free account/member registration.
 			$wpdb->insert( $wpdb->prefix . 'swpm_members_tbl', $member_info );
 			$last_insert_id = $wpdb->insert_id;
 		} else {
+			/* Error condition. Show an error message and return false so the process stops here. */
 			$message = array(
 				'succeeded' => false,
 				'message'   => SwpmUtils::_( 'Membership Level Couldn\'t be found.' ),
@@ -321,6 +343,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			return false;
 		}
 		$member_info['plain_password'] = $plain_password;
+
+		//Save the updated member info in the class property so it can be used in the later execution steps.
 		$this->member_info = $member_info;
 		return true;
 	}

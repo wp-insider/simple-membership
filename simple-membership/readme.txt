@@ -171,6 +171,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Added a new filter hook 'swpm_registration_data_before_save' to allow customizing the registration data before saving it to the database.
+
 = 4.5.1 =
 - Stripe library updated to the latest version (v15.4.0).
 - Updated the 'swpm_login_failed' action hook's trigger condition.

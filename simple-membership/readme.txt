@@ -173,6 +173,7 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - Added a new filter hook 'swpm_registration_data_before_save' to allow customizing the registration data before saving it to the database.
+- Added a check to ensure a valid membership level ID is entered when the free membership is enabled in the settings.
 
 = 4.5.1 =
 - Stripe library updated to the latest version (v15.4.0).

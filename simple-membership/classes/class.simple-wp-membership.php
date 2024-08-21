@@ -1067,9 +1067,21 @@ class SimpleWpMembership {
             return $any_notice_output;
         }
         
-        $is_free = SwpmSettings::get_instance()->get_value('enable-free-membership');
-        $free_level = absint(SwpmSettings::get_instance()->get_value('free-membership-id'));
-        $level = isset($atts['level']) ? absint($atts['level']) : ($is_free ? $free_level : null);
+        //Check if free membership is enabled on the site.
+        $is_free_enabled = SwpmSettings::get_instance()->get_value('enable-free-membership');
+        $free_level_id = absint(SwpmSettings::get_instance()->get_value('free-membership-id'));
+        $is_valid_free_level = SwpmMembershipLevelUtils::check_if_membership_level_exists($free_level_id);
+        if( $is_free_enabled && !$is_valid_free_level ){
+            //Free membership is enabled but the free level ID is invalid. 
+            //This is a critical configuration error. Show an error message and return.
+            $output .= '<div class="swpm_error swpm-red-error-text">';
+            $output .= __('Error! You have enabled free membership on this site but you did not enter a valid membership level ID in the "Free Membership Level ID" field of the settings menu.', 'simple-membership');
+            $output .= '</div>';
+            return $output;
+        }
+
+        //Get the level ID from the shortcode or use the free membership level ID if free membership is enabled.
+        $level = isset($atts['level']) ? absint($atts['level']) : ($is_free_enabled ? $free_level_id : null);
         
         $output .= $any_notice_output;
         $output .= SwpmFrontRegistration::get_instance()->regigstration_ui($level);

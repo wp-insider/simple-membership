@@ -3,10 +3,14 @@
 class SwpmSelfActionHandler {
 
     public function __construct() {
-        //Register all the self action hooks the plugin needs to handle
-        add_action('swpm_front_end_registration_complete_fb', array(&$this, 'after_registration_callback'));//For the form builder
-        add_action('swpm_front_end_registration_complete_user_data', array(&$this, 'after_registration_callback'));
+        //Register all the self action hooks the plugin needs to handle.
 
+        //Important: The following after registration hooks are handled using a lower priority (20) so that other plugins can do their processing first.
+        //This is important because if someone has added some custom code that uses this same hook, we want them to run their code before this code runs and exits (for auto login feature).
+        add_action('swpm_front_end_registration_complete_fb', array(&$this, 'after_registration_callback'), 20);//For the form builder
+        add_action('swpm_front_end_registration_complete_user_data', array(&$this, 'after_registration_callback'), 20);//For the core plugin
+
+        //Handle membership level change action hook.
         add_action('swpm_membership_level_changed', array(&$this, 'handle_membership_level_changed_action'));
 
         add_action('swpm_payment_ipn_processed', array(&$this, 'handle_swpm_payment_ipn_processed'));

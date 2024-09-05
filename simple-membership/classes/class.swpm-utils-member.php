@@ -457,6 +457,78 @@ class SwpmMemberUtils {
 		return "";
 	}
 
+	/**
+	 * Get subscription data by key from the member's extra info column.
+	 *
+	 * @param $member_id int The ID of the member.
+	 * @param $key string The field to retrieve
+	 * @param $default string Default value if result not found.
+	 *
+	 * @return string The value of provided key.
+	 */
+	public static function get_subscription_data_extra_info($member_id, $key, $default = ''){
+		// Attached subsrc_id to members table.
+		$sub_id = self::get_member_field_by_id( $member_id, 'subscr_id' );
 
+		// Check if subscr_id not present.
+		if (empty($sub_id)){
+			return $default;
+		}
 
+		// Retrieve the extra_info column.
+		$extra_info = self::get_account_extra_info( $member_id );
+
+		// Check if target key value pair exists, then return it.
+		if ( is_array($extra_info) && isset( $extra_info['subscription_details'][$sub_id][$key] ) ) {
+			return $extra_info['subscription_details'][$sub_id][$key];
+		}
+
+		// Target key value pair not set, return default value.
+		return $default;
+	}
+
+	/**
+	 * Set subscription data by key in the member's extra info column.
+	 *
+	 * @param $member_id int The ID of the member.
+	 * @param $key string The field to retrieve.
+	 * @param $value string The value of the field.
+	 * @param $subscr_id string The subscription id to retrieve data of.
+	 *
+	 * @return void
+	*/
+	public static function set_subscription_data_extra_info($member_id, $key, $value,  $subscr_id = ''){
+		if (!empty($subscr_id)){
+			$sub_id = $subscr_id;
+		} else {
+			// get attached subs id to members account.
+			$sub_id = SwpmMemberUtils::get_member_field_by_id($member_id, 'subscr_id');
+		}
+
+		if (empty($sub_id)){
+			// No subscription id found, so nothing to set.
+			return;
+		}
+
+		$extra_info = SwpmMemberUtils::get_account_extra_info( $member_id );
+
+		// Initialize an array if not set.
+		if ( ! is_array( $extra_info ) ) {
+			$extra_info = array();
+		}
+
+		// Check whether subscription_details array exists. If not, create one first.
+		if ( !array_key_exists('subscription_details', $extra_info) || !is_array($extra_info['subscription_details'])){
+			$extra_info['subscription_details'] = array();
+		}
+
+		// Check whether the array value of subscription_details exists. If not, create one first.
+		if ( ! array_key_exists($sub_id, $extra_info['subscription_details']) ){
+			$extra_info['subscription_details'][$sub_id] = array();
+		}
+
+		$extra_info['subscription_details'][$sub_id][$key] = $value;
+
+		SwpmMemberUtils::update_account_extra_info( $member_id, $extra_info );
+	}
 }

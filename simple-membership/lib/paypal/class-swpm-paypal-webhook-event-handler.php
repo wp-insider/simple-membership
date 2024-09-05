@@ -124,19 +124,14 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			// Found a member record
 			$member_id = $member_record->member_id;
 			//Example value: array('last_webhook_status' => 'expired' );
-			$extra_info = maybe_unserialize( $member_record->extra_info );
-			if( isset( $extra_info['last_webhook_status'] ) && $extra_info['last_webhook_status'] == $status ){
+
+			if( SwpmMemberUtils::get_subscription_data_extra_info($member_id, 'last_webhook_status') == $status ){
 				//Nothing to do. This webhook status has already been processed.
 				SwpmLog::log_simple_debug( 'This webhook status ('.$status.') has already been processed for this member (ID: '.$member_id.'). Nothing to do.', true );
 				return;
 			} else {
-				//Check if the extra_info is an array. If not, initialize it as an array before adding the last_webhook_status.
-				if (!is_array($extra_info)) {
-					$extra_info = array(); // Initialize as array if not already
-				}
 				//Save the last webhook status.
-				$extra_info['last_webhook_status'] = $status;
-				SwpmMemberUtils::update_account_extra_info( $member_id, $extra_info );
+				SwpmMemberUtils::set_subscription_data_extra_info( $member_id, 'last_webhook_status', $status );
 
 				//Handle the account status update according to the membership level's expiry settings.
 				$ipn_data = array();

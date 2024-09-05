@@ -2,17 +2,20 @@
 //This file is used to edit member's profile from the admin dashboard of the plugin.
 
 $form_id = "swpm-edit-user";
-
+$member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
 SimpleWpMembership::enqueue_validation_scripts_v2(
     "swpm-profile-form-validator",
     array(
         'query_args' => array(
-            'member_id' => filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT),
+            'member_id' => $member_id,
             'nonce' => wp_create_nonce('swpm-rego-form-ajax-nonce'),
         ),
         'form_id' => $form_id,
     )
 );
+
+$is_attached_subscription_cancelled = SwpmMemberUtils::get_subscription_data_extra_info($member_id, 'subscription_status') === 'inactive';
+
 ?>
 <div class="wrap" id="swpm-profile-page" type="edit">
     <form action="" method="post" name="swpm-edit-user" id="<?php echo $form_id ?>" enctype="multipart/form-data" class="swpm-form" <?php do_action('user_new_form_tag'); ?>>
@@ -127,6 +130,18 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 <th scope="row"><label for="subscr_id"><?php _e('Subscriber ID/Reference', 'simple-membership') ?> </label></th>
                 <td><input class="regular-text" name="subscr_id" type="text" id="subscr_id" value="<?php echo esc_attr($subscr_id); ?>" /></td>
             </tr>
+
+            <?php if ($is_attached_subscription_cancelled) { ?>
+            <tr class="swpm-form-row swpm-subscription-status-row">
+                <th scope="row"><label for="subscr_id"><?php _e('Subscription Status', 'simple-membership') ?> </label></th>
+                <td>
+                    <span style="color: #CC0000">
+                        <b><?php _e('CANCELLED', 'simple-membership') ?></b>
+                    </span>
+                </td>
+            </tr>
+	        <?php } ?>
+
             <tr class="swpm-form-row swpm-expiry-date-row">
                 <th scope="row"><label for="member_expiry_date"><?php _e('Expiry Date', 'simple-membership') ?> </label></th>
                 <td>

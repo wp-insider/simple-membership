@@ -355,6 +355,9 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 			update_post_meta( $swpm_txn_cpt_id, 'subscr_status', 'cancelled' );
 		}
 
+		// Update attached subcription status.
+		SwpmMemberUtils::set_subscription_data_extra_info( $member_id, 'subscription_status', 'inactive');
+
 		// Trigger hook for subscription payment cancelled.
 		$ipn_data['member_id'] = $member_id;
 		do_action( 'swpm_subscription_payment_cancelled', $ipn_data ); 

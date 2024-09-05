@@ -3,6 +3,8 @@
 
 //The admin ajax causes an issue with the JS validation if done on form submission. The edit profile doesn't need JS validation on email. There is PHP validation which will catch any email error.
 //SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.$member_id)));
+
+$is_attached_subscription_cancelled = SwpmMemberUtils::get_subscription_data_extra_info($member_id, 'subscription_status') === 'inactive';
 ?>
 <div class="wrap" id="swpm-profile-page" type="edit">
     <form action="" method="post" name="swpm-edit-user" id="swpm-edit-user" enctype="multipart/form-data" class="validate swpm-validate-form"<?php do_action('user_new_form_tag');?>>
@@ -99,10 +101,20 @@
             </td>
         </tr>
     <?php include('admin_member_form_common_part.php');?>
-        <tr class="swpm-admin-edit-subscriber-id">
+    <tr class="swpm-admin-edit-subscriber-id">
 		<th scope="row"><label for="subscr_id"><?php echo  SwpmUtils::_('Subscriber ID/Reference') ?> </label></th>
 		<td><input class="regular-text" name="subscr_id" type="text" id="subscr_id" value="<?php echo esc_attr($subscr_id); ?>" /></td>
 	</tr>
+    <?php if ($is_attached_subscription_cancelled) { ?>
+        <tr class="swpm-form-row swpm-subscription-status-row">
+            <th scope="row"><label for="subscr_id"><?php _e('Subscription Status', 'simple-membership') ?> </label></th>
+            <td>
+                <span style="color: #CC0000">
+                    <b><?php _e('CANCELLED', 'simple-membership') ?></b>
+                </span>
+            </td>
+        </tr>
+    <?php } ?>
         <tr class="swpm-admin-edit-expiry-date">
 		<th scope="row"><label for="member_expiry_date"><?php echo SwpmUtils::_('Expiry Date') ?> </label></th>
 		<td>

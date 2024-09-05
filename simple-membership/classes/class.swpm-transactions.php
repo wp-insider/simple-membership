@@ -344,6 +344,11 @@ class SwpmTransactions {
      */
     public static function get_all_txn_posts_using_meta_query_with_metadata( array $meta_query )
     {
+		/*** Tip ***/
+		//Use the following technique to print all post metas of a CPT so we can craft the meta_query parameter as needed.
+		//$all_post_metas_of_a_cpt = get_post_meta( "1234" );
+		//print_r($all_post_metas_of_a_cpt);
+		
         // Get the transaction posts types.
         $txn_posts = get_posts(
             array(

@@ -14,7 +14,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
     )
 );
 
-$is_attached_subscription_cancelled = SwpmMemberUtils::get_subscription_data_extra_info($member_id, 'subscription_status') === 'inactive';
+$is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extra_info($member_id, 'subscription_status') === 'inactive';
 
 ?>
 <div class="wrap" id="swpm-profile-page" type="edit">
@@ -131,13 +131,18 @@ $is_attached_subscription_cancelled = SwpmMemberUtils::get_subscription_data_ext
                 <td><input class="regular-text" name="subscr_id" type="text" id="subscr_id" value="<?php echo esc_attr($subscr_id); ?>" /></td>
             </tr>
 
-            <?php if ($is_attached_subscription_cancelled) { ?>
+            <?php if ($is_attached_subscription_canceled) { ?>
             <tr class="swpm-form-row swpm-subscription-status-row">
-                <th scope="row"><label for="subscr_id"><?php _e('Subscription Status', 'simple-membership') ?> </label></th>
+                <th scope="row"><label for="subscr_id"><?php _e('Subscription Payment Status', 'simple-membership') ?> </label></th>
                 <td>
                     <span style="color: #CC0000">
-                        <b><?php _e('CANCELLED', 'simple-membership') ?></b>
+                        <b><?php _e('Canceled/Inactive', 'simple-membership') ?></b>
                     </span>
+                    <p class="description">
+                        <?php _e('The subscription associated with this member profile has been canceled. The member may purchase a new subscription when needed.', 'simple-membership') ?>
+                        <?php _e(' The account will expire based on the membership level settings. To learn more about the membership level settings, refer to ', 'simple-membership') ?>
+                        <a href="https://simple-membership-plugin.com/adding-membership-access-levels-site/" target="_blank"><?php _e('this documentation', 'simple-membership') ?></a>.
+                    </p>
                 </td>
             </tr>
 	        <?php } ?>

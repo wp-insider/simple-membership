@@ -4,7 +4,7 @@
 //The admin ajax causes an issue with the JS validation if done on form submission. The edit profile doesn't need JS validation on email. There is PHP validation which will catch any email error.
 //SimpleWpMembership::enqueue_validation_scripts(array('ajaxEmailCall' => array('extraData'=>'&action=swpm_validate_email&member_id='.$member_id)));
 
-$is_attached_subscription_cancelled = SwpmMemberUtils::get_subscription_data_extra_info($member_id, 'subscription_status') === 'inactive';
+$is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extra_info($member_id, 'subscription_status') === 'inactive';
 ?>
 <div class="wrap" id="swpm-profile-page" type="edit">
     <form action="" method="post" name="swpm-edit-user" id="swpm-edit-user" enctype="multipart/form-data" class="validate swpm-validate-form"<?php do_action('user_new_form_tag');?>>
@@ -105,13 +105,18 @@ $is_attached_subscription_cancelled = SwpmMemberUtils::get_subscription_data_ext
 		<th scope="row"><label for="subscr_id"><?php echo  SwpmUtils::_('Subscriber ID/Reference') ?> </label></th>
 		<td><input class="regular-text" name="subscr_id" type="text" id="subscr_id" value="<?php echo esc_attr($subscr_id); ?>" /></td>
 	</tr>
-    <?php if ($is_attached_subscription_cancelled) { ?>
+    <?php if ($is_attached_subscription_canceled) { ?>
         <tr class="swpm-form-row swpm-subscription-status-row">
             <th scope="row"><label for="subscr_id"><?php _e('Subscription Status', 'simple-membership') ?> </label></th>
             <td>
-                <span style="color: #CC0000">
-                    <b><?php _e('CANCELLED', 'simple-membership') ?></b>
-                </span>
+                    <span style="color: #CC0000">
+                        <b><?php _e('Canceled/Inactive', 'simple-membership') ?></b>
+                    </span>
+                    <p class="description">
+                        <?php _e('The subscription associated with this member profile has been canceled. The member may purchase a new subscription when needed.', 'simple-membership') ?>
+                        <?php _e(' The account will expire based on the membership level settings. To learn more about the membership level settings, refer to ', 'simple-membership') ?>
+                        <a href="https://simple-membership-plugin.com/adding-membership-access-levels-site/" target="_blank"><?php _e('this documentation', 'simple-membership') ?></a>.
+                    </p>
             </td>
         </tr>
     <?php } ?>

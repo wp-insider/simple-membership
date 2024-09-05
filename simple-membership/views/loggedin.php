@@ -4,7 +4,7 @@ do_action('swpm_before_loggedin_widget');
 //Get the auth object
 $auth = SwpmAuth::get_instance();
 
-$is_attached_subscription_cancelled = SwpmMemberUtils::get_subscription_data_extra_info($auth->get('member_id'), 'subscription_status') === 'inactive';
+$is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extra_info($auth->get('member_id'), 'subscription_status') === 'inactive';
 
 ?>
 <div class="swpm-login-widget-logged">
@@ -25,11 +25,14 @@ $is_attached_subscription_cancelled = SwpmMemberUtils::get_subscription_data_ext
         <div class="swpm-logged-expiry-value swpm-logged-value"><?php echo $auth->get_expire_date(); ?></div>
     </div>
 
-	<?php if ($is_attached_subscription_cancelled) { ?>
-        <div class="swpm-subs-status">
-            <div class="swpm-subs-status-label swpm-logged-label"><?php _e('Subscription Status', 'simple-membership') ?></div>
-            <div class="swpm-subs-status-value swpm-logged-value">
-                <span style="color: #CC0000"><b><?php _e('CANCELLED', 'simple-membership') ?></b></span>
+	<?php if ($is_attached_subscription_canceled) { ?>
+        <div class="swpm-logged-subs-status">
+            <div class="swpm-logged-subs-status-label swpm-logged-label"><?php _e('Subscription Payment Status', 'simple-membership') ?></div>
+            <div class="swpm-logged-subs-status-value swpm-logged-value">
+                <span style="color: #CC0000"><b><?php _e('Canceled', 'simple-membership') ?></b></span>
+            </div>
+            <div class="swpm-logged-subs-status-description">
+                <?php _e('You can purchase a new subscription when needed to reactivate.', 'simple-membership') ?>
             </div>
         </div>
 	<?php } ?>

@@ -320,9 +320,25 @@ class SwpmTransactions {
     }
 
 	/**
-     * Retrieve all transaction posts using meta query with metadata.
+	 * Retrieve all the transaction CPT posts by member ID.
+	 */
+	public static function get_all_txn_cpts_with_metadata_by_member_id( $member_id ) {
+		$meta_query = array(
+			array(
+				'key' => 'member_id',
+				'value' => $member_id,
+				'compare' => '='
+			)
+		);
+
+		$all_txn_cpts = self::get_all_txn_posts_using_meta_query_with_metadata($meta_query);
+		return $all_txn_cpts;
+	}
+   
+	/**
+     * Retrieve all the transaction CPT posts using meta query with metadata.
      *
-     * @param array $meta_query
+     * @param array $meta_query The standard 'meta_query' array argument that is used in the get_posts() function.
      *
      * @return array|null The retrieved posts as array of WP_Post object. NULL if no posts found.
      */

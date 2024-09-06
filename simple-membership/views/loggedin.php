@@ -29,15 +29,19 @@ $is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extr
         <div class="swpm-logged-subs-status">
             <div class="swpm-logged-subs-status-label swpm-logged-label"><?php _e('Subscription Payment Status', 'simple-membership') ?></div>
             <div class="swpm-logged-subs-status-value swpm-logged-value">
-                <span style="color: #CC0000"><b><?php _e('Canceled', 'simple-membership') ?></b></span>
+                <?php _e('Canceled or Expired', 'simple-membership') ?>
             </div>
             <div class="swpm-logged-subs-status-description">
-                <?php _e('You can purchase a new subscription when needed to reactivate.', 'simple-membership') ?>
+                <?php _e('You can purchase a new subscription when needed to reactivate', 'simple-membership') ?>
             </div>
         </div>
 	<?php } ?>
 
     <?php
+    //Add some spac before the edit profile and logout links
+    echo '<div class="swpm-margin-bottom-10"></div>';
+    
+    //Show the edit profile link
     $edit_profile_page_url = SwpmSettings::get_instance()->get_value('profile-page-url');
     if (!empty($edit_profile_page_url)) {
         //Show the edit profile link
@@ -45,6 +49,8 @@ $is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extr
         echo '<a href="' . $edit_profile_page_url . '">' . __("Edit Profile", 'simple-membership') . '</a>';
         echo '</div>';
     }
+
+    //Show the logout link
     ?>
     <div class="swpm-logged-logout-link">
         <a href="?swpm-logout=true"><?php _e('Logout', 'simple-membership') ?></a>

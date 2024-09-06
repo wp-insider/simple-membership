@@ -16,6 +16,8 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 
 $is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extra_info($member_id, 'subscription_status') === 'inactive';
 
+//Get the current expiry date based on the membership level of this member.
+$member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user_id($member_id);
 ?>
 <div class="wrap" id="swpm-profile-page" type="edit">
     <form action="" method="post" name="swpm-edit-user" id="<?php echo $form_id ?>" enctype="multipart/form-data" class="swpm-form" <?php do_action('user_new_form_tag'); ?>>
@@ -136,10 +138,10 @@ $is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extr
                 <th scope="row"><label for="subscr_id"><?php _e('Subscription Payment Status', 'simple-membership') ?> </label></th>
                 <td>
                     <span style="color: #CC0000">
-                        <b><?php _e('Canceled/Inactive', 'simple-membership') ?></b>
+                        <b><?php _e('Canceled or Expired', 'simple-membership') ?></b>
                     </span>
                     <p class="description">
-                        <?php _e('The subscription associated with this member profile has been canceled. The member may purchase a new subscription when needed.', 'simple-membership') ?>
+                        <?php _e('The subscription associated with this member profile has been canceled or expired. The member may purchase a new subscription when needed.', 'simple-membership') ?>
                         <?php _e(' The account will expire based on the membership level settings. To learn more about the membership level settings, refer to ', 'simple-membership') ?>
                         <a href="https://simple-membership-plugin.com/adding-membership-access-levels-site/" target="_blank"><?php _e('this documentation', 'simple-membership') ?></a>.
                     </p>
@@ -151,7 +153,6 @@ $is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extr
                 <th scope="row"><label for="member_expiry_date"><?php _e('Expiry Date', 'simple-membership') ?> </label></th>
                 <td>
                     <?php
-                    $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user_id($member_id);
                     echo esc_attr($member_current_expiry_date);
                     ?>
                     <p class="description indicator-hint">

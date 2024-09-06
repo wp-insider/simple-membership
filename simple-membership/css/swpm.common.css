@@ -153,7 +153,20 @@
 .swpm-logged-label{
     font-weight: bold;
 }
-
+.swpm-logged-subs-status-value{
+    font-weight: bold;
+    color:#CC0000;
+}
+.swpm-logged-subs-status-description{
+    opacity: 0.8;
+}
+.swpm-edit-profile-link{
+    font-weight: bold;
+}
+.swpm-logged-logout-link{
+    font-weight: bold;
+}
+    
 /* Password reset form CSS */
 .swpm-pw-reset-submit-button{
     margin: 10px 0px;

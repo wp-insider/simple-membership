@@ -172,11 +172,13 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
+- Added a new feature to display the subscription payment cancellation status in the "Edit/View Member" menu. This status is also shown in the member's login widget.
 - Added a new filter hook 'swpm_registration_data_before_save' to allow customizing the registration data before saving it to the database.
 - Added a check to ensure a valid membership level ID is entered when the free membership is enabled in the settings.
 - The 'after_registration_callback' function is handled using a lower priority for better compatibility with other plugins.
 - Added a new utility function in the SwpmTransactions class to retrieve all the transactions for a specific member.
-- New feature to show subscription cancelled status in member's profile page.
+- Added spacing before the "Edit Profile" link in the login widget.
+- The "Edit Profile" and "Logout" links in the login widget are now bolded.
 
 = 4.5.1 =
 - Stripe library updated to the latest version (v15.4.0).

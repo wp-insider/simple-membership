@@ -179,6 +179,7 @@ https://simple-membership-plugin.com/
 - Added a new utility function in the SwpmTransactions class to retrieve all the transactions for a specific member.
 - Added spacing before the "Edit Profile" link in the login widget.
 - The "Edit Profile" and "Logout" links in the login widget are now bolded.
+- Added a toggle visibility option for System-Related Additional Data in the Edit/View Member's Profile interface.
 
 = 4.5.1 =
 - Stripe library updated to the latest version (v15.4.0).

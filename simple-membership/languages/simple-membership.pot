@@ -3541,7 +3541,7 @@ msgid "Last Accessed From IP"
 msgstr ""
 
 #: views/admin_edit.php:138 views/admin_edit_v2.php:162
-msgid "System-related Additional Data"
+msgid "System-Related Additional Data"
 msgstr ""
 
 #: views/admin_edit.php:141 views/admin_edit_v2.php:165

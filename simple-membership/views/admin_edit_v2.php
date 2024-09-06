@@ -179,10 +179,18 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
                 </td>
             </tr>
             <?php if (isset($extra_info) && !empty($extra_info)) { ?>
+                <!-- This system related extra info row is hidden by default to reduce clutter. -->
                 <tr class="swpm-form-row swpm-any-extra-info-row">
-                    <th scope="row"><label for="extra_info"><?php _e('System-related Additional Data', 'simple-membership') ?> </label></th>
-                    <td>
-                        <?php echo esc_attr($extra_info); ?>
+                    <th scope="row"><label for="extra_info"><?php _e('System-Related Additional Data', 'simple-membership') ?> </label></th>
+                    <td class="spwm-system-info-td">
+                        <a href="#" onclick="document.getElementById('swpm-system-info-value').classList.toggle('swpm-hidden'); return false;"><?php _e('Show/Hide Data', 'simple-membership'); ?></a>
+                        <?php 
+                        $unserialized_extra_info = maybe_unserialize($extra_info);
+                        echo '<div id="swpm-system-info-value" class="swpm-hidden">';
+                        print_r($unserialized_extra_info);
+                        echo '</div>';
+                        //echo esc_attr($extra_info); 
+                        ?>
                         <p class="description indicator-hint"><?php _e('The plugin saves this information for system purposes for some profiles. There is no need for you to take any action regarding this value.', 'simple-membership') ?></p>
                     </td>
                 </tr>

@@ -155,7 +155,7 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
 
     <?php if( isset($extra_info) && !empty($extra_info) ){ ?>
     <tr class="swpm-admin-edit-any-extra-info">
-		<th scope="row"><label for="extra_info"><?php echo  SwpmUtils::_('System-related Additional Data') ?> </label></th>
+		<th scope="row"><label for="extra_info"><?php echo  SwpmUtils::_('System-Related Additional Data') ?> </label></th>
 		<td>
                     <?php echo esc_attr($extra_info); ?>
                     <p class="description indicator-hint"><?php echo SwpmUtils::_('The plugin saves this information for system purposes for some profiles. There is no need for you to take any action regarding this value.') ?></p>

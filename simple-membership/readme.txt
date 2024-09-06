@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 7.4
 Tested up to: 6.6
-Stable tag: 4.5.1
+Stable tag: 4.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -171,7 +171,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= 4.5.2 =
 - Added a new feature to display the subscription payment cancellation status in the "Edit/View Member" menu. This status is also shown in the member's login widget.
 - Added a new filter hook 'swpm_registration_data_before_save' to allow customizing the registration data before saving it to the database.
 - Added a check to ensure a valid membership level ID is entered when the free membership is enabled in the settings.

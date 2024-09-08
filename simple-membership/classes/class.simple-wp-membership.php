@@ -94,7 +94,9 @@ class SimpleWpMembership {
 
         //init is too early for settings api.
         add_action('admin_init', array(&$this, 'admin_init_hook'));
-        add_action('plugins_loaded', array(&$this, "plugins_loaded"));        
+        add_action('plugins_loaded', array(&$this, "plugins_loaded"));
+
+	    add_action('wp_ajax_swpm_reset_log', array('SwpmLog', 'swpm_reset_log'));
     }
 
     public function wp_head_callback() {

@@ -162,9 +162,13 @@ class SwpmShortcodesHandler {
 		} else {
 			//User is NOT logged-in.
 			$mini_login_output_when_not_logged = '<span class="swpm_mini_login_login_here"><a href="' . esc_url($filtered_login_url) . '">' . __( 'Login Here', 'simple-membership') . '</a></span>';
-			$mini_login_output_when_not_logged .= '<span class="swpm_mini_login_no_membership"> | ' . __( 'Not a member? ', 'simple-membership') . '</span>';
-			$mini_login_output_when_not_logged .= '<span class="swpm_mini_login_join_now"><a href="' . esc_url($join_page_url) . '">' . __( 'Join Now', 'simple-membership') . '</a></span>';
-			
+
+			$hide_join_us_link = SwpmSettings::get_instance()->get_value('hide-join-us-link');
+			if (empty($hide_join_us_link)){
+				$mini_login_output_when_not_logged .= '<span class="swpm_mini_login_no_membership"> | ' . __( 'Not a member? ', 'simple-membership') . '</span>';
+				$mini_login_output_when_not_logged .= '<span class="swpm_mini_login_join_now"><a href="' . esc_url($join_page_url) . '">' . __( 'Join Now', 'simple-membership') . '</a></span>';
+			}
+
 			//Trigger filter to allow addons to modify this output.
 			$mini_login_output_when_not_logged = apply_filters( 'swpm_mini_login_output_when_not_logged_in', $mini_login_output_when_not_logged );
 

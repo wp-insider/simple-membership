@@ -212,20 +212,20 @@ class SwpmLog {
 		fclose( $fp );  // close file
 	}
 
-	public static function swpm_reset_log(){
-		if (!check_ajax_referer( 'swpm_reset_log', 'nonce', false )) {
+	public static function handle_reset_log_action(){
+		if (!check_ajax_referer( 'swpm_reset_log_action', 'nonce', false )) {
 			wp_send_json_error(array(
-				'message' => __('Nonce Verification Failed!', 'simple-membership'),
+				'message' => __('Error! Nonce verification failed for reset log files action', 'simple-membership'),
 			));
 		}
 
 		if ( SwpmLog::reset_swmp_log_files() ) {
 			wp_send_json_success(array(
-				'message' => __('Log has been reset.', 'simple-membership'),
+				'message' => __('Log files have been reset.', 'simple-membership'),
 			));
 		} else {
 			wp_send_json_error(array(
-				'message' => __('Log could not reset.', 'simple-membership'),
+				'message' => __("Failed to reset the log files. Ensure the server's file permission is correct.", "simple-membership"),
 			));
 		}
 	}

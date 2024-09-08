@@ -278,8 +278,8 @@ class SwpmSettings {
                     e.preventDefault();
                     const ajaxUrl = '<?php echo admin_url( 'admin-ajax.php' )?>';
                     const payload = new URLSearchParams();
-                    payload.append('action', 'swpm_reset_log');
-                    payload.append('nonce',  '<?php echo esc_js( wp_create_nonce( 'swpm_reset_log' ) ) ?>');
+                    payload.append('action', 'swpm_reset_log_action');
+                    payload.append('nonce',  '<?php echo esc_js( wp_create_nonce( 'swpm_reset_log_action' ) ) ?>');
                     fetch(
                         ajaxUrl,
                         {
@@ -290,11 +290,11 @@ class SwpmSettings {
                             body: payload.toString()
                         }
                     ).then((response) => {
-                            return response.json();
+                        return response.json();
                     }).then((res) => {
                         alert(res.data.message);
                     }).catch(err => {
-                        alert('Something went wrong!');
+                        alert('The ajax request to reset the log files has failed unexpectedly. Please try again later.');
                     })
                 });
             })

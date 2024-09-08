@@ -171,6 +171,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Log files now resets via ajax.
+
 = 4.5.2 =
 - Added a new feature to display the subscription payment cancellation status in the "Edit/View Member" menu. This status is also shown in the member's login widget.
 - Added a new filter hook 'swpm_registration_data_before_save' to allow customizing the registration data before saving it to the database.

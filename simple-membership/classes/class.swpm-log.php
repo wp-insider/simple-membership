@@ -212,6 +212,24 @@ class SwpmLog {
 		fclose( $fp );  // close file
 	}
 
+	public static function swpm_reset_log(){
+		if (!check_ajax_referer( 'swpm_reset_log', 'nonce', false )) {
+			wp_send_json_error(array(
+				'message' => __('Nonce Verification Failed!', 'simple-membership'),
+			));
+		}
+
+		if ( SwpmLog::reset_swmp_log_files() ) {
+			wp_send_json_success(array(
+				'message' => __('Log has been reset.', 'simple-membership'),
+			));
+		} else {
+			wp_send_json_error(array(
+				'message' => __('Log could not reset.', 'simple-membership'),
+			));
+		}
+	}
+
 	public static function reset_swmp_log_files() {
 		$log_reset = true;
 		self::gen_log_file_names();

@@ -263,21 +263,47 @@ class SwpmSettings {
 			admin_url( 'admin.php' )
 		);
 
-		$reset_log_url = add_query_arg(
-			array(
-				'page'           => 'simple_wp_membership_settings',
-				'swpm_reset_log' => '1',
-				'_wpnonce'       => wp_create_nonce( 'swpm_reset_log' ),
-			),
-			admin_url( 'admin.php' )
-		);
-
-		$debug_field_help_text  = SwpmUtils::_( 'Check this option to enable debug logging.' );
-		$debug_field_help_text .= SwpmUtils::_( ' This can be useful when troubleshooting an issue. Turn it off and reset the log files after the troubleshooting is complete.' );
+		$debug_field_help_text  = __( 'Check this option to enable debug logging.', 'simple-membership' );
+		$debug_field_help_text .= __( ' This can be useful when troubleshooting an issue. Turn it off and reset the log files after the troubleshooting is complete.', 'simple-membership' );
 		$debug_field_help_text .= '<br />';
-		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'View general debug log file by clicking ' ) . '<a href="' . $debug_log_url . '" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
-		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'View login related debug log file by clicking ' ) . '<a href="' . $auth_log_url . '" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
-		$debug_field_help_text .= '<br />- ' . SwpmUtils::_( 'Reset debug log files by clicking ' ) . '<a href="' . $reset_log_url . '" target="_blank">' . SwpmUtils::_( 'here' ) . '</a>.';
+		$debug_field_help_text .= '<br />- ' . __( 'View general debug log file by clicking ', 'simple-membership' ) . '<a href="' . $debug_log_url . '" target="_blank">' . __( 'here', 'simple-membership' ) . '</a>.';
+		$debug_field_help_text .= '<br />- ' . __( 'View login related debug log file by clicking ', 'simple-membership' ) . '<a href="' . $auth_log_url . '" target="_blank">' . __( 'here', 'simple-membership' ) . '</a>.';
+		$debug_field_help_text .= '<br />- ' . __( 'Reset debug log files by clicking ', 'simple-membership' ) . '<a href="javascript:void(0)" target="" id="swpm_reset_log_anchor">' . __( 'here', 'simple-membership') . '</a>.';
+		ob_start();
+        ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function (){
+                const swpm_reset_log_anchor = document.getElementById('swpm_reset_log_anchor');
+                swpm_reset_log_anchor.addEventListener('click', function (e){
+                    e.preventDefault();
+                    const ajaxUrl = '<?php echo admin_url( 'admin-ajax.php' )?>';
+                    const payload = new URLSearchParams();
+                    payload.append('action', 'swpm_reset_log');
+                    payload.append('nonce',  '<?php echo esc_js( wp_create_nonce( 'swpm_reset_log' ) ) ?>');
+                    fetch(
+                        ajaxUrl,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: payload.toString()
+                        }
+                    ).then((response) => {
+                            return response.json();
+                    }).then((res) => {
+                        alert(res.data.message);
+                    }).catch(err => {
+                        alert('Something went wrong!');
+                    })
+                });
+            })
+
+
+        </script>
+        <?php
+		$debug_field_help_text .= ob_get_clean();
+
 		add_settings_field(
 			'enable-debug',
 			SwpmUtils::_( 'Enable Debug' ),
@@ -1105,16 +1131,6 @@ class SwpmSettings {
 	}
 
 	public function swpm_general_post_submit_check_callback() {
-		//Log file reset handler
-		if ( isset( $_REQUEST['swpm_reset_log'] ) ) {
-			check_admin_referer( 'swpm_reset_log' );
-			if ( SwpmLog::reset_swmp_log_files() ) {
-				echo '<div id="message" class="updated fade"><p>Debug log files have been reset!</p></div>';
-			} else {
-				echo '<div id="message" class="updated fade"><p>Debug log files could not be reset!</p></div>';
-			}
-		}
-
 		//Show settings updated message
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
 			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';

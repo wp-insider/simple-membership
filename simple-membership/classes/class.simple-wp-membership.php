@@ -95,8 +95,6 @@ class SimpleWpMembership {
         //init is too early for settings api.
         add_action('admin_init', array(&$this, 'admin_init_hook'));
         add_action('plugins_loaded', array(&$this, "plugins_loaded"));
-
-	    add_action('wp_ajax_swpm_reset_log_action', array('SwpmLog', 'handle_reset_log_action'));
     }
 
     public function wp_head_callback() {
@@ -289,10 +287,6 @@ class SimpleWpMembership {
         //Hide admin toolbar if the hide adminbar feature is enabled
         $hide = SwpmSettings::get_instance()->get_value('hide-adminbar');
         return $hide ? FALSE : TRUE;
-    }
-
-    public function shutdown() {
-        SwpmLog::writeall();
     }
 
     public static function handle_after_login_authentication($username, $pass, $rememberme = true) {

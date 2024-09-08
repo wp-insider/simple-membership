@@ -172,7 +172,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
-- Log files now resets via ajax.
+- The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.
+- Removed the unused 'shutdown' function from the plugin.
 
 = 4.5.2 =
 - Added a new feature to display the subscription payment cancellation status in the "Edit/View Member" menu. This status is also shown in the member's login widget.

@@ -266,9 +266,9 @@ class SwpmSettings {
 		$debug_field_help_text  = __( 'Check this option to enable debug logging.', 'simple-membership' );
 		$debug_field_help_text .= __( ' This can be useful when troubleshooting an issue. Turn it off and reset the log files after the troubleshooting is complete.', 'simple-membership' );
 		$debug_field_help_text .= '<br />';
-		$debug_field_help_text .= '<br />- ' . __( 'View general debug log file by clicking ', 'simple-membership' ) . '<a href="' . $debug_log_url . '" target="_blank">' . __( 'here', 'simple-membership' ) . '</a>.';
-		$debug_field_help_text .= '<br />- ' . __( 'View login related debug log file by clicking ', 'simple-membership' ) . '<a href="' . $auth_log_url . '" target="_blank">' . __( 'here', 'simple-membership' ) . '</a>.';
-		$debug_field_help_text .= '<br />- ' . __( 'Reset debug log files by clicking ', 'simple-membership' ) . '<a href="javascript:void(0)" target="" id="swpm_reset_log_anchor">' . __( 'here', 'simple-membership') . '</a>.';
+		$debug_field_help_text .= '<br />- ' . __( 'View general debug log file by ', 'simple-membership' ) . '<a href="' . $debug_log_url . '" target="_blank">' . __( 'clicking here', 'simple-membership' ) . '</a>.';
+		$debug_field_help_text .= '<br />- ' . __( 'View login related debug log file by ', 'simple-membership' ) . '<a href="' . $auth_log_url . '" target="_blank">' . __( 'clicking here', 'simple-membership' ) . '</a>.';
+		$debug_field_help_text .= '<br />- ' . __( 'Reset debug log files by ', 'simple-membership' ) . '<a href="javascript:void(0)" style="color: #CC0000;" id="swpm_reset_log_anchor">' . __( 'clicking here', 'simple-membership') . '</a>.';
 		ob_start();
         ?>
         <script>

@@ -78,8 +78,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$free_rego_disabled_msg  = '<p>';
 			$free_rego_disabled_msg .= __( 'Free membership is disabled on this site. ', 'simple-membership' );
 
-			$hide_join_us_link = SwpmSettings::get_instance()->get_value('hide-join-us-link');
-			if (empty($hide_join_us_link)){
+			//Check if the "Hide Join Us Link" feature is enabled. If it is enabled, don't show the link.
+			$hide_join_us_link_enabled = SwpmSettings::get_instance()->get_value('hide-join-us-link');
+			if (empty($hide_join_us_link_enabled)){
+				//Show the "Join Us" option.
 				$free_rego_disabled_msg .= __( 'Please make a payment from the ', 'simple-membership'  );
 				$free_rego_disabled_msg .= SwpmUtils::_( $joinuspage_link );
 				$free_rego_disabled_msg .= SwpmUtils::_( ' page to pay for a premium membership.' );

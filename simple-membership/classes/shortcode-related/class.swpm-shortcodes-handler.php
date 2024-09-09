@@ -163,8 +163,10 @@ class SwpmShortcodesHandler {
 			//User is NOT logged-in.
 			$mini_login_output_when_not_logged = '<span class="swpm_mini_login_login_here"><a href="' . esc_url($filtered_login_url) . '">' . __( 'Login Here', 'simple-membership') . '</a></span>';
 
-			$hide_join_us_link = SwpmSettings::get_instance()->get_value('hide-join-us-link');
-			if (empty($hide_join_us_link)){
+			//Check if the join us link should be hidden
+			$hide_join_us_link_enabled = SwpmSettings::get_instance()->get_value('hide-join-us-link');
+			if (empty($hide_join_us_link_enabled)){
+				//Show the join us option.
 				$mini_login_output_when_not_logged .= '<span class="swpm_mini_login_no_membership"> | ' . __( 'Not a member? ', 'simple-membership') . '</span>';
 				$mini_login_output_when_not_logged .= '<span class="swpm_mini_login_join_now"><a href="' . esc_url($join_page_url) . '">' . __( 'Join Now', 'simple-membership') . '</a></span>';
 			}

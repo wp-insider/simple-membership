@@ -103,6 +103,7 @@ You can create a free forum user account and ask your questions.
 * Option force the members to use strong password.
 * Option to make the users agree to your terms and conditions before they can register for a member account.
 * Option to make the users agree to your privacy policy before they can register for a member account.
+* Option to hide the registration/join option. Useful if you prefer visitors not to see the registration option on your site.
 * Option to automatically logout the members when they close the browser.
 * Ability to forward the payment notification to an external URL for further processing.
 * Option to configure whitelisting for user email addresses to allow registration only from specific email addresses or email domains.
@@ -110,6 +111,8 @@ You can create a free forum user account and ask your questions.
 * Option to configure PayPal payment buttons for memberships (one-time and recurring payments).
 * Option to configure Stripe payment buttons for memberships (one-time and recurring payments).
 * Option to configure Braintree payment buttons for memberships (one-time payments).
+* The plugin is actively maintained and we are working on new features for the plugin.
+* Browse the [plugin documentation](https://simple-membership-plugin.com/simple-membership-documentation/) to learn more about the features of this plugin.
 
 = Language Translations =
 
@@ -174,7 +177,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.
 - Removed the unused 'shutdown' function from the plugin.
-- New settings to hide the join us link.
+- Added a new settings to hide the join us link.
 
 = 4.5.2 =
 - Added a new feature to display the subscription payment cancellation status in the "Edit/View Member" menu. This status is also shown in the member's login widget.

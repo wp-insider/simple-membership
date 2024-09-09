@@ -657,6 +657,18 @@ class SwpmSettings {
 		);
 
 		add_settings_field(
+			'hide-join-us-link',
+			__( 'Hide the Join Us Link' , 'simple-membership'),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'hide-join-us-link',
+				'message' => __( "Select this option to hide the 'Join Us' link if you prefer visitors not to see the registration option on your site." , "simple-membership"),
+			)
+		);
+
+		add_settings_field(
 			'hide-rego-form-to-logged-users',
 			SwpmUtils::_( 'Hide Registration Form to Logged Users' ),
 			array( &$this, 'checkbox_callback' ),
@@ -665,18 +677,6 @@ class SwpmSettings {
 			array(
 				'item'    => 'hide-rego-form-to-logged-users',
 				'message' => SwpmUtils::_( 'Use this option if you want to hide the registration form to the logged-in members. If logged-in members visit the registration page, they will see a message instead of the registration form.' ),
-			)
-		);
-
-		add_settings_field(
-			'hide-join-us-link',
-			__( 'Hide the Join Us Link' , 'simple-membership'),
-			array( &$this, 'checkbox_callback' ),
-			'simple_wp_membership_settings',
-			'advanced-settings',
-			array(
-				'item'    => 'hide-join-us-link',
-				'message' => __( 'Check this if you want to hide the join us link. Useful if you do not want visitors to register for membership in you site.' , 'simple-membership'),
 			)
 		);
 

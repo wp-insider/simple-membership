@@ -398,7 +398,7 @@ function swpm_send_subscription_cancel_notification_email($member_id){
 	// Send email to Member
 	$member_email_notification_enable = $settings->get_value('subscription-cancel-member-mail-enable', false);
 	if(!empty($member_email_notification_enable)){
-		$member_email_address = $settings->get_value( 'subscription-cancel-member-mail-address' );
+		$member_email_address = $member->email;
 		$member_email_subject = $settings->get_value( 'subscription-cancel-member-mail-subject' );
 		$member_email_body = $settings->get_value( 'subscription-cancel-member-mail-body' );
 

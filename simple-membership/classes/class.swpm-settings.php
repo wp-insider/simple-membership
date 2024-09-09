@@ -669,6 +669,18 @@ class SwpmSettings {
 		);
 
 		add_settings_field(
+			'hide-join-us-link',
+			__( 'Hide the Join Us Link' , 'simple-membership'),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'hide-join-us-link',
+				'message' => __( 'Check this if you want to hide the join us link. Useful if you do not want visitors to register for membership in you site.' , 'simple-membership'),
+			)
+		);
+
+		add_settings_field(
 			'after-logout-redirection-url',
 			SwpmUtils::_( 'After Logout Redirect URL' ),
 			array( &$this, 'textfield_long_callback' ),
@@ -1361,6 +1373,7 @@ class SwpmSettings {
 		$output['force-strong-passwords']            = isset( $input['force-strong-passwords'] ) ? esc_attr( $input['force-strong-passwords'] ) : '';
 		$output['auto-login-after-rego']             = isset( $input['auto-login-after-rego'] ) ? esc_attr( $input['auto-login-after-rego'] ) : '';
                 $output['hide-rego-form-to-logged-users']    = isset( $input['hide-rego-form-to-logged-users'] ) ? esc_attr( $input['hide-rego-form-to-logged-users'] ) : '';
+		$output['hide-join-us-link']                = isset( $input['hide-join-us-link'] ) ? esc_attr( $input['hide-join-us-link'] ) : '';
 		$output['force-wp-user-sync']                = isset( $input['force-wp-user-sync'] ) ? esc_attr( $input['force-wp-user-sync'] ) : '';
 		$output['payment-notification-forward-url']  = esc_url( $input['payment-notification-forward-url'] );
 		$output['use-new-form-ui']            		 = isset( $input['use-new-form-ui'] ) ? esc_attr( $input['use-new-form-ui'] ) : '';

@@ -25,6 +25,8 @@ $render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui')
 if ( !empty( $render_new_form_ui ) ){
     $login_submit_class .= ' swpm-submit-btn-default-style';
 }
+
+$hide_join_us_link = SwpmSettings::get_instance()->get_value('hide-join-us-link');
 ?>
 <div class="swpm-login-widget-form">
     <form id="swpm-login-form" name="swpm-login-form" method="post" action="">
@@ -64,9 +66,11 @@ if ( !empty( $render_new_form_ui ) ){
             <div class="swpm-forgot-pass-link">
                 <a id="forgot_pass" class="swpm-login-form-pw-reset-link"  href="<?php echo esc_url($password_reset_url); ?>"><?php _e('Forgot Password?', 'simple-membership') ?></a>
             </div>
+            <?php if (empty($hide_join_us_link)) {?>
             <div class="swpm-join-us-link">
                 <a id="register" class="swpm-login-form-register-link" href="<?php echo esc_url($join_url); ?>"><?php _e('Join Us', 'simple-membership') ?></a>
             </div>
+            <?php } ?>
             <div class="swpm-login-action-msg">
                 <span class="swpm-login-widget-action-msg"><?php echo apply_filters( 'swpm_login_form_action_msg', $auth->get_message() ); ?></span>
             </div>

@@ -500,8 +500,11 @@ class SWPM_Utils_Subscriptions
 				$stripe_sub->cancel();
 			}
 
-			update_post_meta($sub['post_id'], 'subscr_status', $stripe_sub['status']);
+            update_post_meta($sub['post_id'], 'subscr_status', $stripe_sub['status']);
+			SwpmLog::log_simple_debug("Stripe SCA subscription cancelled successfully.", true);
 		} catch (\Exception $e) {
+			SwpmLog::log_simple_debug("Stripe SCA subscription cancellation failed.", false);
+			SwpmLog::log_simple_debug($e->getMessage(), false);
 			return $e->getMessage();
 		}
 		return true;

@@ -518,112 +518,41 @@ class SwpmMembers extends WP_List_Table {
 		}
 	}
 
-	private static function delete_user_subs( $id ) {
-		$member = SwpmMemberUtils::get_user_by_id( $id );
+	private static function delete_user_subs( $member_id ) {
+
+		$member = SwpmMemberUtils::get_user_by_id( $member_id );
+
 		if ( ! $member ) {
 			return false;
 		}
 
-		// TODO: Old code, need to remove.
-		// let's check if Stripe subscription needs to be cancelled
-		// global $wpdb;
-		// $q = $wpdb->prepare(
-		// 	'SELECT *
-		// FROM  `' . $wpdb->prefix . 'swpm_payments_tbl`
-		// WHERE email =  %s
-		// AND (gateway =  "stripe" OR gateway = "stripe-sca-subs")
-		// AND subscr_id != ""',
-		// 	array( $member->email )
-		// );
-		// $res = $wpdb->get_results( $q, ARRAY_A );
+		SwpmLog::log_simple_debug("Cancelling all subscription of member id: " . $member_id, true);
 
-		$meta_query = array(
-			'relation' => 'AND',
-			array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'email',
-					'value'   => $member->email,
-					'compare' => '='
-				),
-				array(
-					'key'     => 'subscr_id',
-					'value'   => '',
-					'compare' => '!='
-				),
-				array(
-					'key'     => 'gateway',
-					'value'   => array('stripe', 'stripe-sca-subs'),
-					'compare' => 'IN'
-				),
-			),
-		);
-		$res = SwpmTransactions::get_all_txn_posts_using_meta_query_with_metadata($meta_query);
+        $subscription_utils = new SWPM_Utils_Subscriptions($member_id);
+        $subscription_utils->load_subs_data();
 
-		if ( empty($res) ) {
+		$active_subs = $subscription_utils->get_active_subscriptions();
+
+		if ( empty($active_subs) ) {
+		    SwpmLog::log_simple_debug("No active subscriptions found for member ID: " . $member_id, true);
 			return false;
 		}
 
-		foreach ( $res as $sub ) {
+		SwpmLog::log_simple_debug("Active subscriptions found for member ID: " . $member_id, true);
+		SwpmLog::log_simple_debug( "Active subscription IDs: ". implode(', ', array_keys($active_subs)) , true);
 
-			if ( substr( $sub['subscr_id'], 0, 4 ) !== 'sub_' ) {
-				//not Stripe subscription
-				continue;
-			}
-
-            // TODO: Old code, need to remove.
-			// let's find the payment button
-			// $q        = $wpdb->prepare( "SELECT post_id FROM {$wpdb->prefix}postmeta WHERE meta_key='subscr_id' AND meta_value=%s", $sub['subscr_id'] );
-			// $res_post = $wpdb->get_row( $q );
-			// if ( ! $res_post ) {
-			// 	//no button found
-			// 	continue;
-			// }
-			// $button_id = get_post_meta( $res_post->post_id, 'payment_button_id', true );
-
-
-			// let's find the payment button.
-
-			$button_id = $sub['payment_button_id'];
-
-            if ( empty($button_id) ) {
-                // payment button id not found.
-                continue;
-            }
-
-			$button = get_post( $button_id );
-
-			if ( ! $button ) {
-				//no button found
-				continue;
-			}
-
-			SwpmLog::log_simple_debug( 'Attempting to cancel Stripe Subscription ' . $sub['subscr_id'], true );
-
-			$is_live = get_post_meta( $button_id, 'is_live', true );
-
-			//API Keys
-			$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, $is_live );
-
-			//Include the Stripe library.
-			SwpmMiscUtils::load_stripe_lib();
-
-			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
-
-			$error = null;
-			// Let's try to cancel subscription
-			try {
-				$sub = \Stripe\Subscription::retrieve( $sub['subscr_id'] );
-				$sub->cancel();
-			} catch ( Exception $e ) {
-				SwpmLog::log_simple_debug( 'Error occurred during Stripe Subscription cancellation. ' . $e->getMessage(), false );
-				$body         = $e->getJsonBody();
-				$error        = $body['error'];
-				$error_string = wp_json_encode( $error );
-				SwpmLog::log_simple_debug( 'Error details: ' . $error_string, false );
-			}
-			if ( ! isset( $error ) ) {
-				SwpmLog::log_simple_debug( 'Stripe Subscription has been cancelled.', true );
+		foreach ( $active_subs as $sub ) {
+			switch($sub['gateway']){
+				case 'stripe-sca-subs':
+                    SwpmLog::log_simple_debug("Cancelling Stripe SCA subscription with subscription ID: ". $sub['sub_id'], true);
+					$subscription_utils->cancel_subscription_stripe_sca( $sub['sub_id'] );
+					break;
+				case 'paypal_subscription_checkout':
+                    SwpmLog::log_simple_debug("Cancelling PayPal PPCP subscription with subscription ID: ". $sub['sub_id'], true);
+					$subscription_utils->cancel_subscription_paypal( $sub['sub_id'] );
+					break;
+				default:
+					break;
 			}
 		}
 	}

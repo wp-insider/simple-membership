@@ -179,6 +179,7 @@ https://simple-membership-plugin.com/
 - Removed the unused 'shutdown' function from the plugin.
 - Added a new settings to hide the join us link. Refer to [this documentation](https://simple-membership-plugin.com/hiding-join-option-from-visitors/) for more information.
 - Deleting a member will now also cancel any PayPal subscriptions configured through the PPCP (New API) option.
+- New settings to send notification email on subscription cancel.
 
 = 4.5.2 =
 - Added a new feature to display the subscription payment cancellation status in the "Edit/View Member" menu. This status is also shown in the member's login widget.

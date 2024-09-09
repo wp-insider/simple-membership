@@ -664,7 +664,7 @@ class SwpmSettings {
 			'advanced-settings',
 			array(
 				'item'    => 'hide-join-us-link',
-				'message' => __( "Select this option to hide the 'Join Us' link if you prefer visitors not to see the registration option on your site." , "simple-membership"),
+				'message' => __( "Select this option to hide the 'Join Us' link if you prefer visitors not to see the registration option on your site. Refer to <a href='https://simple-membership-plugin.com/hiding-join-option-from-visitors/' target='_blank'>this documentation</a> to learn more." , "simple-membership"),
 			)
 		);
 

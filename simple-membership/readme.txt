@@ -177,7 +177,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.
 - Removed the unused 'shutdown' function from the plugin.
-- Added a new settings to hide the join us link.
+- Added a new settings to hide the join us link. Refer to [this documentation](https://simple-membership-plugin.com/hiding-join-option-from-visitors/) for more information.
 
 = 4.5.2 =
 - Added a new feature to display the subscription payment cancellation status in the "Edit/View Member" menu. This status is also shown in the member's login widget.

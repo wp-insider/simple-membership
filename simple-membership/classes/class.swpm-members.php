@@ -518,7 +518,7 @@ class SwpmMembers extends WP_List_Table {
 		}
 	}
 
-	public static function delete_user_subs( $member_id ) {
+	private static function delete_user_subs( $member_id ) {
 
 		$member = SwpmMemberUtils::get_user_by_id( $member_id );
 

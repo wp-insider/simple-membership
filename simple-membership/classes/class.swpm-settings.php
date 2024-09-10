@@ -595,6 +595,64 @@ class SwpmSettings {
 				'message' => '',
 			)
 		);
+
+		//Subscription Cancel email settings.
+		add_settings_section( 'subscription-cancel-email-settings', __( ' Email Settings (Subscription Cancel)', 'simple-membership'), array( &$this, 'subscription_cancel_email_settings_callback' ), 'simple_wp_membership_settings' );
+		add_settings_field(
+			'subscription-cancel-member-mail-enable',
+			__( 'Send Notification to Member', 'simple-membership'),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'subscription-cancel-email-settings',
+			array(
+				'item'    => 'subscription-cancel-member-mail-enable',
+				'message' => __( 'Enable this to send notification to the member on subscription cancel.', 'simple-membership'),
+			)
+		);
+        add_settings_field(
+			'subscription-cancel-member-mail-subject',
+			__( 'Email Subject', 'simple-membership'),
+			array( &$this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'subscription-cancel-email-settings',
+			array(
+				'item'    => 'subscription-cancel-member-mail-subject',
+				'message' => '',
+			)
+		);
+		add_settings_field(
+			'subscription-cancel-member-mail-body',
+			__( 'Email Body', 'simple-membership'),
+			array( &$this, 'wp_editor_callback' ),
+			'simple_wp_membership_settings',
+			'subscription-cancel-email-settings',
+			array(
+				'item'    => 'subscription-cancel-member-mail-body',
+				'message' => '',
+			)
+		);
+		add_settings_field(
+			'subscription-cancel-admin-mail-enable',
+			__( 'Send Notification to Admin', 'simple-membership'),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'subscription-cancel-email-settings',
+			array(
+				'item'    => 'subscription-cancel-admin-mail-enable',
+				'message' => __( 'Enable this to send notification to the admin on subscription cancel.', 'simple-membership'),
+			)
+		);
+		add_settings_field(
+			'subscription-cancel-admin-mail-address',
+			__( 'Admin Email Address', 'simple-membership' ),
+			array( &$this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'subscription-cancel-email-settings',
+			array(
+				'item'    => 'subscription-cancel-admin-mail-address',
+				'message' => 'Admin email address to send notification to.',
+			)
+		);
 	}
 
 	private function tab_4() {
@@ -1217,6 +1275,10 @@ class SwpmSettings {
 		_e( 'This email will be sent if Email Activation is enabled for a Membership Level.', 'simple-membership' );
 	}
 
+    public function subscription_cancel_email_settings_callback() {
+		_e( 'This email will be sent if a member\'s subscription gets cancelled..', 'simple-membership' );
+	}
+
 	public function reg_prompt_email_settings_callback() {
 		_e( 'This email will be sent to prompt users to complete registration after the payment.', 'simple-membership' );
 	}
@@ -1344,6 +1406,13 @@ class SwpmSettings {
 
 		$output['email-activation-mail-subject'] = sanitize_text_field( $input['email-activation-mail-subject'] );
 		$output['email-activation-mail-body']    = wp_kses_post( $input['email-activation-mail-body'] );
+
+		$output['subscription-cancel-member-mail-enable']       = isset( $input['subscription-cancel-member-mail-enable'] ) ? esc_attr( $input['subscription-cancel-member-mail-enable'] ) : '';
+		$output['subscription-cancel-member-mail-subject']    = sanitize_text_field( $input['subscription-cancel-member-mail-subject'] );
+		$output['subscription-cancel-member-mail-body']    = wp_kses_post( $input['subscription-cancel-member-mail-body'] );
+
+        $output['subscription-cancel-admin-mail-enable']       = isset( $input['subscription-cancel-admin-mail-enable'] ) ? esc_attr( $input['subscription-cancel-admin-mail-enable'] ) : '';
+        $output['subscription-cancel-admin-mail-address'] = sanitize_text_field( $input['subscription-cancel-admin-mail-address'] );
 
 		$output['reg-prompt-complete-mail-subject'] = sanitize_text_field( $input['reg-prompt-complete-mail-subject'] );
 		$output['reg-prompt-complete-mail-body']    = wp_kses_post( $input['reg-prompt-complete-mail-body'] );

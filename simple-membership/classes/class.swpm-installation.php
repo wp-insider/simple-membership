@@ -234,6 +234,7 @@ class SwpmInstallation {
                 "\n\n{activation_link}" .
                 "\n\nThank You";
 
+
         $curr_email_act_mail_subj = $settings->get_value('email-activation-mail-subject', false);
         if ($curr_email_act_mail_subj === false) {
             $settings->set_value('email-activation-mail-subject', stripslashes($email_activation_mail_subject));
@@ -243,6 +244,25 @@ class SwpmInstallation {
         if ($curr_email_act_mail_body === false) {
             $settings->set_value('email-activation-mail-body', stripslashes($email_activation_mail_body));
         }
+
+	    // TODO: Need to update the following texts
+	    $subscription_cancel_member_mail_subject = "A subscription agreement has been cancelled";
+	    $subscription_cancel_member_mail_body = "Dear {first_name}" .
+                "\n\nA subscription agreement has been cancelled." .
+                "\n\nMember ID: {member_id}" .
+                "\n\nFirst Name: {first_name}" .
+                "\n\nLast Name: {last_name}" .
+                "\n\nSubscription ID: {subscr_id}" .
+                "\n\nThank You";
+	    $curr_subscription_cancel_member_mail_subject = $settings->get_value('subscription-cancel-member-mail-subject', false);
+	    if ($curr_subscription_cancel_member_mail_subject === false) {
+		    $settings->set_value('subscription-cancel-member-mail-subject', stripslashes($subscription_cancel_member_mail_subject));
+	    }
+
+	    $curr_subscription_cancel_member_mail_body = $settings->get_value('subscription-cancel-member-mail-body', false);
+	    if ($curr_subscription_cancel_member_mail_body === false) {
+		    $settings->set_value('subscription-cancel-member-mail-body', stripslashes($subscription_cancel_member_mail_body));
+	    }
 
         if (empty($installed_version)) {
             //Do fresh install tasks

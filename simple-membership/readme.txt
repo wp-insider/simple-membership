@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 7.4
 Tested up to: 6.6
-Stable tag: 4.5.2
+Stable tag: 4.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -174,7 +174,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= 4.5.3 =
 - The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.
 - Removed the unused 'shutdown' function from the plugin.
 - Added a new settings to hide the join us link. Refer to [this documentation](https://simple-membership-plugin.com/hiding-join-option-from-visitors/) for more information.

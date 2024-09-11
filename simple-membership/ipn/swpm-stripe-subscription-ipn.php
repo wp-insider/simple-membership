@@ -47,6 +47,9 @@ class SwpmStripeSubscriptionIpnHandler {
 				$ipn_data['subscr_id']     = $subscr_id;
 				$ipn_data['parent_txn_id'] = $customer;
 
+                // Update subscription status of the subscription agreement record in transactions cpt table.
+                SWPM_Utils_Subscriptions::update_subscription_agreement_record_status_to_cancelled($subscr_id);
+
 				swpm_handle_subsc_cancel_stand_alone( $ipn_data );
 			}
 

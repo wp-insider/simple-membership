@@ -94,6 +94,8 @@ class SWPMPaymentsListTable extends WP_List_Table {
 			$column_value = '<span class="swpm_status_subscription_created">' . $status . '</span>';
 		} else if ( strtolower($status) == 'subscription' ) {
 			$column_value = '<span class="swpm_status_subscription">' . $status . '</span>';
+		}else if ( strtolower($status) == 'subscription cancelled' ) {
+			$column_value = '<span class="swpm_status_subscription_cancelled">' . $status . '</span>';
 		} else {
 			$column_value = '<span class="swpm_status_general">' . $status . '</span>';
 		}

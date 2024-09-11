@@ -111,6 +111,10 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		}
 
 		if( $status == 'expired' || $status == 'cancelled' || $status == 'suspended'){
+
+            // Update subscription status of the subscription agreement record in transactions cpt table.
+            SWPM_Utils_Subscriptions::update_subscription_agreement_record_status_to_cancelled($subscription_id);
+
 			//Set the account profile to expired or inactive.
 
 			//Retrieve the member record for this subscription

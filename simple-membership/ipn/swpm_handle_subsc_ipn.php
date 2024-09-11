@@ -358,6 +358,9 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		// Update attached subcription status.
 		SwpmMemberUtils::set_subscription_data_extra_info( $member_id, 'subscription_status', 'inactive');
 
+        // Update subscription status of the subscription agreement record in transactions cpt table.
+        SWPM_Utils_Subscriptions::update_subscription_agreement_record_status_to_cancelled($subscr_id);
+
 		// Send subscription cancel notification emails
 		swpm_send_subscription_cancel_notification_email($member_id);
 

@@ -295,6 +295,16 @@
 	background-color: #b6dee4;
 }
 
+.swpm_status_subscription_cancelled{
+    padding: 7px 15px;
+    width: auto;
+    display: inline-block;
+    text-align: center;
+    min-width: 80px;
+    border-radius: 4px;
+    background-color: #e4d4b6;
+}
+
 .swpm-active-subs-table{
     width: 100%;
 }

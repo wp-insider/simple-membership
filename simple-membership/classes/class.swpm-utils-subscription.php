@@ -593,9 +593,7 @@ class SWPM_Utils_Subscriptions
 		ob_start();
 		?>
 		<div class="swpm_subscription_inactive">
-			<?php 
-			echo _e('Subscription Inactive', 'simple-membership');
-			?>
+			<?php _e('Subscription Inactive', 'simple-membership'); ?>
 		</div>
 		<?php
 		$inactive_output = ob_get_clean();
@@ -609,4 +607,92 @@ class SWPM_Utils_Subscriptions
 	public function get_any_paypal_ppcp_api_key_error(){
 		return $this->paypal_ppcp_api_key_error;
 	}
+
+    /**
+     * Retrieves the cpt id of a subscription agreement transaction record by a subscription ID.
+     *
+     * It utilizes the 'status' post meta as a filter. It checks whether the 'status' is set to 'subscription created' or not.
+     *
+     * @param $subscr_id string Subscription ID.
+     *
+     * @return int|null
+     */
+    public static function get_subscription_agreement_cpt_id_by_subs_id($subscr_id)
+    {
+        if (empty($subscr_id)) {
+            return null;
+        }
+
+        $subscription_records = get_posts(array(
+            'post_type' => 'swpm_transactions',
+            'posts_per_page' => -1,
+            'orderby' => 'ID',
+            'order' => 'ASC',
+            'fields' => 'ids',
+            'meta_query' => array(
+                array(
+                    'key' => 'subscr_id',
+                    'value' => $subscr_id,
+                    'compare' => '=',
+                ),
+            ),
+        ));
+
+        $sub_agreement_record_id = null;
+        foreach ($subscription_records as $key => $record_id) {
+            $status = get_post_meta($record_id, 'status', true);
+
+            if (strtolower($status) == 'subscription created') {
+                $sub_agreement_record_id = $record_id;
+                break;
+            }
+        }
+
+        return $sub_agreement_record_id;
+    }
+
+    /**
+     * Updates a meta value of a subscription agreement cpt record.
+     *
+     * First it retrieves the cpt id of a subscription agreement record using a subscription ID,
+     * then it updated the specified meta field.
+     *
+     * @param $subscr_id string Subscription ID
+     * @param $meta_key string Key of the meta field to update.
+     * @param $meta_value string Value of the meta field to update.
+     *
+     * @return void
+     */
+    public static function update_subscription_agreement_record_meta_by_sub_id($subscr_id, $meta_key, $meta_value)
+    {
+        if (empty($subscr_id) || empty($meta_key)) {
+            // Invalid parameters.
+            return;
+        }
+
+        // Retrieves the cpt id of a subscription agreement transaction record.
+        $cpt_id = self::get_subscription_agreement_cpt_id_by_subs_id($subscr_id);
+
+        // Check if record exits.
+        if (empty($cpt_id)) {
+            SwpmLog::log_simple_debug("Subscription agreement record not found for subscription ID: " . $subscr_id . ". Nothing to update.", false);
+            return;
+        }
+
+        // Update the post meta.
+        SwpmLog::log_simple_debug("Updating subscription agreement record\'s '" . $meta_key . "' updated to '" . $meta_value . "'. Subscription ID: " . $subscr_id, true);
+        update_post_meta($cpt_id, $meta_key, $meta_value);
+    }
+
+    /**
+     * Updates the subscription agreement record status to 'subscription cancelled'.
+     *
+     * @param $subscr_id string Subscription ID
+     *
+     * @return void
+     */
+    public static function update_subscription_agreement_record_status_to_cancelled($subscr_id)
+    {
+        self::update_subscription_agreement_record_meta_by_sub_id($subscr_id, 'status', 'subscription cancelled');
+    }
 }

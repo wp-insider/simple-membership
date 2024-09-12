@@ -65,6 +65,23 @@ function swpm_handle_edit_txn()
 		// SwpmMiscUtils::redirect_to_url($redirect_to);
 	}
 
+    if ( isset($_POST['swpm_admin_do_cancel_sub']) ) {
+        check_admin_referer('swpm_admin_cancel_sub_nonce_action');
+
+        $subscr_id = get_post_meta($post->ID, 'subscr_id', true);
+        $gateway = get_post_meta($post->ID, 'gateway', true);
+        switch($gateway){
+            case 'stripe-sca-subs':
+                $this->cancel_subscription_stripe_sca( $subscr_id );
+                break;
+            case 'paypal_subscription_checkout':
+                $this->cancel_subscription_paypal( $subscr_id );
+                break;
+            default:
+                break;
+        }
+    }
+
 	//Show the transaction edit from.
 	swpm_show_edit_txn_form($post);
 }
@@ -257,7 +274,29 @@ function swpm_show_edit_txn_form($post)
 						<td><?php echo esc_attr($custom); ?></td>
 					</tr>
 
-				</table>
+                    <?php
+                    if ($status == 'subscription created') {
+
+                    ?>
+                    <tr>
+                        <td><?php _e("Cancel Subscription", "simple-membership"); ?></td>
+                        <td>
+                            <pre>
+                                <?php print_r( get_post_meta($post_id)) ?>
+                            </pre>
+
+                            <form method="post" class="swpm-admin-cancel-subscription-form">
+                                <?php echo wp_nonce_field( 'swpm_admin_cancel_sub_nonce_action' );?>
+                                <input type="hidden" name="swpm_admin_cancel_sub_gateway" value="<?php echo esc_attr($gateway) ?>">
+                                <button type="submit" class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active" name="swpm_admin_do_cancel_sub" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel this subscription?', 'simple-membership' )?> ')">
+                                    <?php _e('Cancel', 'simple-membership') ?>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <?php } ?>
+
+                </table>
 
 				<p class="submit">
 					<?php wp_nonce_field('swpm_admin_edit_txn_form_nonce_action', 'swpm_admin_edit_txn_form_nonce_field') ?>

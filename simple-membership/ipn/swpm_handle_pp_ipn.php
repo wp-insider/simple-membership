@@ -23,10 +23,10 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		$error_msg = '';
 
 		// Read the IPN and validate
-		$gross_total      = $this->ipn_data['mc_gross'];
-		$transaction_type = $this->ipn_data['txn_type'];
-		$txn_id           = $this->ipn_data['txn_id'];
-		$payment_status   = $this->ipn_data['payment_status'];
+		$gross_total      = (float)$this->ipn_data['mc_gross'];
+		$transaction_type = isset($this->ipn_data['txn_type']) ? $this->ipn_data['txn_type'] : '';
+		$txn_id           = isset($this->ipn_data['txn_id']) ? (string)$this->ipn_data['txn_id'] : '';
+		$payment_status   = isset($this->ipn_data['payment_status']) ? $this->ipn_data['payment_status'] : '';
 
 		// Check payment status
 		if ( ! empty( $payment_status ) ) {

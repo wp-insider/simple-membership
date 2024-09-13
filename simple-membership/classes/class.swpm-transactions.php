@@ -194,7 +194,7 @@ class SwpmTransactions {
      *
      * @return object|null
      */
-	public static function get_transaction_row_by_txn_id (string $txn_id, bool $return_post_metas = false)
+	public static function get_transaction_row_by_txn_id ( $txn_id, $return_post_metas = false)
     {
         $meta_query = array(
 			array(
@@ -219,7 +219,7 @@ class SwpmTransactions {
      *
      * @return object|null
      */
-    public static function get_transaction_row_by_txn_id_and_email(string $txn_id, string $email, bool $return_post_metas = false)
+    public static function get_transaction_row_by_txn_id_and_email( $txn_id, $email, $return_post_metas = false)
     {
         $meta_query = array(
             'relation' => 'AND',
@@ -250,7 +250,7 @@ class SwpmTransactions {
      *
      * @return object|null
      */
-    public static function get_transaction_row_by_txn_id_and_subscription_id(string $txn_id, string $subscription_id, bool $return_post_metas = false)
+    public static function get_transaction_row_by_txn_id_and_subscription_id( $txn_id, $subscription_id, $return_post_metas = false)
     {
         $meta_query = array(
             'relation' => 'AND',

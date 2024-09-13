@@ -70,16 +70,24 @@ function swpm_handle_edit_txn()
 
         $subscr_id = get_post_meta($post->ID, 'subscr_id', true);
         $gateway = get_post_meta($post->ID, 'gateway', true);
-        switch($gateway){
-            case 'stripe-sca-subs':
-                $this->cancel_subscription_stripe_sca( $subscr_id );
-                break;
-            case 'paypal_subscription_checkout':
-                $this->cancel_subscription_paypal( $subscr_id );
-                break;
-            default:
-                break;
+        $member_id = get_post_meta($post->ID, 'member_id', true);
+
+        $subscription_utils = new SWPM_Utils_Subscriptions( $member_id );
+        $subscription_utils->load_subs_data_by_sub_id( $subscr_id );
+
+        if (!array_key_exists($subscr_id, $subscription_utils->get_all_subscriptions())){
+            // Subscription record not found.
+            wp_die( 'Subscription record not found.' );
         }
+
+        $response = $subscription_utils->dispatch_subscription_cancel_request($subscr_id, $gateway);
+        if ($response !== true){
+            wp_die($response);
+        }
+
+        // Subscription cancellation done, redirect to transactions list table page.
+        $txn_list_table_url = admin_url('admin.php?page=simple_wp_membership_payments') ;
+        SwpmMiscUtils::redirect_to_url($txn_list_table_url);
     }
 
 	//Show the transaction edit from.
@@ -276,19 +284,18 @@ function swpm_show_edit_txn_form($post)
 
                     <?php
                     if ($status == 'subscription created') {
-
                     ?>
                     <tr>
                         <td><?php _e("Cancel Subscription", "simple-membership"); ?></td>
                         <td>
-                            <pre>
-                                <?php print_r( get_post_meta($post_id)) ?>
-                            </pre>
-
                             <form method="post" class="swpm-admin-cancel-subscription-form">
                                 <?php echo wp_nonce_field( 'swpm_admin_cancel_sub_nonce_action' );?>
-                                <input type="hidden" name="swpm_admin_cancel_sub_gateway" value="<?php echo esc_attr($gateway) ?>">
-                                <button type="submit" class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active" name="swpm_admin_do_cancel_sub" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel this subscription?', 'simple-membership' )?> ')">
+                                <button
+                                        type="submit"
+                                        class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active"
+                                        name="swpm_admin_do_cancel_sub"
+                                        onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel this subscription?', 'simple-membership' )?> ')"
+                                >
                                     <?php _e('Cancel', 'simple-membership') ?>
                                 </button>
                             </form>

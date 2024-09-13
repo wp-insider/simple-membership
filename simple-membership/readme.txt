@@ -177,6 +177,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - New settings to send notification email on subscription payment cancel event.
 - Now subscription agreement record's status gets updated when subscriptions gets cancelled.
+- Now subscriptions can be cancelled from the transaction details page of a subscription agreement transaction.
 
 = 4.5.3 =
 - The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.

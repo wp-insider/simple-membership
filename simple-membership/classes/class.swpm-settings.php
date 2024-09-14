@@ -597,7 +597,7 @@ class SwpmSettings {
 		);
 
 		//Subscription Cancel email settings.
-		add_settings_section( 'subscription-cancel-email-settings', __( ' Email Settings (Subscription Cancel)', 'simple-membership'), array( &$this, 'subscription_cancel_email_settings_callback' ), 'simple_wp_membership_settings' );
+		add_settings_section( 'subscription-cancel-email-settings', __( ' Email Settings (Subscription Payment Canceled or Expired)', 'simple-membership'), array( &$this, 'subscription_cancel_email_settings_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
 			'subscription-cancel-member-mail-enable',
 			__( 'Send Notification to Member', 'simple-membership'),
@@ -606,7 +606,7 @@ class SwpmSettings {
 			'subscription-cancel-email-settings',
 			array(
 				'item'    => 'subscription-cancel-member-mail-enable',
-				'message' => __( 'Enable this to send notification to the member on subscription cancel.', 'simple-membership'),
+				'message' => __( 'Enable this option to send an email notification to members when their subscription payment is canceled or expires.', 'simple-membership'),
 			)
 		);
         add_settings_field(
@@ -639,7 +639,7 @@ class SwpmSettings {
 			'subscription-cancel-email-settings',
 			array(
 				'item'    => 'subscription-cancel-admin-mail-enable',
-				'message' => __( 'Enable this to send notification to the admin on subscription cancel.', 'simple-membership'),
+				'message' => __( 'Enable this option to send a notification to the admin.', 'simple-membership'),
 			)
 		);
 		add_settings_field(
@@ -650,7 +650,7 @@ class SwpmSettings {
 			'subscription-cancel-email-settings',
 			array(
 				'item'    => 'subscription-cancel-admin-mail-address',
-				'message' => 'Admin email address to send notification to.',
+				'message' => __( 'Enter the email address where you want the admin notification email to be sent to.', 'simple-membership'),
 			)
 		);
 	}
@@ -1276,7 +1276,7 @@ class SwpmSettings {
 	}
 
     public function subscription_cancel_email_settings_callback() {
-		_e( 'This email will be sent if a member\'s subscription gets cancelled..', 'simple-membership' );
+		_e( 'This email will be sent when a member\'s subscription is canceled or expires.', 'simple-membership' );
 	}
 
 	public function reg_prompt_email_settings_callback() {

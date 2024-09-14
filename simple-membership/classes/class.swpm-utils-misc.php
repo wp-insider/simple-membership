@@ -328,6 +328,7 @@ class SwpmMiscUtils {
 			$password = isset( $additional_args['password'] ) ? $additional_args['password'] : $password;
 			$reg_link = isset( $additional_args['reg_link'] ) ? $additional_args['reg_link'] : $reg_link;
 			$password_reset_link = isset( $additional_args['password_reset_link'] ) ? $additional_args['password_reset_link'] : $password_reset_link;
+			$subscription_id = isset($additional_args['subscription_id']) ? $additional_args['subscription_id'] : '';
 		}
 		
 		$login_link = $settings->get_value( 'login-page-url' );
@@ -372,7 +373,8 @@ class SwpmMiscUtils {
 			'{login_link}',
 			'{reg_link}',
 			'{primary_address}',
-			'{password_reset_link}'
+			'{password_reset_link}',
+			'{subscription_id}',
 		);
 
 		//Define the values
@@ -394,6 +396,7 @@ class SwpmMiscUtils {
 			$reg_link,
 			$primary_address,
 			$password_reset_link,
+			$subscription_id,
 		);
 		
 		$msg_body = str_replace( $tags, $vals, $msg_body );

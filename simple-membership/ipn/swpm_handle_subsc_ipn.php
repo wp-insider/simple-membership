@@ -362,7 +362,7 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
         SWPM_Utils_Subscriptions::update_subscription_agreement_record_status_to_cancelled($subscr_id);
 
 		// Send subscription cancel notification emails
-		swpm_send_subscription_cancel_notification_email($member_id);
+		swpm_send_subscription_cancel_notification_email($member_id, $subscr_id);
 
 		// Trigger hook for subscription payment cancelled.
 		$ipn_data['member_id'] = $member_id;
@@ -376,14 +376,8 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 
 /**
  * Sends notification email to member and admin.
- *
- * TODO: Need to fix the dynamic tags to allow subscription related tags support.
- *
-* @param $member_id int The member id whose subscription has cancelled.
- *
-* @return void
  */
-function swpm_send_subscription_cancel_notification_email($member_id){
+function swpm_send_subscription_cancel_notification_email($member_id, $subscription_id){
 	$settings = SwpmSettings::get_instance();
 
 	$member = SwpmMemberUtils::get_user_by_id( $member_id );
@@ -392,6 +386,10 @@ function swpm_send_subscription_cancel_notification_email($member_id){
 		wp_die(__( "Can't find member account to send notification email." , 'simple-membership'));
 	}
 
+	//Additional arguments for dynamic tag replacement
+	$additional_args = array('subscription_id' => $subscription_id);
+
+	// Set Email details for the notification.
 	$from_address = $settings->get_value( 'email-from' );
 	$headers = array();
 	$headers[] = 'From: ' . $from_address . "\r\n";
@@ -405,14 +403,14 @@ function swpm_send_subscription_cancel_notification_email($member_id){
 		$member_email_subject = $settings->get_value( 'subscription-cancel-member-mail-subject' );
 		$member_email_body = $settings->get_value( 'subscription-cancel-member-mail-body' );
 
-		$member_email_body = SwpmMiscUtils::replace_dynamic_tags($member_email_body, $member->member_id);
+		$member_email_body = SwpmMiscUtils::replace_dynamic_tags($member_email_body, $member->member_id, $additional_args);
 		if (!empty($is_html_email_enabled)){
-			$headers[] .= "Content-Type: text/html; charset=UTF-8\r\n";
+			$headers[] = "Content-Type: text/html; charset=UTF-8\r\n";
 			$member_email_body = nl2br($member_email_body);
 		}
 
 		wp_mail($member_email_address, $member_email_subject , $member_email_body, $headers);
-		SwpmLog::log_simple_debug( 'Sending subscription cancel notification email to : '.$member_email_address, true );
+		SwpmLog::log_simple_debug( 'Sending subscription payment canceled or expired notification email to: '.$member_email_address, true );
 	}
 
 	// Send email to Admin
@@ -420,22 +418,22 @@ function swpm_send_subscription_cancel_notification_email($member_id){
 	if(!empty($admin_email_notification_enable)){
 		$admin_email_address = $settings->get_value( 'subscription-cancel-admin-mail-address' );
 
-		// TODO: Need to update the following texts
-		$admin_email_subject = "A subscription agreement has been cancelled";
+		// The default email subject and body for admin
+		$admin_email_subject = "A subscription payment agreement has been canceled or expired";
 		$admin_email_body = "Dear Admin" .
-                "\n\nA member just cancelled a subscription." .
+                "\n\nA subscription payment agreement has been canceled or has expired." .
+				"\n\nSubscription ID: {subscription_id}" .
                 "\n\nMember ID: {member_id}" .
-                "\n\nSubscription ID: {subscr_id}" .
-                "\n\nSorry for that!";
+                "\n\nYou can view more details in the Payments menu of the plugin.";
 
-		$admin_email_body = SwpmMiscUtils::replace_dynamic_tags($admin_email_body, $member->member_id);
+		$admin_email_body = SwpmMiscUtils::replace_dynamic_tags($admin_email_body, $member->member_id, $additional_args);
 		if (!empty($is_html_email_enabled)){
-			$headers[] .= "Content-Type: text/html; charset=UTF-8\r\n";
+			$headers[] = "Content-Type: text/html; charset=UTF-8\r\n";
 			$admin_email_body = nl2br($admin_email_body);
 		}
 
 		wp_mail($admin_email_address, $admin_email_subject , $admin_email_body, $headers);
-		SwpmLog::log_simple_debug( 'Sending subscription cancel notification email to : '.$admin_email_address, true );
+		SwpmLog::log_simple_debug( 'Sending subscription payment canceled or expired notification email to: '.$admin_email_address, true );
 	}
 }
 

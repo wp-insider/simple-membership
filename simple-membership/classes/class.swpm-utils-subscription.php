@@ -16,25 +16,27 @@ class SWPM_Utils_Subscriptions
 	public $stripe_sca_api_key_error = "";
 	public $paypal_ppcp_api_key_error = "";
 
+	public $subscr_id_attached_to_profile = "";
+
+    public $settings;
+
     private $is_stripe_lib_loaded = false;
 
 	public function __construct($member_id)
 	{
 		$this->member_id = $member_id;
+
+        $this->settings = SwpmSettings::get_instance();
+
+        // Get the subscr_id (the value of 'subscr_id' field in members table) currently attached to this member's profile.
+        $this->subscr_id_attached_to_profile = SwpmMemberUtils::get_member_field_by_id($member_id, 'subscr_id');
 	}
 
 	/**
 	 * Load the types of subscriptions that we want to show in the subscriptions list.
-	 *
-	 * @return SWPM_Utils_Subscriptions
 	 */
 	public function load_subs_data()
 	{
-		$settings = SwpmSettings::get_instance();
-		
-		//Get the subscr_id (reference field's value) currently attached to this member's profile.
-		$subscr_id_attached_to_profile = SwpmMemberUtils::get_member_field_by_id($this->member_id, 'subscr_id');
-
 		//Get any swpm_transactions CPT posts that are associated with the given member ID OR the given subscr_id.
 		$subscriptions = get_posts(array(
 			'post_type'  => 'swpm_transactions',
@@ -50,7 +52,7 @@ class SWPM_Utils_Subscriptions
 					),
 					array(
 						'key'     => 'subscr_id',
-						'value'   => $subscr_id_attached_to_profile,
+						'value'   => $this->subscr_id_attached_to_profile,
 						'compare' => '=',
 					),
 				),
@@ -77,136 +79,220 @@ class SWPM_Utils_Subscriptions
 				continue;
 			}
 
-			$sub = array();
-			$post_id = $subscription->ID;
+			$sub = $this->process_subscription_data($subscription);
 
-			$payment_button_id = get_post_meta($post_id, 'payment_button_id', true);
-			$sub['payment_button_id'] = $payment_button_id;
+            if (is_null($sub)){
+                continue;
+            }
 
-			$sub['post_id'] = $post_id;
-			$sub_id = get_post_meta($post_id, 'subscr_id', true);
+            $sub_id = $sub['sub_id'];
 
-			$sub['sub_id'] = $sub_id;
+            $status = $sub['status'];
 
-			//Check if this subscription is the one that is currently attached to the member's profile.
-			if ( $sub_id == $subscr_id_attached_to_profile ) {
-				//This is the subscription that is currently attached to the member's profile.
-				//We will use it to show a msg for the subscription that is currently being used for membership access of this member.
-				$sub['is_attached_to_profile'] = 'yes';
-			}
-
-			//Get the environment mode (live or sandbox) of the subscription.
-			$is_live = get_post_meta($post_id, 'is_live', true);
-
-			//Get the gateway that was used to create this subscription.
-			$sub['gateway'] = get_post_meta($post_id, 'gateway', true);
-			if( !isset($sub['gateway']) || empty($sub['gateway']) ){
-				//Gateway is not set. This is an invalid subscription. Skip it.
-				continue;
-			}
-
-			// Check and get the subscription status based on the gateways.
-			$status = '';
-			switch($sub['gateway']){
-				case 'stripe-sca-subs':
-                    //Check if this is a valid stripe sca subscription created entry. Also check backward compatibility (when the status postmenta used to save as 'completed').
-                    $txn_status = get_post_meta($post_id, 'status', true);
-                    $statuses_for_actual_sub_txn = array('subscription created', 'completed');
-                    if( !in_array($txn_status, $statuses_for_actual_sub_txn)){
-                        //This is not a stripe sca subscription created entry. Nothing to do here. Go to the next entry.
-                        continue 2;
-                    }
-
-                    // In case of Stripe, is_live value is saved as '1' or '' in the post meta.
-                    $sub['is_live'] = empty($is_live) ? false : true;
-
-					$stripe_sca_api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button($sub['payment_button_id'], $sub['is_live']);
-
-                    if (isset($stripe_sca_api_keys['secret']) && !empty($stripe_sca_api_keys['secret'])) {
-						 // $status = get_post_meta($post_id, 'subscr_status', true); //This has replaced by api call.
-
-                        // Check if stripe lib loaded once to prevent loading on every iteration.
-                        if (!$this->is_stripe_lib_loaded){
-                            SwpmMiscUtils::load_stripe_lib();
-                            $this->is_stripe_lib_loaded = true;
-                        }
-
-                        \Stripe\Stripe::setApiKey($stripe_sca_api_keys['secret']);
-                        try {
-                            $stripe_sub = \Stripe\Subscription::retrieve($sub_id);
-                            $status = $stripe_sub['status'];
-                        } catch ( \Stripe\Exception\ApiErrorException $e){
-                            $this->stripe_sca_api_key_error = __( 'Error: Subscription details for subscription id: '. $sub_id .' could not be retrieved from Stripe.', 'simple-membership' );
-                        }
-
-                    }else{
-						$this->stripe_sca_api_key_error = __( 'Error: Stripe API keys are not configured on your site!', 'simple-membership' );
-					}
-					
-					break;
-				case 'paypal_subscription_checkout':
-					//Check if this is a valid PayPal PPCP subscription created entry.
-					$txn_status = get_post_meta($post_id, 'status', true);
-					if( $txn_status != 'subscription created' ){
-						//This is not a PPCP subscription created entry. Nothing to do here. Go to the next entry.
-						continue 2;
-					}
-
-                    // In case of PayPal PPCP, is_live value is saved as 'yes' or 'no'. We will use this value to determine the environment mode.
-                    if(isset($is_live) && $is_live == 'yes') {
-                        $sub['is_live'] = true;
-                    } else if (isset($is_live) && $is_live == 'no'){
-                        $sub['is_live'] = false;
-                    } else {
-                        // In the older version, the 'is_live' postmeta wasn't set. So as a fallback, use the currently set environment mode.
-                        $sub['is_live'] = empty($settings->get_value('enable-sandbox-testing'));
-                    }
-
-					//Get the PayPal PPCP API keys based on the environment mode that this subscription was created in.
-					$paypal_ppcp_api_keys = array();
-					if ( $sub['is_live'] ) {
-						$paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-live-secret-key');
-					} else {
-                        $paypal_ppcp_api_keys['secret'] =  $settings->get_value('paypal-sandbox-secret-key');
-                    }
-
-					//Get the subscription details from PayPal.
-					$environment_mode = $sub['is_live'] ? 'production': 'sandbox';
-					if (isset($paypal_ppcp_api_keys['secret']) && !empty($paypal_ppcp_api_keys['secret'])) {
-                        $pp_api_injector = new SWPM_PayPal_Request_API_Injector();
-                        $pp_api_injector->set_mode_and_api_creds_based_on_mode( $environment_mode );
-						$sub_details = $pp_api_injector->get_paypal_subscription_details( $sub_id );
-						if( !empty($sub_details) ){
-							$status = strtolower($sub_details->status);
-						} else {
-                            $this->paypal_ppcp_api_key_error = __( 'Error: Subscription details for subscription id: '. $sub_id .' could not be retrieved from PayPal.', 'simple-membership' );
-                        }
-					}else{
-						$this->paypal_ppcp_api_key_error = __( 'Error: PayPal PPCP API credentials are not configured in the settings menu.', 'simple-membership' );
-					}
-
-					break;
-			}
-			$sub['status'] = $status;
-
-			$cancel_token = get_post_meta($post_id, 'subscr_cancel_token', true);
-
-			if (empty($cancel_token)) {
-				$cancel_token = md5($post_id . $sub_id . uniqid());
-				update_post_meta($post_id, 'subscr_cancel_token', $cancel_token);
-			}
-
-			$sub['cancel_token'] = $cancel_token;
-
-			$sub['plan'] = get_the_title($payment_button_id);
-
-			if ($this->is_active($status)) {
+			if ($this->is_active_status($status)) {
 				$this->active_subs[$sub_id] = $sub;
 			}
 
 			$this->subs[$sub_id] = $sub;
 		}
 	}
+
+    public function load_subs_data_by_sub_id($subscr_id )
+    {
+        // Get any swpm_transactions CPT posts that are associated with the given member ID AND the given subscr_id.
+        $subscriptions = get_posts(array(
+            'post_type'  => 'swpm_transactions',
+            'posts_per_page' => -1,
+            'meta_query' => array(
+                'relation' => 'AND',
+                array(
+                    'relation' => 'AND', // We are looking for subscriptions that are associated with the given member ID AND the given subscr_id
+                    array(
+                        'key'     => 'member_id',
+                        'value'   => $this->member_id,
+                        'compare' => '=',
+                    ),
+                    array(
+                        'key'     => 'subscr_id',
+                        'value'   => $subscr_id,
+                        'compare' => '=',
+                    ),
+                ),
+                array(
+                    'relation' => 'OR',// We are looking for subscriptions that are created using Stripe SCA or PayPal PPCP.
+                    array(
+                        'key'     => 'gateway',
+                        'value'   => 'stripe-sca-subs',
+                        'compare' => '=',
+                    ),
+                    array(
+                        'key'     => 'gateway',
+                        'value'   => 'paypal_subscription_checkout',
+                        'compare' => '=',
+                    ),
+                ),
+            ),
+        ));
+
+        // Loop through the found subscriptions and get the details to create a curated list of subscriptions.
+        foreach ($subscriptions as $subscription) {
+            if ( !is_numeric($subscription->ID) ) {
+                continue;
+            }
+
+            $sub = $this->process_subscription_data($subscription);
+
+            if (is_null($sub)){
+                continue;
+            }
+
+            $sub_id = $sub['sub_id'];
+
+            $this->subs[$sub_id] = $sub;
+        }
+
+    }
+
+    /**
+     * Process an array of subscription data with post metas.
+     *
+     * @param WP_Post $subscription
+     *
+     * @return array|null
+     */
+    public function process_subscription_data( $subscription )
+    {
+        $sub = array();
+        $post_id = $subscription->ID;
+
+        $payment_button_id = get_post_meta($post_id, 'payment_button_id', true);
+        $sub['payment_button_id'] = $payment_button_id;
+
+        $sub['post_id'] = $post_id;
+        $sub_id = get_post_meta($post_id, 'subscr_id', true);
+
+        $sub['sub_id'] = $sub_id;
+
+        //Check if this subscription is the one that is currently attached to the member's profile.
+        if ( $sub_id == $this->subscr_id_attached_to_profile ) {
+            //This is the subscription that is currently attached to the member's profile.
+            //We will use it to show a msg for the subscription that is currently being used for membership access of this member.
+            $sub['is_attached_to_profile'] = 'yes';
+        }
+
+        //Get the environment mode (live or sandbox) of the subscription.
+        $is_live = get_post_meta($post_id, 'is_live', true);
+
+        //Get the gateway that was used to create this subscription.
+        $sub['gateway'] = get_post_meta($post_id, 'gateway', true);
+        if( !isset($sub['gateway']) || empty($sub['gateway']) ){
+            //Gateway is not set. This is an invalid subscription. Skip it.
+            return null;
+        }
+
+        // Check and get the subscription status based on the gateways.
+        $status = '';
+        switch($sub['gateway']){
+            case 'stripe-sca-subs':
+                //Check if this is a valid stripe sca subscription created entry. Also check backward compatibility (when the status postmenta used to save as 'completed').
+                $txn_status = get_post_meta($post_id, 'status', true);
+                $statuses_for_actual_sub_txn = array('subscription created', 'completed');
+                if( !in_array($txn_status, $statuses_for_actual_sub_txn)){
+                    //This is not a stripe sca subscription created entry. Nothing to do here. Go to the next entry.
+                    return null;
+                }
+
+                // In case of Stripe, is_live value is saved as '1' or '' in the post meta.
+                $sub['is_live'] = empty($is_live) ? false : true;
+
+                $stripe_sca_api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button($sub['payment_button_id'], $sub['is_live']);
+
+                if (isset($stripe_sca_api_keys['secret']) && !empty($stripe_sca_api_keys['secret'])) {
+                    // $status = get_post_meta($post_id, 'subscr_status', true); //This has replaced by api call.
+
+                    // Check if stripe lib loaded once to prevent loading on every iteration.
+                    if (!$this->is_stripe_lib_loaded){
+                        SwpmMiscUtils::load_stripe_lib();
+                        $this->is_stripe_lib_loaded = true;
+                    }
+
+                    \Stripe\Stripe::setApiKey($stripe_sca_api_keys['secret']);
+
+                    try {
+                        $stripe_sub = \Stripe\Subscription::retrieve($sub_id);
+                        $status = $stripe_sub['status'];
+                    } catch ( \Stripe\Exception\ApiErrorException $e){
+                        $this->stripe_sca_api_key_error = __( 'Error: Subscription details for subscription id: '. $sub_id .' could not be retrieved from Stripe.', 'simple-membership' );
+                    }
+
+                }else{
+                    $this->stripe_sca_api_key_error = __( 'Error: Stripe API keys are not configured on your site!', 'simple-membership' );
+                }
+
+                break;
+            case 'paypal_subscription_checkout':
+                //Check if this is a valid PayPal PPCP subscription created entry.
+                $txn_status = get_post_meta($post_id, 'status', true);
+                if( $txn_status != 'subscription created' ){
+                    //This is not a PPCP subscription created entry. Nothing to do here. Go to the next entry.
+                    return null;
+                }
+
+                // In case of PayPal PPCP, is_live value is saved as 'yes' or 'no'. We will use this value to determine the environment mode.
+                if(isset($is_live) && $is_live == 'yes') {
+                    $sub['is_live'] = true;
+                } else if (isset($is_live) && $is_live == 'no'){
+                    $sub['is_live'] = false;
+                } else {
+                    // In the older version, the 'is_live' postmeta wasn't set. So as a fallback, use the currently set environment mode.
+                    $sub['is_live'] = empty($this->settings->get_value('enable-sandbox-testing'));
+                }
+
+                //Get the PayPal PPCP API keys based on the environment mode that this subscription was created in.
+                $paypal_ppcp_api_keys = array();
+                if ( $sub['is_live'] ) {
+                    $paypal_ppcp_api_keys['secret'] =  $this->settings->get_value('paypal-live-secret-key');
+                } else {
+                    $paypal_ppcp_api_keys['secret'] =  $this->settings->get_value('paypal-sandbox-secret-key');
+                }
+
+                //Get the subscription details from PayPal.
+                $environment_mode = $sub['is_live'] ? 'production': 'sandbox';
+                if (isset($paypal_ppcp_api_keys['secret']) && !empty($paypal_ppcp_api_keys['secret'])) {
+                    $pp_api_injector = new SWPM_PayPal_Request_API_Injector();
+                    $pp_api_injector->set_mode_and_api_creds_based_on_mode( $environment_mode );
+                    $sub_details = $pp_api_injector->get_paypal_subscription_details( $sub_id );
+                    if( !empty($sub_details) ){
+                        $status = strtolower($sub_details->status);
+                    } else {
+                        $this->paypal_ppcp_api_key_error = __( 'Error: Subscription details for subscription id: '. $sub_id .' could not be retrieved from PayPal.', 'simple-membership' );
+                    }
+                }else{
+                    $this->paypal_ppcp_api_key_error = __( 'Error: PayPal PPCP API credentials are not configured in the settings menu.', 'simple-membership' );
+                }
+
+                break;
+        }
+
+        $sub['status'] = $status;
+
+        $cancel_token = get_post_meta($post_id, 'subscr_cancel_token', true);
+
+        if (empty($cancel_token)) {
+            $cancel_token = md5($post_id . $sub_id . uniqid());
+            update_post_meta($post_id, 'subscr_cancel_token', $cancel_token);
+        }
+
+        $sub['cancel_token'] = $cancel_token;
+
+        $sub['plan'] = get_the_title($payment_button_id);
+
+        if ($this->is_active_status($status)) {
+            $this->active_subs[$sub_id] = $sub;
+        }
+
+        return $sub;
+    }
 
 	/**
 	 * Load stripe subscriptions only. (Old method that is used by the stripe subscription cancel shortcode)
@@ -273,7 +359,7 @@ class SWPM_Utils_Subscriptions
 
 			$sub['payment_button_id'] = get_post_meta($post_id, 'payment_button_id', true);
 
-			if ($this->is_active($status)) {
+			if ($this->is_active_status($status)) {
 				$this->active_subs_count++;
 				$this->active_subs[$sub_id] = $sub;
 			}
@@ -333,7 +419,7 @@ class SWPM_Utils_Subscriptions
 	 * 
 	 * @return boolean True if 'active' or 'trialing', false otherwise.
 	 */
-	public static function is_active($status)
+	public static function is_active_status($status)
 	{
 		return in_array($status, self::$active_statuses, true);
 	}
@@ -355,7 +441,7 @@ class SWPM_Utils_Subscriptions
 
 				$this->subs[$sub_id]['status'] = $stripe_sub['status'];
 
-				if ($this->is_active($stripe_sub['status'])) {
+				if ($this->is_active_status($stripe_sub['status'])) {
 					$this->active_subs_count++;
 				}
 
@@ -451,17 +537,7 @@ class SWPM_Utils_Subscriptions
 			return false;
 		}
 
-		switch($gateway){
-			case 'stripe-sca-subs':
-				$res = $this->cancel_subscription_stripe_sca( $sub['sub_id'] );
-				break;
-			case 'paypal_subscription_checkout':
-				$res = $this->cancel_subscription_paypal( $sub['sub_id'] );
-				break;
-			default:
-				$res = false;
-			break;
-		}
+		$res = $this->dispatch_subscription_cancel_request($sub['sub_id'], $gateway);
 
 		if ( $res !== true ) {
 			self::cancel_msg( $res );
@@ -475,6 +551,35 @@ class SWPM_Utils_Subscriptions
 		self::cancel_msg( __( 'Subscription has been cancelled.', 'simple-membership' ), false );
 
 	}
+
+    /**
+     * Send the subscription cancel request to the corresponding gateway api.
+     *
+     * @param $subscr_id string The subscription ID of the subscription to cancel.
+     * @param $gateway string The payment gateway.
+     *
+     * @return bool|string True on success, Error message string on failure.
+     */
+    public function dispatch_subscription_cancel_request($subscr_id, $gateway)
+    {
+        if (empty($subscr_id)){
+            return '';
+        }
+
+        switch($gateway){
+            case 'stripe-sca-subs':
+                $res = $this->cancel_subscription_stripe_sca( $subscr_id );
+                break;
+            case 'paypal_subscription_checkout':
+                $res = $this->cancel_subscription_paypal( $subscr_id );
+                break;
+            default:
+                $res = false;
+                break;
+        }
+
+        return $res;
+    }
 
 	/**
 	 * Triggers the subscription cancellation api for Stripe SCA.
@@ -496,7 +601,7 @@ class SWPM_Utils_Subscriptions
 
 			$stripe_sub = \Stripe\Subscription::retrieve($sub_id);
 
-			if ($this->is_active($stripe_sub['status'])) {
+			if ($this->is_active_status($stripe_sub['status'])) {
 				$stripe_sub->cancel();
 			}
 
@@ -569,7 +674,7 @@ class SWPM_Utils_Subscriptions
 	 * @return string HTML of cancel form as string.
 	 */
 	public static function get_cancel_subscription_output(&$subscription){		
-		if (self::is_active($subscription['status'])) {
+		if (self::is_active_status($subscription['status'])) {
 			// Subscription is active.
 			$token = $subscription['cancel_token'];
 			$cancel_form_output = '';

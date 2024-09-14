@@ -79,15 +79,15 @@ class SWPM_Utils_Subscriptions
 				continue;
 			}
 
-			$sub = $this->process_subscription_data($subscription);
+			$sub = $this->create_subscription_data_array($subscription);
 
             if (is_null($sub)){
                 continue;
             }
 
-            $sub_id = $sub['sub_id'];
+            $sub_id = isset($sub['sub_id']) ? $sub['sub_id'] : '';
 
-            $status = $sub['status'];
+            $status = isset($sub['status']) ? $sub['status'] : '';
 
 			if ($this->is_active_status($status)) {
 				$this->active_subs[$sub_id] = $sub;
@@ -140,7 +140,7 @@ class SWPM_Utils_Subscriptions
                 continue;
             }
 
-            $sub = $this->process_subscription_data($subscription);
+            $sub = $this->create_subscription_data_array($subscription);
 
             if (is_null($sub)){
                 continue;
@@ -154,14 +154,29 @@ class SWPM_Utils_Subscriptions
     }
 
     /**
-     * Process an array of subscription data with post metas.
+     * Takes a subscription Transaction CPT and then creates an array with the useful data.
      *
      * @param WP_Post $subscription
      *
      * @return array|null
      */
-    public function process_subscription_data( $subscription )
+    public function create_subscription_data_array( $subscription )
     {
+		/*
+		//Example of data that will be returned.
+		[sub_1PyVdBFP7UDYJ9v5E81jJq8A] => Array
+        (
+            [payment_button_id] => 210
+            [post_id] => 1230
+            [sub_id] => sub_1PyVdBFP7UDYJ9v5E81jJq8A
+            [gateway] => stripe-sca-subs
+            [is_live] => 
+            [status] => active
+            [cancel_token] => 50635e21dc084589182aa23e16ec1dac
+            [plan] => Stripe SCA Subscription
+        )
+		*/
+
         $sub = array();
         $post_id = $subscription->ID;
 
@@ -295,7 +310,8 @@ class SWPM_Utils_Subscriptions
     }
 
 	/**
-	 * Load stripe subscriptions only. (Old method that is used by the stripe subscription cancel shortcode)
+	 * Load stripe subscriptions only. (Old method that is used by the stripe subscription cancel shortcode).
+	 * FYI - In the future, when the stripe only sub cancel shortcode is removed, this method will be removed.
 	 *
 	 * @return SWPM_Utils_Subscriptions
 	 */

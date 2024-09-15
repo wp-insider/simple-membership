@@ -179,6 +179,7 @@ https://simple-membership-plugin.com/
 - Now subscription agreement record's status gets updated when subscriptions gets cancelled.
 - Added Typcasting to the transaction ID variable for the PayPal IPN handling process.
 - Now subscriptions can be cancelled from the transaction details page of a subscription agreement transaction.
+- The PayPal standard subscriptions will also save a 'subscription created' entry in the payments menu for new subscriptions.
 
 = 4.5.3 =
 - The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.

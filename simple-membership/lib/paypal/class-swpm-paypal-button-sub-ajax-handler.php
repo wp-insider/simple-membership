@@ -243,7 +243,7 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 
 		//Set the gateway and txn_type values.
 		$ipn['gateway'] = 'paypal_subscription_checkout';
-		$ipn['txn_type'] = 'pp_subscription_new';
+		$ipn['txn_type'] = 'pp_subscription_new';//Can be used to find sub-created type transactions.
 
 		//The custom field value.
 		$ipn['custom'] = isset($data['custom_field']) ? $data['custom_field'] : '';

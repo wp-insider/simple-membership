@@ -77,7 +77,10 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 				$this->debug_log( 'Found a membership level ID. Creating member account...', true );
 				$swpm_id = $customvariables['swpm_id'];
 				swpm_handle_subsc_signup_stand_alone( $this->ipn_data, $subsc_ref, $this->ipn_data['subscr_id'], $swpm_id );
-				// Handle customized subscription signup
+				
+				// Save in the Transactions CPT so there is a 'subscription created' entry for paypal standard subscriptions.
+				$pp_std_sub_created_ipn = $this->create_pp_std_sub_created_ipn_data($this->ipn_data);
+				SwpmTransactions::save_txn_record( $pp_std_sub_created_ipn );
 			}
 			return true;
 		} elseif ( ( $transaction_type == 'subscr_cancel' ) || ( $transaction_type == 'subscr_eot' ) || ( $transaction_type == 'subscr_failed' ) ) {
@@ -249,6 +252,65 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		do_action( 'swpm_payment_ipn_processed', $this->ipn_data );
 
 		return true;
+	}
+
+	/**
+	 * Create the IPN data array for a subscription created type notification so it can be used in the save txn function.
+	 */
+	public function create_pp_std_sub_created_ipn_data($incoming_ipn_data){
+		//Note: the save_txn_record function will get the user_ip, membership_level, member_id from the custom field data so no need to set them here.
+
+		$sub_created_ipn_data = array();
+
+		//Set the gateway and txn_type values.
+		$sub_created_ipn_data['gateway'] = 'paypal_std_sub_checkout';
+		$sub_created_ipn_data['txn_type'] = 'pp_std_subscription_new';//Can be used to find sub-created type transactions.
+		
+		//This is used to show the 'subscription created' status in the payments menu.
+		$sub_created_ipn_data['status'] = __('subscription created', 'simple-membership');
+
+		//The transaction ID is not available in the create/activate subscription response. So we will just use the subsciption ID here.
+		$sub_created_ipn_data['txn_id'] = $incoming_ipn_data['subscr_id'];//For subscription create, the txn_id is the subscr_id.
+		$sub_created_ipn_data['subscr_id'] = $incoming_ipn_data['subscr_id'];	
+
+		//Custom field data.
+		$sub_created_ipn_data['custom'] = isset($incoming_ipn_data['custom']) ? $incoming_ipn_data['custom'] : '';
+		//$customvariables = SwpmTransactions::parse_custom_var( $sub_created_ipn_data['custom']);
+
+		//The 'item_number' contains the payment button id. This will save the button ID (in the save_txn_record function) in the swpm_transactions CPT.
+		$sub_created_ipn_data['payment_button_id'] = isset($incoming_ipn_data['item_number']) ? $incoming_ipn_data['item_number'] : '';
+
+		//If the subscription is for live mode or sandbox mode. We will use this to set the 'is_live' flag in the swpm_transactions CPT.
+		$settings = SwpmSettings::get_instance();
+		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
+		$sub_created_ipn_data['is_live'] = empty($sandbox_enabled) ? 'yes' : 'no';//We need to save the environment (live or sandbox) of the subscription.
+
+		//Amount and currency.
+		if(isset($incoming_ipn_data['amount1'])){
+			$sub_created_ipn_data['mc_gross'] = $incoming_ipn_data['amount1'];
+			$sub_created_ipn_data['is_trial_txn'] = 'yes';
+		}else{
+			$sub_created_ipn_data['mc_gross'] = isset($incoming_ipn_data['amount3']) ? $incoming_ipn_data['amount3'] : 0;
+		}
+		$sub_created_ipn_data['mc_currency'] = isset($incoming_ipn_data['mc_currency']) ? $incoming_ipn_data['mc_currency'] : '';
+		$sub_created_ipn_data['quantity'] = 1;
+
+		// customer info.
+		$sub_created_ipn_data['first_name'] = isset($incoming_ipn_data['first_name']) ? $incoming_ipn_data['first_name'] : '';
+		$sub_created_ipn_data['last_name'] = isset($incoming_ipn_data['last_name']) ? $incoming_ipn_data['last_name'] : '';
+		$sub_created_ipn_data['payer_email'] = isset($incoming_ipn_data['payer_email']) ? $incoming_ipn_data['payer_email'] : '';
+
+		$sub_created_ipn_data['address_street'] = isset($incoming_ipn_data['address_street']) ? $incoming_ipn_data['address_street'] : '';
+		$sub_created_ipn_data['address_city'] = isset($incoming_ipn_data['address_city']) ? $incoming_ipn_data['address_city'] : '';
+		$sub_created_ipn_data['address_state'] = isset($incoming_ipn_data['address_state']) ? $incoming_ipn_data['address_state'] : '';
+		$sub_created_ipn_data['address_zip'] = isset($incoming_ipn_data['address_zip']) ? $incoming_ipn_data['address_zip'] : '';
+		$sub_created_ipn_data['address_country'] = isset($incoming_ipn_data['address_country']) ? $incoming_ipn_data['address_country'] : '';
+
+		//Other data (not so important)
+		$sub_created_ipn_data['item_number'] = isset($incoming_ipn_data['item_number']) ? $incoming_ipn_data['item_number'] : '';
+		$sub_created_ipn_data['item_name'] = isset($incoming_ipn_data['item_name']) ? $incoming_ipn_data['item_name'] : '';
+
+		return $sub_created_ipn_data;
 	}
 
 	public function swpm_validate_ipn() {

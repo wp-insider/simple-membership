@@ -73,8 +73,8 @@ class SwpmTransactions {
 
 		//Save additional data based on the checkout gateway.
 		if( isset( $ipn_data['gateway'])) {
-			//Check if this is a PayPal subscription or a Stripe subscription checkout.
-			if ( $ipn_data['gateway'] == 'paypal_subscription_checkout' || $ipn_data['gateway'] == 'stripe-sca-subs' ) {
+			//Check if this is a PayPal std subscription, or PayPal PPCP subscription, or a Stripe subscription checkout.
+			if ( $ipn_data['gateway'] == 'paypal_subscription_checkout' || $ipn_data['gateway'] == 'stripe-sca-subs' || $ipn_data['gateway'] == 'paypal_std_sub_checkout' ) {
 				//Save the swpm_transactions CPT post ID of the original checkout in the member's proifle. Useful to retreive some of the original checkout txn data (example: custom_field data).
 				$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $subscr_id );
 				if( ! $member_record ){
@@ -116,6 +116,11 @@ class SwpmTransactions {
 		//Add the discount_amount value to the txn_data array so it can be saved to the swpm_transactions CPT.
 		if ( isset( $ipn_data['discount_amount'] ) ) {
 			$txn_data['discount_amount'] = $ipn_data['discount_amount'];
+		}
+
+		//Add the txn_type value to the txn_data array so it can be saved to the swpm_transactions CPT.
+		if ( isset( $ipn_data['txn_type'] ) ) {
+			$txn_data['txn_type'] = $ipn_data['txn_type'];
 		}
 
         //Save the $txn_data to the swpm_transactions CPT as post meta.

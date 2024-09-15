@@ -90,7 +90,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 			$column_value = '<span class="swpm_status_refunded">' . $status . '</span>';
 		} else if ( strtolower($status) == 'subscription created' ) {
             if ( in_array(strtolower($item['subscr_status']), array('canceled', 'cancelled')) ){
-                $column_value = '<span class="swpm_status_subscription_cancelled">'. __('Subscription cancelled', 'simple-membership') .'</span>';
+                $column_value = '<span class="swpm_status_subscription_cancelled">Subscription '. $item['subscr_status'] .'</span>';
             } else {
 			    $column_value = '<span class="swpm_status_subscription_created">' . $status . '</span>';
             }

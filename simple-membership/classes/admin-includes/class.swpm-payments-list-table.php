@@ -89,13 +89,15 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		} else if ( strtolower($status) == 'refunded' ) {
 			$column_value = '<span class="swpm_status_refunded">' . $status . '</span>';
 		} else if ( strtolower($status) == 'subscription created' ) {
-			$column_value = '<span class="swpm_status_subscription_created">' . $status . '</span>';
+            if ( in_array(strtolower($item['subscr_status']), array('canceled', 'cancelled')) ){
+                $column_value = '<span class="swpm_status_subscription_cancelled">Subscription '. $item['subscr_status'] .'</span>';
+            } else {
+			    $column_value = '<span class="swpm_status_subscription_created">' . $status . '</span>';
+            }
 		} else if ( strtolower($status) == 'stripe subscription created' ) {
 			$column_value = '<span class="swpm_status_subscription_created">' . $status . '</span>';
 		} else if ( strtolower($status) == 'subscription' ) {
 			$column_value = '<span class="swpm_status_subscription">' . $status . '</span>';
-		}else if ( strtolower($status) == 'subscription cancelled' ) {
-			$column_value = '<span class="swpm_status_subscription_cancelled">' . $status . '</span>';
 		} else {
 			$column_value = '<span class="swpm_status_general">' . $status . '</span>';
 		}

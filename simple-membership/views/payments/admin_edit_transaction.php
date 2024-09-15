@@ -65,19 +65,23 @@ function swpm_handle_edit_txn()
 		// SwpmMiscUtils::redirect_to_url($redirect_to);
 	}
 
-    if ( isset($_POST['swpm_admin_do_cancel_sub']) ) {
+    if ( isset($_POST['swpm_admin_cancel_subscr_submit']) ) {
         check_admin_referer('swpm_admin_cancel_sub_nonce_action');
 
-        $subscr_id = get_post_meta($post->ID, 'subscr_id', true);
-        $gateway = get_post_meta($post->ID, 'gateway', true);
-        $member_id = get_post_meta($post->ID, 'member_id', true);
+        $subscr_id  = isset($_POST['swpm_admin_cancel_subscr_id']) ? sanitize_text_field($_POST['swpm_admin_cancel_subscr_id']) : '';
+        $gateway    = isset($_POST['swpm_admin_cancel_subscr_gateway']) ? sanitize_text_field($_POST['swpm_admin_cancel_subscr_gateway']) : '';
+        $member_id  = isset($_POST['swpm_admin_cancel_subscr_member_id']) ? sanitize_text_field($_POST['swpm_admin_cancel_subscr_member_id']) : '';
+
+        if (empty($subscr_id) || empty($gateway) || empty($member_id)){
+            wp_die( __('Some subscription cancel related required fields not found!', 'simple-membership') );
+        }
 
         $subscription_utils = new SWPM_Utils_Subscriptions( $member_id );
         $subscription_utils->load_subs_data_by_sub_id( $subscr_id );
-
-        if (!array_key_exists($subscr_id, $subscription_utils->get_all_subscriptions())){
+        $subscriptions_data = $subscription_utils->get_subscription_data($subscr_id);
+        if (empty($subscriptions_data)){
             // Subscription record not found.
-            wp_die( 'Subscription record not found.' );
+            wp_die( __('Subscription record not found.', 'simple-membership') );
         }
 
         $response = $subscription_utils->dispatch_subscription_cancel_request($subscr_id, $gateway);
@@ -151,9 +155,9 @@ function swpm_show_edit_txn_form($post)
 	
 	$payment_amount = get_post_meta($post_id, 'payment_amount', true);
 
-	$gateway = get_post_meta($post_id, 'gateway', true);
+	$gateway_raw = get_post_meta($post_id, 'gateway', true);
 	if (!empty($gateway)) {
-		$gateway = SwpmUtils::get_formatted_payment_gateway_name($gateway);
+		$gateway = SwpmUtils::get_formatted_payment_gateway_name($gateway_raw);
 	} else {
 		$gateway = '-';
 	}
@@ -188,6 +192,8 @@ function swpm_show_edit_txn_form($post)
 	if (empty($custom)) {
 		$custom = '-';
 	}
+
+    $subscr_status = get_post_meta($post_id, 'subscr_status', true);
 ?>
 
 	<div class="postbox">
@@ -281,28 +287,6 @@ function swpm_show_edit_txn_form($post)
 						<td><?php _e("Custom (System Data)", "simple-membership"); ?></td>
 						<td><?php echo esc_attr($custom); ?></td>
 					</tr>
-
-                    <?php
-                    if ($status == 'subscription created') {
-                    ?>
-                    <tr>
-                        <td><?php _e("Cancel Subscription", "simple-membership"); ?></td>
-                        <td>
-                            <form method="post" class="swpm-admin-cancel-subscription-form">
-                                <?php echo wp_nonce_field( 'swpm_admin_cancel_sub_nonce_action' );?>
-                                <button
-                                        type="submit"
-                                        class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active"
-                                        name="swpm_admin_do_cancel_sub"
-                                        onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel this subscription?', 'simple-membership' )?> ')"
-                                >
-                                    <?php _e('Cancel', 'simple-membership') ?>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    <?php } ?>
-
                 </table>
 
 				<p class="submit">
@@ -312,6 +296,56 @@ function swpm_show_edit_txn_form($post)
 			</form>
 		</div>
 	</div>
+    <?php
+    // echo '<pre>' . print_r(get_post_meta($post_id), true) . '</pre>';
+    /**
+     * Check if it is a subscription agreement record.
+     * Then check if the gateway is stripe sca or papal ppcp.
+     * And also check if the 'subscr_status' is not set to 'cancelled'.
+     * Only then show the action postbox.
+     */
+    if ($status == 'subscription created' && in_array($gateway_raw, array('stripe-sca-subs', 'paypal_subscription_checkout')) && !in_array($subscr_status, array('canceled', 'cancelled'))) {
+    ?>
+    <div class="postbox">
+        <h2>
+            <?php _e('Actions', 'simple-membership') ?>
+        </h2>
+        <div class="inside">
+            <?php
+            /**
+             * For backward compatibility, we also need to check if the subscription is active or not via api call.
+             */
+            $subscription_utils = new SWPM_Utils_Subscriptions( $member_id );
+            $subscription_utils->load_subs_data_by_sub_id( $subscr_id );
+            $subscriptions_data = $subscription_utils->get_subscription_data($subscr_id);
+            if ( $subscriptions_data && SWPM_Utils_Subscriptions::is_active_status($subscriptions_data['status']) ){
+            ?>
+            <p> <?php _e('Cancel this subscription?' , 'simple-membership'); ?> </p>
+            <div class="swpm-yellow-box">
+                <b><?php _e('NOTE:', 'simple-membership') ?></b> <?php _e('Need to add a description here.', 'simple-membership') ?>
+            </div>
+            <form method="post" class="swpm-admin-cancel-subscription-form">
+                <?php echo wp_nonce_field( 'swpm_admin_cancel_sub_nonce_action' );?>
+                <input type="hidden" name="swpm_admin_cancel_subscr_id" value="<?php echo esc_attr($subscr_id);?>">
+                <input type="hidden" name="swpm_admin_cancel_subscr_gateway" value="<?php echo esc_attr($gateway_raw);?>">
+                <input type="hidden" name="swpm_admin_cancel_subscr_member_id" value="<?php echo esc_attr($member_id);?>">
+                <button
+                        type="submit"
+                        class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active"
+                        name="swpm_admin_cancel_subscr_submit"
+                        onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel this subscription?', 'simple-membership' )?> ')"
+                >
+                    <?php _e('Cancel Subscription', 'simple-membership') ?>
+                </button>
+            </form>
+            <?php } else { ?>
+                <div class="swpm-yellow-box">
+                    <?php _e('This subscription has been cancelled already.', 'simple-membership') ?>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+    <?php } ?>
 
 <?php
 }

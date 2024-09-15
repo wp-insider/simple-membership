@@ -324,6 +324,7 @@ class SwpmMiscUtils {
 		$password = '';
 		$password_reset_link = '';
 		$reg_link = '';
+		$subscription_id = '';
 		if ( ! empty( $additional_args ) ) {
 			$password = isset( $additional_args['password'] ) ? $additional_args['password'] : $password;
 			$reg_link = isset( $additional_args['reg_link'] ) ? $additional_args['reg_link'] : $reg_link;

@@ -177,7 +177,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - New settings to send notification email on subscription payment cancel event.
 - Now subscription agreement record's status gets updated when subscriptions gets cancelled.
-- Added Typcasting to the transaction ID variable for the PayPal IPN handling process.
+- Added Typecasting to the transaction ID variable for the PayPal IPN handling process.
 - Now subscriptions can be cancelled from the transaction details page of a subscription agreement transaction.
 - The PayPal standard subscriptions will also save a 'subscription created' entry in the payments menu for new subscriptions.
 

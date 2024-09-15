@@ -408,6 +408,22 @@ class SWPM_Utils_Subscriptions
 		return $this->subs;
 	}
 
+    /**
+     * Get the subscription data for a specific subscription.
+     *
+     * @param $subscr_id string The subscription ID.
+     *
+     * @return array|null
+     */
+    public function get_subscription_data($subscr_id)
+    {
+        if (array_key_exists($subscr_id, $this->subs)){
+            return $this->subs[$subscr_id];
+        }
+
+        return null;
+    }
+
 	/**
 	 * Get the active subscriptions count.
 	 *
@@ -814,6 +830,6 @@ class SWPM_Utils_Subscriptions
      */
     public static function update_subscription_agreement_record_status_to_cancelled($subscr_id)
     {
-        self::update_subscription_agreement_record_meta_by_sub_id($subscr_id, 'status', 'subscription cancelled');
+        self::update_subscription_agreement_record_meta_by_sub_id($subscr_id, 'subscr_status', 'cancelled');
     }
 }

@@ -138,6 +138,7 @@ class SwpmStripeSubscriptionIpnHandler {
 					$ipn_data['ip']               = '';
 					$ipn_data['custom']           = $custom_field_value;
 					$ipn_data['gateway']          = 'stripe-sca-subs';
+					$ipn_data['txn_type']         = 'recurring_payment';
 					$ipn_data['status']           = 'subscription';
 
 					//TODO - Maybe handle the user access start date updating here (instead of "customer.subscription.updated" hook).

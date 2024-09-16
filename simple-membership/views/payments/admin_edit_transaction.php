@@ -180,10 +180,16 @@ function swpm_show_edit_txn_form($post)
 	}
 
 	$is_live = get_post_meta($post_id, 'is_live', true);
-	if (!empty($is_live)) {
-		$is_live = __("Yes", 'simple-membership');
+	if( $is_live == 'yes' || $is_live == 'no' ){
+		//This field has been set using the new 'yes' or 'no' value.
+		$is_live = ucfirst($is_live);
 	} else {
-		$is_live = __("No", 'simple-membership');
+		//This field has been set using the old '1' or '0' value.
+		if (!empty($is_live)) {
+			$is_live = __("Yes", 'simple-membership');
+		} else {
+			$is_live = __("No", 'simple-membership');
+		}
 	}
 
 	$discount_amount = get_post_meta($post_id, 'discount_amount', true);

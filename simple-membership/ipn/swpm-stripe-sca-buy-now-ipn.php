@@ -245,6 +245,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 		$ipn_data['ip']               = $custom_var['user_ip'];
 		$ipn_data['custom']           = $custom;
 		$ipn_data['gateway']          = 'stripe-sca';
+		$ipn_data['txn_type']         = 'standard_payment';
 		$ipn_data['status']           = 'completed';
 
 		$ipn_data['address_street']  = isset( $bd_addr->line1 ) ? $bd_addr->line1 : '';

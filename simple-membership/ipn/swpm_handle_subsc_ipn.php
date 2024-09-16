@@ -369,7 +369,7 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		do_action( 'swpm_subscription_payment_cancelled', $ipn_data );
 
 	} else {
-		swpm_debug_log_subsc( 'No associated active member record found for this notification. The profile may have been updated/attached to another subscription or transaction.', true );
+		swpm_debug_log_subsc( 'No associated active member record found for this notification. The profile may have been updated, deleted or attached to another subscription or transaction. Nothing to do.', true );
 		return;
 	}
 }

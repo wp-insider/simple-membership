@@ -750,6 +750,8 @@ abstract class SwpmUtils {
 				return 'Stripe Subscription';
 			case 'paypal':
 				return 'PayPal Standard';
+			case 'paypal_std_sub_checkout':
+				return 'PayPal Standard Subscription';
 			case 'paypal_buy_now_checkout':
 				return 'PayPal Buy Now (PPCP)';
 			case 'paypal_subscription_checkout':

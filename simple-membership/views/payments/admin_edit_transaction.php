@@ -156,11 +156,13 @@ function swpm_show_edit_txn_form($post)
 	$payment_amount = get_post_meta($post_id, 'payment_amount', true);
 
 	$gateway_raw = get_post_meta($post_id, 'gateway', true);
-	if (!empty($gateway)) {
-		$gateway = SwpmUtils::get_formatted_payment_gateway_name($gateway_raw);
+	if (!empty($gateway_raw)) {
+		$gateway_formatted = SwpmUtils::get_formatted_payment_gateway_name($gateway_raw);
 	} else {
-		$gateway = '-';
+		$gateway_formatted = '-';
 	}
+
+	$txn_type_raw = get_post_meta($post_id, 'txn_type', true);
 
 	$status = get_post_meta($post_id, 'status', true);
 	$ip_address = get_post_meta($post_id, 'ip_address', true);
@@ -219,8 +221,15 @@ function swpm_show_edit_txn_form($post)
 					</tr>
 					<tr>
 						<td><?php _e("Payment Gateway", "simple-membership"); ?></td>
-						<td><?php echo esc_attr($gateway); ?></td>
+						<td><?php echo esc_attr($gateway_formatted); ?></td>
 					</tr>
+					<?php if (!empty($txn_type_raw)) { ?>
+						<!-- Some older transactions may not have the txn_type. So only show the transaction type field if it is set. -->
+						<tr>
+							<td><?php _e("Transaction Type", "simple-membership"); ?></td>
+							<td><?php echo esc_attr($txn_type_raw); ?></td>
+						</tr>
+					<?php } ?>
 					<tr>
 						<td><?php _e("Status", "simple-membership"); ?></td>
 						<td><?php echo ucfirst(esc_attr($status)); ?></td>

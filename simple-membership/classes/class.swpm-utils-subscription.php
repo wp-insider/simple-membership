@@ -816,8 +816,8 @@ class SWPM_Utils_Subscriptions
             return;
         }
 
-        // Update the post meta.
-        SwpmLog::log_simple_debug("Updating subscription agreement record\'s '" . $meta_key . "' updated to '" . $meta_value . "'. Subscription ID: " . $subscr_id, true);
+        // Update the 'subscr_status' post meta.
+        SwpmLog::log_simple_debug("Updating subscription agreement record. Post meta [" . $meta_key . "] updated to [" . $meta_value . "]. Subscription ID: " . $subscr_id, true);
         update_post_meta($cpt_id, $meta_key, $meta_value);
     }
 

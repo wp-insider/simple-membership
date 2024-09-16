@@ -91,7 +91,8 @@ function swpm_handle_edit_txn()
 
         // Subscription cancellation done, redirect to transactions list table page.
         $txn_list_table_url = admin_url('admin.php?page=simple_wp_membership_payments') ;
-        SwpmMiscUtils::redirect_to_url($txn_list_table_url);
+		$sub_cancel_msg = __('Your subscription cancellation request has been successfully processed. The payment gateway may take a few seconds to complete the process.', 'simple-membership');
+		SwpmMiscUtils::show_temporary_message_then_redirect($sub_cancel_msg, $txn_list_table_url);
     }
 
 	//Show the transaction edit from.
@@ -309,7 +310,7 @@ function swpm_show_edit_txn_form($post)
     // echo '<pre>' . print_r(get_post_meta($post_id), true) . '</pre>';
     /**
      * Check if it is a subscription agreement record.
-     * Then check if the gateway is stripe sca or papal ppcp.
+     * Then check if the gateway is stripe-sca or papal-ppcp.
      * And also check if the 'subscr_status' is not set to 'cancelled'.
      * Only then show the action postbox.
      */
@@ -317,7 +318,7 @@ function swpm_show_edit_txn_form($post)
     ?>
     <div class="postbox">
         <h2>
-            <?php _e('Actions', 'simple-membership') ?>
+            <?php _e('Cancel Subscription', 'simple-membership') ?>
         </h2>
         <div class="inside">
             <?php
@@ -329,9 +330,9 @@ function swpm_show_edit_txn_form($post)
             $subscriptions_data = $subscription_utils->get_subscription_data($subscr_id);
             if ( $subscriptions_data && SWPM_Utils_Subscriptions::is_active_status($subscriptions_data['status']) ){
             ?>
-            <p> <?php _e('Cancel this subscription?' , 'simple-membership'); ?> </p>
+            <p><?php _e('You can use the button below to cancel the subscription. The subscription is canceled immediately once you confirm the cancellation.' , 'simple-membership'); ?> </p>
             <div class="swpm-yellow-box">
-                <b><?php _e('NOTE:', 'simple-membership') ?></b> <?php _e('Need to add a description here.', 'simple-membership') ?>
+                <b><?php _e('NOTE:', 'simple-membership') ?></b> <?php _e('Canceled subscriptions cannot be reactivated. The user can purchase a new subscription if needed.', 'simple-membership'); ?>
             </div>
             <form method="post" class="swpm-admin-cancel-subscription-form">
                 <?php echo wp_nonce_field( 'swpm_admin_cancel_sub_nonce_action' );?>

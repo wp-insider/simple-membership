@@ -80,6 +80,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 				
 				// Save in the Transactions CPT so there is a 'subscription created' entry for paypal standard subscriptions.
 				$pp_std_sub_created_ipn = $this->create_pp_std_sub_created_ipn_data($this->ipn_data);
+				//SwpmLog::log_array_data_to_debug($pp_std_sub_created_ipn, true);
 				SwpmTransactions::save_txn_record( $pp_std_sub_created_ipn );
 			}
 			return true;
@@ -269,8 +270,8 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		//This is used to show the 'subscription created' status in the payments menu.
 		$sub_created_ipn_data['status'] = __('subscription created', 'simple-membership');
 
-		//The transaction ID is not available in the create/activate subscription response. So we will just use the subsciption ID here.
-		$sub_created_ipn_data['txn_id'] = $incoming_ipn_data['subscr_id'];//For subscription create, the txn_id is the subscr_id.
+		//The transaction ID is not available in the create/activate subscription response. So we will use the subsciption ID with a prefix here.
+		$sub_created_ipn_data['txn_id'] = 'ppstd-sub-' . $incoming_ipn_data['subscr_id'];//For subscription create, the txn_id is the subscr_id with a prefix.
 		$sub_created_ipn_data['subscr_id'] = $incoming_ipn_data['subscr_id'];	
 
 		//Custom field data.

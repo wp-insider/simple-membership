@@ -91,8 +91,17 @@ function swpm_handle_edit_txn()
 
         // Subscription cancellation done, redirect to transactions list table page.
         $txn_list_table_url = admin_url('admin.php?page=simple_wp_membership_payments') ;
-		$sub_cancel_msg = __('Your subscription cancellation request has been successfully processed. The payment gateway may take a few seconds to complete the process.', 'simple-membership');
-		SwpmMiscUtils::show_temporary_message_then_redirect($sub_cancel_msg, $txn_list_table_url);
+
+        $sub_cancel_msg = '<div class="swpm-yellow-box">';
+        $sub_cancel_msg .= '<div>';
+        $sub_cancel_msg .= __('Your subscription cancellation request has been successfully processed. The payment gateway may take a few seconds to complete the process.', 'simple-membership');
+        $sub_cancel_msg .= '</div>';
+        $sub_cancel_msg .= '<br />';
+        $sub_cancel_msg .= '<a href="'.$txn_list_table_url.'" class="button button-primary">'.__('Go back to transactions page', 'simple-membership').'</a>';
+        $sub_cancel_msg .= '</div>';
+
+        echo $sub_cancel_msg;
+        exit();
     }
 
 	//Show the transaction edit from.
@@ -203,6 +212,37 @@ function swpm_show_edit_txn_form($post)
 	}
 
     $subscr_status = get_post_meta($post_id, 'subscr_status', true);
+
+    $is_subscr_agreement_post = false;
+    if ($status == 'subscription created' && in_array($gateway_raw, array('stripe-sca-subs', 'paypal_subscription_checkout'))){
+        $is_subscr_agreement_post = true;
+    }
+
+    $subscr_status_active = false;
+    $show_action_postbox = false;
+    $is_active_subscr_status_retrieved_via_api_call = false;
+
+    if ( $is_subscr_agreement_post && !in_array($subscr_status, array('canceled', 'cancelled')) ) {
+        $subscr_status_active = true;
+
+        // Show the actions postbox if active subscription status.
+        $show_action_postbox = $subscr_status_active;
+
+        // Get the actual subscription status value via api call.
+        $subscription_utils = new SWPM_Utils_Subscriptions( $member_id );
+        $subscription_utils->load_subs_data_by_sub_id( $subscr_id );
+        $subscriptions_data = $subscription_utils->get_subscription_data($subscr_id);
+        if ( $subscriptions_data ){
+            $subscr_status_retrieved_via_api_call = $subscriptions_data['status'];
+            if ( SWPM_Utils_Subscriptions::is_active_status( $subscr_status_retrieved_via_api_call ) ){
+                $is_active_subscr_status_retrieved_via_api_call = true;
+            } else {
+                // Update the 'subscr_status' meta value for older transactions records.
+                // When an admin enters the transaction details page, this postmeta will be updated based on the actual subscription status.
+                update_post_meta( $post_id, 'subscr_status', $subscr_status_retrieved_via_api_call );
+            }
+        }
+    }
 ?>
 
 	<div class="postbox">
@@ -241,6 +281,16 @@ function swpm_show_edit_txn_form($post)
 						<td><?php _e("Status", "simple-membership"); ?></td>
 						<td><?php echo ucfirst(esc_attr($status)); ?></td>
 					</tr>
+
+                    <?php if ( $is_subscr_agreement_post && !$subscr_status_active && !$is_active_subscr_status_retrieved_via_api_call ){ ?>
+                    <tr>
+                        <td><?php _e("Subscription Status", "simple-membership"); ?></td>
+                        <td>
+                            <span class="swpm_status_subscription_cancelled"><?php echo ucfirst(esc_attr($subscr_status)); ?></span>
+                        </td>
+                    </tr>
+                    <?php } ?>
+
 					<tr>
 						<td><?php _e("First Name", "simple-membership"); ?></td>
 						<td><input type="text" size="40" name="swpm_txn_first_name" value="<?php echo esc_attr($first_name); ?>" /></td>
@@ -320,7 +370,7 @@ function swpm_show_edit_txn_form($post)
      * And also check if the 'subscr_status' is not set to 'cancelled'.
      * Only then show the action postbox.
      */
-    if ($status == 'subscription created' && in_array($gateway_raw, array('stripe-sca-subs', 'paypal_subscription_checkout')) && !in_array($subscr_status, array('canceled', 'cancelled'))) {
+    if ($show_action_postbox) {
     ?>
     <div class="postbox">
         <h2>
@@ -329,12 +379,9 @@ function swpm_show_edit_txn_form($post)
         <div class="inside">
             <?php
             /**
-             * For backward compatibility, we also need to check if the subscription is active or not via api call.
+             * For backward compatibility, we also need to check if the subscription is already cancelled or not via api call.
              */
-            $subscription_utils = new SWPM_Utils_Subscriptions( $member_id );
-            $subscription_utils->load_subs_data_by_sub_id( $subscr_id );
-            $subscriptions_data = $subscription_utils->get_subscription_data($subscr_id);
-            if ( $subscriptions_data && SWPM_Utils_Subscriptions::is_active_status($subscriptions_data['status']) ){
+            if ( $is_active_subscr_status_retrieved_via_api_call ){
             ?>
             <p><?php _e('You can use the button below to cancel the subscription. The subscription is canceled immediately once you confirm the cancellation.' , 'simple-membership'); ?> </p>
             <div class="swpm-yellow-box">

@@ -181,6 +181,7 @@ https://simple-membership-plugin.com/
 - Now subscriptions can be cancelled from the transaction details page of a subscription agreement transaction.
 - The PayPal standard subscriptions will also save a 'subscription created' entry in the payments menu for new subscriptions.
 - The transaction type will also be stored in the transactions table, allowing for future filtering of transactions based on type.
+- Canceled subscription status will now be shown in subscription agreement transaction details page.
 
 = 4.5.3 =
 - The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.

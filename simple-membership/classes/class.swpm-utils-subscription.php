@@ -827,6 +827,6 @@ class SWPM_Utils_Subscriptions
     public static function update_subscription_agreement_record_status_to_cancelled($subscr_id){
 		//Note: it is important not to update the 'status' post meta as that one is used in the cancel shortcode at the moment.
 		//In the future when we update that cancel shortcode to use the 'txn_type' post meta, then we can change/update the 'status' column.
-        self::update_subscription_agreement_record_meta_by_sub_id($subscr_id, 'subscr_status', 'cancelled');
+        self::update_subscription_agreement_record_meta_by_sub_id($subscr_id, 'subscr_status', 'canceled');
     }
 }

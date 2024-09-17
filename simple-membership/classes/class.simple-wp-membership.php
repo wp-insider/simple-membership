@@ -353,7 +353,11 @@ class SimpleWpMembership {
             //Check if "redirect_to" parameter is set. If so, use that URL.
             if(isset($_REQUEST['redirect_to'])){
                 $redirect_url = sanitize_url($_REQUEST['redirect_to']);
-                SwpmLog::log_auth_debug("The redirect_to query parameter is set. Value: ". $redirect_url, true);
+                //Validate the redirect URL
+                $fallback_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+                //The 'allowed_redirect_hosts' filter hook can be used to add or remove allowed hosts.
+                $redirect_url = wp_validate_redirect( $redirect_url, $fallback_url );
+                SwpmLog::log_auth_debug("The redirect_to query parameter is set. URL value after the wp validation: ". $redirect_url, true);
             } else {
                 //The 'redirect_to' parameter is not set. By default we will use the current page URL as the redirect URL.
                 $redirect_url = SwpmMiscUtils::get_current_page_url();

@@ -182,6 +182,7 @@ https://simple-membership-plugin.com/
 - The PayPal standard subscriptions will also save a 'subscription created' entry in the payments menu for new subscriptions.
 - The transaction type will also be stored in the transactions table, allowing for future filtering of transactions based on type.
 - Canceled subscription status will now be shown in subscription agreement transaction details page.
+- The 'redirect_to' parameter on the login page is now processed through the 'wp_validate_redirect' function.
 
 = 4.5.3 =
 - The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.

@@ -494,8 +494,8 @@ function swpm_is_paypal_recurring_payment($payment_data){
         $subscr_id = $payment_data['subscr_id'];
         swpm_debug_log_subsc('Is recurring payment check debug data: ' . $item_number . "|" . $subscr_id, true);
 
-        $result = SwpmTransactions::get_transaction_row_by_subscr_id($subscr_id);
-        if (isset($result)) {
+        $result = SwpmTransactions::get_transaction_row_by_subscr_id($subscr_id, true);
+        if (isset($result) && strtolower($result->status) != 'subscription created') {
             swpm_debug_log_subsc('This subscr_id exists in the transactions db. Recurring payment check flag value is true.', true);
             $recurring_payment = true;
             return $recurring_payment;

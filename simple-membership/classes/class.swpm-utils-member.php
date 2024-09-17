@@ -132,7 +132,8 @@ class SwpmMemberUtils {
 	}
 
 	public static function get_user_by_subsriber_id( $subsc_id ) {
-		//Retrieves the SWPM user record for the given member ID
+		//Retrieves the SWPM user record for the given Subscription ID.
+		//(Subscriber ID = Subscription ID)
 		global $wpdb;
 		$query  = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s", $subsc_id );
 		$result = $wpdb->get_row( $query );

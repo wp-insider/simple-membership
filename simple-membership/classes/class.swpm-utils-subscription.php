@@ -3,6 +3,9 @@
  * Utility class for handling subscription related tasks.
  * 
  * Loads and manages subscriptions associated with a member through different gateways.
+ * 
+ * Transaction types (txn_type) for the various subscriptions are: 
+ * stripe_subscription_new, pp_subscription_new, pp_std_subscription_new
  */
 class SWPM_Utils_Subscriptions
 {
@@ -639,7 +642,7 @@ class SWPM_Utils_Subscriptions
 			}
 
             update_post_meta($sub['post_id'], 'subscr_status', $stripe_sub['status']);
-			SwpmLog::log_simple_debug("Stripe SCA subscription cancelled successfully.", true);
+			SwpmLog::log_simple_debug("Stripe SCA subscription canceled successfully.", true);
 		} catch (\Exception $e) {
 			SwpmLog::log_simple_debug("Stripe SCA subscription cancellation failed.", false);
 			SwpmLog::log_simple_debug($e->getMessage(), false);
@@ -664,7 +667,7 @@ class SWPM_Utils_Subscriptions
 			//Make the API call to cancel the PPCP subscription
 			$cancel_succeeded = $api_injector->cancel_paypal_subscription( $subscription_id );
 			if( $cancel_succeeded ){
-				SwpmLog::log_simple_debug("PayPal PPCP subscription cancelled successfully.", true);
+				SwpmLog::log_simple_debug("PayPal PPCP subscription canceled successfully.", true);
 				return true;
 			}else{
 				SwpmLog::log_simple_debug("PayPal PPCP subscription cancellation failed.", false);
@@ -823,7 +826,7 @@ class SWPM_Utils_Subscriptions
     }
 
     /**
-     * Updates the subscription agreement record to 'subscription cancelled' by updating the 'subscr_status' post meta.
+     * Updates the subscription agreement record to 'canceled' by updating the 'subscr_status' post meta.
      */
     public static function update_subscription_agreement_record_status_to_cancelled($subscr_id){
 		//Note: it is important not to update the 'status' post meta as that one is used in the cancel shortcode at the moment.

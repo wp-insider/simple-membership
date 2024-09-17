@@ -97,7 +97,7 @@ function swpm_handle_edit_txn()
         $sub_cancel_msg .= __('Your subscription cancellation request has been successfully processed. The payment gateway may take a few seconds to complete the process.', 'simple-membership');
         $sub_cancel_msg .= '</div>';
         $sub_cancel_msg .= '<p>';
-        $sub_cancel_msg .= '<a href="'.$txn_list_table_url.'" class="button button-primary">'.__('Go back to the transactions page', 'simple-membership').'</a>' .__(' to view another transaction.', 'simple-membership');
+        $sub_cancel_msg .= '<a href="'.$txn_list_table_url.'">'.__('Go to the transactions page', 'simple-membership').'</a>' .__(' to view another transaction.', 'simple-membership');
 		$sub_cancel_msg .= '</p>';
         $sub_cancel_msg .= '</div>';
 
@@ -128,7 +128,7 @@ function swpm_show_edit_txn_form($post)
 	//Get the member ID that maybe associated with this transaction.
 	$member_id = get_post_meta($post_id, 'member_id', true);
 	if (empty($member_id) && !empty($subscr_id)){
-		//Try to get the member ID from the subscriber ID reference.
+		//Try to get the member ID from the Subscription ID reference.
 		$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $subscr_id );
 		if ( $member_record ) {
 			$member_id = $member_record->member_id;
@@ -265,7 +265,7 @@ function swpm_show_edit_txn_form($post)
 						<td><?php echo esc_attr(SwpmUtils::get_formatted_and_translated_date_according_to_wp_settings($txn_date)) ?></td>
 					</tr>
 					<tr>
-						<td><?php _e("Subscriber ID", "simple-membership"); ?></td>
+						<td><?php _e("Subscription ID", "simple-membership"); ?></td>
 						<td><?php echo esc_attr($subscr_id); ?></td>
 					</tr>
 					<tr>
@@ -279,19 +279,20 @@ function swpm_show_edit_txn_form($post)
 							<td><?php echo esc_attr($txn_type_raw); ?></td>
 						</tr>
 					<?php } ?>
-					<tr>
-						<td><?php _e("Status", "simple-membership"); ?></td>
-						<td><?php echo ucfirst(esc_attr($status)); ?></td>
-					</tr>
-
                     <?php if ( $is_subscr_agreement_post && !$subscr_status_active && !$is_active_subscr_status_retrieved_via_api_call ){ ?>
+					<!-- If this is a subscription agreement (sub-created) type txn and the status is not active, we show the status using the 'subscr_status' post meta. -->
                     <tr>
-                        <td><?php _e("Subscription Status", "simple-membership"); ?></td>
+                        <td><?php _e("Subscription Payment Status", "simple-membership"); ?></td>
                         <td>
                             <span class="swpm_status_subscription_cancelled"><?php echo ucfirst(esc_attr($subscr_status)); ?></span>
                         </td>
                     </tr>
-                    <?php } ?>
+                    <?php } else { ?>
+						<tr>
+						<td><?php _e("Status", "simple-membership"); ?></td>
+						<td><?php echo ucfirst(esc_attr($status)); ?></td>
+					</tr>
+					<?php } ?>
 
 					<tr>
 						<td><?php _e("First Name", "simple-membership"); ?></td>

@@ -535,6 +535,7 @@ class SWPM_Utils_Subscriptions
 				return $sub;
 			}
 		}
+		return null;
 	}
 
 	/**
@@ -566,7 +567,7 @@ class SWPM_Utils_Subscriptions
 
 		if ( empty( $sub ) ) {
 			// no subscription found
-			return false;
+			return;
 		}
 
 		$res = $this->dispatch_subscription_cancel_request($sub['sub_id'], $gateway);

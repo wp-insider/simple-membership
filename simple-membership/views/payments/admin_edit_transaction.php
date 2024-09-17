@@ -96,12 +96,14 @@ function swpm_handle_edit_txn()
         $sub_cancel_msg .= '<div>';
         $sub_cancel_msg .= __('Your subscription cancellation request has been successfully processed. The payment gateway may take a few seconds to complete the process.', 'simple-membership');
         $sub_cancel_msg .= '</div>';
-        $sub_cancel_msg .= '<br />';
-        $sub_cancel_msg .= '<a href="'.$txn_list_table_url.'" class="button button-primary">'.__('Go back to transactions page', 'simple-membership').'</a>';
+        $sub_cancel_msg .= '<p>';
+        $sub_cancel_msg .= '<a href="'.$txn_list_table_url.'" class="button button-primary">'.__('Go back to the transactions page', 'simple-membership').'</a>' .__(' to view another transaction.', 'simple-membership');
+		$sub_cancel_msg .= '</p>';
         $sub_cancel_msg .= '</div>';
 
         echo $sub_cancel_msg;
-        exit();
+		//Return from this function as we don't want to show the edit transaction form.
+        return;
     }
 
 	//Show the transaction edit from.

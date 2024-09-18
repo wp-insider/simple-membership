@@ -177,7 +177,7 @@ https://simple-membership-plugin.com/
 = 4.5.4 =
 - Subscriptions can be canceled from the transaction details page of a 'subscription created' transaction (supported for the New PayPal PPCP API and Stripe subscriptions).
 - New settings to send notification email on subscription payment canceled or expired event.
-- The subscription agreement tranaction record's status will get updated when the subscriptions is canceled.
+- The subscription agreement tranaction record's status will get updated when the subscription is canceled.
 - Added Typecasting to the transaction ID variable for the PayPal IPN handling process.
 - The PayPal standard subscriptions will also save a 'subscription created' entry in the payments menu for new subscriptions.
 - The transaction type will also be stored in the transactions table, allowing for future filtering of transactions based on type.

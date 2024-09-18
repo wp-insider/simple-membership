@@ -261,7 +261,6 @@ function swpm_handle_refund_using_parent_txn_id( $ipn_data ){
 function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 
 	swpm_debug_log_subsc( "Refund/Cancellation Check - Let's see if a member's profile needs to be updated or deactivated.", true );
-
 	global $wpdb;
 
 	$swpm_id = '';
@@ -270,13 +269,14 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		$swpm_id = $customvariables['swpm_id'];
 	}
 
+    $subscr_id = isset( $ipn_data['subscr_id'] ) && ! empty( $ipn_data['subscr_id'] ) ? $ipn_data['subscr_id'] : '';
+
 	if ( ! empty( $swpm_id ) ) {
 		// This IPN has the SWPM ID. Retrieve the member record using member ID.
 		swpm_debug_log_subsc( 'Member ID is present. Retrieving member account from the database. Member ID: ' . $swpm_id, true );
 		$resultset = SwpmMemberUtils::get_user_by_id( $swpm_id );
-	} elseif ( isset( $ipn_data['subscr_id'] ) && ! empty( $ipn_data['subscr_id'] ) ) {
+	} elseif ( ! empty( $subscr_id ) ) {
 		// This IPN has the subscriber ID. Retrieve the member record using subscr_id.
-		$subscr_id = $ipn_data['subscr_id'];
 		swpm_debug_log_subsc( 'Subscriber ID is present. Retrieving member account from the database. Subscr_id: ' . $subscr_id, true );
 		$resultset = $wpdb->get_row(
 			$wpdb->prepare(

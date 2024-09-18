@@ -348,6 +348,11 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 			// Make sure the cronjob to do expiry check and deactivate the member accounts treat this status as if it is "active".
 		}
 
+		//Check if subscription_id is still empty (due to it not being present in the $ipn_data array), then try to get it from the member record.
+		if( empty( $subscr_id ) ){
+			$subscr_id = isset($resultset->subscr_id) ? $resultset->subscr_id : '';
+		}
+
 		//Update the swpm_transactions CPT record to mark the subscription as "Cancelled".
 		$swpm_txn_cpt_id = SwpmTransactions::get_original_swpm_txn_cpt_id_by_subscr_id( $subscr_id );
 		if ( ! empty( $swpm_txn_cpt_id ) ) {

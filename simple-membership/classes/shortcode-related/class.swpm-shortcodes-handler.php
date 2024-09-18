@@ -75,7 +75,7 @@ class SwpmShortcodesHandler {
 		$output   = '';
 		$settings = SwpmSettings::get_instance();
 
-		//If user is logged in then the purchase will be applied to the existing profile
+		//If user is logged in then the purchase will be applied to the existing profile.
 		if ( SwpmMemberUtils::is_member_logged_in() ) {
 			$username = SwpmMemberUtils::get_logged_in_members_username();
 			$output  .= '<div class="swpm-ty-page-registration-logged-in swpm-yellow-box">';
@@ -86,6 +86,7 @@ class SwpmShortcodesHandler {
 			return $output;
 		}
 
+		//If user is not-logged in then lets see if there is a pending registration that needs to be completed.
 		$output .= '<div class="swpm-ty-page-registration">';
 		$member_data = SwpmUtils::get_incomplete_paid_member_info_by_ip();
 		if ( $member_data ) {
@@ -104,9 +105,16 @@ class SwpmShortcodesHandler {
 			$output .= '</div>';
 			//Allow addons to modify the output
 			$output = apply_filters( 'swpm_ty_page_registration_msg_with_link', $output, $rego_complete_url );
+		} else if ( SwpmMemberUtils::get_user_by_ip_address() ) {
+			//Found a member profile record for this IP but it is not a pending registration
+			$output .= '<div class="swpm-ty-page-registration-link swpm-found-user-by-ip swpm-yellow-box">';
+			$output .= __( "It looks like you have already completed the registration process. You can now log in to the site and start enjoying your membership benefits.", "simple-membership" );
+			$output .= '</div>';
+			//Allow addons to modify the output
+			$output = apply_filters( 'swpm_ty_page_registration_msg_found_user_by_ip', $output );
 		} else {
 			//Nothing found. Check again later.
-			$output .= '<div class="swpm-ty-page-registration-link swpm-yellow-box">';
+			$output .= '<div class="swpm-ty-page-registration-link swpm-no-user-found swpm-yellow-box">';
 			$output .= __( 'If you have just made a membership payment then your payment is yet to be processed. Please check back in a few minutes. An email will be sent to you with the details shortly.', 'simple-membership' );
 			$output .= '</div>';
 			//Allow addons to modify the output

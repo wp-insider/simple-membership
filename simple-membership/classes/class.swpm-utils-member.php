@@ -140,6 +140,26 @@ class SwpmMemberUtils {
 		return $result;
 	}
 
+	/*
+	 * Retrieves the last SWPM user record for the given IP address. This method is not robust as multiple users can have the same IP address.
+	 */
+	public static function get_user_by_ip_address( $user_ip = '') {
+		if( empty($user_ip) ){
+			//Get the user's IP address if not provided
+			$user_ip = SwpmUtils::get_user_ip_address();
+		}
+
+		if ( ! empty( $user_ip ) ) {
+			//Lets check if a member profile exists with this IP address.
+			global $wpdb;
+			$query = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE last_accessed_from_ip=%s ORDER BY member_id DESC';
+			$query = $wpdb->prepare( $query, $user_ip );
+			$result = $wpdb->get_row( $query );
+			return $result;
+		}
+		return null;
+	}	
+
 	public static function get_wp_user_from_swpm_user_id( $swpm_id ) {
 		//Retrieves the WP user record for the given SWPM member ID.
 		$swpm_user_row = self::get_user_by_id( $swpm_id );

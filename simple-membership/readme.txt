@@ -185,6 +185,7 @@ https://simple-membership-plugin.com/
 - The 'redirect_to' parameter on the login page is now processed through the 'wp_validate_redirect' function.
 - The 'get_user_ip_address' function has been updated to make it more robust.
 - Query updated of the 'get_incomplete_paid_member_info_by_ip' function.
+- Added a new utility function 'get_user_by_ip_address' to retrieve user data based on the IP address.
 
 = 4.5.3 =
 - The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.

@@ -527,7 +527,7 @@ abstract class SwpmUtils {
 		if ( ! empty( $user_ip ) ) {
 			//Lets check if a payment has been confirmed from this user's IP and the profile needs to be completed (where username is empty).
 			$username = '';
-			$query    = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE last_accessed_from_ip=%s AND user_name=%s';
+			$query    = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE last_accessed_from_ip=%s AND user_name=%s ORDER BY member_id DESC';
 			$query    = $wpdb->prepare( $query, $user_ip, $username );
 			$result   = $wpdb->get_row( $query );
 			return $result;

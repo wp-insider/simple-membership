@@ -275,7 +275,7 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 		// This IPN has the SWPM ID. Retrieve the member record using member ID.
 		swpm_debug_log_subsc( 'Member ID is present. Retrieving member account from the database. Member ID: ' . $swpm_id, true );
 		$resultset = SwpmMemberUtils::get_user_by_id( $swpm_id );
-	} elseif ( ! empty( $subscr_id ) ) {
+	} else if ( ! empty( $subscr_id ) ) {
 		// This IPN has the subscriber ID. Retrieve the member record using subscr_id.
 		swpm_debug_log_subsc( 'Subscriber ID is present. Retrieving member account from the database. Subscr_id: ' . $subscr_id, true );
 		$resultset = $wpdb->get_row(

@@ -183,6 +183,7 @@ https://simple-membership-plugin.com/
 - The transaction type will also be stored in the transactions table, allowing for future filtering of transactions based on type.
 - Canceled subscription status will now be shown in subscription agreement transaction details page.
 - The 'redirect_to' parameter on the login page is now processed through the 'wp_validate_redirect' function.
+- The 'get_user_ip_address' function has been updated to make it more robust.
 
 = 4.5.3 =
 - The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.

@@ -174,6 +174,11 @@ function swpm_show_edit_txn_form($post)
 		$gateway_formatted = '-';
 	}
 
+	//Get the transaction type.
+	// We now save the following transaction types for the 3 supported subscription gateways: 
+	// 1) stripe_subscription_new
+    // 2) pp_subscription_new
+    // 3) pp_std_subscription_new
 	$txn_type_raw = get_post_meta($post_id, 'txn_type', true);
 
 	$status = get_post_meta($post_id, 'status', true);

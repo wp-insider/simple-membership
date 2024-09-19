@@ -174,6 +174,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- PayPal standard subscription canceled status will also be shown in the 'subscription created' transaction details page.
+
 = 4.5.4 =
 - Subscriptions can be canceled from the transaction details page of a 'subscription created' transaction (supported for the New PayPal PPCP API and Stripe subscriptions).
 - New settings to send notification email on subscription payment canceled or expired event.

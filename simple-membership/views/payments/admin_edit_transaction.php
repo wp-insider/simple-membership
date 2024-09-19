@@ -224,6 +224,7 @@ function swpm_show_edit_txn_form($post)
     $show_action_postbox = false;
     $is_active_subscr_status_retrieved_via_api_call = false;
 
+	//Handle the PPCP and Stripe subscription agreement posts (these ones can be queried via API so we handle these separately to PP STD Subs).	
     if ( $is_subscr_agreement_post && !in_array($subscr_status, array('canceled', 'cancelled')) ) {
         $subscr_status_active = true;
 
@@ -245,6 +246,14 @@ function swpm_show_edit_txn_form($post)
             }
         }
     }
+
+	//Check if this is a PayPal Standard subscription agreement and the subscr_status meta is 'canceled'.
+	//Note: we handle this subscr_status separately to the PPCP and Stripe subs since the PPCP and Stripe subs can be queried via API.
+	$is_pp_std_subscr_status_canceled = false;
+	if( $txn_type_raw == 'pp_std_subscription_new' && in_array($subscr_status, array('canceled', 'cancelled'))){
+		//This is a PP Std Subscr agreement type txn and the subscr_status is canceled.
+		$is_pp_std_subscr_status_canceled = true;
+	}
 ?>
 
 	<div class="postbox">
@@ -280,18 +289,29 @@ function swpm_show_edit_txn_form($post)
 						</tr>
 					<?php } ?>
                     <?php if ( $is_subscr_agreement_post && !$subscr_status_active && !$is_active_subscr_status_retrieved_via_api_call ){ ?>
-					<!-- If this is a subscription agreement (sub-created) type txn and the status is not active, we show the status using the 'subscr_status' post meta. -->
-                    <tr>
-                        <td><?php _e("Subscription Payment Status", "simple-membership"); ?></td>
-                        <td>
-                            <span class="swpm_status_subscription_cancelled"><?php echo ucfirst(esc_attr($subscr_status)); ?></span>
-                        </td>
-                    </tr>
-                    <?php } else { ?>
+						<!-- This block handles the PPCP and Stripe subscription agreement type txn. These type of txns can be queried via API -->
+						<!-- If this is a subscription agreement (sub-created) type txn and the status is not active, we show the status using the 'subscr_status' post meta. -->
 						<tr>
-						<td><?php _e("Status", "simple-membership"); ?></td>
-						<td><?php echo ucfirst(esc_attr($status)); ?></td>
-					</tr>
+							<td><?php _e("Subscription Payment Status", "simple-membership"); ?></td>
+							<td>
+								<span class="swpm_status_subscription_cancelled"><?php echo ucfirst(esc_attr($subscr_status)); ?></span>
+							</td>
+						</tr>
+					<?php } else if ( $is_pp_std_subscr_status_canceled ){ ?>
+						<!-- This block handles the PayPal standard subscription agreement type txn (it cannot be queried via API) -->
+						<!-- If this is a PayPal standard subscription agreement (sub-created) type txn, and the subscr_status is canceled, we show the canceled status. -->
+						<tr>
+							<td><?php _e("Subscription Payment Status", "simple-membership"); ?></td>
+							<td>
+								<span class="swpm_status_subscription_cancelled"><?php echo ucfirst(esc_attr($subscr_status)); ?></span>
+							</td>
+						</tr>
+                    <?php } else { ?>
+						<!-- show the status field for all other types of transactions -->
+						<tr>
+							<td><?php _e("Status", "simple-membership"); ?></td>
+							<td><?php echo ucfirst(esc_attr($status)); ?></td>
+						</tr>
 					<?php } ?>
 
 					<tr>

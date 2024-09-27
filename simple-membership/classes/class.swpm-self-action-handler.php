@@ -73,6 +73,7 @@ class SwpmSelfActionHandler {
                 'swpm_user_name' => urlencode($user_data['user_name']),
                 'swpm_encoded_pw' => $encoded_pass,
                 'swpm_auto_login_nonce' => $swpm_auto_login_nonce,
+                'swpm_login_origination_flag' => '1',
             );
             $redirect_page = add_query_arg($arr_params, $login_page_url);
             wp_redirect($redirect_page);

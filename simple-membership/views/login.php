@@ -30,6 +30,7 @@ $hide_join_us_link_enabled = SwpmSettings::get_instance()->get_value('hide-join-
 ?>
 <div class="swpm-login-widget-form">
     <form id="swpm-login-form" name="swpm-login-form" method="post" action="">
+        <input type="hidden" name="swpm_login_origination_flag" value="1" />
         <div class="swpm-login-form-inner">
             <div class="swpm-username-label">
                 <label for="swpm_user_name" class="swpm-label"><?php _e($swpm_username_label, 'simple-membership') ?></label>

@@ -297,10 +297,13 @@ class SimpleWpMembership {
         if ( !isset($_REQUEST['swpm_user_name']) ) {
             //This is not a login request from our plugin's login form. 
             //Our plugin's login request (Standard login, login after registration, 2FA login, etc.) should have the 'swpm_user_name' parameter.
+            //We have also added 'swpm_login_origination_flag' parameter to all our logins to identify the login request origination.
+
             //Return from here since WP or the other plugin will handle the full login operation and post-login redirection.
             SwpmLog::log_auth_debug("The 'swpm_user_name' query parameter is not set. This login action didn't originate from our plugin's login form.", true);
             SwpmLog::log_auth_debug("Exiting this function to skip wp_signon and after_login_redirection since the login was initiated by WP or another plugin.", true);
-            do_action('swpm_after_login_authentication_external_login_form');
+            //Trigger an action hook for this scenario.
+            do_action('swpm_after_login_authentication_external_login_action');
             return;
         }
 

@@ -290,31 +290,35 @@ class SimpleWpMembership {
     }
 
     public static function handle_after_login_authentication($username, $pass, $rememberme = true) {
-        //This function is called after authentication is successful in SWPM.
-        //This function should only handle/execute when the loign originates from our plugin's login form.
+        //This function is called after the authentication is successful in SWPM.
+        //Note: This function should ONLY be executed/handled by us when the login originates from our plugin's login form.
 
-        if(isset($_REQUEST['wp-submit'])){
-            //This is a WP login form submission. 
-            //Just return from here since this function's wp_signon call is only needed when the login request originates from our plugin's login form.
-            //WP will handle the full login operation and post-login redirection.
-            SwpmLog::log_auth_debug("The wp-submit query parameter is set. This login action originated from WP login form submission. WP will handle the main login operation and any post login redirection.", true);
-            //Trigger a separate hook for WP login form submission.
-            do_action('swpm_after_login_authentication_wp_login_form');
+        //Check if the login request originated from our plugin's login form.
+        if ( !isset($_REQUEST['swpm_user_name']) ) {
+            //This is not a login request from our plugin's login form. 
+            //Our plugin's login request (Standard login, login after registration, 2FA login, etc.) should have the 'swpm_user_name' parameter.
+            //Return from here since WP or the other plugin will handle the full login operation and post-login redirection.
+            SwpmLog::log_auth_debug("The 'swpm_user_name' query parameter is not set. This login action didn't originate from our plugin's login form.", true);
+            SwpmLog::log_auth_debug("Exiting this function to skip wp_signon and after_login_redirection since the login was initiated by WP or another plugin.", true);
+            do_action('swpm_after_login_authentication_external_login_form');
             return;
         }
 
+        //Check if the login request is for a user that is already logged in.
         if (is_user_logged_in()) {
             $current_user = wp_get_current_user();
             SwpmLog::log_auth_debug("Static function handle_after_login_authentication(). User is logged in. WP Username: " . $current_user->user_login, true);
             if ($current_user->user_login == $username) {
+                //The user is already logged in. Nothing to do.
                 return;
             }
         }
         SwpmLog::log_auth_debug("Trying wp_signon() with username: " . $username, true);
 
-        add_filter('wordfence_ls_require_captcha', '__return_false');//For Wordfence plugin's captcha compatibility
+        //For Wordfence plugin's captcha compatibility.
+        add_filter('wordfence_ls_require_captcha', '__return_false');
 
-        //Try to login the user into WP user system.
+        //Try to log-in the user into the WP user system.
         $user_obj = wp_signon(array('user_login' => $username, 'user_password' => $pass, 'remember' => $rememberme), is_ssl());
         if ($user_obj instanceof WP_User) {
             wp_set_current_user($user_obj->ID, $user_obj->user_login);
@@ -347,7 +351,7 @@ class SimpleWpMembership {
         SwpmLog::log_auth_debug("Triggering swpm_after_login hook.", true);
         do_action('swpm_after_login');//This hook is triggered when login originates from our plugin's login form.
 
-        if (!SwpmUtils::is_ajax()) {
+        if ( !SwpmUtils::is_ajax() ) {
             //Redirection after login to make sure the page loads with all the correct variables set everywhere.
 
             //Check if "redirect_to" parameter is set. If so, use that URL.

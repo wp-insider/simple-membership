@@ -178,6 +178,8 @@ https://simple-membership-plugin.com/
 - PayPal standard subscription canceled status will also be shown in the 'subscription created' transaction details page.
 - Do not execute the after_login_redirection and the wp_signon function when the login originates from an external login form (example: WP, WooCommerce etc). This creates a better user experience.
 - Updated the Italian language translation file.
+- Minor Update to the swpm-orange-box CSS class to make it more readable.
+- Added a new auto-redirect feature to the 'Full Page Protection Addon' for when a visitor attempts to access a protected page.
 
 = 4.5.4 =
 - Subscriptions can be canceled from the transaction details page of a 'subscription created' transaction (supported for the New PayPal PPCP API and Stripe subscriptions).

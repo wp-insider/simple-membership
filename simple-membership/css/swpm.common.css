@@ -347,8 +347,8 @@
 }
 
 /* Media Queries */
-@media only screen and (max-width: 420px) {
-    /* Special CSS for mobile devices only */
+@media (max-width: 420px) {
+    /* Special CSS for small screen mobile devices */
     /* Set the password reset text field width to 100% for better theme compatibility. */
     .swpm-pw-reset-text {
         width: 100%;

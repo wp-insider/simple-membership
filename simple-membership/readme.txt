@@ -180,6 +180,7 @@ https://simple-membership-plugin.com/
 - Updated the Italian language translation file.
 - Minor Update to the swpm-orange-box CSS class to make it more readable.
 - Added a new auto-redirect feature to the 'Full Page Protection Addon' for when a visitor attempts to access a protected page.
+- Updated the password reset shortcode's email field to use a size of 30.
 
 = 4.5.4 =
 - Subscriptions can be canceled from the transaction details page of a 'subscription created' transaction (supported for the New PayPal PPCP API and Stripe subscriptions).

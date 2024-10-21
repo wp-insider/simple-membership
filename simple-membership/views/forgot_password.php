@@ -13,7 +13,7 @@ if ( !empty( $render_new_form_ui ) ){
                 <label for="swpm_reset_email" class="swpm_label swpm-pw-reset-email-label"><?php _e('Email Address', 'simple-membership') ?></label>
             </div>
             <div class="swpm-pw-reset-email-input swpm-margin-top-10">
-                <input type="text" name="swpm_reset_email" class="swpm-text-field swpm-pw-reset-text" id="swpm_reset_email"  value="" size="60" />
+                <input type="text" name="swpm_reset_email" class="swpm-text-field swpm-pw-reset-text" id="swpm_reset_email"  value="" size="30" />
             </div>
             <div class="swpm-before-login-submit-section"><?php echo apply_filters('swpm_before_pass_reset_form_submit_button', ''); ?></div>
             <div class="swpm-pw-reset-submit-button">

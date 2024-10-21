@@ -50,6 +50,7 @@ class SwpmInstallation {
             $charset_collate .= " COLLATE $wpdb->collate";
         }
 
+        //The members table
         $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_members_tbl (
 			member_id int(12) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			user_name varchar(255) NOT NULL,
@@ -85,6 +86,17 @@ class SwpmInstallation {
           )" . $charset_collate . ";";
         dbDelta($sql);
 
+        //The members meta table
+        $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_members_meta_tbl (
+            meta_id bigint(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            member_id bigint(20) unsigned NOT NULL DEFAULT '0',
+            meta_key varchar(255) DEFAULT NULL,
+            meta_value longtext,
+            KEY member_id (member_id)
+        )" . $charset_collate . ";";
+        dbDelta($sql);
+
+        //The membership level table
         $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_membership_tbl (
 			id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			alias varchar(127) NOT NULL,
@@ -139,6 +151,7 @@ class SwpmInstallation {
         $sql = "UPDATE  " . $wpdb->prefix . "swpm_membership_tbl SET subscription_duration_type = 4 WHERE subscription_unit='years' AND subscription_duration_type = 0";
         $wpdb->query($sql);
 
+        //The membership level meta table
         $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_membership_meta_tbl (
                     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     level_id int(11) NOT NULL,
@@ -152,6 +165,7 @@ class SwpmInstallation {
         )" . $charset_collate . " AUTO_INCREMENT=1;";
         dbDelta($sql);
 
+        //The payments table (Note: We now use the SWPM Transactions Custom Post Type)
         $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_payments_tbl (
                     id int(12) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                     email varchar(255) DEFAULT NULL,

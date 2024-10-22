@@ -484,8 +484,9 @@ class SwpmMembers extends WP_List_Table {
 			wp_die( 'Error! Member ID must be numeric.' );
 		}
 
-                //Trigger action hook
-                do_action( 'swpm_admin_end_user_delete_action', $id );
+		//Trigger action hook
+		do_action( 'swpm_before_user_delete_action', $id );
+		do_action( 'swpm_admin_end_user_delete_action', $id );
 
 		$swpm_user = SwpmMemberUtils::get_user_by_id( $id );
 		$user_name = $swpm_user->user_name;

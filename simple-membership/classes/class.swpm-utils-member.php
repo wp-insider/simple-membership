@@ -222,6 +222,11 @@ class SwpmMemberUtils {
 		return $result;
 	}
 
+	public static function delete_member_and_wp_user( $member_id ) {
+		//Deletes the SWPM user record and the associated WP user record.
+		//The WP user record will be deleted only if the user is not an admin user.
+		SwpmMembers::delete_user_by_id( $member_id );
+	}
 
 	/*
 	 * Use this function to update or set membership level of a member easily.

@@ -33,6 +33,8 @@ define( 'SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS', serialize( array( 'JPY', 'MGA'
 
 //Include the main class file.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.simple-wp-membership.php' );
+//Include the compatibility file (for backward compatibility). It needs to be included after the main class file has included the necessary files.
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'swpm-compat.php' );//It will be removed in the future.
 
 //Perform some initial setup tasks.
 SwpmUtils::do_misc_initial_plugin_setup_tasks();

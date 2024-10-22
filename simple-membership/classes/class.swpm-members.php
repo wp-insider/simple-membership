@@ -587,15 +587,15 @@ class SwpmMembers extends WP_List_Table {
 				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Change Membership Level action. Clear cache and try again.' ) );
 			}
 
-			$errorMsg      = '';
+			$error_msg = '';
 			$from_level_id = sanitize_text_field( $_REQUEST['swpm_bulk_change_level_from'] );
 			$to_level_id   = sanitize_text_field( $_REQUEST['swpm_bulk_change_level_to'] );
 
 			if ( $from_level_id == 'please_select' || $to_level_id == 'please_select' ) {
-				$errorMsg = SwpmUtils::_( 'Error! Please select a membership level first.' );
+				$error_msg = SwpmUtils::_( 'Error! Please select a membership level first.' );
 			}
 
-			if ( empty( $errorMsg ) ) {//No validation errors so go ahead
+			if ( empty( $error_msg ) ) {//No validation errors so go ahead
 				$member_records = SwpmMemberUtils::get_all_members_of_a_level( $from_level_id );
 				if ( $member_records ) {
 					foreach ( $member_records as $row ) {
@@ -606,8 +606,8 @@ class SwpmMembers extends WP_List_Table {
 			}
 
 			$message = '';
-			if ( ! empty( $errorMsg ) ) {
-				$message = $errorMsg;
+			if ( ! empty( $error_msg ) ) {
+				$message = $error_msg;
 			} else {
 				$message = SwpmUtils::_( 'Membership level change operation completed successfully.' );
 			}
@@ -624,15 +624,15 @@ class SwpmMembers extends WP_List_Table {
 				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Change Access Starts Date action. Clear cache and try again.' ) );
 			}
 
-			$errorMsg = '';
+			$error_msg = '';
 			$level_id = sanitize_text_field( $_REQUEST['swpm_bulk_user_start_date_change_level'] );
 			$new_date = sanitize_text_field( $_REQUEST['swpm_bulk_user_start_date_change_date'] );
 
 			if ( $level_id == 'please_select' ) {
-				$errorMsg = SwpmUtils::_( 'Error! Please select a membership level first.' );
+				$error_msg = SwpmUtils::_( 'Error! Please select a membership level first.' );
 			}
 
-			if ( empty( $errorMsg ) ) {//No validation errors so go ahead
+			if ( empty( $error_msg ) ) {//No validation errors so go ahead
 				$member_records = SwpmMemberUtils::get_all_members_of_a_level( $level_id );
 				if ( $member_records ) {
 					foreach ( $member_records as $row ) {
@@ -643,8 +643,8 @@ class SwpmMembers extends WP_List_Table {
 			}
 
 			$message = '';
-			if ( ! empty( $errorMsg ) ) {
-				$message = $errorMsg;
+			if ( ! empty( $error_msg ) ) {
+				$message = $error_msg;
 			} else {
 				$message = SwpmUtils::_( 'Access starts date change operation successfully completed.' );
 			}
@@ -661,17 +661,17 @@ class SwpmMembers extends WP_List_Table {
 				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Change Account Status action. Clear cache and try again.' ) );
 			}
 
-			$errorMsg      = '';
+			$error_msg = '';
 			$from_level_id = sanitize_text_field( $_POST['swpm_bulk_account_status_change_level_of'] );
 			$to_account_status   = sanitize_text_field( $_POST['swpm_bulk_change_account_status_to'] );
 
 			if ( $from_level_id == 'please_select' ) {
-				$errorMsg = __( 'Error! Please select a membership level first.', 'simple-membership' );
+				$error_msg = __( 'Error! Please select a membership level first.', 'simple-membership' );
 			}else if($to_account_status == 'please_select' || empty($to_account_status)){
-				$errorMsg = __( 'Error! Please select a account status.', 'simple-membership' );
+				$error_msg = __( 'Error! Please select a account status.', 'simple-membership' );
 			}
 
-			if ( empty( $errorMsg ) ) { //No validation errors so go ahead
+			if ( empty( $error_msg ) ) { //No validation errors so go ahead
 				SwpmLog::log_simple_debug( 'Updating bulk account status value of membership level ID: ' . $from_level_id . ' to the account status of: ' . $to_account_status, true );
 				$member_records = SwpmMemberUtils::get_all_members_of_a_level( $from_level_id );
 				if ( $member_records ) {
@@ -682,16 +682,54 @@ class SwpmMembers extends WP_List_Table {
 				}
 			}
 
-			if ( ! empty( $errorMsg ) ) {
+			if ( ! empty( $error_msg ) ) {
 				echo '<div id="message" class="notice notice-error"><p><strong>';
-				echo $errorMsg;
+				echo $error_msg;
 				echo '</strong></p></div>';
-			}else{	
+			}else{
 				echo '<div id="message" class="notice notice-success"><p><strong>';
 				_e( 'Account status change operation completed successfully.', 'simple-membership');
 				echo '</strong></p></div>';
 			}
 		}
+
+		if ( isset( $_REQUEST['swpm_bulk_delete_account_process'] ) ) {
+			//Check nonce
+			$swpm_bulk_delete_account_nonce = filter_input( INPUT_POST, 'swpm_bulk_delete_account_nonce' );
+			if ( ! wp_verify_nonce( $swpm_bulk_delete_account_nonce, 'swpm_bulk_delete_account_nonce_action' ) ) {
+				//Nonce check failed.
+				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Delete Account action. Clear cache and try again.' ) );
+			}
+
+			$error_msg = '';
+
+			//Check if the user has selected a membership level.
+			$from_level_id = sanitize_text_field( $_POST['swpm_bulk_delete_account_level_of'] );
+			if ( $from_level_id == 'please_select' ) {
+				$error_msg = __( 'Error! Please select a membership level first.', 'simple-membership' );
+			}
+
+			if ( empty( $error_msg ) ) { //No validation errors so go ahead
+				SwpmLog::log_simple_debug( 'Executing bulk delete accounts of membership level ID: ' . $from_level_id, true );
+				$member_records = SwpmMemberUtils::get_all_members_of_a_level( $from_level_id );
+				if ( $member_records ) {
+					foreach ( $member_records as $row ) {
+						$member_id = $row->member_id;
+						SwpmMemberUtils::delete_member_and_wp_user( $member_id );
+					}
+				}
+			}
+
+			if ( ! empty( $error_msg ) ) {
+				echo '<div id="message" class="notice notice-error"><p><strong>';
+				echo $error_msg;
+				echo '</strong></p></div>';
+			}else{	
+				echo '<div id="message" class="notice notice-success"><p><strong>';
+				_e( 'Bulk delete of member accounts completed successfully.', 'simple-membership');
+				echo '</strong></p></div>';
+			}
+		}		
 		?>
 
 		<div class="postbox">
@@ -740,7 +778,8 @@ class SwpmMembers extends WP_List_Table {
 
 					</table>
 				</form>
-			</div></div>
+			</div>
+		</div>
 
 		<div class="postbox">
 			<h3 class="hndle"><label for="title"><?php _e( 'Bulk Update Access Starts Date of Members', 'simple-membership' ); ?></label></h3>
@@ -784,7 +823,8 @@ class SwpmMembers extends WP_List_Table {
 
 					</table>
 				</form>
-			</div></div>
+			</div>
+		</div>
 
 		<script>
 			jQuery(document).ready(function ($) {
@@ -839,6 +879,43 @@ class SwpmMembers extends WP_List_Table {
 				</form>
 			</div>
 		</div>
+
+		<div class="postbox">
+			<h3 class="hndle"><label for="title"><?php _e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?></label></h3>
+			<div class="inside">
+				<p>
+					<?php _e( 'This option allows you to bulk delete all members from a selected level, including their associated WordPress user records. ', 'simple-membership' ); ?>
+					<?php _e('The WP user record will be deleted only if the user is not an administrator user.', 'simple-membership'); ?>
+				</p>
+				<form method="post" action="">
+					<input type="hidden" name="swpm_bulk_delete_account_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_delete_account_nonce_action' ); ?>" />
+
+					<table width="100%" border="0" cellspacing="0" cellpadding="6">
+						<tr valign="top">
+							<td width="25%" align="left">
+								<strong><?php _e( 'Membership Level: ', 'simple-membership' ); ?></strong>
+							</td>
+							<td align="left">
+								<select name="swpm_bulk_delete_account_level_of">
+									<option value="please_select"><?php _e( 'Select Level', 'simple-membership' ); ?></option>
+									<?php echo SwpmUtils::membership_level_dropdown(); ?>
+								</select>
+								<p class="description"><?php _e( 'Select the Membership level (the accounts of all members who are in this level will be deleted).', 'simple-membership' ); ?></p>
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<td width="25%" align="left">
+								<input type="submit" class="button" style="color:red;" name="swpm_bulk_delete_account_process" value="<?php _e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?>" onclick="return confirm('Are you sure you want to bulk delete member accounts?');" />
+							</td>
+							<td align="left"></td>
+						</tr>
+
+					</table>
+				</form>
+			</div>
+		</div>
+
 		<?php
 		echo '</div></div>'; //<!-- end of #poststuff #post-body -->
 	}

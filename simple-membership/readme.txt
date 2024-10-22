@@ -182,6 +182,7 @@ https://simple-membership-plugin.com/
 - Added a new auto-redirect feature to the 'Full Page Protection Addon' for when a visitor attempts to access a protected page.
 - Updated the password reset shortcode's email field to use a size of 30.
 - Added members meta database table to store additional member data.
+- Added a new option to bulk delete all members from a specific membership level.
 
 = 4.5.4 =
 - Subscriptions can be canceled from the transaction details page of a 'subscription created' transaction (supported for the New PayPal PPCP API and Stripe subscriptions).

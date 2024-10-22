@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Description of BCronJob
- *
- * @author nur
+ * The cron job class that handles the cron job tasks.
  */
 class SwpmCronJob {
 

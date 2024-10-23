@@ -44,6 +44,7 @@ class SwpmAuth {
 	 * So this function is only called once per page load.
 	 */
 	private function auth_init() {
+		SwpmLog::log_simple_debug(__METHOD__, true);
 		//SwpmLog::log_auth_debug("SwpmAuth::auth_init() function.", true);
 		/**********************************************************
 		 * Note: This function is run on every page load. 

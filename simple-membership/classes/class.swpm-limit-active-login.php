@@ -5,6 +5,86 @@
  */
 
 class SwpmLimitActiveLogin {
+
+	public function __construct(){
+		// Use authentication filter.
+		add_filter( 'wp_authenticate_user', array( $this, 'handle_wp_authenticate_login_limit' ) );
+	}
+
+	/**
+	 * Validate if the maximum active logins limit reached.
+	 * This check happens after authentication happens.
+	 *
+	 * @param object $wp_user User Object/WPError.
+	 *
+	 * @return object User object or error object.
+	 */
+	public function handle_wp_authenticate_login_limit( $wp_user ) {
+		// If login validation failed already, return that error.
+		if ( is_wp_error( $wp_user ) ) {
+			return $wp_user;
+		}
+
+		$wp_username = $wp_user->user_login;
+
+		$swpm_member = SwpmMemberUtils::get_user_by_user_name($wp_username);
+
+		if (empty($swpm_member)){
+			// SWPM user account not found for this wp user account. Noting to do.
+			return $wp_user;
+		}
+
+		// Check if limit exceed.
+		if ( self::reached_active_login_limit( $swpm_member->member_id ) ) {
+			return new WP_Error( 'swpm_active_login_limit_reached', __( 'Maximum no. of active logins found for this account. Please logout from another device to continue.', 'simple-membership' ));
+		}
+
+		return $wp_user;
+	}
+
+	/**
+	 * Validate if the maximum active logins limit reached.
+	 *
+	 * This check happens only after authentication happens and
+	 * the login logic is "Allow".
+	 *
+	 * @param boolean $check    User Object/WPError.
+	 * @param string  $password Plaintext user's password.
+	 * @param string  $hash     Hash of the user's password to check against.
+	 * @param int     $user_id  User ID.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 *
+	 * @return bool
+	 */
+	public function validate_allow_logic( $check, $password, $hash, $user_id ) {
+		// If the validation failed already, bail.
+		if ( ! $check ) {
+			return false;
+		}
+		$wp_user = get_userdata($user_id);
+
+		$wp_username = $wp_user->user_login;
+
+		$swpm_member = SwpmMemberUtils::get_user_by_user_name($wp_username);
+
+		if (empty($swpm_member)){
+			// SWPM user account not found for this wp user account.
+			return true;
+		}
+
+
+		if ( self::login_logic() == 'allow' ) {
+			// Check if limit exceed.
+			if ( self::reached_active_login_limit( $swpm_member->member_id ) ) {
+
+			}
+		}
+
+		return true;
+	}
+
 	/**
 	 * Check if active login limit enabled or not.
 	 *

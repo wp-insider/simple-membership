@@ -1158,6 +1158,10 @@ class SimpleWpMembership {
                 SwpmInstallation::run_safe_installer();
             }
         }
+
+		if (SwpmLimitActiveLogin::is_enabled()){
+			new SwpmLimitActiveLogin();
+		}
     }
 
     public static function activate() {

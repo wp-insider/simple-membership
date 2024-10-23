@@ -37,6 +37,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-members-meta.php')
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-cronjob.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-main.php' );
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-limit-active-login.php');
 
 class SimpleWpMembership {
 

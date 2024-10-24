@@ -48,6 +48,7 @@ class SimpleWpMembership {
 
         new SwpmShortcodesHandler(); //Tackle the shortcode definitions and implementation.
         new SwpmSelfActionHandler(); //Tackle the self action hook handling.
+	    new SwpmLimitActiveLogin(); // Tackle login limit functionalities.
 
         add_action('admin_menu', array(&$this, 'menu'));
         add_action('init', array(&$this, 'init_hook'));
@@ -1158,10 +1159,6 @@ class SimpleWpMembership {
                 SwpmInstallation::run_safe_installer();
             }
         }
-
-		if (SwpmLimitActiveLogin::is_enabled()){
-			new SwpmLimitActiveLogin();
-		}
     }
 
     public static function activate() {

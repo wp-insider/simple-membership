@@ -6,9 +6,10 @@
 
 class SwpmLimitActiveLogin {
 
-	public function __construct(){
-		// Use authentication filter.
-		add_filter( 'wp_authenticate_user', array( $this, 'handle_wp_authenticate_login_limit' ) );
+	public function __construct() {
+		if ( self::is_enabled() ) {
+			// add_filter( 'wp_authenticate_user', array( $this, 'handle_wp_authenticate_login_limit' ) );
+		}
 	}
 
 	/**
@@ -19,71 +20,28 @@ class SwpmLimitActiveLogin {
 	 *
 	 * @return object User object or error object.
 	 */
-	public function handle_wp_authenticate_login_limit( $wp_user ) {
-		// If login validation failed already, return that error.
-		if ( is_wp_error( $wp_user ) ) {
-			return $wp_user;
-		}
-
-		$wp_username = $wp_user->user_login;
-
-		$swpm_member = SwpmMemberUtils::get_user_by_user_name($wp_username);
-
-		if (empty($swpm_member)){
-			// SWPM user account not found for this wp user account. Noting to do.
-			return $wp_user;
-		}
-
-		// Check if limit exceed.
-		if ( self::reached_active_login_limit( $swpm_member->member_id ) ) {
-			return new WP_Error( 'swpm_active_login_limit_reached', __( 'Maximum no. of active logins found for this account. Please logout from another device to continue.', 'simple-membership' ));
-		}
-
-		return $wp_user;
-	}
-
-	/**
-	 * Validate if the maximum active logins limit reached.
-	 *
-	 * This check happens only after authentication happens and
-	 * the login logic is "Allow".
-	 *
-	 * @param boolean $check    User Object/WPError.
-	 * @param string  $password Plaintext user's password.
-	 * @param string  $hash     Hash of the user's password to check against.
-	 * @param int     $user_id  User ID.
-	 *
-	 * @since  1.0.0
-	 * @access public
-	 *
-	 * @return bool
-	 */
-	public function validate_allow_logic( $check, $password, $hash, $user_id ) {
-		// If the validation failed already, bail.
-		if ( ! $check ) {
-			return false;
-		}
-		$wp_user = get_userdata($user_id);
-
-		$wp_username = $wp_user->user_login;
-
-		$swpm_member = SwpmMemberUtils::get_user_by_user_name($wp_username);
-
-		if (empty($swpm_member)){
-			// SWPM user account not found for this wp user account.
-			return true;
-		}
-
-
-		if ( self::login_logic() == 'allow' ) {
-			// Check if limit exceed.
-			if ( self::reached_active_login_limit( $swpm_member->member_id ) ) {
-
-			}
-		}
-
-		return true;
-	}
+	//	public function handle_wp_authenticate_login_limit( $wp_user ) {
+	//		// If login validation failed already, return that error.
+	//		if ( is_wp_error( $wp_user ) ) {
+	//			return $wp_user;
+	//		}
+	//
+	//		$wp_username = $wp_user->user_login;
+	//
+	//		$swpm_member = SwpmMemberUtils::get_user_by_user_name( $wp_username );
+	//
+	//		if ( empty( $swpm_member ) ) {
+	//			// SWPM user account not found for this wp user account. Noting to do.
+	//			return $wp_user;
+	//		}
+	//
+	//		// Check if limit exceed.
+	//		if ( self::reached_active_login_limit( $swpm_member->member_id ) && self::login_limit_logic() == 'allow' ) {
+	//			self::delete_session_tokens( $swpm_member->member_id );
+	//		}
+	//
+	//		return $wp_user;
+	//	}
 
 	/**
 	 * Check if active login limit enabled or not.
@@ -99,7 +57,7 @@ class SwpmLimitActiveLogin {
 	 *
 	 * @return int
 	 */
-	public static function max_active_logins() {
+	public static function allowed_max_active_logins() {
 		return intval( SwpmSettings::get_instance()->get_value( 'maximum-active-logins', 3 ) );
 	}
 
@@ -114,7 +72,7 @@ class SwpmLimitActiveLogin {
 	 *
 	 * @return string
 	 */
-	public static function login_logic() {
+	public static function login_limit_logic() {
 		// return SwpmSettings::get_instance()->get_value( 'login-logic', 'allow' );
 		return 'allow';
 	}
@@ -126,7 +84,7 @@ class SwpmLimitActiveLogin {
 	 *
 	 * @return array
 	 */
-	public static function prepare_new_session_token( $remember_me ) {
+	public static function create_new_session_token_array( $remember_me ) {
 		if ( $remember_me ) {
 			$expiration = time() + 14 * DAY_IN_SECONDS;
 		} else {
@@ -144,54 +102,33 @@ class SwpmLimitActiveLogin {
 	/**
 	 * Clear expired session token data and append new one for a member.
 	 *
-	 * @param $member_id         int
-	 * @param $verifier          string Session Token data array key.
-	 * @param $new_session_token array
+	 * @param $member_id          int
+	 * @param $token_key          string Session Token data array key.
+	 * @param $new_session_token  array
 	 *
 	 * @return void
 	 */
-	public static function purge_member_session_tokens( $member_id, $verifier, $new_session_token ) {
+	public static function refresh_member_session_tokens( $member_id, $token_key, $new_session_token ) {
 		// Get valid session tokens.
-		$session_tokens = self::get_valid_session_tokens( $member_id );
+		$session_tokens = self::get_all_valid_session_tokens_of_member( $member_id );
 
-		$session_tokens[ hash( 'sha256', $verifier ) ] = $new_session_token;
+		$session_tokens[ hash( 'sha256', $token_key ) ] = $new_session_token;
 
 		SwpmMembersMeta::update( $member_id, 'session_tokens', $session_tokens );
 	}
 
 	/**
-	 * Set a new session token data for a member.
-	 *
-	 * @param $member_id     int
-	 * @param $verifier      string Session Token data array key.
-	 * @param $session_token array
-	 *
-	 * @return void
-	 */
-	public static function set_session_token( $member_id, $verifier, $session_token ) {
-		$session_tokens = SwpmMembersMeta::get( $member_id, 'session_tokens', true );
-		if ( empty( $session_tokens ) || ! is_array( $session_tokens ) ) {
-			$session_tokens = array();
-		}
-
-		$session_tokens[ hash( 'sha256', $verifier ) ] = $session_token;
-
-		SwpmMembersMeta::update( $member_id, 'session_tokens', $session_tokens );
-	}
-
-
-	/**
-	 * Check if a member has a session token with specific verifier.
+	 * Check if a member has a session token with specific token_key.
 	 *
 	 * @param $member_id int
-	 * @param $verifier  string Session Token data array key.
+	 * @param $token_key string Session Token data array key.
 	 *
 	 * @return bool
 	 */
-	public static function has_members_session_token( $member_id, $verifier ) {
-		$valid_tokens = self::get_valid_session_tokens( $member_id );
+	public static function is_member_session_token_valid( $member_id, $token_key ) {
+		$valid_tokens = self::get_all_valid_session_tokens_of_member( $member_id );
 
-		return array_key_exists( hash( 'sha256', $verifier ), $valid_tokens );
+		return array_key_exists( hash( 'sha256', $token_key ), $valid_tokens );
 	}
 
 	/**
@@ -201,7 +138,7 @@ class SwpmLimitActiveLogin {
 	 *
 	 * @return array
 	 */
-	public static function get_valid_session_tokens( $member_id ) {
+	public static function get_all_valid_session_tokens_of_member( $member_id ) {
 		$session_tokens = SwpmMembersMeta::get( $member_id, 'session_tokens', true );
 		if ( ! is_array( $session_tokens ) ) {
 			return array();
@@ -227,41 +164,49 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Clear session token of a member.
-	 * If a session_token verifier provided, only delete that, else clear all.
+	 * If a session_token token_key provided, only delete that, else clear all.
 	 *
-	 * @param $member_id int
+	 * @param $member_id  int
 	 *
-	 * @param $verifier  string Session Token data array key.
+	 * @param $token_key  string Session Token data array key.
 	 *
 	 * @return void
 	 */
-	public static function clear_session_token( $member_id, $verifier = '' ) {
-		if ( empty( $member_id ) ) {
+	public static function clear_specific_session_tokens( $member_id, $token_key ) {
+		if ( empty( $member_id ) || empty( $token_key ) ) {
 			return;
 		}
 
-		// Clear all tokens if specific session token provided.
-		if ( empty( $verifier ) ) {
-			SwpmMembersMeta::delete( $member_id, 'session_tokens' );
-
-			return;
-		}
-
-		// CHeck is 'session_token' meta is empty.
+		// Check if 'session_token' meta is empty.
 		$session_tokens = SwpmMembersMeta::get( $member_id, 'session_tokens', true );
 		if ( empty( $session_tokens ) || ! is_array( $session_tokens ) ) {
 			return;
 		}
 
-		$verifier = hash( 'sha256', $verifier ); // The session_token key was saved as sha256 hash.
+		$token_key = hash( 'sha256', $token_key ); // The session_token key was saved as sha256 hash.
 
 		// Check and remove target session token.
-		if ( array_key_exists( $verifier, $session_tokens ) ) {
-			unset( $session_tokens[ $verifier ] );
+		if ( array_key_exists( $token_key, $session_tokens ) ) {
+			unset( $session_tokens[ $token_key ] );
 		}
 
 		// Update member's session tokens.
 		SwpmMembersMeta::update( $member_id, 'session_tokens', $session_tokens );
+	}
+
+	/**
+	 * Deletes all session tokens of a member.
+	 *
+	 * @param $member_id int
+	 *
+	 * @return void
+	 */
+	public static function delete_session_tokens( $member_id ) {
+		if ( empty( $member_id ) ) {
+			return;
+		}
+		// Clear all session tokens.
+		SwpmMembersMeta::delete( $member_id, 'session_tokens' );
 	}
 
 	/**
@@ -273,7 +218,7 @@ class SwpmLimitActiveLogin {
 	 */
 	public static function delete_expired_session_tokens( $member_id ) {
 		// Get valid session tokens.
-		$session_tokens = self::get_valid_session_tokens( $member_id );
+		$session_tokens = self::get_all_valid_session_tokens_of_member( $member_id );
 		// Update member's session tokens.
 		SwpmMembersMeta::update( $member_id, 'session_tokens', $session_tokens );
 	}
@@ -286,9 +231,9 @@ class SwpmLimitActiveLogin {
 	 * @return bool
 	 */
 	public static function reached_active_login_limit( $member_id ) {
-		$valid_tokens       = self::get_valid_session_tokens( $member_id );
+		$valid_tokens       = self::get_all_valid_session_tokens_of_member( $member_id );
 		$valid_tokens_count = count( $valid_tokens );
-		if ( $valid_tokens_count >= self::max_active_logins() ) {
+		if ( $valid_tokens_count >= self::allowed_max_active_logins() ) {
 			return true;
 		}
 

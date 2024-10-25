@@ -162,6 +162,14 @@ class SwpmAuth {
 				$this->trigger_swpm_authenticate_failed_hook($swpm_user_name);//Trigger authenticate failed action hook.
 				return false;
 			}
+
+			if (SwpmLimitActiveLogin::is_enabled() && SwpmLimitActiveLogin::reached_active_login_limit($userData->member_id)){
+				if ( SwpmLimitActiveLogin::login_limit_logic() == 'allow'){
+					SwpmLimitActiveLogin::delete_session_tokens($userData->member_id);
+					SwpmLog::log_auth_debug('All active session tokens cleared for member id: '.$userData->member_id , true);
+				}
+			}
+
 			if ( $this->check_constraints() ) {
 				$remember   = isset( $_POST['rememberme'] ) ? true : false;
 				$this->set_cookie( $remember );
@@ -224,10 +232,29 @@ class SwpmAuth {
 			
             do_action('swpm_validate_login_hash_mismatch');
 			//Clear the auth cookies of SWPM to clear the bad hash. This will log out the user.
-			$this->swpm_clear_auth_cookies();
+			$this->swpm_clear_auth_cookies_and_session_tokens();
 			//Clear the wp user auth cookies and destroy session as well.
 			$this->clear_wp_user_auth_cookies();
 			return false;
+		}
+
+		if (SwpmLimitActiveLogin::is_enabled()){
+			// Check if session_token exists.
+			// Try to connect the auth cookie to session tokens of members meta table
+			$token_key = $_COOKIE[ $auth_cookie_name ];
+			$member_id = SwpmMemberUtils::get_user_by_user_name($username)->member_id;
+			if (!SwpmLimitActiveLogin::is_member_session_token_valid($member_id ,$token_key)){
+				$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . __( 'Session Expired! Please login again.', 'simple-membership') . '</span>';
+				SwpmLog::log_auth_debug( 'Validate() function - Session Token meta expired. Going to clear the auth cookies to clear the bad hash.', true );
+				SwpmLog::log_auth_debug( 'Validate() function - The user profile with the username: ' . $username . ' will be logged out.', true );
+
+				do_action('swpm_validate_login_session_token_error');
+				//Clear the auth cookies of SWPM to clear the bad hash. This will log out the user.
+				$this->swpm_clear_auth_cookies_and_session_tokens();
+				//Clear the wp user auth cookies and destroy session as well.
+				$this->clear_wp_user_auth_cookies();
+				return false;
+			}
 		}
 
 		if ( $expiration < time() ) {
@@ -394,7 +421,7 @@ class SwpmAuth {
 		}
         
 		//Clear the auth cookies.
-		$this->swpm_clear_auth_cookies();
+		$this->swpm_clear_auth_cookies_and_session_tokens();
 
 		$this->userData      = null;
 		$this->isLoggedIn    = false;
@@ -410,7 +437,7 @@ class SwpmAuth {
 	 */
 	public function logout_silent_and_redirect() {
 		$this->logout( false );//Logout without triggering the action hook.
-		$this->swpm_clear_auth_cookies();//Force clear the auth cookies.
+		$this->swpm_clear_auth_cookies_and_session_tokens();//Force clear the auth cookies.
 		$silent_logout_redirect_url = add_query_arg(
 			array(
 				'swpm_logged_out' => '1',
@@ -422,15 +449,28 @@ class SwpmAuth {
 		wp_redirect( trailingslashit( $redirect_url ) );
 		exit( 0 );
 	}
-	
+
 	public function swpm_clear_auth_cookies() {
 		do_action( 'swpm_clear_auth_cookies' );
 		if ( SwpmUtils::is_multisite_install() ) {
 			//Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
 			wp_cookie_constants();
 		}
+
 		setcookie( SIMPLE_WP_MEMBERSHIP_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
 		setcookie( SIMPLE_WP_MEMBERSHIP_SEC_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
+	}
+	
+	public function swpm_clear_auth_cookies_and_session_tokens() {
+		$logged_in_member_id = SwpmMemberUtils::get_logged_in_members_id();
+
+		$this->swpm_clear_auth_cookies();
+
+		if (SwpmLimitActiveLogin::is_enabled()){
+			// Save Session Token to members meta as well
+			$token_key = isset($_COOKIE[SIMPLE_WP_MEMBERSHIP_SEC_AUTH]) ? $_COOKIE[SIMPLE_WP_MEMBERSHIP_SEC_AUTH] : $_COOKIE[SIMPLE_WP_MEMBERSHIP_AUTH];
+			SwpmLimitActiveLogin::clear_specific_session_tokens($logged_in_member_id, $token_key);
+		}
 	}
 
 	public function clear_wp_user_auth_cookies(){
@@ -488,6 +528,13 @@ class SwpmAuth {
 		$auth_cookie      = $this->userData->user_name . '|' . $expiration . '|' . $hash;
 		$auth_cookie_name = $secure ? SIMPLE_WP_MEMBERSHIP_SEC_AUTH : SIMPLE_WP_MEMBERSHIP_AUTH;
 		setcookie( $auth_cookie_name, $auth_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
+
+		if (SwpmLimitActiveLogin::is_enabled()){
+			// Save Session Token to members meta as well
+			$token_key = $auth_cookie;
+			$new_session_token = SwpmLimitActiveLogin::create_new_session_token_array(!empty($remember));
+			SwpmLimitActiveLogin::refresh_member_session_tokens($this->userData->member_id, $token_key, $new_session_token);
+		}
 	}
 
 	/*
@@ -518,7 +565,7 @@ class SwpmAuth {
 	 */
 	public function reset_swpm_auth_cookies_only($user_info, $remember='', $secure=''){
 		// First clear the old auth cookies for the SWPM user.
-		$this->swpm_clear_auth_cookies(); //Clear the swpm auth cookies. New auth cookies will generate below.
+		$this->swpm_clear_auth_cookies_and_session_tokens(); //Clear the swpm auth cookies. New auth cookies will generate below.
 
 		// Next, assign new cookies, so the user doesn't have to login again.
 		// Set new auth cookies for SWPM user
@@ -604,7 +651,7 @@ class SwpmAuth {
 		//$email     = $this->get( 'email' );
 
 		SwpmLog::log_simple_debug( 'Deleting member profile with username: ' . $user_name . ' (ID: ' . $user_id . ')', true );
-		$this->swpm_clear_auth_cookies();
+		$this->swpm_clear_auth_cookies_and_session_tokens();
 		wp_clear_auth_cookie();
 		SwpmMembers::delete_swpm_user_by_id( $user_id );
 		SwpmMembers::delete_wp_user( $user_name );
@@ -653,5 +700,4 @@ class SwpmAuth {
 		$wp_error_obj = new WP_Error( 'swpm-authenticate-failed', $error_msg );
 		do_action( 'swpm_authenticate_failed', $username, $wp_error_obj );
 	}
-
 }

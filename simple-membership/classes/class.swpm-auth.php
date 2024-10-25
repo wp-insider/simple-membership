@@ -462,15 +462,12 @@ class SwpmAuth {
 	}
 	
 	public function swpm_clear_auth_cookies_and_session_tokens() {
-		$logged_in_member_id = SwpmMemberUtils::get_logged_in_members_id();
+		//Delete the session token from the members meta table before deleting the auth cookies 
+		//We need the token key from the cookie value.
+		SwpmLimitActiveLogin::clear_logged_in_member_session_token();
 
+		//Clear the auth cookies.
 		$this->swpm_clear_auth_cookies();
-
-		if (SwpmLimitActiveLogin::is_enabled()){
-			// Save Session Token to members meta as well
-			$token_key = isset($_COOKIE[SIMPLE_WP_MEMBERSHIP_SEC_AUTH]) ? $_COOKIE[SIMPLE_WP_MEMBERSHIP_SEC_AUTH] : $_COOKIE[SIMPLE_WP_MEMBERSHIP_AUTH];
-			SwpmLimitActiveLogin::clear_specific_session_tokens($logged_in_member_id, $token_key);
-		}
 	}
 
 	public function clear_wp_user_auth_cookies(){

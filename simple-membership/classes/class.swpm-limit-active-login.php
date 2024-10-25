@@ -162,6 +162,13 @@ class SwpmLimitActiveLogin {
 		return $session_token['expiration'] >= time();
 	}
 
+	public static function clear_logged_in_member_session_token() {
+		$logged_in_member_id = SwpmMemberUtils::get_logged_in_members_id();
+		if (self::is_enabled()){
+			$token_key = isset($_COOKIE[SIMPLE_WP_MEMBERSHIP_SEC_AUTH]) ? $_COOKIE[SIMPLE_WP_MEMBERSHIP_SEC_AUTH] : $_COOKIE[SIMPLE_WP_MEMBERSHIP_AUTH];
+			SwpmLimitActiveLogin::clear_specific_session_token($logged_in_member_id, $token_key);
+		}
+	}
 	/**
 	 * Clear session token of a member.
 	 * If a session_token token_key provided, only delete that, else clear all.
@@ -172,7 +179,7 @@ class SwpmLimitActiveLogin {
 	 *
 	 * @return void
 	 */
-	public static function clear_specific_session_tokens( $member_id, $token_key ) {
+	public static function clear_specific_session_token( $member_id, $token_key ) {
 		if ( empty( $member_id ) || empty( $token_key ) ) {
 			return;
 		}

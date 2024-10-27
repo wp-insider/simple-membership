@@ -6,13 +6,14 @@
 class SwpmCronJob {
 
     public function __construct() {
-        //Daily cron job event
+        //Daily cron job event(s)
         add_action('swpm_account_status_event', array(&$this, 'update_account_status'));
-        add_action('swpm_account_status_event', array(&$this, 'handle_twicedaily_cron_event'));
+        add_action('swpm_account_status_event', array(&$this, 'clean_expired_session_tokens_of_members'));
+
         add_action('swpm_delete_pending_account_event', array(&$this, 'delete_pending_account'));
         add_action('swpm_delete_pending_account_event', array($this, 'delete_pending_email_activation_data'));
 
-        //Twice daily cron job event
+        //Twice daily cron job event(s)
         add_action('swpm_twicedaily_cron_event', array( &$this, 'handle_twicedaily_cron_event' ) );
     }
 
@@ -22,10 +23,11 @@ class SwpmCronJob {
             $query = $wpdb->prepare("SELECT member_id, membership_level, subscription_starts, account_state
                     FROM {$wpdb->prefix}swpm_members_tbl
                     WHERE membership_level NOT IN ( SELECT id FROM {$wpdb->prefix}swpm_membership_tbl
-                                                WHERE subscription_period = '' OR subscription_period = '0' )
+                    WHERE subscription_period = '' OR subscription_period = '0' )
                     LIMIT %d, 100", $counter);
             $results = $wpdb->get_results($query);
             if (empty($results)) {
+                //No more records to process. Break out of the loop.
                 break;
             }
             $expired = array();
@@ -53,13 +55,10 @@ class SwpmCronJob {
             return;
         }
         for ($counter = 0;; $counter += 100) {
-            $query = $wpdb->prepare("SELECT member_id
-                                     FROM
-                                        {$wpdb->prefix}swpm_members_tbl
-                                    WHERE account_state='pending'
-                                         AND subscription_starts < DATE_SUB(NOW(), INTERVAL %d MONTH) LIMIT %d, 100", $interval, $counter);
+            $query = $wpdb->prepare("SELECT member_id FROM {$wpdb->prefix}swpm_members_tbl WHERE account_state='pending' AND subscription_starts < DATE_SUB(NOW(), INTERVAL %d MONTH) LIMIT %d, 100", $interval, $counter);
             $results = $wpdb->get_results($query);
             if (empty($results)) {
+                //No more records to process. Break out of the loop.
                 break;
             }
             $to_delete = array();
@@ -93,13 +92,32 @@ class SwpmCronJob {
         }
     }
 
+    public function clean_expired_session_tokens_of_members(){
+	    // Clean expired session tokens of swpm members (the valid ones will be kept).
+        SwpmLog::log_auth_debug('CRON JOB: Cleaning expired session tokens of swpm members.', true);
+
+        global $wpdb;
+        for ($counter = 0;; $counter += 100) {
+            //Get 100 member records at a time to process.
+            $query = $wpdb->prepare("SELECT member_id FROM {$wpdb->prefix}swpm_members_tbl LIMIT %d, 100", $counter);
+            $results = $wpdb->get_results($query);
+            if (empty($results)) {
+                //No more records to process. Break out of the loop.
+                break;
+            }
+
+            foreach ($results as $result) {
+                $member_id = $result->member_id;
+                SwpmLimitActiveLogin::delete_expired_session_tokens($member_id);
+            }
+        }
+
+    }
+
     public function handle_twicedaily_cron_event() {
         //Perform any cron job tasks that needs to be done twice daily.
         //At the moment, we don't have any tasks that needs to be done twice daily.
         //This is a placeholder for future use.
-
-	    // Clear expired session tokens of swpm members, but keep the valid one's.
-	    SwpmLimitActiveLogin::delete_all_members_expired_session_tokens();
     }
 
 }

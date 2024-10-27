@@ -7,15 +7,19 @@
 class SwpmLimitActiveLogin {
 
 	public function __construct() {
-		if ( self::is_enabled() ) {
-			add_filter( 'authenticate', array( $this, 'authenticate_filter_login_limit_check' ), 30, 3 );
-		}
+		// Add filter to check the active login limit when the user logs in from WP login form.
+		add_filter( 'authenticate', array( $this, 'authenticate_filter_login_limit_check' ), 30, 3 );
 	}
 
 	/**
 	 * WordPress authentication process - check if the maximum active logins limit reached.
 	 */
 	public function authenticate_filter_login_limit_check( $wp_user, $username, $password ) {
+		if ( !self::is_enabled() ) {
+			// Active login limit is not enabled. Nothing to do.
+			return $wp_user;
+		}
+
 		if( ! SwpmUtils::login_originated_from_swpm_login_form() ) {
 			// If the login request is not originated from the SWPM login form, we don't need to check the active login limit here.
 			// Our plugin checks the active login limit when the user logs in from the SWPM login form.

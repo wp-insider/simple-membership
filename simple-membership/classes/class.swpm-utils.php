@@ -766,4 +766,13 @@ abstract class SwpmUtils {
 				return $gateway;
 		}
 	}
+
+	public static function login_originated_from_swpm_login_form(){
+		//Our plugin's login request (Standard login, login after registration, 2FA login, etc.) should have the 'swpm_user_name' parameter.
+		//We have also added 'swpm_login_origination_flag' parameter to all our logins to identify the login request origination.
+		if ( isset($_REQUEST['swpm_user_name']) ) {
+			return true;
+		}
+		return false;
+	}
 }

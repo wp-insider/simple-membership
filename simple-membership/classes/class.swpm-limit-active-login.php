@@ -8,40 +8,39 @@ class SwpmLimitActiveLogin {
 
 	public function __construct() {
 		if ( self::is_enabled() ) {
-			// add_filter( 'wp_authenticate_user', array( $this, 'handle_wp_authenticate_login_limit' ) );
+			add_filter( 'authenticate', array( $this, 'authenticate_filter_login_limit_check' ), 30, 3 );
 		}
 	}
 
 	/**
-	 * Validate if the maximum active logins limit reached.
-	 * This check happens after authentication happens.
-	 *
-	 * @param object $wp_user User Object/WPError.
-	 *
-	 * @return object User object or error object.
+	 * WordPress authentication process - check if the maximum active logins limit reached.
 	 */
-	//	public function handle_wp_authenticate_login_limit( $wp_user ) {
-	//		// If login validation failed already, return that error.
-	//		if ( is_wp_error( $wp_user ) ) {
-	//			return $wp_user;
-	//		}
-	//
-	//		$wp_username = $wp_user->user_login;
-	//
-	//		$swpm_member = SwpmMemberUtils::get_user_by_user_name( $wp_username );
-	//
-	//		if ( empty( $swpm_member ) ) {
-	//			// SWPM user account not found for this wp user account. Noting to do.
-	//			return $wp_user;
-	//		}
-	//
-	//		// Check if limit exceed.
-	//		if ( self::reached_active_login_limit( $swpm_member->member_id ) && self::login_limit_logic() == 'allow' ) {
-	//			self::delete_session_tokens( $swpm_member->member_id );
-	//		}
-	//
-	//		return $wp_user;
-	//	}
+	public function authenticate_filter_login_limit_check( $wp_user, $username, $password ) {
+		if( ! SwpmUtils::login_originated_from_swpm_login_form() ) {
+			// If the login request is not originated from the SWPM login form, we don't need to check the active login limit here.
+			// Our plugin checks the active login limit when the user logs in from the SWPM login form.
+			return $wp_user;
+		}
+
+		if ( is_wp_error( $wp_user ) ) {
+			// If login validation failed already, return that error.
+			return $wp_user;
+		}
+
+		$wp_username = $wp_user->user_login;
+		$swpm_member = SwpmMemberUtils::get_user_by_user_name( $wp_username );
+		if ( empty( $swpm_member ) ) {
+			// SWPM user account not found for this wp user account. Noting to do.
+			return $wp_user;
+		}
+
+		// Check if limit exceed.
+		if ( self::reached_active_login_limit( $swpm_member->member_id )) {
+			self::delete_session_tokens( $swpm_member->member_id );
+		}
+
+		return $wp_user;
+	}
 
 	/**
 	 * Check if active login limit enabled or not.
@@ -192,7 +191,7 @@ class SwpmLimitActiveLogin {
 	 * Check if login limit has reached for a member.
 	 */
 	public static function reached_active_login_limit( $member_id ) {
-		$valid_tokens       = self::get_all_valid_session_tokens_of_member( $member_id );
+		$valid_tokens = self::get_all_valid_session_tokens_of_member( $member_id );
 		$valid_tokens_count = count( $valid_tokens );
 		if ( $valid_tokens_count >= self::allowed_max_active_logins() ) {
 			return true;

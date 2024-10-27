@@ -78,8 +78,8 @@ class SimpleWpMembership {
         add_action('load-wp-membership_page_simple_wp_membership_levels', array(&$this, 'admin_library'));
 
         //Core WP hooks that we need to hook into
-        add_action('wp_login', array(&$this, 'wp_login_hook_handler'), 10, 2);
-        add_action('wp_authenticate', array(&$this, 'wp_authenticate_handler'), 1, 2);
+        add_action('wp_authenticate', array(&$this, 'wp_authenticate_handler'), 1, 2);//This hook is triggered before WordPress authenticates the user. Useful for pre-authentication tasks.
+        add_action('wp_login', array(&$this, 'wp_login_hook_handler'), 10, 2);//This hook is triggered after WordPress authenticates a user. It passes the user's username and user object (of the authenticated user).
         add_action('wp_logout', array(&$this, 'wp_logout_handler'));
         add_action('password_reset', array(&$this, 'wp_password_reset_hook'), 10, 2);
         add_action('user_register', array(&$this, 'swpm_handle_wp_user_registration'));
@@ -420,8 +420,12 @@ class SimpleWpMembership {
         $auth->login_to_swpm_using_wp_user($user);
     }
 
-    /* Used to log the user into SWPM system using the wp_login hook. Some social plugins use this hook to handle the login */
+    /* 
+    * Used to log the user into SWPM system using the wp_login hook. Some social plugins use this hook to handle the login.
+    */
     public function wp_login_hook_handler($user_login, $user){
+        //This hook is triggered after WordPress authenticates a user. 
+        //It passes the user's username and user object (of the authenticated user).        
         SwpmLog::log_auth_debug('wp_login hook triggered. Username: ' . $user_login, true);
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
@@ -431,7 +435,12 @@ class SimpleWpMembership {
         $auth->login_to_swpm_using_wp_user($user);
     }
 
+    /*
+    * We can use this function to do any pre-authentication tasks.
+    * This function is triggered before WordPress authenticates the user.
+    */
     public function wp_authenticate_handler($username, $password) {
+        //This hook is triggered before WordPress authenticates the user. Useful for pre-authentication tasks.
 
         $auth = SwpmAuth::get_instance();
         if (($auth->is_logged_in() && ($auth->userData->user_name == $username))) {

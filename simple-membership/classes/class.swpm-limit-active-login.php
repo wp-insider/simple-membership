@@ -45,8 +45,6 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Check if active login limit enabled or not.
-	 *
-	 * @return bool
 	 */
 	public static function is_enabled() {
 		return ! empty( SwpmSettings::get_instance()->get_value( 'enable-login-limiter' ) );
@@ -54,8 +52,6 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Get the max allowed active logins.
-	 *
-	 * @return int
 	 */
 	public static function allowed_max_active_logins() {
 		return intval( SwpmSettings::get_instance()->get_value( 'maximum-active-logins', 3 ) );
@@ -69,8 +65,6 @@ class SwpmLimitActiveLogin {
 	 * Options:
 	 * 'allow': Allow new login by terminating all other old sessions when the limit is reached.
 	 * 'block': Do not allow new login if the limit is reached. Users need to wait for the old login sessions to expire.
-	 *
-	 * @return string
 	 */
 	public static function login_limit_logic() {
 		// return SwpmSettings::get_instance()->get_value( 'login-logic', 'allow' );
@@ -79,10 +73,6 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Prepare a session token array data.
-	 *
-	 * @param $remember_me bool If 'remember me' input checked or not.
-	 *
-	 * @return array
 	 */
 	public static function create_new_session_token_array( $remember_me ) {
 		if ( $remember_me ) {
@@ -101,12 +91,6 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Clear expired session token data and append new one for a member.
-	 *
-	 * @param $member_id          int
-	 * @param $token_key          string Session Token data array key.
-	 * @param $new_session_token  array
-	 *
-	 * @return void
 	 */
 	public static function refresh_member_session_tokens( $member_id, $token_key, $new_session_token ) {
 		// Get valid session tokens.
@@ -119,11 +103,6 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Check if a member has a session token with specific token_key.
-	 *
-	 * @param $member_id int
-	 * @param $token_key string Session Token data array key.
-	 *
-	 * @return bool
 	 */
 	public static function is_member_session_token_valid( $member_id, $token_key ) {
 		$valid_tokens = self::get_all_valid_session_tokens_of_member( $member_id );
@@ -133,10 +112,6 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Get only the valid session tokens.
-	 *
-	 * @param $member_id int
-	 *
-	 * @return array
 	 */
 	public static function get_all_valid_session_tokens_of_member( $member_id ) {
 		$session_tokens = SwpmMembersMeta::get( $member_id, 'session_tokens', true );
@@ -149,10 +124,6 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Check if the 'expiration' field exceeds current time.
-	 *
-	 * @param $session_token array Session token data.
-	 *
-	 * @return bool
 	 */
 	public static function is_token_still_valid( $session_token ) {
 		if ( ! is_array( $session_token ) ) {
@@ -173,12 +144,6 @@ class SwpmLimitActiveLogin {
 	/**
 	 * Clear session token of a member.
 	 * If a session_token token_key provided, only delete that, else clear all.
-	 *
-	 * @param $member_id  int
-	 *
-	 * @param $token_key  string Session Token data array key.
-	 *
-	 * @return void
 	 */
 	public static function clear_specific_session_token( $member_id, $token_key ) {
 		if ( empty( $member_id ) || empty( $token_key ) ) {
@@ -204,10 +169,6 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Deletes all session tokens of a member.
-	 *
-	 * @param $member_id int
-	 *
-	 * @return void
 	 */
 	public static function delete_session_tokens( $member_id ) {
 		if ( empty( $member_id ) ) {
@@ -219,10 +180,6 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Deletes all session tokens meta of a member that has been expired.
-	 *
-	 * @param $member_id int
-	 *
-	 * @return void
 	 */
 	public static function delete_expired_session_tokens( $member_id ) {
 		// Get valid session tokens.
@@ -233,10 +190,6 @@ class SwpmLimitActiveLogin {
 
 	/**
 	 * Check if login limit has reached for a member.
-	 *
-	 * @param $member_id int
-	 *
-	 * @return bool
 	 */
 	public static function reached_active_login_limit( $member_id ) {
 		$valid_tokens       = self::get_all_valid_session_tokens_of_member( $member_id );

@@ -253,7 +253,8 @@ class SwpmAuth {
 				$this->swpm_clear_auth_cookies_and_session_tokens();
 				//Clear the wp user auth cookies and destroy session as well.
 				$this->clear_wp_user_auth_cookies();
-				return false;
+
+				wp_die(__('You have been logged out as the maximum authentication limit reached for this account. Go back to ', 'simple-membership') . '<a href="'.home_url().'">' . __('home page','simple-membership') . '</a>');
 			}
 		}
 

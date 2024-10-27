@@ -6,9 +6,13 @@
 class SwpmCronJob {
 
     public function __construct() {
+        //Daily cron job event
         add_action('swpm_account_status_event', array(&$this, 'update_account_status'));
         add_action('swpm_delete_pending_account_event', array(&$this, 'delete_pending_account'));
         add_action('swpm_delete_pending_account_event', array($this, 'delete_pending_email_activation_data'));
+
+        //Twice daily cron job event
+        add_action('swpm_twicedaily_cron_event', array( &$this, 'handle_twicedaily_cron_event' ) );
     }
 
     public function update_account_status() {
@@ -86,6 +90,12 @@ class SwpmCronJob {
                 delete_option($data->option_name);
             }
         }
+    }
+
+    public function handle_twicedaily_cron_event() {
+        //Perform any cron job tasks that needs to be done twice daily.
+        //At the moment, we don't have any tasks that needs to be done twice daily.
+        //This is a placeholder for future use.
     }
 
 }

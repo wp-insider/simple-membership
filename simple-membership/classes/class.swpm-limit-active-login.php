@@ -165,6 +165,7 @@ class SwpmLimitActiveLogin {
 	public static function clear_logged_in_member_session_token() {
 		$logged_in_member_id = SwpmMemberUtils::get_logged_in_members_id();
 		if (self::is_enabled()){
+			//We only clear the specific session token of this user's current session. We don't clear all session tokens since the user may have multiple devices logged in.
 			$token_key = isset($_COOKIE[SIMPLE_WP_MEMBERSHIP_SEC_AUTH]) ? $_COOKIE[SIMPLE_WP_MEMBERSHIP_SEC_AUTH] : $_COOKIE[SIMPLE_WP_MEMBERSHIP_AUTH];
 			SwpmLimitActiveLogin::clear_specific_session_token($logged_in_member_id, $token_key);
 		}

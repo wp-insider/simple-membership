@@ -8,6 +8,7 @@ class SwpmCronJob {
     public function __construct() {
         //Daily cron job event
         add_action('swpm_account_status_event', array(&$this, 'update_account_status'));
+        add_action('swpm_account_status_event', array(&$this, 'handle_twicedaily_cron_event'));
         add_action('swpm_delete_pending_account_event', array(&$this, 'delete_pending_account'));
         add_action('swpm_delete_pending_account_event', array($this, 'delete_pending_email_activation_data'));
 
@@ -96,6 +97,9 @@ class SwpmCronJob {
         //Perform any cron job tasks that needs to be done twice daily.
         //At the moment, we don't have any tasks that needs to be done twice daily.
         //This is a placeholder for future use.
+
+	    // Clear expired session tokens of swpm members, but keep the valid one's.
+	    SwpmLimitActiveLogin::delete_all_members_expired_session_tokens();
     }
 
 }

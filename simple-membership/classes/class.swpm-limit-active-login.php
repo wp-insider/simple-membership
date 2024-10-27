@@ -20,19 +20,13 @@ class SwpmLimitActiveLogin {
 			return $wp_user;
 		}
 
-		if( ! SwpmUtils::login_originated_from_swpm_login_form() ) {
-			// If the login request is not originated from the SWPM login form, we don't need to check the active login limit here.
-			// Our plugin checks the active login limit when the user logs in from the SWPM login form.
+		if( SwpmUtils::login_originated_from_swpm_login_form() ) {
+			// If the login request is originated from the SWPM login form, we don't need to check the active login limit here.
+			// Our plugin checks the active login limit when the user logs in from the SWPM login form or WP login form once, not twice for both login type.
 			return $wp_user;
 		}
 
-		if ( is_wp_error( $wp_user ) ) {
-			// If login validation failed already, return that error.
-			return $wp_user;
-		}
-
-		$wp_username = $wp_user->user_login;
-		$swpm_member = SwpmMemberUtils::get_user_by_user_name( $wp_username );
+		$swpm_member = SwpmMemberUtils::get_user_by_user_name( $username );
 		if ( empty( $swpm_member ) ) {
 			// SWPM user account not found for this wp user account. Noting to do.
 			return $wp_user;
@@ -40,7 +34,12 @@ class SwpmLimitActiveLogin {
 
 		// Check if limit exceed.
 		if ( self::reached_active_login_limit( $swpm_member->member_id )) {
+
+			// Clear SWPM session tokens to log out members from swpm side.
 			self::delete_session_tokens( $swpm_member->member_id );
+
+			// Clear WP session token as well, to retain members from being logged in in wp admin.
+			\WP_Session_Tokens::get_instance( $wp_user->ID )->destroy_all();
 		}
 
 		return $wp_user;
@@ -189,6 +188,20 @@ class SwpmLimitActiveLogin {
 		$session_tokens = self::get_all_valid_session_tokens_of_member( $member_id );
 		// Update member's session tokens.
 		SwpmMembersMeta::update( $member_id, 'session_tokens', $session_tokens );
+	}
+
+	/**
+	 * Clear expired session tokens of swpm members, but keep the valid one's.
+	 * This runs on cron job event.
+	 */
+	public static function delete_all_members_expired_session_tokens(){
+		SwpmLog::log_auth_debug('CRON JOB: Clearing expired session tokens of swpm members.', true);
+		global $wpdb;
+		$query = "SELECT member_id FROM {$wpdb->prefix}swpm_members_tbl";
+		$member_ids = $wpdb->get_col($query);
+		foreach ($member_ids as $member_id){
+			SwpmLimitActiveLogin::delete_expired_session_tokens($member_id);
+		}
 	}
 
 	/**

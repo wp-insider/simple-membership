@@ -163,9 +163,24 @@ class SwpmAuth {
 				return false;
 			}
 
+			// Check if the active login limit reached for this member account.
 			if (SwpmLimitActiveLogin::is_enabled() && SwpmLimitActiveLogin::reached_active_login_limit($userData->member_id)){
+
+				// If login limit logic set to 'allow' then do silent logout from all active logins.
 				if ( SwpmLimitActiveLogin::login_limit_logic() == 'allow'){
+
+					// Delete session tokens of swpm member, this will log out the user from swpm side.
 					SwpmLimitActiveLogin::delete_session_tokens($userData->member_id);
+
+					// We also need to get the associate wp user, to log him/her out.
+					$wp_user = SwpmMemberUtils::get_wp_user_from_swpm_user_id($userData->member_id);
+					if( !empty($wp_user) && class_exists('WP_Session_Tokens') ) {
+						//Remove all session tokens for the wp user from the database. This will log out the member form wp side.
+						\WP_Session_Tokens::get_instance( $wp_user->ID )->destroy_all();
+					}
+
+					// If the code reaches here, the member will be logged out from both the swpm and wp side.
+
 					SwpmLog::log_auth_debug('All active session tokens cleared for member id: '.$userData->member_id , true);
 				}
 			}

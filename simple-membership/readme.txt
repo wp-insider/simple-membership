@@ -184,6 +184,7 @@ https://simple-membership-plugin.com/
 - Added members meta database table to store additional member data.
 - Added a new option to bulk delete all members from a specific membership level.
 - Added a twice daily cron job event that will be used to do various cleanup tasks in the future.
+- New 'Active Login Limit' feature added.
 
 = 4.5.4 =
 - Subscriptions can be canceled from the transaction details page of a 'subscription created' transaction (supported for the New PayPal PPCP API and Stripe subscriptions).

@@ -175,7 +175,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
-- New 'Active Login Limits' feature added. Refer to [this documentation](https://simple-membership-plugin.com/configuring-active-login-limits/) for more information.
+- New 'Active Login Limit' feature added. Refer to [this documentation](https://simple-membership-plugin.com/configuring-active-login-limit/) for more information.
 - PayPal standard subscription canceled status will also be shown in the 'subscription created' transaction details page.
 - Do not execute the after_login_redirection and the wp_signon function when the login originates from an external login form (example: WP, WooCommerce etc). This creates a better user experience.
 - Updated the Italian language translation file.

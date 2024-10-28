@@ -989,7 +989,7 @@ class SwpmSettings {
 		);
 
 		//Terms and conditions section
-		add_settings_section( 'limit-active-logins', __( 'Limit Active Logins', 'simple-membership' ), array( &$this, 'advanced_settings_limit_active_logins_callback' ), 'simple_wp_membership_settings' );
+		add_settings_section( 'limit-active-logins', __( 'Active Login Limit', 'simple-membership' ), array( &$this, 'advanced_settings_limit_active_logins_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
 			'enable-login-limiter',
 			__( 'Enable Login Limit', 'simple-membership' ),
@@ -1387,7 +1387,7 @@ class SwpmSettings {
 
 	public function advanced_settings_limit_active_logins_callback() {
 		_e( 'This section lets you set login limits for your members.', 'simple-membership' );
-		echo ' <a href="https://simple-membership-plugin.com/configuring-active-login-limits/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
+		echo ' <a href="https://simple-membership-plugin.com/configuring-active-login-limit/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
 	}
 
 	public function maximum_active_login_callback( $args ) {

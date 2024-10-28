@@ -1157,7 +1157,7 @@ class SwpmSettings {
 			echo '<option ' . $is_selected . ' value="' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</option>';
 		}
 		echo '</select>';
-		echo '<br/><i>' . $msg . '</i>';
+		echo '<p class="description">' . $msg . '</p>';
 	}
 
 	public function checkbox_callback( $args ) {
@@ -1165,7 +1165,7 @@ class SwpmSettings {
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
 		$is   = esc_attr( $this->get_value( $item ) );
 		echo "<input type='checkbox' $is name='swpm-settings[" . $item . "]' value=\"checked='checked'\" />";
-		echo '<br/><i>' . $msg . '</i>';
+		echo '<p class="description">' . $msg . '</p>';
 	}
 
 	public function textarea_callback( $args ) {
@@ -1173,7 +1173,7 @@ class SwpmSettings {
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
 		$text = esc_attr( $this->get_value( $item ) );
 		echo "<textarea name='swpm-settings[" . $item . "]'  rows='6' cols='60' >" . $text . '</textarea>';
-		echo '<br/><i>' . $msg . '</i>';
+		echo '<p class="description">' . $msg . '</p>';
 	}
 
 	public function textfield_small_callback( $args ) {
@@ -1181,7 +1181,7 @@ class SwpmSettings {
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
 		$text = esc_attr( $this->get_value( $item ) );
 		echo "<input type='text' name='swpm-settings[" . $item . "]'  size='5' value='" . $text . "' />";
-		echo '<br/><i>' . $msg . '</i>';
+		echo '<p class="description">' . $msg . '</p>';
 	}
 
 	public function textfield_callback( $args ) {
@@ -1197,7 +1197,7 @@ class SwpmSettings {
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
 		$text = esc_attr( $this->get_value( $item ) );
 		echo "<input type='text' name='swpm-settings[" . $item . "]'  size='100' value='" . $text . "' />";
-		echo '<br/><i>' . $msg . '</i>';
+		echo '<p class="description">' . $msg . '</p>';
 	}
 
 	public function set_default_editor( $r ) {

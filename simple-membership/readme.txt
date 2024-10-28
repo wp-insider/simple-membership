@@ -175,6 +175,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
+- New 'Active Login Limits' feature added. Refer to [this documentation](https://simple-membership-plugin.com/configuring-active-login-limits/) for more information.
 - PayPal standard subscription canceled status will also be shown in the 'subscription created' transaction details page.
 - Do not execute the after_login_redirection and the wp_signon function when the login originates from an external login form (example: WP, WooCommerce etc). This creates a better user experience.
 - Updated the Italian language translation file.
@@ -184,7 +185,7 @@ https://simple-membership-plugin.com/
 - Added members meta database table to store additional member data.
 - Added a new option to bulk delete all members from a specific membership level.
 - Added a twice daily cron job event that will be used to do various cleanup tasks in the future.
-- New 'Active Login Limit' feature added.
+- Updated settings menu help text CSS to use the 'description' class for improved readability.
 
 = 4.5.4 =
 - Subscriptions can be canceled from the transaction details page of a 'subscription created' transaction (supported for the New PayPal PPCP API and Stripe subscriptions).

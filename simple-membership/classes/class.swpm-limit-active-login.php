@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This class handles all active login limit related operations.
+ * This class handles all active login limits feture related operations.
  */
 
 class SwpmLimitActiveLogin {
@@ -25,13 +25,14 @@ class SwpmLimitActiveLogin {
 	/**
 	 * Get the logic settings for restricting login limits.
 	 *
-	 * TODO: The settings has not finalized yet, assume it 'allow' for now.
+	 * TODO: At the moment we only offer the 'allow' option for this feature.
 	 *
 	 * Options:
 	 * 'allow': Allow new login by terminating all other old sessions when the limit is reached.
 	 * 'block': Do not allow new login if the limit is reached. Users need to wait for the old login sessions to expire.
 	 */
 	public static function login_limit_logic() {
+		//Note: At the moment we only offer the 'allow' option for this feature.
 		// return SwpmSettings::get_instance()->get_value( 'login-logic', 'allow' );
 		return 'allow';
 	}

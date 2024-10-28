@@ -1397,7 +1397,7 @@ class SwpmSettings {
 
 		echo '<p><input type="number" name="swpm-settings['.esc_attr($item).']" id="loggedin_maximum" min="1" value="' . intval( $value ) . '" /></p>';
 		echo '<p class="description">' . esc_html__( 'Set the maximum number of active logins allowed for a user account.', 'simple-membership' ) . '</p>';
-		echo '<p class="description">' . esc_html__( 'Once this limit is reached, any new login will automatically log out all other active sessions from other browsers or devices.', 'simple-membership' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Once this limit is reached, any new login will automatically terminate all active sessions of the user from other browsers or devices.', 'simple-membership' ) . '</p>';
 	}
 
     //	public function login_logic_callback( $args ) {

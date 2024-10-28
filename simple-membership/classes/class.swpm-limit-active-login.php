@@ -6,51 +6,7 @@
 
 class SwpmLimitActiveLogin {
 
-	public function __construct() {
-		// Add filter to check the active login limit when the user logs in from WP login form.
-		add_filter( 'authenticate', array( $this, 'authenticate_filter_login_limit_check' ), 30, 3 );
-	}
-
-	/**
-	 * WordPress authentication process - check if the maximum active login limit reached.
-	 */
-	public function authenticate_filter_login_limit_check( $wp_user, $username, $password ) {
-		//Note: This filter hook is triggered before WordPres completes the authentication process and logs the user in.
-		//We can use this to clear/remove previous session tokens of the user if the user has reached the maximum active login limit.
-
-		if ( !self::is_enabled() ) {
-			// Active login limit is not enabled. Nothing to do.
-			return $wp_user;
-		}
-
-		if( SwpmUtils::login_originated_from_swpm_login_form() ) {
-			// If the login request is originated from the SWPM login form, we don't need to check the active login limit here.
-			// Our plugin checks the active login limit when the user logs in from the SWPM login form or WP login form once, not twice for both login type.
-			return $wp_user;
-		}
-
-		$swpm_member = SwpmMemberUtils::get_user_by_user_name( $username );
-		if ( empty( $swpm_member ) ) {
-			// SWPM user account not found for this wp user account. Noting to do.
-			return $wp_user;
-		}
-
-		// Check if limit exceed.
-		if ( self::reached_active_login_limit( $swpm_member->member_id )) {
-
-			// Clear SWPM session tokens to log out members from swpm side.
-			self::delete_session_tokens( $swpm_member->member_id );
-
-			// Clear WP session token, to refrain the users from staying logged in the wp-admin side.
-			if( class_exists('WP_Session_Tokens') ) {
-				//Remove all session tokens for the user from the database.
-				\WP_Session_Tokens::get_instance( $wp_user->ID )->destroy_all();
-				//The wp login process will continue after this which will add/set the new session token for the user.
-			}
-		}
-
-		return $wp_user;
-	}
+	public function __construct() {}
 
 	/**
 	 * Check if active login limit enabled or not.

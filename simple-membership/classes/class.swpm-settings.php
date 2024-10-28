@@ -989,7 +989,7 @@ class SwpmSettings {
 		);
 
 		//Terms and conditions section
-		add_settings_section( 'limit-active-logins', __( 'Limit Active Logins', 'simple-membership' ), array( &$this, 'advanced_settings_terms_and_conditions_callback' ), 'simple_wp_membership_settings' );
+		add_settings_section( 'limit-active-logins', __( 'Limit Active Logins', 'simple-membership' ), array( &$this, 'advanced_settings_limit_active_logins_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
 			'enable-login-limiter',
 			__( 'Enable Login Limit', 'simple-membership' ),
@@ -998,7 +998,7 @@ class SwpmSettings {
 			'limit-active-logins',
 			array(
 				'item'    => 'enable-login-limiter',
-				'message' => __( 'Check this ot turn on login limit.', 'simple-membership'),
+				'message' => __( 'Check this box to enable the login limit feature.', 'simple-membership'),
 			)
 		);
 		add_settings_field(
@@ -1382,10 +1382,12 @@ class SwpmSettings {
 
 	public function advanced_settings_terms_and_conditions_callback() {
 		_e( 'This section allows you to configure terms and conditions and privacy policy that users must accept at registration time.', 'simple-membership' );
+		echo ' <a href="https://simple-membership-plugin.com/adding-a-terms-and-conditions-and-privacy-policy-to-member-registration-page/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
 	}
 
 	public function advanced_settings_limit_active_logins_callback() {
-		_e( 'This section allows you to configure terms and conditions and privacy policy that users must accept at registration time.', 'simple-membership' );
+		_e( 'This section lets you set login limits for your members.', 'simple-membership' );
+		echo ' <a href="https://simple-membership-plugin.com/configuring-active-login-limits/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
 	}
 
 	public function maximum_active_login_callback( $args ) {
@@ -1393,10 +1395,9 @@ class SwpmSettings {
 		$item = $args['item'];
 		$value = $this->get_value( $item, 3 );
 
-		echo '<p><input type="number" name="swpm-settings['.esc_attr($item).']" id="loggedin_maximum" min="1" value="' . intval( $value ) . '" placeholder="' . esc_html__( 'Enter the limit in number', 'simple-membership' ) . '" /></p>';
-		echo '<p class="description">' . esc_html__( 'Set the maximum no. of active logins a user account can have.', 'simple-membership' ) . '</p>';
-		echo '<p class="description">' . esc_html__( 'If this limit reached, next login request will be failed and user will have to logout from one device to continue.', 'simple-membership' ) . '</p>';
-		echo '<p class="description"><strong>' . esc_html__( 'Note: ', 'simple-membership' ) . '</strong>' . esc_html__( 'Even if the browser is closed, login session may exist.', 'simple-membership' ) . '</p>';
+		echo '<p><input type="number" name="swpm-settings['.esc_attr($item).']" id="loggedin_maximum" min="1" value="' . intval( $value ) . '" /></p>';
+		echo '<p class="description">' . esc_html__( 'Set the maximum number of active logins allowed for a user account.', 'simple-membership' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Once this limit is reached, any new login will automatically log out all other active sessions from other browsers or devices.', 'simple-membership' ) . '</p>';
 	}
 
     //	public function login_logic_callback( $args ) {

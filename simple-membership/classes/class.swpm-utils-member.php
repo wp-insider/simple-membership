@@ -362,35 +362,35 @@ class SwpmMemberUtils {
 	}
 
         public static function check_and_die_if_email_belongs_to_admin_user( $email_to_check ){
-		//Check if the email belongs to an existing wp user account.
-		$wp_user_id = email_exists( $email_to_check );
-		if ( $wp_user_id ) {
-                    //A wp user account exist with this email.
-                    //Check if the user has admin role.
-                    $admin_user = SwpmMemberUtils::wp_user_has_admin_role( $wp_user_id );
-                    if ( $admin_user ) {
-                        //This email belongs to an admin user. Cannot use/register using an admin user's email from front-end. Show error message then exit.
-                        $error_msg = '<p>This email address (' . $email_to_check . ') belongs to an admin user. This email cannot be used to register a new account on this site for security reasons. Contact site admin.</p>';
-                        $error_msg .= '<p>For testing purpose, you can create another user account that is completely separate from the admin user account of this site.</p>';
-                        wp_die( $error_msg );
-                    }
-		}
+			//Check if the email belongs to an existing wp user account.
+			$wp_user_id = email_exists( $email_to_check );
+			if ( $wp_user_id ) {
+                //A wp user account exist with this email.
+                //Check if the user has admin role.
+                $admin_user = SwpmMemberUtils::wp_user_has_admin_role( $wp_user_id );
+                if ( $admin_user ) {
+                    //This email belongs to an admin user. Cannot use/register using an admin user's email from front-end. Show error message then exit.
+                    $error_msg = '<p>'.sprintf(__('This email address (%s) belongs to an admin user. This email cannot be used to register a new account on this site for security reasons. Contact site admin.', 'simple-membership'), $email_to_check).'</p>';
+                    $error_msg .= '<p>'.__('For testing purpose, you can create another user account that is completely separate from the admin user account of this site.', 'simple-membership').'</p>';
+                    wp_die( $error_msg );
+                }
+			}
         }
 
         public static function check_and_die_if_username_belongs_to_admin_user( $username_to_check ){
-                //Check if the username belongs to an existing wp user account.
-                $wp_user_id = username_exists( $username_to_check );
-                if ( $wp_user_id ) {
-                    //A wp user account exists with this username.
-                    //Check if the user has admin role.
-                    $admin_user = SwpmMemberUtils::wp_user_has_admin_role( $wp_user_id );
-                    if ( $admin_user ) {
-                        //This Username belongs to an admin user. Cannot use/register using an existing admin user's username from front-end. Show error message then exit.
-                        $error_msg = '<p>This username (' . $username_to_check . ') belongs to an admin user. It cannot be used to register a new account on this site for security reasons. Contact site admin.</p>';
-                        $error_msg .= '<p>For testing purpose, you can create another user account that is completely separate from the admin user account of this site.</p>';
-                        wp_die( $error_msg );
-                    }
+            //Check if the username belongs to an existing wp user account.
+            $wp_user_id = username_exists( $username_to_check );
+            if ( $wp_user_id ) {
+                //A wp user account exists with this username.
+                //Check if the user has admin role.
+                $admin_user = SwpmMemberUtils::wp_user_has_admin_role( $wp_user_id );
+                if ( $admin_user ) {
+                    //This Username belongs to an admin user. Cannot use/register using an existing admin user's username from front-end. Show error message then exit.
+                    $error_msg = '<p>'.sprintf(__('This username (%s) belongs to an admin user. It cannot be used to register a new account on this site for security reasons. Contact site admin.', 'simple-membership'), $username_to_check).'</p>';
+                    $error_msg .= '<p>'.__('For testing purpose, you can create another user account that is completely separate from the admin user account of this site.', 'simple-membership').'</p>';
+                    wp_die( $error_msg );
                 }
+            }
         }
 
         /**

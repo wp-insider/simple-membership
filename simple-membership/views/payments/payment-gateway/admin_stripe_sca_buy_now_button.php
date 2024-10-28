@@ -93,7 +93,7 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 							<option value="TRY">Turkish Lira</option>
 							<option value="VND">Vietnamese Dong</option>
 						</select>
-						<p class="description">Select the currency for this payment button.</p>
+						<p class="description"><?php _e('Select the currency for this payment button.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 
@@ -104,7 +104,7 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Use Global API Keys Settings' ); ?></th>
+					<th scope="row"><?php _e( 'Use Global API Keys Settings', 'simple-membership' ); ?></th>
 					<td>
 						<input type="checkbox" name="stripe_use_global_keys" value="1" checked/>
 						<p class="description"><?php _e( 'Use API keys from <a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe" target="_blank">Payment Settings</a> tab.', 'simple-membership' ); ?></p>

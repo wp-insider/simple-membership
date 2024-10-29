@@ -7,7 +7,7 @@ class SwpmMessages {
     private $session_key;
 
     public function __construct() {
-        $this->messages = get_option('swpm-messages');
+        $this->messages = get_option('swpm-messages', array());
         $this->session_key = $_COOKIE['swpm_session'];
     }
 

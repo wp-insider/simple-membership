@@ -4,8 +4,8 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
 Requires at least: 5.0
 Requires PHP: 7.4
-Tested up to: 6.6
-Stable tag: 4.5.4
+Tested up to: 6.7
+Stable tag: 4.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,6 +108,7 @@ You can create a free forum user account and ask your questions.
 * Ability to forward the payment notification to an external URL for further processing.
 * Option to configure whitelisting for user email addresses to allow registration only from specific email addresses or email domains.
 * Option to configure blacklisting for user email addresses to block registration from certain email addresses or email domains.
+* Allows you to set an active login limit for members, helping to prevent account sharing.
 * Option to configure PayPal payment buttons for memberships (one-time and recurring payments).
 * Option to configure Stripe payment buttons for memberships (one-time and recurring payments).
 * Option to configure Braintree payment buttons for memberships (one-time payments).
@@ -174,11 +175,10 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= 4.5.5 =
 - New 'Active Login Limit' feature added. Refer to [this documentation](https://simple-membership-plugin.com/configuring-active-login-limit/) for more information.
 - PayPal standard subscription canceled status will also be shown in the 'subscription created' transaction details page.
 - Do not execute the after_login_redirection and the wp_signon function when the login originates from an external login form (example: WP, WooCommerce etc). This creates a better user experience.
-- Updated the Italian language translation file.
 - Minor Update to the swpm-orange-box CSS class to make it more readable.
 - Added a new auto-redirect feature to the 'Full Page Protection Addon' for when a visitor attempts to access a protected page.
 - Updated the password reset shortcode's email field to use a size of 30.
@@ -186,6 +186,7 @@ https://simple-membership-plugin.com/
 - Added a new option to bulk delete all members from a specific membership level.
 - Added a twice daily cron job event that will be used to do various cleanup tasks in the future.
 - Updated settings menu help text CSS to use the 'description' class for improved readability.
+- Updated the Italian language translation file.
 
 = 4.5.4 =
 - Subscriptions can be canceled from the transaction details page of a 'subscription created' transaction (supported for the New PayPal PPCP API and Stripe subscriptions).

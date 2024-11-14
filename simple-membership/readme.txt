@@ -175,6 +175,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Protected posts types are now excluded from search result.
+
 = 4.5.5 =
 - New 'Active Login Limit' feature added. Refer to [this documentation](https://simple-membership-plugin.com/configuring-active-login-limit/) for more information.
 - PayPal standard subscription canceled status will also be shown in the 'subscription created' transaction details page.

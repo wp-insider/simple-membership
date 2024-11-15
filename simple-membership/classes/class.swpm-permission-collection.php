@@ -1,17 +1,9 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of bPermissionCollection
- *
- * @author nur
+ * Class SwpmPermissionCollection
  */
 class SwpmPermissionCollection {
+    private static $_this; //Singleton instance of this class.
     protected $permissions;
     protected static $instance;
     
@@ -19,11 +11,14 @@ class SwpmPermissionCollection {
         $this->permissions = array();
     }
     
+	/**
+	 * Get the singleton instance of this class.
+	 */    
     public static function get_instance(){
         self::$_this = empty(self::$_this)? new SwpmPermissionCollection():self::$_this;
         return self::$_this;
-    }    
-    
+    }
+
     public function load($level_ids = array()){
         if (empty($level_ids)){
             global $wpdb;

@@ -68,4 +68,29 @@ class SwpmProtection extends SwpmProtectionBase {
         return /* (($this->bitmap&1)!=1) && */ $this->in_parent_categories($id);
     }
 
+	/**
+	 * Save a list (in array format) of all protected post and page IDs (includes posts from all post types of the site).
+     * This can be useful when we need to quickly check if a post is protected or not given its ID.
+	 */
+	public static function save_swpm_all_protected_post_ids_list() {
+        // Get all post IDs of all post type (includes post, pages, custom post types) from the site.
+		$all_posts_ids = get_posts(array(
+			'post_type'      => 'any',
+			'post_status'    => 'publish',
+			'fields'         => 'ids', /* Only get IDs, not the full post objects. */
+			'posts_per_page' => -1
+		));
+
+		$protected_post_ids = array();
+		foreach ($all_posts_ids as $post_id){
+			if (SwpmProtection::get_instance()->is_protected($post_id)){
+				$protected_post_ids[] = $post_id;
+			}
+		}
+		if (!empty($protected_post_ids)){
+            // Save the list of all protected post IDs in the WP options table.
+			update_option('swpm_all_protected_post_ids_list', $protected_post_ids);
+		}
+	}
+
 }

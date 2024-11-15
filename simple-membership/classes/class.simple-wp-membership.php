@@ -100,30 +100,27 @@ class SimpleWpMembership {
         add_action('admin_init', array(&$this, 'admin_init_hook'));
         add_action('plugins_loaded', array(&$this, "plugins_loaded"));
 
-	    add_filter('pre_get_posts', array(&$this, 'exclude_swpm_protected_posts_from_search_result'));
+        //Filter to exclude the protected posts from the search results.
+	    add_filter('pre_get_posts', array(&$this, 'exclude_swpm_protected_posts_from_wp_search_result'));
     }
 
-	public function exclude_swpm_protected_posts_from_search_result($query) {
-		$protected_post_ids = get_transient('swpm_protected_post_ids_temp');
-
-		delete_transient('swpm_protected_post_ids_temp');
-
-		if (empty($protected_post_ids)){
-			return;
-		}
+	public function exclude_swpm_protected_posts_from_wp_search_result($query) {
+        $protected_post_ids = get_option('swpm_all_protected_post_ids_list');
+        if (empty($protected_post_ids)){
+            //No protected posts. Nothing to exclude.
+            return;
+        }
 
 		// Exclude from regular web search.
-		if ($query->is_search && !is_admin() && $query->is_main_query()) {
+		if (!is_admin() && $query->is_main_query() && $query->is_search()) {
+            //This is a standard search query on the front-end.
 			$query->set('post__not_in', $protected_post_ids);
 		}
 
-		// Exclude form REST API search.
-		if (
-			defined('REST_REQUEST')
-			&& REST_REQUEST
-			&& (isset($query->query_vars['s']) || isset($query->query_vars['p']))
-		) {
-			$query->set('post__not_in', $protected_post_ids);
+		// Exclude form REST API search also.
+		if (defined('REST_REQUEST') && REST_REQUEST && (isset($query->query_vars['s']) || isset($query->query_vars['p']))) {
+			//This is a REST API search query.
+            $query->set('post__not_in', $protected_post_ids);
 		}
 	}
 
@@ -869,6 +866,11 @@ class SimpleWpMembership {
                 }
             }
         }
+
+        //Save the list of all protected post IDs in the options table for quick access.
+        SwpmProtection::save_swpm_all_protected_post_ids_list();
+        
+        //Return data.
         $enable_protection = array();
         $enable_protection['protect'] = $swpm_protect_post;
         $enable_protection['level'] = $swpm_protection_level;
@@ -902,31 +904,7 @@ class SimpleWpMembership {
     public function init_hook() {
         $init_tasks = new SwpmInitTimeTasks();
         $init_tasks->do_init_tasks();
-
-		$this->temp_save_swpm_protected_post_ids();
     }
-
-	/**
-	 * Temporarily save all protected post types ids to exclude them in search result in the pre_get_posts filter hook.
-	 */
-	public function temp_save_swpm_protected_post_ids() {
-		$all_posts_type_ids = get_posts(array(
-			'post_type'      => 'any',
-			'post_status'    => 'publish',
-			'fields'         => 'ids',   // Only get IDs, not full post objects
-			'posts_per_page' => -1
-		));
-
-		$protected_post_ids = array();
-		foreach ($all_posts_type_ids as $post_id){
-			if (SwpmProtection::get_instance()->is_protected($post_id)){
-				$protected_post_ids[] = $post_id;
-			}
-		}
-		if (!empty($protected_post_ids)){
-			set_transient('swpm_protected_post_ids_temp', $protected_post_ids);
-		}
-	}
 
     public function handle_wp_loaded_tasks() {
         $wp_loaded_tasks = new SwpmWpLoadedTasks();

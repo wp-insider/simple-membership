@@ -175,7 +175,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= WIP 4.5.6.t1 =
 - The 'load_plugin_textdomain' function call has been moved to init hook with a higher priority for better compatibility with other plguins. This seem to work better for most languages.
 - Protected posts are now excluded from search result.
 

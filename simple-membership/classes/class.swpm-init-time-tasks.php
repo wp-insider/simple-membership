@@ -7,14 +7,9 @@ class SwpmInitTimeTasks {
 	}
 
 	public function do_init_tasks() {
-
-		//Set up localisation. First loaded ones will override strings present in later loaded file.
-		//Allows users to have a customized language in a different folder.
-		$locale = apply_filters( 'plugin_locale', get_locale(), 'simple-membership' );
-		load_textdomain( 'simple-membership', WP_LANG_DIR . "/simple-membership-$locale.mo" );
-		load_plugin_textdomain( 'simple-membership', false, SIMPLE_WP_MEMBERSHIP_DIRNAME . '/languages/' );
-
-		if ( ! isset( $_COOKIE['swpm_session'] ) ) { // give a unique ID to current session.
+		//Standard init time tasks.
+		if ( ! isset( $_COOKIE['swpm_session'] ) ) {
+			// Give a unique ID to current session.
 			$uid = '';
 			if (function_exists('session_create_id')){
 				$uid = md5( session_create_id('swpm') );
@@ -34,8 +29,8 @@ class SwpmInitTimeTasks {
 
 		//Do frontend-only init time tasks
 		if ( ! is_admin() ) {
-                        //Trigger an action hook 
-                        do_action('swpm_do_init_time_tasks_front_end');
+			//Trigger an action hook 
+			do_action('swpm_do_init_time_tasks_front_end');
                         
 			SwpmAuth::get_instance();
 

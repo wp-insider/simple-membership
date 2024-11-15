@@ -50,10 +50,18 @@ class SimpleWpMembership {
         new SwpmSelfActionHandler(); //Tackle the self action hook handling.
 	    new SwpmLimitActiveLogin(); // Tackle login limit functionalities.
 
-        add_action('admin_menu', array(&$this, 'menu'));
+        //Load the plugin text domain
+        //We are loading the text domain in init with a high priority for better compatibility with other plugins. Most langauges (example: de_DE) work fine with this. Alternative is to load it in plugins_loaded.
+        add_action('init', array(&$this, 'load_swpm_textdomain'), 5);
+
+        //The init and wp_loaded hooks.
         add_action('init', array(&$this, 'init_hook'));
         add_action('wp_loaded', array(&$this, 'handle_wp_loaded_tasks'));
 
+        //Admin menu hook.
+        add_action('admin_menu', array(&$this, 'menu'));
+
+        //Other general hooks
         add_filter('the_content', array(&$this, 'filter_content'), 20, 1);
         add_filter('widget_text', 'do_shortcode');
         add_filter('show_admin_bar', array(&$this, 'hide_adminbar'));
@@ -102,6 +110,15 @@ class SimpleWpMembership {
 
         //Filter to exclude the protected posts from the search results.
 	    add_filter('pre_get_posts', array(&$this, 'exclude_swpm_protected_posts_from_wp_search_result'));
+    }
+
+    public function load_swpm_textdomain() {
+		//Set up localisation. First loaded ones will override strings present in later loaded file.
+		//The following technique allows users to have a customized language in a different folder.
+		$locale = apply_filters( 'plugin_locale', get_locale(), 'simple-membership' );
+		load_textdomain( 'simple-membership', WP_LANG_DIR . "/simple-membership-$locale.mo" );
+        //Load the plugin's language files.
+		load_plugin_textdomain( 'simple-membership', false, SIMPLE_WP_MEMBERSHIP_DIRNAME . '/languages/' );
     }
 
 	public function exclude_swpm_protected_posts_from_wp_search_result($query) {

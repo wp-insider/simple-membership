@@ -175,7 +175,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= 4.5.6 =
+= 4.5.6 RC =
 - The 'load_plugin_textdomain' function call has been moved to init hook with a higher priority for better compatibility with other plguins. This seem to work better for most languages.
 - Regenerated the language POT file for the plugin to include the latest changes.
 - Protected posts are now excluded from WP search query if the user doesn't have access to the post.

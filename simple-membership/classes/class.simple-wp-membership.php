@@ -142,8 +142,8 @@ class SimpleWpMembership {
             SwpmProtection::save_swpm_all_protected_post_ids_list();
             $protected_post_ids = get_option('swpm_all_protected_post_ids_list');
 
-	        //No protected posts. Nothing to exclude.
 	        if (empty($protected_post_ids)){
+	            //No protected posts. Nothing to exclude.
 	            return;
 	        }
         }

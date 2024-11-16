@@ -109,6 +109,7 @@ You can create a free forum user account and ask your questions.
 * Option to configure whitelisting for user email addresses to allow registration only from specific email addresses or email domains.
 * Option to configure blacklisting for user email addresses to block registration from certain email addresses or email domains.
 * Allows you to set an active login limit for members, helping to prevent account sharing.
+* Option to reset the settings and data of the plugin to start fresh.
 * Option to configure PayPal payment buttons for memberships (one-time and recurring payments).
 * Option to configure Stripe payment buttons for memberships (one-time and recurring payments).
 * Option to configure Braintree payment buttons for memberships (one-time payments).
@@ -175,7 +176,8 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= 4.5.6 RC =
+= 4.5.6 =
+- New free addon for resetting the settings and data of the plugin. Refer to [this documentation](https://simple-membership-plugin.com/simple-membership-reset-settings-and-data-addon/) for more information.
 - The 'load_plugin_textdomain' function call has been moved to init hook with a higher priority for better compatibility with other plguins. This seem to work better for most languages.
 - Regenerated the language POT file for the plugin to include the latest changes.
 - Protected posts are now excluded from WP search query if the user doesn't have access to the post.

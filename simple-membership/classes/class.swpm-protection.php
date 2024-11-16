@@ -98,7 +98,9 @@ class SwpmProtection extends SwpmProtectionBase {
 	 */
 	public static function filter_protected_post_ids_list_for_current_user($post_ids_list) {
         $filtered_protected_post_ids = array_filter($post_ids_list, 'SwpmProtection::is_post_protected_for_current_user');
-		return $filtered_protected_post_ids;
+        // Reindex the array
+        $reindexed_array = array_values($filtered_protected_post_ids);        
+		return $reindexed_array;
 	}
 
     /**

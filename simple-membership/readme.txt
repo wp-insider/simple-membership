@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.5.5
+Stable tag: 4.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,8 +175,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.5.6.t1 =
+= 4.5.6 =
 - The 'load_plugin_textdomain' function call has been moved to init hook with a higher priority for better compatibility with other plguins. This seem to work better for most languages.
+- Regenerated the language POT file for the plugin to include the latest changes.
 - Protected posts are now excluded from WP search query if the user doesn't have access to the post.
 
 = 4.5.5 =

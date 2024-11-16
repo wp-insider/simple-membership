@@ -93,4 +93,15 @@ class SwpmProtection extends SwpmProtectionBase {
 		}
 	}
 
+	/**
+	 * Get only the post ids which are not permitted for this user.
+	 */
+	public static function swpm_filter_protected_post_ids_for_current_visitor($post_ids) {
+		return array_filter($post_ids, 'SwpmProtection::swpm_not_permitted_post_ids_filter');
+	}
+
+	public static function swpm_not_permitted_post_ids_filter($post_id) {
+		return !SwpmAccessControl::get_instance()->can_i_read_post(get_post($post_id));
+	}
+
 }

@@ -94,14 +94,25 @@ class SwpmProtection extends SwpmProtectionBase {
 	}
 
 	/**
-	 * Get only the post ids which are not permitted for this user.
+	 * Filter and keep only the post ids that are not permitted for the current user.
 	 */
-	public static function swpm_filter_protected_post_ids_for_current_visitor($post_ids) {
-		return array_filter($post_ids, 'SwpmProtection::swpm_not_permitted_post_ids_filter');
+	public static function filter_protected_post_ids_list_for_current_user($post_ids_list) {
+        $filtered_protected_post_ids = array_filter($post_ids_list, 'SwpmProtection::is_post_protected_for_current_user');
+		return $filtered_protected_post_ids;
 	}
 
-	public static function swpm_not_permitted_post_ids_filter($post_id) {
-		return !SwpmAccessControl::get_instance()->can_i_read_post(get_post($post_id));
+    /**
+     * Check if a post (given the post_id) is protected for the current user.
+     */
+	public static function is_post_protected_for_current_user($post_id) {
+        $swpm_access_control = SwpmAccessControl::get_instance();
+        if( $swpm_access_control->can_i_read_post_by_post_id($post_id) ){
+            // Not protected for current suer (the user has permission to read this post).
+            return false;
+        } else {
+            // Protected for current user (the user does not have permission to read this post).
+            return true;
+        }
 	}
 
 }

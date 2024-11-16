@@ -177,7 +177,7 @@ https://simple-membership-plugin.com/
 
 = WIP 4.5.6.t1 =
 - The 'load_plugin_textdomain' function call has been moved to init hook with a higher priority for better compatibility with other plguins. This seem to work better for most languages.
-- Protected posts are now excluded from search result.
+- Protected posts are now excluded from WP search query if the user doesn't have access to the post.
 
 = 4.5.5 =
 - New 'Active Login Limit' feature added. Refer to [this documentation](https://simple-membership-plugin.com/configuring-active-login-limit/) for more information.

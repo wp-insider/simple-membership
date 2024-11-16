@@ -148,9 +148,9 @@ class SimpleWpMembership {
 	        }
         }
 
+        //Check if the user is logged in. If so, filter the protected post IDs for the current user.
 		if (SwpmAuth::get_instance()->is_logged_in()){
-			// As visitor is logged in, so get only the post ids which are not permitted for this user, so that only those ids could be excluded.
-			$protected_post_ids = SwpmProtection::swpm_filter_protected_post_ids_for_current_visitor($protected_post_ids);
+			$protected_post_ids = SwpmProtection::filter_protected_post_ids_list_for_current_user($protected_post_ids);
 		}
 
 		// Modify the search query to exclude the protected posts.

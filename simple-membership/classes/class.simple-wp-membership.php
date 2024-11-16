@@ -140,11 +140,18 @@ class SimpleWpMembership {
         if (empty($protected_post_ids)){
             //Try rebuilding the list of protected post IDs now.
             SwpmProtection::save_swpm_all_protected_post_ids_list();
-            if (empty($protected_post_ids)){
-                //No protected posts. Nothing to exclude.
-                return;
-            }
+            $protected_post_ids = get_option('swpm_all_protected_post_ids_list');
+
+	        if (empty($protected_post_ids)){
+	            //No protected posts. Nothing to exclude.
+	            return;
+	        }
         }
+
+		if (SwpmAuth::get_instance()->is_logged_in()){
+			// As visitor is logged in, so get only the post ids which are not permitted for this user, so that only those ids could be excluded.
+			$protected_post_ids = SwpmProtection::swpm_filter_protected_post_ids_for_current_visitor($protected_post_ids);
+		}
 
 		// Modify the search query to exclude the protected posts.
 		$query->set('post__not_in', $protected_post_ids);

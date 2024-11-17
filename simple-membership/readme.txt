@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 5.0
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.5.6
+Stable tag: 4.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,6 +175,9 @@ Please visit the membership plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+
+= 4.5.7 =
+- Enhanced the efficiency of the 'pre_get_posts' filter hook handling function to address issues encountered on some sites during page saving and publishing.
 
 = 4.5.6 =
 - New free addon for resetting the settings and data of the plugin. Refer to [this documentation](https://simple-membership-plugin.com/simple-membership-reset-settings-and-data-addon/) for more information.

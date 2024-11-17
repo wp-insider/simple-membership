@@ -123,19 +123,17 @@ class SimpleWpMembership {
 
 	public function exclude_swpm_protected_posts_from_wp_search_result($query) {
         //Let's determine if this query is for a standard WP search or a REST API search.
-        $is_search_queqry = false;
+        $is_search_query = false;
         if (!is_admin() && $query->is_main_query() && $query->is_search()) {
-            $is_search_queqry = true;
+            $is_search_query = true;
         } else if (
             defined('REST_REQUEST') && REST_REQUEST && // Check if it's a REST request
-            isset($query->query_vars['s']) &&         // Ensure it's a search query
-            !empty($query->query_vars['s']) &&        // Ensure the search term is not empty
             strpos($_SERVER['REQUEST_URI'], '/wp/v2/search') !== false // Confirm it's the search endpoint
         ){
-            $is_search_queqry = true;
-        } 
+            $is_search_query = true;
+        }
 
-        if( !$is_search_queqry ){
+        if( !$is_search_query ){
             //This is not a search query. Nothing to exclude.
             return;
         }

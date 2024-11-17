@@ -131,7 +131,7 @@ class SwpmPostList extends WP_List_Table {
         //Add/remove the post/page IDs to the protection list and then save it in the database.
         $post->remove($ids_in_page, $type)->apply($ids, $type)->save();
 
-        //Save the list of all protected post IDs in the options table for quick access.
+        //Additionally, save/update the list of all protected post IDs in the options table for quick access.
         SwpmProtection::save_swpm_all_protected_post_ids_list();
 
         //Set a message to show the user.

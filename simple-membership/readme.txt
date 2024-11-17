@@ -176,6 +176,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Added a new utility function 'get_all_protected_post_ids_list_from_db' to retrieve all the protected post IDs from the database.
+
 = 4.5.7 =
 - Enhanced the efficiency of the 'pre_get_posts' filter hook handling function to address issues encountered on some sites during page saving and publishing.
 

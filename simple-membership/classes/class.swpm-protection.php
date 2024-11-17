@@ -68,62 +68,42 @@ class SwpmProtection extends SwpmProtectionBase {
         return /* (($this->bitmap&1)!=1) && */ $this->in_parent_categories($id);
     }
 
+    /**
+     * Creates a list of all protected post IDs (includes posts from all post types of the site).
+     * It retrieves the data from the membership level DB table so it is more efficient.
+     */
+    public static function get_all_protected_post_ids_list_from_db() {
+        global $wpdb;
+        $all_protected_post_ids = array();
+
+        //Get all the protected post IDs from the database (it is stored in the membership level table with ID 1).
+        $level_id = 1; // Default level ID for General Protection.
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_membership_tbl WHERE id = %d", absint($level_id));
+        $result = $wpdb->get_row($query);
+
+        $standard_posts_list = isset($result->post_list) ? (array) unserialize($result->post_list) : array();
+        $standard_pages_list = isset($result->page_list) ? (array) unserialize($result->page_list) : array();
+        $custom_posts_list = isset($result->custom_post_list) ? (array) unserialize($result->custom_post_list) : array();
+
+        $all_protected_post_ids = array_merge($standard_posts_list, $standard_pages_list, $custom_posts_list);
+        // Sort the final list of post IDs in ascending order
+        sort($all_protected_post_ids);
+        return $all_protected_post_ids;
+    }
+
 	/**
-	 * Save a list (in array format) of all protected post and page IDs (includes posts from all post types of the site).
-     * This can be useful when we need to quickly check if a post is protected or not given its ID.
+	 * Save/update a list (in array format) of all protected post IDs (includes posts from all post types of the site).
+     * This can be useful when we need to quickly check if a post is protected given its ID.
 	 */
 	public static function save_swpm_all_protected_post_ids_list() {
-        // Get all post IDs of all post type (includes post, pages, custom post types) from the site.
-		$all_posts_ids = self::get_all_post_ids_of_site_memory_efficient();
+        // Get all protected post IDs of all post types (includes post, pages, custom post types) from the site.
+		$protected_post_ids = self::get_all_protected_post_ids_list_from_db();
 
-		$protected_post_ids = array();
-		foreach ($all_posts_ids as $post_id){
-			if (SwpmProtection::get_instance()->is_protected($post_id)){
-				$protected_post_ids[] = $post_id;
-			}
-		}
 		if (!empty($protected_post_ids)){
             // Save the list of all protected post IDs in the WP options table.
 			update_option('swpm_all_protected_post_ids_list', $protected_post_ids);
 		}
 	}
-
-    public static function get_all_post_ids_of_site_memory_efficient() {
-        // Initialize variables
-        $post_ids = array(); // This will hold all the post IDs
-        $batch_size = 1000;  // Number of posts to fetch per batch
-        $current_page = 1;   // Start with the first page
-
-        // Fetch post IDs in batches
-        do {
-            // Create a query to fetch posts in batches
-            $query_args = array(
-                'post_type'      => 'any',       // Fetch any post type
-                'post_status'    => 'publish',  // Only published posts
-                'fields'         => 'ids',      // Only retrieve post IDs
-                'posts_per_page' => $batch_size, // Number of posts per batch
-                'paged'          => $current_page, // Current batch/page number
-            );
-
-            $query = new WP_Query($query_args);
-
-            // Check if there are posts in the current batch
-            if (!empty($query->posts)) {
-                // Add the retrieved post IDs to our list
-                $post_ids = array_merge($post_ids, $query->posts);
-
-                // Move to the next page/batch
-                $current_page++;
-            } else {
-                // If no more posts, break out of the loop
-                break;
-            }
-
-            // Clean up to avoid memory leaks
-            wp_reset_postdata();
-        } while ($query->found_posts > count($post_ids));
-        return $post_ids;
-    }
 
 	/**
 	 * Filter and keep only the post ids that are not permitted for the current user.

@@ -139,7 +139,7 @@ class SimpleWpMembership {
         }
 
         //Get the list of all protected post IDs.
-        $protected_post_ids = get_option('swpm_all_protected_post_ids_list');
+        $protected_post_ids = SwpmProtection::get_all_protected_post_ids_list_from_db();
         if (empty($protected_post_ids)){
             return;
         }
@@ -896,7 +896,7 @@ class SimpleWpMembership {
             }
         }
 
-        //Save the list of all protected post IDs in the options table for quick access.
+        //Additionally, save/update the list of all protected post IDs in the options table for quick access.
         SwpmProtection::save_swpm_all_protected_post_ids_list();
         
         //Return data.

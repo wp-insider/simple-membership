@@ -74,12 +74,7 @@ class SwpmProtection extends SwpmProtectionBase {
 	 */
 	public static function save_swpm_all_protected_post_ids_list() {
         // Get all post IDs of all post type (includes post, pages, custom post types) from the site.
-		$all_posts_ids = get_posts(array(
-			'post_type'      => 'any',
-			'post_status'    => 'publish',
-			'fields'         => 'ids', /* Only get IDs, not the full post objects. */
-			'posts_per_page' => -1
-		));
+		$all_posts_ids = self::get_all_post_ids_of_site_memory_efficient();
 
 		$protected_post_ids = array();
 		foreach ($all_posts_ids as $post_id){
@@ -92,6 +87,43 @@ class SwpmProtection extends SwpmProtectionBase {
 			update_option('swpm_all_protected_post_ids_list', $protected_post_ids);
 		}
 	}
+
+    public static function get_all_post_ids_of_site_memory_efficient() {
+        // Initialize variables
+        $post_ids = array(); // This will hold all the post IDs
+        $batch_size = 1000;  // Number of posts to fetch per batch
+        $current_page = 1;   // Start with the first page
+
+        // Fetch post IDs in batches
+        do {
+            // Create a query to fetch posts in batches
+            $query_args = array(
+                'post_type'      => 'any',       // Fetch any post type
+                'post_status'    => 'publish',  // Only published posts
+                'fields'         => 'ids',      // Only retrieve post IDs
+                'posts_per_page' => $batch_size, // Number of posts per batch
+                'paged'          => $current_page, // Current batch/page number
+            );
+
+            $query = new WP_Query($query_args);
+
+            // Check if there are posts in the current batch
+            if (!empty($query->posts)) {
+                // Add the retrieved post IDs to our list
+                $post_ids = array_merge($post_ids, $query->posts);
+
+                // Move to the next page/batch
+                $current_page++;
+            } else {
+                // If no more posts, break out of the loop
+                break;
+            }
+
+            // Clean up to avoid memory leaks
+            wp_reset_postdata();
+        } while ($query->found_posts > count($post_ids));
+        return $post_ids;
+    }
 
 	/**
 	 * Filter and keep only the post ids that are not permitted for the current user.

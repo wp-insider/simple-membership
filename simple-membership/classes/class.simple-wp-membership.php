@@ -126,7 +126,12 @@ class SimpleWpMembership {
         $is_search_queqry = false;
         if (!is_admin() && $query->is_main_query() && $query->is_search()) {
             $is_search_queqry = true;
-        } else if (defined('REST_REQUEST') && REST_REQUEST && (isset($query->query_vars['s']) || isset($query->query_vars['p']))) {
+        } else if (
+            defined('REST_REQUEST') && REST_REQUEST && // Check if it's a REST request
+            isset($query->query_vars['s']) &&         // Ensure it's a search query
+            !empty($query->query_vars['s']) &&        // Ensure the search term is not empty
+            strpos($_SERVER['REQUEST_URI'], '/wp/v2/search') !== false // Confirm it's the search endpoint
+        ){
             $is_search_queqry = true;
         } 
 
@@ -138,14 +143,7 @@ class SimpleWpMembership {
         //Get the list of all protected post IDs.
         $protected_post_ids = get_option('swpm_all_protected_post_ids_list');
         if (empty($protected_post_ids)){
-            //Try rebuilding the list of protected post IDs now.
-            SwpmProtection::save_swpm_all_protected_post_ids_list();
-            $protected_post_ids = get_option('swpm_all_protected_post_ids_list');
-
-	        if (empty($protected_post_ids)){
-	            //No protected posts. Nothing to exclude.
-	            return;
-	        }
+            return;
         }
 
         //Check if the user is logged in. If so, filter the protected post IDs for the current user.

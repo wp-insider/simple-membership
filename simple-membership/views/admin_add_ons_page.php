@@ -23,12 +23,12 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             array_push($addons_data, $addon_1);
 
             $addon_2 = array(
-                'name' => 'MailChimp Integration',
-                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/mailchimp-integration.png',
-                'description' => 'Allows you to signup the member to your MailChimp list after registration',
-                'page_url' => 'https://simple-membership-plugin.com/signup-members-mailchimp-list/',
+                'name' => 'Reset Settings and Data',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-reset-settings-data-addon.png',
+                'description' => 'Allows you reset the entire settings configuration and data of the Simple Membership plugin.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-reset-settings-and-data-addon/',
             );
-            array_push($addons_data, $addon_2);
+            array_push($addons_data, $addon_2); 
 
             $addon_3 = array(
                 'name' => 'Form Shortcode',
@@ -233,7 +233,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
             $addon_28 = array(
                 'name' => '2 Factor Authentication',
                 'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/2fa-addon-icon.png',
-                'description' => 'This addon adds the 2 factor authentication for member login to increase login security.',
+                'description' => 'This addon adds the 2 factor authentication (2FA) for member login to increase login security.',
                 'page_url' => 'https://simple-membership-plugin.com/swpm-two-factor-authentication-addon/',
             );
             array_push($addons_data, $addon_28);
@@ -245,6 +245,14 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'page_url' => 'https://simple-membership-plugin.com/simple-membership-mailerlite-integration-addon/',
             );
             array_push($addons_data, $addon_29);
+
+            $addon_30 = array(
+                'name' => 'MailChimp Integration',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/mailchimp-integration.png',
+                'description' => 'Allows you to signup the member to your MailChimp list after registration',
+                'page_url' => 'https://simple-membership-plugin.com/signup-members-mailchimp-list/',
+            );
+            array_push($addons_data, $addon_30);          
             
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {

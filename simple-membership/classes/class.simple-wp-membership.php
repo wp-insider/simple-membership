@@ -138,6 +138,12 @@ class SimpleWpMembership {
             return;
         }
 
+        $override_protected_post_exclusion = apply_filters('swpm_override_protected_post_exclusion_from_search', false);
+        if ( $override_protected_post_exclusion ){
+            //The protected post exclusion from search has been overridden by a custom code.
+            return;
+        }
+
         //Get the list of all protected post IDs.
         $protected_post_ids = SwpmProtection::get_all_protected_post_ids_list_from_db();
         if (empty($protected_post_ids)){
@@ -895,9 +901,6 @@ class SimpleWpMembership {
                 }
             }
         }
-
-        //Additionally, save/update the list of all protected post IDs in the options table for quick access.
-        SwpmProtection::save_swpm_all_protected_post_ids_list();
         
         //Return data.
         $enable_protection = array();

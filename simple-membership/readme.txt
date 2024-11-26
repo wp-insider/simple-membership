@@ -179,6 +179,7 @@ https://simple-membership-plugin.com/
 = 4.5.8.t1 WIP =
 - Added a new utility function 'get_all_protected_post_ids_list_from_db' to retrieve all the protected post IDs from the database.
 - Added a new filter hook 'swpm_override_protected_post_exclusion_from_search'.
+- Updated the French language translation file.
 
 = 4.5.7 =
 - Enhanced the efficiency of the 'pre_get_posts' filter hook handling function to address issues encountered on some sites during page saving and publishing.

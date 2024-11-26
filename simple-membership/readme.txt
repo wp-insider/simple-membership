@@ -2,7 +2,7 @@
 Contributors: smp7, wp.insider
 Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
-Requires at least: 5.0
+Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.7
 Stable tag: 4.5.7

@@ -627,7 +627,7 @@ class SwpmAuth {
         setcookie( $auth_cookie_name, $auth_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
 
 		if (SwpmLimitActiveLogin::is_enabled()){
-			// Reinitialize session token data
+			// Reinitialize session token data (so the member's profile is initialized/updated with a new session token).
 			SwpmLimitActiveLogin::reinitialize_session_tokens_metadata($user_info['member_id'], $auth_cookie);
 		}
 	}

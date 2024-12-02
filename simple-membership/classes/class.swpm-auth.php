@@ -625,6 +625,11 @@ class SwpmAuth {
         $auth_cookie = $swpm_username . '|' . $expiration . '|' . $hash;
         $auth_cookie_name = $secure ? SIMPLE_WP_MEMBERSHIP_SEC_AUTH : SIMPLE_WP_MEMBERSHIP_AUTH;
         setcookie( $auth_cookie_name, $auth_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
+
+		if (SwpmLimitActiveLogin::is_enabled()){
+			// Reinitialize session token data
+			SwpmLimitActiveLogin::reinitialize_session_tokens_metadata($user_info['member_id'], $auth_cookie);
+		}
 	}
 
 	public static function b_hash( $data, $scheme = 'auth' ) {

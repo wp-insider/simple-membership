@@ -89,6 +89,17 @@ class SwpmLimitActiveLogin {
 	}
 
 	/**
+	 * Re-initialize session_tokens meta with new fresh session token.
+	 */
+	public static function reinitialize_session_tokens_metadata($member_id, $auth_cookie) {
+		$token_key = hash( 'sha256', $auth_cookie );
+		$new_session_tokens = array();
+		$new_session_tokens[$token_key] = SwpmLimitActiveLogin::create_new_session_token_array(!empty($remember));
+
+		SwpmMembersMeta::update( $member_id, 'session_tokens', $new_session_tokens );
+	}
+
+	/**
 	 * Check if the 'expiration' field exceeds current time.
 	 */
 	public static function is_token_still_valid( $session_token ) {

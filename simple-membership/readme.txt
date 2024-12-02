@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.5.7
+Stable tag: 4.5.8.t1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,13 +175,12 @@ Please visit the membership plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
-= WIP =
-- Active login limit issue fixed for password reset event.
 
-= 4.5.8.t1 WIP =
+= WIP 4.5.8.t1  =
 - Added a new utility function 'get_all_protected_post_ids_list_from_db' to retrieve all the protected post IDs from the database.
 - Added a new filter hook 'swpm_override_protected_post_exclusion_from_search'.
 - Updated the French language translation file.
+- Active login limit feature conflict issue fixed for password reset event.
 
 = 4.5.7 =
 - Enhanced the efficiency of the 'pre_get_posts' filter hook handling function to address issues encountered on some sites during page saving and publishing.

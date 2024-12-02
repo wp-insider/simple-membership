@@ -231,7 +231,15 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 					</td>
 				</tr>
 
-				<tr valign="top">
+                <tr valign="top">
+                    <th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
+                    <td>
+                        <input type="checkbox" name="allow_promotion_codes" value="1" <?php echo ( $edit ? ( ( isset( $opts['allow_promotion_codes'][0] ) && $opts['allow_promotion_codes'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
+                        <p class="description"><?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
+                    </td>
+                </tr>
+
+                <tr valign="top">
 					<th scope="row"><?php _e( 'Return URL' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="return_url" value="<?php echo ( $edit ? $opts['return_url'][0] : '' ); ?>" />
@@ -343,6 +351,7 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 		update_post_meta( $button_id, 'button_image_url', trim( sanitize_text_field( $_REQUEST['button_image_url'] ) ) );
 		update_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
 		update_post_meta( $button_id, 'stripe_automatic_tax', isset( $_POST['automatic_tax'] ) ? '1' : '' );
+		update_post_meta( $button_id, 'allow_promotion_codes', isset( $_POST['allow_promotion_codes'] ) ? '1' : '' );
 
 		//API details
 		$stripe_test_secret_key = isset( $_POST['stripe_test_secret_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_secret_key'] ) ) : '';

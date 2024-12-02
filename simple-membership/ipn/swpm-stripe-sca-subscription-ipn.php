@@ -112,7 +112,7 @@ class SwpmStripeSCASubscriptionIpnHandler {
 			return;
 		}
 
-		$price_in_cents = $sub->plan->amount;
+		$price_in_cents = $sess->amount_total;
 		$currency_code  = strtoupper( $sub->plan->currency );
 
 		$zero_cents = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );

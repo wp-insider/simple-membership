@@ -181,6 +181,7 @@ https://simple-membership-plugin.com/
 - Added a new filter hook 'swpm_override_protected_post_exclusion_from_search'.
 - Updated the French language translation file.
 - Active login limit feature conflict issue fixed for password reset event.
+- Allow promo code feature added to stripe sca subscription payment.
 
 = 4.5.7 =
 - Enhanced the efficiency of the 'pre_get_posts' filter hook handling function to address issues encountered on some sites during page saving and publishing.

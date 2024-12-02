@@ -122,6 +122,14 @@ class SimpleWpMembership {
     }
 
 	public function exclude_swpm_protected_posts_from_wp_search_result($query) {
+
+		// First check if it is allowed to override the query to exclude protected posts from search result.
+		$swpm_override_protected_posts_search = apply_filters('swpm_override_protected_posts_search', true);
+		if (!$swpm_override_protected_posts_search){
+			// Not allowed. Don't filter protected items. Nothing to do here.
+			return $query;
+		}
+
         //Let's determine if this query is for a standard WP search or a REST API search.
         $is_search_query = false;
         if (!is_admin() && $query->is_main_query() && $query->is_search()) {

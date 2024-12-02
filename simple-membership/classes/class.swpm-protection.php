@@ -92,20 +92,6 @@ class SwpmProtection extends SwpmProtectionBase {
     }
 
 	/**
-	 * Save/update a list (in array format) of all protected post IDs (includes posts from all post types of the site).
-     * This can be useful when we need to quickly check if a post is protected given its ID.
-	 */
-	public static function save_swpm_all_protected_post_ids_list() {
-        // Get all protected post IDs of all post types (includes post, pages, custom post types) from the site.
-		$protected_post_ids = self::get_all_protected_post_ids_list_from_db();
-
-		if (!empty($protected_post_ids)){
-            // Save the list of all protected post IDs in the WP options table.
-			update_option('swpm_all_protected_post_ids_list', $protected_post_ids);
-		}
-	}
-
-	/**
 	 * Filter and keep only the post ids that are not permitted for the current user.
 	 */
 	public static function filter_protected_post_ids_list_for_current_user($post_ids_list) {

@@ -175,6 +175,8 @@ Please visit the membership plugin page to view screenshots:
 https://simple-membership-plugin.com/
 
 == Changelog ==
+= WIP =
+- Active login limit issue fixed for password reset event.
 
 = 4.5.8.t1 WIP =
 - Added a new utility function 'get_all_protected_post_ids_list_from_db' to retrieve all the protected post IDs from the database.

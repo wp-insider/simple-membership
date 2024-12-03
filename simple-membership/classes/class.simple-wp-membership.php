@@ -41,9 +41,6 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-limit-active-login
 
 class SimpleWpMembership {
 
-    public $execution_success_notice = false;
-    public $success_notice_pw_reset = false;
-    
     public function __construct() {
 
         new SwpmShortcodesHandler(); //Tackle the shortcode definitions and implementation.
@@ -71,12 +68,6 @@ class SimpleWpMembership {
         add_filter('wp_get_attachment_metadata', array(&$this, 'filter_attachment'), 10, 2);
         add_filter('attachment_fields_to_save', array(&$this, 'save_attachment_extra'), 10, 2);
         add_filter('rest_request_before_callbacks', array(&$this, 'filter_media_rest_request_before_callbacks'), 10, 3);//For filtering REST API calls for media.
-
-        //TODO - refactor these shortcodes into the shortcodes handler class
-        add_shortcode("swpm_registration_form", array(&$this, 'registration_form'));
-        add_shortcode('swpm_profile_form', array(&$this, 'profile_form'));
-        add_shortcode('swpm_login_form', array(&$this, 'login_form_shortcode_output'));
-        add_shortcode('swpm_reset_form', array(&$this, 'reset_password_shortcode_output'));
 
         add_action('wp_head', array(&$this, 'wp_head_callback'));
         add_action('save_post', array(&$this, 'save_postdata'));
@@ -524,24 +515,6 @@ class SimpleWpMembership {
         }
     }
 
-    public function login_form_shortcode_output() {
-        ob_start();
-        $auth = SwpmAuth::get_instance();
-        if ($auth->is_logged_in()) {
-            //Load the template for logged-in member
-            SwpmUtilsTemplate::swpm_load_template('loggedin.php', false);
-        } else {
-            //Load JS only if option is set
-            $display_password_toggle = SwpmSettings::get_instance()->get_value('password-visibility-login-form');
-            if ( !empty( $display_password_toggle ) ){
-                wp_enqueue_script('swpm.password-toggle');
-            }
-            //Load the login widget template
-            SwpmUtilsTemplate::swpm_load_template('login.php', false);
-        }
-        return ob_get_clean();
-    }
-
     public function wp_logout_handler() {
         $auth = SwpmAuth::get_instance();
         if ($auth->is_logged_in()) {
@@ -648,94 +621,6 @@ class SimpleWpMembership {
         SwpmMemberUtils::create_swpm_member_entry_from_array_data($fields);
     }
 
-    public function reset_password_shortcode_output() {        
-        //Check if the form has been submitted and there is a success message.
-        $any_notice_output = $this->capture_any_notice_output();
-        if( !empty( $any_notice_output ) && $this->success_notice_pw_reset ){
-            //The password reset form execution was a success. Return the success notice output string (it will be used with the shortcode output).
-            return $any_notice_output;
-        }        
-
-        if( isset( $_GET["action"]) && $_GET["action"] == "swpm-reset-using-link" ) {
-            ob_start();
-            echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
-            //Load the reset password template
-            SwpmUtilsTemplate::swpm_load_template('reset_password_using_link.php', false);
-            return ob_get_clean();
-        }
-        else {
-            ob_start();
-            echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
-            //Load the forgot password template
-            SwpmUtilsTemplate::swpm_load_template('forgot_password.php', false);
-            return ob_get_clean();
-        }
-    }
-
-    public function profile_form() {
-        $output = '';
-        $auth = SwpmAuth::get_instance();
-        $any_notice_output = $this->capture_any_notice_output();
-        if ($auth->is_logged_in()) {
-            $override_out = apply_filters('swpm_profile_form_override', '');
-            if (!empty($override_out)) {
-                return $override_out;
-            }
-            ob_start();
-            echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
-            //Load the edit profile template
-            // SwpmUtilsTemplate::swpm_load_template('edit.php', false);
-            $render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui');
-            if (!empty($render_new_form_ui)) {
-                SwpmUtilsTemplate::swpm_load_template('edit-v2.php', false);
-            }else{
-                SwpmUtilsTemplate::swpm_load_template('edit.php', false);
-            }
-            return ob_get_clean();
-        }
-        //User is not logged into the site. Show appropriate message.
-        $output .= '<div class="swpm_profile_not_logged_in_msg">';
-        $output .= SwpmUtils::_('You are not logged in.');
-        $output .= '</div>';
-        return $output;
-    }
-
-    /*
-     * Similar to $this->notices() function but instead of echoing the message, it returns the message (if any).
-     * Useful for using inside a shortcode output.
-     */
-    public function capture_any_notice_output() {
-        $output = '';
-        $message = SwpmTransfer::get_instance()->get('status');
-        if ( empty( $message ) ) {
-            return $output;
-        }
-        
-        if ( $message['succeeded'] ) {
-            $output .= "<div id='swpm_message' class='swpm_success'>";
-            $this->execution_success_notice = true;
-        } else {
-            $output .= "<div id='swpm_message' class='swpm_error'>";
-        }
-        $output .= $message['message'];
-        $extra = isset( $message['extra'] ) ? $message['extra'] : array();
-        if ( is_string($extra) ) {
-            $output .= $extra;
-        } else if ( is_array($extra) && !empty($extra) ) {
-            $output .= '<ul>';
-            foreach ($extra as $key => $value) {
-                $output .= '<li class="' . esc_attr( $key ) . '">' . $value . '</li>';
-            }
-            $output .= '</ul>';
-        }
-        $output .= "</div>";
-        //If password reset notice was sent, set the flag.
-        if (isset($message['pass_reset_sent'])) {
-            $this->success_notice_pw_reset = true;
-        }        
-        return $output;
-    }
-    
     /**
      * If any message/notice was set during the execution then this function will output that message.
      *
@@ -1140,43 +1025,6 @@ class SimpleWpMembership {
         wp_localize_script('swpm.validationEngine-localization', 'swpm_validationEngine_localization', $loc_data);
 
         wp_localize_script('jquery.validationEngine-en', 'swpmRegForm', array('nonce' => $nonce));
-    }
-
-    public function registration_form($atts) {
-        //Trigger action hook
-        do_action( 'swpm_shortcode_registration_form_start', $atts );
-
-        $output = "";
-        
-        //Check if the form has been submitted and there is a success message.
-        $any_notice_output = $this->capture_any_notice_output();
-        if( !empty( $any_notice_output ) && $this->execution_success_notice ){
-            //The registration form execution was a success. Return the success notice output string (it will be used with the shortcode output).
-            return $any_notice_output;
-        }
-        
-        //Check if free membership is enabled on the site.
-        $is_free_enabled = SwpmSettings::get_instance()->get_value('enable-free-membership');
-        $free_level_id = absint(SwpmSettings::get_instance()->get_value('free-membership-id'));
-        $is_valid_free_level = SwpmMembershipLevelUtils::check_if_membership_level_exists($free_level_id);
-        if( $is_free_enabled && !$is_valid_free_level ){
-            //Free membership is enabled but the free level ID is invalid. 
-            //This is a critical configuration error. Show an error message and return.
-            $output .= '<div class="swpm_error swpm-red-error-text">';
-            $output .= __('Error! You have enabled free membership on this site but you did not enter a valid membership level ID in the "Free Membership Level ID" field of the settings menu.', 'simple-membership');
-            $output .= '</div>';
-            return $output;
-        }
-
-        //Get the level ID from the shortcode or use the free membership level ID if free membership is enabled.
-        $level = isset($atts['level']) ? absint($atts['level']) : ($is_free_enabled ? $free_level_id : null);
-        
-        $output .= $any_notice_output;
-        $output .= SwpmFrontRegistration::get_instance()->regigstration_ui($level);
-
-        //Trigger action hook
-        do_action( 'swpm_shortcode_registration_form_end', $atts );
-        return $output;
     }
 
     public function menu() {

@@ -34,14 +34,14 @@ document.addEventListener("DOMContentLoaded", function () {
             })
                 .trim()
                 .min(1, { message: validationMsg?.username?.required })
-                .regex(/^(?=[a-zA-Z0-9.\-_*@]+$)/, {
+                .regex(/^(?=[a-zA-Z0-9.\-_@]+$)/, {
                     message: validationMsg?.username?.regex,
                 })
                 .min(4, { message: validationMsg?.username?.minLength })
                 .refine(
                     async function (value) {
                         const usernameSchema = string().regex(
-                            /^(?=[a-zA-Z0-9.\-_*@]+$)/
+                            /^(?=[a-zA-Z0-9.\-_@]+$)/
                         );
                         const parseResult = usernameSchema.safeParse(value);
                         if (parseResult.success) {

@@ -183,6 +183,7 @@ https://simple-membership-plugin.com/
 - Active login limit feature conflict issue fixed for password reset event.
 - Allow promo code feature added to stripe subscription payment buttons.
 - Added a new filter hook 'swpm_override_protected_posts_search' that can be used to override the protected post exclusion from the search query.
+- Now the '*' sign is not allowed in registration form username field.
 
 = 4.5.7 =
 - Enhanced the efficiency of the 'pre_get_posts' filter hook handling function to address issues encountered on some sites during page saving and publishing.

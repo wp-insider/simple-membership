@@ -3594,12 +3594,12 @@ document.addEventListener("DOMContentLoaded", function() {
       rule: stringType({
         required_error: (_a = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _a.required,
         invalid_type_error: (_b = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _b.invalid
-      }).trim().min(1, { message: (_c = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _c.required }).regex(/^(?=[a-zA-Z0-9.\-_*@]+$)/, {
+      }).trim().min(1, { message: (_c = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _c.required }).regex(/^(?=[a-zA-Z0-9.\-_@]+$)/, {
         message: (_d = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _d.regex
       }).min(4, { message: (_e = validationMsg == null ? void 0 : validationMsg.username) == null ? void 0 : _e.minLength }).refine(
         async function(value) {
           const usernameSchema = stringType().regex(
-            /^(?=[a-zA-Z0-9.\-_*@]+$)/
+            /^(?=[a-zA-Z0-9.\-_@]+$)/
           );
           const parseResult = usernameSchema.safeParse(value);
           if (parseResult.success) {

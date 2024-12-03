@@ -998,7 +998,7 @@ class SimpleWpMembership {
             "username" => array(
                 "required" => __("Username is required", "simple-membership"),
                 "invalid" => __("Invalid username", "simple-membership"),
-                "regex" => __("Usernames can only contain: letters, numbers and .-_*@", "simple-membership"),
+                "regex" => __("Usernames can only contain: letters, numbers and .-_@", "simple-membership"),
                 "minLength" => __("Minimum 4 characters required", "simple-membership"),
                 "exists" => __("Username already exists", "simple-membership"),
             ),
@@ -1113,7 +1113,7 @@ class SimpleWpMembership {
                 'alertText' => '* ' . SwpmUtils::_('Password must contain at least:').'<br>'.SwpmUtils::_('- a digit').'<br>'.SwpmUtils::_('- an uppercase letter').'<br>'.SwpmUtils::_('- a lowercase letter'),
             ),
             'SWPMUserName' => array(
-                'alertText' => '* ' . SwpmUtils::_('Invalid Username').'<br>'.SwpmUtils::_('Usernames can only contain: letters, numbers and .-_*@'),
+                'alertText' => '* ' . SwpmUtils::_('Invalid Username').'<br>'.SwpmUtils::_('Usernames can only contain: letters, numbers and .-_@'),
             ),
             'minSize' => array(
                 'alertText' => '* ' . SwpmUtils::_('Minimum '),

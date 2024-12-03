@@ -2,7 +2,7 @@ Username:
 =======================
 * This field is required
 * Invalid Username
-Usernames can only contain: letters, numbers and .-_*@
+Usernames can only contain: letters, numbers and .-_@
 * Minimum 4 characters required
 
 Email:
@@ -86,7 +86,7 @@ https://valibot.dev/
 //     username: {
 //         required: "Username is required",
 //         invalid: "Invalid username",
-//         regex: "Usernames can only contain: letters, numbers and .-_*@",
+//         regex: "Usernames can only contain: letters, numbers and .-_@",
 //         minLength: "Minimum 4 characters required",
 //         exists: "Username already exists",
 //     },

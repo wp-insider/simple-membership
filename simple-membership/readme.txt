@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.5.8.t1
+Stable tag: 4.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,14 +176,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP 4.5.8.t1  =
+= 4.5.8  =
+- Allow promo code feature added to stripe subscription payment buttons.
 - Added a new utility function 'get_all_protected_post_ids_list_from_db' to retrieve all the protected post IDs from the database.
-- Added a new filter hook 'swpm_override_protected_post_exclusion_from_search'.
 - Updated the French language translation file.
 - Active login limit feature conflict issue fixed for password reset event.
-- Allow promo code feature added to stripe subscription payment buttons.
-- Added a new filter hook 'swpm_override_protected_posts_search' that can be used to override the protected post exclusion from the search query.
-- Now the '*' sign is not allowed in registration form username field.
+- Added a new filter hook 'swpm_override_protected_post_exclusion_from_search' that can be used to override the protected post exclusion from the search query.
+- The asterisk character (*) is not allowed in the username field to maintain consistency with WordPress username character restrictions.
 
 = 4.5.7 =
 - Enhanced the efficiency of the 'pre_get_posts' filter hook handling function to address issues encountered on some sites during page saving and publishing.

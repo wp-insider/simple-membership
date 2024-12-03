@@ -899,7 +899,7 @@ msgstr ""
 
 #: classes/class.simple-wp-membership.php:994
 #: classes/class.simple-wp-membership.php:1109
-msgid "Usernames can only contain: letters, numbers and .-_*@"
+msgid "Usernames can only contain: letters, numbers and .-_@"
 msgstr ""
 
 #: classes/class.simple-wp-membership.php:995

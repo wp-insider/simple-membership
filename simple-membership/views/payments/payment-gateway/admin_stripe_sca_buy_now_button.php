@@ -166,7 +166,10 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 					<th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
 					<td>
 						<input type="checkbox" name="allow_promotion_codes" value="1"/>
-						<p class="description"><?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
+						<p class="description">
+							<?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?>
+							<?php echo '<a href="https://simple-membership-plugin.com/applying-discount-coupon-or-promotion-codes-to-stripe-payment-buttons/" target="_blank">' . __('Learn more', 'simple-membership') . '</a>.'; ?>
+						</p>
 					</td>
 				</tr>				
 
@@ -481,7 +484,10 @@ function swpm_edit_stripe_sca_buy_now_button() {
 					<th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
 					<td>
 						<input type="checkbox" name="allow_promotion_codes" value="1" <?php echo esc_attr($allow_promotion_codes) ?> />
-						<p class="description"><?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
+						<p class="description">
+							<?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?>
+							<?php echo '<a href="https://simple-membership-plugin.com/applying-discount-coupon-or-promotion-codes-to-stripe-payment-buttons/" target="_blank">' . __('Learn more', 'simple-membership') . '</a>.'; ?>
+						</p>
 					</td>
 				</tr>				
 

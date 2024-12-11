@@ -56,7 +56,13 @@ class SwpmLog {
 			wp_die( 'Can\'t open the log file.' );
 		}
 		header( 'Content-Type: text/plain' );
-		fpassthru( $fp );
+
+		if ( function_exists( 'fpassthru' ) ) {
+			fpassthru( $fp );
+		} else {
+			echo stream_get_contents( $fp );
+		}
+
 		die;
 	}
 

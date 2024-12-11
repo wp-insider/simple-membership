@@ -176,6 +176,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Backwards compatibility for the 'profile_update' action hook.
+
 = 4.5.8  =
 - Allow promo code feature added to stripe subscription payment buttons.
 - Added a new utility function 'get_all_protected_post_ids_list_from_db' to retrieve all the protected post IDs from the database.

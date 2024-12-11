@@ -543,7 +543,7 @@ class SimpleWpMembership {
         }
     }
 
-    public function sync_with_wp_profile($wp_user_id, $old_user_data, $userdata) {
+    public function sync_with_wp_profile($wp_user_id, $old_user_data, $userdata = array()) {
         //Reference - https://developer.wordpress.org/reference/hooks/profile_update/
 
         //Check if the SWPM profile update form was submitted.

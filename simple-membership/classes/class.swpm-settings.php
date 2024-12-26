@@ -42,7 +42,6 @@ class SwpmSettings {
 				1 => SwpmUtils::_( 'General Settings' ),
 				2 => SwpmUtils::_( 'Payment Settings' ),
 				3 => SwpmUtils::_( 'Email Settings' ),
-				4 => SwpmUtils::_( 'Tools' ),
 				5 => SwpmUtils::_( 'Advanced Settings' ),
                                 6 => SwpmUtils::_( 'Blacklisting & Whitelisting' ),
 				7 => SwpmUtils::_( 'Addons Settings' ),
@@ -1602,10 +1601,6 @@ class SwpmSettings {
 				case 3:
 					//Email settings
 					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';
-					break;
-				case 4:
-					//Tools
-					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_tools_settings.php';
 					break;
 				case 5:
 					//Advanced settings

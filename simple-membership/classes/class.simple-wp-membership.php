@@ -1181,8 +1181,8 @@ class SimpleWpMembership {
         add_submenu_page($menu_parent_slug, __("Membership Levels", 'simple-membership'), __("Membership Levels", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_levels', array(&$this, "admin_membership_levels_menu"));
         add_submenu_page($menu_parent_slug, __("Settings", 'simple-membership'), __("Settings", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_settings', array(&$this, "admin_settings_menu"));
         add_submenu_page($menu_parent_slug, __("Payments", 'simple-membership'), __("Payments", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_payments', array(&$this, "admin_payments_menu"));
+        add_submenu_page($menu_parent_slug, __("Tools", 'simple-membership'), __("Tools", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_tools', array(&$this, "admin_tools_menu"));
         add_submenu_page($menu_parent_slug, __("Add-ons", 'simple-membership'), __("Add-ons", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_addons', array(&$this, "admin_add_ons_menu"));
-	    add_submenu_page($menu_parent_slug, __("Tools", 'simple-membership'), __("Tools", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_tools', array(&$this, "admin_tools_menu"));
         do_action('swpm_after_main_admin_menu', $menu_parent_slug);
 
         $this->meta_box();

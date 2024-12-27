@@ -1602,6 +1602,7 @@ class SwpmSettings {
 					//Email settings
 					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';
 					break;
+				/* Note: The Tools tab has been moved to an independant menu. */
 				case 5:
 					//Advanced settings
 					include SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_settings.php';

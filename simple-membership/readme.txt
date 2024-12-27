@@ -178,7 +178,7 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - Backwards compatibility for the 'profile_update' action hook.
-- Tool tab has moved to a dedicated page.
+- The "Tools" tab has been relocated to its own standalone menu item.
 
 = 4.5.8  =
 - Allow promo code feature added to stripe subscription payment buttons.

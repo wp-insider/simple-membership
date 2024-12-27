@@ -25,7 +25,7 @@ class SwpmToolsAdminMenu {
             <a class="nav-tab <?php echo ( $tab == '' ) ? 'nav-tab-active' : ''; ?>"
                href="admin.php?page=simple_wp_membership_tools"><?php _e( 'General Tools', 'simple-membership' ); ?></a>
             <a class="nav-tab <?php echo ( $tab == 'migration' ) ? 'nav-tab-active' : ''; ?>"
-               href="admin.php?page=simple_wp_membership_tools&tab=migration"><?php _e( 'Migration Tools', 'simple-membership' ); ?></a>
+               href="admin.php?page=simple_wp_membership_tools&tab=migration"><?php _e( 'Data Migration', 'simple-membership' ); ?></a>
 			<?php
 
 			//Trigger hooks that allows an extension to add extra nav tabs in the payments menu.

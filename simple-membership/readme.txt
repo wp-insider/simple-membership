@@ -179,6 +179,8 @@ https://simple-membership-plugin.com/
 = WIP =
 - Backwards compatibility for the 'profile_update' action hook.
 - The "Tools" tab has been relocated to its own standalone menu item.
+- Added a new action hook 'swpm_admin_account_status_updated' that will be triggered when the account status of a member is changed in the admin dashboard.
+- Added a new action hook 'swpm_account_status_updated' that will be triggered when the account status update function is called for a member.
 
 = 4.5.8  =
 - Allow promo code feature added to stripe subscription payment buttons.

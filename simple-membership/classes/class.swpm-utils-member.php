@@ -174,6 +174,12 @@ class SwpmMemberUtils {
 		return $level_id;
 	}
 
+	public static function get_account_status_of_a_member( $member_id ) {
+		$user_row = SwpmMemberUtils::get_user_by_id( $member_id );
+		$account_status = $user_row->account_state;
+		return $account_status;
+	}	
+
 	public static function get_all_members_of_a_level( $level_id ) {
 		//Retrieves all the SWPM user records for the given membership level
 		global $wpdb;
@@ -263,12 +269,27 @@ class SwpmMemberUtils {
 	 * Use this function to update or set account status of a member easily.
 	 */
 	public static function update_account_state( $member_id, $new_status = 'active' ) {
+		//Get the existing account status of the member.
+		$existing_status = self::get_account_status_of_a_member( $member_id );
+
 		global $wpdb;
 		$members_table_name = $wpdb->prefix . 'swpm_members_tbl';
 
 		SwpmLog::log_simple_debug( 'Updating the account status value of member (ID: ' . $member_id . ') to: ' . $new_status, true );
-		$query     = $wpdb->prepare( "UPDATE $members_table_name SET account_state=%s WHERE member_id=%s", $new_status, $member_id );
+		$query = $wpdb->prepare( "UPDATE $members_table_name SET account_state=%s WHERE member_id=%s", $new_status, $member_id );
 		$resultset = $wpdb->query( $query );
+
+		//Trigger the account status updated action hook. It doesn't matter if the status is not changed. 
+		//The function listening to this hook can decide what to do.
+		do_action(
+			'swpm_account_status_updated',
+			array(
+				'member_id' => $member_id,
+				'from_status' => $existing_status,
+				'to_status' => $new_status,
+			)
+		);
+
 	}
 
 	/*

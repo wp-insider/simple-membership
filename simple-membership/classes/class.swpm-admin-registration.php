@@ -113,8 +113,10 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		$member = $wpdb->get_row( $query, ARRAY_A );
 		// let's get previous membership level
 		$prev_level = false;
+		$prev_account_status = false;
 		if ( $member ) {
 			$prev_level = $member['membership_level'];
+			$prev_account_status = $member['account_state'];
 		}
 		$email_address = $member['email'];
 		$user_name = $member['user_name'];
@@ -146,13 +148,14 @@ class SwpmAdminRegistration extends SwpmRegistration {
                 SwpmLog::log_auth_debug( 'Profile edit from admin dashboard - The authentication cookies have been reset since the password was changed by the user (member_id: '. $id . ').', true );
             }
 
-			// set previous membership level
-			$member['prev_membership_level'] = $prev_level;
-			$member['member_id'] = $id;
-
+			$member['member_id'] = $id;//Add member ID to the member array.
+			$member['prev_membership_level'] = $prev_level;//Add previous membership level to the member array.
+			$member['prev_account_status'] = $prev_account_status;//Add previous account status to the member array.
+			
 			 //Trigger action hook
 			do_action( 'swpm_admin_end_edit_complete_user_data', $member );
 
+			//Trigger membership level change action hook
 			if ( $member['prev_membership_level'] != $member['membership_level'] ) {
 				do_action(
 					'swpm_membership_level_changed',
@@ -162,6 +165,26 @@ class SwpmAdminRegistration extends SwpmRegistration {
 						'to_level'   => $member['membership_level'],
 					)
 				);
+			}
+
+			//Trigger account status updated action hook
+			if ( $member['prev_account_status'] != $member['account_state'] ) {
+				//We will trigger two hooks for admin account status update so it can be targeted by other plugins.
+				$hooks = array(
+					'swpm_account_status_updated',
+					'swpm_admin_account_status_updated',
+				);
+				
+				foreach ($hooks as $hook) {
+					do_action(
+						$hook,
+						array(
+							'member_id'  => $id,
+							'from_status' => $member['prev_account_status'],
+							'to_status'   => $member['account_state'],
+						)
+					);
+				}
 			}
 
 			//Set messages

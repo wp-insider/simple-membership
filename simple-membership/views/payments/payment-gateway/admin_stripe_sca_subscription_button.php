@@ -115,7 +115,7 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Stripe API ID' , 'simple-membership'); ?></th>
+					<th scope="row"><?php _e( 'Stripe Price/API ID' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" name="stripe_plan_id" value="<?php echo ( $edit ? $opts['stripe_plan_id'][0] : '' ); ?>" required />
 						<p class="description">

@@ -108,6 +108,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		ob_start();
 		extract( (array) $member, EXTR_SKIP );
 
+		$hide_membership_level_field = $settings_configs->get_value( 'hide-reg-form-membership-level-field' );
+
 		$render_new_form_ui = $settings_configs->get_value('use-new-form-ui');
 		if (!empty($render_new_form_ui)) {
 			include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add-v2.php';

@@ -38,7 +38,11 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                 <td><label for="last_name"><?php _e('Last Name', 'simple-membership') ?></label></td>
                 <td><input type="text" id="last_name" value="<?php echo esc_attr($last_name); ?>" size="50" name="last_name" /></td>
             </tr>
-            <tr class="swpm-registration-membership-level-row" <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>>
+            <tr
+                class="swpm-registration-membership-level-row"
+                <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>
+                style="<?php echo !empty($hide_membership_level_field) ? 'display:none' : '' ?>"
+            >
                 <td><label for="membership_level"><?php _e('Membership Level', 'simple-membership') ?></label></td>
                 <td>
                     <?php

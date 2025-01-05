@@ -108,7 +108,11 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-membership-level-row" <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>>
+            <div
+                class="swpm-form-row swpm-membership-level-row"
+                <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>
+                style="<?php echo !empty($hide_membership_level_field) ? 'display:none' : '' ?>"
+            >
                 <div class="swpm-form-label-wrap swpm-form-membership-level-label-wrap">
                     <label for="membership_level"><?php _e('Membership Level', "simple-membership") ?></label>
                 </div>

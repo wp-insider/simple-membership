@@ -714,6 +714,18 @@ class SwpmSettings {
 		);
 
 		add_settings_field(
+			'hide-reg-form-membership-level-field',
+			__( 'Hide Membership Level Field in Registration Form', 'simple-membership' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'hide-reg-form-membership-level-field',
+				'message' => __( 'Check this if you don\'t want to show membership level field in the registration forms.' ),
+			)
+		);
+
+		add_settings_field(
 			'hide-join-us-link',
 			__( 'Hide the Join Us Link' , 'simple-membership'),
 			array( &$this, 'checkbox_callback' ),
@@ -1500,7 +1512,8 @@ class SwpmSettings {
 		$output['after-logout-redirection-url']      = esc_url( $input['after-logout-redirection-url'] );
 		$output['force-strong-passwords']            = isset( $input['force-strong-passwords'] ) ? esc_attr( $input['force-strong-passwords'] ) : '';
 		$output['auto-login-after-rego']             = isset( $input['auto-login-after-rego'] ) ? esc_attr( $input['auto-login-after-rego'] ) : '';
-                $output['hide-rego-form-to-logged-users']    = isset( $input['hide-rego-form-to-logged-users'] ) ? esc_attr( $input['hide-rego-form-to-logged-users'] ) : '';
+		$output['hide-reg-form-membership-level-field'] = isset( $input['hide-reg-form-membership-level-field'] ) ? esc_attr( $input['hide-reg-form-membership-level-field'] ) : '';
+        $output['hide-rego-form-to-logged-users']    = isset( $input['hide-rego-form-to-logged-users'] ) ? esc_attr( $input['hide-rego-form-to-logged-users'] ) : '';
 		$output['hide-join-us-link']                = isset( $input['hide-join-us-link'] ) ? esc_attr( $input['hide-join-us-link'] ) : '';
 		$output['force-wp-user-sync']                = isset( $input['force-wp-user-sync'] ) ? esc_attr( $input['force-wp-user-sync'] ) : '';
 		$output['payment-notification-forward-url']  = esc_url( $input['payment-notification-forward-url'] );

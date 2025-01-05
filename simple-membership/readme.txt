@@ -182,7 +182,7 @@ https://simple-membership-plugin.com/
 - Added a new action hook 'swpm_admin_account_status_updated' that will be triggered when the account status of a member is changed in the admin dashboard.
 - Added a new action hook 'swpm_account_status_updated' that will be triggered when the account status update function is called for a member.
 - Updated the Stripe subscription payment button configuration interface to include the word 'Price' ID to reflect the changes made by Stripe.
-- Shortcode code refactored.
+- Small refactoring of shortcode handler class to make it more efficient.
 
 = 4.5.8  =
 - Allow promo code feature added to stripe subscription payment buttons.

@@ -7,28 +7,20 @@ class SwpmShortcodesHandler {
 	public $success_notice_pw_reset = false;
 
 	public function __construct() {
-		//Register all the shortcodes here
-		add_shortcode( 'swpm_payment_button', array( &$this, 'swpm_payment_button_sc' ) );
-		
-		add_shortcode( 'swpm_thank_you_page_registration', array( &$this, 'swpm_ty_page_rego_sc' ) );
-
-		add_shortcode( 'swpm_show_expiry_date', array( &$this, 'swpm_show_expiry_date_sc' ) );
-
-		add_shortcode( 'swpm_mini_login', array( &$this, 'swpm_show_mini_login_sc' ) );
-
-		add_shortcode( 'swpm_paypal_subscription_cancel_link', array( &$this, 'swpm_pp_cancel_subs_link_sc' ) );
-
-		add_shortcode( 'swpm_stripe_subscription_cancel_link', array( $this, 'swpm_stripe_cancel_subs_link_sc' ) );
-
-		add_shortcode( 'swpm_show_subscriptions_and_cancel_link', array( $this, 'swpm_show_subscriptions_and_cancel_link' ) );
-
-		//TODO - WIP (Later, this will be moved to the shortcode implementation section like the other ones)
-		//include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_advanced_buy_now_button_shortcode_view.php' );
-
+		//Shortcode for the registration, login and profile forms
 		add_shortcode("swpm_registration_form", array(&$this, 'registration_form'));
 		add_shortcode('swpm_profile_form', array(&$this, 'profile_form'));
 		add_shortcode('swpm_login_form', array(&$this, 'login_form_shortcode_output'));
 		add_shortcode('swpm_reset_form', array(&$this, 'reset_password_shortcode_output'));
+
+		//Register all the other shortcodes here
+		add_shortcode( 'swpm_payment_button', array( &$this, 'swpm_payment_button_sc' ) );
+		add_shortcode( 'swpm_thank_you_page_registration', array( &$this, 'swpm_ty_page_rego_sc' ) );
+		add_shortcode( 'swpm_show_expiry_date', array( &$this, 'swpm_show_expiry_date_sc' ) );
+		add_shortcode( 'swpm_mini_login', array( &$this, 'swpm_show_mini_login_sc' ) );
+		add_shortcode( 'swpm_paypal_subscription_cancel_link', array( &$this, 'swpm_pp_cancel_subs_link_sc' ) );
+		add_shortcode( 'swpm_stripe_subscription_cancel_link', array( $this, 'swpm_stripe_cancel_subs_link_sc' ) );
+		add_shortcode( 'swpm_show_subscriptions_and_cancel_link', array( $this, 'swpm_show_subscriptions_and_cancel_link' ) );
 	}
 
 	public function swpm_payment_button_sc( $args ) {

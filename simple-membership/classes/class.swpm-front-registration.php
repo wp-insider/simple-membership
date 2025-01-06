@@ -458,7 +458,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			//Update the data in the swpm database.
 			$swpm_id = $auth->get( 'member_id' );
 			//SwpmLog::log_simple_debug("Updating member profile data with SWPM ID: " . $swpm_id, true);
-			$member_info = array_filter( $member_info );//Remove any null values.
+			$member_info = array_filter( $member_info, array($this, 'filter_empty_member_info_fields'), ARRAY_FILTER_USE_BOTH  );//Remove any null values (except first_name and last_name).
 			$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', $member_info, array( 'member_id' => $swpm_id ) );
 
 			//Reload user data after update so the profile page reflects the new data.
@@ -506,6 +506,17 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			SwpmTransfer::get_instance()->set( 'status', $message );
 			return false; //Error in the form submission.
 		}
+	}
+
+	/**
+	 * array_filter callback to remove any null values except first_name and last_name.
+	 */
+	public function filter_empty_member_info_fields ($item_value, $item_key){
+		if (in_array($item_key, array('first_name', 'last_name'))){
+			return true;
+		}
+
+		return !empty($item_value);
 	}
 
 	public function reset_password( $email ) {

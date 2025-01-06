@@ -715,13 +715,13 @@ class SwpmSettings {
 
 		add_settings_field(
 			'hide-reg-form-membership-level-field',
-			__( 'Hide Membership Level Field in Registration Form', 'simple-membership' ),
+			__( 'Hide Membership Level Field on Registration Form', 'simple-membership' ),
 			array( &$this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
 			'advanced-settings',
 			array(
 				'item'    => 'hide-reg-form-membership-level-field',
-				'message' => __( 'Check this if you don\'t want to show membership level field in the registration forms.' ),
+				'message' => __( "Enable this option to hide the membership level field on the registration form. While the field will remain part of the form, it will be hidden from view. This is useful for sites where you prefer not to display the membership level to users.", "simple-membership" ),
 			)
 		);
 
@@ -870,8 +870,8 @@ class SwpmSettings {
 			)
 		);
 
-		// WP Toolbar and Admin Dashboard Related
-		add_settings_section( 'wp-toolbar-and-admin-dashboard-related', __( 'WP Toolbar and Admin Dashboard Related' , 'simple-membership'), null, 'simple_wp_membership_settings' );
+		// WP Toolbar and Admin Dashboard Related settings section
+		add_settings_section( 'wp-toolbar-and-admin-dashboard-related', __( 'WP Toolbar and Admin Dashboard Related' , 'simple-membership'), array( &$this, 'advanced_settings_wp_toolbar_related_section_callback' ), 'simple_wp_membership_settings' );
 
 		add_settings_field(
 			'hide-adminbar',
@@ -881,7 +881,7 @@ class SwpmSettings {
 			'wp-toolbar-and-admin-dashboard-related',
 			array(
 				'item'    => 'hide-adminbar',
-				'message' => __( 'WordPress shows an admin toolbar to the logged in users of the site. Check this if you want to hide that admin toolbar in the frontend of your site.' , 'simple-membership'),
+				'message' => __( 'WordPress displays an admin toolbar to logged-in users. Enable this option if you want to hide the admin toolbar on the frontend of your site.' , 'simple-membership'),
 			)
 		);
 
@@ -905,7 +905,7 @@ class SwpmSettings {
 			'wp-toolbar-and-admin-dashboard-related',
 			array(
 				'item'    => 'disable-access-to-wp-dashboard',
-				'message' => __( 'WordPress allows a standard wp user to be able to go to the wp-admin URL and access his profile from the wp dashboard. Using this option will prevent any non-admin users from going to the wp dashboard.' , 'simple-membership'),
+				'message' => __( 'WordPress allows a standard wp user to be able to go to the wp-admin URL and access his profile from the wp dashboard. Enabling this option will restrict non-admin users from accessing the WordPress dashboard.' , 'simple-membership'),
 			)
 		);
 
@@ -1388,6 +1388,10 @@ class SwpmSettings {
 
 	public function blacklist_settings_callback() {
 		_e( 'This section allows you to configure blacklisting settings.', 'simple-membership' );
+	}
+
+	public function advanced_settings_wp_toolbar_related_section_callback() {
+		_e( "The options in this section allow you to customize the default behavior of the WordPress toolbar. If you choose to use them, ensure you test and verify that the behavior meets your needs.", "simple-membership" );
 	}
 
 	public function advanced_settings_auto_create_swpm_uses_settings_callback() {

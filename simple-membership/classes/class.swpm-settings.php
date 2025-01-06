@@ -870,12 +870,15 @@ class SwpmSettings {
 			)
 		);
 
+		// WP Toolbar and Admin Dashboard Related
+		add_settings_section( 'wp-toolbar-and-admin-dashboard-related', __( 'WP Toolbar and Admin Dashboard Related' , 'simple-membership'), null, 'simple_wp_membership_settings' );
+
 		add_settings_field(
 			'hide-adminbar',
 			__( 'Hide Adminbar' , 'simple-membership'),
 			array( &$this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
-			'advanced-settings',
+			'wp-toolbar-and-admin-dashboard-related',
 			array(
 				'item'    => 'hide-adminbar',
 				'message' => __( 'WordPress shows an admin toolbar to the logged in users of the site. Check this if you want to hide that admin toolbar in the frontend of your site.' , 'simple-membership'),
@@ -887,7 +890,7 @@ class SwpmSettings {
 			__( 'Show Adminbar to Admin' , 'simple-membership'),
 			array( &$this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
-			'advanced-settings',
+			'wp-toolbar-and-admin-dashboard-related',
 			array(
 				'item'    => 'show-adminbar-admin-only',
 				'message' => __( 'Use this option if you want to show the admin toolbar to admin users only. The admin toolbar will be hidden for all other users.' , 'simple-membership'),
@@ -899,7 +902,7 @@ class SwpmSettings {
 			__( 'Disable Access to WP Dashboard' , 'simple-membership'),
 			array( &$this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
-			'advanced-settings',
+			'wp-toolbar-and-admin-dashboard-related',
 			array(
 				'item'    => 'disable-access-to-wp-dashboard',
 				'message' => __( 'WordPress allows a standard wp user to be able to go to the wp-admin URL and access his profile from the wp dashboard. Using this option will prevent any non-admin users from going to the wp dashboard.' , 'simple-membership'),

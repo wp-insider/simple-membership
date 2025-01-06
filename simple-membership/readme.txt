@@ -184,6 +184,7 @@ https://simple-membership-plugin.com/
 - Updated the Stripe subscription payment button configuration interface to include the word 'Price' ID to reflect the changes made by Stripe.
 - Small refactoring of shortcode handler class to make it more efficient.
 - New settings added hide membership level in registration form.
+- WP toolbar and admin dashboard related settings has moved to a new section in advanced settings tab.
 
 = 4.5.8  =
 - Allow promo code feature added to stripe subscription payment buttons.

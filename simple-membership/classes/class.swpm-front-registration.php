@@ -509,10 +509,13 @@ class SwpmFrontRegistration extends SwpmRegistration {
 	}
 
 	/**
-	 * array_filter callback to remove any null values except first_name and last_name.
+	 * array_filter callback to remove any null values except for the first_name and last_name array indexes.
 	 */
 	public function filter_empty_member_info_fields ($item_value, $item_key){
+		//Returning 'true' will keep the item in the array (so it will not be filtered out). We want to keep the first_name and last_name fields even if they are empty.
+		//Returning 'false' will perform the filtering and remove the item from the array if it is empty (so the null/empty value will not be saved in the database).
 		if (in_array($item_key, array('first_name', 'last_name'))){
+			//Keep the first_name and last_name fields even if they are empty.
 			return true;
 		}
 

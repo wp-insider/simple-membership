@@ -185,7 +185,7 @@ https://simple-membership-plugin.com/
 - Small refactoring of shortcode handler class to make it more efficient.
 - Introduced a new settings option to hide membership level field on the registration form.
 - Options related to the WP toolbar and admin dashboard have been grouped together in the advanced settings menu.
-- First and Last name update issue fixed.
+- First and Last name values can be set to empty in the member's profile edit interface.
 
 = 4.5.8  =
 - Allow promo code feature added to stripe subscription payment buttons.

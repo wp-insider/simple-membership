@@ -19,7 +19,8 @@ class SWPM_Migration_Tools_Menu_Tab {
 		?>
         <div class="swpm-yellow-box">
             <p class="description">
-				<?php _e( "To migrate the Simple Membership plugin's data to another WordPress installation, please download and install the SWPM Data Migration Addon.", "simple-membership" ) ?>
+				<?php _e( "To migrate the Simple Membership plugin's data to another WordPress installation, please download and install the free ", "simple-membership" ) ?>
+				<?php echo '<a href="https://simple-membership-plugin.com/simple-membership-data-migration-between-wordpress-sites/" target="_blank">' . __( "Data Migration Addon", "simple-membership" ) . '</a>.'; ?>
             </p>
         </div>
 		<?php

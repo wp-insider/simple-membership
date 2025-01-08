@@ -30,7 +30,7 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
                     <div class="swpm-yellow-box" style="max-width:450px;">
                         <p>This user account registration is not complete yet. The member needs to click on the unique registration completion link (sent to his email) and complete the registration by choosing a username and password.</p>
                         <br />
-                        <p>You can go to the <a href="admin.php?page=simple_wp_membership_settings&tab=4" target="_blank">Tools Interface</a> and generate another unique "Registration Completion" link then send the link to the user. Alternatively, you can use that link yourself and complete the registration on behalf of the user.</p>
+                        <p>You can go to the <a href="admin.php?page=simple_wp_membership_tools" target="_blank">Tools Interface</a> and generate another unique "Registration Completion" link then send the link to the user. Alternatively, you can use that link yourself and complete the registration on behalf of the user.</p>
                         <br />
                         <p>If you suspect that this user has lost interest in becoming a member then you can delete this member record.</p>
                     </div>

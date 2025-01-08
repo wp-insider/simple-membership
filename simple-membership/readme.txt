@@ -176,6 +176,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Updated the reference to the tools menu in the admin dashboard to point to the new location.
+
 = 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.
 - Added a new action hook 'swpm_admin_account_status_updated' that will be triggered when the account status of a member is changed in the admin dashboard.

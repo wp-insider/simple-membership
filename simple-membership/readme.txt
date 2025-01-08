@@ -1,11 +1,11 @@
 === Simple Membership ===
 Contributors: smp7, wp.insider
 Donate link: https://simple-membership-plugin.com/
-Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, login page, bbpress, stripe, braintree
+Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, bbpress, stripe
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.5.8
+Stable tag: 4.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,13 +176,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
-- Backwards compatibility for the 'profile_update' action hook.
+= 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.
 - Added a new action hook 'swpm_admin_account_status_updated' that will be triggered when the account status of a member is changed in the admin dashboard.
 - Added a new action hook 'swpm_account_status_updated' that will be triggered when the account status update function is called for a member.
+- Backwards compatibility for the 'profile_update' action hook.
 - Updated the Stripe subscription payment button configuration interface to include the word 'Price' ID to reflect the changes made by Stripe.
-- Small refactoring of shortcode handler class to make it more efficient.
+- Small refactoring of the shortcode handler class to make it more efficient.
 - Introduced a new settings option to hide membership level field on the registration form.
 - Options related to the WP toolbar and admin dashboard have been grouped together in the advanced settings menu.
 - First and Last name values can be set to empty in the member's profile edit interface.

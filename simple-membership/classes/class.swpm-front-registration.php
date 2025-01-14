@@ -106,15 +106,23 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$member = array_map( 'sanitize_text_field', $_POST );
 		}
 		ob_start();
-		extract( (array) $member, EXTR_SKIP );
+		// extract( (array) $member, EXTR_SKIP ); // TODO: Old code. Need to remove this.
 
 		$hide_membership_level_field = $settings_configs->get_value( 'hide-reg-form-membership-level-field' );
 
+		$tpl_data = (array) $member;
+		$tpl_data['hide_membership_level_field'] = $hide_membership_level_field;
+		$tpl_data['membership_level'] = $membership_level;
+		$tpl_data['membership_level_alias'] = $membership_level_alias;
+		$tpl_data['level_identifier'] = $level_identifier;
+
 		$render_new_form_ui = $settings_configs->get_value('use-new-form-ui');
 		if (!empty($render_new_form_ui)) {
-			include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add-v2.php';
+			// include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add-v2.php'; // TODO: Old code. Need to remove this.
+			SwpmUtilsTemplate::swpm_load_template('add-v2.php', false, $tpl_data);
 		}else{
-			include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add.php';
+			// include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add.php'; // TODO: Old code. Need to remove this.
+			SwpmUtilsTemplate::swpm_load_template('add.php', false, $tpl_data);
 		}
 		return ob_get_clean();
 	}

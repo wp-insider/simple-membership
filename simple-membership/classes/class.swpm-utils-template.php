@@ -29,9 +29,12 @@ class SwpmUtilsTemplate {
 
         //Lets load this template
         if ($template_to_load) {
-			// Extract the data on which the template depends on.
-			extract($tpl_data, EXTR_SKIP);
+			// Extract any template data passed to this function (if any) to the global scope.
+            if( is_array($tpl_data) && !empty($tpl_data) ){
+                extract( (array) $tpl_data, EXTR_SKIP);
+            }
 
+            //Include the template file.
 			if ($require_once) {
                 require_once( $template_to_load );
             } else {

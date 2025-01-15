@@ -126,7 +126,8 @@ class SwpmForm {
 
     protected function phone() {
         $phone = filter_input(INPUT_POST, 'phone', FILTER_UNSAFE_RAW);
-		if (is_null($phone)){ // This check is used to prevent deprecation error occurred by passing NULL content.
+		if (is_null($phone)){ 
+            // This check is used to prevent any PHP notice for null value.
 			$phone = '';
 		}
         $saned = wp_kses($phone, array());

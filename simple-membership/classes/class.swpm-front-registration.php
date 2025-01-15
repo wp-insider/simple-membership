@@ -56,7 +56,6 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 		$joinuspage_url = $settings_configs->get_value( 'join-us-page-url' );
 		$membership_level = '';
-		global $wpdb;
 
 		if ( SwpmUtils::is_paid_registration() ) {
 			//Lets check if this is a registration for paid membership
@@ -106,7 +105,6 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$member = array_map( 'sanitize_text_field', $_POST );
 		}
 		ob_start();
-		// extract( (array) $member, EXTR_SKIP ); // TODO: Old code. Need to remove this.
 
 		$hide_membership_level_field = $settings_configs->get_value( 'hide-reg-form-membership-level-field' );
 
@@ -118,10 +116,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 		$render_new_form_ui = $settings_configs->get_value('use-new-form-ui');
 		if (!empty($render_new_form_ui)) {
-			// include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add-v2.php'; // TODO: Old code. Need to remove this.
 			SwpmUtilsTemplate::swpm_load_template('add-v2.php', false, $tpl_data);
 		}else{
-			// include SIMPLE_WP_MEMBERSHIP_PATH . 'views/add.php'; // TODO: Old code. Need to remove this.
 			SwpmUtilsTemplate::swpm_load_template('add.php', false, $tpl_data);
 		}
 		return ob_get_clean();

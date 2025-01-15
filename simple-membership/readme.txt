@@ -178,8 +178,8 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - Updated the reference to the tools menu in the admin dashboard to point to the new location.
-- Front-end registration form now renders via the 'SwpmUtilsTemplate::swpm_load_template()' method.
-- A deprecation warning issue fixed.
+- Front-end registration form now renders via the 'swpm_load_template()' method.
+- Fixed minor PHP notice issue.
 
 = 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.

@@ -49,26 +49,26 @@ class SwpmAccessControl {
         //Check if the user is logged in.
         if(!$auth->is_logged_in()){
             //This user is not logged into the site. No access to this protected post.
-            $text = SwpmUtils::_('You need to be logged in to view this content. ') . SwpmMiscUtils::get_login_link();
+            $text = __('You need to be logged in to view this content. ', 'simple-membership') . SwpmMiscUtils::get_login_link();
             $error_msg = '<div class="swpm-post-not-logged-in-msg">'.$text.'</div>';
             $this->lastError = apply_filters('swpm_not_logged_in_post_msg', $error_msg);
-            return false;            
+            return false;
         }
 
         //Check if the account is expired
         if ($auth->is_expired_account()){
             //This user's account is expired. No access to this post. Show account expiry message.
-            $text = SwpmUtils::_('Your account has expired. ') .  SwpmMiscUtils::get_renewal_link();
+            $text = __('Your account has expired. ', 'simple-membership') .  SwpmMiscUtils::get_renewal_link();
             $error_msg = '<div class="swpm-post-account-expired-msg swpm-yellow-box">'.$text.'</div>';
             $this->lastError = apply_filters('swpm_account_expired_msg', $error_msg);
-            return false;                        
+            return false;
         }
         
         //Check older post protection addon settings (if being used on this site).
         $protect_older_posts = apply_filters('swpm_should_protect_older_post', false, $id);
         if ($protect_older_posts){
             //This post falls under the older post protection condition. No access to it.
-            $text = SwpmUtils::_('This content can only be viewed by members who joined on or before ') . SwpmUtils::get_formatted_and_translated_date_according_to_wp_settings($post->post_date);
+            $text = __('This content can only be viewed by members who joined on or before. ', 'simple-membership') . SwpmUtils::get_formatted_and_translated_date_according_to_wp_settings($post->post_date);
             $error_msg = '<div class="swpm-post-older-post-msg">'.$text.'</div>';
             $this->lastError = apply_filters ('swpm_restricted_post_msg_older_post', $error_msg);
             return false;
@@ -81,7 +81,7 @@ class SwpmAccessControl {
             return true;
         } else {
             //User's level DOES NOT have access to this post.
-            $text = SwpmUtils::_('This content is not permitted for your membership level.');
+            $text = __('This content is not permitted for your membership level.', 'simple-membership');
             $error_msg = '<div class="swpm-post-no-access-msg">'.$text.'</div>';
             $this->lastError = apply_filters ('swpm_restricted_post_msg', $error_msg);
             return false;
@@ -318,5 +318,8 @@ class SwpmAccessControl {
                 
         return false;
     }
-    
+
+	public function get_lastError() {
+		return $this->lastError;
+	}
 }

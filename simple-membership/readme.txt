@@ -181,6 +181,7 @@ https://simple-membership-plugin.com/
 - Front-end registration form now renders via the 'swpm_load_template()' method.
 - Fixed minor PHP notice issue.
 - A getter method added to SwpmAccessControl class.
+- Password reset request form resubmission issue on page reload fixed.
 
 = 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.

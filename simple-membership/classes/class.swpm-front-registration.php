@@ -639,7 +639,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		);
 
 		SwpmTransfer::get_instance()->set( 'status', $message_ary );
-		
+
+		// Redirecting to current page to avoid password reset request form resubmission on page reload.
+		SwpmMiscUtils::redirect_to_url( SwpmMiscUtils::get_current_page_url() );
 	}
 
 	public function reset_password_using_link( $user_data, $password ) {

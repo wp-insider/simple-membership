@@ -177,13 +177,13 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
+- Added a new option to bulk delete all member accounts with a specific account status.
 - Updated the reference to the tools menu in the admin dashboard to point to the new location.
 - Front-end registration form now renders via the 'swpm_load_template()' method.
-- Fixed minor PHP notice issue.
 - A getter method added to SwpmAccessControl class.
-- Password reset request form resubmission issue on page reload fixed.
-- New option for bulk delete members account by status added.
-- Admin user deletion issue fixed.
+- Improved the handling of the password reset request form to prevent resubmission on page reload.
+- Added an extra check in the user delete function to check if user has admin role.
+- Fixed a minor PHP notice issue.
 
 = 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.

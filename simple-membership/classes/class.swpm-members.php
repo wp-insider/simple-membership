@@ -564,6 +564,7 @@ class SwpmMembers extends WP_List_Table {
 	}
 
 	public static function is_wp_super_user( $wp_user_id ) {
+		//Note: Better to use the wp_user_has_admin_role() method to check if a user has administrator role.
 		$user_data = get_userdata( $wp_user_id );
 		if ( empty( $user_data ) ) {
 			//Not an admin user if we can't find his data for the given ID.
@@ -949,7 +950,7 @@ class SwpmMembers extends WP_List_Table {
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<input type="submit" class="button" style="color:red;" name="swpm_bulk_delete_account_process" value="<?php _e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?>" onclick="return confirm('Are you sure you want to bulk delete member accounts?');" />
+								<input type="submit" class="button" style="color:red;" name="swpm_bulk_delete_account_process" value="<?php _e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?>" onclick="return confirm('Are you sure you want to bulk delete all member accounts with the selected membership level?');" />
 							</td>
 							<td align="left"></td>
 						</tr>
@@ -963,8 +964,8 @@ class SwpmMembers extends WP_List_Table {
             <h3 class="hndle"><label for="title"><?php _e( 'Bulk Delete Member Accounts By Status', 'simple-membership' ); ?></label></h3>
             <div class="inside">
                 <p>
-					<?php _e( 'This option allows you to bulk delete all members of a particular account status, including their associated WordPress user records. ', 'simple-membership' ); ?>
-					<?php _e('The WP user record will be deleted only if the user is not an administrator user.', 'simple-membership'); ?>
+					<?php _e( 'This option enables you to bulk delete all members with a specific account status, including their associated WordPress user records. ', 'simple-membership' ); ?>
+					<?php _e( 'The WP user record will be deleted only if the user is not an administrator user.', 'simple-membership' ); ?>
                 </p>
                 <form method="post" action="">
                     <input type="hidden" name="swpm_bulk_delete_account_by_status_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_delete_account_by_status_nonce_action' ); ?>" />
@@ -979,13 +980,13 @@ class SwpmMembers extends WP_List_Table {
                                     <option value="please_select"><?php _e( 'Select Status', 'simple-membership' ); ?></option>
 	                                <?php echo SwpmUtils::account_state_dropdown('please_select'); ?>
                                 </select>
-                                <p class="description"><?php _e( 'Select the Account Status (the accounts of all members who are in this account status will be deleted).', 'simple-membership' ); ?></p>
+                                <p class="description"><?php _e( 'Select the Account Status (the accounts of all members with this account status will be deleted).', 'simple-membership' ); ?></p>
                             </td>
                         </tr>
 
                         <tr valign="top">
                             <td width="25%" align="left">
-                                <input type="submit" class="button" style="color:red;" name="swpm_bulk_delete_account_status_process" value="<?php _e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?>" onclick="return confirm('Are you sure you want to bulk delete member accounts?');" />
+                                <input type="submit" class="button" style="color:red;" name="swpm_bulk_delete_account_status_process" value="<?php _e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?>" onclick="return confirm('Are you sure you want to bulk delete all member accounts with the selected account status?');" />
                             </td>
                             <td align="left"></td>
                         </tr>

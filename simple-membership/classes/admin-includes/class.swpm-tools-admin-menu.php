@@ -24,6 +24,8 @@ class SwpmToolsAdminMenu {
         <h2 class="nav-tab-wrapper">
             <a class="nav-tab <?php echo ( $tab == '' ) ? 'nav-tab-active' : ''; ?>"
                href="admin.php?page=simple_wp_membership_tools"><?php _e( 'General Tools', 'simple-membership' ); ?></a>
+            <a class="nav-tab <?php echo ( $tab == 'systeminfo' ) ? 'nav-tab-active' : ''; ?>"
+               href="admin.php?page=simple_wp_membership_tools&tab=systeminfo"><?php _e( 'System Info', 'simple-membership' ); ?></a>
             <a class="nav-tab <?php echo ( $tab == 'migration' ) ? 'nav-tab-active' : ''; ?>"
                href="admin.php?page=simple_wp_membership_tools&tab=migration"><?php _e( 'Data Migration', 'simple-membership' ); ?></a>
 			<?php
@@ -64,6 +66,11 @@ class SwpmToolsAdminMenu {
                 include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/admin-includes/class.swpm-migration-tools-menu-tab.php');
                 $migration_tools_tab = new SWPM_Migration_Tools_Menu_Tab();
                 $migration_tools_tab->handle_migration_tools_menu_tab();
+				break;
+			case 'systeminfo':
+				include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/admin-includes/class.swpm-system-info-menu-tab.php');
+				$migration_tools_tab = new SWPM_System_Info_Menu_Tab();
+				$migration_tools_tab->handle_system_info_menu_tab();
 				break;
             case 'general':
 			default:

@@ -507,6 +507,11 @@ class SwpmMembers extends WP_List_Table {
 			return;
 		}
 
+        if (SwpmMemberUtils::wp_user_has_admin_role($wp_user_id)){
+            // For safety, we do not allow deletion of any associated WordPress account with administrator role.
+            return;
+        }
+
 		if ( ! self::is_wp_super_user( $wp_user_id ) ) {
 			//Not an admin user so it is safe to delete this user.
 			include_once ABSPATH . 'wp-admin/includes/user.php';
@@ -730,6 +735,44 @@ class SwpmMembers extends WP_List_Table {
 				echo '</strong></p></div>';
 			}
 		}		
+
+		if ( isset( $_REQUEST['swpm_bulk_delete_account_status_process'] ) ) {
+			//Check nonce
+			$swpm_bulk_delete_account_by_status_nonce = filter_input( INPUT_POST, 'swpm_bulk_delete_account_by_status_nonce' );
+			if ( ! wp_verify_nonce( $swpm_bulk_delete_account_by_status_nonce, 'swpm_bulk_delete_account_by_status_nonce_action' ) ) {
+				//Nonce check failed.
+				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Delete Account by Status action. Clear cache and try again.' ) );
+			}
+
+			$error_msg = '';
+
+			//Check if the user has selected a membership level.
+			$from_status = sanitize_text_field( $_POST['swpm_bulk_delete_account_status_of'] );
+			if ( $from_status == 'please_select' ) {
+				$error_msg = __( 'Error! Please select a account status first.', 'simple-membership' );
+			}
+
+			if ( empty( $error_msg ) ) { //No validation errors so go ahead
+				SwpmLog::log_simple_debug( 'Executing bulk delete accounts of status: ' . $from_status, true );
+				$member_records = SwpmMemberUtils::get_all_members_of_account_status( $from_status );
+				if ( $member_records ) {
+					foreach ( $member_records as $row ) {
+						$member_id = $row->member_id;
+						SwpmMemberUtils::delete_member_and_wp_user( $member_id );
+					}
+				}
+			}
+
+			if ( ! empty( $error_msg ) ) {
+				echo '<div id="message" class="notice notice-error"><p><strong>';
+				echo $error_msg;
+				echo '</strong></p></div>';
+			}else{
+				echo '<div id="message" class="notice notice-success"><p><strong>';
+				_e( 'Bulk delete of member accounts by status completed successfully.', 'simple-membership');
+				echo '</strong></p></div>';
+			}
+		}
 		?>
 
 		<div class="postbox">
@@ -915,6 +958,43 @@ class SwpmMembers extends WP_List_Table {
 				</form>
 			</div>
 		</div>
+
+        <div class="postbox">
+            <h3 class="hndle"><label for="title"><?php _e( 'Bulk Delete Member Accounts By Status', 'simple-membership' ); ?></label></h3>
+            <div class="inside">
+                <p>
+					<?php _e( 'This option allows you to bulk delete all members of a particular account status, including their associated WordPress user records. ', 'simple-membership' ); ?>
+					<?php _e('The WP user record will be deleted only if the user is not an administrator user.', 'simple-membership'); ?>
+                </p>
+                <form method="post" action="">
+                    <input type="hidden" name="swpm_bulk_delete_account_by_status_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_delete_account_by_status_nonce_action' ); ?>" />
+
+                    <table width="100%" border="0" cellspacing="0" cellpadding="6">
+                        <tr valign="top">
+                            <td width="25%" align="left">
+                                <strong><?php _e( 'Account Status: ', 'simple-membership' ); ?></strong>
+                            </td>
+                            <td align="left">
+                                <select name="swpm_bulk_delete_account_status_of">
+                                    <option value="please_select"><?php _e( 'Select Status', 'simple-membership' ); ?></option>
+	                                <?php echo SwpmUtils::account_state_dropdown('please_select'); ?>
+                                </select>
+                                <p class="description"><?php _e( 'Select the Account Status (the accounts of all members who are in this account status will be deleted).', 'simple-membership' ); ?></p>
+                            </td>
+                        </tr>
+
+                        <tr valign="top">
+                            <td width="25%" align="left">
+                                <input type="submit" class="button" style="color:red;" name="swpm_bulk_delete_account_status_process" value="<?php _e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?>" onclick="return confirm('Are you sure you want to bulk delete member accounts?');" />
+                            </td>
+                            <td align="left"></td>
+                        </tr>
+
+                    </table>
+                </form>
+            </div>
+        </div>
+
 
 		<?php
 		echo '</div></div>'; //<!-- end of #poststuff #post-body -->

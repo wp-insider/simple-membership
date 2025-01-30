@@ -184,6 +184,7 @@ https://simple-membership-plugin.com/
 - Improved the handling of the password reset request form to prevent resubmission on page reload.
 - Added an extra check in the user delete function to check if user has admin role.
 - Fixed a minor PHP notice issue.
+- New 'System Info' tab added in Tools menu.
 
 = 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.

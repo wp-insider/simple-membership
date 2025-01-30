@@ -188,6 +188,14 @@ class SwpmMemberUtils {
 		return $result;
 	}
 
+	public static function get_all_members_of_account_status( $status ) {
+		//Retrieves all the SWPM user records for the given account status
+		global $wpdb;
+		$query  = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE account_state = %s", $status );
+		$result = $wpdb->get_results( $query );
+		return $result;
+	}
+
 	/**
 	 * Retrieves all members with a given membership level id and a given account state
 	 * '-1' as $level_id represents all membership levels.

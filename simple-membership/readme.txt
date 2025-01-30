@@ -182,6 +182,7 @@ https://simple-membership-plugin.com/
 - Fixed minor PHP notice issue.
 - A getter method added to SwpmAccessControl class.
 - Password reset request form resubmission issue on page reload fixed.
+- New option for bulk delete members account by status added.
 
 = 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.

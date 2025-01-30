@@ -507,6 +507,11 @@ class SwpmMembers extends WP_List_Table {
 			return;
 		}
 
+        if (SwpmMemberUtils::wp_user_has_admin_role($wp_user_id)){
+            // For safety, we do not allow deletion of any associated WordPress account with administrator role.
+            return;
+        }
+
 		if ( ! self::is_wp_super_user( $wp_user_id ) ) {
 			//Not an admin user so it is safe to delete this user.
 			include_once ABSPATH . 'wp-admin/includes/user.php';
@@ -958,7 +963,7 @@ class SwpmMembers extends WP_List_Table {
             <h3 class="hndle"><label for="title"><?php _e( 'Bulk Delete Member Accounts By Status', 'simple-membership' ); ?></label></h3>
             <div class="inside">
                 <p>
-					<?php _e( 'This option allows you to bulk delete all members os a particular account status, including their associated WordPress user records. ', 'simple-membership' ); ?>
+					<?php _e( 'This option allows you to bulk delete all members of a particular account status, including their associated WordPress user records. ', 'simple-membership' ); ?>
 					<?php _e('The WP user record will be deleted only if the user is not an administrator user.', 'simple-membership'); ?>
                 </p>
                 <form method="post" action="">

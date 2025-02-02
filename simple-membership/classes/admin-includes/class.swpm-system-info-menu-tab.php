@@ -38,7 +38,7 @@ class SWPM_System_Info_Menu_Tab {
                                         title="<?php esc_attr_e( $info['description'] ) ?>"
                                 ></span>
                             </td>
-                            <td><?php echo wp_kses_post($info['value']) ?></td>
+                            <td><?php echo wp_kses_post( $info['value'] ) ?></td>
                         </tr>
 					<?php } ?>
                     </tbody>
@@ -64,7 +64,7 @@ class SWPM_System_Info_Menu_Tab {
                                         title="<?php esc_attr_e( $info['description'] ) ?>"
                                 ></span>
                             </td>
-                            <td><?php echo wp_kses_post($info['value']) ?></td>
+                            <td><?php echo wp_kses_post( $info['value'] ) ?></td>
                         </tr>
 					<?php } ?>
                     </tbody>
@@ -90,7 +90,7 @@ class SWPM_System_Info_Menu_Tab {
                                         title="<?php esc_attr_e( $info['description'] ) ?>"
                                 ></span>
                             </td>
-                            <td><?php echo wp_kses_post($info['value']) ?></td>
+                            <td><?php echo wp_kses_post( $info['value'] ) ?></td>
                         </tr>
 					<?php } ?>
                     </tbody>
@@ -109,27 +109,7 @@ class SWPM_System_Info_Menu_Tab {
                         <tr>
                             <td><?php esc_attr_e( $info['title'] ) ?>:</td>
                             <td><i><?php esc_attr_e( $info['cron'] ) ?></i></td>
-                            <td><?php echo wp_kses_post($info['value']) ?></td>
-                        </tr>
-					<?php } ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="postbox">
-            <h3 class="hndle">
-                <label for="title"><?php _e( 'Language Files', 'simple-membership' ); ?></label>
-            </h3>
-            <div class="inside">
-                <table class="widefat striped " cellspacing="0" id="status">
-                    <tbody>
-					<?php foreach ( $this->get_plugin_language_files() as $info ) { ?>
-                        <tr>
-                            <td><?php esc_attr_e( $info['language'] ) ?></td>
-                            <td>
-                                <a href="<?php echo $info['url'] ?>"><?php esc_attr_e($info['filename']) ?></a>
-                            </td>
+                            <td><?php echo wp_kses_post( $info['value'] ) ?></td>
                         </tr>
 					<?php } ?>
                     </tbody>
@@ -145,7 +125,7 @@ class SWPM_System_Info_Menu_Tab {
 		echo $output;
 	}
 
-	public function get_bool_symbol( $bool ) {
+	public function convert_bool_to_symbol( $bool ) {
 		if ( boolval( $bool ) ) {
 			return '<span class="dashicons dashicons-yes" style="color: green"></span>';
 		} else {
@@ -177,29 +157,34 @@ class SWPM_System_Info_Menu_Tab {
 			),
 			array(
 				'title'       => __( 'WordPress multisite', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( is_multisite() ),
+				'value'       => $this->convert_bool_to_symbol( is_multisite() ),
 				'description' => __( 'Whether or not you have WordPress Multisite enabled.', 'simple-membership' )
 			),
 			array(
-				'title'       => __( 'WordPress memory limit:', 'simple-membership' ),
+				'title'       => __( 'WordPress memory limit', 'simple-membership' ),
 				'value'       => esc_attr( defined( 'WP_MEMORY_LIMIT' ) ? WP_MEMORY_LIMIT : ini_get( 'memory_limit' ) ),
 				'description' => __( 'The maximum amount of memory (RAM) that your site can use at one time.', 'simple-membership' )
 			),
 			array(
-				'title'       => __( 'WordPress debug mode:', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ),
+				'title'       => __( 'WordPress debug mode', 'simple-membership' ),
+				'value'       => $this->convert_bool_to_symbol( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ),
 				'description' => __( 'Displays whether WordPress debug is enabled or not.', 'simple-membership' )
 			),
 			array(
-				'title'       => __( 'WordPress Crons:', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( wp_next_scheduled( 'wp_version_check' ) ),
+				'title'       => __( 'WordPress Crons', 'simple-membership' ),
+				'value'       => $this->convert_bool_to_symbol( wp_next_scheduled( 'wp_version_check' ) ),
 				//This checks if WordPress has scheduled its version check, which indicates WP-Cron is functional.
 				'description' => __( 'Displays whether WordPress cronjobs ar running or not.', 'simple-membership' )
 			),
 			array(
-				'title'       => __( 'Language:', 'simple-membership' ),
+				'title'       => __( 'Language', 'simple-membership' ),
 				'value'       => esc_attr( get_locale() ),
 				'description' => __( 'The current language used by WordPress.', 'simple-membership' )
+			),
+			array(
+				'title'       => __( 'Loaded Translation File', 'simple-membership' ),
+				'value'       => esc_attr($this->get_loaded_translation_file()),
+				'description' => __( 'The translation file loaded by Simple Membership plugin.', 'simple-membership' )
 			),
 		);
 	}
@@ -238,7 +223,7 @@ class SWPM_System_Info_Menu_Tab {
 			),
 			array(
 				'title'       => __( 'SUHOSIN Installed', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( extension_loaded( 'suhosin' ) ),
+				'value'       => $this->convert_bool_to_symbol( extension_loaded( 'suhosin' ) ),
 				'description' => __( 'Suhosin is an advanced protection system for PHP installations. It was designed to protect your servers on the one hand against a number of well known problems in PHP applications and on the other hand against potential unknown vulnerabilities within these applications or the PHP core itself. If enabled on your server, Suhosin may need to be configured to increase its data submission limits.', 'simple-membership' )
 			),
 			array(
@@ -258,37 +243,37 @@ class SWPM_System_Info_Menu_Tab {
 			),
 			array(
 				'title'       => __( 'fsockopen/cURL', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( function_exists( 'fsockopen' ) || function_exists( 'curl_version' ) ),
+				'value'       => $this->convert_bool_to_symbol( function_exists( 'fsockopen' ) || function_exists( 'curl_version' ) ),
 				'description' => __( 'Payment gateways can use cURL to communicate with remote servers to authorize payments, other plugins may also use it when communicating with remote services.', 'simple-membership' )
 			),
 			array(
 				'title'       => __( 'SoapClient', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( class_exists( 'SoapClient' ) ),
+				'value'       => $this->convert_bool_to_symbol( class_exists( 'SoapClient' ) ),
 				'description' => __( 'Some webservices like shipping use SOAP to get information from remote servers, for example, live shipping quotes from FedEx require SOAP to be installed.', 'simple-membership' )
 			),
 			array(
 				'title'       => __( 'DOMDocument', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( class_exists( 'DOMDocument' ) ),
+				'value'       => $this->convert_bool_to_symbol( class_exists( 'DOMDocument' ) ),
 				'description' => __( 'HTML/Multipart emails use DOMDocument to generate inline CSS in templates.', 'simple-membership' )
 			),
 			array(
 				'title'       => __( 'GZip', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( function_exists( 'gzcompress' ) ),
+				'value'       => $this->convert_bool_to_symbol( function_exists( 'gzcompress' ) ),
 				'description' => __( 'GZip (gzopen) is used to open the GEOIP database from MaxMind.', 'simple-membership' )
 			),
 			array(
 				'title'       => __( 'Multibyte String', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( extension_loaded( 'mbstring' ) ),
+				'value'       => $this->convert_bool_to_symbol( extension_loaded( 'mbstring' ) ),
 				'description' => __( 'Multibyte String (mbstring) is used to convert character encoding, like for emails or converting characters to lowercase.', 'simple-membership' )
 			),
 			array(
 				'title'       => __( 'Remote Post', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( wp_remote_post( 'https://www.google.com' ) ),
+				'value'       => $this->convert_bool_to_symbol( wp_remote_post( 'https://www.google.com' ) ),
 				'description' => __( 'PayPal uses this method of communicating when sending back transaction information.', 'simple-membership' )
 			),
 			array(
 				'title'       => __( 'Remote Get', 'simple-membership' ),
-				'value'       => $this->get_bool_symbol( wp_remote_get( 'https://www.google.com' ) ),
+				'value'       => $this->convert_bool_to_symbol( wp_remote_get( 'https://www.google.com' ) ),
 				'description' => __( 'WooCommerce plugins may use this method of communication when checking for plugin updates.', 'simple-membership' )
 			),
 		);
@@ -339,36 +324,14 @@ class SWPM_System_Info_Menu_Tab {
 		return '<span style="color: darkred"><span class="dashicons dashicons-warning"></span> ' . __( 'Page Not Set!', 'simple-membership' ) . '</span>';
 	}
 
-	public function get_plugin_language_files() {
-		$languages_dir  = SIMPLE_WP_MEMBERSHIP_PATH . 'languages/'; // Path to the languages folder
-		$languages_url  = SIMPLE_WP_MEMBERSHIP_URL . '/languages/';  // URL to the languages folder
-		$language_files = [];
+	public function get_loaded_translation_file() {
+		$swpm_loaded_lang_file_path = $this->get_loaded_mo_file();
 
-		// Check if the directory exists
-		if ( ! is_dir( $languages_dir ) ) {
-			return array(); // Return empty if the folder doesn't exist
-		}
+        if (empty($swpm_loaded_lang_file_path)){
+            return __( 'No translation file loaded for ', 'simple-membership' ) . get_locale();
+        }
 
-		// Scan the directory for .po files
-		$files = glob( $languages_dir . 'simple-membership-*.po' );
-
-		foreach ( $files as $file ) {
-			$filename = basename( $file );
-			$file_url = $languages_url . $filename;
-
-			// Extract the language code (ar_SA, fr_FR, etc.)
-			preg_match( '/simple-membership-(.+)\.po$/', $filename, $matches );
-			$lang_code = isset( $matches[1] ) ? $matches[1] : 'Unknown';
-
-			// Store in an array
-			$language_files[] = [
-				'filename' => $filename,
-				'url'      => $file_url,
-				'language' => $lang_code,
-			];
-		}
-
-		return $language_files;
+        return str_replace(ABSPATH, '', $swpm_loaded_lang_file_path);
 	}
 
 	public function get_cronjobs() {
@@ -400,9 +363,42 @@ class SWPM_System_Info_Menu_Tab {
 		$next_run = wp_next_scheduled( $name );
 
 		if ( $next_run ) {
-			return '<span style="color: green">' . $this->get_bool_symbol( true ) . __('Next scheduled', 'simple-membership') . ': ' . date( 'Y-m-d H:i:s', $next_run ) . '<span>';
+			return '<span style="color: green">' . $this->convert_bool_to_symbol( true ) . __( 'Next scheduled', 'simple-membership' ) . ': ' . date( 'Y-m-d H:i:s', $next_run ) . '<span>';
 		} else {
-			return '<span style="color: darkred">' . $this->get_bool_symbol( false ) . __('Not scheduled!', 'simple-membership') . '<span>';
+			return '<span style="color: darkred">' . $this->convert_bool_to_symbol( false ) . __( 'Not scheduled!', 'simple-membership' ) . '<span>';
 		}
+	}
+
+	public function get_loaded_mo_file() {
+		$domain = 'simple-membership';
+
+		global $l10n;
+
+		$file_path = '';
+
+        // Retrieve the target translation file path by recursively reconstructing the i10n class.
+
+        if (isset($l10n[$domain])){
+		    $i10n_obj = $this->objectToArray($l10n[$domain]);
+            if (isset($i10n_obj['controller'])){
+		        $i10n_obj = $this->objectToArray($i10n_obj['controller']);
+                if (isset($i10n_obj['loaded_translations'][get_locale()][$domain][0])){
+		            $i10n_obj = $this->objectToArray($i10n_obj['loaded_translations'][get_locale()][$domain][0]);
+		            $file_path = isset($i10n_obj['file']) ? $i10n_obj['file'] : '';
+                }
+            }
+        }
+
+		return $file_path;
+	}
+
+	public function objectToArray($obj) {
+		$array = [];
+		$reflection = new \ReflectionClass($obj);
+		foreach ($reflection->getProperties() as $property) {
+			$property->setAccessible(true); // Allow access to private/protected properties
+			$array[$property->getName()] = $property->getValue($obj);
+		}
+		return $array;
 	}
 }

@@ -568,6 +568,22 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			return;
 		}
 
+		// Check if incomplete member account
+		if (empty($user->user_name)){
+			$message  = '<div class="swpm-reset-pw-error">';
+			$message  .= __('Your account registration is not completed yet!', 'simple-membership');
+			$message  .= '</div>';
+			$message_ary = array(
+				'succeeded'       => false,
+				'message'         => $message,
+				'pass_reset_sent' => false,
+			);
+
+			SwpmTransfer::get_instance()->set( 'status', $message_ary );
+			// Redirecting to current page to avoid password reset request form resubmission on page reload.
+			SwpmMiscUtils::redirect_to_url( SwpmMiscUtils::get_current_page_url() );
+		}
+
 		$settings = SwpmSettings::get_instance();
 		$password_reset_link='';		
 		$additional_args =array();

@@ -185,6 +185,7 @@ https://simple-membership-plugin.com/
 - Added an extra check in the user delete function to check if user has admin role.
 - Fixed a minor PHP notice issue.
 - New 'System Info' tab added in Tools menu.
+- Password reset link sending issue fixed for incomplete accounts.
 
 = 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.

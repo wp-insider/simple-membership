@@ -1,0 +1,46 @@
+function swpm_load_textdomain_mofile_handler( $mofile, $domain ) {
+	if ( $domain == 'simple-membership' ) {
+		if ( file_exists( $mofile ) ) {
+
+			global $swpm_loaded_lang_file_path;
+
+			$moFiles = $swpm_loaded_lang_file_path;
+		}
+	}
+
+	return $mofile;
+}
+add_filter( 'load_textdomain_mofile', 'swpm_load_textdomain_mofile_handler', 999, 2 );
+
+public function get_loaded_mo_file() {
+    $domain = 'simple-membership';
+
+    global $l10n;
+
+    $file_path = '';
+
+    // Retrieve the target translation file path by recursively reconstructing the i10n class.
+
+    if (isset($l10n[$domain])){
+        $i10n_obj = $this->objectToArray($l10n[$domain]);
+        if (isset($i10n_obj['controller'])){
+            $i10n_obj = $this->objectToArray($i10n_obj['controller']);
+            if (isset($i10n_obj['loaded_translations'][get_locale()][$domain][0])){
+                $i10n_obj = $this->objectToArray($i10n_obj['loaded_translations'][get_locale()][$domain][0]);
+                $file_path = isset($i10n_obj['file']) ? $i10n_obj['file'] : '';
+            }
+        }
+    }
+
+    return $file_path;
+}
+
+public function objectToArray($obj) {
+    $array = [];
+    $reflection = new \ReflectionClass($obj);
+    foreach ($reflection->getProperties() as $property) {
+        $property->setAccessible(true); // Allow access to private/protected properties
+        $array[$property->getName()] = $property->getValue($obj);
+    }
+    return $array;
+}

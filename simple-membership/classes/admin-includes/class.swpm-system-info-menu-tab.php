@@ -129,7 +129,7 @@ class SWPM_System_Info_Menu_Tab {
 		if ( boolval( $bool ) ) {
 			return '<span class="dashicons dashicons-yes" style="color: green"></span>';
 		} else {
-			return '<span class="dashicons dashicons-no-alt" style="color: darkred"></span>';
+			return '<span>-</span>';
 		}
 	}
 
@@ -182,9 +182,9 @@ class SWPM_System_Info_Menu_Tab {
 				'description' => __( 'The current language used by WordPress.', 'simple-membership' )
 			),
 			array(
-				'title'       => __( 'Loaded Translation File', 'simple-membership' ),
-				'value'       => esc_attr($this->get_loaded_translation_file()),
-				'description' => __( 'The translation file loaded by Simple Membership plugin.', 'simple-membership' )
+				'title'       => __( 'Translation Files', 'simple-membership' ),
+				'value'       => $this->get_translation_files(),
+				'description' => __( 'The list translation files loaded for Simple Membership plugin.', 'simple-membership' )
 			),
 		);
 	}
@@ -324,14 +324,27 @@ class SWPM_System_Info_Menu_Tab {
 		return '<span style="color: darkred"><span class="dashicons dashicons-warning"></span> ' . __( 'Page Not Set!', 'simple-membership' ) . '</span>';
 	}
 
-	public function get_loaded_translation_file() {
-		$swpm_loaded_lang_file_path = $this->get_loaded_mo_file();
+	public function get_translation_files() {
+        $filename = 'simple-membership-' . get_locale() . '.mo';
+		$lang_dir_file  = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'languages/' . $filename; // Path to the wp-content languages folder
+		$plugin_lang_dir_file  = SIMPLE_WP_MEMBERSHIP_PATH . 'languages/' . $filename; // Path to the plugins languages folder
 
-        if (empty($swpm_loaded_lang_file_path)){
-            return __( 'No translation file loaded for ', 'simple-membership' ) . get_locale();
+        if ( file_exists($lang_dir_file) ){
+	        $lang_dir_file = $this->convert_bool_to_symbol(true) . ' ' . $lang_dir_file;
+        } else {
+	        $lang_dir_file = '<span class="dashicons dashicons-no-alt" style="margin-right: 4px"></span>' . $lang_dir_file;
         }
 
-        return str_replace(ABSPATH, '', $swpm_loaded_lang_file_path);
+        if ( file_exists($plugin_lang_dir_file) ){
+	        $plugin_lang_dir_file = $this->convert_bool_to_symbol(true) . ' ' . $plugin_lang_dir_file;
+        } else {
+	        $plugin_lang_dir_file = '<span class="dashicons dashicons-no-alt" style="margin-right: 4px"></span>' . $plugin_lang_dir_file;
+        }
+
+		$lang_dir_file = str_replace(ABSPATH, '', $lang_dir_file);
+        $plugin_lang_dir_file = str_replace(ABSPATH, '', $plugin_lang_dir_file);
+
+        return $lang_dir_file . '<br>' . $plugin_lang_dir_file;
 	}
 
 	public function get_cronjobs() {
@@ -367,38 +380,5 @@ class SWPM_System_Info_Menu_Tab {
 		} else {
 			return '<span style="color: darkred">' . $this->convert_bool_to_symbol( false ) . __( 'Not scheduled!', 'simple-membership' ) . '<span>';
 		}
-	}
-
-	public function get_loaded_mo_file() {
-		$domain = 'simple-membership';
-
-		global $l10n;
-
-		$file_path = '';
-
-        // Retrieve the target translation file path by recursively reconstructing the i10n class.
-
-        if (isset($l10n[$domain])){
-		    $i10n_obj = $this->objectToArray($l10n[$domain]);
-            if (isset($i10n_obj['controller'])){
-		        $i10n_obj = $this->objectToArray($i10n_obj['controller']);
-                if (isset($i10n_obj['loaded_translations'][get_locale()][$domain][0])){
-		            $i10n_obj = $this->objectToArray($i10n_obj['loaded_translations'][get_locale()][$domain][0]);
-		            $file_path = isset($i10n_obj['file']) ? $i10n_obj['file'] : '';
-                }
-            }
-        }
-
-		return $file_path;
-	}
-
-	public function objectToArray($obj) {
-		$array = [];
-		$reflection = new \ReflectionClass($obj);
-		foreach ($reflection->getProperties() as $property) {
-			$property->setAccessible(true); // Allow access to private/protected properties
-			$array[$property->getName()] = $property->getValue($obj);
-		}
-		return $array;
 	}
 }

@@ -569,9 +569,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		}
 
 		// Check if incomplete member account
-		if (empty($user->user_name)){
+		if ( !isset($user->user_name) || empty($user->user_name)){
 			$message  = '<div class="swpm-reset-pw-error">';
-			$message  .= __('Your account registration is not completed yet!', 'simple-membership');
+			$message  .= __('Your account registration is not yet complete. Please finish the registration process before using the password reset option. If you need assistance, contact the site administrator.', 'simple-membership');
 			$message  .= '</div>';
 			$message_ary = array(
 				'succeeded'       => false,

@@ -200,6 +200,10 @@ function swpm_edit_braintree_buy_now_button() {
 
 // This function tries to get Merchant Account currency
 function swpm_get_braintree_default_currency($params) {
+    if (empty($params['merc_name'])){
+        return '';
+    }
+
     $settings = SwpmSettings::get_instance();
     $sandbox_enabled = $settings->get_value('enable-sandbox-testing');
 
@@ -211,11 +215,11 @@ function swpm_get_braintree_default_currency($params) {
 
     require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/braintree/lib/autoload.php');
     try {
-        Braintree_Configuration::environment($braintree_env);
-        Braintree_Configuration::merchantId($params['merc_id']);
-        Braintree_Configuration::publicKey($params['public_key']);
-        Braintree_Configuration::privateKey($params['private_key']);
-        $merchantAccount = Braintree_MerchantAccount::find($params['merc_name']);
+        \Braintree\Configuration::environment($braintree_env);
+        \Braintree\Configuration::merchantId($params['merc_id']);
+        \Braintree\Configuration::publicKey($params['public_key']);
+        \Braintree\Configuration::privateKey($params['private_key']);
+        $merchantAccount = \Braintree\MerchantAccount::find($params['merc_name']);
     } catch (Exception $e) {
         // Something went wrong. We actually don't care what exactly happened, so we just return ''
         return '';

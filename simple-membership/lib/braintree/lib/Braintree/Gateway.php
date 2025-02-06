@@ -1,11 +1,9 @@
-<?php
+<?php // phpcs:disable Generic.Commenting.DocComment.MissingShort
+
 namespace Braintree;
 
 /**
  * Braintree Gateway module
- *
- * @package    Braintree
- * @category   Resources
  */
 class Gateway
 {
@@ -15,12 +13,20 @@ class Gateway
      */
     public $config;
 
+    /**
+     *
+     * @var GraphQLClient
+     */
+    public $graphQLClient;
+
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
     public function __construct($config)
     {
         if (is_array($config)) {
             $config = new Configuration($config);
         }
         $this->config = $config;
+        $this->graphQLClient = new GraphQLClient($config);
     }
 
     /**
@@ -88,6 +94,15 @@ class Gateway
 
     /**
      *
+     * @return CustomerSessionGateway
+     */
+    public function customerSession()
+    {
+        return new CustomerSessionGateway($this->graphQLClient);
+    }
+
+    /**
+     *
      * @return DiscountGateway
      */
     public function discount()
@@ -111,6 +126,15 @@ class Gateway
     public function documentUpload()
     {
         return new DocumentUploadGateway($this);
+    }
+
+    /**
+     *
+     * @return ExchangeRateQuoteGateway
+     */
+    public function exchangeRateQuote()
+    {
+        return new ExchangeRateQuoteGateway($this);
     }
 
     /**
@@ -169,6 +193,15 @@ class Gateway
 
     /**
      *
+     * @return SepaDirectDebitAccountGateway
+     */
+    public function sepaDirectDebitAccount()
+    {
+        return new SepaDirectDebitAccountGateway($this);
+    }
+
+    /**
+     *
      * @return PlanGateway
      */
     public function plan()
@@ -223,15 +256,6 @@ class Gateway
 
     /**
      *
-     * @return TransparentRedirectGateway
-     */
-    public function transparentRedirect()
-    {
-        return new TransparentRedirectGateway($this);
-    }
-
-    /**
-     *
      * @return UsBankAccountGateway
      */
     public function usBankAccount()
@@ -246,15 +270,6 @@ class Gateway
     public function usBankAccountVerification()
     {
         return new UsBankAccountVerificationGateway($this);
-    }
-
-    /**
-     *
-     * @return IdealPaymentGateway
-     */
-    public function idealPayment()
-    {
-        return new IdealPaymentGateway($this);
     }
 
     /**
@@ -275,4 +290,3 @@ class Gateway
         return new WebhookTestingGateway($this);
     }
 }
-class_alias('Braintree\Gateway', 'Braintree_Gateway');

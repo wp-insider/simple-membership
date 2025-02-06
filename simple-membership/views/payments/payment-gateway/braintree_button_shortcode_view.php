@@ -77,11 +77,11 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'lib/braintree/lib/autoload.php');
 
     try {
-        Braintree_Configuration::environment($braintree_env);
-        Braintree_Configuration::merchantId(get_post_meta($button_id, 'braintree_merchant_acc_id', true));
-        Braintree_Configuration::publicKey(get_post_meta($button_id, 'braintree_public_key', true));
-        Braintree_Configuration::privateKey(get_post_meta($button_id, 'braintree_private_key', true));
-        $clientToken = Braintree_ClientToken::generate();
+        \Braintree\Configuration::environment($braintree_env);
+        \Braintree\Configuration::merchantId(get_post_meta($button_id, 'braintree_merchant_acc_id', true));
+        \Braintree\Configuration::publicKey(get_post_meta($button_id, 'braintree_public_key', true));
+        \Braintree\Configuration::privateKey(get_post_meta($button_id, 'braintree_private_key', true));
+        $clientToken = \Braintree\ClientToken::generate();
     } catch (Exception $e) {
         $e_class = get_class($e);
         $ret = __('Braintree Pay Now button error: ', 'simple-membership') . $e_class;

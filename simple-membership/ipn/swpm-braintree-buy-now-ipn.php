@@ -56,10 +56,10 @@ class SwpmBraintreeBuyNowIpnHandler {
 
         //Set Braintree library environment and keys
         try {
-            Braintree_Configuration::environment($braintree_env);
-            Braintree_Configuration::merchantId(get_post_meta($button_id, 'braintree_merchant_acc_id', true));
-            Braintree_Configuration::publicKey(get_post_meta($button_id, 'braintree_public_key', true));
-            Braintree_Configuration::privateKey(get_post_meta($button_id, 'braintree_private_key', true));
+            \Braintree\Configuration::environment($braintree_env);
+            \Braintree\Configuration::merchantId(get_post_meta($button_id, 'braintree_merchant_acc_id', true));
+            \Braintree\Configuration::publicKey(get_post_meta($button_id, 'braintree_public_key', true));
+            \Braintree\Configuration::privateKey(get_post_meta($button_id, 'braintree_private_key', true));
 
             $braintree_merc_acc_name = get_post_meta($button_id, 'braintree_merchant_acc_name', true);
 
@@ -79,7 +79,7 @@ class SwpmBraintreeBuyNowIpnHandler {
 				'email'     => $email
 			);
       
-            $result = Braintree_Transaction::sale([
+            $result = \Braintree\Transaction::sale([
                         'amount' => $payment_amount,
                         'paymentMethodNonce' => $nonce,
                         'channel' => 'TipsandTricks_SP',
@@ -97,7 +97,7 @@ class SwpmBraintreeBuyNowIpnHandler {
         if (!$result->success) {
             
             
-            SwpmLog::log_simple_debug("Braintree transaction error occurred: " . $result->transaction->status . ", message: ".$result->message."  , button ID: " . $button_id, false);
+            SwpmLog::log_simple_debug("Braintree transaction error occurred: " . $result->transaction->status . ", message: ".$result->getMessage."  , button ID: " . $button_id, false);
             wp_die("Braintree transaction error occurred: " . $result->transaction->status);
         } else {
 

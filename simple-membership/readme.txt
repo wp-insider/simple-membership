@@ -180,12 +180,13 @@ https://simple-membership-plugin.com/
 - Added a new option to bulk delete all member accounts with a specific account status.
 - Updated the reference to the tools menu in the admin dashboard to point to the new location.
 - Front-end registration form now renders via the 'swpm_load_template()' method.
-- A getter method added to SwpmAccessControl class.
+- A getter method added to the SwpmAccessControl class.
 - Improved the handling of the password reset request form to prevent resubmission on page reload.
 - Added an extra check in the user delete function to check if user has admin role.
 - Fixed a minor PHP notice issue.
 - New 'System Info' tab added in Tools menu.
-- Password reset link sending issue fixed for incomplete accounts.
+- Updated the system to display an error message when a password request is made for an incomplete account.
+- Added the [Cloudflare Turnstile captcha integration](https://simple-membership-plugin.com/simple-membership-and-cloudflare-turnstile-integration-addon/).
 - Braintree SDK updated to v6.23.0.
 
 = 4.5.9 =

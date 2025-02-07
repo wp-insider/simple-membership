@@ -186,6 +186,7 @@ https://simple-membership-plugin.com/
 - Fixed a minor PHP notice issue.
 - New 'System Info' tab added in Tools menu.
 - Password reset link sending issue fixed for incomplete accounts.
+- Braintree SDK updated to v6.23.0.
 
 = 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.

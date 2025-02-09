@@ -186,9 +186,9 @@ https://simple-membership-plugin.com/
 - Fixed a minor PHP notice issue.
 - New 'System Info' tab added in Tools menu.
 - Updated the system to display an error message when a password request is made for an incomplete account.
-- Added the [Cloudflare Turnstile captcha integration](https://simple-membership-plugin.com/simple-membership-and-cloudflare-turnstile-integration-addon/).
 - Braintree SDK updated to v6.23.0.
-- A small UI issue fixed.
+- Minor improvement to the category protection UI.
+- Added the [Cloudflare Turnstile captcha integration](https://simple-membership-plugin.com/simple-membership-and-cloudflare-turnstile-integration-addon/).
 
 = 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.

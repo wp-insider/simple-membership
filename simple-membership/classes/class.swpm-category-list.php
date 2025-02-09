@@ -96,7 +96,7 @@ class SwpmCategoryList extends WP_List_Table {
         $filtered = filter_input_array(INPUT_POST, $args);
         $ids_in_page = $filtered['ids_in_page'];
         $category->remove($ids_in_page, 'category')->apply($ids, 'category')->save();
-        $message = array('succeeded' => true, 'message' => '<p class="swpm-green-box">' . SwpmUtils::_('Category protection updated!') . '</p>');
+        $message = array('succeeded' => true, 'message' => __('Category protection updated!', 'simple-membership'));
         SwpmTransfer::get_instance()->set('status', $message);
     }
 

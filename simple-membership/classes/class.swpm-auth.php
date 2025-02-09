@@ -504,11 +504,14 @@ class SwpmAuth {
 	
 	private function set_cookie( $remember = '', $secure = '' ) {
 		if ( $remember ) {
+			//This is the same value as the WP's "remember me" cookie expiration.
 			$expiration = time() + 1209600; //14 days
 			$expire = $expiration + 43200; //12 hours grace period
 		} else {
+			//We use a different expiration for the "non-remember me" cookie to offer a better experience.
 			$expiration = time() + 259200; //3 days.
 			$expire = $expiration; //The minimum cookie expiration should be at least a few days.
+			//Check if the force_wp_user_sync option is enabled. If it is, set the cookie expiration to 0 to match with WP's cookie expiration (when "remember me" is not checked).
 			$force_wp_user_sync = SwpmSettings::get_instance()->get_value( 'force-wp-user-sync' );
 			if ( !empty( $force_wp_user_sync ) ) {
 				//Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).

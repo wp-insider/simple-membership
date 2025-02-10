@@ -508,9 +508,10 @@ class SwpmAuth {
 			$expiration = time() + 1209600; //14 days
 			$expire = $expiration + 43200; //12 hours grace period
 		} else {
-			//We use a different expiration for the "non-remember me" cookie to offer a better experience.
-			$expiration = time() + (2 * 24 * 60 * 60); //2 days.
-
+			//When "remember me" is not checked, we use a session cookie to match with WP.
+			//Session cookie will expire when the browser is closed. 
+			//The $expiration is used in the event the browser session is not closed for a long time. This value is used by our validate function on page load.
+	        $expiration = time() + 172800; //2 days.
 			//Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
 			$expire = 0;
 		}
@@ -587,11 +588,14 @@ class SwpmAuth {
 		// Next, assign new cookies, so the user doesn't have to login again.
 		// Set new auth cookies for SWPM user
         if ( $remember ) {
+			//This is the same value as the WP's "remember me" cookie expiration.
             $expiration = time() + 1209600; //14 days
             $expire = $expiration + 43200; //12 hours grace period
         } else {
-	        $expiration = time() + (2 * 24 * 60 * 60); //2 days.
-
+			//When "remember me" is not checked, we use a session cookie to match with WP.
+			//Session cookie will expire when the browser is closed. 
+			//The $expiration is used in the event the browser session is not closed for a long time. This value is used by our validate function on page load.
+	        $expiration = time() + 172800; //2 days.
             //Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
             $expire = 0;
         }

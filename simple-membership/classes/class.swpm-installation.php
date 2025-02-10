@@ -304,8 +304,8 @@ class SwpmInstallation {
             $settings->set_value('bulk-activate-notify-mail-subject', stripslashes($bulk_activate_email_subject));
             $settings->set_value('bulk-activate-notify-mail-body', stripslashes($bulk_activate_email_body));
 
-            //Preparing it to be enabled by default in the feature.
-            $settings->set_value("force-wp-user-sync", "checked='checked'");
+            //Preparing it to be enabled by default in the future.
+            //$settings->set_value("force-wp-user-sync", "checked='checked'");
 
             $settings->set_value("use-new-form-ui", "checked='checked'");
         }

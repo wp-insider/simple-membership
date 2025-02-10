@@ -177,6 +177,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 = WIP =
 - Cookie expiration values are now the same as WP when remember me is not checked.
+- 'Force WP User sync' is now enabled by default for new installations.
 
 = 4.6.0 =
 - Added a new option to bulk delete all member accounts with a specific account status.

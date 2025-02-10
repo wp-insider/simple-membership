@@ -509,15 +509,10 @@ class SwpmAuth {
 			$expire = $expiration + 43200; //12 hours grace period
 		} else {
 			//We use a different expiration for the "non-remember me" cookie to offer a better experience.
-			$expiration = time() + 259200; //3 days.
-			$expire = $expiration; //The minimum cookie expiration should be at least a few days.
-			//Check if the force_wp_user_sync option is enabled. If it is, set the cookie expiration to 0 to match with WP's cookie expiration (when "remember me" is not checked).
-			$force_wp_user_sync = SwpmSettings::get_instance()->get_value( 'force-wp-user-sync' );
-			if ( !empty( $force_wp_user_sync ) ) {
-				//Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
-				SwpmLog::log_auth_debug( 'The force_wp_user_sync option is enabled. Setting the cookie expiration to 0 to match with WP\'s cookie expiration (when "remember me" is not checked).', true );
-				$expire = 0;
-			}
+			$expiration = time() + (2 * 24 * 60 * 60); //2 days.
+
+			//Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
+			$expire = 0;
 		}
 
 		$expire = apply_filters( 'swpm_auth_cookie_expiry_value', $expire );
@@ -595,14 +590,10 @@ class SwpmAuth {
             $expiration = time() + 1209600; //14 days
             $expire = $expiration + 43200; //12 hours grace period
         } else {
-            $expiration = time() + 259200; //3 days.
-            $expire = $expiration; //The minimum cookie expiration should be at least a few days.
-            $force_wp_user_sync = SwpmSettings::get_instance()->get_value( 'force-wp-user-sync' );
-            if ( !empty( $force_wp_user_sync ) ) {
-                //Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
-                SwpmLog::log_auth_debug( 'The force_wp_user_sync option is enabled. Setting the cookie expiration to 0 to match with WP\'s cookie expiration (when "remember me" is not checked).', true );
-                $expire = 0;
-            }
+	        $expiration = time() + (2 * 24 * 60 * 60); //2 days.
+
+            //Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
+            $expire = 0;
         }
         $expire = apply_filters( 'swpm_auth_cookie_expiry_value', $expire );
 

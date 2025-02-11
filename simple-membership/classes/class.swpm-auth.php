@@ -506,6 +506,7 @@ class SwpmAuth {
 	}
 	
 	private function set_cookie( $remember = '', $secure = '' ) {
+		SwpmLog::log_auth_debug( "SwpmAuth::set_cookie() - Value of 'remember me' parameter: " . $remember, true );
 		if ( $remember ) {
 			//This is the same value as the WP's "remember me" cookie expiration.
 			$expiration = time() + 1209600; //14 days
@@ -517,6 +518,7 @@ class SwpmAuth {
 	        $expiration = time() + 172800; //2 days.
 			//Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
 			$expire = 0;
+			SwpmLog::log_auth_debug( "The 'Remember me' option is unchecked for this request, setting expiry to be a session cookie. The session cookie will expire when the browser is closed.", true );
 		}
 
 		$expire = apply_filters( 'swpm_auth_cookie_expiry_value', $expire );
@@ -601,6 +603,7 @@ class SwpmAuth {
 	        $expiration = time() + 172800; //2 days.
             //Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
             $expire = 0;
+			SwpmLog::log_auth_debug( "The 'Remember me' option is unchecked for this reset request, setting expiry to be a session cookie.", true );
         }
         $expire = apply_filters( 'swpm_auth_cookie_expiry_value', $expire );
 

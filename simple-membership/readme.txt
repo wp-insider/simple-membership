@@ -179,6 +179,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - When "remember me" is not checked, we use a session cookie to match with WordPress's cookie expiration.
 - Updated the Dutch language translation file.
+- 'remember me' issue fixed for WP originated SWPM login.
 
 = 4.6.0 =
 - Added a new option to bulk delete all member accounts with a specific account status.

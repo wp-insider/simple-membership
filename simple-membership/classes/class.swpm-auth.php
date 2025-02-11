@@ -603,7 +603,7 @@ class SwpmAuth {
 	        $expiration = time() + 172800; //2 days.
             //Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
             $expire = 0;
-			SwpmLog::log_auth_debug( "The 'Remember me' option is unchecked for this reset request, setting expiry to be a session cookie.", true );
+			SwpmLog::log_auth_debug( "The 'Remember me' option is not set for this reset request, setting expiry to be a session cookie.", true );
         }
         $expire = apply_filters( 'swpm_auth_cookie_expiry_value', $expire );
 

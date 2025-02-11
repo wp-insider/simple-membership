@@ -404,7 +404,10 @@ class SwpmAuth {
 		}
 		$this->userData   = $member;
 		$this->isLoggedIn = true;
-		$this->set_cookie();
+
+		$remember_me = isset($_REQUEST['rememberme']) && !empty($_REQUEST['rememberme']) ? $_REQUEST['rememberme'] : '';
+
+		$this->set_cookie($remember_me);
 		SwpmLog::log_auth_debug( 'Member has been logged in using WP User object.', true );
 		$this->check_constraints();
 		return true;

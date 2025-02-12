@@ -569,7 +569,7 @@ class SwpmAuth {
 	public function reset_auth_cookies_after_pass_change($user_info){
 		// Clear the old auth cookies for WP user and SWPM. Then set new auth cookies.
 
-		$remember = SwpmAuth::is_auth_cookie_with_rememberme();
+		$remember = SwpmAuth::is_auth_cookie_with_remember_me();
 
 		//Reset the auth cookies for SWPM user only.
 		$this->reset_swpm_auth_cookies_only($user_info, $remember);
@@ -735,7 +735,10 @@ class SwpmAuth {
 		do_action( 'swpm_authenticate_failed', $username, $wp_error_obj );
 	}
 
-	public static function is_auth_cookie_with_rememberme() {
+	/*
+	 * Checks whether the auth cookie contains a "Remember Me" flag and returns the value.
+	 */
+	public static function is_auth_cookie_with_remember_me() {
 		$auth_cookie_name = is_ssl() ? SIMPLE_WP_MEMBERSHIP_SEC_AUTH : SIMPLE_WP_MEMBERSHIP_AUTH;
 
 		if ( isset( $_COOKIE[ $auth_cookie_name ] ) && ! empty( $_COOKIE[ $auth_cookie_name ] ) ) {

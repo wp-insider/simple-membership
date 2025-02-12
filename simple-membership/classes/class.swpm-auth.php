@@ -210,12 +210,12 @@ class SwpmAuth {
 			return false;
 		}
 		$cookie_elements = explode( '|', $_COOKIE[ $auth_cookie_name ] );
-		if ( count( $cookie_elements ) != 3 ) {
+		if ( count( $cookie_elements ) != 4 ) {
 			return false;
 		}
 
 		//SwpmLog::log_auth_debug("validate() - " . $_COOKIE[$auth_cookie_name], true);
-		list($username, $expiration, $hmac) = $cookie_elements;
+		list($username, $expiration, $hmac, $remember) = $cookie_elements;
 		$expired = $expiration;
 		// Allow a grace period for POST and AJAX requests
 		if ( defined( 'DOING_AJAX' ) || 'POST' == $_SERVER['REQUEST_METHOD'] ) {
@@ -548,7 +548,7 @@ class SwpmAuth {
 		}
 		$key              = self::b_hash( $this->userData->user_name . $pass_frag . '|' . $expiration, $scheme );
 		$hash             = hash_hmac( 'md5', $this->userData->user_name . '|' . $expiration, $key );
-		$auth_cookie      = $this->userData->user_name . '|' . $expiration . '|' . $hash;
+		$auth_cookie      = $this->userData->user_name . '|' . $expiration . '|' . $hash . '|' . intval($remember);
 		$auth_cookie_name = $secure ? SIMPLE_WP_MEMBERSHIP_SEC_AUTH : SIMPLE_WP_MEMBERSHIP_AUTH;
 		setcookie( $auth_cookie_name, $auth_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
 
@@ -577,7 +577,7 @@ class SwpmAuth {
 		$swpm_id = $user_info['member_id'];
 		$wp_user = SwpmMemberUtils::get_wp_user_from_swpm_user_id( $swpm_id );
 		$wp_user_id = $wp_user->ID;
-		wp_set_auth_cookie( $wp_user_id, true ); // Set new auth cookies (second parameter true means "remember me")
+		wp_set_auth_cookie( $wp_user_id, $remember ); // Set new auth cookies (second parameter true means "remember me")
 		wp_set_current_user( $wp_user_id ); // Set the current user object
 		SwpmLog::log_auth_debug( 'Authentication cookies have been reset after the password update.', true );
 	}
@@ -626,7 +626,7 @@ class SwpmAuth {
 		$swpm_username = $user_info['user_name'];
         $key = self::b_hash( $swpm_username . $pass_frag . '|' . $expiration, $scheme );
         $hash = hash_hmac( 'md5', $swpm_username . '|' . $expiration, $key );
-        $auth_cookie = $swpm_username . '|' . $expiration . '|' . $hash;
+        $auth_cookie = $swpm_username . '|' . $expiration . '|' . $hash . '|' . intval($remember);
         $auth_cookie_name = $secure ? SIMPLE_WP_MEMBERSHIP_SEC_AUTH : SIMPLE_WP_MEMBERSHIP_AUTH;
         setcookie( $auth_cookie_name, $auth_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
 

@@ -566,11 +566,13 @@ class SwpmAuth {
 	 * Important: This function should only be used after the users have changed their password. Otherwise it can have unintended consequences.
 	 * This function is used to reset the auth cookies after the user changes their password (from our plugin's profile page).
 	 */
-	public function reset_auth_cookies_after_pass_change($user_info, $remember='', $secure=''){
+	public function reset_auth_cookies_after_pass_change($user_info){
 		// Clear the old auth cookies for WP user and SWPM. Then set new auth cookies.
 
+		$remember = SwpmAuth::is_auth_cookie_with_rememberme();
+
 		//Reset the auth cookies for SWPM user only.
-		$this->reset_swpm_auth_cookies_only($user_info, $remember, $secure);
+		$this->reset_swpm_auth_cookies_only($user_info, $remember);
 
 		//Clear the WP user auth cookies and destroy session. New auth cookies will be generate below.
 		$this->clear_wp_user_auth_cookies(); 
@@ -732,4 +734,21 @@ class SwpmAuth {
 		$wp_error_obj = new WP_Error( 'swpm-authenticate-failed', $error_msg );
 		do_action( 'swpm_authenticate_failed', $username, $wp_error_obj );
 	}
+
+	public static function is_auth_cookie_with_rememberme() {
+		$auth_cookie_name = is_ssl() ? SIMPLE_WP_MEMBERSHIP_SEC_AUTH : SIMPLE_WP_MEMBERSHIP_AUTH;
+
+		if ( isset( $_COOKIE[ $auth_cookie_name ] ) && ! empty( $_COOKIE[ $auth_cookie_name ] ) ) {
+			$cookie_elements = explode( '|', $_COOKIE[ $auth_cookie_name ] );
+
+			if ( count( $cookie_elements ) == 4 && isset( $cookie_elements[3] ) ) { // if cookie elements are not of count 4, then its malformed.
+				$remember_me = $cookie_elements[3]; // Index 3 fragment is the remember me value
+
+				return boolval( $remember_me );
+			}
+		}
+
+		return false;
+	}
+
 }

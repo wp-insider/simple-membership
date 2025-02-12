@@ -506,6 +506,8 @@ class SwpmAuth {
 	}
 	
 	private function set_cookie( $remember = '', $secure = '' ) {
+		$remember = boolval($remember);
+
 		SwpmLog::log_auth_debug( "SwpmAuth::set_cookie() - Value of 'remember me' parameter: " . $remember, true );
 		if ( $remember ) {
 			//This is the same value as the WP's "remember me" cookie expiration.
@@ -587,6 +589,8 @@ class SwpmAuth {
 	 * This is typically used after the user's password is updated in the members DB table (for example, after WP profile update hook is triggered).
 	 */
 	public function reset_swpm_auth_cookies_only($user_info, $remember='', $secure=''){
+		$remember = boolval($remember);
+
 		// First clear the old auth cookies for the SWPM user.
 		$this->swpm_clear_auth_cookies_and_session_tokens(); //Clear the swpm auth cookies. New auth cookies will generate below.
 

@@ -182,6 +182,7 @@ https://simple-membership-plugin.com/
 - 'remember me' issue fixed for WP originated SWPM login.
 - SWPM auth cookie structure now contains 'remember me' value.
 - Note: Members must log in again after updating to this version.
+- Cookie expiration after password reset issue fixed.
 
 = 4.6.0 =
 - Added a new option to bulk delete all member accounts with a specific account status.

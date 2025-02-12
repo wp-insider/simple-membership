@@ -181,6 +181,7 @@ https://simple-membership-plugin.com/
 - Updated the Dutch language translation file.
 - 'remember me' issue fixed for WP originated SWPM login.
 - SWPM auth cookie structure now contains 'remember me' value.
+- Note: Members must log in again after updating to this version.
 
 = 4.6.0 =
 - Added a new option to bulk delete all member accounts with a specific account status.

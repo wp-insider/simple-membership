@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.6.0
+Stable tag: 4.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,13 +176,13 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= 4.6.1 =
 - This release primarily includes optimizations and enhancements for the user login process with the 'Remember Me' option.
 - Note: After updating to this version, members will need to log in again.
 - The SWPM auth cookie structure now includes the 'Remember Me' value.
 - When "remember me" is not checked, we use a session cookie to match with WordPress's cookie expiration.
 - The 'Remember Me' option is now respected for SWPM logins originating from WordPress.
-- After changing or updating the password from the edit profile, the cookie can now be reset using the original remember-me flag.
+- After changing or updating the password from the edit profile page, the cookie is reset using the original remember-me flag.
 - Updated the Dutch language translation file.
 
 = 4.6.0 =

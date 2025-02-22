@@ -233,7 +233,7 @@ class SwpmInitTimeTasks {
 	private function check_and_do_email_activation() {
 		$email_activation = filter_input( INPUT_GET, 'swpm_email_activation', FILTER_SANITIZE_NUMBER_INT );
 		if ( ! empty( $email_activation ) ) {
-			SwpmFrontRegistration::get_instance()->email_activation();
+			SwpmFrontRegistration::get_instance()->handle_email_activation();
 		}
 		//also check activation email resend request
 		$email_activation_resend = filter_input( INPUT_GET, 'swpm_resend_activation_email', FILTER_SANITIZE_NUMBER_INT );

@@ -176,6 +176,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Renamed the function "email_activation()" to "handle_email_activation()" for clarity.
+
 = 4.6.1 =
 - This release primarily includes optimizations and enhancements for the user login process with the 'Remember Me' option.
 - Note: After updating to this version, members will need to log in again.

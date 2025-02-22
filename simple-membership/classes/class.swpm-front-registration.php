@@ -706,7 +706,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 	/*
 	 * This function is called when the user clicks on the activation link in the email.
 	 */
-	public function email_activation() {
+	public function handle_email_activation() {
 		//The email activation link contains the member ID and the activation code.
 
 		$login_page_url = SwpmSettings::get_instance()->get_value( 'login-page-url' );

@@ -9,7 +9,6 @@ abstract class SwpmRegistration {
 	var $email_activation = false;
 	protected static $_intance = null;
 
-	//public abstract static function get_instance();
 	protected function send_reg_email() {
 		global $wpdb;
 		if ( empty( $this->member_info ) ) {
@@ -21,7 +20,10 @@ abstract class SwpmRegistration {
 		$subject     = $settings->get_value( 'reg-complete-mail-subject' );
 		$body        = $settings->get_value( 'reg-complete-mail-body' );
 
+		//Check if email activation is enabled
 		if ( $this->email_activation ) {
+			//Generate the activation code and store it in the DB
+			//Note: this function is called again after the email activation is completed to send the standard registration complete email.
 			$swpm_user = SwpmMemberUtils::get_user_by_user_name( $member_info['user_name'] );
 			$member_id = $swpm_user->member_id;
 			$act_code  = md5( uniqid() . $member_id );
@@ -85,6 +87,9 @@ abstract class SwpmRegistration {
 			SwpmLog::log_simple_debug( 'NOTICE: Registration complete email body value is empty. Member registration complete email will NOT be sent.', true );
 		}
 
+		//Send notification email to the site admin
+		//If this is a registration with email activation, we don't send the admin notification email yet. 
+		//This function is called again from the "handle_email_activation()" after the email activation is completed at which point the admin notification email is sent.
 		if ( $settings->get_value( 'enable-admin-notification-after-reg' ) && ! $this->email_activation ) {
 			//Send notification email to the site admin
 			$admin_notification  = $settings->get_value( 'admin-notification-email' );

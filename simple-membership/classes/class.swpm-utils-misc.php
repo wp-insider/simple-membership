@@ -401,6 +401,9 @@ class SwpmMiscUtils {
 		);
 		
 		$msg_body = str_replace( $tags, $vals, $msg_body );
+
+		//Allow any addons to add their own custom tags.
+		$msg_body = apply_filters( 'swpm_replace_dynamic_tags', $msg_body, $member_id, $additional_args );
 		
 		return $msg_body;
 	}

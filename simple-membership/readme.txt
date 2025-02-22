@@ -177,6 +177,7 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
+- Added a new filter hook 'swpm_replace_dynamic_tags' to allow addons to replace dynamic tags in the email notification.
 - Renamed the function "email_activation()" to "handle_email_activation()" for clarity.
 
 = 4.6.1 =

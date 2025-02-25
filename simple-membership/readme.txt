@@ -179,6 +179,7 @@ https://simple-membership-plugin.com/
 = WIP =
 - Added a new filter hook 'swpm_replace_dynamic_tags' to allow addons to replace dynamic tags in the email notification.
 - Renamed the function "email_activation()" to "handle_email_activation()" for clarity.
+- A translation issue fixed.
 
 = 4.6.1 =
 - This release primarily includes optimizations and enhancements for the user login process with the 'Remember Me' option.

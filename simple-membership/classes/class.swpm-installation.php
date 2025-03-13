@@ -170,7 +170,6 @@ class SwpmInstallation {
             event_id int(12) NOT NULL PRIMARY KEY AUTO_INCREMENT,
             event_type varchar(255) DEFAULT NULL,
             event_date_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-            last_name varchar(64) DEFAULT '',
             member_id varchar(16) DEFAULT '',
             username varchar(255) DEFAULT '',
             ip_address varchar(128) DEFAULT '',

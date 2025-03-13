@@ -76,6 +76,7 @@ class SWPM_Membership_Level_Report_Menu_Tab {
             </div>
         </div>
 
+	    <?php if (!empty($results)) { ?>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function (){
                 google.load('visualization', '1.0', {'packages': ['corechart']});
@@ -93,6 +94,7 @@ class SWPM_Membership_Level_Report_Menu_Tab {
             })
         </script>
 	    <?php
+	    }
 	    return ob_get_clean();
     }
 

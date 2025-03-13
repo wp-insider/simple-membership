@@ -37,7 +37,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 		//Switch case for the various different tabs handled by the core plugin.
 		switch ( $subtab ) {
             case 'login-by-date':
-	            $output .= $this->render_members_by_logins();
+	            $output .= $this->render_logins_by_date();
 				break;
             case 'login-history':
 			default:
@@ -50,7 +50,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 		echo $output;
 	}
 
-	public function render_members_by_logins() {
+	public function render_logins_by_date() {
 		global $wpdb;
 		$query   = "SELECT COUNT(member_id) AS count, DATE(last_accessed) as date 
                 FROM " . $wpdb->prefix . "swpm_members_tbl 
@@ -100,6 +100,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
             </div>
         </div>
 
+        <?php if (!empty($results)) { ?>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function () {
                 google.load('visualization', '1', {packages: ['corechart', 'bar']});
@@ -121,9 +122,8 @@ class SWPM_Member_Logins_Report_Menu_Tab {
                 });
             })
         </script>
-
-
 		<?php
+		}
 		return ob_get_clean();
 	}
 

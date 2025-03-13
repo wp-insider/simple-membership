@@ -40,7 +40,7 @@ class SWPM_Members_Report_Menu_Tab {
 		    $end_date
 	    );
 
-        $registration_by_months_results = $wpdb->get_results( $query );
+        $results = $wpdb->get_results( $query );
 
 	    ob_start();
 	    ?>
@@ -63,7 +63,7 @@ class SWPM_Members_Report_Menu_Tab {
 					    <?php
 					    $stats = array( array( 'Month', 'Count' ) );
 					    $count       = 0;
-					    foreach ( $registration_by_months_results as $result ) {
+					    foreach ( $results as $result ) {
 						    ?>
                             <tr>
                                 <td>
@@ -88,6 +88,7 @@ class SWPM_Members_Report_Menu_Tab {
             </div>
         </div>
 
+	    <?php if (!empty($results)) { ?>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function () {
                 google.load('visualization', '1', {packages: ['corechart', 'bar']});
@@ -110,6 +111,7 @@ class SWPM_Members_Report_Menu_Tab {
             })
         </script>
 	    <?php
+        }
 	    return ob_get_clean();
     }
 
@@ -117,7 +119,7 @@ class SWPM_Members_Report_Menu_Tab {
 	    global $wpdb;
 
 	    $query = 'SELECT COUNT(member_id) AS count, account_state FROM ' . $wpdb->prefix . 'swpm_members_tbl GROUP BY (account_state)';
-	    $members_by_account_status_results = $wpdb->get_results( $query );
+	    $results = $wpdb->get_results( $query );
 
 	    ob_start();
         ?>
@@ -139,7 +141,7 @@ class SWPM_Members_Report_Menu_Tab {
 					    <?php $stats = array(array('Status', 'Count'));
 					    $count       = 0; ?>
 					    <?php
-					    foreach ( $members_by_account_status_results as $result ) { ?>
+					    foreach ( $results as $result ) { ?>
                             <tr>
                                 <td>
 								    <?php echo ucfirst( $result->account_state ); ?>
@@ -163,6 +165,7 @@ class SWPM_Members_Report_Menu_Tab {
             </div>
         </div>
 
+	    <?php if (!empty($results)) { ?>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function () {
                 google.load('visualization', '1.0', {'packages': ['corechart']});
@@ -180,6 +183,7 @@ class SWPM_Members_Report_Menu_Tab {
             })
         </script>
 	    <?php
+	    }
 	    return ob_get_clean();
     }
 

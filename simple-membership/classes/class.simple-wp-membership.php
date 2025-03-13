@@ -1031,6 +1031,7 @@ class SimpleWpMembership {
         add_submenu_page($menu_parent_slug, __("Settings", 'simple-membership'), __("Settings", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_settings', array(&$this, "admin_settings_menu"));
         add_submenu_page($menu_parent_slug, __("Payments", 'simple-membership'), __("Payments", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_payments', array(&$this, "admin_payments_menu"));
         add_submenu_page($menu_parent_slug, __("Tools", 'simple-membership'), __("Tools", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_tools', array(&$this, "admin_tools_menu"));
+        add_submenu_page($menu_parent_slug, __("Reports", 'simple-membership'), __("Reports", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_reports', array(&$this, "admin_reports_menu"));
         add_submenu_page($menu_parent_slug, __("Add-ons", 'simple-membership'), __("Add-ons", 'simple-membership'), SWPM_MANAGEMENT_PERMISSION, 'simple_wp_membership_addons', array(&$this, "admin_add_ons_menu"));
         do_action('swpm_after_main_admin_menu', $menu_parent_slug);
 
@@ -1070,6 +1071,12 @@ class SimpleWpMembership {
 		include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/admin-includes/class.swpm-tools-admin-menu.php');
 		$tools_admin = new SwpmToolsAdminMenu();
 		$tools_admin->handle_tools_admin_menu();
+	}
+
+	public function admin_reports_menu() {
+		include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/admin-includes/class.swpm-reports-admin-menu.php');
+		$tools_admin = new SwpmReportsAdminMenu();
+		$tools_admin->handle_reports_admin_menu();
 	}
 
     public function admin_add_ons_menu() {

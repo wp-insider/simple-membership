@@ -181,6 +181,7 @@ https://simple-membership-plugin.com/
 - Renamed the function "email_activation()" to "handle_email_activation()" for clarity.
 - Fixed a translation issue in the account delete feature's confirmation message.
 - Added debug logging statements in the calculate_access_start_date_for_account_update() function.
+- New reports menu added.
 
 = 4.6.1 =
 - This release primarily includes optimizations and enhancements for the user login process with the 'Remember Me' option.

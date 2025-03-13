@@ -358,3 +358,71 @@
         width: 100%;
     }
 }
+
+/* Reports menu css */
+.swpm-stats-container{
+    overflow: hidden;
+}
+
+.swpm-stats-container th{
+    font-weight: bold;
+}
+
+.swpm-stats-container .table-column{
+    /*width: 100%;*/
+    order: 2;
+}
+
+.swpm-stats-container .char-column{
+    /*width: 100%;*/
+    order: 1;
+}
+
+.swpm_report_date_range_form {
+    width: 100%;
+    display: flex;
+    align-items: end;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+.swpm_report_date_range_form label{
+    font-size: smaller;
+}
+
+.swpm_report_date_range_form div:last-child{
+    margin-top: 5px;
+}
+
+.swpm_report_total_container{
+    margin-top: 6px;
+    /*padding-left: 8px;*/
+}
+
+@media (min-width: 768px) {
+    .swpm-stats-container{
+        display: flex;
+        align-items: center;
+    }
+
+    .swpm-stats-container .table-column{
+        min-width: 50%;
+        order: 1;
+    }
+
+    .swpm-stats-container .table-column-80X{
+        min-width: 80%;
+    }
+
+    .swpm-stats-container .char-column{
+        /*width: 100%;*/
+        flex-grow: 1;
+        padding: 24px 10px;
+        order: 2;
+    }
+
+    .swpm_report_date_range_form div:last-child{
+        margin-top: 0px;
+        margin-left: 4px;
+    }
+}
+/* End of reports menu css */

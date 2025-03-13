@@ -165,7 +165,20 @@ class SwpmInstallation {
         )" . $charset_collate . " AUTO_INCREMENT=1;";
         dbDelta($sql);
 
-        //The payments table (Note: We now use the SWPM Transactions Custom Post Type)
+        //The Events table (For storing event_type such as: login, logout, profile_edited, registration etc.)
+        $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_events_tbl (
+            event_id int(12) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            event_type varchar(255) DEFAULT NULL,
+            event_date_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+            last_name varchar(64) DEFAULT '',
+            member_id varchar(16) DEFAULT '',
+            username varchar(255) DEFAULT '',
+            ip_address varchar(128) DEFAULT '',
+            user_agent mediumtext DEFAULT ''
+        )" . $charset_collate . " AUTO_INCREMENT=1;";
+        dbDelta($sql);
+
+        //[Deprecated] TODO: Delete later. The payments table (Note: We now use the SWPM Transactions Custom Post Type)
         $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_payments_tbl (
                     id int(12) NOT NULL PRIMARY KEY AUTO_INCREMENT,
                     email varchar(255) DEFAULT NULL,
@@ -173,14 +186,14 @@ class SwpmInstallation {
                     last_name varchar(64) DEFAULT '',
                     member_id varchar(16) DEFAULT '',
                     membership_level varchar(64) DEFAULT '',
-                    txn_date date NOT NULL default '0000-00-00',
-                    txn_id varchar(255) NOT NULL default '',
-                    subscr_id varchar(255) NOT NULL default '',
-                    reference varchar(255) NOT NULL default '',
-                    payment_amount varchar(32) NOT NULL default '',
+                    txn_date date NOT NULL DEFAULT '0000-00-00',
+                    txn_id varchar(255) NOT NULL DEFAULT '',
+                    subscr_id varchar(255) NOT NULL DEFAULT '',
+                    reference varchar(255) NOT NULL DEFAULT '',
+                    payment_amount varchar(32) NOT NULL DEFAULT '',
                     gateway varchar(32) DEFAULT '',
                     status varchar(255) DEFAULT '',
-                    ip_address varchar(128) default ''
+                    ip_address varchar(128) DEFAULT ''
                     )" . $charset_collate . ";";
         dbDelta($sql);
 

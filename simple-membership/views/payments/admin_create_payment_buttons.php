@@ -31,9 +31,9 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 			<tr>
 			<td>
 			<fieldset>
-				<label><input type="radio" name="button_type" value="pp_buy_now_new" checked /> <?php _e( 'PayPal Buy Now (New API)', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_buy_now_new" checked /> <?php _e( 'PayPal Buy Now (New API)(Recommended)', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="pp_subscription_new" /> <?php _e( 'PayPal Subscription (New API)', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_subscription_new" /> <?php _e( 'PayPal Subscription (New API)(Recommended)', 'simple-membership' ); ?></label>
 				<br />				
 				<label><input type="radio" name="button_type" value="pp_buy_now" /> <?php _e( 'PayPal Buy Now', 'simple-membership' ); ?></label>
 				<br />
@@ -41,13 +41,13 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 				<br />
 				<label><input type="radio" name="button_type" value="braintree_buy_now" /> <?php _e( 'Braintree Buy Now', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_sca_buy_now" /> <?php _e( 'Stripe SCA Buy Now', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_sca_buy_now" /> <?php _e( 'Stripe Buy Now (Recommended)', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_sca_subscription" /> <?php _e( 'Stripe SCA Subscription', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_sca_subscription" /> <?php _e( 'Stripe Subscription (Recommended)', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_buy_now" /> <?php _e( 'Stripe Legacy Buy Now (deprecated)', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_buy_now" /> <?php _e( 'Stripe Legacy Buy Now (Deprecated)', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_subscription" /> <?php _e( 'Stripe Legacy Subscription (deprecated)', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_subscription" /> <?php _e( 'Stripe Legacy Subscription (Deprecated)', 'simple-membership' ); ?></label>
 				<br />
 			</fieldset>
 			</td>

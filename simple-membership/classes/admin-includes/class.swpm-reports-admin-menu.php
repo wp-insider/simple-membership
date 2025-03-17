@@ -93,7 +93,7 @@ class SwpmReportsAdminMenu {
 	}
 
 
-    public static function date_range_selector($stats_name = '', $start_date = 'Y-m-d', $end_date = 'Y-m-d', $method = 'post') {
+    public static function date_range_selector($stats_name = '', $start_date = 'Y-m-d', $end_date = 'Y-m-d') {
 	    $start_date = date($start_date);
 	    $end_date = date($end_date);
 
@@ -115,7 +115,7 @@ class SwpmReportsAdminMenu {
         $output = '';
         ob_start();
         ?>
-        <form action="" method="<?php esc_attr_e($method); ?>" class="swpm_report_date_range_form">
+        <form action="" method="post" class="swpm_report_date_range_form">
             <div>
                 <label for="swpm_date_range_start"><?php _e('Start Date', 'simple-membership') ?></label><br>
                 <input type="date" name="<?php esc_attr_e($form_name);?>[start_date]" id="swpm_date_range_start" value="<?php esc_attr_e($start_date);?>">

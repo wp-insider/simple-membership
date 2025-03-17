@@ -41,6 +41,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 				break;
             case 'login-history':
 			default:
+                $output .= $this->render_login_history_settings();
                 $output .= $this->render_login_history();
 				break;
 		}
@@ -101,13 +102,13 @@ class SWPM_Member_Logins_Report_Menu_Tab {
         </div>
 
         <?php if (!empty($results)) { ?>
-        <script type="text/javascript">
+        <!--<script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function () {
                 google.load('visualization', '1', {packages: ['corechart', 'bar']});
                 google.setOnLoadCallback(function(){
                     swpmRenderBarChart({
                         mountPoint: 'member-by-date',
-                        stats: <?php echo json_encode( $stats ); ?>,
+                        stats: <?php /*echo json_encode( $stats ); */?>,
                         options: {
                             // title:  'Member Login in last 30 days',
                             chartArea: {
@@ -121,67 +122,101 @@ class SWPM_Member_Logins_Report_Menu_Tab {
                     });
                 });
             })
-        </script>
+        </script>-->
 		<?php
 		}
 		return ob_get_clean();
 	}
 
-    public function render_login_history() {
-	    global $wpdb;
+    public function render_login_history_settings() {
+	    if (isset($_POST['swpm_login_log_settings']) && check_admin_referer('swpm_login_log_settings_nonce')){
+		    $enable_login_event_tracking = isset( $_POST['enable_login_event_tracking'] ) ? "checked='checked'" : '';
+		    $auto_prune_login_events = isset( $_POST['auto_prune_login_events'] ) ? "checked='checked'" : '';
 
-	    $last30thDay = date("Y-m-d", strtotime("-30 days"));
+		    $this->settings->set_value('enable_login_event_tracking', $enable_login_event_tracking);
+		    $this->settings->set_value('auto_prune_login_events', $auto_prune_login_events);
+		    $this->settings->save();
+	    }
 
-	    list($start_date, $end_date, $date_range_from_html) = SwpmReportsAdminMenu::date_range_selector('recent_logins', $last30thDay, 'Y-m-d');
-
-	    $query = $wpdb->prepare(
-		    'SELECT member_id, user_name, last_accessed, last_accessed_from_ip 
-            FROM ' . $wpdb->prefix . 'swpm_members_tbl 
-            WHERE last_accessed BETWEEN %s AND %s
-            ORDER BY last_accessed DESC',
-		    $start_date,
-		    $end_date
-	    );
-
-	    $results = $wpdb->get_results( $query );
+	    $enable_login_event_tracking = $this->settings->get_value('enable_login_event_tracking');
+	    $auto_prune_login_events = $this->settings->get_value('auto_prune_login_events');
 
         ob_start();
         ?>
-        <div class="postbox">
-            <h3 class="hndle"><label for="title"><?php _e('Member Recent Logins', 'simple-membership') ?></label></h3>
+            <div class="postbox">
+            <h3 class="hndle">
+                <label>
+				    <?php _e('Login Log Settings', 'simple-membership') ?>
+                </label>
+            </h3>
             <div class="inside">
-                <?php echo $date_range_from_html; ?>
-                <table class="widefat striped">
-                    <thead>
-                    <tr>
-                        <th><?php _e('Member ID', 'simple-membership') ?></th>
-                        <th><?php _e('Member Username', 'simple-membership') ?></th>
-                        <th><?php _e('Last Login Date', 'simple-membership') ?></th>
-                        <th><?php _e('IP Address', 'simple-membership') ?></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    foreach ( $results as $result ) { ?>
+                <form action="" method="post">
+                    <table class="form-table" role="presentation">
+                        <tbody>
                         <tr>
+                            <th>
+                                <label for="enable_login_event_tracking"><?php _e('Enable Login Event Tracking', 'simple-membership') ?></label>
+                            </th>
                             <td>
-                                <a href="<?php echo admin_url('admin.php?page=simple_wp_membership&member_action=edit&member_id=' . $result->member_id) ?>">
-                                    <?php esc_attr_e($result->member_id); ?>
-                                </a>
+                                <input id="enable_login_event_tracking" type="checkbox" name="enable_login_event_tracking" value="1" <?php esc_attr_e($enable_login_event_tracking) ?>>
+                                <p class="description">
+								    <?php _e('If checked, the plugin will capture member login events.', 'simple-membership') ?>
+                                </p>
                             </td>
-                            <td><?php esc_attr_e($result->user_name) ?></td>
-                            <td>
-                                <?php echo sprintf(
-                                        '%s %s %s',
-                                        date( SwpmReportsAdminMenu::get_date_format(), strtotime( $result->last_accessed ) ),
-                                        __( 'at' , 'simple-membership'),
-                                        date( SwpmReportsAdminMenu::get_time_format(), strtotime( $result->last_accessed ) )
-                                ) ?>
-                            </td>
-                            <td><?php echo $result->last_accessed_from_ip ?></td>
                         </tr>
-                    <?php } ?>
-                </table>
+                        <tr>
+                            <th>
+                                <label for="auto_prune_login_events"><?php _e('Auto Prune Login Events', 'simple-membership') ?></label>
+                            </th>
+                            <td>
+                                <input id="auto_prune_login_events" type="checkbox" name="auto_prune_login_events" value="1" <?php esc_attr_e($auto_prune_login_events) ?>>
+                                <p class="description">
+								    <?php _e('When enabled it will auto trim login event logs older than 1 year.', 'simple-membership') ?>
+                                </p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+				    <?php echo wp_nonce_field('swpm_login_log_settings_nonce') ?>
+
+                    <p class="submit">
+                        <input class="button-primary" type="submit" name="swpm_login_log_settings" value="<?php _e('Save Changes', 'simple-membership') ?>">
+                    </p>
+                </form>
+            </div>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    public function render_login_history() {
+	    require_once(SIMPLE_WP_MEMBERSHIP_PATH . 'classes/admin-includes/class.swpm-login-events-list-table.php');
+
+	    $table = new SWPM_Login_Events_List_Table();
+
+	    if ( isset( $_REQUEST['start_date'] ) && !empty( $_REQUEST['start_date'] ) ){
+		    $table->set_start_date(sanitize_text_field($_REQUEST['start_date']));
+	    }
+
+	    if ( isset( $_REQUEST['end_date'] ) && !empty( $_REQUEST['end_date'] ) ){
+		    $table->set_end_date(sanitize_text_field($_REQUEST['end_date']));
+	    }
+
+	    if ( isset( $_REQUEST['s'] ) && !empty( $_REQUEST['s'] ) ){
+		    $table->set_search_text(sanitize_text_field($_REQUEST['s']));
+	    }
+
+        $table->prepare_items();
+
+	    ob_start();
+        ?>
+        <div class="postbox">
+            <h3 class="hndle">
+                <label for="title"><?php _e('Member Recent Logins', 'simple-membership') ?></label>
+            </h3>
+            <div class="inside">
+                <?php $table->display_table() ?>
             </div>
         </div>
 	    <?php

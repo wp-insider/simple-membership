@@ -29,7 +29,8 @@ class SWPM_Members_Report_Menu_Tab {
     public function render_registration_by_month() {
 	    global $wpdb;
 
-        list($start_date, $end_date, $date_range_from_html) = SwpmReportsAdminMenu::date_range_selector('reg_by_month');
+	    $last_one_year = date("Y-m-d", strtotime("-1 year"));
+        list($start_date, $end_date, $date_range_from_html) = SwpmReportsAdminMenu::date_range_selector('reg_by_month', $last_one_year);
 
 	    $query = $wpdb->prepare(
             'SELECT COUNT(member_id) AS count, MONTHNAME(member_since) AS month 
@@ -89,13 +90,13 @@ class SWPM_Members_Report_Menu_Tab {
         </div>
 
 	    <?php if (!empty($results)) { ?>
-        <script type="text/javascript">
+    <!-- <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function () {
                 google.load('visualization', '1', {packages: ['corechart', 'bar']});
                 google.setOnLoadCallback(function(){
                     swpmRenderBarChart({
                         mountPoint: 'member-by-month',
-                        stats: <?php echo json_encode( $stats ); ?>,
+                        stats: <?php /*echo json_encode( $stats ); */?>,
                         options: {
                             // title: 'Member Registrations by Month',
                             chartArea: {
@@ -109,7 +110,7 @@ class SWPM_Members_Report_Menu_Tab {
                     });
                 });
             })
-        </script>
+        </script>-->
 	    <?php
         }
 	    return ob_get_clean();
@@ -166,13 +167,13 @@ class SWPM_Members_Report_Menu_Tab {
         </div>
 
 	    <?php if (!empty($results)) { ?>
-        <script type="text/javascript">
+    <!-- <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function () {
                 google.load('visualization', '1.0', {'packages': ['corechart']});
                 google.setOnLoadCallback(function(){
                     swpmRenderPieChart({
                         mountPoint: 'member-by-state',
-                        stats: <?php echo json_encode( $stats ); ?>,
+                        stats: <?php /*echo json_encode( $stats ); */?>,
                         options: {
                             // title: 'Members by Account Status',
                             // 'width': 250,
@@ -181,7 +182,7 @@ class SWPM_Members_Report_Menu_Tab {
                     })
                 });
             })
-        </script>
+        </script>-->
 	    <?php
 	    }
 	    return ob_get_clean();

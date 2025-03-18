@@ -279,7 +279,7 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
         <?php
 	}
 
-    public function display_reset_logs_section(){
+    public function display_reset_events_section(){
         ?>
         <div>
             <button type="button" id="swpm-reset-login-event-entries" class="button">
@@ -299,8 +299,8 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
                     }
                     try {
                         const payload = new URLSearchParams({
-                            action: 'swpm_reset_login_event_logs',
-                            nonce: '<?php echo wp_create_nonce('swpm_reset_login_event_logs') ?>'
+                            action: 'swpm_reset_login_events',
+                            nonce: '<?php echo wp_create_nonce('swpm_reset_login_events') ?>'
                         })
                         const response = await fetch('<?php echo admin_url( 'admin-ajax.php')?>', {
                             method: 'post',
@@ -338,7 +338,7 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 		</form>
 
 		<br>
-		<?php $this->display_reset_logs_section() ?>
+		<?php $this->display_reset_events_section() ?>
         <?php
     }
 }

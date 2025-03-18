@@ -93,7 +93,7 @@ class SwpmReportsAdminMenu {
 	}
 
 
-    public static function date_range_selector($stats_name = '', $start_date = 'Y-01-01', $end_date = 'Y-12-31') {
+    public static function date_range_selector($stats_name = '', $start_date = 'Y-m-d', $end_date = 'Y-m-d') {
 	    $start_date = date($start_date);
 	    $end_date = date($end_date);
 
@@ -132,8 +132,8 @@ class SwpmReportsAdminMenu {
 	    $output .= ob_get_clean();
 
         return array(
-            $start_date,
-            $end_date,
+            date("Y-m-d H:i:s", strtotime($start_date)),
+            date("Y-m-d 11:59:59", strtotime($end_date)),
             $output,
         );
     }

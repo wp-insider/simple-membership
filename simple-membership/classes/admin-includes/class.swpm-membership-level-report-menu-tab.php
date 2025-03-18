@@ -77,12 +77,12 @@ class SWPM_Membership_Level_Report_Menu_Tab {
         </div>
 
 	    <?php if (!empty($results)) { ?>
-        <script type="text/javascript">
+    <!-- <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function (){
                 google.load('visualization', '1.0', {'packages': ['corechart']});
                 google.setOnLoadCallback(function(){
                     swpmRenderPieChart({
-                        stats: <?php echo json_encode( $stats ); ?>,
+                        stats: <?php /*echo json_encode( $stats ); */?>,
                         mountPoint: 'member-by-level',
                         options: {
                             // 'title': 'Members by Membership Level',
@@ -92,10 +92,11 @@ class SWPM_Membership_Level_Report_Menu_Tab {
                     })
                 });
             })
-        </script>
+        </script>-->
 	    <?php
 	    }
 	    return ob_get_clean();
     }
 
 }
+

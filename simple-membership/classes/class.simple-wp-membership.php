@@ -38,6 +38,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-cronjob.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-main.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-limit-active-login.php');
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-event-logger.php');
 
 class SimpleWpMembership {
     
@@ -46,6 +47,7 @@ class SimpleWpMembership {
         new SwpmShortcodesHandler(); //Tackle the shortcode definitions and implementation.
         new SwpmSelfActionHandler(); //Tackle the self action hook handling.
 	    new SwpmLimitActiveLogin(); // Tackle login limit functionalities.
+		new SwpmEventLogger(); // Tackle event log related functionalities.
 
         //Load the plugin text domain
         //We are loading the text domain in init with a high priority for better compatibility with other plugins. Most langauges (example: de_DE) work fine with this. Alternative is to load it in plugins_loaded.
@@ -1101,6 +1103,8 @@ class SimpleWpMembership {
         //Schedule the pending account deletion cron event.
         wp_schedule_event(time(), 'daily', 'swpm_delete_pending_account_event');
 
+        wp_schedule_event(time(), 'daily', 'swpm_daily_cron_event');
+
         wp_schedule_event(time(), 'twicedaily', 'swpm_twicedaily_cron_event');
 
         //Run the standard installer steps
@@ -1111,6 +1115,7 @@ class SimpleWpMembership {
     public static function deactivate() {
         wp_clear_scheduled_hook('swpm_account_status_event');
         wp_clear_scheduled_hook('swpm_delete_pending_account_event');
+        wp_clear_scheduled_hook('swpm_daily_cron_event');
     }
 
 }

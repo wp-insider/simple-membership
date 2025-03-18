@@ -133,7 +133,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
                 <div class="char-column" id="member-by-date"></div>
                 <div class="table-column">
                     <p class="description">
-                        <?php _e('This table displays the number of total member logins by date over the past 30 days.', 'simple-membership');?>
+                        <?php _e('This table shows the total number of logins per day over the past 30 days. Multiple login events from the same user are counted here.', 'simple-membership');?>
                     </p>
                     <br>
                     <?php if (empty($results)) {

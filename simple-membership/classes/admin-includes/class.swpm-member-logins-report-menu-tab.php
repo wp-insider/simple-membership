@@ -17,23 +17,25 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 		//Check current_user_can() or die.
 		SwpmMiscUtils::check_user_permission_and_is_admin( 'Member Logins Report Menu Tab' );
 
-        $output = '';
-
 		$subtab = isset( $_GET['subtab'] ) ? sanitize_text_field( $_GET['subtab'] ) : '';
 		?>
+        <!-- show info box -->
+        <div class="swpm-grey-box"><?php _e('This interface displays reports related to member logins.', 'simple-membership'); ?></div>
 
         <!-- start nav menu sub tabs -->
         <h3 class="nav-tab-wrapper">
             <a class="nav-tab <?php echo ( $subtab == '' ) ? 'nav-tab-active' : ''; ?>"
                href="admin.php?page=simple_wp_membership_reports&tab=member-logins"><?php _e( 'Login History', 'simple-membership' ); ?></a>
             <a class="nav-tab <?php echo ( $subtab == 'login-by-date' ) ? 'nav-tab-active' : ''; ?>"
-               href="admin.php?page=simple_wp_membership_reports&tab=member-logins&subtab=login-by-date"><?php _e( 'Login by Date', 'simple-membership' ); ?></a>
+               href="admin.php?page=simple_wp_membership_reports&tab=member-logins&subtab=login-by-date"><?php _e( 'Login Counts by Date', 'simple-membership' ); ?></a>
         </h3>
         <!-- end nav menu sub tabs -->
 
         <br>
 
 		<?php
+        $output = '';
+        
 		//Switch case for the various different tabs handled by the core plugin.
 		switch ( $subtab ) {
             case 'login-by-date':
@@ -63,10 +65,14 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 		ob_start();
 		?>
         <div class="postbox">
-            <h3 class="hndle"><label for="title"><?php _e('Member Login in Last 30 Days', 'simple-membership');?></label></h3>
+            <h3 class="hndle"><label for="title"><?php _e('Unique Member Account Login Counts by Date', 'simple-membership');?></label></h3>
             <div class="inside swpm-stats-container">
                 <div class="char-column" id="member-by-date"></div>
                 <div class="table-column">
+                    <p class="description">
+                        <?php _e('This table displays the number of unique member logins by date over the past 30 days.', 'simple-membership');?>
+                    </p>
+                    <br>
                     <table class="widefat striped">
                         <thead>
                         <tr>
@@ -146,7 +152,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
             <div class="postbox">
             <h3 class="hndle">
                 <label>
-				    <?php _e('Login Log Settings', 'simple-membership') ?>
+				    <?php _e('Login Event Tracking Settings', 'simple-membership') ?>
                 </label>
             </h3>
             <div class="inside">
@@ -171,7 +177,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
                             <td>
                                 <input id="auto_prune_login_events" type="checkbox" name="auto_prune_login_events" value="1" <?php esc_attr_e($auto_prune_login_events) ?>>
                                 <p class="description">
-								    <?php _e('When enabled it will auto trim login event logs older than 1 year.', 'simple-membership') ?>
+								    <?php _e('When enabled, it will auto prune login events data older than 1 year.', 'simple-membership') ?>
                                 </p>
                             </td>
                         </tr>
@@ -213,10 +219,17 @@ class SWPM_Member_Logins_Report_Menu_Tab {
         ?>
         <div class="postbox">
             <h3 class="hndle">
-                <label for="title"><?php _e('Member Recent Logins', 'simple-membership') ?></label>
+                <label for="title"><?php _e('Recent Login Events', 'simple-membership') ?></label>
             </h3>
             <div class="inside">
-                <?php $table->display_table() ?>
+                <?php 
+                if( SwpmEventLogger::has_event_entries(SwpmEventLogger::EVENT_TYPE_LOGIN_SUCCESS)){
+                    $table->display_table();
+                }
+                else{
+                    echo '<p>' . __('No login events found.', 'simple-membership') . '</p>';
+                }
+                ?>
             </div>
         </div>
 	    <?php

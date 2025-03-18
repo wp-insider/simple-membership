@@ -21,7 +21,7 @@ class SwpmSelfActionHandler {
         add_action("swpm_do_init_time_tasks_front_end", array(&$this, 'handle_whitelist_blacklist_registration'));
         add_action("swpm_before_login_request_is_processed", array(&$this, 'handle_whitelist_blacklist_login'));
 
-		add_action('swpm_after_login_authentication', array(&$this, 'handle_login_event_log'));
+		add_action('swpm_after_login_authentication', array(&$this, 'handle_login_event_tracking'));
     }
 
     public function handle_auth_cookie_expiry_value($expire){
@@ -268,12 +268,12 @@ class SwpmSelfActionHandler {
         return;
     }
 
-	public function handle_login_event_log( $user ) {
+	public function handle_login_event_tracking( $user ) {
 		$settings = SwpmSettings::get_instance();
 		$enable_login_event_tracking = $settings->get_value('enable_login_event_tracking');
 
 		if ( $enable_login_event_tracking ){
-			SwpmEventLogger::log_login_event( $user );
+			SwpmEventLogger::track_login_event( $user );
 		}
 	}
 }

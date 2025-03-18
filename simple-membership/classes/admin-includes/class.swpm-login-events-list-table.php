@@ -212,9 +212,9 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 			$del_row = $wpdb->query('DELETE FROM ' . $table . ' WHERE event_id IN ( '. $row_ids .' )');
 
 			if ( $del_row ) {
-				echo '<div class="notice notice-success"><p>' . __( 'Log entries deleted successfully!', 'simple-membership' ) . '</p></div>';
+				echo '<div class="notice notice-success"><p>' . __( 'Event entries deleted successfully!', 'simple-membership' ) . '</p></div>';
 			} else {
-				echo '<div class="notice notice-error"><p>' . __( 'Error: log entries could not be deleted!', 'simple-membership' ) . '</p></div>';
+				echo '<div class="notice notice-error"><p>' . __( 'Error: event entries could not be deleted!', 'simple-membership' ) . '</p></div>';
 			}
 		}
 	}
@@ -328,13 +328,13 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 
     public function display_table() {
 	    ?>
-            <form action="" method="post" id="swpm-recent-login-events-table">
-                <?php $this->display_filter_data_section() ?>
-                <?php $this->display(); ?>
-            </form>
+		<form action="" method="post" id="swpm-recent-login-events-table">
+			<?php $this->display_filter_data_section() ?>
+			<?php $this->display(); ?>
+		</form>
 
-            <br>
-            <?php $this->display_reset_logs_section() ?>
+		<br>
+		<?php $this->display_reset_logs_section() ?>
         <?php
     }
 }

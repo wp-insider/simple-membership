@@ -3,6 +3,11 @@
 
 class SwpmEventLogger {
 
+	//At the moment we only use the following event types. In the future, we will add more.
+	//Event Types: login_success.
+	const EVENT_TYPE_LOGIN_SUCCESS = 'login_success';
+	const EVENT_TYPE_PROFILE_UPDATED = 'profile_updated';
+
 	public function __construct() {
 		add_action('wp_ajax_swpm_reset_login_event_logs', array($this, 'reset_login_event_logs') );
 	}
@@ -18,14 +23,14 @@ class SwpmEventLogger {
 
 		$table = $wpdb->prefix . 'swpm_events_tbl';
 
-		$count = $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . $table . ' WHERE event_type = %s', 'login_success'));
+		$count = $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . $table . ' WHERE event_type = %s', self::EVENT_TYPE_LOGIN_SUCCESS));
 		if ($count == 0){
 			wp_send_json_success(array(
 				'message' => __( 'No log entries exists!', 'simple-membership' ),
 			));
 		}
 
-		$delete = $wpdb->query($wpdb->prepare('DELETE FROM ' . $table . ' WHERE event_type = %s', 'login_success'));
+		$delete = $wpdb->query($wpdb->prepare('DELETE FROM ' . $table . ' WHERE event_type = %s', self::EVENT_TYPE_LOGIN_SUCCESS));
 		if ( ! $delete ) {
 			wp_send_json_error( array(
 				'message' => __( 'Error: log entries could not be deleted!', 'simple-membership' ),
@@ -33,11 +38,11 @@ class SwpmEventLogger {
 		}
 
 		wp_send_json_success(array(
-			'message' => __( 'Log entries deleted successfully!', 'simple-membership' ),
+			'message' => __( 'Event entries deleted successfully!', 'simple-membership' ),
 		));
 	}
 
-	public static function log_login_event( $username ){
+	public static function track_login_event( $username ){
 		$username = sanitize_text_field($username);
 		$member = SwpmMemberUtils::get_user_by_user_name($username);
 		$member_id = !empty($member) ? $member->member_id : '';
@@ -45,10 +50,10 @@ class SwpmEventLogger {
 		$ip = SwpmUtils::get_user_ip_address();
 		$user_agent = serialize(self::get_parsed_user_agent());
 
-		self::log('login_success', $member_id , $username, $date_time, $ip, $user_agent);
+		self::insert_event_to_db(self::EVENT_TYPE_LOGIN_SUCCESS, $member_id , $username, $date_time, $ip, $user_agent);
 	}
 
-	public static function log( $event_type, $member_id, $username, $date_time, $ip ='', $user_agent='' ){
+	public static function insert_event_to_db( $event_type, $member_id, $username, $date_time, $ip ='', $user_agent='' ){
 		global $wpdb;
 
 		$data = array(
@@ -128,7 +133,28 @@ class SwpmEventLogger {
 	public static function delete_login_events_older_than_one_year() {
 		global $wpdb;
 		$table = $wpdb->prefix . 'swpm_events_tbl';
-		$query = "DELETE FROM " . $table . " WHERE event_type = 'login_success' AND event_date_time < NOW() - INTERVAL 1 YEAR";
+		$query = "DELETE FROM " . $table . " WHERE event_type = '".self::EVENT_TYPE_LOGIN_SUCCESS."' AND event_date_time < NOW() - INTERVAL 1 YEAR";
 		$wpdb->query($query);
+	}
+
+	public static function has_event_entries($event_type = '') {
+		if(empty($event_type)){
+			$event_type = self::EVENT_TYPE_LOGIN_SUCCESS;
+		}
+		$count = self::count_events($event_type);
+		return $count > 0;
+	}
+
+	public static function count_events($event_type = '') {
+		global $wpdb;
+		$table = $wpdb->prefix . 'swpm_events_tbl';
+		if( empty($event_type) ){
+			$query = "SELECT COUNT(*) FROM " . $table;
+			$count = $wpdb->get_var($query);
+		} else {
+			$query = "SELECT COUNT(*) FROM " . $table . " WHERE event_type = %s";
+			$count = $wpdb->get_var($wpdb->prepare($query, $event_type));
+		}
+		return $count;
 	}
 }

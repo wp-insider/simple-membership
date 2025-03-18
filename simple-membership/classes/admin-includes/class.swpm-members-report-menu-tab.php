@@ -32,7 +32,7 @@ class SWPM_Members_Report_Menu_Tab {
 	    $last_one_year = date("Y-m-d", strtotime("-1 year"));
         list($start_date, $end_date, $date_range_from_html) = SwpmReportsAdminMenu::date_range_selector('reg_by_month', $last_one_year);
 
-        $count_items = $wpdb->get_var( "SELECT COUNT(*) FROM ". $wpdb->prefix ."swpm_members_tbl" );
+        $members_count = $wpdb->get_var( "SELECT COUNT(*) FROM ". $wpdb->prefix ."swpm_members_tbl" );
 
 	    ob_start();
 	    ?>
@@ -44,54 +44,58 @@ class SWPM_Members_Report_Menu_Tab {
                 <div class="char-column" id="member-by-month"></div>
                 <div class="table-column">
                     <?php
-                    if(empty($count_items)) {
+                    if( empty($members_count) ) {
                         echo __('No entries found!', 'simple-membership');
                     } else {
-                    $query = $wpdb->prepare(
-                        'SELECT COUNT(member_id) AS count, MONTHNAME(member_since) AS month 
-                        FROM ' . $wpdb->prefix . 'swpm_members_tbl 
-                        WHERE member_since BETWEEN %s AND %s 
-                        GROUP BY MONTH(member_since)',
-                        $start_date,
-                        $end_date
-                    );
+                        echo $date_range_from_html;
 
-                    $results = $wpdb->get_results( $query );
+                        $query = $wpdb->prepare(
+                            'SELECT COUNT(member_id) AS count, MONTHNAME(member_since) AS month 
+                            FROM ' . $wpdb->prefix . 'swpm_members_tbl 
+                            WHERE member_since BETWEEN %s AND %s 
+                            GROUP BY MONTH(member_since)',
+                            $start_date,
+                            $end_date
+                        );
 
-                    echo $date_range_from_html;
-                    ?>
-                    <table class="widefat striped">
-                        <thead>
-                        <tr>
-                            <th><?php _e('Month', 'simple-membership') ?></th>
-                            <th><?php _e('Count', 'simple-membership') ?></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $stats = array( array( 'Month', 'Count' ) );
-                        $count       = 0;
-                        foreach ( $results as $result ) {
-                            ?>
+                        $results = $wpdb->get_results( $query );
+
+                        if (count($results) == 0){
+	                        echo __('No entries found!', 'simple-membership');
+                        } else { ?>
+                        <table class="widefat striped">
+                            <thead>
                             <tr>
-                                <td>
-                                    <?php echo ucfirst( $result->month ); ?>
-                                </td>
-                                <td>
-                                    <?php echo $result->count; ?>
-                                    <?php
-                                    $stats[] = array( ucfirst( $result->month ), intval( $result->count ) );
-                                    $count   += $result->count;
-                                    ?>
-                                </td>
+                                <th><?php _e('Month', 'simple-membership') ?></th>
+                                <th><?php _e('Count', 'simple-membership') ?></th>
                             </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            $stats = array( array( 'Month', 'Count' ) );
+                            $count       = 0;
+                            foreach ( $results as $result ) {
+                                ?>
+                                <tr>
+                                    <td>
+                                        <?php echo ucfirst( $result->month ); ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $result->count; ?>
+                                        <?php
+                                        $stats[] = array( ucfirst( $result->month ), intval( $result->count ) );
+                                        $count   += $result->count;
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                        <div class="swpm_report_total_container">
+                            <p class="description">
+                                <?php echo __('Total registrations: ', 'simple-membership') . $count; ?>
+                            </p>
+                        </div>
                         <?php } ?>
-                    </table>
-                    <div class="swpm_report_total_container">
-                        <p class="description">
-                            <?php echo __('Total registrations: ', 'simple-membership') . $count; ?>
-                        </p>
-                    </div>
                     <?php } ?>
                 </div>
             </div>

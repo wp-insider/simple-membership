@@ -363,6 +363,13 @@ class SWPM_System_Info_Menu_Tab {
 				'description' => '',
 			),
 
+            array(
+				'title'       => __( 'Daily Cron', 'simple-membership' ),
+				'cron'        => 'swpm_daily_cron_event',
+				'value'       => $this->get_cron_job( 'swpm_daily_cron_event' ),
+				'description' => '',
+			),
+
 			array(
 				'title'       => __( 'Twice Daily Cron', 'simple-membership' ),
 				'cron'        => 'swpm_twicedaily_cron_event',

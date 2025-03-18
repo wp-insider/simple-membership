@@ -9,11 +9,11 @@ class SwpmEventLogger {
 	const EVENT_TYPE_PROFILE_UPDATED = 'profile_updated';
 
 	public function __construct() {
-		add_action('wp_ajax_swpm_reset_login_event_logs', array($this, 'reset_login_event_logs') );
+		add_action('wp_ajax_swpm_reset_login_events', array($this, 'reset_login_events') );
 	}
 
-	public function reset_login_event_logs() {
-		if (!isset($_POST['nonce']) || ! wp_verify_nonce($_POST['nonce'], 'swpm_reset_login_event_logs' ) ) {
+	public function reset_login_events() {
+		if (!isset($_POST['nonce']) || ! wp_verify_nonce($_POST['nonce'], 'swpm_reset_login_events' ) ) {
 			wp_send_json_error(array(
 				'message' => __('Nonce verification failed!', 'simple-membership')
 			));

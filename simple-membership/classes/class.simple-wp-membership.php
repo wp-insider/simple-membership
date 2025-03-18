@@ -1098,13 +1098,15 @@ class SimpleWpMembership {
 
     public static function activate() {
         //Schedule the cron job events.
-        //We use the daily cronjob events for account status and expiry checks. This cron event is also used by the ENB extension.
+        //We use the daily cronjob events for account status and expiry checks, delete pending accounts, prune events etc. 
+        //The daily cron event is also used by the ENB extension.
+
+        //TODO - Move the all the daily crons to the newly added 'swpm_daily_cron_event' hook.
         wp_schedule_event(time(), 'daily', 'swpm_account_status_event');
-        //Schedule the pending account deletion cron event.
         wp_schedule_event(time(), 'daily', 'swpm_delete_pending_account_event');
 
+        //New daily and twicedaily cron events.
         wp_schedule_event(time(), 'daily', 'swpm_daily_cron_event');
-
         wp_schedule_event(time(), 'twicedaily', 'swpm_twicedaily_cron_event');
 
         //Run the standard installer steps
@@ -1116,6 +1118,7 @@ class SimpleWpMembership {
         wp_clear_scheduled_hook('swpm_account_status_event');
         wp_clear_scheduled_hook('swpm_delete_pending_account_event');
         wp_clear_scheduled_hook('swpm_daily_cron_event');
+        wp_clear_scheduled_hook('swpm_twicedaily_cron_event');
     }
 
 }

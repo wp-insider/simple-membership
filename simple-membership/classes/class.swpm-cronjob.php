@@ -13,7 +13,7 @@ class SwpmCronJob {
         add_action('swpm_delete_pending_account_event', array(&$this, 'delete_pending_account'));
         add_action('swpm_delete_pending_account_event', array($this, 'delete_pending_email_activation_data'));
 
-        //Twice daily cron job event(s)
+        //Our new daily and twicedaily cron job events
         add_action('swpm_daily_cron_event', array( &$this, 'handle_daily_cron_event' ) );
         add_action('swpm_twicedaily_cron_event', array( &$this, 'handle_twicedaily_cron_event' ) );
     }
@@ -124,7 +124,7 @@ class SwpmCronJob {
 	public function handle_daily_cron_event(){
 		$auto_prune_login_events = SwpmSettings::get_instance()->get_value('auto_prune_login_events');
 		if ( $auto_prune_login_events ){
-			SwpmEventLogger::delete_login_event_older_than_one_year();
+			SwpmEventLogger::delete_login_events_older_than_one_year();
 		}
 	}
 }

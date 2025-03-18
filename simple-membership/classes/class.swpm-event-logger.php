@@ -125,13 +125,10 @@ class SwpmEventLogger {
 		return $user_agent_data;
 	}
 
-	public static function delete_login_event_older_than_one_year() {
+	public static function delete_login_events_older_than_one_year() {
 		global $wpdb;
-
 		$table = $wpdb->prefix . 'swpm_events_tbl';
-
 		$query = "DELETE FROM " . $table . " WHERE event_type = 'login_success' AND event_date_time < NOW() - INTERVAL 1 YEAR";
-
 		$wpdb->query($query);
 	}
 }

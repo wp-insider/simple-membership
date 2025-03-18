@@ -1,15 +1,12 @@
 <?php
-
 /**
- * Description of BInstallation
- *
- * @author nur
+ * The installation class that handles the installation and upgrade tasks.
  */
 class SwpmInstallation {
+
     /*
      * This function is capable of handing both single site or multi-site install and upgrade all in one.
      */
-
     static function run_safe_installer() {
         global $wpdb;
 

@@ -18,6 +18,7 @@ class SWPM_Members_Report_Menu_Tab {
 		SwpmMiscUtils::check_user_permission_and_is_admin( 'Members Report Menu Tab' );
 
         $output = '';
+        $output .= '<div class="swpm-grey-box">'.__('This interface displays reports related to members.', 'simple-membership').'</div>';
         $output .= $this->render_registration_by_month();
         $output .= $this->render_member_by_account_status();
 
@@ -45,7 +46,7 @@ class SWPM_Members_Report_Menu_Tab {
                 <div class="table-column">
                     <?php
                     if( empty($members_count) ) {
-                        echo __('No entries found!', 'simple-membership');
+                        echo __('No entries found.', 'simple-membership');
                     } else {
                         echo $date_range_from_html;
 
@@ -61,7 +62,7 @@ class SWPM_Members_Report_Menu_Tab {
                         $results = $wpdb->get_results( $query );
 
                         if (count($results) == 0){
-	                        echo __('No entries found!', 'simple-membership');
+	                        echo __('No entries found.', 'simple-membership');
                         } else { ?>
                         <table class="widefat striped">
                             <thead>
@@ -121,7 +122,7 @@ class SWPM_Members_Report_Menu_Tab {
                 <div class="char-column" id="member-by-state"></div>
                 <div class="table-column">
                     <?php if(empty($results)) {
-                        echo __('No entries found!', 'simple-membership');
+                        echo __('No entries found.', 'simple-membership');
                     } else { ?>
                     <table class="widefat striped">
                         <thead>

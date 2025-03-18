@@ -286,7 +286,7 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
                 <?php _e('Reset All Login Event Entries', 'simple-membership') ?>
             </button>
             <p class="description">
-                <?php _e('This button will reset all login event entries. It can useful if you want to delete all your login event entries', 'simple-membership') ?>
+                <?php _e('This button will reset all login event entries in the database.', 'simple-membership') ?>
             </p>
         </div>
 

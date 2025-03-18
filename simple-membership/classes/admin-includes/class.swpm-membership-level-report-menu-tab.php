@@ -18,6 +18,7 @@ class SWPM_Membership_Level_Report_Menu_Tab {
 		SwpmMiscUtils::check_user_permission_and_is_admin( 'Membership Levels Report Menu Tab' );
 
         $output = '';
+        $output .= '<div class="swpm-grey-box">'.__('This interface displays reports related to membership levels.', 'simple-membership').'</div>';
         $output .= $this->render_members_by_membership_level();
 
 		$output = apply_filters( 'swpm_membership_level_report_menu_tab_content', $output );
@@ -42,7 +43,7 @@ class SWPM_Membership_Level_Report_Menu_Tab {
             <div class="inside swpm-stats-container">
                 <div class="table-column">
 	                <?php if (empty($results)) {
-		                echo __('No entries found!', 'simple-membership');
+		                echo __('No entries found.', 'simple-membership');
 	                } else { ?>
                     <table class="widefat striped">
                         <thead>

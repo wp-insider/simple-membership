@@ -75,7 +75,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
                     </p>
                     <br>
 	                <?php if (empty($results)) {
-		                echo __('No entries found!', 'simple-membership');
+		                echo __('No entries found.', 'simple-membership');
 	                } else { ?>
                         <table class="widefat striped">
                             <thead>
@@ -137,7 +137,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
                     </p>
                     <br>
                     <?php if (empty($results)) {
-	                    echo __('No entries found!', 'simple-membership');
+	                    echo __('No entries found.', 'simple-membership');
                     } else { ?>
                     <table class="widefat striped">
                         <thead>
@@ -231,10 +231,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
                     </table>
 
 				    <?php echo wp_nonce_field('swpm_login_log_settings_nonce') ?>
-
-                    <p class="submit">
-                        <input class="button-primary" type="submit" name="swpm_login_log_settings" value="<?php _e('Save Changes', 'simple-membership') ?>">
-                    </p>
+                    <input class="button-primary" type="submit" name="swpm_login_log_settings" value="<?php _e('Save Changes', 'simple-membership') ?>">
                 </form>
             </div>
         </div>

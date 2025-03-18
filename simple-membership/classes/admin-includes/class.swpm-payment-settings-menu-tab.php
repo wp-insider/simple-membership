@@ -19,14 +19,12 @@ class SWPM_Payment_Settings_Menu_Tab {
 
         //Tab overview message and documentation link.
         echo '<div class="swpm-grey-box">';
-        echo '<p>';
         _e('You can create membership payment buttons from the ', 'simple-membership');
         echo '<a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" target="_blank">' . __('create new button tab', 'simple-membership') . '</a>';
         _e(' of this plugin (useful if you want to offer paid memberships on the site).', 'simple-membership');
         _e(' Read the ', 'simple-membership');
         echo '<a href="https://simple-membership-plugin.com/simple-membership-documentation/#membership-payment-options" target="_blank">' . __('membership payment section', 'simple-membership') . '</a>';
         _e(' of our documentation to learn more about creating membership payment buttons.', 'simple-membership');
-        echo '</p>';
         echo '</div>';
 
         //Sub nav tabs related code.

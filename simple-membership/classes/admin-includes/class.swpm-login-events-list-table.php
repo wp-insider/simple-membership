@@ -220,24 +220,28 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 	}
 
 	public function display_filter_data_section() {
+
+        $start_date = empty($this->start_date) ? date('Y-m-d' ) : date('Y-m-d', strtotime($this->start_date));
+		$end_date = empty($this->end_date) ? date('Y-m-d' ) : date('Y-m-d', strtotime($this->end_date));
+
         ?>
         <fieldset id="swpm-login-events-filter-fieldset" class="alignleft actions searchactions" style="display: flex; align-items: end; flex-wrap: wrap; margin-bottom: 18px">
             <div>
                 <label for="swpm_date_range_start"><?php _e('Start Date', 'simple-membership') ?></label>
                 <br>
-                <input type="date" name="sDate" id="swpm_date_range_start" value="<?php esc_attr_e(date('Y-m-d', strtotime($this->start_date)));?>">
+                <input type="date" name="swpm_start_date" id="swpm_date_range_start" value="<?php esc_attr_e($start_date);?>">
             </div>
 
             <div>
                 <label for="swpm_date_range_end"><?php _e('End Date', 'simple-membership') ?></label>
                 <br>
-                <input type="date" name="eDate" id="swpm_date_range_end" value="<?php esc_attr_e(date('Y-m-d', strtotime($this->end_date)));?>">
+                <input type="date" name="swpm_end_date" id="swpm_date_range_end" value="<?php esc_attr_e($end_date);?>">
             </div>
 
             <div>
                 <label for="swpm-search-input"><?php _e('Search', 'simple-membership') ?>:</label>
                 <br>
-                <input type="search" id="swpm-search-input" name="s" value="<?php _admin_search_query(); ?>"/>
+                <input type="search" id="swpm-search-input" name="swpm_search" value="<?php _admin_search_query(); ?>"/>
             </div>
 
             <button class="button-secondary" type="submit" id="swpm-login-events-filter-submit">
@@ -278,17 +282,17 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
     public function display_reset_logs_section(){
         ?>
         <div>
-            <button type="button" id="swpm-reset-login-event-logs" class="button">
-                <?php _e('Reset All Log Entries', 'simple-membership') ?>
+            <button type="button" id="swpm-reset-login-event-entries" class="button">
+                <?php _e('Reset All Event Entries', 'simple-membership') ?>
             </button>
             <p class="description">
-                <?php _e('This button will reset all log entries. It can useful if you want to delete all your log entries', 'simple-membership') ?>
+                <?php _e('This button will reset all event entries. It can useful if you want to delete all your login event entries', 'simple-membership') ?>
             </p>
         </div>
 
         <script>
             document.addEventListener('DOMContentLoaded', function(){
-                const resetBtn = document.getElementById('swpm-reset-login-event-logs');
+                const resetBtn = document.getElementById('swpm-reset-login-event-entries');
                 resetBtn.addEventListener('click', async function (e){
                     if(!confirm("Are you sure you want to delete all logs?")) {
                         return;

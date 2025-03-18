@@ -26,8 +26,8 @@ class SWPM_Member_Logins_Report_Menu_Tab {
         <h3 class="nav-tab-wrapper">
             <a class="nav-tab <?php echo ( $subtab == '' ) ? 'nav-tab-active' : ''; ?>"
                href="admin.php?page=simple_wp_membership_reports&tab=member-logins"><?php _e( 'Login History', 'simple-membership' ); ?></a>
-            <a class="nav-tab <?php echo ( $subtab == 'login-by-date' ) ? 'nav-tab-active' : ''; ?>"
-               href="admin.php?page=simple_wp_membership_reports&tab=member-logins&subtab=login-by-date"><?php _e( 'Login Counts by Date', 'simple-membership' ); ?></a>
+            <a class="nav-tab <?php echo ( $subtab == 'login-counts-by-date' ) ? 'nav-tab-active' : ''; ?>"
+               href="admin.php?page=simple_wp_membership_reports&tab=member-logins&subtab=login-counts-by-date"><?php _e( 'Login Counts by Date', 'simple-membership' ); ?></a>
         </h3>
         <!-- end nav menu sub tabs -->
 
@@ -38,8 +38,9 @@ class SWPM_Member_Logins_Report_Menu_Tab {
         
 		//Switch case for the various different tabs handled by the core plugin.
 		switch ( $subtab ) {
-            case 'login-by-date':
-	            $output .= $this->render_logins_by_date();
+            case 'login-counts-by-date':
+	            $output .= $this->render_unique_member_login_count_by_date();
+	            $output .= $this->render_member_login_count_by_date();
 				break;
             case 'login-history':
 			default:
@@ -53,13 +54,13 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 		echo $output;
 	}
 
-	public function render_logins_by_date() {
+	public function render_unique_member_login_count_by_date() {
 		global $wpdb;
-		$query   = "SELECT COUNT(member_id) AS count, DATE(last_accessed) as date 
-                FROM " . $wpdb->prefix . "swpm_members_tbl 
-                WHERE last_accessed > " . date( 'Y-m-d', mktime( 0, 0, 0, date( 'm' ) - 1, date( 'd' ), date( 'Y' ) ) ) . " 
-                GROUP BY DATE(last_accessed) 
-                ORDER BY DATE(last_accessed) DESC";
+		$query   = "SELECT COUNT(DISTINCT member_id) AS count, DATE(event_date_time) as date 
+                FROM " . $wpdb->prefix . "swpm_events_tbl 
+                WHERE event_date_time > " . date( 'Y-m-d', mktime( 0, 0, 0, date( 'm' ) - 1, date( 'd' ), date( 'Y' ) ) ) . " 
+                GROUP BY DATE(event_date_time) 
+                ORDER BY DATE(event_date_time) DESC";
 		$results = $wpdb->get_results( $query );
 
 		ob_start();
@@ -73,11 +74,76 @@ class SWPM_Member_Logins_Report_Menu_Tab {
                         <?php _e('This table displays the number of unique member logins by date over the past 30 days.', 'simple-membership');?>
                     </p>
                     <br>
+	                <?php if (empty($results)) {
+		                echo __('No entries found!', 'simple-membership');
+	                } else { ?>
+                        <table class="widefat striped">
+                            <thead>
+                            <tr>
+                                <th><?php _e('Date', 'simple-membership') ?></th>
+                                <th><?php _e('Unique Login Count', 'simple-membership');?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+			                <?php $stats = array( array( 'Date', 'Count' ) );
+			                $count = 0;
+			                foreach ( $results as $result ) { ?>
+                                <tr>
+                                    <td>
+						                <?php echo date( SwpmReportsAdminMenu::get_date_format(), strtotime( $result->date ) ); ?>
+                                    </td>
+                                    <td>
+						                <?php echo $result->count; ?>
+						                <?php
+						                $stats[] = array( date( SwpmReportsAdminMenu::get_date_format(), strtotime( $result->date ) ), intval($result->count) );
+						                $count  += $result->count;
+						                ?>
+                                    </td>
+                                </tr>
+			                <?php } ?>
+                        </table>
+                        <div class="swpm_report_total_container">
+                            <p class="description">
+				                <?php echo __('Total login count: ', 'simple-membership') . $count; ?>
+                            </p>
+                        </div>
+	                <?php } ?>
+                </div>
+            </div>
+        </div>
+
+        <?php
+		return ob_get_clean();
+	}
+
+	public function render_member_login_count_by_date() {
+		global $wpdb;
+		$query   = "SELECT COUNT(member_id) AS count, DATE(event_date_time) as date 
+                FROM " . $wpdb->prefix . "swpm_events_tbl 
+                WHERE event_date_time > " . date( 'Y-m-d', mktime( 0, 0, 0, date( 'm' ) - 1, date( 'd' ), date( 'Y' ) ) ) . " 
+                GROUP BY DATE(event_date_time) 
+                ORDER BY DATE(event_date_time) DESC";
+		$results = $wpdb->get_results( $query );
+
+		ob_start();
+		?>
+        <div class="postbox">
+            <h3 class="hndle"><label for="title"><?php _e('Member Account Login Counts by Date', 'simple-membership');?></label></h3>
+            <div class="inside swpm-stats-container">
+                <div class="char-column" id="member-by-date"></div>
+                <div class="table-column">
+                    <p class="description">
+                        <?php _e('This table displays the number of total member logins by date over the past 30 days.', 'simple-membership');?>
+                    </p>
+                    <br>
+                    <?php if (empty($results)) {
+	                    echo __('No entries found!', 'simple-membership');
+                    } else { ?>
                     <table class="widefat striped">
                         <thead>
                         <tr>
-                            <th><?php _e('Date', 'simple-membership') ?>></th>
-                            <th><?php _e('Login Count', 'simple-membership');?></th>
+                            <th><?php _e('Date', 'simple-membership') ?></th>
+                            <th><?php _e('Total Login Count', 'simple-membership');?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -103,34 +169,12 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 							<?php echo __('Total login count: ', 'simple-membership') . $count; ?>
                         </p>
                     </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
 
-        <?php if (!empty($results)) { ?>
-        <!--<script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', function () {
-                google.load('visualization', '1', {packages: ['corechart', 'bar']});
-                google.setOnLoadCallback(function(){
-                    swpmRenderBarChart({
-                        mountPoint: 'member-by-date',
-                        stats: <?php /*echo json_encode( $stats ); */?>,
-                        options: {
-                            // title:  'Member Login in last 30 days',
-                            chartArea: {
-                                width: '90%',
-                                // height: '70%'
-                            },
-                            hAxis: {title: 'Date'},
-                            vAxis: {title: 'Count', minValue: 0},
-                            legend: {position: 'none'}
-                        }
-                    });
-                });
-            })
-        </script>-->
-		<?php
-		}
+        <?php
 		return ob_get_clean();
 	}
 
@@ -142,6 +186,8 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 		    $this->settings->set_value('enable_login_event_tracking', $enable_login_event_tracking);
 		    $this->settings->set_value('auto_prune_login_events', $auto_prune_login_events);
 		    $this->settings->save();
+
+            echo '<div class="notice notice-success"><p>'.__('Login event tracking settings updated.', 'simple-membership').'</p></div>';
 	    }
 
 	    $enable_login_event_tracking = $this->settings->get_value('enable_login_event_tracking');
@@ -161,7 +207,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
                         <tbody>
                         <tr>
                             <th>
-                                <label for="enable_login_event_tracking"><?php _e('Enable Login Event Tracking', 'simple-membership') ?></label>
+                                <label><?php _e('Enable Login Event Tracking', 'simple-membership') ?></label>
                             </th>
                             <td>
                                 <input id="enable_login_event_tracking" type="checkbox" name="enable_login_event_tracking" value="1" <?php esc_attr_e($enable_login_event_tracking) ?>>
@@ -172,7 +218,7 @@ class SWPM_Member_Logins_Report_Menu_Tab {
                         </tr>
                         <tr>
                             <th>
-                                <label for="auto_prune_login_events"><?php _e('Auto Prune Login Events', 'simple-membership') ?></label>
+                                <label><?php _e('Auto Prune Login Events', 'simple-membership') ?></label>
                             </th>
                             <td>
                                 <input id="auto_prune_login_events" type="checkbox" name="auto_prune_login_events" value="1" <?php esc_attr_e($auto_prune_login_events) ?>>
@@ -201,16 +247,16 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 
 	    $table = new SWPM_Login_Events_List_Table();
 
-	    if ( isset( $_REQUEST['sDate'] ) && !empty( $_REQUEST['sDate'] ) ){
-		    $table->set_start_date(sanitize_text_field($_REQUEST['sDate']));
+	    if ( isset( $_REQUEST['swpm_start_date'] ) && !empty( $_REQUEST['swpm_start_date'] ) ){
+		    $table->set_start_date(sanitize_text_field($_REQUEST['swpm_start_date']));
 	    }
 
-	    if ( isset( $_REQUEST['eDate'] ) && !empty( $_REQUEST['eDate'] ) ){
-		    $table->set_end_date(sanitize_text_field($_REQUEST['eDate']));
+	    if ( isset( $_REQUEST['swpm_end_date'] ) && !empty( $_REQUEST['swpm_end_date'] ) ){
+		    $table->set_end_date(sanitize_text_field($_REQUEST['swpm_end_date']));
 	    }
 
-	    if ( isset( $_REQUEST['s'] ) && !empty( $_REQUEST['s'] ) ){
-		    $table->set_search_text(sanitize_text_field($_REQUEST['s']));
+	    if ( isset( $_REQUEST['swpm_search'] ) && !empty( $_REQUEST['swpm_search'] ) ){
+		    $table->set_search_text(sanitize_text_field($_REQUEST['swpm_search']));
 	    }
 
         $table->prepare_items();

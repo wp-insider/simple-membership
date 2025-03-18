@@ -38,9 +38,12 @@ class SWPM_Membership_Level_Report_Menu_Tab {
             <h3 class="hndle">
                 <label for="title"><?php _e('Members by Membership Level', 'simple-membership');?></label>
             </h3>
+            <div class="char-column" id="member-by-level"></div>
             <div class="inside swpm-stats-container">
-                <div class="char-column" id="member-by-level"></div>
                 <div class="table-column">
+	                <?php if (empty($results)) {
+		                echo __('No entries found!', 'simple-membership');
+	                } else { ?>
                     <table class="widefat striped">
                         <thead>
                         <tr>
@@ -72,27 +75,28 @@ class SWPM_Membership_Level_Report_Menu_Tab {
 						    <?php echo __('Total members: ', 'simple-membership') . $count; ?>
                         </p>
                     </div>
+	                <?php } ?>
                 </div>
             </div>
         </div>
 
 	    <?php if (!empty($results)) { ?>
-    <!-- <script type="text/javascript">
+        <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function (){
                 google.load('visualization', '1.0', {'packages': ['corechart']});
                 google.setOnLoadCallback(function(){
                     swpmRenderPieChart({
-                        stats: <?php /*echo json_encode( $stats ); */?>,
+                        stats: <?php echo json_encode( $stats ); ?>,
                         mountPoint: 'member-by-level',
                         options: {
                             // 'title': 'Members by Membership Level',
-                            // 'width': 250,
+                            'width': 360,
                             // 'height': 150
                         }
                     })
                 });
             })
-        </script>-->
+        </script>
 	    <?php
 	    }
 	    return ob_get_clean();

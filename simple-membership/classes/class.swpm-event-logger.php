@@ -130,10 +130,13 @@ class SwpmEventLogger {
 		return $user_agent_data;
 	}
 
-	public static function prune_login_events($event_name, $before_date) {
+	public static function prune_events_db_table($event_name, $cuttoff_date) {
+		//Trigger a filter hook to allow other plugins to modify the cuttoff date.
+		$cuttoff_date = apply_filters('swpm_prune_events_db_table_cuttoff_date', $cuttoff_date, $event_name);
+		//Delete all the events that are older than the cuttoff date.
 		global $wpdb;
 		$table = $wpdb->prefix . 'swpm_events_tbl';
-		$query = $wpdb->prepare("DELETE FROM " . $table . " WHERE event_type = %s AND event_date_time < %s", $event_name, $before_date);
+		$query = $wpdb->prepare("DELETE FROM " . $table . " WHERE event_type = %s AND event_date_time < %s", $event_name, $cuttoff_date);
 		$wpdb->query($query);
 	}
 

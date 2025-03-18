@@ -17,9 +17,15 @@ class SwpmEventLogger {
 		global $wpdb;
 
 		$table = $wpdb->prefix . 'swpm_events_tbl';
-		$query = $wpdb->prepare('DELETE FROM ' . $table . ' WHERE event_type = %s', 'login_success');
-		$delete = $wpdb->query($query);
 
+		$count = $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . $table . ' WHERE event_type = %s', 'login_success'));
+		if ($count == 0){
+			wp_send_json_success(array(
+				'message' => __( 'No log entries exists!', 'simple-membership' ),
+			));
+		}
+
+		$delete = $wpdb->query($wpdb->prepare('DELETE FROM ' . $table . ' WHERE event_type = %s', 'login_success'));
 		if ( ! $delete ) {
 			wp_send_json_error( array(
 				'message' => __( 'Error: log entries could not be deleted!', 'simple-membership' ),

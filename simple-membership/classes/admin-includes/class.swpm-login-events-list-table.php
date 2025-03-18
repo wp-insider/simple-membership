@@ -12,6 +12,8 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 
     private $search;
 
+    private $per_page = 50;
+
 	public function __construct() {
 		parent::__construct([
 			'singular' => 'login event log',
@@ -67,13 +69,12 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 	public function prepare_items() {
 		$this->process_bulk_action();
 
-		$per_page = 50;
 		$current_page = $this->get_pagenum();
 		$this->total_count = $this->get_total_item_count();
 
-		$offset = ($current_page - 1) * $per_page;
+		$offset = ($current_page - 1) * $this->per_page;
 
-		$this->table_data = $this->get_table_data( $per_page, $offset );
+		$this->table_data = $this->get_table_data( $this->per_page, $offset );
 
 		$columns = $this->get_columns();
 		$hidden = array();
@@ -85,8 +86,8 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 
 		$this->set_pagination_args(array(
 			'total_items' => $this->total_count,
-			'per_page'    => $per_page,
-			'total_pages' => ceil( $this->total_count / $per_page )
+			'per_page'    => $this->per_page,
+			'total_pages' => ceil( $this->total_count / $this->per_page )
 		));
 
 		$this->items = $this->table_data;
@@ -219,42 +220,66 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 	}
 
 	public function display_filter_data_section() {
-        $search_btn_text = __('Filter', 'simple-membership');
         ?>
-        <div class="alignleft actions searchactions" style="display: flex; align-items: end; flex-wrap: wrap; margin-bottom: 18px">
+        <fieldset id="swpm-login-events-filter-fieldset" class="alignleft actions searchactions" style="display: flex; align-items: end; flex-wrap: wrap; margin-bottom: 18px">
             <div>
                 <label for="swpm_date_range_start"><?php _e('Start Date', 'simple-membership') ?></label>
                 <br>
-                <input type="date" name="start_date" id="swpm_date_range_start" value="<?php esc_attr_e(date('Y-m-d', strtotime($this->start_date)));?>">
+                <input type="date" name="sDate" id="swpm_date_range_start" value="<?php esc_attr_e(date('Y-m-d', strtotime($this->start_date)));?>">
             </div>
 
             <div>
                 <label for="swpm_date_range_end"><?php _e('End Date', 'simple-membership') ?></label>
                 <br>
-                <input type="date" name="end_date" id="swpm_date_range_end" value="<?php esc_attr_e(date('Y-m-d', strtotime($this->end_date)));?>">
+                <input type="date" name="eDate" id="swpm_date_range_end" value="<?php esc_attr_e(date('Y-m-d', strtotime($this->end_date)));?>">
             </div>
 
             <div>
-                <label for="swpm-search-input"><?php esc_attr_e($search_btn_text) ?>:</label>
+                <label for="swpm-search-input"><?php _e('Search', 'simple-membership') ?>:</label>
                 <br>
                 <input type="search" id="swpm-search-input" name="s" value="<?php _admin_search_query(); ?>"/>
             </div>
 
-            <?php submit_button( $search_btn_text, '', '', false, array( 'id' => 'search-submit' ) ); ?>
-        </div>
+            <button class="button-secondary" type="submit" id="swpm-login-events-filter-submit">
+                <?php _e('Apply Filter', 'simple-membership')?>
+            </button>
+        </fieldset>
 
+        <script>
+            document.addEventListener("DOMContentLoaded", function (){
+                const submitBtn = document.getElementById('swpm-login-events-filter-submit');
+                const fieldset = document.getElementById('swpm-login-events-filter-fieldset');
+                const fields = fieldset?.querySelectorAll('input');
+
+                submitBtn?.addEventListener('click', function (e){
+                    e.preventDefault();
+
+                    const currentURL = new URL(window.location.href);
+
+                    fields.forEach(input => {
+                        const inputValue = input.value.trim();
+
+                        if (inputValue.length){
+                            currentURL.searchParams.set(input.name, inputValue) // Append query arg.
+                        }else{
+                            currentURL.searchParams.delete(input.name) // Remove existing empty query args.
+                        }
+
+                        currentURL.searchParams.delete('paged') // Always remove the pagination args when filter is applied.
+                    });
+
+                    window.location.replace(currentURL);
+                })
+            })
+        </script>
         <?php
 	}
 
     public function display_reset_logs_section(){
         ?>
         <div>
-            <button
-                    type="button"
-                    id="swpm-reset-login-event-logs"
-                    class="button"
-            >
-			    <?php _e('Reset Log Entries', 'simple-membership') ?>
+            <button type="button" id="swpm-reset-login-event-logs" class="button">
+                <?php _e('Reset All Log Entries', 'simple-membership') ?>
             </button>
             <p class="description">
                 <?php _e('This button will reset all log entries. It can useful if you want to delete all your log entries', 'simple-membership') ?>
@@ -282,7 +307,6 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
                         })
 
                         const result = await response.json();
-                        console.log(result);
 
                         if (!result.success) {
                             throw new Error(result.data.message);

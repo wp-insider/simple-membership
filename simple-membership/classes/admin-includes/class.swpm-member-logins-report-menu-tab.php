@@ -195,12 +195,12 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 
 	    $table = new SWPM_Login_Events_List_Table();
 
-	    if ( isset( $_REQUEST['start_date'] ) && !empty( $_REQUEST['start_date'] ) ){
-		    $table->set_start_date(sanitize_text_field($_REQUEST['start_date']));
+	    if ( isset( $_REQUEST['sDate'] ) && !empty( $_REQUEST['sDate'] ) ){
+		    $table->set_start_date(sanitize_text_field($_REQUEST['sDate']));
 	    }
 
-	    if ( isset( $_REQUEST['end_date'] ) && !empty( $_REQUEST['end_date'] ) ){
-		    $table->set_end_date(sanitize_text_field($_REQUEST['end_date']));
+	    if ( isset( $_REQUEST['eDate'] ) && !empty( $_REQUEST['eDate'] ) ){
+		    $table->set_end_date(sanitize_text_field($_REQUEST['eDate']));
 	    }
 
 	    if ( isset( $_REQUEST['s'] ) && !empty( $_REQUEST['s'] ) ){

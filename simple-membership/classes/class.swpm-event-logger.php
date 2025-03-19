@@ -81,22 +81,34 @@ class SwpmEventLogger {
 		}
 
 		$browserArray = array(
+			'Aloha Browser' => 'AlohaBrowser',
+			'Yandex Browser' => 'YaBrowser',
 			'Microsoft Edge' => 'Edg',
-			'Opera' => '(OPR)|(OPX)',
+			'Opera' => array('OPR', 'OPX', 'OPT'),
 			'Vivaldi' => 'Vivaldi',
-			'Firefox' => 'Firefox',
+			'Firefox' => array('Firefox', 'FxiOS'),
 			"Samsung Browser" => 'SamsungBrowser',
-			'Chrome' => 'Chrome',
+			'Chrome' => array('Chrome', 'CriOS'),
 			'Internet Explorer' => 'MSIE',
-			'Safari' => 'Safari'
+			'DuckDuckGo' => 'Ddg',
+			'Safari' => 'Safari',
 		);
 
 		$user_agent_data['browser'] = "Other";
 
-		foreach ($browserArray as $k => $v) {
-			if (preg_match("/$v/", $agent)) {
-				$user_agent_data['browser'] = $k;
-				break;
+		foreach ($browserArray as $k => $V) {
+			if (is_array($V)){
+				foreach ($V as $v){
+					if (preg_match("/$v/", $agent)) {
+						$user_agent_data['browser'] = $k;
+						break 2;
+					}
+				}
+			} else {
+				if (preg_match("/$V/", $agent)) {
+					$user_agent_data['browser'] = $k;
+					break;
+				}
 			}
 		}
 

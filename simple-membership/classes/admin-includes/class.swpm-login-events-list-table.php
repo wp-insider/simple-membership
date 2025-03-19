@@ -37,12 +37,13 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 
 	public function get_columns() {
 		return [
-			'cb' => '<input type="checkbox" />',
-			'event_id' => __('Event ID', 'simple-membership'),
-			'member' => __('Member', 'simple-membership'),
-			'event_date_time' => __( 'Date', 'simple-membership'),
-			'ip_address' => __('IP Address', 'simple-membership'),
-			// 'browser' => __('Browser', 'simple-membership')
+            'cb' => '<input type="checkbox" />',
+            'event_id' => __('Event ID', 'simple-membership'),
+            'member' => __('Member', 'simple-membership'),
+            'event_date_time' => __( 'Date', 'simple-membership'),
+            'ip_address' => __('IP Address', 'simple-membership'),
+            'browser' => __('Browser', 'simple-membership'),
+            'platform' => __('Platform ', 'simple-membership'),
 		];
 	}
 
@@ -62,9 +63,17 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 		return date(SwpmReportsAdminMenu::get_date_format() . ' \a\t ' . SwpmReportsAdminMenu::get_time_format(), strtotime($item['event_date_time']));
 	}
 
-	//public function column_browser($item){
-	//    echo print_r(maybe_unserialize($item['user_agent']), true);
-	//}
+	public function column_browser($item){
+	    $user_agent = maybe_unserialize($item['user_agent']);
+
+        echo isset($user_agent['browser']) ? esc_attr($user_agent['browser']) : '-';
+	}
+
+	public function column_platform($item){
+		$user_agent = maybe_unserialize($item['user_agent']);
+
+		echo isset($user_agent['platform']) ? esc_attr($user_agent['platform']) : '-';
+	}
 
 	public function prepare_items() {
 		$this->process_bulk_action();

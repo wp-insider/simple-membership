@@ -177,12 +177,13 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
+- Added a new Reports menu to display various membership-related statistics and reports.
+- Added a new DB table for storing the member's login history.
 - Added a new filter hook 'swpm_replace_dynamic_tags' to allow addons to replace dynamic tags in the email notification.
 - Renamed the function "email_activation()" to "handle_email_activation()" for clarity.
 - Fixed a translation issue in the account delete feature's confirmation message.
 - Added debug logging statements in the calculate_access_start_date_for_account_update() function.
-- Added a new Reports menu to display various membership-related statistics and reports.
-- Added a new DB table for storing the member's login history.
+- Updated the admin menu page title to maintain consistency with other menu items.
 
 = 4.6.1 =
 - This release primarily includes optimizations and enhancements for the user login process with the 'Remember Me' option.

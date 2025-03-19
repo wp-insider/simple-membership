@@ -1599,7 +1599,7 @@ class SwpmSettings {
 		?>
 		<div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-			<h1><?php echo SwpmUtils::_( 'Simple WP Membership::Settings' ); ?></h1><!-- page title -->
+			<h1><?php _e( 'Settings' ); ?></h1><!-- page title -->
 
 			<!-- start nav menu tabs -->
 			<?php do_action( 'swpm-draw-settings-nav-tabs' ); ?>

@@ -20,7 +20,7 @@ class SwpmPaymentsAdminMenu {
 
         <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-            <h1><?php echo SwpmUtils::_('Simple Membership::Payments') ?></h1><!-- page title -->
+            <h1><?php _e('Payments') ?></h1><!-- page title -->
 
             <!-- start nav menu tabs -->
             <h2 class="nav-tab-wrapper">

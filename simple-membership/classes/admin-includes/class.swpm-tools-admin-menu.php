@@ -18,7 +18,7 @@ class SwpmToolsAdminMenu {
 		?>
         <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-        <h1><?php _e( 'Simple Membership Tools' , 'simple-membership') ?></h1><!-- page title -->
+        <h1><?php _e( 'Tools' , 'simple-membership') ?></h1><!-- page title -->
 
         <!-- start nav menu tabs -->
         <h2 class="nav-tab-wrapper">

@@ -269,7 +269,7 @@ class SwpmMembershipLevels extends WP_List_Table {
         <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
         <!-- page title -->
-        <h1><?php echo  SwpmUtils::_('Simple WP Membership::Membership Levels') ?></h1>
+        <h1><?php _e('Membership Levels') ?></h1>
 
         <!-- start nav menu tabs -->
         <h2 class="nav-tab-wrapper">

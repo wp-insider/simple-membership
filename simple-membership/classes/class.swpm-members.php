@@ -1029,7 +1029,7 @@ class SwpmMembers extends WP_List_Table {
 		?>
 		<div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-		<h1><?php echo SwpmUtils::_('Simple WP Membership::Members'); ?><!-- page title -->
+		<h1><?php _e('Members'); ?><!-- page title -->
 			<a href="admin.php?page=simple_wp_membership&member_action=add"
 			   class="add-new-h2"><?php echo SwpmUtils::_('Add New'); ?></a>
 		</h1>

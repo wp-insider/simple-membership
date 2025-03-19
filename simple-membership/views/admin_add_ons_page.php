@@ -8,7 +8,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
 ?>
 
 <div class="wrap">
-    <h1><?php echo SwpmUtils::_('Simple WP Membership::Add-ons') ?></h1>
+    <h1><?php _e('Add-ons / Extensions') ?></h1>
 
     <div id="poststuff"><div id="post-body">
 

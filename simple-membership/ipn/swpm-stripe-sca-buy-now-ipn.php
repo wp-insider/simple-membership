@@ -14,7 +14,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 		//SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 
 		// Read and sanitize the request parameters.
-		$ref_id = isset( $_GET['ref_id'] ) ? sanitize_text_field( stripslashes ( $_GET['ref_id'] ) ) : '';
+		$ref_id = isset( $_GET['ref_id'] ) ? sanitize_text_field( stripslashes( $_GET['ref_id'] ) ) : '';
 
 		if ( empty( $ref_id ) ) {
 			//no ref id provided, cannot proceed
@@ -35,11 +35,11 @@ class SwpmStripeSCABuyNowIpnHandler {
 		}
 
 		//Initialize the discount amount variables to 0. These will be used to set and calculate values (if discount was applied to this transaction).
-		$discount_amount = 0;
+		$discount_amount          = 0;
 		$discount_amount_in_cents = 0;
 
 		// Check if the sandbox mode is enabled
-		$settings = SwpmSettings::get_instance();
+		$settings        = SwpmSettings::get_instance();
 		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
 
 		//API keys
@@ -79,14 +79,35 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 			$pi_id = $sess->payment_intent;
 
-			$pi = \Stripe\PaymentIntent::retrieve( $pi_id );
+			$is_full_discount = false;
 
 			// Check if any coupon/promo code was applied
-			if ($sess instanceof \Stripe\Checkout\Session && isset($sess->allow_promotion_codes) && $sess->allow_promotion_codes == '1') {
-				if (isset($sess->total_details) && isset($sess->total_details->amount_discount)) {
-					$discount_amount_in_cents = floatval($sess->total_details->amount_discount);
+			if ( $sess instanceof \Stripe\Checkout\Session && isset( $sess->allow_promotion_codes ) && $sess->allow_promotion_codes == '1' ) {
+				if ( isset( $sess->total_details ) && isset( $sess->total_details->amount_discount ) ) {
+					$discount_amount_in_cents = floatval( $sess->total_details->amount_discount );
 					SwpmLog::log_simple_debug( 'Discount amount (in cents) applied to this Stripe checkout session is: ' . $discount_amount_in_cents . ' (amount in cents).', true );
 				}
+				if ( $sess->amount_total == 0 ) {
+					// First check if it is a valid full discount checkout or not.
+					// This is to prevent forgery.
+					$session_object = \Stripe\Checkout\Session::retrieve($sess->id);
+					if ( ! $session_object){
+						throw new Exception('Invalid Session ID.');
+					}
+
+					// Session ID validation successful.
+					$is_full_discount = true;
+				}
+			}
+
+			$pi = null;
+			if ( $is_full_discount ) {
+				// Mimicking payment intent object because for full discount no pi object gets created.
+				$pi = new stdClass();
+				$pi->amount_received = $sess->amount_total;
+				$pi->currency = $sess->currency;
+			} else {
+				$pi = \Stripe\PaymentIntent::retrieve( $pi_id );
 			}
 
 		} catch ( Exception $e ) {
@@ -95,8 +116,25 @@ class SwpmStripeSCABuyNowIpnHandler {
 			wp_die( esc_html( $error_msg ) );
 		}
 
+
+		if ($is_full_discount) {
+			// Mimicking charge object because for full discount no charge object gets created.
+			$charge = new stdClass();
+			$charge->billing_details = new stdClass();
+			$charge->billing_details->email = isset($sess->customer_details->email) ? $sess->customer_details->email : '';
+			$charge->billing_details->name = isset($sess->customer_details->name) ? $sess->customer_details->name : '';
+
+			if (empty($charge->billing_details->name)){
+				// if name is empty, try to get the username form email address.
+				$email_parts = explode('@', $sess->customer_details->email);
+				$charge->billing_details->name = sanitize_text_field($email_parts[0]);
+			}
+
+			$charge->billing_details->address = isset($sess->customer_details->address) ? $sess->customer_details->address : array();
+			$charge_id = 'free_' . hash('md5', $sess->id); // custom charge_id.
+
 		//Get the charge object based on the Stripe API version used in the payment intents object.
-		if( isset ( $pi->latest_charge ) ){
+		} else if ( isset ( $pi->latest_charge ) ){
 			//Using the new Stripe API version 2022-11-15 or later
 			SwpmLog::log_simple_debug( 'Using the Stripe API version 2025-02-24.acacia or later for Payment Intents object. Need to retrieve the charge object.', true );
 			$charge_id = $pi->latest_charge;

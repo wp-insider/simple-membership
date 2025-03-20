@@ -130,8 +130,7 @@ class SwpmStripeCheckoutSessionCreate{
 
 		try {
 			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
-			\Stripe\Stripe::setApiVersion("2022-08-01");
-
+			\Stripe\Stripe::setApiVersion("2025-02-24.acacia");
 			if ( empty( $plan_id ) ) {
 				//this is one-off payment
 				$opts = array(

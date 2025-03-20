@@ -98,7 +98,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 		//Get the charge object based on the Stripe API version used in the payment intents object.
 		if( isset ( $pi->latest_charge ) ){
 			//Using the new Stripe API version 2022-11-15 or later
-			SwpmLog::log_simple_debug( 'Using the Stripe API version 2022-11-15 or later for Payment Intents object. Need to retrieve the charge object.', true );
+			SwpmLog::log_simple_debug( 'Using the Stripe API version 2025-02-24.acacia or later for Payment Intents object. Need to retrieve the charge object.', true );
 			$charge_id = $pi->latest_charge;
 			//For Stripe API version 2022-11-15 or later, the charge object is not included in the payment intents object. It needs to be retrieved using the charge ID.
 			try {

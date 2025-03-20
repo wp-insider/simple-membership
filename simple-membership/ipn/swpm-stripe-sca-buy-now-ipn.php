@@ -131,7 +131,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 			}
 
 			$charge->billing_details->address = isset($sess->customer_details->address) ? $sess->customer_details->address : array();
-			$charge_id = 'ch_free_' . hash('md5', $sess->id); // custom charge_id.
+			$charge_id = 'free_' . hash('md5', $sess->id); // custom charge_id.
 
 		//Get the charge object based on the Stripe API version used in the payment intents object.
 		} else if ( isset ( $pi->latest_charge ) ){

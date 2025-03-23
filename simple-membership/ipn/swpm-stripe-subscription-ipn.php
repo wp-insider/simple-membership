@@ -33,6 +33,20 @@ class SwpmStripeSubscriptionIpnHandler {
 			// SwpmLog::log_simple_debug($input, true);
 			$event_json = json_decode( $input );
 
+			// Check if webhook event data needs to be validated.
+			$webhook_signing_secret = SwpmSettings::get_instance()->get_value( 'stripe-webhook-signing-secret' );
+			if (!empty($webhook_signing_secret)){
+				SwpmLog::log_simple_debug( 'Stripe webhook signing secret is configured. Validating this webhook event...', true );
+				$event_json = $this->validate_webhook_data($input);
+				if (empty($event_json)){
+					http_response_code(400);
+					echo 'Error: Invalid webhook data received.';
+					exit();
+				} else {
+					SwpmLog::log_simple_debug( 'Webhook event data validated successfully!', true );
+				}
+			}
+
 			$type = $event_json->type;
 			SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received: %s. Checking if we need to handle this webhook.', $type ), true );
 
@@ -121,6 +135,16 @@ class SwpmStripeSubscriptionIpnHandler {
 									$membership_level_id = '';
 					}
 
+					$txn_id = $event_json->data->object->charge;
+
+					// Handle if it's a 100% discount. Charge id is not available for this case.
+					if ( empty( $txn_id ) ){
+						if ( isset($event_json->data->object->discount->coupon->percent_off) && ($event_json->data->object->discount->coupon->percent_off == 100) ){
+							// create dummy txn id.
+							$txn_id = "free_sub_" . hash("md5", $sub_id);
+						}
+					}
+
 					//Create the custom field
 					$custom_field_value  = 'subsc_ref=' . $membership_level_id;
 					$custom_field_value .= '&swpm_id=' . $member_id;
@@ -132,7 +156,7 @@ class SwpmStripeSubscriptionIpnHandler {
 					$ipn_data['last_name']        = $last_name;
 					$ipn_data['payer_email']      = $event_json->data->object->customer_email;
 					$ipn_data['membership_level'] = $membership_level_id;
-					$ipn_data['txn_id']           = $event_json->data->object->charge;
+					$ipn_data['txn_id']           = $txn_id;
 					$ipn_data['subscr_id']        = $sub_id;
 					$ipn_data['swpm_id']          = $member_id;
 					$ipn_data['ip']               = '';
@@ -287,6 +311,48 @@ class SwpmStripeSubscriptionIpnHandler {
 		SwpmLog::log_simple_debug( 'Redirecting customer to: ' . $return_url, true );
 		SwpmLog::log_simple_debug( 'End of Stripe subscription IPN processing.', true, true );
 		SwpmMiscUtils::redirect_to_url( $return_url );
+	}
+
+	public function validate_webhook_data( $event_data_raw ){
+		$event_json = json_decode( $event_data_raw );
+
+		$sub_id = $event_json->data->object->subscription;
+
+		$sub_agreement_cpt_id = SWPM_Utils_Subscriptions::get_subscription_agreement_cpt_id_by_subs_id($sub_id);;
+
+		// Check if the sandbox mode is enabled
+		$sandbox_enabled = SwpmSettings::get_instance()->get_value( 'enable-sandbox-testing' );
+		$webhook_signing_secret = SwpmSettings::get_instance()->get_value( 'stripe-webhook-signing-secret' );
+
+		$payment_button_id = get_post_meta($sub_agreement_cpt_id, 'payment_button_id', true);
+
+		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $payment_button_id, !$sandbox_enabled );
+
+		if (!isset($api_keys['secret'])){
+			SwpmLog::log_simple_debug('Stripe API secret key could not be retrieved. Could not validate this webhook.', false);
+			return false;
+		}
+
+		// Include the Stripe library.
+		SwpmMiscUtils::load_stripe_lib();
+
+		\Stripe\Stripe::setApiKey( $api_keys['secret'] );
+
+		$stripe_signature_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
+
+		try {
+			$event_json = \Stripe\Webhook::constructEvent($event_data_raw, $stripe_signature_header, $webhook_signing_secret);
+		} catch(\UnexpectedValueException $e) {
+			// Invalid payload. Don't Process this request.
+			SwpmLog::log_simple_debug('Error parsing payload: ' . $e->getMessage() , false);
+			return false;
+		} catch(\Stripe\Exception\SignatureVerificationException $e) {
+			// Invalid signature. Don't Process this request.
+			SwpmLog::log_simple_debug('Error verifying webhook signature: ' . $e->getMessage() , false);
+			return false;
+		}
+
+		return $event_json;
 	}
 
 }

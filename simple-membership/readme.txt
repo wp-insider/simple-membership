@@ -186,6 +186,7 @@ https://simple-membership-plugin.com/
 - Updated the admin menu page title to maintain consistency with other menu items.
 - Stripe API version updated.
 - Full discount support added.
+- New option added to validate subscription webhook event.
 
 = 4.6.1 =
 - This release primarily includes optimizations and enhancements for the user login process with the 'Remember Me' option.

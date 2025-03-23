@@ -137,6 +137,7 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->set_value('stripe-test-secret-key' ,( isset($_POST['stripe-test-secret-key']) ? sanitize_text_field($_POST['stripe-test-secret-key']) : ''));
             $settings->set_value('stripe-live-public-key' ,( isset($_POST['stripe-live-public-key']) ? sanitize_text_field($_POST['stripe-live-public-key']) : ''));
             $settings->set_value('stripe-live-secret-key' ,( isset($_POST['stripe-live-secret-key']) ? sanitize_text_field($_POST['stripe-live-secret-key']) : ''));
+            $settings->set_value('stripe-webhook-signing-secret' ,( isset($_POST['stripe-webhook-signing-secret']) ? sanitize_text_field($_POST['stripe-webhook-signing-secret']) : ''));
 
             $settings->save();
             echo '<div class="notice notice-success"><p>' . __('Stripe settings updated successfully.', 'simple-membership') . '</p></div>';
@@ -241,7 +242,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 
         <!-- Paypal Settings postbox -->
         <div class="postbox">
-            <h2><?php _e("PayPal API Credentials", 'simple-membership'); ?></h3>
+            <h3><?php _e("PayPal API Credentials", 'simple-membership'); ?></h3>
             <div class="inside">
                 <p>
                     <?php 	
@@ -446,6 +447,7 @@ class SWPM_Payment_Settings_Menu_Tab {
         $stripe_test_secret_key = $settings->get_value( 'stripe-test-secret-key' );
         $stripe_live_public_key = $settings->get_value( 'stripe-live-public-key' );
         $stripe_live_secret_key = $settings->get_value( 'stripe-live-secret-key' );
+	    $stripe_webhook_signing_secret_key = $settings->get_value( 'stripe-webhook-signing-secret' );
         ?>
         <!-- Stripe Settings postbox -->
         <div class="postbox">
@@ -518,6 +520,19 @@ class SWPM_Payment_Settings_Menu_Tab {
                                 <input type="text" name="stripe-live-secret-key" size="100" value="<?php echo $stripe_live_secret_key; ?>">
                                 <p class="description">
                                     <?php _e('Stripe API Live secret key', 'simple-membership'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label>
+				                    <?php _e('Webhook Signing Secret Key', 'simple-membership'); ?>
+                                </label>
+                            </th>
+                            <td>
+                                <input type="text" name="stripe-webhook-signing-secret" size="100" value="<?php echo $stripe_webhook_signing_secret_key; ?>">
+                                <p class="description">
+				                    <?php _e('Enter a webhook signing secret key to apply webhook event protection.', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>

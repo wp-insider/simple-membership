@@ -109,6 +109,7 @@ You can create a free forum user account and ask your questions.
 * Option to configure whitelisting for user email addresses to allow registration only from specific email addresses or email domains.
 * Option to configure blacklisting for user email addresses to block registration from certain email addresses or email domains.
 * Allows you to set an active login limit for members, helping to prevent account sharing.
+* Option to enable login event tracking, allowing you to view the history of member logins.
 * Option to reset the settings and data of the plugin to start fresh.
 * Option to configure PayPal payment buttons for memberships (one-time and recurring payments).
 * Option to configure Stripe payment buttons for memberships (one-time and recurring payments).

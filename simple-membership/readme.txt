@@ -184,9 +184,9 @@ https://simple-membership-plugin.com/
 - Fixed a translation issue in the account delete feature's confirmation message.
 - Added debug logging statements in the calculate_access_start_date_for_account_update() function.
 - Updated the admin menu page title to maintain consistency with other menu items.
-- Stripe API version updated.
-- Full discount support added.
-- New option added to validate subscription webhook event.
+- Stripe API version updated to the latest version. 
+- New option added for Stripe webhook event verification.
+- Added support for Stripe's 100% discount code feature.
 
 = 4.6.1 =
 - This release primarily includes optimizations and enhancements for the user login process with the 'Remember Me' option.

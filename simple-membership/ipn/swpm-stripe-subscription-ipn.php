@@ -39,11 +39,12 @@ class SwpmStripeSubscriptionIpnHandler {
 				SwpmLog::log_simple_debug( 'Stripe webhook signing secret is configured. Validating this webhook event...', true );
 				$event_json = $this->validate_webhook_data($input);
 				if (empty($event_json)){
+					//Invalid webhook data received. Don't process this request.
 					http_response_code(400);
 					echo 'Error: Invalid webhook data received.';
 					exit();
 				} else {
-					SwpmLog::log_simple_debug( 'Webhook event data validated successfully!', true );
+					SwpmLog::log_simple_debug( 'Stripe webhook event data validated successfully!', true );
 				}
 			}
 
@@ -103,9 +104,9 @@ class SwpmStripeSubscriptionIpnHandler {
 
 					$zero_cents = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
 					if ( in_array( $currency_code, $zero_cents, true ) ) {
-							$payment_amount = $price_in_cents;
+						$payment_amount = $price_in_cents;
 					} else {
-							$payment_amount = $price_in_cents / 100;// The amount (in cents). This value is used in Stripe API.
+						$payment_amount = $price_in_cents / 100;// The amount (in cents). This value is used in Stripe API.
 					}
 					$payment_amount = floatval( $payment_amount );
 
@@ -120,9 +121,9 @@ class SwpmStripeSubscriptionIpnHandler {
 					//Retrieve the member record for this subscription
 					$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $sub_id );
 					if ( $member_record ) {
-									// Found a member record
-									$member_id           = $member_record->member_id;
-									$membership_level_id = $member_record->membership_level;
+							// Found a member record
+							$member_id           = $member_record->member_id;
+							$membership_level_id = $member_record->membership_level;
 						if ( empty( $first_name ) ) {
 							$first_name = $member_record->first_name;
 						}
@@ -130,12 +131,16 @@ class SwpmStripeSubscriptionIpnHandler {
 							$last_name = $member_record->last_name;
 						}
 					} else {
-									SwpmLog::log_simple_debug( 'Could not find an existing member record for the given subscriber ID: ' . $sub_id . '. This user profile may have been deleted.', false );
-									$member_id           = '';
-									$membership_level_id = '';
+						SwpmLog::log_simple_debug( 'Could not find an existing member record for the given subscriber ID: ' . $sub_id . '. This user profile may have been deleted.', false );
+						$member_id           = '';
+						$membership_level_id = '';
 					}
 
-					$txn_id = $event_json->data->object->charge;
+					// Retrieve the customer's email address.
+					$customer_email = isset($event_json->data->object->customer_email) ? $event_json->data->object->customer_email : '';
+					
+					// Retrieve the transaction ID (Charge ID) for this payment.
+					$txn_id = isset($event_json->data->object->charge) ? $event_json->data->object->charge : '';
 
 					// Handle if it's a 100% discount. Charge id is not available for this case.
 					if ( empty( $txn_id ) ){
@@ -154,7 +159,7 @@ class SwpmStripeSubscriptionIpnHandler {
 					$ipn_data['mc_gross']         = $payment_amount;
 					$ipn_data['first_name']       = $first_name;
 					$ipn_data['last_name']        = $last_name;
-					$ipn_data['payer_email']      = $event_json->data->object->customer_email;
+					$ipn_data['payer_email']      = $customer_email;
 					$ipn_data['membership_level'] = $membership_level_id;
 					$ipn_data['txn_id']           = $txn_id;
 					$ipn_data['subscr_id']        = $sub_id;

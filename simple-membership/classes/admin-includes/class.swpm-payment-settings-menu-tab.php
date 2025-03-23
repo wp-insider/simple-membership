@@ -242,7 +242,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 
         <!-- Paypal Settings postbox -->
         <div class="postbox">
-            <h3><?php _e("PayPal API Credentials", 'simple-membership'); ?></h3>
+            <h2><?php _e("PayPal API Credentials", 'simple-membership'); ?></h2>
             <div class="inside">
                 <p>
                     <?php 	
@@ -526,7 +526,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-				                    <?php _e('Webhook Signing Secret Key', 'simple-membership'); ?>
+				                    <?php _e('Webhook Signing Secret Key (Optional)', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.6.1
+Stable tag: 4.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,7 +176,7 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
-= WIP =
+= 4.6.2 =
 - Added a new Reports menu to display various membership-related statistics and reports.
 - Added a new DB table for storing the member's login history.
 - Added a new filter hook 'swpm_replace_dynamic_tags' to allow addons to replace dynamic tags in the email notification.
@@ -184,9 +184,9 @@ https://simple-membership-plugin.com/
 - Fixed a translation issue in the account delete feature's confirmation message.
 - Added debug logging statements in the calculate_access_start_date_for_account_update() function.
 - Updated the admin menu page title to maintain consistency with other menu items.
-- Stripe API version updated to the latest version. 
 - New option added for Stripe webhook event verification.
 - Added support for Stripe's 100% discount code feature.
+- Stripe API version updated to the latest version. 
 
 = 4.6.1 =
 - This release primarily includes optimizations and enhancements for the user login process with the 'Remember Me' option.

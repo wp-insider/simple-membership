@@ -177,6 +177,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- New feature added to set default content protection settings.
+
 = 4.6.2 =
 - Added a new Reports menu to display various membership-related statistics and reports.
 - Added a new DB table for storing the member's login history.

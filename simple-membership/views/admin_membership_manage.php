@@ -1,3 +1,28 @@
+<?php
+
+$settings = SwpmSettings::get_instance();
+
+if ( isset( $_POST['default_content_protection_form_submit'] ) && check_admin_referer('default_content_protection_form_nonce')){
+
+    $enable_default_content_protection = isset($_POST['enable_default_content_protection']) ? 'checked="checked"': '';
+
+    $default_protect_this_content = isset($_POST['default_protect_this_content']) && sanitize_text_field($_POST['default_protect_this_content']) == 2 ? true : false;
+    $default_protection_membership_levels = isset($_POST['default_protection_membership_levels']) ? array_map('sanitize_text_field', $_POST['default_protection_membership_levels']) : array();
+
+    $settings->set_value('enable_default_content_protection', $enable_default_content_protection);
+
+    $settings->set_value('default_protect_this_content', $default_protect_this_content);
+    $settings->set_value('default_protection_membership_levels', $default_protection_membership_levels);
+    $settings->save();
+
+    echo '<div class="notice notice-success"><p>'. __('Default Content Protection Settings Updated.', 'simple-membership') .'</p></div>';
+}
+
+$enable_default_content_protection = $settings->get_value('enable_default_content_protection', false);
+
+$default_protect_this_content = $settings->get_value('default_protect_this_content', false);
+$default_protection_membership_levels = $settings->get_value('default_protection_membership_levels', array());
+?>
 
 <div id="poststuff"><div id="post-body">
 
@@ -20,4 +45,61 @@
 
         <img src="<?php echo SIMPLE_WP_MEMBERSHIP_URL . '/images/simple-membership-content-protection-usage.png'; ?>" alt="Content protection example usage">
 
-    </div></div><!-- end of poststuff and post-body -->
+    </div>
+
+    <br>
+    <div>
+        <h3><?php _e('Default Content Protection Settings', 'simple-membership') ?></h3>
+
+        <form action="" method="post">
+            <table class="form-table">
+                <tbody>
+                <tr>
+                    <th>
+                        <label><?php _e('Enable Default Content Protection', 'simple-membership') ?></label>
+                    </th>
+                    <td>
+                        <input
+                                type="checkbox"
+                                name="enable_default_content_protection"
+                                id="enable_default_content_protection"
+                            <?php esc_attr_e($enable_default_content_protection) ?>
+                        >
+                        <p class="description">
+                            <?php _e('Check this to enable default content protection for new posts and pages.', 'simple-membership') ?>
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div>
+                <h3><?php _e('Default Content Protection Template', 'simple-membership') ?></h3>
+
+                <h4><?php _e("Do you want to protect this content?", 'simple-membership') ?></h4>
+                <input type="radio" <?php echo !$default_protect_this_content ? 'checked' : "" ?>  name="default_protect_this_content" value="1" /><?php _e('No, Do not protect this content.', 'simple-membership') ?><br/>
+                <input type="radio" <?php echo $default_protect_this_content ? 'checked' : "" ?>  name="default_protect_this_content" value="2" /><?php _e('Yes, Protect this content.', 'simple-membership') ?><br/>
+                <h4><?php _e("Select the membership level that can access this content:", 'simple-membership') ?></h4>
+
+                <?php
+                $membership_levels = SwpmMembershipLevelUtils::get_all_membership_levels_in_array();
+
+                foreach ($membership_levels as $level_id => $level_alias) {
+	                $is_checked = in_array($level_id, $default_protection_membership_levels);
+
+	                echo '<input type="checkbox" ' . ($is_checked ? "checked='checked'" : "") .
+	                     ' name="default_protection_membership_levels[' . $level_id . ']" value="' . $level_id . '" /> ' . $level_alias . "<br/>";
+                }
+
+                ?>
+            </div>
+
+            <?php echo wp_nonce_field('default_content_protection_form_nonce'); ?>
+
+            <p class="submit">
+                <input type="submit" class="button-p rimary " name="default_content_protection_form_submit"  value="<?php _e('Save Changes', 'simple-membership') ?>">
+            </p>
+        </form>
+    </div>
+
+</div><!-- end of poststuff and post-body -->

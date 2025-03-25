@@ -29,7 +29,7 @@ $default_protection_membership_levels = $settings->get_value('default_protection
         <div class="swpm-yellow-box">
             <?php _e('Read the ', 'simple-membership'); ?> <a href="https://simple-membership-plugin.com/apply-content-protection/" target="_blank"><?php _e('content protection documentation', 'simple-membership'); ?></a> <?php _e('to learn more.', 'simple-membership'); ?>
         </div>
-        <h1><?php _e('How to Apply Content Protection', 'simple-membership'); ?></h1>
+        <h3><?php _e('How to Apply Content Protection', 'simple-membership'); ?></h3>
 
         <p><?php _e('Take the following steps to apply protection to your content so only members can have access to it.', 'simple-membership'); ?></p>
 
@@ -66,7 +66,7 @@ $default_protection_membership_levels = $settings->get_value('default_protection
                             <?php esc_attr_e($enable_default_content_protection) ?>
                         >
                         <p class="description">
-                            <?php _e('Check this to enable default content protection for new posts and pages.', 'simple-membership') ?>
+                            <?php _e('When creating a new post or page, the content protection settings will be pre-filled based on the default protection template you set below.', 'simple-membership') ?>
                         </p>
                     </td>
                 </tr>
@@ -97,7 +97,7 @@ $default_protection_membership_levels = $settings->get_value('default_protection
             <?php echo wp_nonce_field('default_content_protection_form_nonce'); ?>
 
             <p class="submit">
-                <input type="submit" class="button-p rimary " name="default_content_protection_form_submit"  value="<?php _e('Save Changes', 'simple-membership') ?>">
+                <input type="submit" class="button-primary" name="default_content_protection_form_submit"  value="<?php _e('Save Changes', 'simple-membership') ?>">
             </p>
         </form>
     </div>

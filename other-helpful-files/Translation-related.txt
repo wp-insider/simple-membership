@@ -43,13 +43,14 @@ msgstr ""
 msgid "You will need to re-login since you changed your password."
 msgstr ""
 
+#This string was used in older version of FB (so we need it for backwards compatibility).
 msgid "Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
 msgstr ""
 
-msgid "Verification"
+msgid "Please enter any two digits with no spaces (Example: 12)"
 msgstr ""
 
-msgid "Please enter any two digits with no spaces (Example: 12)*"
+msgid "Verification"
 msgstr ""
 
 msgid "Submit"

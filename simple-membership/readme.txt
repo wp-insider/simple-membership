@@ -178,8 +178,8 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
-- New feature added to set default content protection settings.
-- Password reset related code refactored.
+- Added a new feature to set 'default content protection' settings.
+- Password reset processing code refactored to be in 'wp' hook.
 
 = 4.6.2 =
 - Added a new Reports menu to display various membership-related statistics and reports.

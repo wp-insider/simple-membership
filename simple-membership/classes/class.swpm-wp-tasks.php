@@ -7,7 +7,7 @@ class SwpmWpTasks {
 	}
 
 	public function do_wp_tasks(){
-		if (! is_admin()){
+		if ( !is_admin() ){
 			$this->process_password_reset();
 			$this->process_password_reset_using_link();
 		}

@@ -179,6 +179,7 @@ https://simple-membership-plugin.com/
 
 = WIP =
 - New feature added to set default content protection settings.
+- Password reset related code refactored.
 
 = 4.6.2 =
 - Added a new Reports menu to display various membership-related statistics and reports.
@@ -190,7 +191,7 @@ https://simple-membership-plugin.com/
 - Updated the admin menu page title to maintain consistency with other menu items.
 - New option added for Stripe webhook event verification.
 - Added support for Stripe's 100% discount code feature.
-- Stripe API version updated to the latest version. 
+- Stripe API version updated to the latest version.
 
 = 4.6.1 =
 - This release primarily includes optimizations and enhancements for the user login process with the 'Remember Me' option.

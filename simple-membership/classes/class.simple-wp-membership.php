@@ -7,6 +7,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-utils-membership-l
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-utils-template.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-init-time-tasks.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-wp-loaded-tasks.php');
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-wp-tasks.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-self-action-handler.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-comment-form-related.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-settings.php');
@@ -56,6 +57,7 @@ class SimpleWpMembership {
         //The init and wp_loaded hooks.
         add_action('init', array(&$this, 'init_hook'));
         add_action('wp_loaded', array(&$this, 'handle_wp_loaded_tasks'));
+        add_action('wp', array(&$this, 'handle_wp_tasks'));
 
         //Admin menu hook.
         add_action('admin_menu', array(&$this, 'menu'));
@@ -847,6 +849,12 @@ class SimpleWpMembership {
     public function handle_wp_loaded_tasks() {
         $wp_loaded_tasks = new SwpmWpLoadedTasks();
         $wp_loaded_tasks->do_wp_loaded_tasks();
+    }
+
+    public function handle_wp_tasks() {
+	    $wp_tasks = new SwpmWpTasks();
+	    $wp_tasks->do_wp_tasks();
+
     }
 
     public function admin_library() {

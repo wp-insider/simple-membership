@@ -326,7 +326,7 @@ class SWPM_System_Info_Menu_Tab {
 
 	public function get_translation_files() {
         $filename = 'simple-membership-' . get_locale() . '.mo';
-		$lang_dir_file  = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'languages/' . $filename; // Path to the wp-content languages folder
+		$lang_dir_file  = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'languages/plugins/' . $filename; // Path to the wp-content languages folder
 		$plugin_lang_dir_file  = SIMPLE_WP_MEMBERSHIP_PATH . 'languages/' . $filename; // Path to the plugins languages folder
 
         if ( file_exists($lang_dir_file) ){

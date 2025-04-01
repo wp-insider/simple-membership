@@ -181,6 +181,7 @@ https://simple-membership-plugin.com/
 - Added a new feature to set 'default content protection' settings.
 - Password reset processing code refactored to be in 'wp' hook.
 - Modified the 'Tools -> System Info' menu to accurately display the language translation directory path: /wp-content/languages/plugins/
+- Updated the Hungarian language translation file.
 
 = 4.6.2 =
 - Added a new Reports menu to display various membership-related statistics and reports.

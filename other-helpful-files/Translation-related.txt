@@ -43,7 +43,7 @@ msgstr ""
 msgid "You will need to re-login since you changed your password."
 msgstr ""
 
-#This string was used in older version of FB (so we need it for backwards compatibility).
+# This string is used in older versions so we need it for backwards compatibility.
 msgid "Please enter any two digits with <strong>no</strong> spaces (Example: 12)"
 msgstr ""
 
@@ -51,9 +51,6 @@ msgid "Please enter any two digits with no spaces (Example: 12)"
 msgstr ""
 
 msgid "Verification"
-msgstr ""
-
-msgid "Submit"
 msgstr ""
 
 msgid "Username can only contain: letters, numbers and .-*@"
@@ -83,76 +80,24 @@ msgstr ""
 msgid "Member Directory"
 msgstr ""
 
-#: includes/swpm_mda_show_profile.php:26
-msgid "Member ID"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:27
-msgid "Username"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:28
-msgid "First Name"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:29
-msgid "Last Name"
-msgstr ""
-
 #: includes/swpm_mda_show_profile.php:30
 msgid "Level"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:31
-msgid "Account State"
 msgstr ""
 
 #: includes/swpm_mda_show_profile.php:32
 msgid "Address"
 msgstr ""
 
-#: includes/swpm_mda_show_profile.php:33
-msgid "Country"
-msgstr ""
-
 #: includes/swpm_mda_show_profile.php:48
 msgid "Postcode"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:34
-msgid "Phone"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:35
-msgid "Email"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:36
-msgid "Member Since"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:37
-msgid "Gender"
-msgstr ""
-
-#: includes/swpm_mda_show_profile.php:38
-msgid "Company"
 msgstr ""
 
 #: views/template-1.php:52 views/template-2.php:53
 msgid "Search..."
 msgstr ""
 
-#: views/template-1.php:53 views/template-2.php:54
-msgid "Search"
-msgstr ""
-
 #: views/template-1.php:60 views/template-2.php:62
 msgid "Clear Search"
-msgstr ""
-
-#: views/template-1.php:95 views/template-2.php:97
-msgid "View Profile"
 msgstr ""
 
 # === Misc Shortcodes Addon ===
@@ -165,6 +110,63 @@ msgstr ""
 msgid "Already a member of this level."
 msgstr ""
 
-# === Special Translation Strings ===
+#-----------------------------------------------------------------------------
+# Duplicates that are already included in the main plugin's strings. Commenting it out.
+#-----------------------------------------------------------------------------
+#: includes/swpm_mda_show_profile.php:26
+# msgid "Member ID"
+# msgstr ""
 
+#: includes/swpm_mda_show_profile.php:36
+# msgid "Member Since"
+# msgstr ""
+
+# msgid "Submit"
+# msgstr ""
+
+#: includes/swpm_mda_show_profile.php:38
+# msgid "Company"
+# msgstr ""
+
+#: includes/swpm_mda_show_profile.php:33
+# msgid "Country"
+# msgstr ""
+
+#: includes/swpm_mda_show_profile.php:34
+# msgid "Phone"
+# msgstr ""
+
+#: includes/swpm_mda_show_profile.php:37
+# msgid "Gender"
+# msgstr ""
+
+#: views/template-1.php:53 views/template-2.php:54
+# msgid "Search"
+# msgstr ""
+
+#: includes/swpm_mda_show_profile.php:31
+# msgid "Account State"
+# msgstr ""
+
+#: includes/swpm_mda_show_profile.php:35
+# msgid "Email"
+# msgstr ""
+
+#: includes/swpm_mda_show_profile.php:27
+# msgid "Username"
+# msgstr ""
+
+#: includes/swpm_mda_show_profile.php:28
+# msgid "First Name"
+# msgstr ""
+
+#: includes/swpm_mda_show_profile.php:29
+# msgid "Last Name"
+# msgstr ""
+
+#: views/template-1.php:95 views/template-2.php:97
+# msgid "View Profile"
+# msgstr ""
+
+# === Special Translation Strings ===
 

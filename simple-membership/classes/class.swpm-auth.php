@@ -374,15 +374,17 @@ class SwpmAuth {
 	}
 
 	private function check_password( $plain_password, $hashed_pw ) {
-		global $wp_hasher;
 		if ( empty( $plain_password ) ) {
 			return false;
 		}
-		if ( empty( $wp_hasher ) ) {
-			require_once ABSPATH . 'wp-includes/class-phpass.php';
-			$wp_hasher = new PasswordHash( 8, true );
-		}
-		return $wp_hasher->CheckPassword( $plain_password, $hashed_pw );
+		// global $wp_hasher;
+		// if ( empty( $wp_hasher ) ) {
+		// 	require_once ABSPATH . 'wp-includes/class-phpass.php';
+		// 	$wp_hasher = new PasswordHash( 8, true );
+		// }
+		// return $wp_hasher->CheckPassword( $plain_password, $hashed_pw );
+
+		return wp_check_password($plain_password, $hashed_pw);
 	}
 
 	public function match_password( $password ) {

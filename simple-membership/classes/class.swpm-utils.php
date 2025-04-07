@@ -556,12 +556,10 @@ abstract class SwpmUtils {
 	}
 
 	public static function encrypt_password( $plain_password ) {
-		// include_once ABSPATH . WPINC . '/class-phpass.php';
-		// $wp_hasher     = new PasswordHash( 8, true );
-		// $password_hash = $wp_hasher->HashPassword( trim( $plain_password ) );
-		// return $password_hash;
+		//From WP 6.8 onwards, it is better to sue the wp_hash_password() function to hash the password.
+		$hashed_password = wp_hash_password($plain_password);
 
-		return wp_hash_password($plain_password);
+		return $hashed_password;
 	}
 
 	public static function get_restricted_image_url() {

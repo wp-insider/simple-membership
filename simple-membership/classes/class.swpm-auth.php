@@ -375,15 +375,11 @@ class SwpmAuth {
 
 	private function check_password( $plain_password, $hashed_pw ) {
 		if ( empty( $plain_password ) ) {
+			//Password is empty.
 			return false;
 		}
-		// global $wp_hasher;
-		// if ( empty( $wp_hasher ) ) {
-		// 	require_once ABSPATH . 'wp-includes/class-phpass.php';
-		// 	$wp_hasher = new PasswordHash( 8, true );
-		// }
-		// return $wp_hasher->CheckPassword( $plain_password, $hashed_pw );
 
+		// From WordPress 6.8, the function wp_check_password() needs to be used to check the password.
 		return wp_check_password($plain_password, $hashed_pw);
 	}
 

@@ -178,11 +178,12 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
+- WordPress 6.8 compatibility related changes.
 - Added a new feature to set 'default content protection' settings.
 - Password reset processing code refactored to be in 'wp' hook.
 - Modified the 'Tools -> System Info' menu to accurately display the language translation directory path: /wp-content/languages/plugins/
 - Updated the Hungarian language translation file.
-- Password hash related code updated.
+- WordPress 6.8 uses new password hashing. We have updated the function that is used to check the password so it is compatible with WP 6.8.
 
 = 4.6.2 =
 - Added a new Reports menu to display various membership-related statistics and reports.

@@ -556,7 +556,7 @@ abstract class SwpmUtils {
 	}
 
 	public static function encrypt_password( $plain_password ) {
-		//From WP 6.8 onwards, it is better to sue the wp_hash_password() function to hash the password.
+		//From WP 6.8 onwards, it is better to use the wp_hash_password() function to hash the password.
 		$hashed_password = wp_hash_password($plain_password);
 
 		return $hashed_password;

@@ -26,7 +26,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 <tr class="swpm-form-row swpm-username-row">
                     <th scope="row"><label for="user_name"><?php _e('Username', 'simple-membership'); ?> <span class="description"><?php _e('(required)'); ?></span></label></th>
                     <td>
-                        <input class="swpm-form-field swpm-form-username regular-text" name="user_name" type="text" id="user_name" value="<?php echo esc_attr(stripslashes($user_name)); ?>" aria-required="true" />
+                        <input class="swpm-form-field swpm-form-username regular-text" name="user_name" autocomplete="new-username" type="text" id="user_name" value="<?php echo esc_attr(stripslashes($user_name)); ?>" aria-required="true" />
                         <div class="swpm-form-desc"></div>
                     </td>
                 </tr>
@@ -40,14 +40,14 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 <tr class="swpm-form-row swpm-password-row">
                     <th scope="row"><label for="password"><?php _e('Password', 'simple-membership'); ?> <span class="description"><?php _e('(twice, required)', 'simple-membership'); ?></span></label></th>
                     <td>
-                        <input class="swpm-form-field swpm-form-password regular-text" name="password" type="password" id="pass1" autocomplete="off" />
+                        <input class="swpm-form-field swpm-form-password regular-text" name="password" type="password" id="pass1" autocomplete="new-password" />
                         <div class="swpm-form-desc"></div>
                     </td>
                 </tr>
                 <tr class="swpm-form-row swpm-repass-row">
                     <th scope="row"></th>
                     <td style="padding-top: 0;">
-                        <input class="swpm-form-field swpm-form-repass regular-text" name="password_re" type="password" id="pass2" autocomplete="off" placeholder="<?php _e('Retype password', 'simple-membership')?>" />
+                        <input class="swpm-form-field swpm-form-repass regular-text" name="password_re" type="password" id="pass2" autocomplete="new-password" placeholder="<?php _e('Retype password', 'simple-membership')?>" />
                         <div class="swpm-form-desc"></div>
                         <div id="pass-strength-result"></div>
                         <p class="description indicator-hint"><?php _e('Hint: The password should be at least seven characters long. To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ).', 'simple-membership'); ?></p>

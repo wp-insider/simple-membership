@@ -64,14 +64,14 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
             <tr class="swpm-form-row swpm-password-row">
                 <th scope="row"><label for="password"><?php _e('Password', 'simple-membership'); ?> <span class="description"><?php _e('(twice, leave empty to retain old password)', 'simple-membership'); ?></span></label></th>
                 <td>
-                    <input class="swpm-form-field swpm-form-password regular-text" name="password" type="password" id="pass1" autocomplete="off" />
+                    <input class="swpm-form-field swpm-form-password regular-text" name="password" type="password" id="pass1" autocomplete="new-password" />
                     <div class="swpm-form-desc"></div>
                 </td>
             </tr>
             <tr class="swpm-form-row swpm-repass-row">
                 <th scope="row"></th>
                 <td style="padding-top: 0;">
-                    <input class="swpm-form-field swpm-form-repass regular-text" name="password_re" type="password" id="pass2" autocomplete="off" placeholder="<?php _e('Retype password', 'simple-membership') ?>" />
+                    <input class="swpm-form-field swpm-form-repass regular-text" name="password_re" type="password" id="pass2" autocomplete="new-password" placeholder="<?php _e('Retype password', 'simple-membership') ?>" />
                     <div class="swpm-form-desc"></div>
                     <div id="pass-strength-result"></div>
                     <p class="description indicator-hint"><?php _e('Hint: The password should be at least seven characters long. To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ).', 'simple-membership'); ?></p>

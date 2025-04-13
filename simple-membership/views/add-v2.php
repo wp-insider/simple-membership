@@ -59,7 +59,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="user_name"><?php _e('Username', "simple-membership") ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-username-input-wrap">
-                    <input type="text" id="user_name" class="swpm-form-field swpm-form-username" value="<?php echo esc_attr($user_name); ?>" name="user_name" <?php apply_filters('swpm_registration_form_username_input_attributes', ''); ?> />
+                    <input type="text" id="user_name" autocomplete="new-username" class="swpm-form-field swpm-form-username" value="<?php echo esc_attr($user_name); ?>" name="user_name" <?php apply_filters('swpm_registration_form_username_input_attributes', ''); ?> />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -77,7 +77,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="password"><?php _e('Password', "simple-membership") ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-password-input-wrap">
-                    <input type="password" autocomplete="off" id="password" class="swpm-form-field swpm-form-password" value="" name="password" />
+                    <input type="password" autocomplete="new-password" id="password" class="swpm-form-field swpm-form-password" value="" name="password" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -86,7 +86,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="password_re"><?php _e('Repeat Password', "simple-membership") ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-repass-input-wrap">
-                    <input type="password" autocomplete="off" id="password_re" class="swpm-form-field swpm-form-repass" value="" name="password_re" />
+                    <input type="password" autocomplete="new-password" id="password_re" class="swpm-form-field swpm-form-repass" value="" name="password_re" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>

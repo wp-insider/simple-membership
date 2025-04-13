@@ -177,6 +177,9 @@ https://simple-membership-plugin.com/
 
 == Changelog ==
 
+= WIP =
+- Improved user experience by preventing browser auto-fill on the password field in the new registration form.
+
 = 4.6.3 =
 - WordPress 6.8 compatibility related changes.
 - Added a new feature to set 'default content protection' settings.

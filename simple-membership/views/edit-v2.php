@@ -64,7 +64,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="password"><?php _e('Password', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-password-input-wrap">
-                    <input type="password" id="password" value="" name="password" class="swpm-form-field swpm-form-password" autocomplete="off" placeholder="<?php _e('Leave empty to keep the current password', 'simple-membership'); ?>" />
+                    <input type="password" id="password" value="" name="password" class="swpm-form-field swpm-form-password" autocomplete="new-password" placeholder="<?php _e('Leave empty to keep the current password', 'simple-membership'); ?>" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
@@ -73,7 +73,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <label for="password_re"><?php _e('Repeat Password', 'simple-membership'); ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-repass-input-wrap">
-                    <input type="password" id="password_re" value="" name="password_re" class="swpm-form-field swpm-form-repass" autocomplete="off" placeholder="<?php _e('Leave empty to keep the current password', 'simple-membership'); ?>" />
+                    <input type="password" id="password_re" value="" name="password_re" class="swpm-form-field swpm-form-repass" autocomplete="new-password" placeholder="<?php _e('Leave empty to keep the current password', 'simple-membership'); ?>" />
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>

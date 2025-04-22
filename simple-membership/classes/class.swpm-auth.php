@@ -448,7 +448,10 @@ class SwpmAuth {
 
 		$this->userData      = null;
 		$this->isLoggedIn    = false;
-		$this->lastStatusMsg = SwpmUtils::_( 'Logged Out Successfully.' );
+		$this->lastStatusMsg = __( 'Logged Out Successfully.', 'simple-membership' );
+		$member_username = SwpmMemberUtils::get_logged_in_members_username();
+		SwpmLog::log_auth_debug( 'SwpmAuth::logout() - Logout actions executed successfully. Username: ' . $member_username, true );
+
 		if ( $trigger_hook ) {
 			//Trigger action hook unless it is a silent logout.
 			do_action( 'swpm_logout' );

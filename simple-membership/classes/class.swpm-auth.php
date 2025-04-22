@@ -434,6 +434,9 @@ class SwpmAuth {
 	}
 
 	public function logout( $trigger_hook = true) {
+		$member_username = SwpmMemberUtils::get_logged_in_members_username();
+		SwpmLog::log_auth_debug( 'SwpmAuth::logout() - Logout request received for username: ' . $member_username, true );
+
 		if ( ! $this->isLoggedIn ) {
 			return;
 		}
@@ -449,8 +452,8 @@ class SwpmAuth {
 		$this->userData      = null;
 		$this->isLoggedIn    = false;
 		$this->lastStatusMsg = __( 'Logged Out Successfully.', 'simple-membership' );
-		$member_username = SwpmMemberUtils::get_logged_in_members_username();
-		SwpmLog::log_auth_debug( 'SwpmAuth::logout() - Logout actions executed successfully. Username: ' . $member_username, true );
+		
+		SwpmLog::log_auth_debug( 'SwpmAuth::logout() - Logout actions executed successfully.', true );
 
 		if ( $trigger_hook ) {
 			//Trigger action hook unless it is a silent logout.

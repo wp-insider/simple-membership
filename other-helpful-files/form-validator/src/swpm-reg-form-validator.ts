@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Get the input field element.
             let fieldElement = registrationForm?.querySelector(`.swpm-form-${field}`) as HTMLInputElement;
             // Get the initial value of that field if present
-            if(fieldElement.value){
+            if(fieldElement?.value){
                 fieldOption.value = fieldElement.value;
             }
             

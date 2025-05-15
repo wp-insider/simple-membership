@@ -33,9 +33,10 @@ class SwpmStripeCheckoutSessionCreate{
 			//Use the payment_method_types specified in the shortcode (example value: card,us_bank_account
 			$payment_method_types_array = array_map( 'trim', explode (",", $payment_method_types) );
         }
-                
-		$uniqid = isset( $_POST['swpm_uniqid'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_uniqid'] ) ) : '';
-		$uniqid = ! empty( $uniqid ) ? $uniqid : '';
+
+		// TODO: These might not need any more.
+		// $uniqid = isset( $_POST['swpm_uniqid'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_uniqid'] ) ) : '';
+		// $uniqid = ! empty( $uniqid ) ? $uniqid : '';
 
 		$settings   = SwpmSettings::get_instance();
 		$button_cpt = get_post( $button_id ); //Retrieve the CPT for this button
@@ -105,7 +106,16 @@ class SwpmStripeCheckoutSessionCreate{
                         $automatic_tax = true;
                 }
 
-		$ref_id = 'swpm_' . $uniqid . '|' . $button_id;
+
+		$visitor_ip = SwpmUtils::get_user_ip_address();
+		if (empty($visitor_ip)){
+			$error_msg = __("Visitor's IP address could not be detected!", 'simple-membership');
+			SwpmLog::log_simple_debug($error_msg, false);
+			wp_send_json( array( 'error' => 'Error occurred: ' . $error_msg ) );
+		}
+		$hashed_ip = md5($visitor_ip);
+
+		$ref_id = 'swpm_' . $hashed_ip . '|' . $button_id;
 
 		//Return, cancel, notifiy URLs
 		if ( empty( $plan_id ) ) {

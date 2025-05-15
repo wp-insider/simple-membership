@@ -3751,7 +3751,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const fieldOption = formConfig[field];
     if (fieldOption.active) {
       let fieldElement = registrationForm == null ? void 0 : registrationForm.querySelector(`.swpm-form-${field}`);
-      if (fieldElement.value) {
+      if (fieldElement == null ? void 0 : fieldElement.value) {
         fieldOption.value = fieldElement.value;
       }
       fieldOption.eventListener.forEach((eventListener) => {

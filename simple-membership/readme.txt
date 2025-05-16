@@ -178,9 +178,9 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
-- Improved user experience by preventing browser auto-fill on the password field in the new registration form.
-- Added a debug logging statement for after successful logout.
-- A small code refactor regarding stripe client reference id.
+- Enhanced user experience by disabling browser auto-fill on the password field in the new registration form.
+- Added a debug log message upon successful user logout.
+- Minor code refactoring related to the Stripe client reference ID.
 
 = 4.6.3 =
 - WordPress 6.8 compatibility related changes.

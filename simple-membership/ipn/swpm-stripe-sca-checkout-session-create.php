@@ -34,18 +34,18 @@ class SwpmStripeCheckoutSessionCreate{
 			$payment_method_types_array = array_map( 'trim', explode (",", $payment_method_types) );
         }
 
-		// TODO: These might not need any more.
-		// $uniqid = isset( $_POST['swpm_uniqid'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_uniqid'] ) ) : '';
-		// $uniqid = ! empty( $uniqid ) ? $uniqid : '';
+		//Get the settings instance.
+		$settings = SwpmSettings::get_instance();
 
-		$settings   = SwpmSettings::get_instance();
-		$button_cpt = get_post( $button_id ); //Retrieve the CPT for this button
+		//Retrieve the CPT for this button
+		$button_cpt = get_post( $button_id ); 
 		$item_name  = htmlspecialchars( $button_cpt->post_title );
 
 		$plan_id = get_post_meta( $button_id, 'stripe_plan_id', true );
 
 		if ( empty( $plan_id ) ) {
-			//Payment amount and currency
+			//This is a one-off payment button.
+			//Get payment amount and currency
 			$payment_amount = get_post_meta( $button_id, 'payment_amount', true );
 			if ( ! is_numeric( $payment_amount ) ) {
 				wp_send_json( array( 'error' => 'Error! The payment amount value of the button must be a numeric number. Example: 49.50' ) );
@@ -67,8 +67,19 @@ class SwpmStripeCheckoutSessionCreate{
 		}
 
 		//$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
-		//User's IP address
+		
+		//Get user's IP address.
 		$user_ip = SwpmUtils::get_user_ip_address();
+		if (empty($user_ip)){
+			//We use the IP address for reference so this is a required field.
+			//If we can't get the IP address, we can't proceed with the payment.
+			//Log the error and send a JSON response.
+			$error_msg = __("Unable to detect the visitor's IP address. Checkout request cannot proceed.", 'simple-membership');
+			SwpmLog::log_simple_debug($error_msg, false);
+			wp_send_json( array( 'error' => 'Error occurred: ' . $error_msg ) );
+		}
+
+		//Save the IP address in the session for later use.
 		$_SESSION['swpm_payment_button_interaction'] = $user_ip;
 
 		//Get the button's level ID
@@ -91,7 +102,7 @@ class SwpmStripeCheckoutSessionCreate{
 		//Billing address
 		$billing_address = isset( $args['billing_address'] ) ? '1' : '';
 		//By default don't show the billing address in the checkout form.
-		//if billing_address parameter is not present in the shortcode, let's check button option
+		//If billing_address parameter is not present in the shortcode, let's check button option
 		if ( $billing_address === '' ) {
 			$collect_address = get_post_meta( $button_id, 'stripe_collect_address', true );
 			if ( $collect_address === '1' ) {
@@ -100,49 +111,43 @@ class SwpmStripeCheckoutSessionCreate{
 			}
 		}
 
+		//Check automatic tax setting.
 		$automatic_tax = false;
-                $automatic_tax_opt = get_post_meta( $button_id, 'stripe_automatic_tax', true );
-                if ( $automatic_tax_opt === '1' ) {
-                        $automatic_tax = true;
-                }
-
-
-		$visitor_ip = SwpmUtils::get_user_ip_address();
-		if (empty($visitor_ip)){
-			$error_msg = __("Visitor's IP address could not be detected!", 'simple-membership');
-			SwpmLog::log_simple_debug($error_msg, false);
-			wp_send_json( array( 'error' => 'Error occurred: ' . $error_msg ) );
+		$automatic_tax_opt = get_post_meta( $button_id, 'stripe_automatic_tax', true );
+		if ( $automatic_tax_opt === '1' ) {
+				$automatic_tax = true;
 		}
-		$hashed_ip = md5($visitor_ip);
 
+		//Generate a reference ID for this Stripe transaction
+		$hashed_ip = md5($user_ip);
 		$ref_id = 'swpm_' . $hashed_ip . '|' . $button_id;
 
-		//Return, cancel, notifiy URLs
+		//Return, cancel, notifiy URLs.
 		if ( empty( $plan_id ) ) {
 			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_buy_now=1&ref_id=%s', $ref_id );
 		} else {
 			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_subscription=1&ref_id=%s', $ref_id );
 		}
 
-		// The url to redirect to when user clicks on the back button in the stripe sca buy now button checkout page. If no url set, there will be no back button.
+		//The url to redirect to when user clicks on the back button in the stripe sca buy now button checkout page. If no url set, there will be no back button.
 		$cancel_url = get_post_meta( $button_id, 'cancel_url', true );
 		$cancel_url = ! empty( $cancel_url ) ? sanitize_text_field($cancel_url) : SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
 
 		//prefill member email
 		$prefill_member_email = $settings->get_value( 'stripe-prefill-member-email' );
-
 		if ( $prefill_member_email ) {
-			$auth         = SwpmAuth::get_instance();
+			$auth = SwpmAuth::get_instance();
 			$member_email = $auth->get( 'email' );
 		}
 
+		//Load the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
 
 		try {
 			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
 			\Stripe\Stripe::setApiVersion("2025-02-24.acacia");
 			if ( empty( $plan_id ) ) {
-				//this is one-off payment
+				//This is one-off payment
 				$opts = array(
 					'client_reference_id'        => $ref_id,
 					'billing_address_collection' => $billing_address ? 'required' : 'auto',					

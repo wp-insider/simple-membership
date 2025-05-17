@@ -183,6 +183,7 @@ https://simple-membership-plugin.com/
 - Minor code refactoring related to the Stripe client reference ID.
 - Added a new filter hook 'swpm_paypal_ppcp_order_shipping_preference' to allow customization of the shipping preference for PayPal PPCP checkout.
 - Added a new filter hook 'swpm_paypal_ppcp_order_item_category' to allow customization of the item category for PayPal PPCP checkout.
+- For PayPal PPCP checkout, if no Thank You page URL is specified, a success message will be displayed above the PayPal button by default.
 
 = 4.6.3 =
 - WordPress 6.8 compatibility related changes.

@@ -257,6 +257,14 @@
     padding-bottom: 5px;
 }
 
+
+/* PayPal or Other Transaction Related CSS */
+.swpm-ppcp-txn-success-message{
+    font-weight: bold;
+    color: green;
+    margin: 15px 0px;
+}
+
 /* Payments menu CSS */
 .swpm_status_completed{
 	padding: 7px 15px;

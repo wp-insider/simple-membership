@@ -328,37 +328,60 @@ class SWPM_PayPal_Request_API_Injector {
             $currency = isset($data['currency']) ? $data['currency'] : 'USD';
             $item_name = isset($data['item_name']) ? $data['item_name'] : '';
             $digital_goods_enabled = isset($data['digital_goods_enabled']) ? $data['digital_goods_enabled'] : 1;
+
+            //Digital Goods value. Trigger a filter to allow other plugins to modify the digital goods value.
+            $item_category = $digital_goods_enabled ? 'DIGITAL_GOODS' : 'PHYSICAL_GOODS';
+            $item_category = apply_filters('swpm_paypal_ppcp_order_item_category', $item_category, $data);
             
+            //Set the shipping preference. Trigger a filter to allow other plugins to modify the shipping preference.
+            $shipping_preference = isset($data['shipping_preference']) ? $data['shipping_preference'] : 'GET_FROM_FILE';
+            $shipping_preference = apply_filters('swpm_paypal_ppcp_order_shipping_preference', $shipping_preference, $data);
+
+            //Preparation/normalization of any order data (suitable for PayPal API).
+            $item_amount_formatted = number_format((float)$payment_amount, 2, '.', '');
+            $grand_total_formatted = number_format((float)$payment_amount, 2, '.', '');
+            //In the context of our SWPM plugin, the item total is the same as the grand total (since we don't have any quantity, shipping or tax at the moment).
+            $sub_total_formatted = number_format((float)$payment_amount, 2, '.', '');
+
             //https://developer.paypal.com/docs/api/orders/v2/#orders_create
             $order_data = [
-               "intent" => "CAPTURE",
-               "purchase_units" => [
-                   [
-                       "amount" => [
-                           "value" => $payment_amount,
-                           "currency_code" => $currency,
-                           "breakdown" => [
-                               "item_total" => [
-                                   "currency_code" => $currency,
-                                   "value" => $payment_amount * $quantity,
-                               ]
-                           ]
-                       ],
-                       "items" => [
-                           [
-                               "name" => $item_name,
-                               "quantity" => $quantity,
-                               "category" => $digital_goods_enabled ? "DIGITAL_GOODS" : "PHYSICAL_GOODS",
-                               "unit_amount" => [
-                                   "value" => $payment_amount,
-                                   "currency_code" => $currency,
-                               ]
-                           ]
+                "intent" => "CAPTURE",
+                "payment_source" => [
+                    "paypal" => [
+                        "experience_context" => [
+                            "payment_method_preference" => "IMMEDIATE_PAYMENT_REQUIRED",
+                            "shipping_preference" => $shipping_preference,
+                            "user_action" => "PAY_NOW",
+                        ]
+                    ]
+                ],
+                "purchase_units" => [
+                    [
+                        "amount" => [
+                            "value" => $grand_total_formatted,/* The grand total that will be charged for the transaction */
+                            "currency_code" => $currency,
+                            "breakdown" => [
+                                "item_total" => [
+                                    "currency_code" => $currency,
+                                    "value" => $sub_total_formatted,
+                                ]
+                            ]
+                        ],
+                        "items" => [
+                            [
+                                "name" => $item_name,
+                                "quantity" => $quantity,
+                                "category" => $item_category,
+                                "unit_amount" => [
+                                    "value" => $item_amount_formatted,
+                                    "currency_code" => $currency,
+                                ]
+                            ]
                         ],
                         "description" => $item_name,
-                   ]
-               ]
-           ];
+                    ]
+                ]
+            ];
 
             //A simple order data for testing            
             // $order_data = [

@@ -242,11 +242,29 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
                     </td>
                 </tr>
 
+				<?php
+				    $redirect_to_paid_reg_link_after_payment = isset( $opts['redirect_to_paid_reg_link_after_payment'][0] ) && !empty($opts['redirect_to_paid_reg_link_after_payment'][0]) ? true : false;
+				?>
+
+                <tr valign="top">
+                    <th scope="row"><?php _e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
+                    <td>
+                        <input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" <?php echo esc_attr( $edit && $redirect_to_paid_reg_link_after_payment ? 'checked' : '' ); ?> />
+                        <p class="description">
+							<?php _e('Enable this option if you want to redirect to paid registration link after payment.', 'simple-membership') ?>
+                        </p>
+                    </td>
+                </tr>
+
                 <tr valign="top">
 					<th scope="row"><?php _e( 'Return URL' , 'simple-membership'); ?></th>
 					<td>
 						<input type="text" size="100" name="return_url" value="<?php echo ( $edit ? $opts['return_url'][0] : '' ); ?>" />
-						<p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
+                        <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
+
+                        <?php if ($redirect_to_paid_reg_link_after_payment) { ?>
+                            <p class="description"> <b><?php esc_attr_e('NOTE:', 'simple-membership'); ?></b> <?php esc_attr_e("As the 'redirect_to_paid_reg_link_after_payment' is checked, customer will be redirected to registration page url after payment.", 'simple-membership'); ?></p>
+						<?php } ?>
 					</td>
 				</tr>
 
@@ -355,6 +373,7 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 		update_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
 		update_post_meta( $button_id, 'stripe_automatic_tax', isset( $_POST['automatic_tax'] ) ? '1' : '' );
 		update_post_meta( $button_id, 'allow_promotion_codes', isset( $_POST['allow_promotion_codes'] ) ? '1' : '' );
+		update_post_meta( $button_id, 'redirect_to_paid_reg_link_after_payment', isset( $_POST['redirect_to_paid_reg_link_after_payment'] ) ? '1' : '' );
 
 		//API details
 		$stripe_test_secret_key = isset( $_POST['stripe_test_secret_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_secret_key'] ) ) : '';

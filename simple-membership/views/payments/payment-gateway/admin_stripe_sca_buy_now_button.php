@@ -171,7 +171,17 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 							<?php echo '<a href="https://simple-membership-plugin.com/applying-discount-coupon-or-promotion-codes-to-stripe-payment-buttons/" target="_blank">' . __('Learn more', 'simple-membership') . '</a>.'; ?>
 						</p>
 					</td>
-				</tr>				
+				</tr>
+
+                <tr valign="top">
+                    <th scope="row"><?php _e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
+                    <td>
+                        <input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" />
+                        <p class="description">
+							<?php _e('Enable this option if you want to redirect to paid registration link after payment.', 'simple-membership') ?>
+                        </p>
+                    </td>
+                </tr>
 
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Return URL' , 'simple-membership'); ?></th>
@@ -260,6 +270,9 @@ function swpm_save_new_stripe_sca_buy_now_button_data() {
 
 		$allow_promotion_codes = isset($_REQUEST['allow_promotion_codes']) ? sanitize_text_field( $_REQUEST['allow_promotion_codes'] ) : '';
 		add_post_meta( $button_id, 'allow_promotion_codes', $allow_promotion_codes );
+
+		$redirect_to_paid_reg_link_after_payment = isset($_REQUEST['redirect_to_paid_reg_link_after_payment']) ? sanitize_text_field( $_REQUEST['redirect_to_paid_reg_link_after_payment'] ) : '';
+		add_post_meta( $button_id, 'redirect_to_paid_reg_link_after_payment', $redirect_to_paid_reg_link_after_payment );
 				
 		add_post_meta( $button_id, 'stripe_collect_address', isset( $_POST['collect_address'] ) ? '1' : '' );
 		add_post_meta( $button_id, 'stripe_automatic_tax', isset( $_POST['automatic_tax'] ) ? '1' : '' );
@@ -308,6 +321,13 @@ function swpm_edit_stripe_sca_buy_now_button() {
 		$allow_promotion_codes = 'checked';
 	} else {
 		$allow_promotion_codes = '';
+	}
+
+	$redirect_to_paid_reg_link_after_payment = get_post_meta( $button_id, 'redirect_to_paid_reg_link_after_payment', true );
+	if ( $redirect_to_paid_reg_link_after_payment == '1' ) {
+		$redirect_to_paid_reg_link_after_payment = 'checked';
+	} else {
+		$redirect_to_paid_reg_link_after_payment = '';
 	}
 
 	$stripe_test_secret_key      = get_post_meta( $button_id, 'stripe_test_secret_key', true );
@@ -489,14 +509,28 @@ function swpm_edit_stripe_sca_buy_now_button() {
 							<?php echo '<a href="https://simple-membership-plugin.com/applying-discount-coupon-or-promotion-codes-to-stripe-payment-buttons/" target="_blank">' . __('Learn more', 'simple-membership') . '</a>.'; ?>
 						</p>
 					</td>
-				</tr>				
+				</tr>
+
+                <tr valign="top">
+					<th scope="row"><?php _e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
+					<td>
+						<input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" <?php echo esc_attr($redirect_to_paid_reg_link_after_payment) ?> />
+						<p class="description">
+							<?php _e('Enable this option if you want to redirect to paid registration link after payment.', 'simple-membership') ?>
+						</p>
+					</td>
+				</tr>
 
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Return URL','simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="100" name="return_url" value="<?php echo esc_url_raw($return_url); ?>" />
 						<p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
-					</td>
+
+						<?php if (!empty($redirect_to_paid_reg_link_after_payment)) { ?>
+                            <p class="description"> <b><?php esc_attr_e('NOTE:', 'simple-membership'); ?></b> <?php esc_attr_e("As the 'redirect_to_paid_reg_link_after_payment' is checked, customer will be redirected to registration page url after payment.", 'simple-membership'); ?></p>
+						<?php } ?>
+                    </td>
 				</tr>
 
 				<tr valign="top">
@@ -568,7 +602,9 @@ function swpm_edit_stripe_sca_buy_now_button_data() {
 		update_post_meta( $button_id, 'payment_currency', sanitize_text_field( $_REQUEST['payment_currency'] ) );
 
 		update_post_meta( $button_id, 'allow_promotion_codes', isset( $_POST['allow_promotion_codes'] ) ? '1' : '' );
-		
+
+		update_post_meta( $button_id, 'redirect_to_paid_reg_link_after_payment', isset( $_POST['redirect_to_paid_reg_link_after_payment'] ) ? '1' : '' );
+
 		$stripe_test_secret_key = isset( $_POST['stripe_test_secret_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_secret_key'] ) ) : '';
 		$stripe_test_publishable_key = isset( $_POST['stripe_test_publishable_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_publishable_key'] ) ) : '';	
 

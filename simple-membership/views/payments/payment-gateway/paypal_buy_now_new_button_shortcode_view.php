@@ -77,7 +77,6 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
     $btn_sizes = array( 'small' => 25, 'medium' => 35, 'large' => 45, 'xlarge' => 55 );
     $btn_height = isset( $btn_sizes[ $btn_height ] ) ? $btn_sizes[ $btn_height ] : 35;
 
-    $return_url = get_post_meta($button_id, 'return_url', true);
     $txn_success_message = __('Transaction completed successfully!', 'simple-membership');
 
     /**********************
@@ -232,10 +231,10 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
                             // Successful transaction -> Show confirmation or thank you message
                             console.log('Capture-order API call to PayPal completed successfully.');
 
-                            //Redirect to the Thank you page URL if it is set.
-                            return_url = '<?php echo esc_url_raw($return_url); ?>';
+                            //Redirect to the Thank you page or Registration page URL if it is set.
+                            const return_url = response_data.redirect_url || '';
                             if( return_url ){
-                                //redirect to the Thank you page URL.
+                                //redirect to the URL.
                                 console.log('Redirecting to the Thank you page URL: ' + return_url);
                                 window.location.href = return_url;
                                 return;

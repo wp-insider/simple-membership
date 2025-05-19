@@ -271,6 +271,49 @@ class SwpmMiscUtils {
 		return $pageURL;
 	}
 
+	public static function get_after_payment_redirect_url( $button_id ) {
+		if ( empty( $button_id ) ) {
+			SwpmLog::log_simple_debug( 'Payment button id not provided. Redirecting to home url.', false );
+			return SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+		}
+
+		$settings = SwpmSettings::get_instance();
+
+		$incomplete_member_data = SwpmUtils::get_incomplete_paid_member_info_by_ip();
+
+		$redirect_to_paid_reg_link_after_payment = get_post_meta($button_id, 'redirect_to_paid_reg_link_after_payment', true);
+
+		$thank_you_page_url = get_post_meta( $button_id, 'return_url', true );
+
+		if ( ! SwpmMemberUtils::is_member_logged_in() && !empty( $redirect_to_paid_reg_link_after_payment ) && $incomplete_member_data ){
+			//Found a member profile record for this IP that needs to be completed
+			$reg_page_url      = $settings->get_value( 'registration-page-url' );
+			$rego_complete_url = add_query_arg(
+				array(
+					'member_id' => $incomplete_member_data->member_id,
+					'code'      => $incomplete_member_data->reg_code,
+				),
+				$reg_page_url
+			);
+
+			$return_url = $rego_complete_url;
+		} else if ( !empty( $thank_you_page_url ) ) {
+			$return_url = $thank_you_page_url;
+		} else {
+			$return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+		}
+
+		return $return_url;
+	}
+
+	public static function handle_after_payment_redirect( $button_id ){
+		$redirect_url = self::get_after_payment_redirect_url($button_id);
+
+		SwpmLog::log_simple_debug( 'Redirecting customer to: ' . $redirect_url, true );
+
+		self::redirect_to_url($redirect_url);
+	}
+
 	/*
 	 * This is an alternative to the get_current_page_url() function. It needs to be tested on many different server conditions before it can be utilized
 	 */

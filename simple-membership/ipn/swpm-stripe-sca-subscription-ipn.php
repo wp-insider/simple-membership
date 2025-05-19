@@ -212,15 +212,10 @@ class SwpmStripeSCASubscriptionIpnHandler {
 
 		do_action( 'swpm_payment_ipn_processed', $ipn_data );
 
-		// Redirect the user to the return URL (or to the homepage if a return URL is not specified for this payment button).
-		$return_url = get_post_meta( $button_id, 'return_url', true );
-		if ( empty( $return_url ) ) {
-			$return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
-		}
-		SwpmLog::log_simple_debug( 'Redirecting customer to: ' . $return_url, true );
 		SwpmLog::log_simple_debug( 'End of Stripe SCA Subscription IPN processing.', true, true );
-		SwpmMiscUtils::redirect_to_url( $return_url );
 
+		// Redirect the user to the registration URL or return URL (or to the homepage if a return URL is not specified for this payment button).
+		SwpmMiscUtils::handle_after_payment_redirect( $button_id );
 	}
 }
 

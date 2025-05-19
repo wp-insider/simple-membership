@@ -113,11 +113,28 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
                         <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional.'); ?></div></th>
                     </tr>
 
+                    <?php
+                    $redirect_to_paid_reg_link_after_payment = !empty($bt_opts['redirect_to_paid_reg_link_after_payment']) ? true : false;
+                    ?>
+                    <tr valign="top">
+                        <th scope="row"><?php _e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
+                        <td>
+                            <input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" <?php echo ( $is_edit_mode && $redirect_to_paid_reg_link_after_payment ) ? ' checked' : ''; ?> />
+                            <p class="description">
+				                <?php _e('Enable this option if you want to redirect to paid registration link after payment.', 'simple-membership') ?>
+                            </p>
+                        </td>
+                    </tr>
+
                     <tr valign="top">
                         <th scope="row"><?php echo SwpmUtils::_('Return URL'); ?></th>
                         <td>
                             <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? $bt_opts['return_url'] : ''); ?>" />
                             <p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
+
+                            <?php if ($redirect_to_paid_reg_link_after_payment) { ?>
+                                <p class="description"> <b><?php esc_attr_e('NOTE:', 'simple-membership'); ?></b> <?php esc_attr_e("As the 'redirect_to_paid_reg_link_after_payment' is checked, customer will be redirected to registration page url after payment.", 'simple-membership'); ?></p>
+                            <?php } ?>
                         </td>
                     </tr>
 
@@ -187,6 +204,7 @@ function swpm_edit_braintree_buy_now_button() {
         'braintree_merchant_acc_name' => get_post_meta($button_id, 'braintree_merchant_acc_name', true),
         'braintree_public_key' => get_post_meta($button_id, 'braintree_public_key', true),
         'braintree_private_key' => get_post_meta($button_id, 'braintree_private_key', true),
+        'redirect_to_paid_reg_link_after_payment' => get_post_meta($button_id, 'redirect_to_paid_reg_link_after_payment', true),
         'return_url' => get_post_meta($button_id, 'return_url', true),
         'currency_code' => get_post_meta($button_id, 'currency_code', true),
     );
@@ -256,7 +274,10 @@ function swpm_save_edit_braintree_buy_now_button_data() {
         add_post_meta($button_id, 'braintree_public_key', trim(sanitize_text_field($_REQUEST['braintree_public_key'])));
         add_post_meta($button_id, 'braintree_private_key', trim(sanitize_text_field($_REQUEST['braintree_private_key'])));
 
-        add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
+        $redirect_to_paid_reg_link_after_payment = isset($_REQUEST['redirect_to_paid_reg_link_after_payment']) ? sanitize_text_field($_REQUEST['redirect_to_paid_reg_link_after_payment']) : '';
+
+	    add_post_meta($button_id, 'redirect_to_paid_reg_link_after_payment', $redirect_to_paid_reg_link_after_payment);
+	    add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
         //add_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
         //Let's try to get currency code for current Merchant Account
 
@@ -303,6 +324,9 @@ function swpm_save_edit_braintree_buy_now_button_data() {
         update_post_meta($button_id, 'braintree_public_key', trim(sanitize_text_field($_REQUEST['braintree_public_key'])));
         update_post_meta($button_id, 'braintree_private_key', trim(sanitize_text_field($_REQUEST['braintree_private_key'])));
 
+        $redirect_to_paid_reg_link_after_payment = isset($_REQUEST['redirect_to_paid_reg_link_after_payment']) ? sanitize_text_field($_REQUEST['redirect_to_paid_reg_link_after_payment']) : '';
+
+        update_post_meta($button_id, 'redirect_to_paid_reg_link_after_payment', $redirect_to_paid_reg_link_after_payment);
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
         //update_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
 

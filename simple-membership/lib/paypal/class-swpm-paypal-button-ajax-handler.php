@@ -219,7 +219,13 @@ class SWPM_PayPal_Button_Ajax_Hander {
 		do_action( 'swpm_payment_ipn_processed', $ipn_data );
 
 		//Everything is processed successfully, send the success response.
-		wp_send_json( array( 'success' => true, 'order_id' => $order_id, 'capture_id' => $paypal_capture_id, 'txn_data' => $txn_data ) );
+		wp_send_json( array(
+			'success' => true,
+			'order_id' => $order_id,
+			'capture_id' => $paypal_capture_id,
+			'txn_data' => $txn_data,
+			'redirect_url' => SwpmMiscUtils::get_after_payment_redirect_url($button_id)
+			) );
 		exit;
 	}	
 

@@ -213,10 +213,11 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
 
                             //console.log( 'Response from the server: ' + JSON.stringify( response ) );
                             if ( response.success ) {
-                                //Redirect to the Thank you page URL if it is set.
-                                return_url = '<?php echo esc_url_raw($return_url); ?>';
+
+                                //Redirect to the Thank you page or Registration page URL if it is set.
+                                const return_url = response.redirect_url || '';
                                 if( return_url ){
-                                    //redirect to the Thank you page URL.
+                                    //redirect to the URL.
                                     console.log('Redirecting to the Thank you page URL: ' + return_url);
                                     window.location.href = return_url;
                                     return;

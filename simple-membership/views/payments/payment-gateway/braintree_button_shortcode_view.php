@@ -43,10 +43,6 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     $payment_amount_formatted = SwpmMiscUtils::format_money($payment_amount, $payment_currency);
 
     //Return, cancel, notifiy URLs
-    $return_url = get_post_meta($button_id, 'return_url', true);
-    if (empty($return_url)) {
-        $return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
-    }
     $notify_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_braintree_buy_now=1'; //We are going to use it to do post payment processing.
     //$button_image_url = get_post_meta($button_id, 'button_image_url', true);//Stripe doesn't currenty support button image for their standard checkout.
     //User's IP address

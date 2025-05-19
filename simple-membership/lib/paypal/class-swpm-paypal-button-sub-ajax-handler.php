@@ -163,6 +163,7 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		}
 		//SwpmLog::log_array_data_to_debug( $data, true );//Debugging only
 
+		$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';
 		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
 		SwpmLog::log_simple_debug( 'OnApprove ajax request received for createSubscription. On Page Button ID: ' . $on_page_button_id, true );
 
@@ -215,7 +216,10 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		do_action( 'swpm_payment_ipn_processed', $this->ipn_data );
 
 		//If everything is processed successfully, send the success response.
-		wp_send_json( array( 'success' => true ) );
+		wp_send_json( array(
+			'success' => true,
+			'redirect_url' => SwpmMiscUtils::get_after_payment_redirect_url($button_id),
+		) );
 		exit;
     }
 

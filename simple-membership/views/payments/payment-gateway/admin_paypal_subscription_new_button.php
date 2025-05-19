@@ -30,6 +30,7 @@ function swpm_save_edit_pp_subscription_new_button_data() {
     $disable_funding_card = isset($_POST['pp_subscription_new_disable_funding_card']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_card']) : '';
     $disable_funding_credit = isset($_POST['pp_subscription_new_disable_funding_credit']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_credit']) : '';
     $disable_funding_venmo = isset($_POST['pp_subscription_new_disable_funding_venmo']) ? sanitize_text_field($_POST['pp_subscription_new_disable_funding_venmo']) : '';
+    $redirect_to_paid_reg_link_after_payment = isset($_POST['redirect_to_paid_reg_link_after_payment']) ? sanitize_text_field($_POST['redirect_to_paid_reg_link_after_payment']) : '';
 
     //Process form submission
     if (isset($_REQUEST['swpm_pp_subscription_new_save_submit'])) {
@@ -70,6 +71,8 @@ function swpm_save_edit_pp_subscription_new_button_data() {
         add_post_meta($button_id, 'pp_subscription_new_disable_funding_card', $disable_funding_card);
         add_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', $disable_funding_credit);
         add_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', $disable_funding_venmo);
+
+        add_post_meta($button_id, 'redirect_to_paid_reg_link_after_payment', $redirect_to_paid_reg_link_after_payment );
 
         add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
 
@@ -126,6 +129,8 @@ function swpm_save_edit_pp_subscription_new_button_data() {
         update_post_meta($button_id, 'pp_subscription_new_disable_funding_card', $disable_funding_card);
         update_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', $disable_funding_credit);
         update_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', $disable_funding_venmo);
+
+        update_post_meta($button_id, 'redirect_to_paid_reg_link_after_payment', $redirect_to_paid_reg_link_after_payment);
 
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
 
@@ -415,11 +420,29 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                         </td>
                     </tr>
 
+	                <?php
+	                $redirect_to_paid_reg_link_after_payment = isset($bt_opts['redirect_to_paid_reg_link_after_payment']) && !empty($bt_opts['redirect_to_paid_reg_link_after_payment']) ? 'checked' : '';
+	                ?>
+
+                    <tr valign="top">
+                        <th scope="row"><?php _e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
+                        <td>
+                            <input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" <?php echo esc_attr($redirect_to_paid_reg_link_after_payment) ?> />
+                            <p class="description">
+				                <?php _e('Enable this option if you want to redirect to paid registration link after payment.', 'simple-membership') ?>
+                            </p>
+                        </td>
+                    </tr>
+
                     <tr valign="top">
                         <th scope="row"><?php _e('Return URL', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? $bt_opts['return_url'] : ''); ?>" />
                             <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
+
+                            <?php if (!empty($redirect_to_paid_reg_link_after_payment)) { ?>
+                                <p class="description"> <b><?php esc_attr_e('NOTE:', 'simple-membership'); ?></b> <?php esc_attr_e("As the 'redirect_to_paid_reg_link_after_payment' is checked, customer will be redirected to registration page url after payment.", 'simple-membership'); ?></p>
+	                        <?php } ?>
                         </td>
                     </tr>
 
@@ -489,6 +512,7 @@ function swpm_edit_pp_subscription_new_button() {
         'pp_subscription_new_disable_funding_card' => get_post_meta($button_id, 'pp_subscription_new_disable_funding_card', true),
         'pp_subscription_new_disable_funding_credit' => get_post_meta($button_id, 'pp_subscription_new_disable_funding_credit', true),
         'pp_subscription_new_disable_funding_venmo' => get_post_meta($button_id, 'pp_subscription_new_disable_funding_venmo', true),
+        'redirect_to_paid_reg_link_after_payment' => get_post_meta($button_id, 'redirect_to_paid_reg_link_after_payment', true),
         'return_url' => get_post_meta($button_id, 'return_url', true),
         'pp_subscription_plan_id' => get_post_meta($button_id, 'pp_subscription_plan_id', true),
         'pp_subscription_plan_mode' => get_post_meta($button_id, 'pp_subscription_plan_mode', true),

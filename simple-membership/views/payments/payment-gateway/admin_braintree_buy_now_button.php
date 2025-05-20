@@ -121,7 +121,9 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
                         <td>
                             <input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" <?php echo ( $is_edit_mode && $redirect_to_paid_reg_link_after_payment ) ? ' checked' : ''; ?> />
                             <p class="description">
-				                <?php _e('Enable this option if you want to redirect to paid registration link after payment.', 'simple-membership') ?>
+				                <?php _e('Enable this option to automatically redirect the user to the unique paid registration link after a successful payment. ', 'simple-membership') ?>
+                                <a href="https://simple-membership-plugin.com/automatically-redirect-users-to-the-paid-registration-link-after-payment/" target="_blank"><?php _e('Read this documentation', 'simple-membership') ?></a>
+                                <?php _e(' to learn how it works.', 'simple-membership') ?>
                             </p>
                         </td>
                     </tr>

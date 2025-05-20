@@ -250,9 +250,11 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
                     <th scope="row"><?php _e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
                     <td>
                         <input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" <?php echo esc_attr( $edit && $redirect_to_paid_reg_link_after_payment ? 'checked' : '' ); ?> />
-                        <p class="description">
-							<?php _e('Enable this option if you want to redirect to paid registration link after payment.', 'simple-membership') ?>
-                        </p>
+						<p class="description">
+							<?php _e('Enable this option to automatically redirect the user to the unique paid registration link after a successful payment. ', 'simple-membership') ?>
+							<a href="https://simple-membership-plugin.com/automatically-redirect-users-to-the-paid-registration-link-after-payment/" target="_blank"><?php _e('Read this documentation', 'simple-membership') ?></a>
+							<?php _e(' to learn how it works.', 'simple-membership') ?>
+						</p>
                     </td>
                 </tr>
 

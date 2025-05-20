@@ -293,7 +293,8 @@ class SwpmShortcodesHandler {
 	public function swpm_show_subscriptions_and_cancel_link($atts){
 		$output = '';
 		$atts = shortcode_atts(array(
-			'show_all_status' => ''
+			'show_all_status' => '',
+			'redirect_to_after_cancel' => '',
 		), $atts);
 
 		if ( ! SwpmMemberUtils::is_member_logged_in() ) {
@@ -304,6 +305,8 @@ class SwpmShortcodesHandler {
 		//Get the member ID and load subscriptions utils class.
 		$member_username = SwpmMemberUtils::get_logged_in_members_username();
 		$member_id = SwpmMemberUtils::get_logged_in_members_id();
+
+		$return_url = isset($atts['redirect_to_after_cancel']) ? $atts['redirect_to_after_cancel'] : '';
 
 		//We will use this class to load the curated subscriptions list data so we can use it in this shortcode.
 		$subscriptions_utils = new SWPM_Utils_Subscriptions( $member_id );
@@ -359,7 +362,7 @@ class SwpmShortcodesHandler {
 				$output .= '</td>';
 
 				$output .= '<td>';
-				$output .= SWPM_Utils_Subscriptions::get_cancel_subscription_output($subscription);
+				$output .= SWPM_Utils_Subscriptions::get_cancel_subscription_output($subscription, $return_url);
 				$output .= '</td>';
 				$output .= '</tr>';
 			}

@@ -584,8 +584,9 @@ class SWPM_Utils_Subscriptions
 
 		do_action( 'swpm_subscription_payment_cancelled', $ipn_data ); // Hook for subscription payment cancelled.
 
-		self::cancel_msg( __( 'Subscription has been cancelled.', 'simple-membership' ), false );
+        $redirect_url = isset($_POST['swpm_cancel_sub_return_url']) && !empty($_POST['swpm_cancel_sub_return_url']) ? sanitize_url($_POST['swpm_cancel_sub_return_url']) : '';
 
+		self::cancel_msg( __( 'Subscription has been cancelled.', 'simple-membership' ), false, $redirect_url);
 	}
 
     /**
@@ -686,15 +687,16 @@ class SWPM_Utils_Subscriptions
 	 * Shows feedback message after subscription cancel request. 
 	 *
 	 * @param string $msg Success or error message.
+	 * @param string $redirect_url After subscription cancel redirect url.
 	 * @param boolean $is_error Whether it is an error message or not.
-	 * 
+	 *
 	 * @return void
 	 */
-	public static function cancel_msg( $msg, $is_error = true ) {
-		echo $msg;
+	public static function cancel_msg( $msg, $is_error = true, $redirect_url = '' ) {
+        echo $msg;
 		echo '<br><br>';
 		echo __( 'You will be redirected to the previous page in a few seconds. If not, please <a href="">click here</a>.', 'simple-membership' );
-		echo '<script>function toPrevPage(){window.location = window.location.href;}setTimeout(toPrevPage,5000);</script>';
+		echo '<script>function toPrevPage(){window.location = '.(!empty($redirect_url) ? '"'.esc_url($redirect_url).'"' : 'window.location.href' ).';}setTimeout(toPrevPage,5000);</script>';
 		if ( ! $is_error ) {
 			wp_die( '', __( 'Success!', 'simple-membership' ), array( 'response' => 200 ) );
 		}
@@ -709,7 +711,7 @@ class SWPM_Utils_Subscriptions
 	 * 
 	 * @return string HTML of cancel form as string.
 	 */
-	public static function get_cancel_subscription_output(&$subscription){		
+	public static function get_cancel_subscription_output(&$subscription, $return_url = ''){
 		if (self::is_active_status($subscription['status'])) {
 			// Subscription is active.
 			$token = $subscription['cancel_token'];
@@ -723,6 +725,10 @@ class SWPM_Utils_Subscriptions
 				<button type="submit" class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active" name="swpm_do_cancel_sub" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
 					<?php _e('Cancel Subscription', 'simple-membership') ?>
 				</button>
+
+                <?php if ( !empty($return_url) ){ ?>
+                    <input type="hidden" name="swpm_cancel_sub_return_url" value="<?php echo esc_url_raw($return_url) ?>">
+                <?php } ?>
 			</form>
 			<?php
 			$cancel_form_output = ob_get_clean();

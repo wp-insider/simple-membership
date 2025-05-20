@@ -185,6 +185,7 @@ https://simple-membership-plugin.com/
 - Added a new filter hook 'swpm_paypal_ppcp_order_item_category' to allow customization of the item category for PayPal PPCP checkout.
 - For PayPal PPCP checkout, if no Thank You page URL is specified, a success message will be displayed above the PayPal button by default.
 - New feature added to redirect users to the paid registration page after a successful payment to complete his/her account.
+- New shortcode parameter 'redirect_to_after_cancel' added to the shortcode 'swpm_show_subscriptions_and_cancel_link' to allow redirect to specific url after a subscription is cancelled.
 
 = 4.6.3 =
 - WordPress 6.8 compatibility related changes.

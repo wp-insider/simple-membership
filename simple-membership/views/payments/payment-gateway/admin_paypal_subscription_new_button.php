@@ -442,9 +442,11 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                             <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? $bt_opts['return_url'] : ''); ?>" />
                             <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
 
-                            <?php if (!empty($redirect_to_paid_reg_link_after_payment)) { ?>
-                                <p class="description"> <b><?php esc_attr_e('NOTE:', 'simple-membership'); ?></b> <?php esc_attr_e("As the 'redirect_to_paid_reg_link_after_payment' is checked, customer will be redirected to registration page url after payment.", 'simple-membership'); ?></p>
-	                        <?php } ?>
+                            <?php if ($redirect_to_paid_reg_link_after_payment) { ?>
+                                <p class="description">
+                                    <strong><?php esc_attr_e('Note: ', 'simple-membership'); ?></strong> <?php esc_attr_e("The 'Redirect to Paid Registration Link' option is enabled for this button. Unregistered users will be redirected to the paid registration page after completing payment.", 'simple-membership'); ?>
+                                </p>
+                            <?php } ?>
                         </td>
                     </tr>
 

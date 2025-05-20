@@ -271,45 +271,62 @@ class SwpmMiscUtils {
 		return $pageURL;
 	}
 
+	/**
+	 * This function will return the URL to redirect the user to after a payment is completed.
+	 * It will check the button configuration and the user's registration status to determine the appropriate return URL.
+	 */
 	public static function get_after_payment_redirect_url( $button_id ) {
+		//Ensure the button ID is valid.
 		if ( empty( $button_id ) ) {
 			SwpmLog::log_simple_debug( 'Payment button id not provided. Redirecting to home url.', false );
 			return SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
 		}
 
 		$settings = SwpmSettings::get_instance();
-
 		$incomplete_member_data = SwpmUtils::get_incomplete_paid_member_info_by_ip();
 
+		//Check if the regdirect to paid registration link option is enabled for this button.
 		$redirect_to_paid_reg_link_after_payment = get_post_meta($button_id, 'redirect_to_paid_reg_link_after_payment', true);
 
+		//Get the thank you page URL from the button settings or the default thank you page URL (from general settings).
 		$thank_you_page_url = get_post_meta( $button_id, 'return_url', true );
+		if( empty( $thank_you_page_url ) ){
+			$thank_you_page_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+		}
+		//Note: in the future when we support only the PPCP and Stripe payment methods, we will be able to fallback to the default thank you page URL (of general settings) if the button does not have a thank you page URL configured.
 
-		if ( ! SwpmMemberUtils::is_member_logged_in() && !empty( $redirect_to_paid_reg_link_after_payment ) && $incomplete_member_data ){
-			//Found a member profile record for this IP that needs to be completed
-			$reg_page_url      = $settings->get_value( 'registration-page-url' );
-			$rego_complete_url = add_query_arg(
+		if( SwpmMemberUtils::is_member_logged_in() ){
+			//User is already logged in. The appropriate return URL is the thank you page URL.
+			SwpmLog::log_simple_debug( 'User is already logged in. The appropriate return URL is the thank you page URL.', true );
+			$return_url = $thank_you_page_url;
+		} else if ( !empty( $redirect_to_paid_reg_link_after_payment ) && $incomplete_member_data ){
+			//Found a member profile record for this IP that needs to be completed & the redirect to paid registration link option is enabled for this button.
+			//The appropriate return URL is the unique registration completion URL.
+			$reg_page_url = $settings->get_value( 'registration-page-url' );
+			$unique_rego_complete_url = add_query_arg(
 				array(
 					'member_id' => $incomplete_member_data->member_id,
-					'code'      => $incomplete_member_data->reg_code,
+					'code' => $incomplete_member_data->reg_code,
 				),
 				$reg_page_url
 			);
-
-			$return_url = $rego_complete_url;
-		} else if ( !empty( $thank_you_page_url ) ) {
-			$return_url = $thank_you_page_url;
+			SwpmLog::log_simple_debug( 'The condition to redirect to the paid registration link has been met. Setting the return URL to the paid registration link.', true );
+			$return_url = $unique_rego_complete_url;
 		} else {
-			$return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+			//The user is not logged in and the above conditions are not met. 
+			//The return URL is the thank you page URL.
+			$return_url = $thank_you_page_url;
 		}
 
 		return $return_url;
 	}
 
 	public static function handle_after_payment_redirect( $button_id ){
+		//This function is called after a payment is completed. It will redirect the user to the thank you page or the paid registration link (based on the settings).
+
 		$redirect_url = self::get_after_payment_redirect_url($button_id);
 
-		SwpmLog::log_simple_debug( 'Redirecting customer to: ' . $redirect_url, true );
+		SwpmLog::log_simple_debug( 'Redirecting the user to: ' . $redirect_url, true );
 
 		self::redirect_to_url($redirect_url);
 	}

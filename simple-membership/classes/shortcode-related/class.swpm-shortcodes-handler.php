@@ -306,7 +306,7 @@ class SwpmShortcodesHandler {
 		$member_username = SwpmMemberUtils::get_logged_in_members_username();
 		$member_id = SwpmMemberUtils::get_logged_in_members_id();
 
-		$return_url = isset($atts['redirect_to_after_cancel']) ? $atts['redirect_to_after_cancel'] : '';
+		$return_url = isset($atts['redirect_to_after_cancel']) ? sanitize_url($atts['redirect_to_after_cancel']) : '';
 
 		//We will use this class to load the curated subscriptions list data so we can use it in this shortcode.
 		$subscriptions_utils = new SWPM_Utils_Subscriptions( $member_id );

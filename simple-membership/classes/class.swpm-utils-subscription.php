@@ -708,10 +708,11 @@ class SWPM_Utils_Subscriptions
 	 * Used by the 'swpm_show_subscriptions_and_cancel_link' shortcode.
 	 * 
 	 * @param array $subscription Subscription Details.
-	 * 
+	 * @param string $redirect_to_url Optional. Redirect url after subscription cancel.
+	 *
 	 * @return string HTML of cancel form as string.
 	 */
-	public static function get_cancel_subscription_output(&$subscription, $return_url = ''){
+	public static function get_cancel_subscription_output( $subscription, $redirect_to_url = ''){
 		if (self::is_active_status($subscription['status'])) {
 			// Subscription is active.
 			$token = $subscription['cancel_token'];
@@ -726,8 +727,8 @@ class SWPM_Utils_Subscriptions
 					<?php _e('Cancel Subscription', 'simple-membership') ?>
 				</button>
 
-                <?php if ( !empty($return_url) ){ ?>
-                    <input type="hidden" name="swpm_cancel_sub_return_url" value="<?php echo esc_url_raw($return_url) ?>">
+                <?php if ( !empty($redirect_to_url) ){ ?>
+                    <input type="hidden" name="swpm_cancel_sub_return_url" value="<?php echo esc_url_raw($redirect_to_url) ?>">
                 <?php } ?>
 			</form>
 			<?php

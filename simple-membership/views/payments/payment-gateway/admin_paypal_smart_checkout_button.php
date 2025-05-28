@@ -21,7 +21,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
         <div class="inside">
 
             <form id="smart_checkout_button_config_form" method="post">
-                <input type="hidden" name="button_type" value="<?php echo $bt_opts['button_type']; ?>">
+                <input type="hidden" name="button_type" value="<?php echo esc_attr($bt_opts['button_type']); ?>">
                 <?php if (!$is_edit_mode) { ?>
                     <input type="hidden" name="swpm_button_type_selected" value="1">
                 <?php } ?>
@@ -31,7 +31,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                         <tr valign="top">
                             <th scope="row"><?php _e('Button ID', 'simple-membership'); ?></th>
                             <td>
-                                <input type="text" size="10" name="button_id" value="<?php echo $bt_opts['button_id']; ?>" readonly required />
+                                <input type="text" size="10" name="button_id" value="<?php echo esc_attr($bt_opts['button_id']); ?>" readonly required />
                                 <p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
                             </td>
                         </tr>
@@ -39,7 +39,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php _e('Button Title', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="50" name="button_name" value="<?php echo ($is_edit_mode ? $bt_opts['button_name'] : ''); ?>" required />
+                            <input type="text" size="50" name="button_name" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['button_name']) : ''); ?>" required />
                             <p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -57,7 +57,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php _e('Payment Amount', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="6" name="payment_amount" value="<?php echo ($is_edit_mode ? $bt_opts['payment_amount'] : ''); ?>" required />
+                            <input type="text" size="6" name="payment_amount" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['payment_amount']) : ''); ?>" required />
                             <p class="description"><?php _e('Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -109,7 +109,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php _e('Live Client ID', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="100" name="pp_smart_checkout_live_id" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_live_id'] : ''); ?>" required/>
+                            <input type="text" size="100" name="pp_smart_checkout_live_id" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['pp_smart_checkout_live_id']) : ''); ?>" required/>
                             <p class="description"><?php _e('Enter your live Client ID.', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -117,7 +117,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php _e('Live Secret', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="100" name="pp_smart_checkout_live_sec" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_live_sec'] : ''); ?>" required/>
+                            <input type="text" size="100" name="pp_smart_checkout_live_sec" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['pp_smart_checkout_live_sec']) : ''); ?>" required/>
                             <p class="description"><?php _e('Enter your live Secret.', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -125,7 +125,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php _e('Sandbox Client ID', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="100" name="pp_smart_checkout_test_id" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_test_id'] : ''); ?>" required/>
+                            <input type="text" size="100" name="pp_smart_checkout_test_id" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['pp_smart_checkout_test_id']) : ''); ?>" required/>
                             <p class="description"><?php _e('Enter your sandbox Client ID.', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -133,7 +133,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php _e('Sandbox Secret', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="100" name="pp_smart_checkout_test_sec" value="<?php echo ($is_edit_mode ? $bt_opts['pp_smart_checkout_test_sec'] : ''); ?>" required/>
+                            <input type="text" size="100" name="pp_smart_checkout_test_sec" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['pp_smart_checkout_test_sec']) : ''); ?>" required/>
                             <p class="description"><?php _e('Enter your sandbox Secret.', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -202,7 +202,7 @@ function render_save_edit_pp_smart_checkout_button_interface($bt_opts, $is_edit_
                     <tr valign="top">
                         <th scope="row"><?php _e('Return URL', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? $bt_opts['return_url'] : ''); ?>" />
+                            <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? esc_url_raw($bt_opts['return_url']) : ''); ?>" />
                             <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
                         </td>
                     </tr>

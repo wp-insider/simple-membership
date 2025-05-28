@@ -57,8 +57,8 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
         $button_type = get_post_meta($item['ID'], 'button_type', true);
         //Build row actions
         $actions = array(
-            'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=%s&button_type=%s">Edit</a>', $item['ID'], $button_type),
-            'delete' => sprintf( '<a href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons&action=delete_payment_btn&button_id=%s&_wpnonce=%s" onclick="return confirm(\'Are you sure you want to delete this record?\')">Delete</a>', $item['ID'], wp_create_nonce( 'swpm_delete_payment_btn_' . $item['ID'] ) ),
+            'edit' => sprintf('<a href="admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=%s&button_type=%s">Edit</a>', esc_attr($item['ID']), esc_attr($button_type)),
+            'delete' => sprintf( '<a href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons&action=delete_payment_btn&button_id=%s&_wpnonce=%s" onclick="return confirm(\'Are you sure you want to delete this record?\')">Delete</a>', esc_attr($item['ID']), wp_create_nonce( 'swpm_delete_payment_btn_' . $item['ID'] ) ),
         );
 
         //Return the refid column contents

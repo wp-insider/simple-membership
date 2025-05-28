@@ -71,6 +71,9 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 		}
 		return $out;
 	}
+
+	$button_type = isset($_REQUEST['button_type']) ? sanitize_text_field($_REQUEST['button_type']) : '';
+
 	?>
 
 <div class="swpm-orange-box">
@@ -85,13 +88,13 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 		<div class="inside">
 			<table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 				<?php if ( ! $edit ) { ?>
-				<input type="hidden" name="button_type" value="<?php echo sanitize_text_field( $_REQUEST['button_type'] ); ?>">
+				<input type="hidden" name="button_type" value="<?php echo esc_attr( $button_type ); ?>">
 				<input type="hidden" name="swpm_button_type_selected" value="1">
 				<?php } else { ?>
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Button ID' ); ?></th>
 					<td>
-						<input type="text" size="10" name="button_id" value="<?php echo $opts['button_id']; ?>" readonly required />
+						<input type="text" size="10" name="button_id" value="<?php echo esc_attr($opts['button_id']); ?>" readonly required />
 						<p class="description">This is the ID of this payment button. It is automatically generated for you and it cannot be changed.</p>
 					</td>
 				</tr>
@@ -99,7 +102,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Button Title' ); ?></th>
 					<td>
-						<input type="text" size="50" name="button_name" value="<?php echo ( $edit ? $opts['button_title'] : '' ); ?>" required />
+						<input type="text" size="50" name="button_name" value="<?php echo ( $edit ? esc_attr($opts['button_title']) : '' ); ?>" required />
 						<p class="description">Give this membership payment button a name. Example: Gold membership payment</p>
 					</td>
 				</tr>
@@ -117,7 +120,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Stripe API ID' ); ?></th>
 					<td>
-						<input type="text" name="stripe_plan_id" value="<?php echo ( $edit ? $opts['stripe_plan_id'][0] : '' ); ?>" required />
+						<input type="text" name="stripe_plan_id" value="<?php echo ( $edit ? esc_attr($opts['stripe_plan_id'][0]) : '' ); ?>" required />
 						<p class="description">
 							ID of the plan that you want subscribers to be assigned to. You can get more details in the
 							<a href="https://simple-membership-plugin.com/create-stripe-subscription-button-membership-payment/" target="_blank">documentation</a>.
@@ -218,7 +221,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Return URL' ); ?></th>
 					<td>
-						<input type="text" size="100" name="return_url" value="<?php echo ( $edit ? $opts['return_url'][0] : '' ); ?>" />
+						<input type="text" size="100" name="return_url" value="<?php echo ( $edit ? esc_attr($opts['return_url'][0]) : '' ); ?>" />
 						<p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
 					</td>
 				</tr>
@@ -226,7 +229,7 @@ function swpm_render_new_edit_stripe_subscription_button_interface( $opts, $edit
 				<tr valign="top">
 					<th scope="row"><?php echo SwpmUtils::_( 'Button Image URL' ); ?></th>
 					<td>
-						<input type="text" size="100" name="button_image_url" value="<?php echo ( $edit ? $opts['button_image_url'][0] : '' ); ?>" />
+						<input type="text" size="100" name="button_image_url" value="<?php echo ( $edit ? esc_attr($opts['button_image_url'][0]) : '' ); ?>" />
 						<p class="description">If you want to customize the look of the button using an image then enter the URL of the image.</p>
 					</td>
 				</tr>
@@ -366,11 +369,11 @@ function swpm_save_edit_stripe_subscription_button_data() {
 			if ( empty( $stripe_error_msg ) ) {
 				echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
 			} else {
-				echo '<div id="message" class="error"><p>' . $stripe_error_msg . '</p></div>';
+				echo '<div id="message" class="error"><p>' . esc_attr($stripe_error_msg) . '</p></div>';
 			}
 		} else {
 			//Redirect to the edit interface of this button with $button_id
-			$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . $button_id . '&button_type=' . $button_type;
+			$url = admin_url() . 'admin.php?page=simple_wp_membership_payments&tab=edit_button&button_id=' . esc_attr($button_id) . '&button_type=' . esc_attr($button_type);
 			SwpmMiscUtils::redirect_to_url( $url );
 		}
 	}

@@ -5,6 +5,7 @@
 add_action( 'swpm_create_new_button_for_stripe_buy_now', 'swpm_create_new_stripe_buy_now_button' );
 
 function swpm_create_new_stripe_buy_now_button() {
+    $button_type = isset($_REQUEST['button_type']) ? sanitize_text_field($_REQUEST['button_type']) : '';
 
 	//Test for PHP v5.6.0 or show error and don't show the remaining interface.
 	if ( version_compare( PHP_VERSION, '5.6.0' ) < 0 ) {
@@ -27,7 +28,7 @@ function swpm_create_new_stripe_buy_now_button() {
 	<div class="inside">
 
 		<form id="stripe_button_config_form" method="post">
-			<input type="hidden" name="button_type" value="<?php echo sanitize_text_field( $_REQUEST['button_type'] ); ?>">
+			<input type="hidden" name="button_type" value="<?php echo esc_attr( $button_type ); ?>">
 			<input type="hidden" name="swpm_button_type_selected" value="1">
 
 			<table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
@@ -308,21 +309,21 @@ function swpm_edit_stripe_buy_now_button() {
 	<div class="inside">
 
 		<form id="stripe_button_config_form" method="post">
-			<input type="hidden" name="button_type" value="<?php echo $button_type; ?>">
+			<input type="hidden" name="button_type" value="<?php echo esc_attr($button_type); ?>">
 
 			<table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Button ID' , 'simple-membership'); ?></th>
 					<td>
-						<input type="text" size="10" name="button_id" value="<?php echo $button_id; ?>" readonly required />
+						<input type="text" size="10" name="button_id" value="<?php echo esc_attr($button_id); ?>" readonly required />
 						<p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Button Title' , 'simple-membership'); ?></th>
 					<td>
-						<input type="text" size="50" name="button_name" value="<?php echo $button->post_title; ?>" required />
+						<input type="text" size="50" name="button_name" value="<?php echo esc_attr($button->post_title); ?>" required />
 						<p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
 					</td>
 				</tr>
@@ -338,7 +339,7 @@ function swpm_edit_stripe_buy_now_button() {
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Payment Amount' , 'simple-membership'); ?></th>
 					<td>
-						<input type="text" size="6" name="payment_amount" value="<?php echo $payment_amount; ?>" required />
+						<input type="text" size="6" name="payment_amount" value="<?php echo esc_attr($payment_amount); ?>" required />
 						<p class="description"><?php _e('Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership') ?></p>
 					</td>
 				</tr>
@@ -390,7 +391,7 @@ function swpm_edit_stripe_buy_now_button() {
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Use Global API Keys Settings' , 'simple-membership'); ?></th>
 					<td>
-						<input type="checkbox" name="stripe_use_global_keys" value="1" <?php echo $use_global_keys ? ' checked' : ''; ?> />
+						<input type="checkbox" name="stripe_use_global_keys" value="1" <?php echo esc_attr($use_global_keys) ? ' checked' : ''; ?> />
 						<p class="description"><?php _e( 'Use API keys from <a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe" target="_blank">Payment Settings</a> tab.' , 'simple-membership'); ?></p>
 					</td>
 				</tr>
@@ -398,28 +399,28 @@ function swpm_edit_stripe_buy_now_button() {
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Test Publishable Key' , 'simple-membership'); ?></th>
 					<td>
-						<input type="text" size="50" name="stripe_test_publishable_key" value="<?php echo $stripe_test_publishable_key; ?>" required />
+						<input type="text" size="50" name="stripe_test_publishable_key" value="<?php echo esc_attr($stripe_test_publishable_key); ?>" required />
 						<p class="description"><?php _e('Enter your Stripe test publishable key.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Test Secret Key' , 'simple-membership'); ?></th>
 					<td>
-						<input type="text" size="50" name="stripe_test_secret_key" value="<?php echo $stripe_test_secret_key; ?>" required />
+						<input type="text" size="50" name="stripe_test_secret_key" value="<?php echo esc_attr($stripe_test_secret_key); ?>" required />
 						<p class="description"><?php _e('Enter your Stripe test secret key.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Live Publishable Key' , 'simple-membership'); ?></th>
 					<td>
-						<input type="text" size="50" name="stripe_live_publishable_key" value="<?php echo $stripe_live_publishable_key; ?>" required />
+						<input type="text" size="50" name="stripe_live_publishable_key" value="<?php echo esc_attr($stripe_live_publishable_key); ?>" required />
 						<p class="description"><?php _e('Enter your Stripe live publishable key.', 'simple-membership') ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Live Secret Key' , 'simple-membership'); ?></th>
 					<td>
-						<input type="text" size="50" name="stripe_live_secret_key" value="<?php echo $stripe_live_secret_key; ?>" required />
+						<input type="text" size="50" name="stripe_live_secret_key" value="<?php echo esc_attr($stripe_live_secret_key); ?>" required />
 						<p class="description"><?php _e('Enter your Stripe live secret key.', 'simple-membership') ?></p>
 					</td>
 				</tr>
@@ -433,7 +434,7 @@ function swpm_edit_stripe_buy_now_button() {
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Collect Customer Address' , 'simple-membership'); ?></th>
 					<td>
-						<input type="checkbox" name="collect_address" value="1" <?php echo $collect_address; ?> />
+						<input type="checkbox" name="collect_address" value="1" <?php echo esc_attr($collect_address); ?> />
 						<p class="description"><?php _e('Enable this option if you want to collect customer address during Stripe checkout.', 'simple-membership') ?></p>
 					</td>
 				</tr>
@@ -441,7 +442,7 @@ function swpm_edit_stripe_buy_now_button() {
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Return URL', 'simple-membership' ); ?></th>
 					<td>
-						<input type="text" size="100" name="return_url" value="<?php echo $return_url; ?>" />
+						<input type="text" size="100" name="return_url" value="<?php echo esc_url_raw($return_url); ?>" />
 						<p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
 					</td>
 				</tr>
@@ -449,7 +450,7 @@ function swpm_edit_stripe_buy_now_button() {
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Button Image URL' , 'simple-membership'); ?></th>
 					<td>
-						<input type="text" size="100" name="button_image_url" value="<?php echo $button_image_url; ?>" />
+						<input type="text" size="100" name="button_image_url" value="<?php echo esc_url_raw($button_image_url); ?>" />
 						<p class="description"><?php _e('If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership') ?></p>
 					</td>
 				</tr>				

@@ -5,6 +5,7 @@
 add_action('swpm_create_new_button_for_pp_subscription', 'swpm_create_new_pp_subscription_button');
 
 function swpm_create_new_pp_subscription_button() {
+    $button_type = isset($_REQUEST['button_type']) ? sanitize_text_field($_REQUEST['button_type']) : '';
     ?>
 
     <div class="swpm-orange-box">
@@ -18,7 +19,7 @@ function swpm_create_new_pp_subscription_button() {
             <h3 class="hndle"><label for="title"><?php _e('PayPal Subscription Button Configuration', 'simple-membership'); ?></label></h3>
             <div class="inside">
 
-                <input type="hidden" name="button_type" value="<?php echo sanitize_text_field($_REQUEST['button_type']); ?>">
+                <input type="hidden" name="button_type" value="<?php echo esc_attr($button_type); ?>">
                 <input type="hidden" name="swpm_button_type_selected" value="1">
 
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
@@ -303,7 +304,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Button ID', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="10" name="button_id" value="<?php echo $button_id; ?>" readonly required />
+                            <input type="text" size="10" name="button_id" value="<?php echo esc_attr($button_id); ?>" readonly required />
                             <p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -311,7 +312,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Button Title', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="50" name="button_name" value="<?php echo $button->post_title; ?>" required />
+                            <input type="text" size="50" name="button_name" value="<?php echo esc_attr($button->post_title); ?>" required />
                             <p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -369,7 +370,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('PayPal Email', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="50" name="paypal_email" value="<?php echo $paypal_email; ?>" required />
+                            <input type="text" size="50" name="paypal_email" value="<?php echo esc_attr($paypal_email); ?>" required />
                             <p class="description"><?php _e('Enter your PayPal email address. The payment will go to this PayPal account.', 'simple-membership') ?></p>
                         </td>
                     </tr>                    
@@ -377,7 +378,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Billing Amount Each Cycle', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="6" name="billing_amount" value="<?php echo $billing_amount; ?>" required />
+                            <input type="text" size="6" name="billing_amount" value="<?php echo esc_attr($billing_amount); ?>" required />
                             <p class="description"><?php _e('Amount to be charged on every billing cycle. If used with a trial period then this amount will be charged after the trial period is over. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -385,7 +386,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Billing Cycle', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="4" name="billing_cycle" value="<?php echo $billing_cycle; ?>" required />
+                            <input type="text" size="4" name="billing_cycle" value="<?php echo esc_attr( $billing_cycle); ?>" required />
                             <select id="billing_cycle_term" name="billing_cycle_term">
                                 <option value="D" <?php echo ($billing_cycle_term == 'D') ? 'selected="selected"' : ''; ?>>Day(s)</option>
                                 <option value="M" <?php echo ($billing_cycle_term == 'M') ? 'selected="selected"' : ''; ?>>Month(s)</option>
@@ -398,7 +399,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Billing Cycle Count', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="6" name="billing_cycle_count" value="<?php echo $billing_cycle_count; ?>" />
+                            <input type="text" size="6" name="billing_cycle_count" value="<?php echo esc_attr($billing_cycle_count); ?>" />
                             <p class="description"><?php _e('After how many cycles should billing stop. Leave this field empty (or enter 0) if you want the payment to continue until the subscription is canceled.', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -427,7 +428,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Trial Billing Amount', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="6" name="trial_billing_amount" value="<?php echo $trial_billing_amount; ?>" />
+                            <input type="text" size="6" name="trial_billing_amount" value="<?php echo esc_attr($trial_billing_amount); ?>" />
                             <p class="description"><?php _e('Amount to be charged for the trial period. Enter 0 if you want to offer a free trial period.', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -435,7 +436,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Trial Billing Period', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="4" name="trial_billing_cycle" value="<?php echo $trial_billing_cycle; ?>" />
+                            <input type="text" size="4" name="trial_billing_cycle" value="<?php echo esc_attr($trial_billing_cycle); ?>" />
                             <select id="billing_cycle_term" name="trial_billing_cycle_term">
                                 <option value="D" <?php echo ($trial_billing_cycle_term == 'D') ? 'selected="selected"' : ''; ?>>Day(s)</option>
                                 <option value="M" <?php echo ($trial_billing_cycle_term == 'M') ? 'selected="selected"' : ''; ?>>Month(s)</option>
@@ -458,7 +459,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Return URL', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="100" name="return_url" value="<?php echo $return_url; ?>" />
+                            <input type="text" size="100" name="return_url" value="<?php echo esc_url_raw($return_url); ?>" />
                             <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -466,7 +467,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Button Image URL', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="100" name="button_image_url" value="<?php echo $button_image_url; ?>" />
+                            <input type="text" size="100" name="button_image_url" value="<?php echo esc_url_raw($button_image_url); ?>" />
                             <p class="description"><?php _e('If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership') ?></p>
                         </td>
                     </tr> 
@@ -474,7 +475,7 @@ function swpm_edit_pp_subscription_button() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Custom Checkout Page Logo Image', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="100" name="checkout_logo_image_url" value="<?php echo $checkout_logo_image_url; ?>" />
+                            <input type="text" size="100" name="checkout_logo_image_url" value="<?php echo esc_url_raw($checkout_logo_image_url); ?>" />
                             <p class="description"><?php _e('Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.', 'simple-membership') ?></p>
                         </td>
                     </tr>

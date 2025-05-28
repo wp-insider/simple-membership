@@ -176,7 +176,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
         <div class="inside">
 
             <form id="pp_subscription_new_button_config_form" method="post">
-                <input type="hidden" name="button_type" value="<?php echo $bt_opts['button_type']; ?>">
+                <input type="hidden" name="button_type" value="<?php echo esc_attr($bt_opts['button_type']); ?>">
                 <?php if (!$is_edit_mode) { ?>
                     <input type="hidden" name="swpm_button_type_selected" value="1">
                 <?php } ?>
@@ -186,7 +186,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                         <tr valign="top">
                             <th scope="row"><?php _e('Button ID', 'simple-membership'); ?></th>
                             <td>
-                                <input type="text" size="10" name="button_id" value="<?php echo $bt_opts['button_id']; ?>" readonly required />
+                                <input type="text" size="10" name="button_id" value="<?php echo esc_attr($bt_opts['button_id']); ?>" readonly required />
                                 <p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
                             </td>
                         </tr>
@@ -194,7 +194,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php _e('Button Title', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="50" name="button_name" value="<?php echo ($is_edit_mode ? $bt_opts['button_name'] : ''); ?>" required />
+                            <input type="text" size="50" name="button_name" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['button_name']) : ''); ?>" required />
                             <p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -281,7 +281,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php _e('Recurring Billing Amount', 'simple-membership'); ?></th>
                         <td>
-                            <input type="number" min="0" step="0.01" size="10" name="recurring_billing_amount" value="<?php echo ($is_edit_mode ? $bt_opts['recurring_billing_amount'] : ''); ?>" required />
+                            <input type="number" min="0" step="0.01" size="10" name="recurring_billing_amount" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['recurring_billing_amount']) : ''); ?>" required />
                             <p class="description"><?php _e('Amount to be charged on every billing cycle. If used with a trial period then this amount will be charged after the trial period is over. Example values: 9.90 or 25.00 or 299.90 etc (do not enter currency symbol).', 'simple-membership'); ?></p>
                         </td>
                     </tr>
@@ -289,7 +289,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php _e('Recurring Billing Cycle', 'simple-membership'); ?></th>
                         <td>
-                            <input type="number" min="0" step="1" size="10" name="recurring_billing_cycle" value="<?php echo ($is_edit_mode ? $bt_opts['recurring_billing_cycle'] : ''); ?>" required />
+                            <input type="number" min="0" step="1" size="10" name="recurring_billing_cycle" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['recurring_billing_cycle']) : ''); ?>" required />
                             <select id="recurring_billing_cycle_term" name="recurring_billing_cycle_term">
                                 <option value="D"<?php echo (isset($bt_opts['recurring_billing_cycle_term']) && $bt_opts['recurring_billing_cycle_term'] === 'D') ? ' selected' : ''; ?>>Day(s)</option>
                                 <option value="M"<?php echo (isset($bt_opts['recurring_billing_cycle_term']) && $bt_opts['recurring_billing_cycle_term'] === 'M') ? ' selected' : ''; ?>>Month(s)</option>
@@ -302,7 +302,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php _e('Recurring Billing Cycle Count', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="10" name="recurring_billing_cycle_count" value="<?php echo ($is_edit_mode ? $bt_opts['recurring_billing_cycle_count'] : ''); ?>" />
+                            <input type="text" size="10" name="recurring_billing_cycle_count" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['recurring_billing_cycle_count']) : ''); ?>" />
                             <p class="description"><?php _e('After how many cycles should billing stop. Leave this field empty (or enter 0) if you want the payment to continue until the subscription is canceled.', 'simple-membership'); ?></p>
                         </td>
                     </tr>
@@ -322,7 +322,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php _e('Trial Billing Amount', 'simple-membership'); ?></th>
                         <td>
-                            <input type="number" step="0.01" min="0" size="10" name="trial_billing_amount" value="<?php echo ($is_edit_mode ? $bt_opts['trial_billing_amount'] : ''); ?>" />
+                            <input type="number" step="0.01" min="0" size="10" name="trial_billing_amount" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['trial_billing_amount']) : ''); ?>" />
                             <p class="description"><?php _e('Amount to be charged for the trial period. Enter 0 if you want to offer a free trial period.', 'simple-membership') ?></p>
                         </td>
                     </tr>
@@ -330,7 +330,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php _e('Trial Billing Period', 'simple-membership'); ?></th>
                         <td>
-                            <input type="number" min="0" step="1" size="10" name="trial_billing_cycle" value="<?php echo ($is_edit_mode ? $bt_opts['trial_billing_cycle'] : ''); ?>" />
+                            <input type="number" min="0" step="1" size="10" name="trial_billing_cycle" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['trial_billing_cycle']) : ''); ?>" />
                             <select id="trial_billing_cycle_term" name="trial_billing_cycle_term">
                                 <option value="D"<?php echo (isset($bt_opts['trial_billing_cycle_term']) && $bt_opts['trial_billing_cycle_term'] === 'D') ? ' selected' : ''; ?>>Day(s)</option>
                                 <option value="M"<?php echo (isset($bt_opts['trial_billing_cycle_term']) && $bt_opts['trial_billing_cycle_term'] === 'M') ? ' selected' : ''; ?>>Month(s)</option>
@@ -439,7 +439,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                     <tr valign="top">
                         <th scope="row"><?php _e('Return URL', 'simple-membership'); ?></th>
                         <td>
-                            <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? $bt_opts['return_url'] : ''); ?>" />
+                            <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? esc_url_raw($bt_opts['return_url']) : ''); ?>" />
                             <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
 
                             <?php if ($redirect_to_paid_reg_link_after_payment) { ?>

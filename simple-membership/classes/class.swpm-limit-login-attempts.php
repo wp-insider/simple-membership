@@ -128,8 +128,8 @@ class SwpmLimitFailedLoginAttempts {
 	 * Handle login limit for the swpm login form.
 	 */
 	public function handle_swpm_authenticate_failed( $username, $wp_error_obj ) {
-		// Skip if login attempt originated from wp form.
-		if (isset($_REQUEST['wp-submit'])){
+		// Skip if login attempt is not originated from swpm form.
+		if (! isset($_REQUEST['swpm-login'])){
 			return;
 		}
 

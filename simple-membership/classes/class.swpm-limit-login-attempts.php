@@ -8,7 +8,7 @@ class SwpmLimitFailedLoginAttempts {
 
 	const DEFAULT_MAX_FAILED_LOGIN_ATTEMPTS = 3;
 
-	const DEFAULT_LOCKDOWN_TIME_IN_MINUTES = 3;
+	const DEFAULT_LOCKOUT_TIME_IN_MINUTES = 3;
 
 	public $login_limit_error = '';
 
@@ -24,7 +24,6 @@ class SwpmLimitFailedLoginAttempts {
 	 * WP_Error or null otherwise.
 	 *
 	 * @param null|WP_User|WP_Error $user WP_User if the user is authenticated.
-	 *                                    WP_Error or null otherwise.
 	 * @param string $username Username or email address entered into the login form.
 	 * @param string $password User password.
 	 */
@@ -99,7 +98,7 @@ class SwpmLimitFailedLoginAttempts {
 				return new \WP_Error(
 					'swpm_failed_login_attempt_error',
 					sprintf(
-						__( 'Maximum no. of login attempts has reached. Try again after %s.', 'simple-membership' ),
+						__( 'You have reached the maximum number of login attempts. Please try again after the lockout period. Lockout period: %s.', 'simple-membership' ),
 						self::format_seconds_to_readable_timestamp( $interval_in_second )
 					),
 					array(
@@ -113,7 +112,7 @@ class SwpmLimitFailedLoginAttempts {
 		$wp_error->add(
 			'swpm_failed_login_attempt_error',
 			"<br>".sprintf(
-				__('You have %d more attempts left.', 'simple-membership'),
+				__('You have %d attempt(s) remaining.', 'simple-membership'),
 				$attempts_left
 			),
 			array(
@@ -180,7 +179,7 @@ class SwpmLimitFailedLoginAttempts {
 	 * Get the lockdown time for failed login attempts
 	 */
 	public static function lockdown_time_period() {
-		return intval( SwpmSettings::get_instance()->get_value( 'failed-login-attempt-lockdown-time', self::DEFAULT_LOCKDOWN_TIME_IN_MINUTES ) );
+		return intval( SwpmSettings::get_instance()->get_value( 'failed-login-attempt-lockdown-time', self::DEFAULT_LOCKOUT_TIME_IN_MINUTES ) );
 	}
 
 	/**

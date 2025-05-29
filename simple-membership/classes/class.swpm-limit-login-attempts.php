@@ -230,11 +230,11 @@ class SwpmLimitFailedLoginAttempts {
 
 		$delete = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $table . ' WHERE event_type = %s AND ip_address = %s', SwpmEventLogger::EVENT_TYPE_LOGIN_FAILED, $visitor_ip ) );
 		if ( ! $delete ) {
-			SwpmLog::log_simple_debug( 'Failed login limit could not be reset for visitor ip: ' . $visitor_ip, true );
+			SwpmLog::log_simple_debug( 'Failed login limit could not be reset for visitor ip: ' . $visitor_ip, false );
 			return;
 		}
 
-		SwpmLog::log_simple_debug( 'Failed login limit has been reset for visitor ip: ' . $visitor_ip, true );
+		SwpmLog::log_simple_debug( 'Failed login limit has been reset for visitor ip: ' . $visitor_ip, false );
 	}
 
 	/**

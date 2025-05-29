@@ -188,6 +188,7 @@ https://simple-membership-plugin.com/
 - New feature added to redirect users to the paid registration page after a successful payment to complete his/her account.
 - New shortcode parameter 'redirect_to_after_cancel' added to the shortcode 'swpm_show_subscriptions_and_cancel_link' to allow redirect to specific url after a subscription is cancelled.
 - Some escaping functions added to payment button configurations admin menu.
+- Two new utility functions (apply_protection_to_post and apply_protection_to_posts) added to apply protections.
 
 = 4.6.3 =
 - WordPress 6.8 compatibility related changes.

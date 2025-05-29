@@ -115,4 +115,49 @@ class SwpmProtection extends SwpmProtectionBase {
         }
 	}
 
+	/**
+	 * Apply protection to a post by the post id.
+	 *
+	 * @param int $post_id The post id to apply protection on.
+	 * @param array $allowed_levels List of membership level ids that will be allowed to access this post. Leave empty to not apply allowance to none.
+	 * @param string $post_type Default 'post'. The type of post i.e. post, page, attachment, comment, category etc.
+	 *
+	 * @return void
+	 */
+	public static function apply_protection_to_post(int $post_id, array $allowed_levels = array(), string $post_type = 'post') {
+		// Turn on protection for this post.
+		SwpmProtection::get_instance()->apply( array($post_id), $post_type )->save();
+
+		if (!empty($allowed_levels)){
+			// Apply allowance to these membership levels that can access this content.
+
+			if (!class_exists(SwpmPermission::class)){
+				require_once SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-permission.php';
+			}
+
+			foreach ($allowed_levels as $level_id){
+				SwpmPermission::get_instance(intval($level_id))->apply(array($post_id), $post_type)->save();
+			}
+		}
+	}
+
+	/**
+	 * Apply protection to the posts by an array of post ids.
+	 *
+	 * @param array $post_ids List post ids to apply protection on.
+	 * @param array $allowed_levels List of membership level ids that will be allowed to access these posts. Leave empty to not apply allowance to none.
+	 * @param string $post_type Default 'post'. The type of post i.e. post, page, attachment, comment, category etc.
+	 *
+	 * @return void
+	 */
+	public static function apply_protection_to_posts(array $post_ids, array $allowed_levels = array(), string $post_type = 'post'){
+		if (empty($post_ids)){
+			return;
+		}
+
+		foreach ($post_ids as $post_id) {
+			self::apply_protection_to_post( (int) $post_id,  $allowed_levels, $post_type);
+		}
+	}
+
 }

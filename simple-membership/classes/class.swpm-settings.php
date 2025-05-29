@@ -1036,7 +1036,7 @@ class SwpmSettings {
         //			)
         //		);
 
-        add_settings_section( 'failed-login-attempt-limit', __( 'Failed Login Attempt Limit', 'simple-membership' ), array( &$this, 'advanced_settings_limit_active_logins_callback' ), 'simple_wp_membership_settings' );
+        add_settings_section( 'failed-login-attempt-limit', __( 'Failed Login Attempt Limit', 'simple-membership' ), array( &$this, 'advanced_settings_failed_login_attempt_limit_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
 			'enable-failed-login-attempt-limiter',
 			__( 'Enable Failed Login Attempt Limit', 'simple-membership' ),
@@ -1436,7 +1436,12 @@ class SwpmSettings {
 	}
 
 	public function advanced_settings_limit_active_logins_callback() {
-		_e( 'This section lets you set login limits for your members.', 'simple-membership' );
+		_e( 'This section lets you set active login limits for your members.', 'simple-membership' );
+		echo ' <a href="https://simple-membership-plugin.com/configuring-active-login-limit/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
+	}
+
+	public function advanced_settings_failed_login_attempt_limit_callback() {
+		_e( 'This section lets you set failed login attempt limits for your members.', 'simple-membership' );
 		echo ' <a href="https://simple-membership-plugin.com/configuring-active-login-limit/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
 	}
 

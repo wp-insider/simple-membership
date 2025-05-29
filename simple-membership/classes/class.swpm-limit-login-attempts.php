@@ -10,7 +10,10 @@ class SwpmLimitFailedLoginAttempts {
 
 	const DEFAULT_LOCKOUT_TIME_IN_MINUTES = 3;
 
-	public $login_limit_error = '';
+	/**
+	 * @var null|WP_Error
+	 */
+	public $login_limit_error = null;
 
 	public function __construct() {
 		if (self::is_enabled()){
@@ -150,7 +153,7 @@ class SwpmLimitFailedLoginAttempts {
 			$is_lockdown_error = true;
 		}
 
-		$error_message = "<span style='color: red'>" . esc_attr(wp_strip_all_tags($error_message)) . "</span>";
+		$error_message = "<span class='swpm-red-error-text'>" . esc_attr(wp_strip_all_tags($error_message)) . "</span>";
 
 		// Don't show credential error data if lockdown error occurred for safety.
 		if ($is_lockdown_error || empty($existing_error_msg)){

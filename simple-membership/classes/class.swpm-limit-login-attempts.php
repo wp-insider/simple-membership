@@ -239,7 +239,7 @@ class SwpmLimitFailedLoginAttempts {
 			return;
 		}
 
-		SwpmLog::log_auth_debug( 'Failed login limit has been reset for visitor ip: ' . $visitor_ip, true );
+		SwpmLog::log_auth_debug( 'Failed login limit has been reset for visitor IP address: ' . $visitor_ip, true );
 	}
 
 	/**

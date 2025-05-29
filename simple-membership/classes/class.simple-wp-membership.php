@@ -39,6 +39,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-cronjob.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm_handle_subsc_ipn.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-main.php' );
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-limit-active-login.php');
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-limit-login-attempts.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-event-logger.php');
 
 class SimpleWpMembership {
@@ -48,6 +49,7 @@ class SimpleWpMembership {
         new SwpmShortcodesHandler(); //Tackle the shortcode definitions and implementation.
         new SwpmSelfActionHandler(); //Tackle the self action hook handling.
 	    new SwpmLimitActiveLogin(); // Tackle login limit functionalities.
+	    new SwpmLimitFailedLoginAttempts(); // Tackle login limit functionalities.
 		new SwpmEventLogger(); // Tackle event log related functionalities.
 
         //Load the plugin text domain

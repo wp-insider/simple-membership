@@ -6,6 +6,7 @@ class SwpmEventLogger {
 	//At the moment we only use the following event types. In the future, we will add more.
 	//Event Types: login_success.
 	const EVENT_TYPE_LOGIN_SUCCESS = 'login_success';
+	const EVENT_TYPE_LOGIN_FAILED = 'login_failed';
 	const EVENT_TYPE_PROFILE_UPDATED = 'profile_updated';
 
 	public function __construct() {

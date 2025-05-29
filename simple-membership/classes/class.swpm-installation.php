@@ -317,6 +317,9 @@ class SwpmInstallation {
             //$settings->set_value("force-wp-user-sync", "checked='checked'");
 
             $settings->set_value("use-new-form-ui", "checked='checked'");
+
+            $settings->set_value("max-failed-login-attempts", SwpmLimitFailedLoginAttempts::DEFAULT_MAX_FAILED_LOGIN_ATTEMPTS);
+            $settings->set_value("failed-login-attempt-lockdown-time", SwpmLimitFailedLoginAttempts::DEFAULT_LOCKDOWN_TIME_IN_MINUTES);
         }
 
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {

@@ -1006,7 +1006,7 @@ class SwpmSettings {
 		add_settings_section( 'limit-active-logins', __( 'Active Login Limit', 'simple-membership' ), array( &$this, 'advanced_settings_limit_active_logins_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
 			'enable-login-limiter',
-			__( 'Enable Login Limit', 'simple-membership' ),
+			__( 'Enable Active Login Limit', 'simple-membership' ),
 			array( &$this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
 			'limit-active-logins',
@@ -1035,6 +1035,39 @@ class SwpmSettings {
         //				'item'    => 'login-logic',
         //			)
         //		);
+
+        add_settings_section( 'failed-login-attempt-limit', __( 'Failed Login Attempt Limit', 'simple-membership' ), array( &$this, 'advanced_settings_limit_active_logins_callback' ), 'simple_wp_membership_settings' );
+		add_settings_field(
+			'enable-failed-login-attempt-limiter',
+			__( 'Enable Failed Login Attempt Limit', 'simple-membership' ),
+			array( $this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'failed-login-attempt-limit',
+			array(
+				'item' => 'enable-failed-login-attempt-limiter',
+				'message' => __( 'Check this box to enable the limit login attempt feature.', 'simple-membership'),
+			)
+		);
+		add_settings_field(
+			'max-failed-login-attempts',
+			__( 'Maximum Failed Login Attempts', 'simple-membership' ),
+			array( $this, 'max_failed_login_attempts_callback' ),
+			'simple_wp_membership_settings',
+			'failed-login-attempt-limit',
+			array(
+				'item' => 'max-failed-login-attempts',
+			)
+		);
+		add_settings_field(
+			'failed-login-attempt-lockdown-time',
+			__( 'Lockdown Time in Minutes', 'simple-membership' ),
+			array( $this, 'failed_login_attempts_lockdown_time_callback' ),
+			'simple_wp_membership_settings',
+			'failed-login-attempt-limit',
+			array(
+				'item' => 'failed-login-attempt-lockdown-time',
+			)
+		);
 	}
 
 
@@ -1418,7 +1451,7 @@ class SwpmSettings {
 		echo '<p class="description">' . esc_html__( 'Once this limit is reached, any new login will automatically terminate all active sessions of the user from other browsers or devices.', 'simple-membership' ) . '</p>';
 	}
 
-    //	public function login_logic_callback( $args ) {
+	//	public function login_logic_callback( $args ) {
     //		// Get settings value.
     //        $item = $args['item'];
     //		$value = $this->get_value( $item, 'allow' );
@@ -1426,6 +1459,24 @@ class SwpmSettings {
     //        echo '<p><label><input type="radio" name="swpm-settings[' . esc_attr($item) . ']" value="allow" ' . checked( $value, 'allow', false ) . '/> ' . '<strong>' . esc_html__( 'Allow:', 'simple-membership' ) . '</strong> ' . esc_html__( 'Allow new login by terminating all other old sessions when the limit is reached.', 'simple-membership' ) .'</label></p>';
     //		echo '<p><label><input type="radio" name="swpm-settings[' . esc_attr($item) . ']" value="block" ' . checked( $value, 'block', false ) . '/> ' . '<strong>' . esc_html__( 'Block:', 'simple-membership' ) . '</strong> ' . esc_html__( ' Do not allow new login if the limit is reached. Users need to wait for the old login sessions to expire.', 'simple-membership' ) .'</label></p>';
     //	}
+
+	public function max_failed_login_attempts_callback( $args ) {
+		// Get settings value.
+		$item = $args['item'];
+		$value = $this->get_value( $item, 3 );
+
+		echo '<p><input type="number" name="swpm-settings['.esc_attr($item).']" id="'.esc_attr(sanitize_key($item)).'" min="1" value="' . absint( $value ) . '" /></p>';
+		echo '<p class="description">' . esc_html__( 'Set the maximum number of failed login attempt allowed for a visitor.', 'simple-membership' ) . '</p>';
+	}
+
+	public function failed_login_attempts_lockdown_time_callback( $args ) {
+		// Get settings value.
+		$item = $args['item'];
+		$value = $this->get_value( $item, 3 );
+
+		echo '<p><input type="number" name="swpm-settings['.esc_attr($item).']" id="'.esc_attr(sanitize_key($item)).'" min="1" value="' . absint( $value ) . '" /></p>';
+		echo '<p class="description">' . esc_html__( 'Set the lockdown time period time after failed login attempts has reached its limit for that visitor.', 'simple-membership' ) . '</p>';
+	}
 
 	public function sanitize_tab_1( $input ) {
 		if ( empty( $this->settings ) ) {
@@ -1543,7 +1594,11 @@ class SwpmSettings {
         $output['maximum-active-logins'] = isset( $input['maximum-active-logins'] ) && !empty($input['maximum-active-logins']) ? esc_attr( $input['maximum-active-logins'] ) : '';
         // $output['login-logic'] = isset( $input['login-logic'] ) && !empty($input['login-logic']) ? esc_attr( $input['login-logic'] ) : '';
 
-        return $output;
+		$output['enable-failed-login-attempt-limiter'] = isset( $input['enable-failed-login-attempt-limiter'] ) && !empty($input['enable-failed-login-attempt-limiter']) ? esc_attr( $input['enable-failed-login-attempt-limiter'] ) : '';
+		$output['max-failed-login-attempts'] = isset( $input['max-failed-login-attempts'] ) && !empty($input['max-failed-login-attempts']) ? esc_attr( $input['max-failed-login-attempts'] ) : '';
+		$output['failed-login-attempt-lockdown-time'] = isset( $input['failed-login-attempt-lockdown-time'] ) && !empty($input['failed-login-attempt-lockdown-time']) ? esc_attr( $input['failed-login-attempt-lockdown-time'] ) : '';
+
+		return $output;
 	}
 
 	public function sanitize_tab_6( $input ) {

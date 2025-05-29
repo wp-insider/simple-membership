@@ -321,7 +321,12 @@ class SwpmStripeSubscriptionIpnHandler {
 	public function validate_webhook_data( $event_data_raw ){
 		$event_json = json_decode( $event_data_raw );
 
-		$sub_id = $event_json->data->object->subscription;
+		$sub_id = '';
+		if ( isset($event_json->data->object->subscription) ){
+			$sub_id = $event_json->data->object->subscription;
+		} else if (isset( $event_json->data->object->id ) && $event_json->data->object->object == 'subscription' ){
+			$sub_id = $event_json->data->object->id;
+		}
 
 		$sub_agreement_cpt_id = SWPM_Utils_Subscriptions::get_subscription_agreement_cpt_id_by_subs_id($sub_id);;
 

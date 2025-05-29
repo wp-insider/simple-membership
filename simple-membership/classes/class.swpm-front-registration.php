@@ -381,13 +381,13 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 		$wp_user_info                    = array();
 		$wp_user_info['user_nicename']   = implode( '-', explode( ' ', $member_info['user_name'] ) );
-		$wp_user_info['display_name']    = $member_info['user_name'];
-		$wp_user_info['user_email']      = $member_info['email'];
-		$wp_user_info['nickname']        = $member_info['user_name'];
-		$wp_user_info['first_name']      = $member_info['first_name'];
-		$wp_user_info['last_name']       = $member_info['last_name'];
-		$wp_user_info['user_login']      = $member_info['user_name'];
-		$wp_user_info['password']        = $member_info['plain_password'];
+		$wp_user_info['display_name']    = isset($member_info['user_name']) ? $member_info['user_name'] : '';
+		$wp_user_info['user_email']      = isset($member_info['email']) ? $member_info['email'] : '';
+		$wp_user_info['nickname']        = isset($member_info['user_name']) ? $member_info['user_name'] : '';
+		$wp_user_info['first_name']      = isset($member_info['first_name']) ? $member_info['first_name'] : '';
+		$wp_user_info['last_name']       = isset($member_info['last_name']) ? $member_info['last_name'] : '';
+		$wp_user_info['user_login']      = isset($member_info['user_name']) ? $member_info['user_name'] : '';
+		$wp_user_info['password']        = isset($member_info['plain_password']) ? $member_info['plain_password'] : '';
 		$wp_user_info['role']            = $user_role;
 		$wp_user_info['user_registered'] = date( 'Y-m-d H:i:s' );
 		SwpmUtils::create_wp_user( $wp_user_info );

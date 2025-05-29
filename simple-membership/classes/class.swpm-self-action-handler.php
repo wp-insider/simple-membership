@@ -110,6 +110,16 @@ class SwpmSelfActionHandler {
             //Update the WP user role according to the new level's configuration (if applicable).
             $user_role = $level_row->role;
             $user_info = get_user_by('login', $resultset->user_name);
+
+			if (! $user_info instanceof WP_User){
+                $user_info = get_user_by('email', $resultset->email);
+			}
+
+			if (!$user_info instanceof WP_User){
+				// WP User info could not be retrieved, Can't update user role.
+				return;
+			}
+
             $wp_user_id = $user_info->ID;
             SwpmLog::log_simple_debug('Calling user role update function.', true);
             SwpmMemberUtils::update_wp_user_role($wp_user_id, $user_role);

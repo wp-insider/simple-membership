@@ -57,6 +57,7 @@ class SwpmLimitFailedLoginAttempts {
 	 * @param string $username Username or email address entered into the login form.
 	 */
 	public function handle_login_limit_execution( $wp_error, $username) {
+		$visitor_ip = SwpmUtils::get_user_ip_address();
 		$allowed_failed_attempts = self::allowed_max_failed_attempts();
 		$lockdown_time_period = self::lockdown_time_period();
 		$failed_attempts_count = self::get_failed_attempts_for_current_visitor();
@@ -98,6 +99,7 @@ class SwpmLimitFailedLoginAttempts {
 				// Assign the new attempt count.
 				$attempts_left = $allowed_failed_attempts - 1;
 			} else {
+				SwpmLog::log_auth_debug( 'Failed login attempt limit reached for visitor IP address: ' . $visitor_ip, false );
 				return new \WP_Error(
 					'swpm_failed_login_attempt_error',
 					sprintf(
@@ -111,11 +113,12 @@ class SwpmLimitFailedLoginAttempts {
 			}
 		}
 
-		// Show how many attempts is left for the visitor.
+		// Show how many attempts are left for the visitor.
+		SwpmLog::log_auth_debug( 'Failed login attempt. The visitor IP address: ' . $visitor_ip . ' has ' . $attempts_left . ' attempts left.', true );
 		$wp_error->add(
 			'swpm_failed_login_attempt_error',
 			"<br>".sprintf(
-				__('You have %d attempt(s) remaining.', 'simple-membership'),
+				__('You have %d login attempt(s) remaining.', 'simple-membership'),
 				$attempts_left
 			),
 			array(
@@ -232,11 +235,11 @@ class SwpmLimitFailedLoginAttempts {
 
 		$delete = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $table . ' WHERE event_type = %s AND ip_address = %s', SwpmEventLogger::EVENT_TYPE_LOGIN_FAILED, $visitor_ip ) );
 		if ( ! $delete ) {
-			SwpmLog::log_simple_debug( 'Failed login limit could not be reset for visitor ip: ' . $visitor_ip, false );
+			SwpmLog::log_auth_debug( 'Failed login limit could not be reset for visitor ip: ' . $visitor_ip, false );
 			return;
 		}
 
-		SwpmLog::log_simple_debug( 'Failed login limit has been reset for visitor ip: ' . $visitor_ip, false );
+		SwpmLog::log_auth_debug( 'Failed login limit has been reset for visitor ip: ' . $visitor_ip, true );
 	}
 
 	/**

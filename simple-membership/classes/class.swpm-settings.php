@@ -1441,8 +1441,8 @@ class SwpmSettings {
 	}
 
 	public function advanced_settings_failed_login_attempt_limit_callback() {
-		_e( 'This section lets you set failed login attempt limits for your members.', 'simple-membership' );
-		echo ' <a href="https://simple-membership-plugin.com/configuring-active-login-limit/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
+		_e( 'This section allows you to enable and configure limits for failed login attempts on user accounts.', 'simple-membership' );
+		echo ' <a href="https://simple-membership-plugin.com/configuring-the-failed-login-attempt-limit-feature/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
 	}
 
 	public function maximum_active_login_callback( $args ) {

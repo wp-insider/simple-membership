@@ -1045,7 +1045,7 @@ class SwpmSettings {
 			'failed-login-attempt-limit',
 			array(
 				'item' => 'enable-failed-login-attempt-limiter',
-				'message' => __( 'Check this box to enable the limit login attempt feature.', 'simple-membership'),
+				'message' => __( 'Check this box to enable the failed login attempt limit feature.', 'simple-membership'),
 			)
 		);
 		add_settings_field(
@@ -1060,7 +1060,7 @@ class SwpmSettings {
 		);
 		add_settings_field(
 			'failed-login-attempt-lockdown-time',
-			__( 'Lockdown Time in Minutes', 'simple-membership' ),
+			__( 'Lockout Duration (in minutes)', 'simple-membership' ),
 			array( $this, 'failed_login_attempts_lockdown_time_callback' ),
 			'simple_wp_membership_settings',
 			'failed-login-attempt-limit',
@@ -1372,48 +1372,47 @@ class SwpmSettings {
 			//This status message need to be in the callback function to prevent header sent warning
 			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
 
-                        /* Check if any conflicting setting options have been enabled together. */
-                        $disable_wp_dashboard_for_non_admins = $this->get_value('disable-access-to-wp-dashboard');
-                        if ($disable_wp_dashboard_for_non_admins) {
-                            //The disable wp dashboard option is enabled.
-                            //Check to make sure the "Admin Dashboard Access Permission" option is not being used for other roles.
-                            $admin_dashboard_permission = $this->get_value( 'admin-dashboard-access-permission' );
-                            if ( empty( $admin_dashboard_permission ) || $admin_dashboard_permission == 'manage_options' ) {
-                                //This is fine.
-                            } else {
-                                //Conflicting options enabled.
-                                //Show warning and reset the option value to default.
-                                $this->set_value('admin-dashboard-access-permission', 'manage_options');
-                                $this->save();
-                                echo '<div id="message" class="error"><p>' . SwpmUtils::_( 'Note: You cannot enable both the "Disable Access to WP Dashboard" and "Admin Dashboard Access Permission" options at the same time. Only use one of those options.' ) . '</p></div>';
-                            }
-                        }
-                        /* End of conflicting options check */
-
+				/* Check if any conflicting setting options have been enabled together. */
+				$disable_wp_dashboard_for_non_admins = $this->get_value('disable-access-to-wp-dashboard');
+				if ($disable_wp_dashboard_for_non_admins) {
+					//The disable wp dashboard option is enabled.
+					//Check to make sure the "Admin Dashboard Access Permission" option is not being used for other roles.
+					$admin_dashboard_permission = $this->get_value( 'admin-dashboard-access-permission' );
+					if ( empty( $admin_dashboard_permission ) || $admin_dashboard_permission == 'manage_options' ) {
+						//This is fine.
+					} else {
+						//Conflicting options enabled.
+						//Show warning and reset the option value to default.
+						$this->set_value('admin-dashboard-access-permission', 'manage_options');
+						$this->save();
+						echo '<div id="message" class="error"><p>' . SwpmUtils::_( 'Note: You cannot enable both the "Disable Access to WP Dashboard" and "Admin Dashboard Access Permission" options at the same time. Only use one of those options.' ) . '</p></div>';
+					}
+				}
+				/* End of conflicting options check */
 		}
 
-                echo '<div class="swpm-grey-box">';
+        echo '<div class="swpm-grey-box">';
 		echo '<p>';
 		_e( 'This page allows you to configure some advanced features of the plugin.', 'simple-membership' );
 		echo '</p>';
-		echo '</div>';                 
+		echo '</div>';
 	}
 
-        public function blacklist_whitelist_overview_callback() {
+	public function blacklist_whitelist_overview_callback() {
 		//Show settings updated message when it is updated
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
 			//This status message need to be in the callback function to prevent header sent warning
 			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
 		}
-                
+				
 		echo '<div class="swpm-grey-box">';
 		echo '<p>';
 		_e( 'This interface lets you configure blacklisting & whitelisting for email addresses. ', 'simple-membership' );
 		echo '<a href="https://simple-membership-plugin.com/blacklisting-whitelisting-feature/" target="_blank">' . SwpmUtils::_( 'This blacklisting & whitelisting documentation' ) . '</a>';
 		_e( ' explains how to use this feature.', 'simple-membership' );
 		echo '</p>';
-		echo '</div>';            
-        }
+		echo '</div>';
+	}
         
 	public function whitelist_settings_callback() {
 		_e( 'This section allows you to configure whitelisting settings.', 'simple-membership' );
@@ -1451,22 +1450,13 @@ class SwpmSettings {
 		echo '<p class="description">' . esc_html__( 'Once this limit is reached, any new login will automatically terminate all active sessions of the user from other browsers or devices.', 'simple-membership' ) . '</p>';
 	}
 
-	//	public function login_logic_callback( $args ) {
-    //		// Get settings value.
-    //        $item = $args['item'];
-    //		$value = $this->get_value( $item, 'allow' );
-    //
-    //        echo '<p><label><input type="radio" name="swpm-settings[' . esc_attr($item) . ']" value="allow" ' . checked( $value, 'allow', false ) . '/> ' . '<strong>' . esc_html__( 'Allow:', 'simple-membership' ) . '</strong> ' . esc_html__( 'Allow new login by terminating all other old sessions when the limit is reached.', 'simple-membership' ) .'</label></p>';
-    //		echo '<p><label><input type="radio" name="swpm-settings[' . esc_attr($item) . ']" value="block" ' . checked( $value, 'block', false ) . '/> ' . '<strong>' . esc_html__( 'Block:', 'simple-membership' ) . '</strong> ' . esc_html__( ' Do not allow new login if the limit is reached. Users need to wait for the old login sessions to expire.', 'simple-membership' ) .'</label></p>';
-    //	}
-
 	public function max_failed_login_attempts_callback( $args ) {
 		// Get settings value.
 		$item = $args['item'];
 		$value = $this->get_value( $item, 3 );
 
 		echo '<p><input type="number" name="swpm-settings['.esc_attr($item).']" id="'.esc_attr(sanitize_key($item)).'" min="1" value="' . absint( $value ) . '" /></p>';
-		echo '<p class="description">' . esc_html__( 'Set the maximum number of failed login attempt allowed for a visitor.', 'simple-membership' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Set the maximum number of failed login attempts allowed before the visitor is temporarily locked out.', 'simple-membership' ) . '</p>';
 	}
 
 	public function failed_login_attempts_lockdown_time_callback( $args ) {
@@ -1475,7 +1465,7 @@ class SwpmSettings {
 		$value = $this->get_value( $item, 3 );
 
 		echo '<p><input type="number" name="swpm-settings['.esc_attr($item).']" id="'.esc_attr(sanitize_key($item)).'" min="1" value="' . absint( $value ) . '" /></p>';
-		echo '<p class="description">' . esc_html__( 'Set the lockdown time period time after failed login attempts has reached its limit for that visitor.', 'simple-membership' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Set the duration (in minutes) that a visitor will be locked out after reaching the maximum number of failed login attempts.', 'simple-membership' ) . '</p>';
 	}
 
 	public function sanitize_tab_1( $input ) {

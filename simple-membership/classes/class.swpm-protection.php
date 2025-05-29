@@ -130,6 +130,11 @@ class SwpmProtection extends SwpmProtectionBase {
 
 		if (!empty($allowed_levels)){
 			// Apply allowance to these membership levels that can access this content.
+
+			if (!class_exists(SwpmPermission::class)){
+				require_once SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-permission.php';
+			}
+
 			foreach ($allowed_levels as $level_id){
 				SwpmPermission::get_instance(intval($level_id))->apply(array($post_id), $post_type)->save();
 			}

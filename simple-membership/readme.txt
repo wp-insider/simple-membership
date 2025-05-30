@@ -163,7 +163,7 @@ You can translate the plugin using the language [translation documentation](http
 
 Do the following to install the membership plugin:
 
-1. Upload the 'simple-wp-membership.zip' file from the Plugins->Add New page in the WordPress administration panel.
+1. Upload the 'simple-membership.zip' file from the Plugins -> Add New page in the WordPress administration panel.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 
 == Frequently Asked Questions ==
@@ -179,6 +179,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+
+= WIP =
+- Updated the plugin name to "Simple Membership" in the main PHP file to match the plugin slug and readme file.
 
 = 4.6.4 =
 - Added a new feature to limit failed login attempts. Read the [failed login limit documentation](https://simple-membership-plugin.com/configuring-the-failed-login-attempt-limit-feature/) for more information.

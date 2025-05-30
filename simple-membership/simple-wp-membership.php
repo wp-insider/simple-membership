@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Simple WordPress Membership
+Plugin Name: Simple Membership
 Version: 4.6.4
 Plugin URI: https://simple-membership-plugin.com/
 Author: smp7, wp.insider

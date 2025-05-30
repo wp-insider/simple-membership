@@ -2,6 +2,127 @@
 //Since Wordpress only allows 5000 words for the changelog, we have moved the change log of old versions to this separate file.
 //----------------------------------------------
 
+= 4.5.4 =
+- Subscriptions can be canceled from the transaction details page of a 'subscription created' transaction (supported for the New PayPal PPCP API and Stripe subscriptions).
+- New settings to send notification email on subscription payment canceled or expired event.
+- The subscription agreement tranaction record's status will get updated when the subscription is canceled.
+- Added Typecasting to the transaction ID variable for the PayPal IPN handling process.
+- The PayPal standard subscriptions will also save a 'subscription created' entry in the payments menu for new subscriptions.
+- The transaction type will also be stored in the transactions table, allowing for future filtering of transactions based on type.
+- Canceled subscription status will now be shown in the 'subscription created' transaction details page.
+- The 'redirect_to' parameter on the login page is now processed through the 'wp_validate_redirect' function.
+- The 'get_user_ip_address' function has been updated to make it more robust.
+- Query updated of the 'get_incomplete_paid_member_info_by_ip' function.
+- Added a new utility function 'get_user_by_ip_address'.
+
+= 4.5.3 =
+- The 'Reset Debug Log Files' option now utilizes AJAX for improved user experience and smoother functionality.
+- Removed the unused 'shutdown' function from the plugin.
+- Added a new settings to hide the join us link. Refer to [this documentation](https://simple-membership-plugin.com/hiding-join-option-from-visitors/) for more information.
+- Deleting a member will now also cancel any PayPal subscriptions configured through the PPCP (New API) option.
+
+= 4.5.2 =
+- Added a new feature to display the subscription payment cancellation status in the "Edit/View Member" menu. This status is also shown in the member's login widget.
+- Added a new filter hook 'swpm_registration_data_before_save' to allow customizing the registration data before saving it to the database.
+- Added a check to ensure a valid membership level ID is entered when the free membership is enabled in the settings.
+- The 'after_registration_callback' function is handled using a lower priority for better compatibility with other plugins.
+- Added a new utility function in the SwpmTransactions class to retrieve all the transactions for a specific member.
+- Added spacing before the "Edit Profile" link in the login widget.
+- The "Edit Profile" and "Logout" links in the login widget are now bolded.
+- Added a toggle visibility option for System-Related Additional Data in the Edit/View Member's Profile interface.
+
+= 4.5.1 =
+- Stripe library updated to the latest version (v15.4.0).
+- Updated the 'swpm_login_failed' action hook's trigger condition.
+- Renamed the login form and reset password shortcode function name for better clarity.
+- The edit profile interface in the admin dashboard will display an appropriate error message if an attempt is made to edit a profile that has been deleted.
+
+= 4.5.0 =
+- Added membership level specific default account status feature.
+- New admin notes feature added. It can be used to save private notes about members.
+- Added new 'login' API endpoint to the free SWPM API addon.
+- PHP 8.2 compatibility related improvements.
+- New two filter hooks added to the mini/compact login shortcode.
+- The custom messages addon can now be used to customize the output of the mini/compact login shortcode's output.
+- Added a new action hook "swpm_login_failed". This is equivalent to the "wp_login_failed" action hook.
+
+= 4.4.9 =
+- Minor update to the German language file.
+- Added a new filter hook 'swpm_after_email_activation_redirect_url' to allow customizing the email activation redirect URL.
+- Added a check in the member's add/edit interface to ensure a membership level exists before attempting to add or edit a member record.
+- If the site admin deletes the membership level of a member who then tries to log in, an appropriate error message will be displayed instead of a fatal error.
+- When the debug feature is enabled and the debug log file doesn't exist, it will create one automatically.
+- Added reCAPTCHA V3 support. You can now enable [reCAPTCHA V3 for the member registration](https://simple-membership-plugin.com/simple-membership-google-recaptcha-v3-integration/).
+
+= 4.4.8 =
+- Rolled back one of the changes from the previous version that was causing an issue with the WP user profile update process.
+- If your site is experiencing any issue after the update and you need the older version 4.4.6 (before the profile update related improvements/changes), you can download it using the following link:
+- [Simple Membership Plugin v4.4.6](https://downloads.wordpress.org/plugin/simple-membership.4.4.6.zip)
+
+= 4.4.7 =
+- The PayPal PPCP subscriptions will also save the is_live parameter in the transaction record.
+- Minor improvements to the newly added cancel subscription shortcode.
+- Changed the status of the 1st transaction of a Stripe subscription to 'subscription created' for better clarity.
+- Added more output escaping to the payment button shortcode output.
+- Fixed a minor issue with the manual transaction add feature.
+- Added architecture so the password update from profile edit page doesn't require a re-login.
+- The PayPal's new API button options have been moved to the top in the button creation interface.
+- Improved the 'profile_update' action hoook handling code - the user will remain logged-in after the password is changed from WP User profile page.
+- Added a new filter hook swpm_wp_profile_update_hook_override.
+
+= 4.4.6 =
+- Various translation related changes to the button configuration admin interface.
+- Generated a new translation POT file for the plugin.
+- Fixed an error with the cancel Stripe subscription shortcode.
+- Added output escaping to the PayPal cancel subscription shortcode.
+
+= 4.4.5 =
+- Added a link to the corresponding member profile in the newly added transaction view/edit interface.
+- Added a link to the corresponding membership level in the newly added transaction view/edit interface.
+- Minor PHP compatibility related improvements for PayPal and Stripe checkout.
+- Minor updates to the the debug log messaging for the refund/cancelation process.
+
+= 4.4.4 =
+- Added an option to configure a Cancel URL for Stripe SCA Subscription type buttons.
+- Some options related to hiding the WP Admin Bar have been moved from the General Settings menu to the Advanced Settings tab.
+- A warning message is displayed when editing membership levels if both manual approval and email activation settings are enabled simultaneously.
+- Output escaping added to the shortcode output of the subscription cancel shortcode.
+- PayPal PPCP button's JS SDK related code has been converted to use vanilla JavaScript to eliminate the dependency on jQuery.
+- Stripe promotion code feature added for Stripe SCA Buy Now type buttons.
+- The Payments menu now shows the transactions from the SWPM_Transactions custom post type. This will allow us to add more features to the transaction records in the future.
+- Added the option to edit a transaction record from the payments menu of the plugin.
+- Added a new shortcode that can show any active subscriptions and offer an option to cancel it for the logged-in member. It works for the New PayPal API and Stripe Subscription buttons.
+- [Documentation for the new subscription cancel shortcode](https://simple-membership-plugin.com/show-active-subscriptions-and-providing-a-cancellation-option/)
+
+= 4.4.3 =
+- The accepted payment method types can now be controlled from your Stripe account settings. This will allow you to enable/disable certain payment methods.
+- Updated the documentation link for the Stripe Subscription button configuration.
+- Enhanced the auto-login feature's redirect URL handling for better compatibility with some servers.
+- New registration and profile form UI and validation is the default UI for all new installs. The old UI can be enabled from the advanced settings menu.
+- Added Arabic translation files to the plugin. Thanks to @Adham.
+- Added output escaping to the new registration and edit profile forms.
+
+= 4.4.2 =
+- Added an option to specify a cancel URL for Stripe buy now button.
+- The PayPal order ID is also passed to the PayPal payment capture API call's header.
+- Added a check for the PayPal Buy Now payment capture status in the IPN handling script.
+- Updated the Spanish language translation file.
+- Minor spelling mistake fixed.
+
+= 4.4.1 =
+- Added 'Cayman Islands' to the country dropdown list.
+- The unique session ID generation process improved.
+- The PayPal Token cache will be deleted automatically if the Live/Test mode option is changed in the settings menu.
+- Fixed an issue with the PayPal test/live mode toggle issue with the new API.
+
+= 4.4.0 =
+- Added a new feature in the 'Bulk Operation' menu tab to allow bulk update members account status.
+- Improved the email validation in the new registration form UI.
+- Updated the Spanish language translation file.
+- Changed the aciton hook name 'swpm_login' to 'swpm_after_login_authentication' to describe the hook better.
+- The after login redirection feature won't be application when the login form originates from the WP Login form. 
+- This will remove confusion for some users when they login from the standard WP login form (not the simple membership's login form) and then the page redirects to the after login redirection URL.
+
 = 4.3.9 = 
 - Note: Significant updates have been made to the PayPal's new API related code in this release. Please take a backup of your site before updating.
 - The 'Payment Settings' tab has been moved to the 'Payments' menu. Allowing all payment configuration related functions to be under one menu.

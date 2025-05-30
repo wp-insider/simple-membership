@@ -60,12 +60,12 @@ Read the [setup documentation](https://simple-membership-plugin.com/simple-membe
 
 = Plugin Support =
 
-If you have any issue with this plugin, please visit the plugin site and post it on the support forum or send us a contact:
+If you encounter any issues with this plugin, please visit our website to post on the support forum or contact us directly.
 https://simple-membership-plugin.com/
 
-You can create a free forum user account and ask your questions.
+You can create a free forum account to ask your questions.
 
-= Miscellaneous =
+= Additional Features =
 
 * Works with any WordPress theme.
 * Ability to protect photo galleries.
@@ -109,6 +109,7 @@ You can create a free forum user account and ask your questions.
 * Option to configure whitelisting for user email addresses to allow registration only from specific email addresses or email domains.
 * Option to configure blacklisting for user email addresses to block registration from certain email addresses or email domains.
 * Allows you to set an active login limit for members, helping to prevent account sharing.
+* Option to enable and set failed login attempt limit, which helps to protect against brute force attacks.
 * Option to enable login event tracking, allowing you to view the history of member logins.
 * Option to reset the settings and data of the plugin to start fresh.
 * Option to configure PayPal payment buttons for memberships (one-time and recurring payments).
@@ -178,18 +179,18 @@ https://simple-membership-plugin.com/
 == Changelog ==
 
 = WIP =
-- [TODO - doc link] Added a new feature to limit failed login attempts.
-- Enhanced user experience by disabling browser auto-fill on the password field in the new registration form.
-- Added a debug log message upon successful user logout.
-- Minor code refactoring related to the Stripe client reference ID.
-- Added a new filter hook 'swpm_paypal_ppcp_order_shipping_preference' to allow customization of the shipping preference for PayPal PPCP checkout.
-- Added a new filter hook 'swpm_paypal_ppcp_order_item_category' to allow customization of the item category for PayPal PPCP checkout.
-- For PayPal PPCP checkout, if no Thank You page URL is specified, a success message will be displayed above the PayPal button by default.
-- New feature added to redirect users to the paid registration page after a successful payment to complete his/her account.
-- New shortcode parameter 'redirect_to_after_cancel' added to the shortcode 'swpm_show_subscriptions_and_cancel_link' to allow redirect to specific url after a subscription is cancelled.
-- Some escaping functions added to payment button configurations admin menu.
-- Two new utility functions (apply_protection_to_post and apply_protection_to_posts) added to apply protections.
-- Some PHP notice and warning issue fixed.
+- Added a new feature to limit failed login attempts. Read the [failed login limit documentation](https://simple-membership-plugin.com/configuring-the-failed-login-attempt-limit-feature/) for more information.
+- Improved user experience by disabling browser auto-fill on the password field in the new registration form.
+- Added a debug log entry for successful user logouts.
+- Refactored Stripe-related code for the client reference ID.
+- Added new filter hook: 'swpm_paypal_ppcp_order_shipping_preference' to customize the shipping preference in PayPal PPCP checkout.
+- Added new filter hook: 'swpm_paypal_ppcp_order_item_category' to customize the item category in PayPal PPCP checkout.
+- For PayPal PPCP checkout, if no Thank You page URL is set, a default success message will now appear above the PayPal button.
+- Introduced a new feature: users are redirected to the paid registration page after successful payment to complete their account setup.
+- Added 'redirect_to_after_cancel' parameter to the 'swpm_show_subscriptions_and_cancel_link' shortcode to allow redirection to a custom URL after subscription cancellation.
+- Added escaping functions to improve security on the payment button configuration admin screen.
+- Introduced two new utility functions: `apply_protection_to_post` and `apply_protection_to_posts`.
+- Addressed minor PHP notices and warning-related issues.
 
 = 4.6.3 =
 - WordPress 6.8 compatibility related changes.
@@ -232,7 +233,7 @@ https://simple-membership-plugin.com/
 - Fixed a minor PHP notice issue.
 - Braintree SDK updated to v6.23.0.
 - Minor improvement to the category protection UI.
-- Added the [Cloudflare Turnstile captcha integration](https://simple-membership-plugin.com/simple-membership-and-cloudflare-turnstile-integration-addon/).
+- Added the [Cloudflare Turnstile CAPTCHA integration](https://simple-membership-plugin.com/simple-membership-and-cloudflare-turnstile-integration-addon/).
 
 = 4.5.9 =
 - The "Tools" tab has been relocated to its own standalone menu item.

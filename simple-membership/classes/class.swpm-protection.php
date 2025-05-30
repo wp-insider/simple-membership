@@ -116,7 +116,7 @@ class SwpmProtection extends SwpmProtectionBase {
 	}
 
 	/**
-	 * Apply protection to a post by the post id.
+	 * Apply protection to a post by post-id.
 	 *
 	 * @param int $post_id The post id to apply protection on.
 	 * @param array $allowed_levels List of membership level ids that will be allowed to access this post. Leave empty to not apply allowance to none.
@@ -125,24 +125,28 @@ class SwpmProtection extends SwpmProtectionBase {
 	 * @return void
 	 */
 	public static function apply_protection_to_post(int $post_id, array $allowed_levels = array(), string $post_type = 'post') {
-		// Turn on protection for this post.
-		SwpmProtection::get_instance()->apply( array($post_id), $post_type )->save();
+		// Apply protection to the given post.
+        $protection = SwpmProtection::get_instance();
+        $applied_protection = $protection->apply(array($post_id), $post_type);
+        $applied_protection->save();        
 
 		if (!empty($allowed_levels)){
-			// Apply allowance to these membership levels that can access this content.
+            // Ensure the SwpmPermission class is loaded.
+            if ( ! class_exists( SwpmPermission::class ) ) {
+                require_once SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-permission.php';
+            }
 
-			if (!class_exists(SwpmPermission::class)){
-				require_once SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-permission.php';
-			}
-
-			foreach ($allowed_levels as $level_id){
-				SwpmPermission::get_instance(intval($level_id))->apply(array($post_id), $post_type)->save();
-			}
+            // Loop through each allowed level and apply the permission accordingly for the content.
+            foreach ( $allowed_levels as $level_id ) {
+                $permission_instance = SwpmPermission::get_instance( intval( $level_id ) );
+                $applied_protection = $permission_instance->apply( array( $post_id ), $post_type );
+                $applied_protection->save();
+            }
 		}
 	}
 
 	/**
-	 * Apply protection to the posts by an array of post ids.
+	 * Apply protection to posts by an array of post-ids.
 	 *
 	 * @param array $post_ids List post ids to apply protection on.
 	 * @param array $allowed_levels List of membership level ids that will be allowed to access these posts. Leave empty to not apply allowance to none.

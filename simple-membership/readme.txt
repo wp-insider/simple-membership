@@ -181,7 +181,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 
 = WIP =
-- Updated the plugin name to "Simple Membership" in the main PHP file to match the plugin slug and readme file.
+- [Do Testing] Updated the plugin name to "Simple Membership" in the main PHP file to match the plugin slug and readme file.
 
 = 4.6.4 =
 - Added a new feature to limit failed login attempts. Read the [failed login limit documentation](https://simple-membership-plugin.com/configuring-the-failed-login-attempt-limit-feature/) for more information.

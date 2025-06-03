@@ -806,9 +806,9 @@ class SwpmSettings {
 			array(
 				'item'    => 'delete-pending-account',
 				'options' => array(
-					0 => 'Do not delete',
-					1 => 'Older than 1 month',
-					2 => 'Older than 2 months',
+					0 => __('Do not delete', 'simple-membership'),
+					1 => __('Older than 1 month', 'simple-membership'),
+					2 => __('Older than 2 months', 'simple-membership'),
 				),
 				'default' => '0',
 				'message' => SwpmUtils::_( 'Select how long you want to keep "pending" account.' ),

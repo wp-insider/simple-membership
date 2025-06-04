@@ -54,19 +54,62 @@ class SwpmShortcodesHandler {
 			return $error_msg;
 		}
 
-		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_button_shortcode_view.php' );
-		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_button_shortcode_view.php' );
-		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_sca_button_shortcode_view.php' );
-		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/braintree_button_shortcode_view.php' );
-		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php' );
-		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_buy_now_new_button_shortcode_view.php' );
-		include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_subscription_new_button_shortcode_view.php' );
-
-		$button_code = '';
-		$button_code = apply_filters( 'swpm_payment_button_shortcode_for_' . $button_type, $button_code, $args );
-
 		$output  = '';
-		$output .= '<div class="swpm-payment-button">' . $button_code . '</div>';
+
+		$warning_msg = '';
+		$hide_payment_btn = false;
+		if (in_array($button_type, array('stripe_sca_subscription', 'pp_subscription_new'))){
+			$show_warning_if_any_active_sub = get_post_meta( $button_id, 'show_warning_if_any_active_sub', true );
+
+			$is_visitor_logged_in = SwpmAuth::get_instance()->is_logged_in();
+
+			if ( $is_visitor_logged_in && !empty($show_warning_if_any_active_sub) ){
+				// The visitor is logged in and active subs warning is turned on.
+
+				// Now check if the user has any active subscription
+				$logged_in_member_id = SwpmMemberUtils::get_logged_in_members_id();
+				$sub_utils = new SWPM_Utils_Subscriptions($logged_in_member_id);
+				$sub_utils->load_subs_data();
+				$active_sub_count = $sub_utils->get_active_subs_count();
+
+				if (!empty($active_sub_count)){
+					// Active subscription detected.
+
+					// Decide whether to hide the button or not.
+					$hide_btn_if_any_active_sub = get_post_meta( $button_id, 'hide_btn_if_any_active_sub', true );
+					$hide_payment_btn = !empty($hide_btn_if_any_active_sub) && $hide_btn_if_any_active_sub == 1;
+
+					// Crete the warning message regarding active subscriptions.
+					$warning_msg .= '<div class="swpm-yellow-box">';
+					$warning_msg .=  __('You have an active subscription already.', 'simple-membership');
+					$sub_cancel_page_url = get_post_meta( $button_id, 'sub_cancel_page_url', true );
+					if (!empty($sub_cancel_page_url)){
+						$sub_cancel_page_url_link = '<a href="'.esc_url($sub_cancel_page_url).'">'. __('page', 'simple-membership') .'</a>';
+						$warning_msg .= ' ' . __(' To cancel the current active subscription go to this ', 'simple-membership') . $sub_cancel_page_url_link;
+					}
+					$warning_msg .= '</div>';
+				}
+			}
+		}
+
+		if (! $hide_payment_btn){
+			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_button_shortcode_view.php' );
+			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_button_shortcode_view.php' );
+			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_sca_button_shortcode_view.php' );
+			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/braintree_button_shortcode_view.php' );
+			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php' );
+			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_buy_now_new_button_shortcode_view.php' );
+			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_subscription_new_button_shortcode_view.php' );
+
+			$button_code = '';
+			$button_code = apply_filters( 'swpm_payment_button_shortcode_for_' . $button_type, $button_code, $args );
+
+			$output .= '<div class="swpm-payment-button">' . $button_code . '</div>';
+		}
+
+		if (!empty($warning_msg)){
+			$output = '<div>' . $output . $warning_msg . '</div>';
+		}
 
 		return $output;
 	}

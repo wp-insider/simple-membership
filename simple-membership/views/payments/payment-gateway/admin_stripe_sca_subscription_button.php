@@ -291,6 +291,31 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 					</td>
 				</tr>
 
+                <tr valign="top">
+                    <th scope="row"><?php _e( 'Show warning If Any Other Subscription Active' , 'simple-membership'); ?></th>
+                    <td>
+                        <input type="checkbox" name="show_warning_if_any_active_sub" value="1" <?php echo ( $edit ? ( ( isset( $opts['show_warning_if_any_active_sub'][0] ) && $opts['show_warning_if_any_active_sub'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
+                        <p class="description"><?php _e('Check this option if yuu want to show warning if any other subscription is active for that member.', 'simple-membership') ?></p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><?php _e( 'Hide Payment Button If Any Other Subscription Active' , 'simple-membership'); ?></th>
+                    <td>
+                        <input type="checkbox" name="hide_btn_if_any_active_sub" value="1" <?php echo ( $edit ? ( ( isset( $opts['hide_btn_if_any_active_sub'][0] ) && $opts['hide_btn_if_any_active_sub'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
+                        <p class="description">
+                            <?php _e('Check this option if yuu want to hide the payment button if any other subscription is active for that member', 'simple-membership') ?><br>
+                            <strong><?php _e('Note:', 'simple-membership'); ?></strong>  <?php _e('The button will be hidden only if the warning message is shown.', 'simple-membership') ?>
+                        </p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><?php _e( 'Subscription Cancel Page URL' , 'simple-membership'); ?></th>
+                    <td>
+                        <input type="text" size="100" name="sub_cancel_page_url" value="<?php echo ( $edit && isset($opts['sub_cancel_page_url'][0]) ? esc_url_raw($opts['sub_cancel_page_url'][0]) : '' ); ?>" />
+                        <p class="description"><?php _e('Enter the subscription cancel page url. This link will be show in the active subscription warning message box.', 'simple-membership') ?></p>
+                    </td>
+                </tr>
+
 			</table>
 		</div>
 	</div><!-- end of optional details box -->
@@ -381,6 +406,10 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 		update_post_meta( $button_id, 'stripe_automatic_tax', isset( $_POST['automatic_tax'] ) ? '1' : '' );
 		update_post_meta( $button_id, 'allow_promotion_codes', isset( $_POST['allow_promotion_codes'] ) ? '1' : '' );
 		update_post_meta( $button_id, 'redirect_to_paid_reg_link_after_payment', isset( $_POST['redirect_to_paid_reg_link_after_payment'] ) ? '1' : '' );
+
+		update_post_meta( $button_id, 'show_warning_if_any_active_sub', isset( $_POST['show_warning_if_any_active_sub'] ) ? $_POST['show_warning_if_any_active_sub'] : '' );
+		update_post_meta( $button_id, 'hide_btn_if_any_active_sub', isset( $_POST['hide_btn_if_any_active_sub'] ) ? $_POST['hide_btn_if_any_active_sub'] : '' );
+		update_post_meta( $button_id, 'sub_cancel_page_url', isset( $_POST['sub_cancel_page_url'] ) ? sanitize_url($_POST['sub_cancel_page_url']) : '' );
 
 		//API details
 		$stripe_test_secret_key = isset( $_POST['stripe_test_secret_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_secret_key'] ) ) : '';

@@ -183,6 +183,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 = WIP =
 - [Do Testing] Updated the plugin name to "Simple Membership" in the main PHP file to match the plugin slug and readme file.
 - Translation string updates for the 'Auto Delete Pending Account' field.
+- Account activation email resending feature added for admin side.
 
 = 4.6.4 =
 - Added a new feature to limit failed login attempts. Read the [failed login limit documentation](https://simple-membership-plugin.com/configuring-the-failed-login-attempt-limit-feature/) for more information.

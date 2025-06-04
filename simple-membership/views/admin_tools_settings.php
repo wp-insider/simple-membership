@@ -13,6 +13,50 @@ if(isset($_REQUEST['recreate-required-pages-submit'])){
     SwpmMiscUtils::create_mandatory_wp_pages();
     echo '<div class="swpm-green-box">' . SwpmUtils::_('The required pages have been re-created.') . '</div>';
 }
+
+if ( isset($_POST['resend_activation_email_submit']) && check_admin_referer('resend_activation_email_nonce_action') && isset($_POST['resend_activation_required_email_to'])){
+    $send_emails_to = sanitize_text_field($_POST['resend_activation_required_email_to']);
+
+    $activation_required_member_ids = array();
+
+    if ($send_emails_to == 'all'){
+        $members = SwpmMemberUtils::get_all_members_of_account_status('activation_required');
+        if (!empty($members)){
+            // Collect the member ids
+            foreach ($members as $member_info){
+	            $activation_required_member_ids[] = $member_info->member_id;
+            }
+        } else {
+	        echo '<div class="notice notice-warning"><p>' . esc_html__('No member account found to send activation emails to.', 'simple-membership') . '</p></div>';
+        }
+    } else {
+        if (isset($_POST['activation_member_id']) && is_numeric($_POST['activation_member_id'])){
+            // Collect the member id.
+	        $activation_required_member_ids[] = intval(sanitize_text_field($_POST['activation_member_id']));
+        } else {
+            echo '<div class="notice notice-error"><p>' . esc_html__('Empty or invalid member ID provided!', 'simple-membership') . '</p></div>';
+        }
+    }
+
+    if (!empty($activation_required_member_ids)){
+        $is_any_error = false;
+        foreach ($activation_required_member_ids as $member_id){
+            SwpmMiscUtils::resend_activation_email_bu_member_id($member_id);
+
+            // Check if any error.
+            $error_msg = SwpmTransfer::get_instance()->get('resend_activation_email_error');
+            if (!empty($error_msg)){
+	            $is_any_error = true;
+	            echo '<div class="notice notice-error"><p>' . esc_html($error_msg) . '</p></div>';
+            }
+        }
+
+        // If no error, show the success msg.
+        if (!$is_any_error){
+            echo '<div class="notice notice-success"><p>' . esc_html__('Account activation email sent successfully!', 'simple-membership') . '</p></div>';
+        }
+    }
+}
 ?>
 <!-- Note: This view file is included inside of post-stuff and post-body divs already -->
 <div class="swpm-grey-box">
@@ -91,6 +135,54 @@ if(isset($_REQUEST['recreate-required-pages-submit'])){
                     </td>
                 </tr>
             </table>
+        </form>
+
+    </div>
+</div>
+
+<div class="postbox">
+    <h3 class="hndle">
+        <label for="title"><?php esc_html_e( 'Re-send activation required account email', 'simple-membership' ) ?></label>
+    </h3>
+    <div class="inside">
+        <p class="description">
+            <?php esc_attr_e( 'If for some reason the activation email could not be sent, then you can use this to re-send that mail.', 'simple-membership') ?>
+        </p>
+
+        <form action="" method="post">
+            <table class="form-table">
+                <tr>
+                    <th><?php esc_html_e('Sent activation email to', 'simple-membership'); ?></th>
+                    <td>
+                        <div>
+                            <label>
+                                <input type="radio" name="resend_activation_required_email_to" value="one" checked>
+                                <span>
+                                    <?php esc_html_e('For a Specific Member ID', 'simple-membership'); ?>
+                                    <input type="text" name="activation_member_id" size="5">
+                                </span>
+                            </label>
+                        </div>
+                        <div>
+                            <?php esc_html_e('Or', 'simple-membership'); ?>
+                        </div>
+                        <div>
+                            <label>
+                                <input type="radio" name="resend_activation_required_email_to" value="all">
+                                <span>
+                                    <?php esc_html_e('For All Activation Required Account', 'simple-membership'); ?>
+                                </span>
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <?php wp_nonce_field('resend_activation_email_nonce_action') ?>
+
+            <p class="submit">
+                <input type="submit" name="resend_activation_email_submit" class="button-primary" value="<?php esc_attr_e( 'Re-send activation email', 'simple-membership') ?>"/>
+            </p>
         </form>
 
     </div>

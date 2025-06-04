@@ -41,7 +41,7 @@ if ( isset($_POST['resend_activation_email_submit']) && check_admin_referer('res
     if (!empty($activation_required_member_ids)){
         $is_any_error = false;
         foreach ($activation_required_member_ids as $member_id){
-            SwpmMiscUtils::resend_activation_email_bu_member_id($member_id);
+            SwpmMiscUtils::resend_activation_email_by_member_id($member_id);
 
             // Check if any error.
             $error_msg = SwpmTransfer::get_instance()->get('resend_activation_email_error');

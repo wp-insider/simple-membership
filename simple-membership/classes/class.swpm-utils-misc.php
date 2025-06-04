@@ -1173,7 +1173,7 @@ class SwpmMiscUtils {
 		return false;
 	}
 
-	public static function resend_activation_email_bu_member_id( $member_id ) {
+	public static function resend_activation_email_by_member_id( $member_id ) {
 		$member = SwpmMemberUtils::get_user_by_id( $member_id );
 		if ( empty( $member ) ) {
 			//can't find member

@@ -14,7 +14,10 @@ if(isset($_REQUEST['recreate-required-pages-submit'])){
     echo '<div class="swpm-green-box">' . SwpmUtils::_('The required pages have been re-created.') . '</div>';
 }
 
-if ( isset($_POST['resend_activation_email_submit']) && check_admin_referer('resend_activation_email_nonce_action') && isset($_POST['resend_activation_required_email_to'])){
+if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_activation_required_email_to'])){
+    // Nonce check
+	check_admin_referer('resend_activation_email_nonce_action');
+
     $send_emails_to = sanitize_text_field($_POST['resend_activation_required_email_to']);
 
     $activation_required_member_ids = array();

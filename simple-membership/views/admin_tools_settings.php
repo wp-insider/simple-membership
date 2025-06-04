@@ -82,7 +82,7 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
                     <td>
                         <input type="radio" value="one" name="swpm_link_for" /><?php _e('For a Particular Member ID', 'simple-membership'); ?>
                         <input type="text" name="member_id" size="5" value="" />
-                        <p><strong><?php echo SwpmUtils::_('OR') ?></strong></p>
+                        <div><?php echo SwpmUtils::_('OR') ?></div>
                         <input type="radio" checked="checked" value="all" name="swpm_link_for" /> <?php echo SwpmUtils::_('For All Incomplete Registrations') ?>
                     </td>
                 </tr>
@@ -169,7 +169,7 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
                             </label>
                         </div>
                         <div>
-                            <?php esc_html_e('Or', 'simple-membership'); ?>
+                            <?php esc_html_e('OR', 'simple-membership'); ?>
                         </div>
                         <div>
                             <label>

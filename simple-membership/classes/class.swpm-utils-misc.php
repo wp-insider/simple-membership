@@ -2,8 +2,6 @@
 
 class SwpmMiscUtils {
 
-	public static $stripe_sca_frontend_scripts_printed = false;
-
 	public static function create_mandatory_wp_pages() {
 		$settings = SwpmSettings::get_instance();
 
@@ -1147,23 +1145,6 @@ class SwpmMiscUtils {
 			$email_body = nl2br( $email_body );
 		}
 		wp_mail( $email, $subject, $email_body, $headers );
-	}
-
-	/**
-	* Outputs Stripe SCA frontend scripts and styles once
-	* @deprecated
-	*/
-	public static function output_stripe_sca_frontend_scripts_once() {
-		
-		trigger_error(__METHOD__ . ' is deprecated', E_USER_DEPRECATED);
-
-		$out = '';
-		if ( ! self::$stripe_sca_frontend_scripts_printed ) {
-			$out                                      .= '<script src="https://js.stripe.com/v3/"></script>';
-			$out                                      .= "<link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css' type='text/css' media='all' />";
-			self::$stripe_sca_frontend_scripts_printed = true;
-		}
-		return $out;
 	}
 
 	public static function has_tag( $body, $tag ) {

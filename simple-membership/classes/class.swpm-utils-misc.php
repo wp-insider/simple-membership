@@ -1147,7 +1147,7 @@ class SwpmMiscUtils {
 		wp_mail( $email, $subject, $email_body, $headers );
 	}
 
-	public static function has_tag( $body, $tag ) {
+	public static function has_email_merge_tag( $body, $tag ) {
 		if( strpos( $body, $tag ) !== false ) {
 			return true;
 		}

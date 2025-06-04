@@ -632,7 +632,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$body = $settings->get_value( 'reset-mail-body' );
 		$body = html_entity_decode( $body );
 		//If the tag {password_reset_link} is not present in the email body, add it at the bottom of the email body.
-		if( $password_reset_using_link && ( !SwpmMiscUtils::has_tag( $body, "{password_reset_link}" ) ) ) {
+		if( $password_reset_using_link && ( !SwpmMiscUtils::has_email_merge_tag( $body, "{password_reset_link}" ) ) ) {
 			$body .= "\n\nPassword Reset Link: {password_reset_link}";
 		}
                 //Merge tag replacement.

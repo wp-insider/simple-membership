@@ -67,19 +67,20 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
 </div>
 
 <div class="postbox">
-    <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Generate a Registration Completion link') ?></label></h3>
+    <h3 class="hndle"><label for="title"><?php _e('Generate Registration Completion Link', 'simple-membership') ?></label></h3>
     <div class="inside">
 
-        <p><strong><?php echo SwpmUtils::_('You can manually generate a registration completion link here and give it to your customer if they have missed the email that was automatically sent out to them after the payment.') ?></strong></p>
-
+        <p class="description">
+            <?php _e('You can manually generate a unique registration completion link here and share it with your customer if they missed the email that was automatically sent after payment.', 'simple-membership'); ?>
+        </p>
         <form action="" method="post">
             <table>
                 <tr>
                     <?php echo SwpmUtils::_('Generate Registration Completion Link') ?>
-                <br /><input type="radio" value="one" name="swpm_link_for" /><?php _e('For a Particular Member ID', 'simple-membership'); ?>
-                <input type="text" name="member_id" size="5" value="" />
-                <br /><strong><?php echo SwpmUtils::_('OR') ?></strong>
-                <br /><input type="radio" checked="checked" value="all" name="swpm_link_for" /> <?php echo SwpmUtils::_('For All Incomplete Registrations') ?>
+                    <br /><input type="radio" value="one" name="swpm_link_for" /><?php _e('For a Particular Member ID', 'simple-membership'); ?>
+                    <input type="text" name="member_id" size="5" value="" />
+                    <br /><strong><?php echo SwpmUtils::_('OR') ?></strong>
+                    <br /><input type="radio" checked="checked" value="all" name="swpm_link_for" /> <?php echo SwpmUtils::_('For All Incomplete Registrations') ?>
                 </tr>
                 <tr>
                     <td>
@@ -101,7 +102,7 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
                         if (!empty($links)) {
                             echo '<div class="swpm-green-box">' . SwpmUtils::_('Link(s) generated successfully. The following link(s) can be used to complete the registration.') . '</div>';
                         } else {
-                            echo '<div class="swpm-grey-box">' . SwpmUtils::_('Registration completion links will appear below') . '</div>';
+                            echo '<div class="swpm-grey-box">' . SwpmUtils::_('The registration completion link(s) will be displayed below.') . '</div>';
                         }
                         ?>
                         <div class="swpm-margin-top-10"></div>
@@ -145,17 +146,21 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
 
 <div class="postbox">
     <h3 class="hndle">
-        <label for="title"><?php esc_html_e( 'Re-send activation required account email', 'simple-membership' ) ?></label>
+        <label for="title"><?php esc_html_e( 'Resend Account Activation Email', 'simple-membership' ) ?></label>
     </h3>
     <div class="inside">
         <p class="description">
-            <?php esc_attr_e( 'If for some reason the activation email could not be sent, then you can use this to re-send that mail.', 'simple-membership') ?>
+            <?php 
+            _e( 'If you are using the ', 'simple-membership');
+            echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . __('Email Activation Feature', 'simple-membership') . '</a>';
+            _e( ', this tool allows the admin to manually resend the activation email to member(s). It can be useful if a member did not receive the original email or needs a new activation link.', 'simple-membership');
+            ?>
         </p>
 
         <form action="" method="post">
             <table class="form-table">
                 <tr>
-                    <th><?php esc_html_e('Sent activation email to', 'simple-membership'); ?></th>
+                    <th><?php esc_html_e('Resend Activation Email To', 'simple-membership'); ?></th>
                     <td>
                         <div>
                             <label>
@@ -173,7 +178,7 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
                             <label>
                                 <input type="radio" name="resend_activation_required_email_to" value="all">
                                 <span>
-                                    <?php esc_html_e('For All Activation Required Account', 'simple-membership'); ?>
+                                    <?php esc_html_e('For All Accounts Awaiting Activation', 'simple-membership'); ?>
                                 </span>
                             </label>
                         </div>
@@ -184,7 +189,7 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
             <?php wp_nonce_field('resend_activation_email_nonce_action') ?>
 
             <p class="submit">
-                <input type="submit" name="resend_activation_email_submit" class="button-primary" value="<?php esc_attr_e( 'Re-send activation email', 'simple-membership') ?>"/>
+                <input type="submit" name="resend_activation_email_submit" class="button-primary" value="<?php esc_attr_e( 'Re-send Activation Email', 'simple-membership') ?>"/>
             </p>
         </form>
 

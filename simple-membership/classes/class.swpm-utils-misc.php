@@ -1181,7 +1181,7 @@ class SwpmMiscUtils {
 			SwpmTransfer::get_instance()->set('resend_activation_email_error', sprintf(__('Cannot find member account of ID: %d.', 'simple-membership'), $member_id));
 			return;
 		}
-		if ( $member->account_state !== 'activation_required' ) {
+		if ( isset($member->account_state) && $member->account_state !== 'activation_required' ) {
 			//account already active
 			SwpmLog::log_simple_debug( 'Account activation email for member ID: '.$member_id.' could not be sent. Account activation already done.', false );
 			SwpmTransfer::get_instance()->set('resend_activation_email_error', sprintf(__('Account activation for member ID: %d already done.', 'simple-membership'), $member_id));

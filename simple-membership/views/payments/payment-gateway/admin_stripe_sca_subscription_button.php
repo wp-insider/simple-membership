@@ -291,34 +291,49 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 					</td>
 				</tr>
 
+			</table>
+		</div>
+	</div><!-- end of optional details box -->
+
+	<div class="postbox">
+		<h3 class="hndle"><label for="title"><?php _e( 'Active Subscription Check' , 'simple-membership'); ?></label></h3>
+		<div class="inside">
+
+			<p class="description">
+				<?php _e('The options in this section allow you to check if the logged-in member already has an active subscription and display a warning message if needed.', 'simple-membership') ?>
+			</p>
+
+			<table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
+
                 <tr valign="top">
-                    <th scope="row"><?php _e( 'Show warning If Any Other Subscription Active' , 'simple-membership'); ?></th>
+                    <th scope="row"><?php _e( 'Show Warning for Existing Subscription' , 'simple-membership'); ?></th>
                     <td>
                         <input type="checkbox" name="show_warning_if_any_active_sub" value="1" <?php echo ( $edit ? ( ( isset( $opts['show_warning_if_any_active_sub'][0] ) && $opts['show_warning_if_any_active_sub'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
-                        <p class="description"><?php _e('Check this option if yuu want to show warning if any other subscription is active for that member.', 'simple-membership') ?></p>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row"><?php _e( 'Hide Payment Button If Any Other Subscription Active' , 'simple-membership'); ?></th>
-                    <td>
-                        <input type="checkbox" name="hide_btn_if_any_active_sub" value="1" <?php echo ( $edit ? ( ( isset( $opts['hide_btn_if_any_active_sub'][0] ) && $opts['hide_btn_if_any_active_sub'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
+                        <p class="description"><?php _e('Enable this option to display a warning message next to the subscription button if the logged-in member already has an active subscription.', 'simple-membership') ?></p>
+
+						<br />
+						<p><strong><?php _e( 'Message to Display for Existing Subscription' , 'simple-membership'); ?></strong></p>
+                        <input type="text" size="100" name="warning_msg_for_existing_sub" value="<?php echo ( $edit && isset($opts['warning_msg_for_existing_sub'][0]) ? esc_attr($opts['warning_msg_for_existing_sub'][0]) : '' ); ?>" />
                         <p class="description">
-                            <?php _e('Check this option if yuu want to hide the payment button if any other subscription is active for that member', 'simple-membership') ?><br>
-                            <strong><?php _e('Note:', 'simple-membership'); ?></strong>  <?php _e('The button will be hidden only if the warning message is shown.', 'simple-membership') ?>
-                        </p>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row"><?php _e( 'Subscription Cancel Page URL' , 'simple-membership'); ?></th>
-                    <td>
-                        <input type="text" size="100" name="sub_cancel_page_url" value="<?php echo ( $edit && isset($opts['sub_cancel_page_url'][0]) ? esc_url_raw($opts['sub_cancel_page_url'][0]) : '' ); ?>" />
-                        <p class="description"><?php _e('Enter the subscription cancel page url. This link will be show in the active subscription warning message box.', 'simple-membership') ?></p>
+							<?php 
+							_e('Enter the custom message you want to show to logged-in members who already have an active subscription.', 'simple-membership');
+							echo ' ' . __('You may include a link to a page with ', 'simple-membership');
+							echo '<a href="https://simple-membership-plugin.com/show-active-subscriptions-and-providing-a-cancellation-option/" target="_blank">' . __('self-cancellation instructions', 'simple-membership') . '</a>.';
+							?>
+						</p>
+
+						<br />
+						<input type="checkbox" name="hide_btn_if_any_active_sub" value="1" <?php echo ( $edit ? ( ( isset( $opts['hide_btn_if_any_active_sub'][0] ) && $opts['hide_btn_if_any_active_sub'][0] === '1' ) ? ' checked' : '' ) : '' ); ?> />
+						<strong><?php echo ' ' . __( 'Hide Payment Button if Another Subscription is Active' , 'simple-membership'); ?></strong>
+						<p class="description">
+							<?php _e('Check this option to hide the subscription button when the warning message is displayed for an existing active subscription.', 'simple-membership') ?>
+						</p>
                     </td>
                 </tr>
 
 			</table>
 		</div>
-	</div><!-- end of optional details box -->
+	</div><!-- end of Active Subscription Check box -->
 
 	<p class="submit">
 		<?php wp_nonce_field( 'swpm_admin_add_edit_stripe_sca_subs_btn', 'swpm_admin_add_edit_stripe_sca_subs_btn' ); ?>
@@ -409,7 +424,7 @@ function swpm_save_edit_stripe_sca_subscription_button_data() {
 
 		update_post_meta( $button_id, 'show_warning_if_any_active_sub', isset( $_POST['show_warning_if_any_active_sub'] ) ? $_POST['show_warning_if_any_active_sub'] : '' );
 		update_post_meta( $button_id, 'hide_btn_if_any_active_sub', isset( $_POST['hide_btn_if_any_active_sub'] ) ? $_POST['hide_btn_if_any_active_sub'] : '' );
-		update_post_meta( $button_id, 'sub_cancel_page_url', isset( $_POST['sub_cancel_page_url'] ) ? sanitize_url($_POST['sub_cancel_page_url']) : '' );
+		update_post_meta( $button_id, 'warning_msg_for_existing_sub', isset( $_POST['warning_msg_for_existing_sub'] ) ? wp_kses_post($_POST['warning_msg_for_existing_sub']) : '' );
 
 		//API details
 		$stripe_test_secret_key = isset( $_POST['stripe_test_secret_key'] ) ? sanitize_text_field( stripslashes ( $_POST['stripe_test_secret_key'] ) ) : '';

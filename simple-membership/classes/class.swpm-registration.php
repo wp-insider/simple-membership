@@ -24,6 +24,8 @@ abstract class SwpmRegistration {
 		if ( $this->email_activation ) {
 			//Generate the activation code and store it in the DB
 			//Note: this function is called again after the email activation is completed to send the standard registration complete email.
+
+			SwpmLog::log_simple_debug( 'send_reg_email() - email activation is enabled. Generating activation link so it can be inserted into the registration complete email.', true );
 			$swpm_user = SwpmMemberUtils::get_user_by_user_name( $member_info['user_name'] );
 			$member_id = $swpm_user->member_id;
 			$act_code  = md5( uniqid() . $member_id );

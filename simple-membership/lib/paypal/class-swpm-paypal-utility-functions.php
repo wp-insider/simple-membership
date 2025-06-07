@@ -13,6 +13,24 @@ class SWPM_PayPal_Utility_Functions{
         return $environment_mode;
     }
 
+    public static function validate_paypal_client_id_settings( $settings_args ) {
+        //Validates PayPal client ID settings based on the selected mode (live or sandbox).
+        $is_live_mode = !empty($settings_args['is_live_mode']);
+        $live_client_id = isset($settings_args['live_client_id']) ? trim($settings_args['live_client_id']) : '';
+        $sandbox_client_id = isset($settings_args['sandbox_client_id']) ? trim($settings_args['sandbox_client_id']) : '';
+
+        if ( $is_live_mode && empty($live_client_id) ) {
+            return 'PayPal Live Client ID is missing in the settings while operating in live mode.';
+        }
+
+        if ( !$is_live_mode && empty($sandbox_client_id) ) {
+            return 'PayPal Sandbox Client ID is missing in the settings while operating in sandbox mode.';
+        }
+
+        // No error
+        return ''; 
+    }
+
 	public static function get_api_base_url_by_environment_mode( $environment_mode = 'production' ) {
 		if ($environment_mode == 'production') {
 			return SWPM_PayPal_Main::$api_base_url_production;

@@ -93,6 +93,13 @@ function swpm_render_pp_buy_now_new_button_sc_output($button_code, $args) {
         'is_subscription' => 0, /* It is used to set the "vault" parameter in the JS SDK */
     );
 
+    //Validate the PayPal client ID to ensure the settings are correct.
+    $any_validation_error = SWPM_PayPal_Utility_Functions::validate_paypal_client_id_settings( $settings_args );
+    if ( !empty($any_validation_error) ) {
+        //If there is any validation error, return the error message.
+        return '<p class="swpm-red-box">'.$any_validation_error.'</p>';
+    }
+
     //Initialize and set the settings args that will be used to load the JS SDK.
     $pp_js_button = SWPM_PayPal_JS_Button_Embed::get_instance();
     $pp_js_button->set_settings_args( $settings_args );

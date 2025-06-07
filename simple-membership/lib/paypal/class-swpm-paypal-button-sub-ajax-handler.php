@@ -284,7 +284,7 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		}
 		$ipn['quantity'] = 1;
 
-		// customer info.
+		//Customer info.
 		$ipn['ip'] = isset($customvariables['user_ip']) ? $customvariables['user_ip'] : '';
 		$ipn['first_name'] = isset($txn_data['subscriber']['name']['given_name']) ? $txn_data['subscriber']['name']['given_name'] : '';
 		$ipn['last_name'] = isset($txn_data['subscriber']['name']['surname']) ? $txn_data['subscriber']['name']['surname'] : '';
@@ -296,9 +296,49 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		$ipn['address_zip']     = isset($txn_data['subscriber']['shipping_address']['address']['postal_code']) ? $txn_data['subscriber']['shipping_address']['address']['postal_code'] : '';
 		$country_code = isset($txn_data['subscriber']['shipping_address']['address']['country_code']) ? $txn_data['subscriber']['shipping_address']['address']['country_code'] : '';
 		$ipn['address_country'] = SwpmMiscUtils::get_country_name_by_country_code($country_code);
-		//Additional variables
-		//$ipn['reason_code'] = $txn_data['reason_code'];
 
+
+		/**********************************/
+		//Ensure the customer's email and name are set. For guest checkout, the email and name may not be set in the standard onApprove data.
+		//So we will query the subscrition details from the PayPal API to get the subscriber's email and name (if needed).
+		/**********************************/
+		if( empty($ipn['payer_email']) || empty($ipn['first_name']) || empty($ipn['last_name']) ){
+			//Use the subscription ID to get the subscriber's email and name from the PayPal API.
+			$subscription_id = isset($ipn['subscr_id']) ? $ipn['subscr_id'] : '';
+			SwpmLog::log_simple_debug( 'Subscriber Email or Name not set in the onApprove data. Going to query the PayPal API for subscription details. Subscription ID: ' . $subscription_id, true );
+
+			//This is for on-site checkout only. So the 'mode' and API creds will be whatever is currently set in the settings.
+			$api_injector = new SWPM_PayPal_Request_API_Injector();
+			$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
+			if( $sub_details !== false ){
+				$subscriber = isset($sub_details->subscriber) ? $sub_details->subscriber : array();
+				if(is_object($subscriber)){
+					//Convert the object to an array.
+					$subscriber_data_array = json_decode(json_encode($subscriber), true);
+				}
+				//Debugging only.
+				SwpmLog::log_array_data_to_debug( $subscriber_data_array, true );
+				if( empty($ipn['payer_email']) && isset($subscriber_data_array['email_address']) ){
+					//Set the payer email from the subscriber data.
+					$ipn['payer_email'] = $subscriber_data_array['email_address'];
+				}
+				if( empty($ipn['first_name']) && isset($subscriber_data_array['name']['given_name']) ){
+					//Set the payer first name from the subscriber data.
+					$ipn['first_name'] = $subscriber_data_array['name']['given_name'];
+				}
+				if( empty($ipn['last_name']) && isset($subscriber_data_array['name']['surname']) ){
+					//Set the payer last name from the subscriber data.
+					$ipn['last_name'] = $subscriber_data_array['name']['surname'];
+				}
+				SwpmLog::log_simple_debug( 'Subscriber Email: ' . $ipn['payer_email'] . ', First Name: ' . $ipn['first_name'] . ', Last Name: ' . $ipn['last_name'], true );
+			} else {
+				//Error getting subscription details.
+				$validation_error_msg = 'Validation Error! Failed to get subscription details from the PayPal API. Subscription ID: ' . $subscription_id;
+				SwpmLog::log_simple_debug( $validation_error_msg, false );
+			}
+		}		
+
+		//Return the IPN data array. This will be used to create/update the member account and save the transaction data.
 		$this->ipn_data = $ipn;
 	}
 

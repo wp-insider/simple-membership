@@ -188,6 +188,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added a new filter hook 'swpm_payment_button_note_msg_output' to allow custom code to insert a message or note before the payment button.
 - Added a new filter hook 'swpm_hide_payment_button' to allow custom code to hide the payment button based on custom logic.
 - Added a validation for the PayPal client ID to ensure it is not empty when using the PayPal PPCP checkout.
+- For PayPal PPCP guest subscription checkout, it will query the subscription details from the PayPal API to retrieve the email address (if needed).
 
 = 4.6.4 =
 - Added a new feature to limit failed login attempts. Read the [failed login limit documentation](https://simple-membership-plugin.com/configuring-the-failed-login-attempt-limit-feature/) for more information.

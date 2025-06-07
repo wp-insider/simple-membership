@@ -82,9 +82,52 @@ class SWPM_PayPal_Utility_IPN_Related {
 		$ipn_data['address_zip']     = isset($txn_data['purchase_units'][0]['shipping']['address']['postal_code']) ? $txn_data['purchase_units'][0]['shipping']['address']['postal_code'] : '';
 		$country_code = isset($txn_data['purchase_units'][0]['shipping']['address']['country_code']) ? $txn_data['purchase_units'][0]['shipping']['address']['country_code'] : '';
 		$ipn_data['address_country'] = SwpmMiscUtils::get_country_name_by_country_code($country_code);
-		//Additional variables
-		//$ipn_data['reason_code'] = $txn_data['reason_code'];
+	
 
+		/**********************************/
+		//Ensure the customer's email and name are set. For guest checkout, the email and name may not be set in the standard onApprove data (due to privacy reasons).
+		//So we will query the Order details from the PayPal API to get the customer's email and name (if needed).
+		/**********************************/
+		if( empty($ipn_data['payer_email']) || empty($ipn_data['first_name']) || empty($ipn_data['last_name']) ){
+			//Use the order ID to get the customer's email and name from the PayPal API.
+			$pp_order_id = isset($data['order_id']) ? $data['order_id'] : '';
+			SwpmLog::log_simple_debug( 'Customer Email or Name not set in the onApprove data. Going to query the PayPal API for order details. Order ID: ' . $pp_order_id, true );
+
+			//This is for on-site checkout only. So the 'mode' and API creds will be whatever is currently set in the settings.
+			$api_injector = new SWPM_PayPal_Request_API_Injector();
+			$order_details = $api_injector->get_paypal_order_details( $pp_order_id );
+			if( $order_details !== false ){
+				//The order details were retrieved successfully.
+				$payer = isset($order_details->payer) ? $order_details->payer : array();
+				if(is_object($payer)){
+					//Convert the object to an array.
+					$customer_data_array = json_decode(json_encode($payer), true);
+				}
+				//Debugging only.
+				SwpmLog::log_array_data_to_debug( $customer_data_array, true );
+				
+				if( empty($ipn_data['payer_email']) && isset($customer_data_array['email_address']) ){
+					//Set the payer email from the subscriber data.
+					$ipn_data['payer_email'] = $customer_data_array['email_address'];
+				}
+				if( empty($ipn_data['first_name']) && isset($customer_data_array['name']['given_name']) ){
+					//Set the payer first name from the subscriber data.
+					$ipn_data['first_name'] = $customer_data_array['name']['given_name'];
+				}
+				if( empty($ipn_data['last_name']) && isset($customer_data_array['name']['surname']) ){
+					//Set the payer last name from the subscriber data.
+					$ipn_data['last_name'] = $customer_data_array['name']['surname'];
+				}
+				SwpmLog::log_simple_debug( 'Customer Email: ' . $ipn_data['payer_email'] . ', First Name: ' . $ipn_data['first_name'] . ', Last Name: ' . $ipn_data['last_name'], true );
+
+			} else {
+				//Error getting order details.
+				$validation_error_msg = 'Validation Error! Failed to get transaction/order details from the PayPal API. PayPal Order ID: ' . $pp_order_id;
+				SwpmLog::log_simple_debug( $validation_error_msg, false );
+			}
+		}
+
+		//Return the IPN data array.
 		return $ipn_data;
 	}
 
@@ -155,7 +198,7 @@ class SWPM_PayPal_Utility_IPN_Related {
 			}
 
 		} else {
-			//Error getting subscription details.
+			//Error getting order details.
 			$validation_error_msg = 'Validation Error! Failed to get transaction/order details from the PayPal API. PayPal Order ID: ' . $pp_orderID;
 			//TODO - Show additional error details if available.
 			SwpmLog::log_simple_debug( $validation_error_msg, false );

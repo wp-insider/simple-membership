@@ -318,6 +318,7 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 				}
 				//Debugging only.
 				SwpmLog::log_array_data_to_debug( $subscriber_data_array, true );
+				
 				if( empty($ipn['payer_email']) && isset($subscriber_data_array['email_address']) ){
 					//Set the payer email from the subscriber data.
 					$ipn['payer_email'] = $subscriber_data_array['email_address'];

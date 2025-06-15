@@ -11,6 +11,9 @@ class SWPM_Utils_Subscriptions
 {
 	private $member_id;
 	public static $active_statuses = array('trialing', 'active');
+
+	public static $last_active_sub;
+
 	private $active_subs_count = 0;
 	private $active_subs = array();//Used to store active subscriptions data only.
 	private $subs_count = 0;
@@ -840,4 +843,86 @@ class SWPM_Utils_Subscriptions
 		//In the future when we update that cancel shortcode to use the 'txn_type' post meta, then we can change/update the 'status' column.
         self::update_subscription_agreement_record_meta_by_sub_id($subscr_id, 'subscr_status', 'canceled');
     }
+
+	/**
+	 * Retrieve the last active sub data of a member.
+	 *
+	 */
+	public function get_last_active_sub_if_any(){
+		/*
+		 * NOTE: This method stores the last sub info in a static property to make the data persistent,
+		 * So when this method gets called next time, we can skip the sub data finding process reducing time complexity significantly.
+		 */
+
+		if ( isset(static::$last_active_sub) ) {
+			return static::$last_active_sub;
+		}
+
+		//Get any swpm_transactions CPT posts that are associated with the given member ID OR the given subscr_id.
+		$subscriptions = get_posts(array(
+			'post_type'  => 'swpm_transactions',
+			'posts_per_page' => -1,
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'relation' => 'OR',/* We are looking for subscriptions that are associated with the given member ID OR the given subscr_id */
+					array(
+						'key'     => 'member_id',
+						'value'   => $this->member_id,
+						'compare' => '=',
+					),
+					array(
+						'key'     => 'subscr_id',
+						'value'   => $this->subscr_id_attached_to_profile,
+						'compare' => '=',
+					),
+				),
+				array(
+					'relation' => 'OR',/* We are looking for subscriptions that are created using Stripe SCA or PayPal PPCP */
+					array(
+						'key'     => 'gateway',
+						'value'   => 'stripe-sca-subs',
+						'compare' => '=',
+					),
+					array(
+						'key'     => 'gateway',
+						'value'   => 'paypal_subscription_checkout',
+						'compare' => '=',
+					),
+				),
+			),
+		));
+
+		/*
+		 * Loop through the found subscriptions and get the last active subscription data.
+		 */
+
+		foreach ($subscriptions as $subscription) {
+			if ( !is_numeric($subscription->ID) ) {
+				continue;
+			}
+
+            // Check if subscription status post meta was explicitly set to 'canceled'.
+            $saved_subscription_status = get_post_meta($subscription->ID, 'subscr_status', true);
+            if ( in_array($saved_subscription_status, array('canceled', 'cancelled') ) ){
+                continue;
+            }
+
+			$sub = $this->create_subscription_data_array($subscription);
+
+			if (is_null($sub)){
+				continue;
+			}
+
+			$status = isset($sub['status']) ? $sub['status'] : '';
+
+			if ($this->is_active_status($status)) {
+                // An active subscription record found.
+				static::$last_active_sub = $sub;
+				break;
+			}
+		}
+
+		return static::$last_active_sub;
+	}
 }

@@ -70,10 +70,9 @@ class SwpmShortcodesHandler {
 				// Check if the user has any active subscription(s)
 				$logged_in_member_id = SwpmMemberUtils::get_logged_in_members_id();
 				$sub_utils = new SWPM_Utils_Subscriptions($logged_in_member_id);
-				$sub_utils->load_subs_data();
-				$active_sub_count = $sub_utils->get_active_subs_count();
+				$last_active_sub = $sub_utils->get_last_active_sub_if_any();
 
-				if (!empty($active_sub_count)){
+				if (!empty($last_active_sub)){
 					// Active subscription detected.
 
 					// Check if the hide subscription button option is enabled for this button.

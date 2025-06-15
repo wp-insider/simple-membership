@@ -76,7 +76,12 @@ function swpm_save_edit_pp_subscription_new_button_data() {
 
         add_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
 
-        //Check if webhooks already configured for this site. If not, create necessary webhooks.
+	    // Active subscription check settings.
+        update_post_meta( $button_id, 'show_warning_if_any_active_sub', isset( $_REQUEST['show_warning_if_any_active_sub'] ) ? $_REQUEST['show_warning_if_any_active_sub'] : '' );
+	    update_post_meta( $button_id, 'hide_btn_if_any_active_sub', isset( $_REQUEST['hide_btn_if_any_active_sub'] ) ? $_REQUEST['hide_btn_if_any_active_sub'] : '' );
+	    update_post_meta( $button_id, 'warning_msg_for_existing_sub', isset( $_REQUEST['warning_msg_for_existing_sub'] ) ? wp_kses_post($_REQUEST['warning_msg_for_existing_sub']) : '' );
+
+	    //Check if webhooks already configured for this site. If not, create necessary webhooks.
 		SWPM_PayPal_Utility_Functions::check_and_create_webhooks_for_this_site();
 
         //Redirect to the manage payment buttons interface
@@ -133,6 +138,11 @@ function swpm_save_edit_pp_subscription_new_button_data() {
         update_post_meta($button_id, 'redirect_to_paid_reg_link_after_payment', $redirect_to_paid_reg_link_after_payment);
 
         update_post_meta($button_id, 'return_url', trim(sanitize_text_field($_REQUEST['return_url'])));
+
+	    // Active subscription check settings.
+	    update_post_meta( $button_id, 'show_warning_if_any_active_sub', isset( $_REQUEST['show_warning_if_any_active_sub'] ) ? $_REQUEST['show_warning_if_any_active_sub'] : '' );
+	    update_post_meta( $button_id, 'hide_btn_if_any_active_sub', isset( $_REQUEST['hide_btn_if_any_active_sub'] ) ? $_REQUEST['hide_btn_if_any_active_sub'] : '' );
+	    update_post_meta( $button_id, 'warning_msg_for_existing_sub', isset( $_REQUEST['warning_msg_for_existing_sub'] ) ? wp_kses_post($_REQUEST['warning_msg_for_existing_sub']) : '' );
 
         echo '<div id="message" class="updated fade"><p>Payment button data successfully updated!</p></div>';
     }
@@ -450,6 +460,41 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                         </td>
                     </tr>
 
+                    <tr valign="top">
+                        <th colspan="2">
+                            <div class="swpm-grey-box"><?php _e('Active Subscription Check', 'simple-membership'); ?></div>
+                                <p class="description">
+		                        <?php _e('The options in this section allow you to check if the logged-in member already has an active subscription and display a warning message if needed.', 'simple-membership') ?>
+                            </p>
+                        </th>
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row"><?php _e( 'Show Warning for Existing Subscription' , 'simple-membership'); ?></th>
+                        <td>
+                            <input type="checkbox" name="show_warning_if_any_active_sub" value="1" <?php echo ( $is_edit_mode ? ( ( isset( $bt_opts['show_warning_if_any_active_sub'] ) && $bt_opts['show_warning_if_any_active_sub'] === '1' ) ? ' checked' : '' ) : '' ); ?> />
+                            <p class="description"><?php _e('Enable this option to display a warning message next to the subscription button if the logged-in member already has an active subscription.', 'simple-membership') ?></p>
+
+                            <br />
+                            <p><strong><?php _e( 'Message to Display for Existing Subscription' , 'simple-membership'); ?></strong></p>
+                            <input type="text" size="100" name="warning_msg_for_existing_sub" value="<?php echo ( $is_edit_mode && isset( $bt_opts['warning_msg_for_existing_sub'] ) ? esc_attr($bt_opts['warning_msg_for_existing_sub']) : '' ); ?>" />
+                            <p class="description">
+				                <?php
+				                _e('Enter the custom message you want to show to logged-in members who already have an active subscription.', 'simple-membership');
+				                echo ' ' . __('You may include a link to a page with ', 'simple-membership');
+				                echo '<a href="https://simple-membership-plugin.com/show-active-subscriptions-and-providing-a-cancellation-option/" target="_blank">' . __('self-cancellation instructions', 'simple-membership') . '</a>.';
+				                ?>
+                            </p>
+
+                            <br />
+                            <input type="checkbox" name="hide_btn_if_any_active_sub" value="1" <?php echo ( $is_edit_mode ? ( ( isset( $bt_opts['hide_btn_if_any_active_sub'] ) && $bt_opts['hide_btn_if_any_active_sub'] === '1' ) ? ' checked' : '' ) : '' ); ?> />
+                            <strong><?php echo ' ' . __( 'Hide Payment Button if Another Subscription is Active' , 'simple-membership'); ?></strong>
+                            <p class="description">
+				                <?php _e('Check this option to hide the subscription button when the warning message is displayed for an existing active subscription.', 'simple-membership') ?>
+                            </p>
+                        </td>
+                    </tr>
+
                 </table>
 
                 <p class="submit">
@@ -461,7 +506,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
 
         </div>
     </div>
-    <?php
+	<?php
 }
 
 /*****************************************************************
@@ -520,7 +565,11 @@ function swpm_edit_pp_subscription_new_button() {
         'return_url' => get_post_meta($button_id, 'return_url', true),
         'pp_subscription_plan_id' => get_post_meta($button_id, 'pp_subscription_plan_id', true),
         'pp_subscription_plan_mode' => get_post_meta($button_id, 'pp_subscription_plan_mode', true),
-    );
+
+	    'show_warning_if_any_active_sub' => sanitize_text_field(get_post_meta( $button_id, 'show_warning_if_any_active_sub', true )),
+	    'hide_btn_if_any_active_sub' => sanitize_text_field(get_post_meta( $button_id, 'hide_btn_if_any_active_sub', true )),
+	    'warning_msg_for_existing_sub' => wp_kses_post(get_post_meta( $button_id, 'warning_msg_for_existing_sub', true )),
+);
 
     render_save_edit_pp_subscription_new_button_interface($bt_opts, true);
 }

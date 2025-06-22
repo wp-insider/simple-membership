@@ -592,4 +592,15 @@ class SwpmMemberUtils {
 
 		SwpmMemberUtils::update_account_extra_info( $member_id, $extra_info );
 	}
+
+	public static function get_account_change_type( $args ){
+		$membership_level = isset($args['membership_level']) ? $args['membership_level'] : '';
+		$old_membership_level = isset($args['old_membership_level']) ? $args['old_membership_level'] : '';
+
+		if ($membership_level != $old_membership_level){
+			return 'upgrade';
+		}
+
+		return 'renew';
+	}
 }

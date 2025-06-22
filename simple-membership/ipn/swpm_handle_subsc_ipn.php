@@ -1,6 +1,6 @@
 <?php
 /* 
-* Note: We are passign the $ipn_data parameter by reference because we try to add the 'member_id' value to it (from our search or when we insert a new record).
+* Note: We are passing the $ipn_data parameter by reference because we try to add the 'member_id' value to it (from our search or when we insert a new record).
 * This is helpful to save the member_id reference in save transaction function later. 
 */
 function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_ref, $swpm_id = '' ) {
@@ -69,7 +69,14 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 		$subscription_starts = apply_filters( 'swpm_account_update_subscription_starts', $subscription_starts, $args );
 		swpm_debug_log_subsc( 'Setting access starts date value to: ' . $subscription_starts, true );
 
-		swpm_debug_log_subsc( 'Updating the current membership level (' . $old_membership_level . ') of this member to the newly paid level (' . $membership_level . ')', true );
+		// Check whether it is an account upgrade or renew event.
+		$is_account_upgrade = SwpmMemberUtils::get_account_change_type($args) == 'upgrade' ? true : false;
+		if ($is_account_upgrade){
+			swpm_debug_log_subsc( 'Updating the current membership level (' . $old_membership_level . ') of this member to the newly paid level (' . $membership_level . ')', true );
+		} else {
+			swpm_debug_log_subsc( 'Renewing this member account of membership level ' . $old_membership_level, true );
+		}
+
 		// Set account status to active, update level to the newly paid level, update access start date, update subsriber ID (if applicable).
 		$wpdb->query(
 			$wpdb->prepare(
@@ -102,32 +109,61 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 			)
 		);
 
-		// Set Email details for the account upgrade notification.
-		$email   = $ipn_data['payer_email'];
-		$subject = $settings->get_value( 'upgrade-complete-mail-subject' );
-		if ( empty( $subject ) ) {
-			$subject = 'Member Account Upgraded';
-		}
-		$body = $settings->get_value( 'upgrade-complete-mail-body' );
-		if ( empty( $body ) ) {
-			$body = 'Your account has been upgraded successfully';
-		}
-		$from_address = $settings->get_value( 'email-from' );
 
-		$additional_args = array();
-		$email_body      = SwpmMiscUtils::replace_dynamic_tags( $body, $swpm_id, $additional_args );
+		$email   = $ipn_data['payer_email'];
+		$from_address = $settings->get_value( 'email-from' );
 		$headers         = 'From: ' . $from_address . "\r\n";
+		$additional_args = array();
+
+		if ($is_account_upgrade){
+			if ( $settings->get_value( 'disable-email-after-upgrade' ) ) {
+				swpm_debug_log_subsc( 'The disable upgrade email settings is checked. No account upgrade/update email will be sent.', true );
+				//Nothing to do.
+			} else {
+				// Set Email details for the account upgrade notification.
+				$subject = $settings->get_value( 'upgrade-complete-mail-subject' );
+				if ( empty( $subject ) ) {
+					$subject = 'Member Account Upgraded';
+				}
+				$body = $settings->get_value( 'upgrade-complete-mail-body' );
+				if ( empty( $body ) ) {
+					$body = 'Your account has been upgraded successfully';
+				}
+
+				$email_body = SwpmMiscUtils::replace_dynamic_tags( $body, $swpm_id, $additional_args );
 
 				$subject    = apply_filters( 'swpm_email_upgrade_complete_subject', $subject );
 				$email_body = apply_filters( 'swpm_email_upgrade_complete_body', $email_body );
 
-		if ( $settings->get_value( 'disable-email-after-upgrade' ) ) {
-			swpm_debug_log_subsc( 'The disable upgrade email settings is checked. No account upgrade/update email will be sent.', true );
-			//Nothing to do.
+				SwpmMiscUtils::mail( $email, $subject, $email_body, $headers );
+				swpm_debug_log_subsc( 'Member upgrade/update completion email successfully sent to: ' . $email, true );
+			}
 		} else {
-			SwpmMiscUtils::mail( $email, $subject, $email_body, $headers );
-			swpm_debug_log_subsc( 'Member upgrade/update completion email successfully sent to: ' . $email, true );
+			// It is an account renew event.
+			if ( $settings->get_value( 'disable-email-after-renew' ) ) {
+				swpm_debug_log_subsc( 'The disable renew email settings is checked. No account renewal email will be sent.', true );
+				//Nothing to do.
+			} else {
+				// Set Email details for the account renew notification.
+				$subject = $settings->get_value( 'renew-complete-mail-subject' );
+				if ( empty( $subject ) ) {
+					$subject = 'Member Account Renewed';
+				}
+				$body = $settings->get_value( 'renew-complete-mail-body' );
+				if ( empty( $body ) ) {
+					$body = 'Your account has been renewed successfully';
+				}
+
+				$email_body = SwpmMiscUtils::replace_dynamic_tags( $body, $swpm_id, $additional_args );
+
+				$subject    = apply_filters( 'swpm_email_renew_complete_subject', $subject );
+				$email_body = apply_filters( 'swpm_email_renew_complete_body', $email_body );
+
+				SwpmMiscUtils::mail( $email, $subject, $email_body, $headers );
+				swpm_debug_log_subsc( 'Member account renewal completion email successfully sent to: ' . $email, true );
+			}
 		}
+
 		// End of existing user account upgrade/update.
 	} else {
 		// create new member account.

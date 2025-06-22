@@ -230,6 +230,21 @@ class SwpmInstallation {
         $upgrade_email_body = "Dear {first_name} {last_name}" .
                 "\n\nYour Account Has Been Upgraded." .
                 "\n\nThank You";
+
+	    $renew_email_subject = "Subject for email sent after account renewal";
+	    $renew_email_body = "Dear {first_name} {last_name}" .
+	                          "\n\nYour Account Has Been Renewed." .
+	                          "\n\nThank You";
+		// Set default value if it is not set.
+	    $renew_complete_mail_subject = $settings->get_value('renew-complete-mail-subject', false);
+	    if ( $renew_complete_mail_subject === false ){
+		    $settings->set_value('renew-complete-mail-subject', stripslashes($renew_email_subject));
+	    }
+	    $renew_complete_mail_body = $settings->get_value('renew-complete-mail-body', false);
+	    if ( $renew_complete_mail_body === false ){
+		    $settings->set_value('renew-complete-mail-body', stripslashes($renew_email_body));
+	    }
+
         $reset_email_subject = get_bloginfo('name') . ": New Password";
         $reset_email_body = "Dear {first_name} {last_name}" .
                 "\n\nHere is your new password:" .

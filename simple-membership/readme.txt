@@ -190,6 +190,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added a validation for the PayPal client ID to ensure it is not empty when using the PayPal PPCP checkout.
 - For PayPal PPCP guest checkout, it will query the subscription or order details from the PayPal API to retrieve the email address (if needed).
 - New feature added to display warning message above subscription payment buttons if there is already an active subscription.
+- New feature added to send separate email notification for account upgrade and renewal.
 
 = 4.6.4 =
 - Added a new feature to limit failed login attempts. Read the [failed login limit documentation](https://simple-membership-plugin.com/configuring-the-failed-login-attempt-limit-feature/) for more information.

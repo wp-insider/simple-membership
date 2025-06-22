@@ -541,7 +541,41 @@ class SwpmSettings {
 			'upgrade-email-settings',
 			array(
 				'item'    => 'disable-email-after-upgrade',
-				'message' => SwpmUtils::_( 'You can use this option to disable the email notification that gets sent to the members when they make a payment for upgrade or renewal.' ),
+				'message' => SwpmUtils::_( 'You can use this option to disable the email notification that gets sent to the members when they make a payment for account upgrade.' ),
+			)
+		);
+		add_settings_section( 'renewal-email-settings', __( 'Email Settings (Account Renewal Notification)', 'simple-membership' ), array( &$this, 'renewal_email_settings_callback' ), 'simple_wp_membership_settings' );
+		add_settings_field(
+			'renew-complete-mail-subject',
+			__( 'Email Subject', 'simple-membership' ),
+			array( &$this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'renewal-email-settings',
+			array(
+				'item'    => 'renew-complete-mail-subject',
+				'message' => '',
+			)
+		);
+		add_settings_field(
+			'renew-complete-mail-body',
+			__( 'Email Body', 'simple-membership' ),
+			array( &$this, 'wp_editor_callback' ),
+			'simple_wp_membership_settings',
+			'renewal-email-settings',
+			array(
+				'item'    => 'renew-complete-mail-body',
+				'message' => '',
+			)
+		);
+		add_settings_field(
+			'disable-email-after-renew',
+			__( 'Disable Email Notification After Renewal', 'simple-membership' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'renewal-email-settings',
+			array(
+				'item'    => 'disable-email-after-renew',
+				'message' => __( 'You can use this option to disable the email notification that gets sent to the members when they make a payment for account renewal.', 'simple-membership' ),
 			)
 		);
 
@@ -1348,6 +1382,10 @@ class SwpmSettings {
 		_e( 'This email will be sent to your users after account upgrade (when an existing member pays for a new membership level).', 'simple-membership' );
 	}
 
+	public function renewal_email_settings_callback() {
+		_e( 'This email will be sent to your users after account renewal (when an existing member pays for a current membership level).', 'simple-membership' );
+	}
+
 	public function bulk_activate_email_settings_callback() {
 		_e( 'This email will be sent to your members when you use the bulk account activate and notify action.', 'simple-membership' );
 		_e( ' You cannot use email merge tags in this email. You can only use generic text.', 'simple-membership' );
@@ -1524,6 +1562,10 @@ class SwpmSettings {
 		$output['upgrade-complete-mail-subject'] = sanitize_text_field( $input['upgrade-complete-mail-subject'] );
 		$output['upgrade-complete-mail-body']    = wp_kses_post( $input['upgrade-complete-mail-body'] );
 		$output['disable-email-after-upgrade']   = isset( $input['disable-email-after-upgrade'] ) ? esc_attr( $input['disable-email-after-upgrade'] ) : '';
+
+		$output['renew-complete-mail-subject'] = sanitize_text_field( $input['renew-complete-mail-subject'] );
+		$output['renew-complete-mail-body']    = wp_kses_post( $input['renew-complete-mail-body'] );
+		$output['disable-email-after-renew']   = isset( $input['disable-email-after-renew'] ) ? esc_attr( $input['disable-email-after-renew'] ) : '';
 
 		$output['bulk-activate-notify-mail-subject'] = sanitize_text_field( $input['bulk-activate-notify-mail-subject'] );
 		$output['bulk-activate-notify-mail-body']    = wp_kses_post( $input['bulk-activate-notify-mail-body'] );

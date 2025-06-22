@@ -70,11 +70,13 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 		swpm_debug_log_subsc( 'Setting access starts date value to: ' . $subscription_starts, true );
 
 		// Check whether it is an account upgrade or renew event.
-		$is_account_upgrade = SwpmMemberUtils::get_account_change_type($args) == 'upgrade' ? true : false;
-		if ($is_account_upgrade){
+		$level_update_type = SwpmMemberUtils::get_membership_level_update_type($args);
+		if ( $level_update_type == 'upgrade') {
+			// This is an account upgrade event.
 			swpm_debug_log_subsc( 'Updating the current membership level (' . $old_membership_level . ') of this member to the newly paid level (' . $membership_level . ')', true );
 		} else {
-			swpm_debug_log_subsc( 'Renewing this member account of membership level ' . $old_membership_level, true );
+			// This is an account renew event.
+			swpm_debug_log_subsc( 'Renewing the existing level of the member. Membership level: ' . $old_membership_level, true );
 		}
 
 		// Set account status to active, update level to the newly paid level, update access start date, update subsriber ID (if applicable).

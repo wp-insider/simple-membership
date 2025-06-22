@@ -593,7 +593,9 @@ class SwpmMemberUtils {
 		SwpmMemberUtils::update_account_extra_info( $member_id, $extra_info );
 	}
 
-	public static function get_account_change_type( $args ){
+	public static function get_membership_level_update_type( $args ){
+		//Checks if the membership level is being upgraded or renewed.
+		//If the membership level is being changed, it is considered an upgrade, otherwise it is considered a renewal.
 		$membership_level = isset($args['membership_level']) ? $args['membership_level'] : '';
 		$old_membership_level = isset($args['old_membership_level']) ? $args['old_membership_level'] : '';
 
@@ -601,6 +603,7 @@ class SwpmMemberUtils {
 			return 'upgrade';
 		}
 
+		//If the membership level is not being changed, it is considered a renewal.
 		return 'renew';
 	}
 }

@@ -117,7 +117,7 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 		$headers         = 'From: ' . $from_address . "\r\n";
 		$additional_args = array();
 
-		if ($is_account_upgrade){
+		if ($level_update_type == 'upgrade'){
 			if ( $settings->get_value( 'disable-email-after-upgrade' ) ) {
 				swpm_debug_log_subsc( 'The disable upgrade email settings is checked. No account upgrade/update email will be sent.', true );
 				//Nothing to do.

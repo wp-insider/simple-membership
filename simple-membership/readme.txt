@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 4.6.4
+Stable tag: 4.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -180,17 +180,17 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
-- [TODO - Testing] Updated the plugin name to "Simple Membership" in the main PHP file to match the plugin slug and readme file.
-- Translation string updates for the 'Auto Delete Pending Account' field.
+= 4.6.5 =
+- Added a new feature to send separate email notifications for account upgrades and renewals.
+- New feature added to display warning message above subscription payment buttons if there is already an active subscription.
+- Translation string updated for the 'Auto Delete Pending Account' field.
 - Added a new option to resend member account activation email in the Tools menu.
 - Renamed the 'has_tag' function to 'has_email_merge_tag' to avoid confusion.
 - Added a new filter hook 'swpm_payment_button_note_msg_output' to allow custom code to insert a message or note before the payment button.
 - Added a new filter hook 'swpm_hide_payment_button' to allow custom code to hide the payment button based on custom logic.
 - Added a validation for the PayPal client ID to ensure it is not empty when using the PayPal PPCP checkout.
 - For PayPal PPCP guest checkout, it will query the subscription or order details from the PayPal API to retrieve the email address (if needed).
-- New feature added to display warning message above subscription payment buttons if there is already an active subscription.
-- Added a new feature to send separate email notifications for account upgrades and renewals.
+- Updated the plugin name to "Simple Membership" in the main PHP file to match the plugin slug and readme file.
 
 = 4.6.4 =
 - Added a new feature to limit failed login attempts. Read the [failed login limit documentation](https://simple-membership-plugin.com/configuring-the-failed-login-attempt-limit-feature/) for more information.

@@ -1383,7 +1383,7 @@ class SwpmSettings {
 	}
 
 	public function renewal_email_settings_callback() {
-		_e( 'This email will be sent to your users after account renewal (when an existing member pays for a current membership level).', 'simple-membership' );
+		_e( 'This email will be sent to your users after account renewal (when an existing member pays for their current membership level).', 'simple-membership' );
 	}
 
 	public function bulk_activate_email_settings_callback() {

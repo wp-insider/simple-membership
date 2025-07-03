@@ -180,6 +180,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Spanish language translation updated.
+
 = 4.6.5 =
 - Added a new feature to send separate email notifications for account upgrades and renewals.
 - New feature added to display warning message above subscription payment buttons if there is already an active subscription.

@@ -178,12 +178,23 @@ class SwpmLimitActiveLogin {
 	 * Check if login limit has reached for a member.
 	 */
 	public static function reached_active_login_limit( $member_id ) {
+		//Filter hook to override the login limit check using custom code.
+		$limit_overridden = apply_filters( 'swpm_override_login_limit', false, $member_id );
+		if ( $limit_overridden ) {
+			// Login limit is overridden, so we do not restrict the login.
+			return false;
+		}
+
+		// Get all valid session tokens for the member.
+		// If the member has no session tokens, then the limit is not reached.
 		$valid_tokens = self::get_all_valid_session_tokens_of_member( $member_id );
 		$valid_tokens_count = count( $valid_tokens );
 		if ( $valid_tokens_count >= self::allowed_max_active_logins() ) {
+			// login limit reached. Return true which means the limit is reached.
 			return true;
 		}
 
+		// login limit not reached. Return false, which means the user can log in.
 		return false;
 	}
 }

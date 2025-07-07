@@ -183,6 +183,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 = WIP =
 - Spanish language translation updated.
 - Added a new filter hook 'swpm_override_login_limit' to allow custom code to override the active login limit check.
+- The default subject for the account upgrade email has been changed to "Account Upgrade Confirmation Email" for clarity.
+- The default subject for the account renewal email has been changed to "Account Renewal Confirmation Email" for clarity.
 
 = 4.6.5 =
 - Added a new feature to send separate email notifications for account upgrades and renewals.

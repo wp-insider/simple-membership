@@ -226,12 +226,12 @@ class SwpmInstallation {
                 "You can customize this email message from the Email Settings menu of the plugin.\n\n" .
                 "Thank You";
 
-        $upgrade_email_subject = "Subject for email sent after account upgrade";
+        $upgrade_email_subject = "Account Upgrade Confirmation Email";
         $upgrade_email_body = "Dear {first_name} {last_name}" .
                 "\n\nYour Account Has Been Upgraded." .
                 "\n\nThank You";
 
-	    $renew_email_subject = "Subject for email sent after account renewal";
+	    $renew_email_subject = "Account Renewal Confirmation Email";
 	    $renew_email_body = "Dear {first_name} {last_name}" .
 	                          "\n\nYour Account Has Been Renewed." .
 	                          "\n\nThank You";

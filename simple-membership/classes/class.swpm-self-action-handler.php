@@ -40,6 +40,7 @@ class SwpmSelfActionHandler {
         $after_logout_url = SwpmSettings::get_instance()->get_value('after-logout-redirection-url');
         if(!empty($after_logout_url)){
             //After logout URL is being used. Override re-direct URL.
+            SwpmLog::log_simple_debug("After logout redirection URL is being used: " . $after_logout_url, true);
             $redirect_url = $after_logout_url;
         }
         return $redirect_url;

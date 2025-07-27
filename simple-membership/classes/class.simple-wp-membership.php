@@ -93,7 +93,7 @@ class SimpleWpMembership {
         //SWPM login/logout hooks.
         //Note: These should only handle/execute when the login or logout originates from our plugin's login/logout form to prevent loop.
         add_action('swpm_after_login_authentication', array('SimpleWpMembership', 'handle_after_login_authentication'), 10, 3 );
-        add_action('swpm_logout', array(&$this, 'swpm_do_user_logout'));
+        add_action('swpm_after_logout_function_executed', array(&$this, 'swpm_after_member_logout_tasks'));
 
         //AJAX hooks
         add_action('wp_ajax_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
@@ -452,12 +452,18 @@ class SimpleWpMembership {
         }
     }
 
-    public function swpm_do_user_logout() {
+    public function swpm_after_member_logout_tasks() {
         //The hook is triggered after the user is logged out of SWPM.
         //This function should only handle/execute when the logout originates from our plugin's logout form/link.
         if (is_user_logged_in()) {
-            wp_logout();
+            //NOTE: Instead of using wp_logout() function, we will do the following that wp_logout() does then trigger our own action hook. 
+            //This prevents the 'wp_logout' hook from getting triggered from the wp_logout() function and creating a loop. 
+            //It allows a seamless logout process and any after logout tasks or redirection to be handled by our own action hook.
+            $user_id = get_current_user_id();
+	        wp_destroy_current_session();
+	        wp_clear_auth_cookie();
             wp_set_current_user(0);
+            do_action( 'swpm_wp_user_logout_complete', $user_id );
         }
     }
 

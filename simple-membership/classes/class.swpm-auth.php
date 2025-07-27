@@ -456,8 +456,10 @@ class SwpmAuth {
 		SwpmLog::log_auth_debug( 'SwpmAuth::logout() - Logout actions executed successfully.', true );
 
 		if ( $trigger_hook ) {
-			//Trigger action hook unless it is a silent logout.
+			//Trigger after swpm logout action hook unless it is a silent logout.
 			do_action( 'swpm_logout' );
+			//Going forward, better to use the following hook instead of the above one for better clarity with the action name.
+			do_action( 'swpm_after_logout_function_executed' );
 		}
 	}
 

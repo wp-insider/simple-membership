@@ -4258,7 +4258,7 @@ msgid "Force WP User Synchronization"
 msgstr "WP felhasználói szinkronizálás kényszerítése"
 
 #: classes/class.swpm-settings.php:833
-msgid "SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user roles to access the SWPM admin dashboard by selecting a value here. Note that this option cannot work if you enabled the \"Disable Access to WP Dashboard\" option in General Settings."
+msgid "SWPM admin dashboard is accessible to admin users only (just like any other plugin). You can allow users with other WP user roles to access the SWPM admin dashboard by selecting a value here. Note that this option cannot work if you enabled the \"Disable Access to WP Dashboard\" option in Advanced Settings."
 msgstr "Az SWPM adminisztrátori irányítópultja csak az adminisztrátor felhasználók számára érhető el (mint bármely más bővítmény). Itt egy érték kiválasztásával engedélyezheti a más WP felhasználói szerepkörrel rendelkező felhasználók számára az SWPM adminisztrátori irányítópult elérését. Vegye figyelembe, hogy ez az opció nem működik, ha engedélyezte a \"WP Dashboard hozzáférés letiltása\" opciót az Általános beállításokban."
 
 #: classes/class.swpm-settings.php:820

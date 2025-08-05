@@ -234,8 +234,11 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 		$email_body = SwpmMiscUtils::replace_dynamic_tags( $body, $member_id, $additional_args );
 		$headers = 'From: ' . $from_address . "\r\n";
 
+		//Trigger filter hooks for prompt to complete email subject and body.
 		$subject = apply_filters( 'swpm_email_complete_registration_subject', $subject );
-		$email_body = apply_filters( 'swpm_email_complete_registration_body', $email_body );
+		$email_body = apply_filters( 'swpm_email_complete_registration_body', $email_body );//Old filter hook for backward compatibility.
+		$email_body = apply_filters( 'swpm_email_prompt_to_complete_registration_body', $email_body );//The new filter hook.
+
 		if ( empty( $email_body ) ) {
 			swpm_debug_log_subsc( 'Notice: Member signup (prompt to complete registration) email body has been set empty via the filter hook. No email will be sent.', true );
 		} else {

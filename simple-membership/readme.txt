@@ -190,6 +190,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added a new action hook 'swpm_wp_user_logout_complete' that is triggered after the wp_destroy_current_session() and wp_clear_auth_cookie() functions are called in the custom logout method.
 - The plugin now hooks to the 'swpm_after_logout_function_executed' hook instead of the 'swpm_logout' hook to handle after logout tasks. This allows for better clarity with the action name. 
 - Fixed the description of the "Disable Access to WP Dashboard" setting.
+- Added new filter hook 'swpm_email_prompt_to_complete_registration_body' to allow custom code to modify the body of the email sent to members prompting them to complete their registration.
 
 = 4.6.5 =
 - Added a new feature to send separate email notifications for account upgrades and renewals.

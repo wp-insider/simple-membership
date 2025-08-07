@@ -817,6 +817,7 @@ class SwpmMiscUtils {
 	}
 
 	public static function get_countries_dropdown( $country = '' ) {
+		//Note: the country names are output using the __() function below so that they can be translated. The POT file just needs to have the country names in it.
 		$countries = array(
 			'Afghanistan',
 			'Albania',
@@ -1051,10 +1052,222 @@ class SwpmMiscUtils {
 			$country = $guess_country;
 		}
 		foreach ( $countries as $country_name ) {
+			//The country name strings are already in the POT file from the swpm_dummy_country_names_for_translation() function, so we can use __() function to output the country names.
 			$countries_dropdown .= "\r\n" . '<option value="' . $country_name . '"' . ( strtolower( $country_name ) == strtolower( $country ) ? ' selected' : '' ) . '>' . __($country_name, 'simple-membership') . '</option>';
 		}
 		return $countries_dropdown;
 	}
+
+	/**
+	 * This function is used to force the translation tools to include the country names in the translation files (POT file).
+	 * It does not return anything and is not meant to be called in the code.
+	 */
+	function swpm_dummy_country_names_for_translation() {
+		// Dummy country names for translation purpose only.
+		__('Afghanistan', 'simple-membership');
+		__('Albania', 'simple-membership');
+		__('Algeria', 'simple-membership');
+		__('Andorra', 'simple-membership');
+		__('Angola', 'simple-membership');
+		__('Antigua and Barbuda', 'simple-membership');
+		__('Argentina', 'simple-membership');
+		__('Armenia', 'simple-membership');
+		__('Aruba', 'simple-membership');
+		__('Australia', 'simple-membership');
+		__('Austria', 'simple-membership');
+		__('Azerbaijan', 'simple-membership');
+		__('Bahamas', 'simple-membership');
+		__('Bahrain', 'simple-membership');
+		__('Bangladesh', 'simple-membership');
+		__('Barbados', 'simple-membership');
+		__('Belarus', 'simple-membership');
+		__('Belgium', 'simple-membership');
+		__('Belize', 'simple-membership');
+		__('Benin', 'simple-membership');
+		__('Bhutan', 'simple-membership');
+		__('Bolivia', 'simple-membership');
+		__('Bonaire', 'simple-membership');
+		__('Bosnia and Herzegovina', 'simple-membership');
+		__('Botswana', 'simple-membership');
+		__('Brazil', 'simple-membership');
+		__('Brunei', 'simple-membership');
+		__('Bulgaria', 'simple-membership');
+		__('Burkina Faso', 'simple-membership');
+		__('Burundi', 'simple-membership');
+		__('Cambodia', 'simple-membership');
+		__('Cameroon', 'simple-membership');
+		__('Canada', 'simple-membership');
+		__('Cape Verde', 'simple-membership');
+		__('Cayman Islands', 'simple-membership');
+		__('Central African Republic', 'simple-membership');
+		__('Chad', 'simple-membership');
+		__('Chile', 'simple-membership');
+		__('China', 'simple-membership');
+		__('Colombia', 'simple-membership');
+		__('Comoros', 'simple-membership');
+		__('Congo (Brazzaville)', 'simple-membership');
+		__('Congo', 'simple-membership');
+		__('Costa Rica', 'simple-membership');
+		__('Cote d\'Ivoire', 'simple-membership');
+		__('Croatia', 'simple-membership');
+		__('Cuba', 'simple-membership');
+		__('Curacao', 'simple-membership');
+		__('Cyprus', 'simple-membership');
+		__('Czech Republic', 'simple-membership');
+		__('Denmark', 'simple-membership');
+		__('Djibouti', 'simple-membership');
+		__('Dominica', 'simple-membership');
+		__('Dominican Republic', 'simple-membership');
+		__('East Timor (Timor Timur)', 'simple-membership');
+		__('Ecuador', 'simple-membership');
+		__('Egypt', 'simple-membership');
+		__('El Salvador', 'simple-membership');
+		__('Equatorial Guinea', 'simple-membership');
+		__('Eritrea', 'simple-membership');
+		__('Estonia', 'simple-membership');
+		__('Eswatini', 'simple-membership');
+		__('Ethiopia', 'simple-membership');
+		__('Fiji', 'simple-membership');
+		__('Finland', 'simple-membership');
+		__('France', 'simple-membership');
+		__('French Polynesia', 'simple-membership');
+		__('Gabon', 'simple-membership');
+		__('Gambia, The', 'simple-membership');
+		__('Georgia', 'simple-membership');
+		__('Germany', 'simple-membership');
+		__('Ghana', 'simple-membership');
+		__('Greece', 'simple-membership');
+		__('Grenada', 'simple-membership');
+		__('Guatemala', 'simple-membership');
+		__('Guinea', 'simple-membership');
+		__('Guinea-Bissau', 'simple-membership');
+		__('Guyana', 'simple-membership');
+		__('Haiti', 'simple-membership');
+		__('Honduras', 'simple-membership');
+		__('Hong Kong', 'simple-membership');
+		__('Hungary', 'simple-membership');
+		__('Iceland', 'simple-membership');
+		__('India', 'simple-membership');
+		__('Indonesia', 'simple-membership');
+		__('Iran', 'simple-membership');
+		__('Iraq', 'simple-membership');
+		__('Ireland', 'simple-membership');
+		__('Israel', 'simple-membership');
+		__('Italy', 'simple-membership');
+		__('Jamaica', 'simple-membership');
+		__('Japan', 'simple-membership');
+		__('Jordan', 'simple-membership');
+		__('Kazakhstan', 'simple-membership');
+		__('Kenya', 'simple-membership');
+		__('Kiribati', 'simple-membership');
+		__('Korea, North', 'simple-membership');
+		__('Korea, South', 'simple-membership');
+		__('Kuwait', 'simple-membership');
+		__('Kyrgyzstan', 'simple-membership');
+		__('Laos', 'simple-membership');
+		__('Latvia', 'simple-membership');
+		__('Lebanon', 'simple-membership');
+		__('Lesotho', 'simple-membership');
+		__('Liberia', 'simple-membership');
+		__('Libya', 'simple-membership');
+		__('Liechtenstein', 'simple-membership');
+		__('Lithuania', 'simple-membership');
+		__('Luxembourg', 'simple-membership');
+		__('Macedonia', 'simple-membership');
+		__('Madagascar', 'simple-membership');
+		__('Malawi', 'simple-membership');
+		__('Malaysia', 'simple-membership');
+		__('Maldives', 'simple-membership');
+		__('Mali', 'simple-membership');
+		__('Malta', 'simple-membership');
+		__('Marshall Islands', 'simple-membership');
+		__('Mauritania', 'simple-membership');
+		__('Mauritius', 'simple-membership');
+		__('Mexico', 'simple-membership');
+		__('Micronesia', 'simple-membership');
+		__('Moldova', 'simple-membership');
+		__('Monaco', 'simple-membership');
+		__('Mongolia', 'simple-membership');
+		__('Montenegro', 'simple-membership');
+		__('Morocco', 'simple-membership');
+		__('Mozambique', 'simple-membership');
+		__('Myanmar', 'simple-membership');
+		__('Namibia', 'simple-membership');
+		__('Nauru', 'simple-membership');
+		__('Nepa', 'simple-membership');
+		__('Netherlands', 'simple-membership');
+		__('New Zealand', 'simple-membership');
+		__('Nicaragua', 'simple-membership');
+		__('Niger', 'simple-membership');
+		__('Nigeria', 'simple-membership');
+		__('Norway', 'simple-membership');
+		__('Oman', 'simple-membership');
+		__('Pakistan', 'simple-membership');
+		__('Palau', 'simple-membership');
+		__('Palestine', 'simple-membership');
+		__('Panama', 'simple-membership');
+		__('Papua New Guinea', 'simple-membership');
+		__('Paraguay', 'simple-membership');
+		__('Peru', 'simple-membership');
+		__('Philippines', 'simple-membership');
+		__('Poland', 'simple-membership');
+		__('Portugal', 'simple-membership');
+		__('Qatar', 'simple-membership');
+		__('Romania', 'simple-membership');
+		__('Russia', 'simple-membership');
+		__('Rwanda', 'simple-membership');
+		__('Saint Kitts and Nevis', 'simple-membership');
+		__('Saint Lucia', 'simple-membership');
+		__('Saint Vincent', 'simple-membership');
+		__('Samoa', 'simple-membership');
+		__('San Marino', 'simple-membership');
+		__('Sao Tome and Principe', 'simple-membership');
+		__('Saudi Arabia', 'simple-membership');
+		__('Senegal', 'simple-membership');
+		__('Serbia', 'simple-membership');
+		__('Seychelles', 'simple-membership');
+		__('Sierra Leone', 'simple-membership');
+		__('Singapore', 'simple-membership');
+		__('Slovakia', 'simple-membership');
+		__('Slovenia', 'simple-membership');
+		__('Solomon Islands', 'simple-membership');
+		__('Somalia', 'simple-membership');
+		__('South Africa', 'simple-membership');
+		__('Spain', 'simple-membership');
+		__('Sri Lanka', 'simple-membership');
+		__('Sudan', 'simple-membership');
+		__('Suriname', 'simple-membership');
+		__('Swaziland', 'simple-membership');
+		__('Sweden', 'simple-membership');
+		__('Switzerland', 'simple-membership');
+		__('Syria', 'simple-membership');
+		__('Taiwan', 'simple-membership');
+		__('Tajikistan', 'simple-membership');
+		__('Tanzania', 'simple-membership');
+		__('Thailand', 'simple-membership');
+		__('Togo', 'simple-membership');
+		__('Tonga', 'simple-membership');
+		__('Trinidad and Tobago', 'simple-membership');
+		__('Tunisia', 'simple-membership');
+		__('Turkey', 'simple-membership');
+		__('Turkmenistan', 'simple-membership');
+		__('Tuvalu', 'simple-membership');
+		__('Uganda', 'simple-membership');
+		__('Ukraine', 'simple-membership');
+		__('United Arab Emirates', 'simple-membership');
+		__('United Kingdom', 'simple-membership');
+		__('United States of America', 'simple-membership');
+		__('Uruguay', 'simple-membership');
+		__('Uzbekistan', 'simple-membership');
+		__('Vanuatu', 'simple-membership');
+		__('Vatican City', 'simple-membership');
+		__('Venezuela', 'simple-membership');
+		__('Vietnam', 'simple-membership');
+		__('Yemen', 'simple-membership');
+		__('Zambia', 'simple-membership');
+		__('Zimbabwe', 'simple-membership');
+	}
+
 
 	/**
 	 * This function returns the human readable name of a button type.

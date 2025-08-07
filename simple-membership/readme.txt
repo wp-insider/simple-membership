@@ -191,6 +191,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - The plugin now hooks to the 'swpm_after_logout_function_executed' hook instead of the 'swpm_logout' hook to handle after logout tasks. This allows for better clarity with the action name. 
 - Fixed the description of the "Disable Access to WP Dashboard" setting.
 - Added new filter hook 'swpm_email_prompt_to_complete_registration_body' to allow custom code to modify the body of the email sent to members prompting them to complete their registration.
+- Added new function 'swpm_dummy_country_names_for_translation' to include dummy country names to the POT file for translation purposes.
 
 = 4.6.5 =
 - Added a new feature to send separate email notifications for account upgrades and renewals.

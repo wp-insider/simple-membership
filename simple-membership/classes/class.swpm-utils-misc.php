@@ -1064,6 +1064,7 @@ class SwpmMiscUtils {
 	 */
 	function swpm_dummy_country_names_for_translation() {
 		// Dummy country names for translation purpose only.
+		// This will be helpful for all the addons to also output country names using the __() function and have translation support.
 		__('Afghanistan', 'simple-membership');
 		__('Albania', 'simple-membership');
 		__('Algeria', 'simple-membership');

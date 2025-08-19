@@ -20,7 +20,7 @@ The simple membership plugin lets you protect your posts and pages so only your 
 = Unlimited Membership Access Levels =
 Set up unlimited membership levels (example: free, silver, gold etc) and protect your posts and pages using the membership levels you create.
 
-= User Friendly Interface for Content Protection = 
+= User Friendly Interface for Content Protection =
 When you are editing a post or page in the WordPress editor, you can select to protect that post or page for your members.
 
 Non-members viewing a protected page will be prompted to log in or become a member.
@@ -32,13 +32,13 @@ Both one time and recurring/subscription payments are supported for PayPal and S
 
 You can accept one time membership payment via Braintree payment gateway.
 
-Option to make membership payment buttons using the new PayPal Checkout API. 
+Option to make membership payment buttons using the new PayPal Checkout API.
 
 There is also option to use PayPal smart buttons for membership payment.
 
 You can enable email activation or email confirmation for the free memberships.
 
-= Membership Payments Log = 
+= Membership Payments Log =
 All the payments from your members are recorded in the plugin. You can view them anytime by visiting the payments menu from the admin dashboard.
 
 = Developer API =
@@ -188,10 +188,11 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added debug logging for after logout redirection URL.
 - Changed the call to wp_logout() function to use a custom logout method to prevent the 'wp_logout' action hook from being triggered, which causes our plugin's after logout redirection to not work properly.
 - Added a new action hook 'swpm_wp_user_logout_complete' that is triggered after the wp_destroy_current_session() and wp_clear_auth_cookie() functions are called in the custom logout method.
-- The plugin now hooks to the 'swpm_after_logout_function_executed' hook instead of the 'swpm_logout' hook to handle after logout tasks. This allows for better clarity with the action name. 
+- The plugin now hooks to the 'swpm_after_logout_function_executed' hook instead of the 'swpm_logout' hook to handle after logout tasks. This allows for better clarity with the action name.
 - Fixed the description of the "Disable Access to WP Dashboard" setting.
 - Added new filter hook 'swpm_email_prompt_to_complete_registration_body' to allow custom code to modify the body of the email sent to members prompting them to complete their registration.
 - Added new function 'swpm_dummy_country_names_for_translation' to include dummy country names to the POT file for translation purposes.
+- Fatal error issue after stripe payment button click issue has fixed.
 
 = 4.6.5 =
 - Added a new feature to send separate email notifications for account upgrades and renewals.

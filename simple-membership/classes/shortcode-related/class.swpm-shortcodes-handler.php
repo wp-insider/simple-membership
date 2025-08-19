@@ -42,7 +42,7 @@ class SwpmShortcodesHandler {
 
 		//Add a quick escaping to the shortcode arguments.
 		$args = array_map( 'esc_attr', $args );
-                        
+
 		$button_id = $id;
 		//$button = get_post($button_id); //Retrieve the CPT for this button
 		$button_type = get_post_meta( $button_id, 'button_type', true );
@@ -59,7 +59,7 @@ class SwpmShortcodesHandler {
 		$any_note_or_msg_output = '';
 		$hide_payment_btn = false;
 
-		//Check if the active subscription warning optoin is enabled for this button.
+		//Check if the active subscription warning option is enabled for this button.
 		if ( in_array($button_type, array('stripe_sca_subscription', 'pp_subscription_new')) ){
 			$is_visitor_logged_in = SwpmAuth::get_instance()->is_logged_in();
 			$show_warning_if_any_active_sub = get_post_meta( $button_id, 'show_warning_if_any_active_sub', true );
@@ -217,10 +217,10 @@ class SwpmShortcodesHandler {
 			$mini_login_output_when_logged_in .= '<span class="swpm_mini_login_username">' . esc_attr($username) . '</span>';
 			$mini_login_output_when_logged_in .= '<span class="swpm_mini_login_profile"> | <a href="' . esc_url($profile_page_url) . '">' . __( 'Profile', 'simple-membership') . '</a></span>';
 			$mini_login_output_when_logged_in .= '<span class="swpm_mini_login_logout"> | <a href="' . esc_url($logout_url) . '">' . __( 'Logout', 'simple-membership') . '</a></span>';
-			
+
 			//Trigger filter to allow addons to modify this output.
 			$mini_login_output_when_logged_in = apply_filters( 'swpm_mini_login_output_when_logged_in', $mini_login_output_when_logged_in );
-			
+
 			//Add the logged-in output to the main output
 			$output .= $mini_login_output_when_logged_in;
 		} else {
@@ -369,7 +369,7 @@ class SwpmShortcodesHandler {
 		$subscriptions_utils->load_subs_data();
 
 		/**
-		 * Display any API key error messages (if subscription exists but api keys are not saved). 
+		 * Display any API key error messages (if subscription exists but api keys are not saved).
 		 * The error message is only shown when the subscription of the corresponding payment gateway is present.
 		 * For example: If there are no stripe sca subscriptions, stripe api error wont be shown.
 		*/
@@ -397,7 +397,7 @@ class SwpmShortcodesHandler {
 
 		if (count($subscriptions_list)) {
 			$output .= '<table class="swpm-active-subs-table">';
-			
+
 			// Header section
 			$output .= '<thead>';
 			$output .= '<tr>';
@@ -428,15 +428,15 @@ class SwpmShortcodesHandler {
 		}else{
 			$output .= '<p>'.__( 'Active subscription not detected for the member account with the username: ', 'simple-membership' ). esc_attr($member_username) . '</p>';
 		}
-		
-		//This is used to refresh the page so this shortcode is reloaded after a new subscription is added. 
+
+		//This is used to refresh the page so this shortcode is reloaded after a new subscription is added.
 		//This is needed for the newly created subscription to show up in the list.
 		$output .= '<script>';
 		$output .= 'document.addEventListener( "swpm_paypal_subscriptions_complete", function(){ window.location = window.location.href });';
 		$output .= '</script>';
 
 		$output .= '</div>';
-		
+
 		return $output;
 	}
 

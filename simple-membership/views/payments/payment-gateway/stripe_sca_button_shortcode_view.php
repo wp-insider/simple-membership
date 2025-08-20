@@ -19,10 +19,10 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
 	$button_text   = ( isset( $args['button_text'] ) ) ? sanitize_text_field( $args['button_text'] ) : __( 'Buy Now', 'simple-membership' );
 
-	//Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account". 
+	//Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account".
 	//It can be used to enable ACH payment option.
 	$payment_method_types = isset( $args['payment_method_types'] ) ? $args['payment_method_types'] : '';
-        
+
 	$item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
 	$settings   = SwpmSettings::get_instance();
@@ -75,7 +75,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
-	
+
 	//Handle script and style loading for the button
 	if ( ! wp_script_is( 'swpm.stripe', 'registered' ) ) {
             //In some themes (block themes) this may not have been registered yet since that process can be delayed. So register it now before doing inline script to it.
@@ -83,37 +83,65 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	}
 	wp_enqueue_script("swpm.stripe");
 	wp_enqueue_style("swpm.stripe.style");
-	
+
 	//initializing stripe for each button, right after loading stripe script
 	$stripe_js_obj="stripe_".$button_id;
 	wp_add_inline_script("swpm.stripe","var ".$stripe_js_obj." = Stripe('".esc_js( $api_keys['public'] )."');");
-	
+
 	ob_start();
 	?>
-	<script>		
-		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
-			e.preventDefault();
-			var btn = jQuery(this).find('button').attr('disabled', true);
-			jQuery.post('<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
-				'action': 'swpm_stripe_sca_create_checkout_session',
-				'swpm_button_id': <?php echo esc_js( $button_id ); ?>,
-                                'payment_method_types': '<?php echo esc_js( $payment_method_types ); ?>',
-				'swpm_page_url': '<?php echo esc_js( $current_url ); ?>',
-				'swpm_uniqid': '<?php echo esc_js( $uniqid ); ?>'
-				}).done(function (response) {
-					if (!response.error) {
-						<?php echo $stripe_js_obj;?>.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
-					});			
-					} else {
-						alert(response.error);
-						btn.attr('disabled', false);
-						return false;
-					}
-			}).fail(function(e) {
-				alert("HTTP error occurred during AJAX request. Error code: "+e.status);
-				btn.attr('disabled', false);
-				return false;
-			});
+	<script>
+        document.addEventListener('DOMContentLoaded', function (){
+            const swpmStripeSCAPaymentFrom = document.getElementById('swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>');
+            swpmStripeSCAPaymentFrom?.addEventListener('submit', async function (e){
+                e.preventDefault();
+
+                const submitBUtton = swpmStripeSCAPaymentFrom.querySelector('button');
+                submitBUtton.setAttribute('disabled', true);
+
+                const stripe_js_obj = <?php echo $stripe_js_obj;?>;
+                const request_url = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
+                const payload = new URLSearchParams({
+                    action: 'swpm_stripe_sca_create_checkout_session',
+                    swpm_button_id: <?php echo esc_js( $button_id ); ?>,
+                    payment_method_types: '<?php echo esc_js( $payment_method_types ); ?>',
+                    swpm_page_url: '<?php echo esc_js( $current_url ); ?>',
+                    swpm_uniqid: '<?php echo esc_js( $uniqid ); ?>'
+                });
+                try {
+                    let response = await fetch(request_url ,{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: payload
+                    })
+
+                    if (!response.ok) {
+                        // HTTP error codes (e.g. 404, 500)
+                        throw new Error("Error code: " + response.status);
+                    }
+
+                    response = await response.json();
+
+                    if (!response.error) {
+                        stripe_js_obj.redirectToCheckout({
+                            sessionId: response.session_id
+                        }).then(function (result) {
+                            //
+                        });
+                    } else {
+                        alert(response.error);
+                        submitBUtton.removeAttribute('disabled');
+                        return false;
+                    }
+
+                } catch (e) {
+                    alert("HTTP error occurred during AJAX request. Error: "+ e.message);
+                    submitBUtton.removeAttribute('disabled');
+                    return false;
+                }
+            })
 		});
 	</script>
 	<?php
@@ -159,10 +187,10 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
 	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : __( 'Buy Now' , 'simple-membership');
 
-	//Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account". 
+	//Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account".
 	//It can be used to enable ACH payment option.
 	$payment_method_types = isset( $args['payment_method_types'] ) ? $args['payment_method_types'] : '';
-        
+
 	$item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
 	$settings   = SwpmSettings::get_instance();
@@ -226,41 +254,70 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	if ( ! wp_script_is( 'swpm.stripe', 'registered' ) ) {
             //In some themes (block themes) this may not have been registered yet since that process can be delayed. So register it now before doing inline script to it.
             wp_register_script("swpm.stripe", "https://js.stripe.com/v3/", array("jquery"), SIMPLE_WP_MEMBERSHIP_VER);
-	}        
+	}
 	wp_enqueue_script("swpm.stripe");
 	wp_enqueue_style("swpm.stripe.style");
-	
+
 	//initializing stripe for each button, right after loading stripe script
 	$stripe_js_obj="stripe_".$button_id;
 	wp_add_inline_script("swpm.stripe","var ".$stripe_js_obj." = Stripe('".esc_js( $api_keys['public'] )."');");
 
 	ob_start();
 	?>
-	<script>		
-		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
-			e.preventDefault();
-			var btn = jQuery(this).find('button').attr('disabled', true);
-			jQuery.post('<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
-				'action': 'swpm_stripe_sca_create_checkout_session',
-				'swpm_button_id': <?php echo esc_js( $button_id ); ?>,
-                                'payment_method_types': '<?php echo esc_js( $payment_method_types ); ?>',
-				'swpm_page_url': '<?php echo esc_js( $current_url ); ?>',
-				'swpm_uniqid': '<?php echo esc_js( $uniqid ); ?>'
-				}).done(function (response) {
-					if (!response.error) {
-						<?php echo $stripe_js_obj;?>.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
-					});			
-					} else {
-						alert(response.error);
-						btn.attr('disabled', false);
-						return false;
-					}
-			}).fail(function(e) {
-				alert("HTTP error occurred during AJAX request. Error code: "+e.status);
-				btn.attr('disabled', false);
-				return false;
-			});
-		});
+	<script>
+        document.addEventListener('DOMContentLoaded', function (){
+            const swpmStripeScaSubsPaymentFrom = document.getElementById('swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>');
+            swpmStripeScaSubsPaymentFrom?.addEventListener('submit', async function (e){
+                e.preventDefault();
+
+                const submitBUtton = this.querySelector('button');
+                submitBUtton.setAttribute('disabled', true);
+
+	            const stripe_js_obj = <?php echo $stripe_js_obj;?>;
+                const request_url = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
+                const payload = new URLSearchParams({
+                    action: 'swpm_stripe_sca_create_checkout_session',
+                    swpm_button_id: <?php echo esc_js( $button_id ); ?>,
+                    payment_method_types: '<?php echo esc_js( $payment_method_types ); ?>',
+                    swpm_page_url: '<?php echo esc_js( $current_url ); ?>',
+                    swpm_uniqid: '<?php echo esc_js( $uniqid ); ?>'
+                });
+
+                try {
+                    let response = await fetch(request_url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: payload
+                    })
+
+                    if (!response.ok) {
+                        // HTTP error codes (e.g. 404, 500)
+                        throw new Error("Error code: " + response.status);
+                    }
+
+                    response = await response.json();
+
+                    if (!response.error) {
+                        stripe_js_obj.redirectToCheckout({
+                            sessionId: response.session_id
+                        }).then(function (result) {
+                            //
+                        });
+                    } else {
+                        alert(response.error);
+                        submitBUtton.removeAttribute('disabled');
+                        return false;
+                    }
+
+                } catch (e) {
+                    alert("HTTP error occurred during AJAX request. Error: "+ e.message);
+                    submitBUtton.removeAttribute('disabled');
+                    return false;
+                }
+            })
+        })
 	</script>
 	<?php
 	$output .= ob_get_clean();

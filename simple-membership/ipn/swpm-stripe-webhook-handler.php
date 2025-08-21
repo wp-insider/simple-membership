@@ -135,7 +135,7 @@ class SwpmStripeWebhookHandler {
 
 				if ( empty( $txn_id ) ) {
 					// This the newer version of stripe api (i.e. xxxx-xx-xx.basil) the event object does not contain charge id.
-					$txn_id = $this->get_charge_id_from_event_data( $event_json );
+					$txn_id = self::get_charge_id_from_event_data( $event_json );
 				}
 
 				// Handle if it's a 100% discount. Charge id is not available for this case.

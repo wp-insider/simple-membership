@@ -133,6 +133,11 @@ class SwpmStripeWebhookHandler {
 				// Retrieve the transaction ID (Charge ID) for this payment.
 				$txn_id = isset( $event_json->data->object->charge ) ? $event_json->data->object->charge : '';
 
+				if ( empty( $txn_id ) ) {
+					// This the newer version of stripe api (i.e. xxxx-xx-xx.basil) the event object does not contain charge id.
+					$txn_id = self::get_charge_id_from_event_data( $event_json );
+				}
+
 				// Handle if it's a 100% discount. Charge id is not available for this case.
 				if ( empty( $txn_id ) ) {
 					if ( isset( $event_json->data->object->discount->coupon->percent_off ) && ( $event_json->data->object->discount->coupon->percent_off == 100 ) ) {
@@ -174,6 +179,60 @@ class SwpmStripeWebhookHandler {
 		//Give 200 status then exit out.
 		SwpmLog::log_simple_debug( 'End of Stripe subscription webhook processing. Webhook type: ' . $type, true );
 		http_response_code( 200 ); // Tells Stripe we received this notification
+	}
+
+	public static function get_charge_id_from_event_data( $event_json ) {
+		$invoice_id = isset($event_json->data->object->id) ? $event_json->data->object->id : null;
+		if (empty($invoice_id)){
+			SwpmLog::log_simple_debug( 'Invoice id could not be retrieved.', false );
+			return null;
+		}
+
+		SwpmLog::log_simple_debug( 'Using invoice id: ' . $invoice_id . ' to retrieve charge_id.', true );
+
+		$settings = SwpmSettings::get_instance();
+		$sandbox_enabled = $settings->get_value( 'enable-sandbox-testing' );
+
+		$secret_key = null;
+
+		// Try to get api secret key
+		if (isset($event_json->data->object->object) && $event_json->data->object->object == 'subscription' ){
+			$sub_id = $event_json->data->object->id;
+			$sub_agreement_cpt_id = SWPM_Utils_Subscriptions::get_subscription_agreement_cpt_id_by_subs_id($sub_id);
+			$payment_button_id = get_post_meta($sub_agreement_cpt_id, 'payment_button_id', true);
+			$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $payment_button_id, !$sandbox_enabled );
+			$secret_key = isset($api_keys['secret']) ? $api_keys['secret'] : '';
+		}
+
+		if (empty($secret_key)){
+			SwpmLog::log_simple_debug( 'Using stripe secret key from global settings.', true );
+			if ( $sandbox_enabled ) {
+				$secret_key = $settings->get_value( 'stripe-test-secret-key' );
+			} else {
+				$secret_key = $settings->get_value( 'stripe-live-secret-key' );
+			}
+		}
+
+
+		$charge_id = null;
+
+		try {
+			SwpmMiscUtils::load_stripe_lib();
+			\Stripe\Stripe::setApiKey( $secret_key );
+
+			$invoice = \Stripe\Invoice::retrieve( $invoice_id );
+
+			if ( isset($invoice->charge) ){
+				$charge_id = $invoice->charge;
+			} else {
+				SwpmLog::log_simple_debug( 'Error: charge id could not be retrieved from invoice object.', false );
+			}
+
+		} catch ( \Exception $e ) {
+			SwpmLog::log_simple_debug( 'Error During invoice retrieval from invoice id. ' . $e->getMessage(), false );
+		}
+
+		return $charge_id;
 	}
 }
 

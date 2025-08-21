@@ -87,6 +87,13 @@ class SwpmWpLoadedTasks {
 			exit;
 		}
 
+		//Handles all Stripe Webhooks (Both SCA and Legacy)
+		$hook = filter_input( INPUT_GET, 'hook', FILTER_SANITIZE_NUMBER_INT );
+		if ( $hook == '1' ) {
+			include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-webhook-handler.php';
+			exit;
+		}
+
 		//Listen and handle Stripe Subscription IPN
 		$swpm_process_stripe_subscription = filter_input( INPUT_GET, 'swpm_process_stripe_subscription' );
 		if ( $swpm_process_stripe_subscription == '1' ) {
@@ -96,14 +103,8 @@ class SwpmWpLoadedTasks {
 
 		//Listen and handle Stripe SCA Subscription IPN
 		$swpm_process_stripe_sca_subscription = filter_input( INPUT_GET, 'swpm_process_stripe_sca_subscription' );
-		$hook                                 = filter_input( INPUT_GET, 'hook', FILTER_SANITIZE_NUMBER_INT );
 		if ( $swpm_process_stripe_sca_subscription == '1' ) {
-						//$hook == 1 means it is a background post via webshooks. Otherwise it is direct post to the script after payment (at the time of payment).
-			if ( $hook ) {
-				include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-subscription-ipn.php';
-			} else {
-				include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-subscription-ipn.php';
-			}
+			include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-subscription-ipn.php';
 			exit;
 		}
 
@@ -120,10 +121,10 @@ class SwpmWpLoadedTasks {
 			add_action( 'wp_ajax_swpm_process_pp_smart_checkout', 'swpm_pp_smart_checkout_ajax_hanlder' );
 			add_action( 'wp_ajax_nopriv_swpm_process_pp_smart_checkout', 'swpm_pp_smart_checkout_ajax_hanlder' );
 
-			//Listen and handle Stripe SCA checkout session create requests. 
+			//Listen and handle Stripe SCA checkout session create requests.
 			//Our Stripe session create request comes via ajax.
 			require_once SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-checkout-session-create.php';
 		}
 	}
-	
+
 }

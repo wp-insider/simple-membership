@@ -2,8 +2,6 @@
 
 class SwpmStripeWebhookHandler {
 
-	private $event_json;
-
 	public function __construct() {
 		$this->handle_stripe_webhook();
 	}
@@ -25,7 +23,6 @@ class SwpmStripeWebhookHandler {
 		}
 		// SwpmLog::log_simple_debug($input, true);
 		$event_json = json_decode( $input );
-		$this->event_json = $event_json;
 
 		// Check if webhook event data needs to be validated.
 		$webhook_signing_secret = SwpmSettings::get_instance()->get_value( 'stripe-webhook-signing-secret' );
@@ -138,7 +135,7 @@ class SwpmStripeWebhookHandler {
 
 				if ( empty( $txn_id ) ) {
 					// This the newer version of stripe api (i.e. xxxx-xx-xx.basil) the event object does not contain charge id.
-					$txn_id = $this->get_charge_id_from_invoice_id( $event_json->data->object->id );
+					$txn_id = $this->get_charge_id_from_event_data( $event_json );
 				}
 
 				// Handle if it's a 100% discount. Charge id is not available for this case.
@@ -184,7 +181,13 @@ class SwpmStripeWebhookHandler {
 		http_response_code( 200 ); // Tells Stripe we received this notification
 	}
 
-	public function get_charge_id_from_invoice_id( $invoice_id ) {
+	public static function get_charge_id_from_event_data( $event_json ) {
+		$invoice_id = isset($event_json->data->object->id) ? $event_json->data->object->id : null;
+		if (empty($invoice_id)){
+			SwpmLog::log_simple_debug( 'Invoice id could not be retrieved.', false );
+			return null;
+		}
+
 		SwpmLog::log_simple_debug( 'Using invoice id: ' . $invoice_id . ' to retrieve charge_id.', true );
 
 		$settings = SwpmSettings::get_instance();
@@ -193,8 +196,8 @@ class SwpmStripeWebhookHandler {
 		$secret_key = null;
 
 		// Try to get api secret key
-		if (isset($this->event_json->data->object) && $this->event_json->data->object->object == 'subscription' ){
-			$sub_id = $this->event_json->data->object->id;
+		if (isset($event_json->data->object->object) && $event_json->data->object->object == 'subscription' ){
+			$sub_id = $event_json->data->object->id;
 			$sub_agreement_cpt_id = SWPM_Utils_Subscriptions::get_subscription_agreement_cpt_id_by_subs_id($sub_id);
 			$payment_button_id = get_post_meta($sub_agreement_cpt_id, 'payment_button_id', true);
 			$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $payment_button_id, !$sandbox_enabled );

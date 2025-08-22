@@ -73,35 +73,41 @@ class SwpmWpLoadedTasks {
 			exit;
 		}
 
-		//Listen and handle Stripe Buy Now IPN
+		//Listen and handle Stripe (Legacy) Buy Now IPN
 		$swpm_process_stripe_buy_now = filter_input( INPUT_GET, 'swpm_process_stripe_buy_now' );
 		if ( $swpm_process_stripe_buy_now == '1' ) {
 			include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-buy-now-ipn.php';
 			exit;
 		}
 
-		//Listen and handle Stripe SCA Buy Now IPN
+		//Listen and handle Stripe (SCA) Buy Now IPN
 		$swpm_process_stripe_sca_buy_now = filter_input( INPUT_GET, 'swpm_process_stripe_sca_buy_now' );
 		if ( $swpm_process_stripe_sca_buy_now == '1' ) {
 			include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-buy-now-ipn.php';
 			exit;
 		}
 
-		//Handles all Stripe Webhooks (Both SCA and Legacy)
-		$hook = filter_input( INPUT_GET, 'hook', FILTER_SANITIZE_NUMBER_INT );
+		//Handles all the Stripe Webhooks (Both SCA and Legacy)
+		$hook = isset($_REQUEST['hook']) ? $_REQUEST['hook'] : '';
 		if ( $hook == '1' ) {
-			include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-webhook-handler.php';
-			exit;
+			//The normal webhook URL is: SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL/?swpm_process_stripe_subscription=1&hook=1
+			//Lets check for the 'swpm_process_stripe_subscription' query parameter to ensure we are on the correct endpoint
+			$swpm_process_stripe_subscription = isset( $_REQUEST['swpm_process_stripe_subscription'] ) ? $_REQUEST['swpm_process_stripe_subscription'] : '';
+			if( $swpm_process_stripe_subscription == '1'){
+				include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-webhook-handler.php';
+				exit;
+			}
 		}
 
-		//Listen and handle Stripe Subscription IPN
+		//Listen and handle Stripe (Legacy) Subscription IPN
+		//This legacy button has been deprecated. Use the new option instead.
 		$swpm_process_stripe_subscription = filter_input( INPUT_GET, 'swpm_process_stripe_subscription' );
 		if ( $swpm_process_stripe_subscription == '1' ) {
 			include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-subscription-ipn.php';
 			exit;
 		}
 
-		//Listen and handle Stripe SCA Subscription IPN
+		//Listen and handle Stripe (SCA) Subscription IPN
 		$swpm_process_stripe_sca_subscription = filter_input( INPUT_GET, 'swpm_process_stripe_sca_subscription' );
 		if ( $swpm_process_stripe_sca_subscription == '1' ) {
 			include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-subscription-ipn.php';

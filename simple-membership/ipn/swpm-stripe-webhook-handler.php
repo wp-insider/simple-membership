@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * This class handles the webhook notifications from Stripe for all Stripe subscription payments.
+ */
 class SwpmStripeWebhookHandler {
 
 	public function __construct() {
@@ -9,11 +11,6 @@ class SwpmStripeWebhookHandler {
 	public function handle_stripe_webhook() {
 		// This is Webhook notification from Stripe.
 		// This webhook is used for all recurring payment notification (Legacy and SCA ones).
-
-		// TODO: add Webhook Signing Secret verification
-		// To do this, we need to get customer ID, retreive its details from Stripe, get button_id from metadata
-		// and see if the button has Signing Secret option set. If it is - we need to check signatures
-		// More details here: https://stripe.com/docs/webhooks#signatures
 
 		$input = @file_get_contents( 'php://input' );
 		if ( empty( $input ) ) {
@@ -25,6 +22,7 @@ class SwpmStripeWebhookHandler {
 		$event_json = json_decode( $input );
 
 		// Check if webhook event data needs to be validated.
+		//More details here: https://stripe.com/docs/webhooks#signatures
 		$webhook_signing_secret = SwpmSettings::get_instance()->get_value( 'stripe-webhook-signing-secret' );
 		if ( ! empty( $webhook_signing_secret ) ) {
 			SwpmLog::log_simple_debug( 'Stripe webhook signing secret is configured. Validating this webhook event...', true );

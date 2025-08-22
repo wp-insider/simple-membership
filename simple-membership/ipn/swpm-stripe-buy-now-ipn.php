@@ -1,5 +1,8 @@
 <?php
-
+/*
+* NOTE: This class handles the LEGACY Stripe Buy Now buttons related functionality. 
+* Those have been deprecated and should be replaced with the new Stripe Checkout integration.
+*/
 class SwpmStripeBuyNowIpnHandler {
 
 	public function __construct() {

@@ -1,9 +1,20 @@
 <?php
+/*
+* This class handles the new Stripe (SCA) Buy Now buttons related functionality. 
+* 
+* The following steps outline how the Stripe Buy Now (SCA) code flow:
+* 1) When the Buy Now button is clicked, the request is intercepted by JavaScript in 'views/payments/payment-gateway/stripe_sca_button_shortcode_view.php' at line 96, which then sends an AJAX request.
+* 2) The AJAX request is processed by SwpmStripeCheckoutSessionCreate::handle_session_create(), which creates the checkout session and redirects the user to the checkout page.
+* 3) After the payment is completed, Stripe redirects the customer to the URL SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_buy_now=1&ref_id=%s', which was set as the success_url parameter when the Stripe session was created in the previous step.
+* 4) Our IPN listener checks for the query arg swpm_process_stripe_sca_buy_now. When it detects a payload at this request, it calls SwpmStripeSCABuyNowIpnHandler::handle_stripe_ipn() to perform post-payment processing and save the transaction record.
+*/
 
 class SwpmStripeSCABuyNowIpnHandler {
 
 	public function __construct() {
-		//Handle Stripe IPN
+		//This class is initialized and run when a payload is present in the 'swpm_process_stripe_sca_buy_now' query arg.
+		//Refer to the comments at the top of the file for code flow details.
+		//Handle Stripe IPN (After payment is completed).
 		$this->handle_stripe_ipn();
 	}
 
@@ -13,7 +24,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 		SwpmLog::log_simple_debug( 'Stripe SCA Buy Now IPN received. Processing request...', true );
 		//SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose
 
-		// Read and sanitize the request parameters.
+		//Read and sanitize the request parameters.
 		$ref_id = isset( $_GET['ref_id'] ) ? sanitize_text_field( stripslashes( $_GET['ref_id'] ) ) : '';
 
 		if ( empty( $ref_id ) ) {

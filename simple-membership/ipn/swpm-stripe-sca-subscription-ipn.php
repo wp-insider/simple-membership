@@ -1,15 +1,26 @@
 <?php
-
+/*
+* This class handles the new Stripe (SCA) Subscription buttons related functionality. 
+* 
+* The following steps outline how the Stripe Subscription (SCA) code flow:
+* 1) When the Subscription button is clicked, the request is intercepted by JavaScript in 'views/payments/payment-gateway/stripe_sca_button_shortcode_view.php' at line 270, which then sends an AJAX request.
+* 2) The AJAX request is processed by SwpmStripeCheckoutSessionCreate::handle_session_create(), which creates the checkout session and redirects the user to the checkout page.
+* 3) After the payment is completed, Stripe redirects the customer to the URL SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_subscription=1&ref_id=%s', which was set as the success_url parameter when the Stripe session was created in the previous step.
+* 4) Our IPN listener checks for the query arg 'swpm_process_stripe_sca_subscription'. When it detects a payload at this request, it calls SwpmStripeSCASubscriptionIpnHandler::handle_stripe_ipn() to perform post-payment processing and save the transaction record.
+* 5) Webhooks (background posts) are handled separately by the 'SwpmStripeWebhookHandler' class.
+*/
 class SwpmStripeSCASubscriptionIpnHandler {
 
 	public function __construct() {
-
+		//Refer to the comments at the top of the file for code flow details.
+		//This class is initialized and run when a payload is present in the 'swpm_process_stripe_sca_subscription' query arg.
 		$this->handle_stripe_ipn();
 	}
 
 	public function handle_stripe_ipn() {
-		//This will get executed only for direct post (not webhooks). So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not set.
-		//The webhooks are handled by the "swpm-stripe-subscription-ipn.php" script.
+		//This method gets executed only for direct post (not webhooks) when payload is present in the 'swpm_process_stripe_sca_subscription' query arg. 
+		//So it is executed at the time of payment in the browser (via HTTP POST). When the "hook" query arg is not present.
+		//The webhooks are handled by the "SwpmStripeWebhookHandler" class.
 
 		SwpmLog::log_simple_debug( 'Stripe SCA Subscription IPN (HTTP POST) received. Processing request...', true );
 		// SwpmLog::log_simple_debug(print_r($_REQUEST, true), true);//Useful for debugging purpose

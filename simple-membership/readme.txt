@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 4.6.6.t1
+Stable tag: 4.6.6.t2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -180,12 +180,12 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
-- Spanish language translation updated.
+= WIP 4.6.6.t2 =
 - Added a new filter hook 'swpm_override_login_limit' to allow custom code to override the active login limit check.
 - The default subject for the account upgrade email has been changed to "Account Upgrade Confirmation Email" for clarity.
 - The default subject for the account renewal email has been changed to "Account Renewal Confirmation Email" for clarity.
 - Added debug logging for after logout redirection URL.
+- Spanish language translation updated.
 - Changed the call to wp_logout() function to use a custom logout method to prevent the 'wp_logout' action hook from being triggered, which causes our plugin's after logout redirection to not work properly.
 - Added a new action hook 'swpm_wp_user_logout_complete' that is triggered after the wp_destroy_current_session() and wp_clear_auth_cookie() functions are called in the custom logout method.
 - The plugin now hooks to the 'swpm_after_logout_function_executed' hook instead of the 'swpm_logout' hook to handle after logout tasks. This allows for better clarity with the action name.
@@ -193,7 +193,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added new filter hook 'swpm_email_prompt_to_complete_registration_body' to allow custom code to modify the body of the email sent to members prompting them to complete their registration.
 - Added new function 'swpm_dummy_country_names_for_translation' to include dummy country names to the POT file for translation purposes.
 - Replaced the jQuery code for the Stripe button with vanilla JavaScript to resolve fatal errors on certain themes.
-- A issue with recurring subscription payment has fixed.
+- Updated the code to handle the new Stripe webhook API format for subscriptions.
 
 = 4.6.5 =
 - Added a new feature to send separate email notifications for account upgrades and renewals.

@@ -63,9 +63,13 @@ class SwpmStripeWebhookHandler {
 				//This is recurring/subscription payment invoice
 				SwpmLog::log_simple_debug( sprintf( 'Stripe invoice.payment_succeeded webhook for subscription_cycle. This is a successful subscription charge. Capturing payment data.' ), true );
 
-				$sub_id = $event_json->data->object->subscription;
-				if (empty($sub_id) && isset($event_json->data->object->parent->subscription_details->subscription)){
-					$sub_id = $event_json->data->object->parent->subscription_details->subscription;
+				// Get the subscription ID
+				$sub_id = isset($event_json->data->object->subscription) ? $event_json->data->object->subscription : '';
+				if (empty($sub_id)){
+					//The subscription ID value is empty. Let's try to get it from the parent object.
+					if( isset( $event_json->data->object->parent->subscription_details->subscription ) ){
+						$sub_id = $event_json->data->object->parent->subscription_details->subscription;
+					}
 				}
 
 				//$cust_id = $event_json->data->object->billing_reason;
@@ -146,6 +150,8 @@ class SwpmStripeWebhookHandler {
 				$ipn_data['txn_type']         = 'recurring_payment';
 				$ipn_data['status']           = 'subscription';
 
+				// Update the member's access start date if applicable. 
+				// It will update the access start date based on the membership level of the member (if needed)
 				swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
 
 				// Save the transaction record

@@ -196,6 +196,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Updated the code to handle the new Stripe webhook API format for subscriptions.
 - Improved the account access start date updating issue when recurring subscription charge attempt fails.
 - All setcookie function has updated for secure http only protocols.
+- Some translatable text added.
 
 = 4.6.5 =
 - Added a new feature to send separate email notifications for account upgrades and renewals.

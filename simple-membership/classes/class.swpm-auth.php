@@ -20,7 +20,8 @@ class SwpmAuth {
 		if ( ! empty( $custom_msg ) ) {
 			$this->lastStatusMsg = $custom_msg;
 			//let's 'unset' the cookie
-			setcookie( 'swpm-login-form-custom-msg', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN );
+			$secure = is_ssl();
+			setcookie( 'swpm-login-form-custom-msg', '', time() - 3600, COOKIEPATH,  COOKIE_DOMAIN, $secure, true );
 		}
 		$this->isLoggedIn = false;
 		$this->userData = null;
@@ -46,7 +47,7 @@ class SwpmAuth {
 	private function auth_init() {
 		//SwpmLog::log_auth_debug("SwpmAuth::auth_init() function.", true);
 		/**********************************************************
-		 * Note: This function is run on every page load. 
+		 * Note: This function is run on every page load.
 		 * It guarantees the authenticity of the user's login session and permission on every page load.
 		 * It is used to perform certain login related validation tasks when the object is initialized.
 		 * It calls the validate() function to check if login cookie exists, if the cookie is valid, if the cookie is expired etc.
@@ -99,7 +100,7 @@ class SwpmAuth {
 			$this->trigger_swpm_authenticate_failed_hook($swpm_user_name);//Trigger authenticate failed action hook.
 			return false;
 		}
-		
+
 		if ( ! empty( $swpm_user_name ) && ! empty( $swpm_password ) ) {
 			//SWPM member login request.
 			//Trigger action hook that can be used to check stuff before the login request is processed by the plugin.
@@ -243,7 +244,7 @@ class SwpmAuth {
 			$this->lastStatusMsg = SwpmUtils::_( 'Please login again.' );
 			SwpmLog::log_auth_debug( 'Validate() function - Bad hash. Going to clear the auth cookies to clear the bad hash.', true );
 			SwpmLog::log_auth_debug( 'Validate() function - The user profile with the username: ' . $username . ' will be logged out.', true );
-			
+
             do_action('swpm_validate_login_hash_mismatch');
 			//Clear the auth cookies of SWPM to clear the bad hash. This will log out the user.
 			$this->swpm_clear_auth_cookies_and_session_tokens();
@@ -262,7 +263,7 @@ class SwpmAuth {
 				do_action('swpm_login_session_token_expired', $member_id);
 
 				$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . __( 'Login session expired. Please login again.', 'simple-membership') . '</span>';
-				
+
 				SwpmLog::log_auth_debug( 'Active login limit feature - login session token expired. Going to clear the auth cookies. user profile with the username: ' . $username . ' will be logged out from this browser.', true );
 				//Clear the auth cookies of SWPM to clear the bad hash. This will log out the user.
 				$this->swpm_clear_auth_cookies_and_session_tokens();
@@ -349,7 +350,7 @@ class SwpmAuth {
 			return false;
 		}
 
-		//Check if the user's account has expired. 
+		//Check if the user's account has expired.
 		if ( SwpmUtils::is_subscription_expired( $this->userData ) ) {
 			//The user's account has expired.
 			if ( $this->userData->account_state == 'active' ) {
@@ -445,14 +446,14 @@ class SwpmAuth {
 			//Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
 			wp_cookie_constants();
 		}
-        
+
 		//Clear the auth cookies.
 		$this->swpm_clear_auth_cookies_and_session_tokens();
 
 		$this->userData      = null;
 		$this->isLoggedIn    = false;
 		$this->lastStatusMsg = __( 'Logged Out Successfully.', 'simple-membership' );
-		
+
 		SwpmLog::log_auth_debug( 'SwpmAuth::logout() - Logout actions executed successfully.', true );
 
 		if ( $trigger_hook ) {
@@ -474,7 +475,7 @@ class SwpmAuth {
 				'swpm_logged_out' => '1',
 			),
 			SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL
-		);		
+		);
 		$redirect_url = apply_filters( 'swpm_logout_silent_and_redirect_url', $silent_logout_redirect_url );
 		SwpmLog::log_auth_debug( 'Silent logout completed. Redirecting to: ' . $redirect_url, true );
 		wp_redirect( trailingslashit( $redirect_url ) );
@@ -487,13 +488,13 @@ class SwpmAuth {
 			//Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
 			wp_cookie_constants();
 		}
-
-		setcookie( SIMPLE_WP_MEMBERSHIP_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
-		setcookie( SIMPLE_WP_MEMBERSHIP_SEC_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
+		$secure = is_ssl();
+		setcookie( SIMPLE_WP_MEMBERSHIP_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN , $secure, true);
+		setcookie( SIMPLE_WP_MEMBERSHIP_SEC_AUTH, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
 	}
-	
+
 	public function swpm_clear_auth_cookies_and_session_tokens() {
-		//Delete the session token from the members meta table before deleting the auth cookies 
+		//Delete the session token from the members meta table before deleting the auth cookies
 		//We need the token key from the cookie value.
 		SwpmLimitActiveLogin::clear_logged_in_member_session_token();
 
@@ -510,7 +511,7 @@ class SwpmAuth {
 			wp_clear_auth_cookie();
 		}
 	}
-	
+
 	private function set_cookie( $remember = '', $secure = '' ) {
 		$remember = boolval($remember);
 
@@ -521,7 +522,7 @@ class SwpmAuth {
 			$expire = $expiration + 43200; //12 hours grace period
 		} else {
 			//When "remember me" is not checked, we use a session cookie to match with WP.
-			//Session cookie will expire when the browser is closed. 
+			//Session cookie will expire when the browser is closed.
 			//The $expiration is used in the event the browser session is not closed for a long time. This value is used by our validate function on page load.
 	        $expiration = time() + 172800; //2 days.
 			//Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).
@@ -535,15 +536,19 @@ class SwpmAuth {
 			//Defines cookie-related WordPress constants on a multi-site setup (if not defined already).
 			wp_cookie_constants();
 		}
-                
-		setcookie( 'swpm_in_use', 'swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Switch this to the following one.
-		setcookie( 'wp_swpm_in_use', 'wp_swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN );//Prefix the cookie with 'wp' to exclude Batcache caching.
+
+		if ( ! $secure ) {
+			$secure = is_ssl();
+		}
+
+		setcookie( 'swpm_in_use', 'swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );//Switch this to the following one.
+		setcookie( 'wp_swpm_in_use', 'wp_swpm_in_use', $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );//Prefix the cookie with 'wp' to exclude Batcache caching.
 		if ( function_exists( 'wp_cache_serve_cache_file' ) ) {//WP Super cache workaround
 			$author_value = isset( $this->userData->user_name ) ? $this->userData->user_name : 'wp_swpm';
 			$author_value = apply_filters( 'swpm_comment_author_cookie_value', $author_value );
-			setcookie( "comment_author_", $author_value, $expire, COOKIEPATH, COOKIE_DOMAIN );
+			setcookie( "comment_author_", $author_value, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
 		}
-                
+
 		$expiration_timestamp = SwpmUtils::get_expiration_timestamp( $this->userData );
 		$enable_expired_login = SwpmSettings::get_instance()->get_value( 'enable-expired-account-login', '' );
 		// make sure cookie doesn't live beyond account expiration date.
@@ -551,9 +556,7 @@ class SwpmAuth {
 		$expiration = empty( $enable_expired_login ) ? min( $expiration, $expiration_timestamp ) : $expiration;
 		$pass_frag  = substr( $this->userData->password, 8, 4 );
 		$scheme     = 'auth';
-		if ( ! $secure ) {
-			$secure = is_ssl();
-		}
+
 		$key              = self::b_hash( $this->userData->user_name . $pass_frag . '|' . $expiration, $scheme );
 		$hash             = hash_hmac( 'md5', $this->userData->user_name . '|' . $expiration, $key );
 		$auth_cookie      = $this->userData->user_name . '|' . $expiration . '|' . $hash . '|' . intval($remember);
@@ -581,8 +584,8 @@ class SwpmAuth {
 		$this->reset_swpm_auth_cookies_only($user_info, $remember);
 
 		//Clear the WP user auth cookies and destroy session. New auth cookies will be generate below.
-		$this->clear_wp_user_auth_cookies(); 
-		
+		$this->clear_wp_user_auth_cookies();
+
 		// Set new auth cookies for WP user
 		$swpm_id = $user_info['member_id'];
 		$wp_user = SwpmMemberUtils::get_wp_user_from_swpm_user_id( $swpm_id );
@@ -610,7 +613,7 @@ class SwpmAuth {
             $expire = $expiration + 43200; //12 hours grace period
         } else {
 			//When "remember me" is not checked, we use a session cookie to match with WP.
-			//Session cookie will expire when the browser is closed. 
+			//Session cookie will expire when the browser is closed.
 			//The $expiration is used in the event the browser session is not closed for a long time. This value is used by our validate function on page load.
 	        $expiration = time() + 172800; //2 days.
             //Set the expire to 0 to match with WP's cookie expiration (when "remember me" is not checked).

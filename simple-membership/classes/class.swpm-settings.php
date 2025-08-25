@@ -68,7 +68,7 @@ class SwpmSettings {
 
         //The documentation settings section for this tab
 		add_settings_section( 'swpm-documentation', SwpmUtils::_( 'Plugin Documentation' ), array( &$this, 'swpm_documentation_callback' ), 'simple_wp_membership_settings' );
-		
+
 		/* General Settings Section */
 		add_settings_section( 'general-settings', SwpmUtils::_( 'General Settings' ), array( &$this, 'general_settings_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
@@ -144,7 +144,7 @@ class SwpmSettings {
 				'message' => SwpmUtils::_( 'Enable this option if you only want the members of the site to be able to post a comment.' ),
 			)
 		);
-		
+
 		add_settings_field(
 			'password-visibility-login-form',
 			SwpmUtils::_( 'Enable Toggle Password Visibility in Login Form' ),
@@ -239,8 +239,8 @@ class SwpmSettings {
 				'item'    => 'thank-you-page-url',
 				'message' => SwpmUtils::_( 'It is useful to use a thank you page in your payment button configuration. Read <a href="https://simple-membership-plugin.com/paid-registration-from-the-thank-you-page/" target="_blank">this documentation</a> to learn more.' ),
 			)
-		);		
-		
+		);
+
 		/* Debug Settings Section */
 		add_settings_section( 'debug-settings', SwpmUtils::_( 'Test & Debug Settings' ), array( &$this, 'testndebug_settings_callback' ), 'simple_wp_membership_settings' );
 
@@ -320,7 +320,7 @@ class SwpmSettings {
 	private function tab_2() {
 		//Register settings sections and fileds for the payment settings tab.
 		//register_setting( 'swpm-settings-tab-2', 'swpm-settings', array( $this, 'sanitize_tab_2' ) );
-                
+
 		//This settings section has no heading. Useful for hooking at this section and doing arbitrary request parameter checks and show response accordingly (on this settings tab)
 		//add_settings_section( 'swpm-settings-tab-2-before-other-fields', '', array( &$this, 'swpm_settings_tab_2_before_fields_callback' ), 'simple_wp_membership_settings' );
 
@@ -356,7 +356,7 @@ class SwpmSettings {
 			'email-misc-settings',
 			array(
 				'item'    => 'email-from',
-				'message' => 'This value will be used as the sender\'s address for the emails. Example value: Your Name &lt;sales@your-domain.com&gt;',
+				'message' => __("This value will be used as the sender's address for the emails. Example value: Your Name &lt;sales@your-domain.com&gt;", "simple-membership"),
 			)
 		);
 
@@ -368,7 +368,7 @@ class SwpmSettings {
 			'email-misc-settings',
 			array(
 				'item'    => 'email-enable-html',
-				'message' => 'Enables HTML support in emails. We recommend using plain text (non HTML) email as it has better email delivery rate.',
+				'message' => __("Enables HTML support in emails. We recommend using plain text (non HTML) email as it has better email delivery rate.", "simple-membership"),
 			)
 		);
 
@@ -1112,7 +1112,7 @@ class SwpmSettings {
 
                 /* Overview section at the top */
                 add_settings_section( 'blacklist-whitelist-settings-overview', SwpmUtils::_( 'Configure Blacklisting & Whitelisting' ), array( &$this, 'blacklist_whitelist_overview_callback' ), 'simple_wp_membership_settings' );
-                
+
                 /* Whitelisting settings section */
 		add_settings_section( 'whitelist-settings', SwpmUtils::_( 'Whitelisting' ), array( &$this, 'whitelist_settings_callback' ), 'simple_wp_membership_settings' );
 
@@ -1162,7 +1162,7 @@ class SwpmSettings {
 				'item'    => 'whitelist-block-message',
 				'message' => SwpmUtils::_( 'Enter the message you want to show to the user when the whitelisted condition is met. Leave it empty to use the default message.' ),
 			)
-		);     
+		);
 
 		/** BLACKLIST SETTINGS **/
 		add_settings_section( 'blacklist-settings', SwpmUtils::_( 'Blacklisting' ), array( &$this, 'blacklist_settings_callback' ), 'simple_wp_membership_settings' );
@@ -1213,12 +1213,12 @@ class SwpmSettings {
 				'item'    => 'blacklist-block-message',
 				'message' => SwpmUtils::_( 'Enter the message you want to show to the user when the blacklisted condition is met. Leave it empty to use the default message.' ),
 			)
-		);            
+		);
 	}
 
 	private function tab_7() {
 		//Register settings sections and fields for the addon settings tab.
-            
+
 	}
 
 	public static function get_instance() {
@@ -1345,7 +1345,7 @@ class SwpmSettings {
 	public function testndebug_settings_callback() {
 		_e( 'Testing and Debug Related Settings.', 'simple-membership' );
 	}
-        
+
 	public function reg_email_settings_callback() {
 		_e( 'This email will be sent to your users when they complete the registration and become a member.', 'simple-membership' );
 	}
@@ -1442,7 +1442,7 @@ class SwpmSettings {
 			//This status message need to be in the callback function to prevent header sent warning
 			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
 		}
-				
+
 		echo '<div class="swpm-grey-box">';
 		echo '<p>';
 		_e( 'This interface lets you configure blacklisting & whitelisting for email addresses. ', 'simple-membership' );
@@ -1451,7 +1451,7 @@ class SwpmSettings {
 		echo '</p>';
 		echo '</div>';
 	}
-        
+
 	public function whitelist_settings_callback() {
 		_e( 'This section allows you to configure whitelisting settings.', 'simple-membership' );
 	}
@@ -1540,7 +1540,7 @@ class SwpmSettings {
 	}
 
 	public function sanitize_tab_2( $input ) {
-		//This is the callback function for the second tab. 
+		//This is the callback function for the second tab.
 		//It sanitizes the input data for the second tab.
 		//This tab has been moved to the payments menu. In the future, we can remove this tab or re-use it for something else.
 	}
@@ -1643,14 +1643,14 @@ class SwpmSettings {
 			$this->settings = (array) get_option( 'swpm-settings' );
 		}
 		$output = $this->settings;
-		$output['enable-whitelisting'] = isset( $input['enable-whitelisting'] ) ? esc_attr( $input['enable-whitelisting'] ) : '';		
-		$output['whitelist-email-address'] = isset( $input['whitelist-email-address'] ) ? esc_attr( $input['whitelist-email-address'] ) : '';		
-		$output['whitelist-email-address-pattern'] = isset( $input['whitelist-email-address-pattern'] ) ? esc_attr( $input['whitelist-email-address-pattern'] ) : '';		
+		$output['enable-whitelisting'] = isset( $input['enable-whitelisting'] ) ? esc_attr( $input['enable-whitelisting'] ) : '';
+		$output['whitelist-email-address'] = isset( $input['whitelist-email-address'] ) ? esc_attr( $input['whitelist-email-address'] ) : '';
+		$output['whitelist-email-address-pattern'] = isset( $input['whitelist-email-address-pattern'] ) ? esc_attr( $input['whitelist-email-address-pattern'] ) : '';
 		$output['whitelist-block-message'] = isset( $input['whitelist-block-message'] ) ? esc_attr( $input['whitelist-block-message'] ) : '';
 
-		$output['enable-blacklisting'] = isset( $input['enable-blacklisting'] ) ? esc_attr( $input['enable-blacklisting'] ) : '';		
-		$output['blacklist-email-address'] = isset( $input['blacklist-email-address'] ) ? esc_attr( $input['blacklist-email-address'] ) : '';		
-		$output['blacklist-email-address-pattern'] = isset( $input['blacklist-email-address-pattern'] ) ? esc_attr( $input['blacklist-email-address-pattern'] ) : '';		
+		$output['enable-blacklisting'] = isset( $input['enable-blacklisting'] ) ? esc_attr( $input['enable-blacklisting'] ) : '';
+		$output['blacklist-email-address'] = isset( $input['blacklist-email-address'] ) ? esc_attr( $input['blacklist-email-address'] ) : '';
+		$output['blacklist-email-address-pattern'] = isset( $input['blacklist-email-address-pattern'] ) ? esc_attr( $input['blacklist-email-address-pattern'] ) : '';
 		$output['blacklist-block-message'] = isset( $input['blacklist-block-message'] ) ? esc_attr( $input['blacklist-block-message'] ) : '';
 		return $output;
 	}

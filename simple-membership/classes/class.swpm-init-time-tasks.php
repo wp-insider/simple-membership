@@ -17,10 +17,11 @@ class SwpmInitTimeTasks {
 				// Deprecated (only here for older versions of PHP)
 				$uid = md5( microtime() );
 			}
-			
+
 			$_COOKIE['swpm_session'] = $uid; // fake it for current session/
 			if ( ! headers_sent() ) {
-				setcookie( 'swpm_session', $uid, 0, '/' );
+				$secure = is_ssl();
+				setcookie( 'swpm_session', $uid, 0, '/', COOKIE_DOMAIN, $secure, true);
 			}
 		}
 
@@ -29,9 +30,9 @@ class SwpmInitTimeTasks {
 
 		//Do frontend-only init time tasks
 		if ( ! is_admin() ) {
-			//Trigger an action hook 
+			//Trigger an action hook
 			do_action('swpm_do_init_time_tasks_front_end');
-                        
+
 			SwpmAuth::get_instance();
 
 			$this->check_and_handle_auto_login();

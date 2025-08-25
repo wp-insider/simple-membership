@@ -37,8 +37,9 @@ class SwpmStripeWebhookHandler {
 			}
 		}
 
-		$type = $event_json->type;
-		SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received: %s. Checking if we need to handle this webhook.', $type ), true );
+		$type = isset($event_json->type) ? $event_json->type : '';
+		$stripe_api_version = isset($event_json->api_version) ? $event_json->api_version : '';
+		SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received: %s and api version: %s. Checking if we need to handle this webhook.', $type, $stripe_api_version ), true );
 
 		if ( 'customer.subscription.deleted' === $type || 'charge.refunded' === $type ) {
 			// Subscription expired or refunded event
@@ -150,7 +151,7 @@ class SwpmStripeWebhookHandler {
 				$ipn_data['txn_type']         = 'recurring_payment';
 				$ipn_data['status']           = 'subscription';
 
-				// Update the member's access start date if applicable. 
+				// Update the member's access start date if applicable.
 				// It will update the access start date based on the membership level of the member (if needed)
 				swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
 

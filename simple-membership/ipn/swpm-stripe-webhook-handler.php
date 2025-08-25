@@ -57,28 +57,6 @@ class SwpmStripeWebhookHandler {
 			swpm_handle_subsc_cancel_stand_alone( $ipn_data );
 		}
 
-		if ( $type == 'customer.subscription.updated' ) {
-			// Subscription updated webhook
-			// Check that the status is "active" or "trialing". That way we don't process the webhook for "canceled" or "past_due" status.
-			$status = isset( $event_json->data->object->status ) ? $event_json->data->object->status : '';
-			SwpmLog::log_simple_debug( 'Stripe customer.subscription.updated webhook status: ' . $status, true );
-			if ( $status != 'active' && $status != 'trialing' ) {
-				SwpmLog::log_simple_debug( 'Stripe customer.subscription.updated webhook status is not "active" or "trialing". Ignoring this webhook.', true );
-				http_response_code( 200 ); // Tells Stripe we received this notification
-
-				return;
-			}
-
-			// Let's form minimal ipn_data array
-			$customer                  = $event_json->data->object->customer;
-			$subscr_id                 = $event_json->data->object->id;
-			$ipn_data                  = array();
-			$ipn_data['subscr_id']     = $subscr_id;
-			$ipn_data['parent_txn_id'] = $customer;
-
-			swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
-		}
-
 		if ( $type === 'invoice.payment_succeeded' ) {
 			$billing_reason = isset( $event_json->data->object->billing_reason ) ? $event_json->data->object->billing_reason : '';
 			if ( $billing_reason == 'subscription_cycle' ) {
@@ -86,6 +64,10 @@ class SwpmStripeWebhookHandler {
 				SwpmLog::log_simple_debug( sprintf( 'Stripe invoice.payment_succeeded webhook for subscription_cycle. This is a successful subscription charge. Capturing payment data.' ), true );
 
 				$sub_id = $event_json->data->object->subscription;
+				if (empty($sub_id) && isset($event_json->data->object->parent->subscription_details->subscription)){
+					$sub_id = $event_json->data->object->parent->subscription_details->subscription;
+				}
+
 				//$cust_id = $event_json->data->object->billing_reason;
 				//$date = $event_json->data->object->date;
 				$price_in_cents = $event_json->data->object->amount_paid; //amount in cents
@@ -164,8 +146,7 @@ class SwpmStripeWebhookHandler {
 				$ipn_data['txn_type']         = 'recurring_payment';
 				$ipn_data['status']           = 'subscription';
 
-				//TODO - Maybe handle the user access start date updating here (instead of "customer.subscription.updated" hook).
-				//swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
+				swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
 
 				// Save the transaction record
 				SwpmTransactions::save_txn_record( $ipn_data );

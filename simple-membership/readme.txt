@@ -194,6 +194,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added new function 'swpm_dummy_country_names_for_translation' to include dummy country names to the POT file for translation purposes.
 - Replaced the jQuery code for the Stripe button with vanilla JavaScript to resolve fatal errors on certain themes.
 - Updated the code to handle the new Stripe webhook API format for subscriptions.
+- Account access start date updating issue fixed when recurring subscription payment fails.
 
 = 4.6.5 =
 - Added a new feature to send separate email notifications for account upgrades and renewals.

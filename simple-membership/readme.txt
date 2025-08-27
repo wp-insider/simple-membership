@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 4.6.6
+Stable tag: 4.6.7.t1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -179,6 +179,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+
+= WIP 4.6.7.t1 =
+- Improved the renewal logic to include a check for account inactivity so access starts date is calculated correctly.
 
 = 4.6.6 =
 - Added a new filter hook 'swpm_override_login_limit' to allow custom code to override the active login limit check.

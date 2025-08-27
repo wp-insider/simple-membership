@@ -57,17 +57,18 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 			return;
 		}
 		$old_membership_level = $resultset->membership_level;
-		$old_account_state    = $resultset->account_state;
+		$old_account_state = $resultset->account_state;
 
 		// If the payment is for the same/existing membership level, then this is a renewal. Refresh the start date as appropriate.
-		$args                = array(
+		$args = array(
 			'swpm_id'              => $swpm_id,
 			'membership_level'     => $membership_level,
 			'old_membership_level' => $old_membership_level,
+			'old_account_state'    => $old_account_state
 		);
 		$subscription_starts = SwpmMemberUtils::calculate_access_start_date_for_account_update( $args );
 		$subscription_starts = apply_filters( 'swpm_account_update_subscription_starts', $subscription_starts, $args );
-		swpm_debug_log_subsc( 'Setting access starts date value to: ' . $subscription_starts, true );
+		swpm_debug_log_subsc( 'Setting access starts date value to: ' . $subscription_starts . '. Existing account status value: ' . $old_account_state, true );
 
 		// Check whether it is an account upgrade or renew event.
 		$level_update_type = SwpmMemberUtils::get_membership_level_update_type($args);

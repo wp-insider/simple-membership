@@ -351,17 +351,22 @@ class SwpmMemberUtils {
 		$swpm_id              = $args['swpm_id'];
 		$membership_level     = $args['membership_level'];
 		$old_membership_level = $args['old_membership_level'];
+		$old_account_state    = isset($args['old_account_state']) ? $args['old_account_state'] : '';
 
+		//Start with default current date.
 		$access_starts = SwpmUtils::get_current_date_in_wp_zone();//( date( 'Y-m-d' ) );
+
+		//Check if the membership level is the same as the old level.
 		if ( $membership_level == $old_membership_level ) {
 			//Payment for the same membership level (renewal).
-			//Algorithm - ONLY set the $access_starts date to current expiry date if the current expiry date is in the future.
+			//Algorithm - ONLY set the $access_starts date to current expiry date if the current expiry date is in the future AND account state is 'active'.
 			//Otherwise set $access_starts to TODAY.
 			SwpmLog::log_simple_debug( 'This is a payment for the same membership level (renewal scenario).', true );
 
 			$expiry_timestamp = self::get_expiry_date_timestamp_by_user_id( $swpm_id );
-			if ( $expiry_timestamp > time() ) {
-				//Account is not expired. Expiry date is in the future.
+			if ( $expiry_timestamp > time() && $old_account_state == 'active' ) {
+				//Account is not expired or inactive AND the expiry date is in the future.
+				SwpmLog::log_simple_debug( 'The account is active AND the expiry date is in the future.', true );
 				$level_row = SwpmUtils::get_membership_level_row_by_id( $membership_level );
 				$subs_duration_type = $level_row->subscription_duration_type;
 				if ( $subs_duration_type == SwpmMembershipLevel::NO_EXPIRY ) {
@@ -376,12 +381,12 @@ class SwpmMemberUtils {
 					//Duration expiry level.
 					//Set the $access_starts date to the current expiry date so the renewal time starts from then.
 					$access_starts = date( 'Y-m-d', $expiry_timestamp );
-					SwpmLog::log_simple_debug( 'Going to use the current expiry date for the Access Starts date.', true );
+					SwpmLog::log_simple_debug( 'This is a DURATION expiry level. Use the current expiry date for the Access Starts date.', true );
 				}
 			} else {
-				//Account is already expired.
-				//Use todays date for $access_starts date parameter.
-				SwpmLog::log_simple_debug( 'Account is already expired. Use todays date for Access Starts.', true );
+				//Account is already expired or inactive.
+				//Use the standard todays date for $access_starts date parameter.
+				SwpmLog::log_simple_debug( 'Account is already expired or inactive. Use todays date for Access Starts date.', true );
 			}
 		} else {
 			//Payment for a NEW membership level (upgrade).

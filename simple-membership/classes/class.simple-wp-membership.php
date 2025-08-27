@@ -41,6 +41,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'lib/paypal/class-swpm-paypal-main.php
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-limit-active-login.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-limit-login-attempts.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-event-logger.php');
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-woocommerce-protection.php');
 
 class SimpleWpMembership {
     

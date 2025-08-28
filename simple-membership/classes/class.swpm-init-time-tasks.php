@@ -69,6 +69,11 @@ class SwpmInitTimeTasks {
 			$id = filter_input( INPUT_GET, 'member_id', FILTER_VALIDATE_INT );
 			SwpmAdminRegistration::get_instance()->edit_admin_end( $id );
 		}
+		$manual_approve = filter_input( INPUT_POST, 'swpm_admin_member_account_approve' );
+		if ( ! empty( $manual_approve ) ) {
+			$id = filter_input( INPUT_GET, 'member_id', FILTER_VALIDATE_INT );
+			SwpmAdminRegistration::get_instance()->manually_approve_account( $id );
+		}
 		$createswpmlevel = filter_input( INPUT_POST, 'createswpmlevel' );
 		if ( ! empty( $createswpmlevel ) ) {
 			SwpmMembershipLevel::get_instance()->create_level();

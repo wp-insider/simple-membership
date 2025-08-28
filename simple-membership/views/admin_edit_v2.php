@@ -202,12 +202,6 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
         <input type="hidden" name="editswpmuser" value="Save Data">
 		<?php
 		submit_button( __( 'Save Data', 'simple-membership' ), 'primary', null, true, array( 'id' => 'createswpmusersub' ) );
-		if ( strtolower( $account_state ) == 'pending' ) {
-			echo '<div class="swpm_admin_member_account_approve_btn_wrap">';
-			echo '<input type="button" name="" id="swpm_admin_member_account_approve_btn" class="button-secondary" value="' . __( 'Approve Account', 'simple-membership' ) . '" >';
-			echo '<input type="hidden" name="swpm_admin_member_account_approve_btn_clicked" id="swpm_admin_member_account_approve_btn_clicked" value="" >';
-			echo '</div>';
-		}
 		$delete_swpmuser_nonce = wp_create_nonce( 'delete_swpmuser_admin_end' );
 		$member_delete_url     = "?page=simple_wp_membership&member_action=delete&member_id=" . $member_id . "&delete_swpmuser_nonce=" . $delete_swpmuser_nonce;
 		echo '<div class="swpm-admin-delete-user-profile-link">';
@@ -215,6 +209,18 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
 		echo '</div>';
 		?>
     </form>
+    <?php if ( strtolower( $account_state ) == 'pending' ) { ?>
+    <br>
+    <form action="" method="post">
+        <div class="swpm_admin_member_account_approve_btn_wrap">
+            <input type="hidden" name="swpm_admin_member_account_approve" value="1">
+            <input type="hidden" name="member_id" value="<?php echo esc_attr($member_id) ?>">
+            <input type="hidden" name="member_email" value="<?php echo esc_attr($email) ?>">
+	        <?php wp_nonce_field('swpm_admin_member_account_approve', 'swpm_admin_member_account_approve_nonce') ?>
+            <input type="submit" name="" id="swpm_admin_member_account_approve_btn" class="button-secondary" value="<?php _e( 'Approve Account', 'simple-membership' ) ?>" >
+        </div>
+    </form>
+    <?php }?>
     <style>
         form.swpm-form .swpm-submit-section {
             margin-top: 12px;
@@ -240,10 +246,6 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
             padding: 0 !important;
             margin: 4px 0 0 !important;
         }
-
-        form.swpm-form .swpm_admin_member_account_approve_btn_wrap {
-            margin: 0 0 12px;
-        }
     </style>
 </div>
 <script>
@@ -264,21 +266,4 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
             }
         });
     });
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const swpm_admin_member_account_approve_btn = document.getElementById('swpm_admin_member_account_approve_btn');
-
-        if (swpm_admin_member_account_approve_btn) {
-            const swpm_admin_member_account_approve_btn_clicked = document.getElementById('swpm_admin_member_account_approve_btn_clicked');
-            const swpm_account_state_select_input = document.getElementById('account_state');
-            swpm_admin_member_account_approve_btn.addEventListener('click', function (e) {
-                swpm_account_state_select_input.value = 'active';
-                swpm_admin_member_account_approve_btn_clicked.value = '1';
-
-                const accountEditForm = swpm_admin_member_account_approve_btn.closest('form');
-
-                accountEditForm.submit();
-            })
-        }
-    })
 </script>

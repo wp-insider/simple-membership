@@ -252,8 +252,8 @@ class SwpmAdminRegistration extends SwpmRegistration {
 					//Do the standard email merge tag replacement.
 					$manual_approve_email_body = SwpmMiscUtils::replace_dynamic_tags( $manual_approve_email_body, $id );
 
-					$manual_approve_email_subject = apply_filters( 'swpm_email_account_status_change_subject', $manual_approve_email_subject );
-					$manual_approve_email_body = apply_filters( 'swpm_email_account_status_change_body', $manual_approve_email_body );
+					$manual_approve_email_subject = apply_filters( 'swpm_manual_account_approval_notification_subject', $manual_approve_email_subject );
+					$manual_approve_email_body = apply_filters( 'swpm_manual_account_approval_notification_body', $manual_approve_email_body );
 
 					//Send the email
 					SwpmMiscUtils::mail( $email_address, $manual_approve_email_subject, $manual_approve_email_body, $manual_approve_email_headers );

@@ -183,6 +183,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 = WIP 4.6.7.t1 =
 - Improved the renewal logic to include a check for account inactivity so access starts date is calculated correctly.
 - Woocommerce protected product single page now hides its content.
+- New button added to approve member's account from admin end.
 
 = 4.6.6 =
 - Added a new filter hook 'swpm_override_login_limit' to allow custom code to override the active login limit check.

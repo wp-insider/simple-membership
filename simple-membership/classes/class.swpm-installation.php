@@ -300,6 +300,21 @@ class SwpmInstallation {
 		    $settings->set_value('subscription-cancel-member-mail-body', stripslashes($subscription_cancel_member_mail_body));
 	    }
 
+	    $subscription_cancel_member_mail_subject = "Account approval notification";
+	    $subscription_cancel_member_mail_body    = "Dear {first_name}" .
+	                                               "\n\nYour account has approved manually." .
+	                                               "\n\nMember ID: {member_id}" .
+	                                               "\n\nThank You";
+	    $curr_manual_account_approve_member_mail_subject = $settings->get_value( 'manual-account-approve-member-mail-subject', false );
+	    if ( $curr_manual_account_approve_member_mail_subject === false ) {
+		    $settings->set_value( 'manual-account-approve-member-mail-subject', stripslashes( $subscription_cancel_member_mail_subject ) );
+	    }
+
+	    $curr_manual_account_approve_member_mail_body = $settings->get_value( 'manual-account-approve-member-mail-body', false );
+	    if ( $curr_manual_account_approve_member_mail_body === false ) {
+		    $settings->set_value( 'manual-account-approve-member-mail-body', stripslashes( $subscription_cancel_member_mail_body ) );
+	    }
+
         //Check if the plugin is being installed for the first time
         if (empty($installed_version)) {
             //Do fresh install tasks

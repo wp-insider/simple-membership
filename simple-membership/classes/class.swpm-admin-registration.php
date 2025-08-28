@@ -229,6 +229,38 @@ class SwpmAdminRegistration extends SwpmRegistration {
 				SwpmMiscUtils::mail( $email_address, $subject, $body, $headers );
 				SwpmLog::log_simple_debug( 'Notify email sent (after profile edit from admin side). Email sent to: ' . $email_address, true );
 			}
+
+			if (isset($_POST['swpm_admin_member_account_approve_btn_clicked']) && !empty($_POST['swpm_admin_member_account_approve_btn_clicked'])){
+				$settings = SwpmSettings::get_instance();
+
+				$is_manual_account_approval_notification_enabled = $settings->get_value( 'manual-account-approve-member-mail-enable' );
+
+				if (!empty($is_manual_account_approval_notification_enabled)){
+					$from_address = $settings->get_value( 'email-from' );
+					$manual_approve_email_headers = 'From: ' . $from_address . "\r\n";
+
+					$manual_approve_email_subject = $settings->get_value( 'manual-account-approve-member-mail-subject' );
+					$manual_approve_email_body = $settings->get_value( 'manual-account-approve-member-mail-body' );
+
+					$member['login_link'] = $settings->get_value( 'login-page-url' );
+					$member['user_name'] = $user_name;
+					$member['password'] = empty( $plain_password ) ? __( 'Your current password' , 'simple-membership') : $plain_password;
+					$values = array_values( $member );
+					$keys = array_map( 'swpm_enclose_var', array_keys( $member ) );
+					$manual_approve_email_body = html_entity_decode( str_replace( $keys, $values, $manual_approve_email_body ) );
+
+					//Do the standard email merge tag replacement.
+					$manual_approve_email_body = SwpmMiscUtils::replace_dynamic_tags( $manual_approve_email_body, $id );
+
+					$manual_approve_email_subject = apply_filters( 'swpm_email_account_status_change_subject', $manual_approve_email_subject );
+					$manual_approve_email_body = apply_filters( 'swpm_email_account_status_change_body', $manual_approve_email_body );
+
+					//Send the email
+					SwpmMiscUtils::mail( $email_address, $manual_approve_email_subject, $manual_approve_email_body, $manual_approve_email_headers );
+					SwpmLog::log_simple_debug( 'Notify email sent (after manual approval of member account from admin side). Email sent to: ' . $email_address, true );
+				}
+			}
+
 			wp_redirect( 'admin.php?page=simple_wp_membership' );
 			exit( 0 );
 		}

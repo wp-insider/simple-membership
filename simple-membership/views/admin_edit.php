@@ -173,6 +173,7 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
     </form>
     <?php 
     //Additional actions section.
+    echo '<div style="margin-top: 15px">';
     echo '<hr>';
     echo '<h3>' . __( 'Additional Member Actions', 'simple-membership' ) . '</h3>';
 

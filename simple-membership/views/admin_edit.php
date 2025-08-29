@@ -169,25 +169,37 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
     <?php echo apply_filters('swpm_admin_custom_fields', '',$membership_level); ?>
     <?php
     submit_button( SwpmUtils::_('Save Data'), 'primary', 'editswpmuser', true, array( 'id' => 'createswpmusersub' ) );
+	?>
+    </form>
+    <?php 
+    //Additional actions section.
+    echo '<hr>';
+    echo '<h3>' . __( 'Additional Member Actions', 'simple-membership' ) . '</h3>';
+
+    //Delete user profile link.    
     $delete_swpmuser_nonce = wp_create_nonce( 'delete_swpmuser_admin_end' );
-    $member_delete_url = "?page=simple_wp_membership&member_action=delete&member_id=".$member_id."&delete_swpmuser_nonce=".$delete_swpmuser_nonce;
+    $member_delete_url = "?page=simple_wp_membership&member_action=delete&member_id=" . $member_id . "&delete_swpmuser_nonce=" . $delete_swpmuser_nonce;
     echo '<div class="swpm-admin-delete-user-profile-link">';
-    echo '<a style="color:red;font-weight:bold;" href="'.$member_delete_url.'" onclick="return confirm(\'Are you sure you want to delete this user profile?\')">'.SwpmUtils::_('Delete User Profile').'</a>';
+    echo '<div class="swpm-margin-top-10">';
+    echo '<a class="button" style="color:red;font-weight:bold;" href="' . $member_delete_url . '" onclick="return confirm(\'Are you sure you want to delete this user profile?\')">' . __( 'Delete User Profile', 'simple-membership' ) . '</a>';
+    echo '<p class="description">' . __( 'Use this button to permanently delete this user profile.', 'simple-membership' ) . '</p>';
     echo '</div>';
+
+    //Manual account approval button.
+    if ( strtolower( $account_state ) == 'pending' ) {
+        echo '<div style="margin-top: 15px">';
+        echo '<form action="" method="post">';
+        wp_nonce_field('swpm_admin_member_account_approve', 'swpm_admin_member_account_approve_nonce');
+        echo '<div class="swpm_admin_member_account_approve_btn_wrap">';
+        echo '<input type="hidden" name="swpm_admin_member_account_approve" value="1">';
+        echo '<input type="hidden" name="member_id" value="'.esc_attr($member_id) .'">';
+        echo '<input type="hidden" name="member_email" value="'.esc_attr($email) .'">';
+        echo '<input type="submit" name="swpm_admin_approve_account_btn" id="swpm_admin_member_account_approve_btn" class="button" value="' . __( 'Approve Account', 'simple-membership' ) . '" onclick="return confirm(\'Are you sure you want to approve this account?\');">';
+        echo '<p class="description">' . __( 'Use this button to approve this user profile. See the ', 'simple-membership' ) . '<a href="https://simple-membership-plugin.com/manually-approve-members-membership-site" target="_blank">' . __( 'manual approval documentation', 'simple-membership' ) . '</a>.</p>';
+        echo '</div>';
+        echo '</form>';
+    }
     ?>
-</form>
-<?php if ( strtolower( $account_state ) == 'pending' ) { ?>
-<br>
-<form action="" method="post">
-    <div class="swpm_admin_member_account_approve_btn_wrap">
-        <input type="hidden" name="swpm_admin_member_account_approve" value="1">
-        <input type="hidden" name="member_id" value="<?php echo esc_attr($member_id) ?>">
-        <input type="hidden" name="member_email" value="<?php echo esc_attr($email) ?>">
-        <?php wp_nonce_field('swpm_admin_member_account_approve', 'swpm_admin_member_account_approve_nonce') ?>
-        <input type="submit" name="" id="swpm_admin_member_account_approve_btn" class="button-secondary" value="<?php _e( 'Approve Account', 'simple-membership' ) ?>" >
-    </div>
-</form>
-<?php }?>
 </div>
 <script>
 jQuery(document).ready(function($){

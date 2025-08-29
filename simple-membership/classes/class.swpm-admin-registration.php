@@ -73,10 +73,10 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			//Trigger action hook
 			do_action( 'swpm_admin_end_registration_complete_user_data', $member_info );
 
-			//Save success message
+			//Save the success message
 			$message = array(
 				'succeeded' => true,
-				'message'   => '<p>' . SwpmUtils::_( 'Member record added successfully.' ) . '</p>',
+				'message' => __( 'Member record added successfully.', 'simple-membership' ),
 			);
 			SwpmTransfer::get_instance()->set( 'status', $message );
 			wp_redirect( 'admin.php?page=simple_wp_membership' );
@@ -84,7 +84,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		}
 		$message = array(
 			'succeeded' => false,
-			'message'   => SwpmUtils::_( 'Please correct the following:' ),
+			'message'   => __( 'Please correct the following:', 'simple-membership' ),
 			'extra'     => $form->get_errors(),
 		);
 		SwpmTransfer::get_instance()->set( 'status', $message );
@@ -190,13 +190,13 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			//Set messages
 			$message = array(
 				'succeeded' => true,
-				'message'   => '<p>Member profile updated successfully.</p>',
+				'message' => __( 'Member profile updated successfully.', 'simple-membership' ),
 			);
 			$error   = apply_filters( 'swpm_admin_edit_custom_fields', array(), $member + array( 'member_id' => $id ) );
 			if ( ! empty( $error ) ) {
 				$message = array(
 					'succeeded' => false,
-					'message'   => SwpmUtils::_( 'Please correct the following:' ),
+					'message'   => __( 'Please correct the following:', 'simple-membership' ),
 					'extra'     => $error,
 				);
 				SwpmTransfer::get_instance()->set( 'status', $message );
@@ -241,7 +241,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		SwpmTransfer::get_instance()->set( 'status', $message );
 	}
 
-	public function manually_approve_account( $id ) {
+	public function handle_manual_approval( $member_id ) {
 		//Check we are on the admin end and user has management permission
 		SwpmMiscUtils::check_user_permission_and_is_admin( 'member edit by admin' );
 
@@ -251,30 +251,17 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			wp_die( __( 'Error! Nonce verification failed for manual account approval.', 'simple-membership' ) );
 		}
 
-		try {
-			global $wpdb;
-			// Update a account status
-			$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'account_state' => 'active' ), array( 'member_id' => $id ), array( '%s' ), array( '%d' ) );
+		SwpmLog::log_simple_debug('Handling manual account approval for member ID: ' . $member_id, true);
 
-			$settings = SwpmSettings::get_instance();
+		//Set the account status to 'active'
+		SwpmMemberUtils::update_account_state( $member_id, 'active' );
 
-			//Set messages
-			$message = array(
-				'succeeded' => true,
-				'message'   => '<p>'. __('Manually account approval is successful.', 'simple-membership').'</p>',
-			);
-			SwpmTransfer::get_instance()->set( 'status', $message );
-
-		} catch (\Exception $e) {
-			SwpmLog::log_simple_debug('Error: ' . $e->getMessage(), false);
-
-			return;
-		}
-
-		$email_address = isset( $_POST['member_email'] ) ? sanitize_email( $_POST['member_email'] ) : '';
-
+		//Lets check if manual account approval notification is enabled.
+		$settings = SwpmSettings::get_instance();
+		$member_email_address = isset( $_POST['member_email'] ) ? sanitize_email( $_POST['member_email'] ) : '';
 		$is_manual_account_approval_notification_enabled = $settings->get_value( 'manual-account-approve-member-mail-enable' );
-		if (!empty($is_manual_account_approval_notification_enabled) && is_email($email_address)){
+		if ( !empty($is_manual_account_approval_notification_enabled) && is_email($member_email_address)){
+			//Manual approval notification is enabled.
 			$from_address = $settings->get_value( 'email-from' );
 			$manual_approve_email_headers = 'From: ' . $from_address . "\r\n";
 
@@ -282,15 +269,23 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			$manual_approve_email_body = $settings->get_value( 'manual-account-approve-member-mail-body' );
 
 			//Do the standard email merge tag replacement.
-			$manual_approve_email_body = SwpmMiscUtils::replace_dynamic_tags( $manual_approve_email_body, $id );
+			$manual_approve_email_body = SwpmMiscUtils::replace_dynamic_tags( $manual_approve_email_body, $member_id );
 
+			//Trigger the filter hooks
 			$manual_approve_email_subject = apply_filters( 'swpm_manual_account_approval_notification_subject', $manual_approve_email_subject );
 			$manual_approve_email_body = apply_filters( 'swpm_manual_account_approval_notification_body', $manual_approve_email_body );
 
 			//Send the email
-			SwpmMiscUtils::mail( $email_address, $manual_approve_email_subject, $manual_approve_email_body, $manual_approve_email_headers );
-			SwpmLog::log_simple_debug( 'Notify email sent (after manual approval of member account from admin side). Email sent to: ' . $email_address, true );
+			SwpmMiscUtils::mail( $member_email_address, $manual_approve_email_subject, $manual_approve_email_body, $manual_approve_email_headers );
+			SwpmLog::log_simple_debug( 'Notification email sent (after manual approval of member account from admin side). Email sent to: ' . $member_email_address, true );
 		}
+
+		//Set the manual approval success messages
+		$message = array(
+			'succeeded' => true,
+			'message'   => __('Account successfully approved.', 'simple-membership'),
+		);
+		SwpmTransfer::get_instance()->set( 'status', $message );
 
 		wp_redirect( 'admin.php?page=simple_wp_membership' );
 		exit( 0 );

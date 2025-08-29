@@ -687,17 +687,17 @@ class SwpmSettings {
 			)
 		);
 
-		//Manual account approve email settings.
+		//Manual account approval email settings.
 		add_settings_section( 'manual-account-approve-email-settings', __( 'Email Settings (Manual Account Approval)', 'simple-membership'), array( &$this, 'manual_account_approve_email_settings_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
 			'manual-account-approve-member-mail-enable',
-			__( 'Send Notification to Member', 'simple-membership'),
+			__( 'Send Notification After Approval', 'simple-membership'),
 			array( &$this, 'checkbox_callback' ),
 			'simple_wp_membership_settings',
 			'manual-account-approve-email-settings',
 			array(
 				'item'    => 'manual-account-approve-member-mail-enable',
-				'message' => __( 'Enable this option to send an email notification to members when their account is approved manually.', 'simple-membership'),
+				'message' => __( 'Enable this to send an email notification to members when their account is manually approved.', 'simple-membership'),
 			)
 		);
 		add_settings_field(
@@ -1432,11 +1432,12 @@ class SwpmSettings {
 	}
 
     public function subscription_cancel_email_settings_callback() {
-		_e( 'This email will be sent when a member\'s subscription is canceled or expires.', 'simple-membership' );
+		_e( "This email will be sent when a member's subscription is canceled or expires.", 'simple-membership' );
 	}
 
     public function manual_account_approve_email_settings_callback() {
-		_e( 'This email will be sent when a member\'s account is approved manually from admin end.', 'simple-membership' );
+		_e( 'This email is sent to notify a member when their account has been manually approved by an administrator.', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/manually-approve-members-membership-site" target="_blank">' . __( 'Manual approval documentation', 'simple-membership' ) . '</a>.';
 	}
 
 	public function reg_prompt_email_settings_callback() {

@@ -185,6 +185,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - WooCommerce product pages can now be protected using the standard content protection feature.
 - Added a new email settings section for the manual approval notification email.
 - Added a button in the Edit/View Member profile page to let admins easily approve accounts using the manual approval feature.
+- A issue for stripe payment button with background image has fixed.
 
 = 4.6.6 =
 - Added a new filter hook 'swpm_override_login_limit' to allow custom code to override the active login limit check.

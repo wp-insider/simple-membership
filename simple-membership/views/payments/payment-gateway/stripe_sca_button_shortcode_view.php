@@ -96,8 +96,13 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
             swpmStripeSCAPaymentFrom?.addEventListener('submit', async function (e){
                 e.preventDefault();
 
-                const submitBUtton = swpmStripeSCAPaymentFrom.querySelector('button');
-                submitBUtton.setAttribute('disabled', true);
+                let submitBUtton = this.querySelector('button');
+                if ( ! submitBUtton ){
+                    // Using image type button
+                    submitBUtton = this.querySelector('input[type="image"]');
+                }
+
+                submitBUtton?.setAttribute('disabled', true);
 
                 const stripe_js_obj = <?php echo $stripe_js_obj;?>;
                 const request_url = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
@@ -132,13 +137,13 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
                         });
                     } else {
                         alert(response.error);
-                        submitBUtton.removeAttribute('disabled');
+                        submitBUtton?.removeAttribute('disabled');
                         return false;
                     }
 
                 } catch (e) {
                     alert("HTTP error occurred during AJAX request. Error: "+ e.message);
-                    submitBUtton.removeAttribute('disabled');
+                    submitBUtton?.removeAttribute('disabled');
                     return false;
                 }
             })
@@ -270,8 +275,13 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
             swpmStripeScaSubsPaymentFrom?.addEventListener('submit', async function (e){
                 e.preventDefault();
 
-                const submitBUtton = this.querySelector('button');
-                submitBUtton.setAttribute('disabled', true);
+                let submitBUtton = this.querySelector('button');
+                if ( ! submitBUtton ){
+                    // Using image type button
+                    submitBUtton = this.querySelector('input[type="image"]');
+                }
+
+                submitBUtton?.setAttribute('disabled', true);
 
 	            const stripe_js_obj = <?php echo $stripe_js_obj;?>;
                 const request_url = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
@@ -307,13 +317,13 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
                         });
                     } else {
                         alert(response.error);
-                        submitBUtton.removeAttribute('disabled');
+                        submitBUtton?.removeAttribute('disabled');
                         return false;
                     }
 
                 } catch (e) {
                     alert("HTTP error occurred during AJAX request. Error: "+ e.message);
-                    submitBUtton.removeAttribute('disabled');
+                    submitBUtton?.removeAttribute('disabled');
                     return false;
                 }
             })

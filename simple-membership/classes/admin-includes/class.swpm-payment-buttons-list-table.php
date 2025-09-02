@@ -40,13 +40,8 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
                 return $button_name;
                 break;
             case 'button_shortcode':
-                $level_id = get_post_meta($item['ID'], 'membership_level_id', true);
-                if(!SwpmUtils::membership_level_id_exists($level_id)){
-                    //This membership level doesn't exist. Show an error instead of the shortcode.
-                    $shortcode = 'Error! The membership level you specified in this button does not exist. You may have deleted this level. Edit this button and use a valid membership level.';
-                } else {
-                    $shortcode = '<input type="text" onfocus="this.select();" readonly="readonly" value="[swpm_payment_button id=&quot;'.$item['ID'].'&quot;]" class="large-text code">';
-                }
+                $button_id = $item['ID'];
+                $shortcode = SwpmUtils::get_shortcode_for_admin_ui_display($button_id);
                 return $shortcode;
                 break;            
         }

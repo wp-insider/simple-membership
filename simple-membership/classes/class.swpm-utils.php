@@ -775,4 +775,20 @@ abstract class SwpmUtils {
 		}
 		return false;
 	}
+
+	/*
+	 * Get the shortcode that will be used to display in the admin UI so users can copy it easily.
+	 */
+	public static function get_shortcode_for_admin_ui_display( $button_id ){
+		//Let's ensure the membership level ID for this button is valid.
+		$level_id = get_post_meta($button_id, 'membership_level_id', true);
+		if(!SwpmUtils::membership_level_id_exists($level_id)){
+			//This membership level doesn't exist. Show an error instead of the shortcode.
+			$shortcode = '<span style="color:red;">' . __('Error! The membership level you specified in this button does not exist. You may have deleted this level. Edit this button and select a valid membership level.', 'simple-membership') . '</span>';
+		} else {
+			$shortcode = '<input type="text" onfocus="this.select();" readonly="readonly" value="[swpm_payment_button id=&quot;'.$button_id.'&quot;]" class="large-text code">';
+		}
+		return $shortcode;
+	}
+
 }

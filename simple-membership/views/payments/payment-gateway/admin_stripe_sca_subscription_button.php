@@ -98,6 +98,19 @@ function swpm_render_new_edit_stripe_sca_subscription_button_interface( $opts, $
 						<p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
 					</td>
 				</tr>
+				<tr valign="top">
+					<th scope="row"><?php _e('Button Shortcode', 'simple-membership'); ?></th>
+					<td>
+						<?php
+						$shortcode = SwpmUtils::get_shortcode_for_admin_ui_display($opts['button_id'], 50);
+						echo $shortcode;
+						?>
+						<p class="description">
+							<?php _e('Use this shortcode to embed the payment button in your posts, pages, or on your ', 'simple-membership') ?>
+							<?php echo '<a href="https://simple-membership-plugin.com/membership-join-us-page/" target="_blank">' . __('join-us landing page', 'simple-membership') . '</a>.' ?>
+						</p>
+					</td>
+				</tr>				
 				<?php } ?>
 				<tr valign="top">
 					<th scope="row"><?php _e( 'Button Title' , 'simple-membership'); ?></th>

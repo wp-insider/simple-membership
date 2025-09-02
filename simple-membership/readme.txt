@@ -180,6 +180,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Added a payment button shortcode field in the button edit interface for easy copy-and-paste.
+
 = 4.6.7 =
 - Improved the renewal logic to include a check for account inactivity so access starts date is calculated correctly.
 - WooCommerce product pages can now be protected using the standard content protection feature.

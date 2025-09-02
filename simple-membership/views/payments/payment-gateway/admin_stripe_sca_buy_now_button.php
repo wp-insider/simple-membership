@@ -377,6 +377,19 @@ function swpm_edit_stripe_sca_buy_now_button() {
 					</td>
 				</tr>
 				<tr valign="top">
+					<th scope="row"><?php _e('Button Shortcode', 'simple-membership'); ?></th>
+					<td>
+						<?php
+						$shortcode = SwpmUtils::get_shortcode_for_admin_ui_display($button_id, 50);
+						echo $shortcode;
+						?>
+						<p class="description">
+							<?php _e('Use this shortcode to embed the payment button in your posts, pages, or on your ', 'simple-membership') ?>
+							<?php echo '<a href="https://simple-membership-plugin.com/membership-join-us-page/" target="_blank">' . __('join-us landing page', 'simple-membership') . '</a>.' ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
 					<th scope="row"><?php _e( 'Button Title','simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="button_name" value="<?php echo esc_attr($button->post_title); ?>" required />

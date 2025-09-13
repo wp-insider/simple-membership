@@ -183,6 +183,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 = WIP =
 - Added a payment button shortcode field in the button edit interface for easy copy-and-paste.
 - New action hook 'swpm_after_login_form' added to display contents below the login form in login page.
+- Updated the French language translation file. Thanks to David Ramery for the update.
 
 = 4.6.7 =
 - Improved the renewal logic to include a check for account inactivity so access starts date is calculated correctly.

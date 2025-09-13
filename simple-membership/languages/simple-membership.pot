@@ -7330,13 +7330,16 @@ msgid "Do you really want to delete the form?"
 msgstr ""
 
 #: === Partial protection addon strings ===
+msgid "This content is for members only."
+msgstr ""
+
 msgid "You do not have permission to view this content."
 msgstr ""
 
 msgid "Your membership level does not have permission to view this content."
 msgstr ""
 
-msgid "This content is for members only."
+msgid "Your account status does not have permission to view this content."
 msgstr ""
 
 #: === Member Directory Listing addon strings ===

@@ -78,5 +78,5 @@ $hide_join_us_link_enabled = SwpmSettings::get_instance()->get_value('hide-join-
         </div>
     </form>
 
-    <?php do_action('swpm_after_login_form'); ?>
+    <?php echo apply_filters('swpm_after_login_form_output', ''); ?>
 </div>

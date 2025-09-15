@@ -72,7 +72,7 @@ abstract class SwpmRegistration {
 		$member_id = $swpm_user->member_id;
 		$body      = SwpmMiscUtils::replace_dynamic_tags( $body, $member_id ); //Do the standard merge var replacement.
 
-		$email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
+		$email = isset($_POST['email']) && !empty($_POST['email']) ? sanitize_email($_POST['email']) : '';
 
 		if ( empty( $email ) ) {
 			$email = $swpm_user->email;

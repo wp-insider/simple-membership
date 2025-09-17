@@ -78,10 +78,11 @@ abstract class SwpmRegistration {
 			$email = $swpm_user->email;
 		}
 
-		$body = apply_filters( 'swpm_registration_complete_email_body', $body ); //This filter can be used to modify the registration complete email body dynamically.
-		//Send notification email to the member
+		//Trigger filter hooks so that the email content can be modified dynamically.
 		$subject = apply_filters( 'swpm_email_registration_complete_subject', $subject );
-		$body    = apply_filters( 'swpm_email_registration_complete_body', $body ); //You can override the email to empty to disable this email.
+		$body = apply_filters( 'swpm_registration_complete_email_body', $body ); //Deprecated, use the other filter hook for consistency.
+		$body = apply_filters( 'swpm_email_registration_complete_body', $body ); //You can override the email to empty to disable this email.		
+		//Send notification email to the member
 		if ( ! empty( $body ) ) {
 			SwpmMiscUtils::mail( trim( $email ), $subject, $body, $headers );
 			SwpmLog::log_simple_debug( 'Member registration complete email sent to: ' . $email . '. From email address value used: ' . $from_address, true );

@@ -121,8 +121,10 @@ class SwpmWooCommerceProtection {
 		if ( ! $is_post_visible_for_current_user ) {
 			$protection_msg = $access_control->get_lastError();
 
+			echo '<div class="swpm-woocommerce-page-protection-msg">';
 			echo '<div class="wp-block-group has-global-padding">';
 			echo wpautop( wp_kses_post( $protection_msg ) );
+			echo '</div>';
 			echo '</div>';
 		}
 	}

@@ -87,6 +87,7 @@
             changeYear: true,
             yearRange: "-100:+100",
             showButtonPanel: true,
+            currentText: "Current Month",
         });
     });
 </script>

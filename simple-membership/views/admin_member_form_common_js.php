@@ -6,6 +6,7 @@
             changeYear: true,
             yearRange: "-100:+100",
             showButtonPanel: true,
+            currentText: "Current Month",
         });
         $('#member_since').datepicker({
             dateFormat: 'yy-mm-dd',
@@ -13,6 +14,7 @@
             changeYear: true,
             yearRange: "-100:+100",
             showButtonPanel: true,
+            currentText: "Current Month",
         });
         //Allow any field with class 'swpm-date-picker' to use the datepicker
         $('.swpm-date-picker').datepicker({
@@ -21,6 +23,7 @@
             changeYear: true,
             yearRange: "-100:+100",
             showButtonPanel: true,
+            currentText: "Current Month",
         });
     });
 </script>

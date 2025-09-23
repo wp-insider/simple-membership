@@ -186,6 +186,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Updated the French language translation file. Thanks to David Ramery for the update.
 - A PHP warning issue fixed.
 - Woocommerce page protection message HTML updated.
+- Date select UI improved. A current month select button added.
 
 = 4.6.7 =
 - Improved the renewal logic to include a check for account inactivity so access starts date is calculated correctly.

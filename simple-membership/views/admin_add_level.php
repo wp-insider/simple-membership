@@ -80,7 +80,13 @@
 </form>
 </div>
 <script>
-jQuery(document).ready(function($){
-    $('.swpm-date-picker').datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, yearRange: "-100:+100"});
-});
+    jQuery(document).ready(function ($) {
+        $('.swpm-date-picker').datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+100",
+            showButtonPanel: true,
+        });
+    });
 </script>

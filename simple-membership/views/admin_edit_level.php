@@ -111,7 +111,7 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
             changeYear: true,
             yearRange: "-100:+100",
             showButtonPanel: true,
-            currentText: "Current Month",
+            currentText: '<?php _e("Current Month", "simple-membership") ?>',
         });
     });
 </script>

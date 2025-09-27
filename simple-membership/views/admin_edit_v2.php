@@ -195,6 +195,10 @@ $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user
                     </td>
                 </tr>
             <?php } ?>
+            <?php 
+            //Filter hook before the table ends.
+            echo apply_filters('swpm_admin_edit_member_extra_rows', '', $member_id);
+            ?>
         </table>
 
         <?php include('admin_member_form_common_js.php'); ?>

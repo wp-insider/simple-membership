@@ -182,11 +182,12 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 = WIP =
 - Added a payment button shortcode field in the button edit interface for easy copy-and-paste.
-- New filter hook 'swpm_after_login_form_output' added to display contents below the login form in login page.
+- Introduced a new filter hook 'swpm_after_login_form_output' to display custom content below the login form on the login page.
 - Updated the French language translation file. Thanks to David Ramery for the update.
-- A PHP warning issue fixed.
-- Woocommerce page protection message HTML updated.
-- Date select UI improved. A current month select button added.
+- Updated the code to remove a minor PHP notice issue.
+- Improved the WooCommerce page protection message HTML.
+- Enhanced the date selector UI with a button to quickly return to the current month.
+- Added a new filter hook 'swpm_edit_profile_form_before_submit' to allow custom code to display content before the submit button in the profile form of admin dashboard.
 
 = 4.6.7 =
 - Improved the renewal logic to include a check for account inactivity so access starts date is calculated correctly.

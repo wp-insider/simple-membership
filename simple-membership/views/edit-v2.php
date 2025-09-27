@@ -42,7 +42,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 <div class="swpm-edit-profile-form">
     <form id="<?php echo $form_id ?>" class="swpm-form" name="swpm-editprofile-form" method="post" action="">
         <?php wp_nonce_field('swpm_profile_edit_nonce_action', 'swpm_profile_edit_nonce_val') ?>
-        <div>
+        <div class="swpm-edit-profile-form-inner">
             <?php apply_filters('swpm_edit_profile_form_before_username', ''); ?>
             <div class="swpm-form-row swpm-username-row" <?php apply_filters('swpm_edit_profile_form_username_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-username-label-wrap">

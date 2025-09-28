@@ -43,8 +43,8 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
     <form id="<?php echo $form_id ?>" class="swpm-form" name="swpm-editprofile-form" method="post" action="">
         <?php wp_nonce_field('swpm_profile_edit_nonce_action', 'swpm_profile_edit_nonce_val') ?>
         <div class="swpm-edit-profile-form-inner">
-            <?php apply_filters('swpm_edit_profile_form_before_username', ''); ?>
-            <div class="swpm-form-row swpm-username-row" <?php apply_filters('swpm_edit_profile_form_username_tr_attributes', ''); ?>>
+            <?php echo apply_filters('swpm_edit_profile_form_before_username', ''); ?>
+            <div class="swpm-form-row swpm-username-row" <?php echo apply_filters('swpm_edit_profile_form_username_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-username-label-wrap">
                     <label for="user_name"><?php _e('Username', 'simple-membership'); ?></label>
                 </div>
@@ -77,7 +77,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-firstname-row" <?php apply_filters('swpm_edit_profile_form_firstname_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-firstname-row" <?php echo apply_filters('swpm_edit_profile_form_firstname_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-firstname-label-wrap">
                     <label for="first_name"><?php _e('First Name', 'simple-membership'); ?></label>
                 </div>
@@ -86,7 +86,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-lastname-row" <?php apply_filters('swpm_edit_profile_form_lastname_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-lastname-row" <?php echo apply_filters('swpm_edit_profile_form_lastname_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-lastname-label-wrap">
                     <label for="last_name"><?php _e('Last Name', 'simple-membership'); ?></label>
                 </div>
@@ -95,7 +95,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-phone-row" <?php apply_filters('swpm_edit_profile_form_phone_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-phone-row" <?php echo apply_filters('swpm_edit_profile_form_phone_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-phone-label-wrap">
                     <label for="phone"><?php _e('Phone', 'simple-membership'); ?></label>
                 </div>
@@ -104,7 +104,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-street-row" <?php apply_filters('swpm_edit_profile_form_street_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-street-row" <?php echo apply_filters('swpm_edit_profile_form_street_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-street-label-wrap">
                     <label for="address_street"><?php _e('Street', 'simple-membership'); ?></label>
                 </div>
@@ -113,7 +113,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-city-row" <?php apply_filters('swpm_edit_profile_form_city_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-city-row" <?php echo apply_filters('swpm_edit_profile_form_city_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-city-label-wrap">
                     <label for="address_city"><?php _e('City', 'simple-membership'); ?></label>
                 </div>
@@ -122,7 +122,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-state-row" <?php apply_filters('swpm_edit_profile_form_state_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-state-row" <?php echo apply_filters('swpm_edit_profile_form_state_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-state-label-wrap">
                     <label for="address_state"><?php _e('State', 'simple-membership'); ?></label>
                 </div>
@@ -131,7 +131,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-zipcode-row" <?php apply_filters('swpm_edit_profile_form_zipcode_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-zipcode-row" <?php echo apply_filters('swpm_edit_profile_form_zipcode_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-zipcode-label-wrap">
                     <label for="address_zipcode"><?php _e('Zipcode', 'simple-membership'); ?></label>
                 </div>
@@ -140,7 +140,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-country-row" <?php apply_filters('swpm_edit_profile_form_country_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-country-row" <?php echo apply_filters('swpm_edit_profile_form_country_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-country-label-wrap">
                     <label for="country"><?php _e('Country', 'simple-membership'); ?></label>
                 </div>
@@ -149,7 +149,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-company-row" <?php apply_filters('swpm_edit_profile_form_company_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-company-row" <?php echo apply_filters('swpm_edit_profile_form_company_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-company-label-wrap">
                     <label for="company_name"><?php _e('Company Name', 'simple-membership'); ?></label>
                 </div>
@@ -158,7 +158,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
                 <div class="swpm-form-desc"></div>
             </div>
-            <div class="swpm-form-row swpm-membership-level-row" <?php apply_filters('swpm_edit_profile_form_membership_level_tr_attributes', ''); ?>>
+            <div class="swpm-form-row swpm-membership-level-row" <?php echo apply_filters('swpm_edit_profile_form_membership_level_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-membership-level-label-wrap">
                     <label for="membership_level"><?php _e('Membership Level', 'simple-membership'); ?></label>
                 </div>
@@ -166,14 +166,14 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                     <?php echo esc_attr($membership_level_alias); ?>
                 </div>
             </div>
-            <?php apply_filters('swpm_edit_profile_form_after_membership_level', ''); ?>
+            <?php echo apply_filters('swpm_edit_profile_form_after_membership_level', ''); ?>
         </div>
         <?php 
         // Trigger action hook. Can be used to add content to the registration form.
         do_action( 'swpm_before_profile_form_submit_section');
 
         // Trigger a filter hook.
-        apply_filters('swpm_edit_profile_form_before_submit', ''); 
+        echo apply_filters('swpm_edit_profile_form_before_submit', '');
         ?>
 
         <div class="swpm-form-row swpm-submit-section swpm-edit-profile-submit-section">

@@ -188,6 +188,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Improved the WooCommerce page protection message HTML.
 - Enhanced the date selector UI with a button to quickly return to the current month.
 - Added a new filter hook 'swpm_edit_profile_form_before_submit' to allow custom code to display content before the submit button in the profile form of admin dashboard.
+- Some filter hooks related issue fixed.
 
 = 4.6.7 =
 - Improved the renewal logic to include a check for account inactivity so access starts date is calculated correctly.

@@ -115,6 +115,7 @@ You can create a free forum account to ask your questions.
 * Option to configure PayPal payment buttons for memberships (one-time and recurring payments).
 * Option to configure Stripe payment buttons for memberships (one-time and recurring payments).
 * Option to configure Braintree payment buttons for memberships (one-time payments).
+* Free Social Login addon that lets users log in with their Google or Facebook accounts.
 * The plugin is actively maintained and we are working on new features for the plugin.
 * Browse the [plugin documentation](https://simple-membership-plugin.com/simple-membership-documentation/) to learn more about the features of this plugin.
 
@@ -181,6 +182,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 
 = WIP =
+- Added a new free social login addon to allow users to log in using their social media accounts. Refer to [this documentation](https://simple-membership-plugin.com/simple-membership-social-login-addon/) for more information.
 - Added a payment button shortcode field in the button edit interface for easy copy-and-paste.
 - Introduced a new filter hook 'swpm_after_login_form_output' to display custom content below the login form on the login page.
 - Updated the French language translation file. Thanks to David Ramery for the update.

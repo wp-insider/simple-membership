@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 4.6.7
+Stable tag: 4.6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -181,7 +181,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
+= 4.6.8 =
 - Added a new free social login addon to allow users to log in using their social media accounts. Refer to [this documentation](https://simple-membership-plugin.com/simple-membership-social-login-addon/) for more information.
 - Added a payment button shortcode field in the button edit interface for easy copy-and-paste.
 - Introduced a new filter hook 'swpm_after_login_form_output' to display custom content below the login form on the login page.
@@ -190,7 +190,6 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Improved the WooCommerce page protection message HTML.
 - Enhanced the date selector UI with a button to quickly return to the current month.
 - Added a new filter hook 'swpm_edit_profile_form_before_submit' to allow custom code to display content before the submit button in the profile form of admin dashboard.
-- Some filter hooks related issue fixed.
 
 = 4.6.7 =
 - Improved the renewal logic to include a check for account inactivity so access starts date is calculated correctly.

@@ -181,6 +181,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Spanish language translation files updated.
+
 = 4.6.8 =
 - Added a new free social login addon to allow users to log in using their social media accounts. Refer to [this documentation](https://simple-membership-plugin.com/simple-membership-social-login-addon/) for more information.
 - Added a payment button shortcode field in the button edit interface for easy copy-and-paste.

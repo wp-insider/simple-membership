@@ -8,6 +8,9 @@
 .swpm-margin-bottom-10{
     margin-bottom: 10px;
 }
+.swpm-text-center{
+    text-align: center;
+}
 .swpm-hidden{
     display: none;
 }
@@ -434,3 +437,8 @@
     }
 }
 /* End of reports menu css */
+
+/* --- Integrations Related CSS --- */
+.swpm-woocommerce-page-protection-msg{
+    text-align: center;
+}

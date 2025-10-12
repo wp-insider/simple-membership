@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //Define plugin constants
-define( 'SIMPLE_WP_MEMBERSHIP_VER', '4.6.8' );
+define( 'SIMPLE_WP_MEMBERSHIP_VER', '4.6.8.t1' );
 define( 'SIMPLE_WP_MEMBERSHIP_DB_VER', '1.5' );
 define( 'SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url() );
 define( 'SIMPLE_WP_MEMBERSHIP_PATH', dirname( __FILE__ ) . '/' );

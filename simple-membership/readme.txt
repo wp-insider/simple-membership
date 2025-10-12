@@ -183,6 +183,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 = WIP =
 - Spanish language translation files updated.
+- Added center text align CSS to the WooCommerce protection message.
 
 = 4.6.8 =
 - Added a new free social login addon to allow users to log in using their social media accounts. Refer to [this documentation](https://simple-membership-plugin.com/simple-membership-social-login-addon/) for more information.

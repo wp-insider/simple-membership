@@ -741,6 +741,7 @@ abstract class SwpmUtils {
             "subscription_starts" => __("Subscription start date", "simple-membership"),
             "company_name" => __("Company name", "simple-membership"),
             "primary_address" => __("Member's address", "simple-membership"),
+            "expiry_date" => __("Member's account expiry date", "simple-membership"),
         );
     }
 

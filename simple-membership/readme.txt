@@ -184,7 +184,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 = WIP =
 - Spanish language translation files updated.
 - Added center text align CSS to the WooCommerce protection message.
-- Romanian Leu currency can now be used for stripe sca buy now buttons.
+- Romanian Leu currency can now be used for stripe sca buy now buttons
+- New 'expiry_date' email merge tag added.
+- Account activate notification email body now supports email merge tags.
 
 = 4.6.8 =
 - Added a new free social login addon to allow users to log in using their social media accounts. Refer to [this documentation](https://simple-membership-plugin.com/simple-membership-social-login-addon/) for more information.

@@ -4,8 +4,8 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, bbpress, stripe
 Requires at least: 6.0
 Requires PHP: 7.4
-Tested up to: 6.8
-Stable tag: 4.6.8
+Tested up to: 6.9
+Stable tag: 4.6.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -181,12 +181,12 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
+= 4.6.9 =
+- Added a new {expiry_date} email merge tag.
+- Bulk account activate notification email body now supports email merge tags.
 - Spanish language translation files updated.
 - Added center text align CSS to the WooCommerce protection message.
-- Romanian Leu currency can now be used for stripe sca buy now buttons
-- New 'expiry_date' email merge tag added.
-- Account activate notification email body now supports email merge tags.
+- Romanian Leu currency can now be used for stripe buy now buttons.
 
 = 4.6.8 =
 - Added a new free social login addon to allow users to log in using their social media accounts. Refer to [this documentation](https://simple-membership-plugin.com/simple-membership-social-login-addon/) for more information.

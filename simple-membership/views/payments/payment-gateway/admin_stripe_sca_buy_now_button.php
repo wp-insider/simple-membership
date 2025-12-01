@@ -84,6 +84,7 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 							<option value="NOK">Norwegian Krone</option>
 							<option value="PHP">Philippine Pesos</option>
 							<option value="PLN">Polish Zloty</option>
+							<option value="RON">Romanian Leu</option>
 							<option value="SGD">Singapore Dollar ($)</option>
 							<option value="ZAR">South African Rand (R)</option>
 							<option value="KRW">South Korean Won</option>
@@ -437,6 +438,7 @@ function swpm_edit_stripe_sca_buy_now_button() {
 							<option value="NOK" <?php echo ( $payment_currency == 'NOK' ) ? 'selected="selected"' : ''; ?>>Norwegian Krone</option>
 							<option value="PHP" <?php echo ( $payment_currency == 'PHP' ) ? 'selected="selected"' : ''; ?>>Philippine Pesos</option>
 							<option value="PLN" <?php echo ( $payment_currency == 'PLN' ) ? 'selected="selected"' : ''; ?>>Polish Zloty</option>
+                            <option value="RON" <?php echo ( $payment_currency == 'RON' ) ? 'selected="selected"' : ''; ?>>Romanian Leu</option>
 							<option value="SGD" <?php echo ( $payment_currency == 'SGD' ) ? 'selected="selected"' : ''; ?>>Singapore Dollar ($)</option>
 							<option value="ZAR" <?php echo ( $payment_currency == 'ZAR' ) ? 'selected="selected"' : ''; ?>>South African Rand (R)</option>
 							<option value="KRW" <?php echo ( $payment_currency == 'KRW' ) ? 'selected="selected"' : ''; ?>>South Korean Won</option>

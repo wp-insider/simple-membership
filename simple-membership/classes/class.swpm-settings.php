@@ -1424,7 +1424,6 @@ class SwpmSettings {
 
 	public function bulk_activate_email_settings_callback() {
 		_e( 'This email will be sent to your members when you use the bulk account activate and notify action.', 'simple-membership' );
-		_e( ' You cannot use email merge tags in this email. You can only use generic text.', 'simple-membership' );
 	}
 
 	public function email_activation_email_settings_callback() {

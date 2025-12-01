@@ -414,6 +414,8 @@ class SwpmMiscUtils {
 		$member_since_formatted = SwpmUtils::get_formatted_date_according_to_wp_settings( $user_record->member_since );
 		$subsc_starts_formatted = SwpmUtils::get_formatted_date_according_to_wp_settings( $user_record->subscription_starts );
 
+		$expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user_id( $member_id );
+
 		//Define the replacable tags
 		$tags = array(
 			'{member_id}',
@@ -434,6 +436,7 @@ class SwpmMiscUtils {
 			'{primary_address}',
 			'{password_reset_link}',
 			'{subscription_id}',
+			'{expiry_date}',
 		);
 
 		//Define the values
@@ -456,6 +459,7 @@ class SwpmMiscUtils {
 			$primary_address,
 			$password_reset_link,
 			$subscription_id,
+			$expiry_date,
 		);
 		
 		$msg_body = str_replace( $tags, $vals, $msg_body );

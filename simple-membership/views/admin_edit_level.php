@@ -1,9 +1,17 @@
 <?php
-SimpleWpMembership::enqueue_validation_scripts();
+$form_id = 'swpm-edit-level';
+
+SimpleWpMembership::enqueue_validation_scripts_v2(
+	'swpm-membership-level-form-validator',
+	array(
+		'form_id' => $form_id,
+	)
+);
+
 $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'default-account-status' ) == 'pending' && checked($email_activation, true, false) ? true : false;
 ?>
 <div class="wrap" id="swpm-level-page">
-<form action="" method="post" name="swpm-edit-level" id="swpm-edit-level" class="validate swpm-validate-form"<?php do_action('level_edit_form_tag');?>>
+<form action="" method="post" name="swpm-edit-level" id="<?php echo esc_attr($form_id); ?>" class="swpm-validate-form"<?php do_action('level_edit_form_tag');?>>
 <input name="action" type="hidden" value="editlevel" />
 <?php wp_nonce_field( 'edit_swpmlevel_admin_end', '_wpnonce_edit_swpmlevel_admin_end' ) ?>
 <h2><?php echo  SwpmUtils::_('Edit membership level'); ?></h2>
@@ -100,7 +108,11 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
     <?php echo apply_filters('swpm_admin_edit_membership_level_ui', '', $id); ?>
 </tbody>
 </table>
-<?php submit_button(SwpmUtils::_('Save Membership Level '), 'primary', 'editswpmlevel', true, array( 'id' => 'editswpmlevelsub' ) ); ?>
+<?php //submit_button(SwpmUtils::_('Save Membership Level '), 'primary', 'editswpmlevel', true, array( 'id' => 'editswpmlevelsub' ) ); ?>
+<p class="submit">
+    <button type="submit" class="button-primary"><?php _e('Save Membership Level', 'simple-membership') ?></button>
+    <input type="hidden" name="editswpmlevel" value="1">
+</p>
 </form>
 </div>
 <script>

@@ -438,6 +438,23 @@
 }
 /* End of reports menu css */
 
+/* Membership level add/edit css */
+.swpm-validate-form .form-table td.error input{
+    border-color: #cc0000;
+}
+
+.swpm-validate-form .form-table td.error ul{
+    margin: 4px 0 0;
+    color: #cc0000;
+    list-style: none !important;
+    font-size: smaller !important;
+}
+
+/* End of Membership level add/edit css */
+
+/* End of reports menu css */
+
+
 /* --- Integrations Related CSS --- */
 .swpm-woocommerce-page-protection-msg{
     text-align: center;

@@ -1,7 +1,16 @@
-<?php SimpleWpMembership::enqueue_validation_scripts(); ?>
-<div class="wrap" id="swpm-level-page">
+<?php
+$form_id = 'swpm-create-level';
 
-<form action="" method="post" name="swpm-create-level" id="swpm-create-level" class="validate swpm-validate-form">
+SimpleWpMembership::enqueue_validation_scripts_v2(
+	'swpm-membership-level-form-validator',
+	array(
+		'form_id' => $form_id,
+	)
+);
+
+?>
+<div class="wrap" id="swpm-level-page">
+<form action="" method="post" name="swpm-create-level" id="<?php echo esc_attr($form_id) ?>" class="swpm-validate-form">
 <input name="action" type="hidden" value="createlevel" />
 <h3><?php echo SwpmUtils::_('Add Membership Level'); ?></h3>
 <p>
@@ -17,7 +26,7 @@
     <tbody>
 	<tr>
             <th scope="row"><label for="alias"><?php echo  SwpmUtils::_('Membership Level Name'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
-            <td><input class="regular-text validate[required]" name="alias" type="text" id="alias" value="" aria-required="true" /></td>
+            <td><input class="regular-text" name="alias" type="text" id="alias" value="" aria-required="true" /></td>
 	</tr>
 	<tr class="form-field form-required">
             <th scope="row"><label for="role"><?php echo  SwpmUtils::_('Default WordPress Role'); ?> <span class="description"><?php echo  SwpmUtils::_('(required)'); ?></span></label></th>
@@ -76,7 +85,10 @@
     <?php echo  apply_filters('swpm_admin_add_membership_level_ui', '');?>
 </tbody>
 </table>
-<?php submit_button( SwpmUtils::_('Add New Membership Level '), 'primary', 'createswpmlevel', true, array( 'id' => 'createswpmlevelsub' ) ); ?>
+<p class="submit">
+    <button type="submit" class="button-primary"><?php _e('Add New Membership Level', 'simple-membership') ?></button>
+    <input type="hidden" name="createswpmlevel" value="1">
+</p>
 </form>
 </div>
 <script>

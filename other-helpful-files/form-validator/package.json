@@ -8,7 +8,9 @@
     "dev:reg": "vite build --config vite.config-reg-form.js --watch",
     "build:reg": "vite build --config vite.config-reg-form.js",
     "dev:profile": "vite build --config vite.config.profile-form.js --watch",
-    "build:profile": "vite build --config vite.config.profile-form.js"
+    "build:profile": "vite build --config vite.config.profile-form.js",
+    "dev:membership-level": "vite build --config vite.config.membership-level-form.js --watch",
+    "build:membership-level": "vite build --config vite.config.membership-level-form.js"
   },
   "author": "Adil",
   "license": "ISC",

@@ -459,6 +459,24 @@ class SwpmFrontRegistration extends SwpmRegistration {
 				$password_also_changed = true;
 			}
 
+			// Only these fields are whitelisted for front end profile update.
+			$accepted_fields = array(
+    			'email',
+				'password',
+    			'first_name',
+    			'last_name',
+    			'phone',
+    			'address_street',
+    			'address_city',
+    			'address_state',
+    			'address_zipcode',
+    			'country',
+    			'company_name',
+			);
+
+			// Remove unwanted fields:
+			$member_info = array_intersect_key($member_info, array_flip($accepted_fields));
+
 			//Update the data in the swpm database.
 			$swpm_id = $auth->get( 'member_id' );
 			//SwpmLog::log_simple_debug("Updating member profile data with SWPM ID: " . $swpm_id, true);

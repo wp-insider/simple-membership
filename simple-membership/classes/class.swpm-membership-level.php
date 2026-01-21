@@ -11,6 +11,7 @@ class SwpmMembershipLevel {
     const MONTHS = 3;
     const YEARS = 4;
     const FIXED_DATE = 5;
+    const ANNUAL_FIXED_DATE = 6;
 
     private static $_instance = null;
 
@@ -83,9 +84,20 @@ class SwpmMembershipLevel {
 		        'meta_context'=> 'account-status',
 	        );
 
+			$annual_fixed_date_min_period = isset( $_POST['annual_fixed_date_min_period'] ) && !empty($_POST['annual_fixed_date_min_period']) ? absint(sanitize_text_field( $_POST['annual_fixed_date_min_period'] )) : "";
+	        $annual_fixed_date_min_period = array(
+		        'meta_key'=>'annual_fixed_date_min_period',
+		        'level_id'=> $id,
+		        'meta_label'=> 'Annual Fixed Date Minimum Period',
+		        'meta_value'=> $annual_fixed_date_min_period,
+		        'meta_type'=> 'number',
+		        'meta_context'=> 'subscription-type',
+	        );
+
             $custom = apply_filters('swpm_admin_add_membership_level', array());
 	        $custom[] = $after_activation_redirect_page_meta;
 	        $custom[] = $default_account_status_meta;
+	        $custom[] = $annual_fixed_date_min_period;
             $this->save_custom_fields($id, $custom);
             $message = array('succeeded' => true, 'message' => '<p>' . SwpmUtils::_('Membership Level Creation Successful.') . '</p>');
             SwpmTransfer::get_instance()->set('status', $message);
@@ -137,9 +149,20 @@ class SwpmMembershipLevel {
 				'meta_context'=> 'account-status',
 			);
 
-            $custom = apply_filters('swpm_admin_edit_membership_level', array(), $id);
+	        $annual_fixed_date_min_period = isset( $_POST['annual_fixed_date_min_period'] ) && !empty($_POST['annual_fixed_date_min_period']) ? absint(sanitize_text_field( $_POST['annual_fixed_date_min_period'] )) : "";
+	        $annual_fixed_date_min_period = array(
+		        'meta_key'=>'annual_fixed_date_min_period',
+		        'level_id'=> $id,
+		        'meta_label'=> 'Annual Fixed Date Minimum Period',
+		        'meta_value'=> $annual_fixed_date_min_period,
+		        'meta_type'=> 'number',
+		        'meta_context'=> 'subscription-type',
+	        );
+
+	        $custom = apply_filters('swpm_admin_edit_membership_level', array(), $id);
 			$custom[] = $after_activation_redirect_page_meta;
 			$custom[] = $default_account_status_meta;
+			$custom[] = $annual_fixed_date_min_period;
             $this->save_custom_fields($id, $custom);
             $message = array('succeeded' => true, 'message' => '<p>'. SwpmUtils::_('Membership Level Updated Successfully.') . '</p>');
             SwpmTransfer::get_instance()->set('status', $message);

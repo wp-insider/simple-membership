@@ -59,6 +59,10 @@ class SwpmMembershipLevels extends WP_List_Table {
             if ($item['subscription_duration_type'] == SwpmMembershipLevel::YEARS) {
                 return $item['subscription_period'] . " Year(s)";
             }
+	        if ($item['subscription_duration_type'] == SwpmMembershipLevel::ANNUAL_FIXED_DATE) {
+		        $formatted_date = date('F d', strtotime($item['subscription_period']));
+		        return $formatted_date;
+	        }
         }
         if ($column_name == 'role') {
             return ucfirst($item['role']);
@@ -164,6 +168,7 @@ class SwpmMembershipLevels extends WP_List_Table {
         $custom_fields = SwpmMembershipLevelCustom::get_instance_by_id($id);
         $after_activation_redirect_page = sanitize_url($custom_fields->get('after_activation_redirect_page'));
         $default_account_status = sanitize_text_field($custom_fields->get('default_account_status'));
+	    $annual_fixed_date_min_period = sanitize_text_field($custom_fields->get('annual_fixed_date_min_period'));
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_edit_level.php');
         return false;
     }

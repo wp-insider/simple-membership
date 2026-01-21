@@ -378,6 +378,10 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 			// This is a level with a "fixed expiry date" duration.
 			swpm_debug_log_subsc( 'This is a level with a "fixed expiry date" duration.', true );
 			swpm_debug_log_subsc( 'Nothing to do here. The account will expire on the fixed set date.', true );
+		} elseif ( SwpmMembershipLevel::ANNUAL_FIXED_DATE == $subs_duration_type ) {
+			// This is a level with an "annual fixed date" duration.
+			swpm_debug_log_subsc( 'This is a level with a "annual fixed date" duration.', true );
+			swpm_debug_log_subsc( 'Nothing to do here. The account will expire on the set date.', true );
 		} else {
 			// This is a level with "duration" type expiry (example: 30 days, 1 year etc). subscription_period has the duration/period.
 			$subs_period      = $level_row->subscription_period;

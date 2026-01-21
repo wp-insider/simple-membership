@@ -182,6 +182,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 = WIP =
 - Add/Edit Membership level form jquery validation issue fixed.
+- A front-end profile update related issue fixed.
 
 = 4.6.9 =
 - Added a new {expiry_date} email merge tag.

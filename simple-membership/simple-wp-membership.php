@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Simple Membership
-Version: 4.6.9
+Version: 4.7.0
 Plugin URI: https://simple-membership-plugin.com/
 Author: smp7, wp.insider
 Author URI: https://simple-membership-plugin.com/
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //Define plugin constants
-define( 'SIMPLE_WP_MEMBERSHIP_VER', '4.6.9' );
+define( 'SIMPLE_WP_MEMBERSHIP_VER', '4.7.0' );
 define( 'SIMPLE_WP_MEMBERSHIP_DB_VER', '1.5' );
 define( 'SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL', home_url() );
 define( 'SIMPLE_WP_MEMBERSHIP_PATH', dirname( __FILE__ ) . '/' );

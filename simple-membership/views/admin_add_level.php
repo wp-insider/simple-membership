@@ -47,6 +47,11 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 <input type="text" value="" name="subscription_period_<?php echo  SwpmMembershipLevel::YEARS?>"> <?php echo  SwpmUtils::_('Years (Access expires after given number of years)')?></p>
             <p><input type="radio" value="<?php echo  SwpmMembershipLevel::FIXED_DATE?>" name="subscription_duration_type" /> <?php echo  SwpmUtils::_('Fixed Date Expiry')?>
                 <input type="text" class="swpm-date-picker" value="<?php echo  date('Y-m-d');?>" name="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>"> <?php echo  SwpmUtils::_('(Access expires on a fixed date)')?></p>
+            <p><input type="radio" value="<?php echo  SwpmMembershipLevel::ANNUAL_FIXED_DATE?>" name="subscription_duration_type" /> <?php _e('Annual Expiration Date','wp-express-checkout')?>
+                <?php SwpmMiscUtils::month_day_selector(); ?>
+	            <?php printf(__(' with a minimum period of %s days', 'simple-membership'), '<span><input name="annual_fixed_date_min_period" type="number" min="0" value="" style="width: 60px;"></span>')?>
+	            <?php _e('(Memberships will expire on this date every year. Example value: December 31 for calendar-year memberships or June 30 for fiscal alignments.)', 'simple-membership')?>
+            </p>
         </td>
     </tr>
     <tr class="form-field">

@@ -961,8 +961,10 @@ class SimpleWpMembership {
             'ajax_url' => $ajax_url,
             'query_args' => isset($params['query_args']) ? $params['query_args'] : array(),
         )), "before");
-       
-        wp_add_inline_script($handle, "var form_id = '".$params['form_id']."';", "before");
+
+		if (isset($params['form_id']) && !empty($params['form_id'])){
+            wp_add_inline_script($handle, "var form_id = '".$params['form_id']."';", "before");
+		}
 
         if (isset($params['custom_pass_pattern_validator']) && !empty($params['custom_pass_pattern_validator'])) {
             wp_add_inline_script($handle, "var custom_pass_pattern_validator = ".$params['custom_pass_pattern_validator'].";", "before");

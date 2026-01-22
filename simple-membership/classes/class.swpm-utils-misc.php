@@ -1446,4 +1446,53 @@ class SwpmMiscUtils {
 		SwpmMiscUtils::mail( $to_email, $subject, $body, $headers );
 		SwpmLog::log_simple_debug( 'Account activation email for member ID: '.$member_id.' successfully sent to: ' . $to_email . '. From email address value used: ' . $from_address, true );
 	}
+
+
+	public static function get_months_data(int $year = null): array {
+		$year = $year ?? (int) date('Y');
+		$data = array();
+
+		for ($m = 1; $m <= 12; $m++) {
+			$date = DateTime::createFromFormat('Y-n-j', "$year-$m-1");
+
+			$data[] = [
+				'm' => $m,
+				'name' => $date->format('F'),
+				'days'  => $date->format('t'),
+			];
+		}
+
+		return $data;
+	}
+
+	public static function month_day_selector($selected_date = '') {
+		$currentYear = (int) date('Y');
+
+		if (!empty($selected_date)){
+			$selected_date = strtotime($selected_date);
+		} else {
+			$selected_date = strtotime(date('Y-01-01'));
+		}
+
+		$months = self::get_months_data($currentYear);
+
+		SimpleWpMembership::enqueue_validation_scripts_v2( 'swpm-month-day-selector' );
+
+		?>
+		<span class="swpm-month-day-selector" data-day-month-options="<?php echo esc_attr(json_encode($months)) ?>">
+            <select class="swpm-month-selector" name="subscription_period_<?php echo SwpmMembershipLevel::ANNUAL_FIXED_DATE?>[m]">
+                <?php foreach ($months as $month) { ?>
+                    <option value="<?php echo esc_attr($month['m']) ?>" <?php selected( intval(date('m', $selected_date)), $month['m'] ) ?>><?php echo esc_attr($month['name']) ?></option>
+                <?php } ?>
+            </select>
+            <select class="swpm-day-selector" name="subscription_period_<?php echo SwpmMembershipLevel::ANNUAL_FIXED_DATE?>[d]">
+                <?php
+                $selected_month_data = $months[intval(date('m', $selected_date)) - 1];
+                for ($i = 1; $i <= $selected_month_data['days']; $i++) { ?>
+                    <option value="<?php echo esc_attr($i) ?>" <?php selected( intval(date('d', $selected_date)), $i ) ?> ><?php echo esc_attr(SwpmUtils::pad_zero($i)) ?></option>
+                <?php } ?>
+            </select>
+        </span>
+		<?php
+	}
 }

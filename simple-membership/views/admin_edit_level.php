@@ -58,7 +58,14 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
                     <input type="text" value="<?php echo  checked(SwpmMembershipLevel::YEARS,$subscription_duration_type,false)? $subscription_period: "";?>" name="subscription_period_<?php echo  SwpmMembershipLevel::YEARS?>"> <?php echo  SwpmUtils::_('Years (Access expires after given number of years)')?></p>                
                 
                 <p><input type="radio" <?php echo  checked(SwpmMembershipLevel::FIXED_DATE,$subscription_duration_type,false)?> value="<?php echo  SwpmMembershipLevel::FIXED_DATE?>" name="subscription_duration_type" /> <?php echo  SwpmUtils::_('Fixed Date Expiry')?> 
-                    <input type="text" class="swpm-date-picker" value="<?php echo  checked(SwpmMembershipLevel::FIXED_DATE,$subscription_duration_type,false)? $subscription_period: "";?>" name="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>" id="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>"> <?php echo  SwpmUtils::_('(Access expires on a fixed date)')?></p>                                
+                    <input type="text" class="swpm-date-picker" value="<?php echo  checked(SwpmMembershipLevel::FIXED_DATE,$subscription_duration_type,false)? $subscription_period: "";?>" name="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>" id="subscription_period_<?php echo  SwpmMembershipLevel::FIXED_DATE?>"> <?php echo  SwpmUtils::_('(Access expires on a fixed date)')?></p>
+
+                <?php $is_annual_fixed_date_checked = checked(SwpmMembershipLevel::ANNUAL_FIXED_DATE, $subscription_duration_type, false) ?>
+                <p><input type="radio" <?php echo !empty($is_annual_fixed_date_checked) ? 'checked' : '' ?> value="<?php echo SwpmMembershipLevel::ANNUAL_FIXED_DATE?>" name="subscription_duration_type" /> <?php _e('Annual Expiration Date','wp-express-checkout')?>
+	                <?php SwpmMiscUtils::month_day_selector( !empty($is_annual_fixed_date_checked) ? $subscription_period : '' ); ?>
+                    <?php printf(__(' with a minimum period of %s days', 'simple-membership'), '<span><input name="annual_fixed_date_min_period" type="number" min="0" value="'.esc_attr(!empty($is_annual_fixed_date_checked) ? $annual_fixed_date_min_period : '').'" style="width: 60px;"></span>')?>
+                    <?php _e('(Memberships will expire on this date every year. Example value: December 31 for calendar-year memberships or June 30 for fiscal alignments.)', 'simple-membership')?>
+                </p>
         </td>        
     </tr>
     <tr class="form-field">

@@ -43,7 +43,7 @@ class SwpmLevelForm {
             return;
         }
 
-        $subscription_period = filter_input(INPUT_POST, 'subscription_period_'. $subscript_duration_type);
+		$subscription_period = isset($_POST['subscription_period_'. $subscript_duration_type]) ? $_POST['subscription_period_'. $subscript_duration_type] : '';
         if (($subscript_duration_type == SwpmMembershipLevel::FIXED_DATE)){
             $dateinfo = date_parse($subscription_period);
             if ($dateinfo['warning_count']|| $dateinfo['error_count']){
@@ -53,6 +53,29 @@ class SwpmLevelForm {
             $this->sanitized['subscription_period'] = sanitize_text_field($subscription_period);
             return;
         }
+
+	    if ( $subscript_duration_type == SwpmMembershipLevel::ANNUAL_FIXED_DATE ){
+			if (!is_array($subscription_period)){
+				$this->errors['subscription_period'] = __("Annual expiry date is not valid.", "simple-membership");
+			}
+
+			$subscription_period = implode('-', array(
+				date('Y'),
+				SwpmUtils::pad_zero($subscription_period['m']),
+				SwpmUtils::pad_zero($subscription_period['d']),
+			));
+
+		    $dateinfo = date_parse($subscription_period);
+
+		    if ($dateinfo['warning_count']|| $dateinfo['error_count']){
+			    $this->errors['subscription_period'] = __("Date format is not valid. " . $subscription_period, "simple-membership");
+			    return;
+		    }
+
+			$this->sanitized['subscription_period'] = sanitize_text_field($subscription_period);
+
+		    return;
+	    }
 
         if (!is_numeric($subscription_period)) {
             $this->errors['subscription_period'] = SwpmUtils::_("Access duration must be > 0.");

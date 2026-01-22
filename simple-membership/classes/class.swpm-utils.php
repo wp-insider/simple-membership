@@ -97,7 +97,48 @@ abstract class SwpmUtils {
 		$permission = SwpmPermission::get_instance( $user->membership_level );
 		if ( SwpmMembershipLevel::FIXED_DATE == $permission->get( 'subscription_duration_type' ) ) {
 			return strtotime( $permission->get( 'subscription_period' ) );
+
+		} else if ( SwpmMembershipLevel::ANNUAL_FIXED_DATE == $permission->get( 'subscription_duration_type' ) ) {
+			$user_sub_start_date = new DateTime($user->subscription_starts);
+
+			$current_year = intval(date('Y'));
+
+			$expiry_date = new DateTime($permission->get( 'subscription_period' ));
+
+			// Replace year with current year
+			$expiry_date->setDate(
+				$current_year,
+				(int) $expiry_date->format('m'),
+				(int) $expiry_date->format('d')
+			);
+
+			$expiry_timestamp = $expiry_date->getTimestamp();
+
+			// Check if expiry date has reached or not.
+			if ($user_sub_start_date < $expiry_date) {
+				// Expiry date has not reached year. Now check if expiry date and user subscription date satisfies min period days.
+
+				$diff = $user_sub_start_date->diff($expiry_date);
+
+				$custom_fields = SwpmMembershipLevelCustom::get_instance_by_id($user->membership_level);
+				$annual_fixed_date_min_period = sanitize_text_field($custom_fields->get('annual_fixed_date_min_period'));
+				$annual_fixed_date_min_period = absint($annual_fixed_date_min_period);
+
+				if ($diff->days < $annual_fixed_date_min_period){
+					$expiry_date->modify('+1 year'); // expiry date is in next year.
+
+					$expiry_timestamp = $expiry_date->getTimestamp();
+				}
+			} else {
+				// User sub started AFTER membership level expiry date of this year.
+				$expiry_date->modify('+1 year'); // expiry date is in next year.
+
+				$expiry_timestamp = $expiry_date->getTimestamp();
+			}
+
+			return $expiry_timestamp;
 		}
+
 		$days = self::calculate_subscription_period_days( $permission->get( 'subscription_period' ), $permission->get( 'subscription_duration_type' ) );
 		if ( $days == 'noexpire' ) {
 			return PHP_INT_MAX; // which is equivalent to
@@ -121,6 +162,9 @@ abstract class SwpmUtils {
 	public static function get_formatted_expiry_date( $start_date, $subscription_duration, $subscription_duration_type ) {
 		if ( $subscription_duration_type == SwpmMembershipLevel::FIXED_DATE ) {
 			//Membership will expire after a fixed date.
+			return self::get_formatted_and_translated_date_according_to_wp_settings( $subscription_duration );
+		}
+		if ( $subscription_duration_type == SwpmMembershipLevel::ANNUAL_FIXED_DATE ) {
 			return self::get_formatted_and_translated_date_according_to_wp_settings( $subscription_duration );
 		}
 
@@ -797,4 +841,7 @@ abstract class SwpmUtils {
 		return $shortcode;
 	}
 
+	public static function pad_zero($number = 0): string {
+		return str_pad((string) $number, 2, '0', STR_PAD_LEFT);
+	}
 }

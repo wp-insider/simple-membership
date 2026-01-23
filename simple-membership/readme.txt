@@ -180,8 +180,10 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+
 = WIP =
-- New calendar year expiration feature added for membership levels.
+- Added support for annual memberships, allowing you to create calendar-year–based memberships.
+- Added an option to delete the plugin generated required pages in the Reset Data addon.
 
 = 4.7.0 =
 - Improved the validation JavaScript for the Add/Edit Membership Level screen to simplify the interface.

@@ -252,8 +252,16 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 'description' => 'Allows you to signup the member to your MailChimp list after registration',
                 'page_url' => 'https://simple-membership-plugin.com/signup-members-mailchimp-list/',
             );
-            array_push($addons_data, $addon_30);          
-            
+            array_push($addons_data, $addon_30);
+
+            $addon_31 = array(
+                'name' => 'Social Login Addon',
+                'thumbnail' => SIMPLE_WP_MEMBERSHIP_URL . '/images/addons/swpm-social-login-addon.png',
+                'description' => 'Integrates Google, Facebook social login options for Simple Membership users.',
+                'page_url' => 'https://simple-membership-plugin.com/simple-membership-social-login-addon/',
+            );
+            array_push($addons_data, $addon_31);
+
             /*** Show the addons list ***/
             foreach ($addons_data as $addon) {
                 $output .= '<div class="swpm_addon_item_canvas">';

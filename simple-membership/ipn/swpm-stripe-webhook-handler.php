@@ -36,7 +36,7 @@ class SwpmStripeWebhookHandler {
 				SwpmLog::log_simple_debug( 'Stripe webhook event data validated successfully!', true );
 			}
 		} else {
-			if ( empty( self::validate_webhook_data_no_signing_key($event_json) ) ) {
+			if ( empty( self::validate_webhook_data_no_signing_key($input) ) ) {
 				//Invalid webhook data received. Don't process this request.
 				http_response_code( 400 );
 				echo 'Error: Invalid webhook data received.';
@@ -277,7 +277,9 @@ class SwpmStripeWebhookHandler {
 		return $event_json;
 	}
 
-	public static function validate_webhook_data_no_signing_key($received_event){
+	public static function validate_webhook_data_no_signing_key($event_data_raw){
+		$received_event = json_decode( $event_data_raw );
+
 		$events_to_validate = array(
 			'invoice.payment_succeeded', 
 			'customer.subscription.deleted',
@@ -289,7 +291,7 @@ class SwpmStripeWebhookHandler {
 			return true;
 		}
 
-		$max_allowed_event_creation_time_diff = 2 * 60 * 60; // 2 hours.
+		$max_allowed_event_creation_time_diff = 6 * 60 * 60; // 6 hours.
 
 		$received_sub_id = '';
 
@@ -303,7 +305,7 @@ class SwpmStripeWebhookHandler {
 			case 'invoice':
 				$received_sub_id = isset($received_event_object->parent->subscription_details->subscription) ? $received_event_object->parent->subscription_details->subscription : '';
 				
-				$billing_reason = isset( $event_json->data->object->billing_reason ) ? $event_json->data->object->billing_reason : '';
+				$billing_reason = isset( $received_event_object->billing_reason ) ? $received_event_object->billing_reason : '';
 				if ( $billing_reason != 'subscription_cycle' ) {
 					// We don't need to validate invoice event with billing reason other than subscription_cycle.
 					return true;
@@ -314,7 +316,7 @@ class SwpmStripeWebhookHandler {
 				// Change object does not directly contains any sub id, so its not possible to get the sub agreement cpt id hence not the payment button id.
 				// So its not possible to get the stripe api secret key. Thats why we are only checking the event creation time to validate this event. 
 				if ((time() - $received_event->created) > $max_allowed_event_creation_time_diff  ) {
-					SwpmLog::log_simple_debug('Error: Event creation time is too ago!', false);
+					SwpmLog::log_simple_debug('Error: Event creation time is too far in the past!', false);
 					return false;
 				} else {
 					return true;
@@ -339,7 +341,7 @@ class SwpmStripeWebhookHandler {
 		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $payment_button_id, !$sandbox_enabled );
 		
 		if (empty($api_keys['secret'])){
-			SwpmLog::log_simple_debug('Stripe API secret key could not be retrieved. Could not validate this webhook.', false);
+			SwpmLog::log_simple_debug('Error: The Stripe API secret key could not be retrieved. Could not validate this webhook!', false);
 			return false;
 		}
 
@@ -354,13 +356,20 @@ class SwpmStripeWebhookHandler {
 
 			// Check if invalid event creation time.
 			if ($event->created !== $received_event->created || (time() - $event->created) > $max_allowed_event_creation_time_diff  ) {
-				SwpmLog::log_simple_debug('Error: Event creation time is too ago!', false);
+				SwpmLog::log_simple_debug('Error: Event creation time is too far in the past!', false);
 				return false;
 			}
 
 			$sub_id = '';
 			$event_object = $event->data->object;
-			switch(strtolower($event_object->object)){
+			$event_object_name = $event_object->object;
+
+			if ($event_object_name != $received_object_name) {
+				SwpmLog::log_simple_debug("Error: Webhook event object mismatch!", false);
+				return false;
+			}
+
+			switch($event_object_name){
 				case 'subscription':
 					$sub_id = isset($event_object->id) ? $event_object->id : '';
 					break;
@@ -374,7 +383,7 @@ class SwpmStripeWebhookHandler {
 
 			// Check if subscription id mismatch.
 			if ($sub_id != $received_sub_id) {
-				SwpmLog::log_simple_debug('Error: Subscription id mismatch!', false);
+				SwpmLog::log_simple_debug('Error: Subscription ID mismatch!', false);
 				return false;
 			}
 

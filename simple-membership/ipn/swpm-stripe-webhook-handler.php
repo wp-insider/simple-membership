@@ -305,7 +305,7 @@ class SwpmStripeWebhookHandler {
 			case 'invoice':
 				$received_sub_id = isset($received_event_object->parent->subscription_details->subscription) ? $received_event_object->parent->subscription_details->subscription : '';
 				
-				$billing_reason = isset( $event_json->data->object->billing_reason ) ? $event_json->data->object->billing_reason : '';
+				$billing_reason = isset( $received_event_object->billing_reason ) ? $received_event_object->billing_reason : '';
 				if ( $billing_reason != 'subscription_cycle' ) {
 					// We don't need to validate invoice event with billing reason other than subscription_cycle.
 					return true;
@@ -362,7 +362,14 @@ class SwpmStripeWebhookHandler {
 
 			$sub_id = '';
 			$event_object = $event->data->object;
-			switch(strtolower($event_object->object)){
+			$event_object_name = $event_object->object;
+
+			if ($event_object_name != $received_object_name) {
+				SwpmLog::log_simple_debug("Error: Webhook event object mismatch!", false);
+				return false;
+			}
+
+			switch($event_object_name){
 				case 'subscription':
 					$sub_id = isset($event_object->id) ? $event_object->id : '';
 					break;

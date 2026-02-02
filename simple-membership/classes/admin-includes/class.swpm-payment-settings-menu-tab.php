@@ -523,16 +523,31 @@ class SWPM_Payment_Settings_Menu_Tab {
                                 </p>
                             </td>
                         </tr>
+
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-				                    <?php _e('Webhook Signing Secret Key (Optional)', 'simple-membership'); ?>
+                                    <?php _e('Webhook Endpoint URL', 'simple-membership'); ?>
+                                </label>
+                            </th>
+                            <td>
+                                <kbd><?php echo SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1&hook=1'; ?></kbd>
+                                <p class="description">
+                                    <?php _e('This is the webhook endpoint URL that you will need to configure in your Stripe account. You can get more info in the', 'simple-membership') ?> <a href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/#create-a-webhook-in-your-stripe-account" target="_blank"><?php _e('documentation', 'simple-membership') ?></a>.
+                                </p>
+                            </td>
+                        </tr>                        
+                        <tr valign="top">
+                            <th scope="row">
+                                <label>
+				                    <?php _e('Webhook Signing Secret Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input type="text" name="stripe-webhook-signing-secret" size="100" value="<?php echo $stripe_webhook_signing_secret_key; ?>">
                                 <p class="description">
-				                    <?php _e('Enter a webhook signing secret key to apply webhook event protection.', 'simple-membership'); ?>
+				                    <?php _e('Enter the webhook signing secret from your Stripe dashboard here. ', 'simple-membership'); ?>
+                                    <?php _e('Read <a href="https://simple-membership-plugin.com/configuring-the-stripe-webhook-signing-secret/" target="_blank">this documentation</a> to learn more.', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>

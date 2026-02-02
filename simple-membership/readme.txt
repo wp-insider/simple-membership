@@ -185,7 +185,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added support for annual memberships, allowing you to create calendar-year–based memberships.
 - Added an option to delete the plugin generated required pages in the Reset Data addon.
 - Added social login addon to the Add-ons page.
-- A basic stripe webhook event validation added.  
+- The Stripe webhook endpoint URL is also displayed in the Stripe settings menu tab for easy copy-paste.
+- A basic stripe webhook event validation added.
 
 = 4.7.0 =
 - Improved the validation JavaScript for the Add/Edit Membership Level screen to simplify the interface.

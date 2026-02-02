@@ -186,7 +186,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added an option to delete the plugin generated required pages in the Reset Data addon.
 - Added social login addon to the Add-ons page.
 - The Stripe webhook endpoint URL is also displayed in the Stripe settings menu tab for easy copy-paste.
-- A basic stripe webhook event validation added.
+- Added basic Stripe webhook event validation for sites that are not using the webhook signing secret option in the settings menu.
 
 = 4.7.0 =
 - Improved the validation JavaScript for the Add/Edit Membership Level screen to simplify the interface.

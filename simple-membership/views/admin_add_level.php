@@ -13,7 +13,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 <form action="" method="post" name="swpm-create-level" id="<?php echo esc_attr($form_id) ?>" class="swpm-validate-form">
 <input name="action" type="hidden" value="createlevel" />
 <h3><?php echo SwpmUtils::_('Add Membership Level'); ?></h3>
-<p>
+<p class="swpm-grey-box">
     <?php 
     echo __('Create new membership level.', 'simple-membership');
     echo __(' Refer to ', 'simple-membership');
@@ -50,7 +50,8 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             <p><input type="radio" value="<?php echo  SwpmMembershipLevel::ANNUAL_FIXED_DATE?>" name="subscription_duration_type" /> <?php _e('Annual Expiration Date','wp-express-checkout')?>
                 <?php SwpmMiscUtils::month_day_selector(); ?>
 	            <?php printf(__(' with a minimum period of %s days', 'simple-membership'), '<span><input name="annual_fixed_date_min_period" type="number" min="0" value="" style="width: 60px;"></span>')?>
-	            <?php _e('(Memberships will expire on this date every year. Example value: December 31 for calendar-year memberships or June 30 for fiscal alignments.)', 'simple-membership')?>
+	            <?php _e('(Memberships will expire on this date every year. Example value: December 31 for calendar-year memberships or June 30 for fiscal alignments). ', 'simple-membership'); ?>
+                <?php echo '<a href="https://simple-membership-plugin.com/annual-calendar-or-fiscal-year-memberships/" target="_blank">' . __('View Documentation', 'simple-membership') . '</a>.'; ?>
             </p>
         </td>
     </tr>

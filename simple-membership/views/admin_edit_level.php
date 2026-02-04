@@ -15,7 +15,7 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
 <input name="action" type="hidden" value="editlevel" />
 <?php wp_nonce_field( 'edit_swpmlevel_admin_end', '_wpnonce_edit_swpmlevel_admin_end' ) ?>
 <h2><?php echo  SwpmUtils::_('Edit membership level'); ?></h2>
-<p>
+<p class="swpm-grey-box">
     <?php 
     echo __('You can edit details of a selected membership level from this interface. ', 'simple-membership');
     echo __(' Refer to ', 'simple-membership');
@@ -64,7 +64,8 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
                 <p><input type="radio" <?php echo !empty($is_annual_fixed_date_checked) ? 'checked' : '' ?> value="<?php echo SwpmMembershipLevel::ANNUAL_FIXED_DATE?>" name="subscription_duration_type" /> <?php _e('Annual Expiration Date','wp-express-checkout')?>
 	                <?php SwpmMiscUtils::month_day_selector( !empty($is_annual_fixed_date_checked) ? $subscription_period : '' ); ?>
                     <?php printf(__(' with a minimum period of %s days', 'simple-membership'), '<span><input name="annual_fixed_date_min_period" type="number" min="0" value="'.esc_attr(!empty($is_annual_fixed_date_checked) ? $annual_fixed_date_min_period : '').'" style="width: 60px;"></span>')?>
-                    <?php _e('(Memberships will expire on this date every year. Example value: December 31 for calendar-year memberships or June 30 for fiscal alignments.)', 'simple-membership')?>
+                    <?php _e('(Memberships will expire on this date every year. Example value: December 31 for calendar-year memberships or June 30 for fiscal alignments). ', 'simple-membership'); ?>
+                    <?php echo '<a href="https://simple-membership-plugin.com/annual-calendar-or-fiscal-year-memberships/" target="_blank">' . __('View Documentation', 'simple-membership') . '</a>.'; ?>
                 </p>
         </td>        
     </tr>

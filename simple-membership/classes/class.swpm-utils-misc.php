@@ -1495,4 +1495,30 @@ class SwpmMiscUtils {
         </span>
 		<?php
 	}
+
+	public static function check_if_webhook_signing_key_required(){
+		$webhook_signing_secret = SwpmSettings::get_instance()->get_value( 'stripe-webhook-signing-secret' );
+
+		if (!empty(trim($webhook_signing_secret))) {
+			// Signing secret key is present.
+			return false;
+		}
+
+		$args = array(
+			'post_type' => 'swpm_payment_button',
+			'numberposts' => -1,
+			'fields' => 'ids',
+			'meta_query' => array(
+				array(
+					'key'   => 'button_type',
+					'value' => 'stripe_sca_subscription',
+				),				
+			),
+		);
+
+		$query = new WP_Query( $args );
+		$count = $query->found_posts;
+
+		return empty($count) ? false : true;
+	}
 }

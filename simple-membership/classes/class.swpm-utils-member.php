@@ -484,24 +484,42 @@ class SwpmMemberUtils {
 	}
 
 	public static function update_wp_user_role( $wp_user_id, $role ) {
-		if ( SwpmUtils::is_multisite_install() ) {//MS install
-			return; //TODO - don't do this for MS install
+		if ( SwpmUtils::is_multisite_install() ) {//Multi-Site install 
+			//TODO - don't do this for MS install.
+			return; 
 		}
-
-		$admin_user = self::wp_user_has_admin_role( $wp_user_id );
-		if ( $admin_user ) {
-			SwpmLog::log_simple_debug( 'This user has admin role. No role modification will be done.', true );
+	
+		$admin_user = self::wp_user_has_admin_role( $wp_user_id ); 
+		if ( $admin_user ) { 
+			SwpmLog::log_simple_debug( 'This user has admin role. No role modification will be done.', true ); 
+			return; 
+		} 
+	
+		//We will use 'remove_role' and 'add_role' functions to do a clean role update of the core WP user role only. 
+		//The 'add_role()' function does not wipe other roles (any role we don't remove first won't be modified/updated so bbPress forum role remains as is). 
+	
+		// 1. Get the user object 
+		$user = get_userdata( $wp_user_id ); 
+		if ( ! $user ) { 
+			SwpmLog::log_simple_debug( 'WP user not found. User ID: ' . $wp_user_id, true );
 			return;
-		}
-
-		//wp_update_user() function will trigger the 'set_user_role' hook.
-		wp_update_user(
-			array(
-				'ID'   => $wp_user_id,
-				'role' => $role,
-			)
-		);
-		SwpmLog::log_simple_debug( 'User role updated.', true );
+		} 
+		
+		// 2. Remove the old core roles (recommended for a clean swap) 
+		// Most sites only have one core role, like 'subscriber' or 'contributor' 
+		foreach ( $user->roles as $old_role ) { 
+			// We check to make sure we aren't removing bbPress roles  
+			// bbPress roles usually start with 'bbp_' 
+			if ( strpos( $old_role, 'bbp_' ) === false ) { 
+				$user->remove_role( $old_role ); 
+			} 
+		} 
+	
+		// 3. Add the new specific WordPress role  
+		// This does not trigger the 'set_user_role' action hook, so it won't cause other plugins to run their code that is hooked to that action (which is what we want in this case). 
+		$user->add_role( $role ); 
+	
+		SwpmLog::log_simple_debug( 'WP user role updated. Role: ' . $role . ', User email: ' . $user->user_email, true ); 
 	}
 
 	//if a username is provided, it will return sanitized email of the user

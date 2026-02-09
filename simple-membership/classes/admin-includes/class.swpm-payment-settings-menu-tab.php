@@ -558,6 +558,9 @@ class SWPM_Payment_Settings_Menu_Tab {
             </div>
         </div>
         <?php
+
+        // Clear cache for SwpmMiscUtils::check_if_webhook_signing_key_config_required()
+        $settings->set_value( 'stripe_webhook_signing_key_config_required', '' )->save();
     }
 
 	public function paypal_ppcp_connection_settings() {

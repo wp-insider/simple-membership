@@ -194,6 +194,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 = WIP =
 - Stripe webhook signing secret key missing notice now shows on admin dashboard.
 
+= WIP =
+- Improved compatibility with bbPress. Updating a member's WordPress role will no longer interfere with their existing forum roles.
+
 = 4.7.1 =
 - Added support for annual memberships, allowing you to create calendar year based memberships.
 - Added an option to delete the plugin generated required pages in the Reset Data addon.

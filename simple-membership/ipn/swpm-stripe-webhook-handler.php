@@ -231,36 +231,11 @@ class SwpmStripeWebhookHandler {
 	}
 
 	public static function validate_webhook_data( $event_data_raw ){
-		$event_json = json_decode( $event_data_raw );
-
-		$sub_id = '';
-		if ( isset($event_json->data->object->subscription) ){
-			$sub_id = $event_json->data->object->subscription;
-		} else if (isset( $event_json->data->object->id ) && $event_json->data->object->object == 'subscription' ){
-			$sub_id = $event_json->data->object->id;
-		}
-
-		$sub_agreement_cpt_id = SWPM_Utils_Subscriptions::get_subscription_agreement_cpt_id_by_subs_id($sub_id);;
-
-		// Check if the sandbox mode is enabled
-		$sandbox_enabled = SwpmSettings::get_instance()->get_value( 'enable-sandbox-testing' );
-		$webhook_signing_secret = SwpmSettings::get_instance()->get_value( 'stripe-webhook-signing-secret' );
-
-		$payment_button_id = get_post_meta($sub_agreement_cpt_id, 'payment_button_id', true);
-
-		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $payment_button_id, !$sandbox_enabled );
-
-		if (!isset($api_keys['secret'])){
-			SwpmLog::log_simple_debug('Stripe API secret key could not be retrieved. Could not validate this webhook.', false);
-			return false;
-		}
-
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
 
-		\Stripe\Stripe::setApiKey( $api_keys['secret'] );
-
 		$stripe_signature_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
+		$webhook_signing_secret = SwpmSettings::get_instance()->get_value( 'stripe-webhook-signing-secret' );
 
 		try {
 			$event_json = \Stripe\Webhook::constructEvent($event_data_raw, $stripe_signature_header, $webhook_signing_secret);

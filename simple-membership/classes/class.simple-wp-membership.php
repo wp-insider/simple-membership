@@ -694,6 +694,12 @@ class SimpleWpMembership {
                 echo '</div>';
             }
         }
+
+        if (SwpmMiscUtils::check_if_webhook_signing_key_config_required() == 'yes') {
+            echo '<div class="notice notice-error"><p>';
+            esc_html_e("Looks like you are using Stripe subscription payments, but the webhook signing secret is missing from the plugin settings. Please go to the Stripe Settings menu and configure the webhook signing secret.", "simple-membership"); 
+            echo '</p></div>';
+        }
     }
 
     public function meta_box() {

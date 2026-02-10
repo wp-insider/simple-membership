@@ -1495,4 +1495,49 @@ class SwpmMiscUtils {
         </span>
 		<?php
 	}
+
+	public static function check_if_webhook_signing_key_config_required(){
+		// Check if this is a stripe settings form submit and signing key field empty.
+		if (isset($_POST['stripe-webhook-signing-secret'])) {
+			if (empty($_POST['stripe-webhook-signing-secret'])) {
+				return 'yes';
+			} else {
+				return 'no';
+			}
+		}
+
+		$settings = SwpmSettings::get_instance();
+		$webhook_signing_secret = $settings->get_value( 'stripe-webhook-signing-secret' );
+
+		if (!empty(trim($webhook_signing_secret))) {
+			// Signing secret key is present.
+			return 'no';
+		}
+
+		$stripe_webhook_signing_key_config_required = $settings->get_value('stripe_webhook_signing_key_config_required', '');
+		if ( !empty($stripe_webhook_signing_key_config_required) ) {
+			return $stripe_webhook_signing_key_config_required;
+		}
+
+		$args = array(
+			'post_type' => 'swpm_payment_button',
+			'numberposts' => -1,
+			'fields' => 'ids',
+			'meta_query' => array(
+				array(
+					'key'   => 'button_type',
+					'value' => 'stripe_sca_subscription',
+				),				
+			),
+		);
+
+		$query = new WP_Query( $args );
+		$count = $query->found_posts;
+
+		$stripe_webhook_signing_key_config_required = empty($count) ? 'no' : 'yes';
+
+		$settings->set_value('stripe_webhook_signing_key_config_required', $stripe_webhook_signing_key_config_required)->save();
+
+		return $stripe_webhook_signing_key_config_required;
+	}
 }

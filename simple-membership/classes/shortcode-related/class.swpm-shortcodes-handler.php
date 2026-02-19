@@ -59,6 +59,9 @@ class SwpmShortcodesHandler {
 		$any_note_or_msg_output = '';
 		$hide_payment_btn = false;
 
+		//Trigger a hook at the start of the payment button shortcode execution. It can be used by addons to add custom code at the start of the shortcode execution.
+		$output = apply_filters( 'swpm_payment_button_shortcode_start_output', $output, $button_id, $button_type, $args );
+
 		//Check if the active subscription warning option is enabled for this button.
 		if ( in_array($button_type, array('stripe_sca_subscription', 'pp_subscription_new')) ){
 			$is_visitor_logged_in = SwpmAuth::get_instance()->is_logged_in();

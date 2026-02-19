@@ -191,9 +191,11 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+
 = WIP =
 - Improved compatibility with bbPress. Updating a member's WordPress role will no longer interfere with their existing forum roles.
 - Stripe webhook signing secret key missing notice now shows on admin dashboard.
+- Added a new filter hook 'swpm_payment_button_shortcode_start_output' to allow custom code to execute at the start of the payment button shortcode execution.
 
 = 4.7.1 =
 - Added support for annual memberships, allowing you to create calendar year based memberships.

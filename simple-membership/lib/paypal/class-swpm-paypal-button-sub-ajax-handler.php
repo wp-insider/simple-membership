@@ -360,10 +360,31 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 
 		$validation_error_msg = '';
 
+		/*** Guard: Check if this subscription ID has already been used to create a member account (prevent transaction replay). ***/
+		$existing_txn = SwpmTransactions::get_transaction_row_by_subscr_id( $subscription_id );
+		if ( ! empty( $existing_txn ) ) {
+			$validation_error_msg = 'Validation Error! This subscription ID has already been processed. Subscription ID: ' . $subscription_id;
+			SwpmLog::log_simple_debug( $validation_error_msg, false );
+			return $validation_error_msg;
+		}
+
 		//This is for on-site checkout only. So the 'mode' and API creds will be whatever is currently set in the settings.
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
 		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
 		if( $sub_details !== false ){
+			/*** Guard: Verify the subscriber email from PayPal API matches the email submitted in the request (prevent email spoofing in replayed requests). ***/
+			$api_subscriber = isset($sub_details->subscriber) ? $sub_details->subscriber : null;
+			if ( is_object($api_subscriber) ) {
+				$api_subscriber = json_decode(json_encode($api_subscriber), true);
+			}
+			$api_email = isset($api_subscriber['email_address']) ? strtolower($api_subscriber['email_address']) : '';
+			$submitted_email = isset($txn_data['subscriber']['email_address']) ? strtolower($txn_data['subscriber']['email_address']) : '';
+			if ( ! empty($api_email) && ! empty($submitted_email) && $api_email !== $submitted_email ) {
+				$validation_error_msg = 'Validation Error! The subscriber email submitted does not match the PayPal subscription email. Subscription ID: ' . $subscription_id;
+				SwpmLog::log_simple_debug( $validation_error_msg, false );
+				return $validation_error_msg;
+			}
+
 			$billing_info = $sub_details->billing_info;
 			if(is_object($billing_info)){
 				//Convert the object to an array.

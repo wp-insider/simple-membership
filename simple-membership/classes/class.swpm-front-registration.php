@@ -135,9 +135,17 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		//If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
 		$captcha_validation_output = apply_filters( 'swpm_validate_registration_form_submission', '' );
 		if ( ! empty( $captcha_validation_output ) ) {
+			$error_msg = SwpmUtils::_( 'Security check: captcha validation failed.' );
+
+			if (is_array($captcha_validation_output)) {
+				if (!isset($captcha_validation_output['succeeded']) || empty($captcha_validation_output['succeeded'])) {
+					$error_msg = isset($captcha_validation_output['message']) ? sanitize_text_field($captcha_validation_output['message']) : $error_msg;
+				}
+			}
+
 			$message = array(
 				'succeeded' => false,
-				'message'   => SwpmUtils::_( 'Security check: captcha validation failed.' ),
+				'message'   => $error_msg,
 			);
 			SwpmTransfer::get_instance()->set( 'status', $message );
 			return;
@@ -549,7 +557,15 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		//If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
 		$captcha_validation_output = apply_filters( 'swpm_validate_pass_reset_form_submission', '' );
 		if ( ! empty( $captcha_validation_output ) ) {
-			$message = '<div class="swpm-reset-pw-error">' . SwpmUtils::_( 'Captcha validation failed.' ) . '</div>';
+			$error_msg = SwpmUtils::_( 'Captcha validation failed.' );
+
+			if (is_array($captcha_validation_output)) {
+				if (!isset($captcha_validation_output['succeeded']) || empty($captcha_validation_output['succeeded'])) {
+					$error_msg = isset($captcha_validation_output['message']) ? sanitize_text_field($captcha_validation_output['message']) : $error_msg;
+				}
+			}
+				
+			$message = '<div class="swpm-reset-pw-error">' . esc_html($error_msg) . '</div>';
 			$message = array(
 				'succeeded' => false,
 				'message'   => $message,

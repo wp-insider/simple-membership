@@ -4,8 +4,8 @@ Donate link: https://simple-membership-plugin.com/
 Tags: member, members, members only, membership, memberships, register, WordPress membership plugin, content, content protection, paypal, restrict, restrict access, Restrict content, admin, access control, subscription, teaser, protection, profile, login, bbpress, stripe
 Requires at least: 6.0
 Requires PHP: 7.4
-Tested up to: 6.9
-Stable tag: 4.7.1
+Tested up to: 7.0
+Stable tag: 4.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -192,12 +192,12 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
+= 4.7.2 =
 - Improved compatibility with bbPress. Updating a member's WordPress role will no longer interfere with their existing forum roles.
 - Stripe webhook signing secret key missing notice now shows on admin dashboard.
 - Added a new filter hook 'swpm_payment_button_shortcode_start_output' to allow custom code to execute at the start of the payment button shortcode execution.
 - Added extra checks in the validate_subscription_checkout_txn_data() function to ensure the subscription checkout transaction data is valid before processing it.
-- SWPM Cloudflare Turnstile addon compatibility support added.
+- SWPM Cloudflare Turnstile addon updated to handle some edge cases and added extra validation for the Turnstile response.
 
 = 4.7.1 =
 - Added support for annual memberships, allowing you to create calendar year based memberships.

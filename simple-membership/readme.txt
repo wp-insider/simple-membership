@@ -192,6 +192,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Added a link to the warning message about the Stripe webhook signing secret key so users can more easily locate the setting needed to fix the issue.
+
 = 4.7.2 =
 - Improved compatibility with bbPress. Updating a member's WordPress role will no longer interfere with their existing forum roles.
 - Stripe webhook signing secret key missing notice now shows on admin dashboard.

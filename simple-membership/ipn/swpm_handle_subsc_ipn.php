@@ -119,6 +119,9 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 		$additional_args = array();
 
 		if ($level_update_type == 'upgrade'){
+			// It is an account upgrade/update event.
+			do_action( 'swpm_ipn_account_upgrade_event', $swpm_id, $ipn_data ); // Hook for account upgrade event.
+
 			if ( $settings->get_value( 'disable-email-after-upgrade' ) ) {
 				swpm_debug_log_subsc( 'The disable upgrade email settings is checked. No account upgrade/update email will be sent.', true );
 				//Nothing to do.
@@ -143,6 +146,8 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 			}
 		} else {
 			// It is an account renew event.
+			do_action( 'swpm_ipn_account_renewal_event', $swpm_id, $ipn_data ); // Hook for account renewal event.
+
 			if ( $settings->get_value( 'disable-email-after-renew' ) ) {
 				swpm_debug_log_subsc( 'The disable renew email settings is checked. No account renewal email will be sent.', true );
 				//Nothing to do.
@@ -167,9 +172,9 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 			}
 		}
 
-		// End of existing user account upgrade/update.
+		// End of existing user account upgrade/update/renewal process.
 	} else {
-		// create new member account.
+		// Create a new member account for this payment.
 		$default_account_status = $settings->get_value( 'default-account-status-after-payment', 'active' );
 
 		$data = array();
@@ -246,6 +251,7 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 			SwpmMiscUtils::mail( $email, $subject, $email_body, $headers );
 			swpm_debug_log_subsc( 'Member signup (prompt to complete registration) email successfully sent to: ' . $email, true );
 		}
+		// End of new user account creation process.
 	}
 
 }

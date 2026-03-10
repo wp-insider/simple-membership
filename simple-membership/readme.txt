@@ -193,6 +193,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 
 = WIP =
+- Added a new action hook 'swpm_ipn_account_upgrade_event' that is triggered when an account upgrade event is processed in the IPN handler.
+- Added a new action hook 'swpm_ipn_account_renewal_event' that is triggered when an account renewal event is processed in the IPN handler.
 - Added a link to the warning message about the Stripe webhook signing secret key so users can more easily locate the setting needed to fix the issue.
 
 = 4.7.2 =

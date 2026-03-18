@@ -41,30 +41,36 @@ To shutdown the running docker containers:
 docker compose down -v
 ```
 ### Thats all for running wp plugin integration test locally!
+---
+
 
 ## Additional Instructions
+
+NOTE: These `docker` commands must run inside the directory where the docker-compose.yml lives.
 
 To build docker images and start containers
 ```bash
 docker compose up --build
 ```
-
 To start containers in detached mode
 ```bash
 docker compose up -d
 ```
-To start an interactive shell
+To start a specific service(container) in interactive mode:
 ```bash
-docker compose run --rm swpm
+docker compose run '<service_name>'
 ```
-To run php tests using the interactive shell
+To run a specific service(container) in interactive mode and auto prune running container on exit:
 ```bash
-phpunit --testdox --verbose -c /app/tests/phpunit.xml.dist
+docker compose run --rm '<service_name>'
 ```
-Or,
-To run php tests using composer alias, use:
+To shutdown the running docker containers:
 ```bash
-composer test
+docker compose down
+```
+To shutdown the running docker containers with volumes:
+```bash
+docker compose down -v
 ```
 Get the wp plugin integration tests suite scaffolding script if deleted accidentally.
 ```bash

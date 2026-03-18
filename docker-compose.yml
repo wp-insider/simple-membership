@@ -1,0 +1,47 @@
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - docker/env/db.env
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: "phpmyadmin"
+    restart: always
+    env_file:
+      - docker/env/db.env
+    depends_on:
+      - db
+    ports:
+      - "7001:80"
+
+  swpm:
+    build:
+      context: .
+      dockerfile: docker/swpm.dockerfile
+    depends_on:
+      - db
+      - phpmyadmin
+    env_file:
+      # These are passed into install-wp-tests.sh
+      - docker/env/wp.env
+    volumes:
+      # Mount repo root into container
+      - .:/app
+      # Keep wp-tests cache across runs so install only happens once
+      # - wp_tests:/tmp/wordpress-tests-lib
+      # - wp_core:/tmp/wordpress
+      - ./tmp:/tmp
+    working_dir: /app
+
+volumes:
+  db_data:
+  # wp_tests:
+  # wp_core:

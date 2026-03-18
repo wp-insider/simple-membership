@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<phpunit
+	bootstrap="test-cases/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertWarningsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertDeprecationsToExceptions="true"
+	>
+	<testsuites>
+		<testsuite name="swpm">
+			<directory prefix="test-" suffix=".php">./test-cases/</directory>
+			<!-- <exclude>./test-cases/classes/test-class.swpm-level-form.php</exclude> -->
+			<!-- <exclude>./test-cases/classes/test-class.swpm-membership-level.php</exclude> -->
+			<!-- <exclude>./test-cases/classes/test-class.swpm-utils.php</exclude> -->
+			<!-- <exclude>./test-cases/classes/test-class.swpm-front-registration.php</exclude> -->
+			<!-- <exclude>./test-cases/classes/test-class.swpm-auth.php</exclude> -->
+		</testsuite>
+	</testsuites>
+</phpunit>

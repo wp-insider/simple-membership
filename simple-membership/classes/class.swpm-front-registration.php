@@ -255,7 +255,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		global $wpdb;
 		$member = SwpmTransfer::$default_fields;
 		$form   = new SwpmFrontForm( $member );
+		SwpmLog::log_simple_debug('>>> Code came here: '. __LINE__, true);
 		if ( ! $form->is_valid() ) {
+			SwpmLog::log_simple_debug('>>> Code came here: '. __LINE__, true);
 			$message = array(
 				'succeeded' => false,
 				'message'   => SwpmUtils::_( 'Please correct the following' ),
@@ -276,8 +278,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$member_info['member_since'] = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
 		$member_info['subscription_starts'] = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
 
-		$membership_level_id = filter_input( INPUT_POST, 'swpm_membership_level', FILTER_SANITIZE_NUMBER_INT );
-
+		// $membership_level_id = filter_input( INPUT_POST, 'swpm_membership_level', FILTER_SANITIZE_NUMBER_INT );
+		$membership_level_id = isset( $_POST['swpm_membership_level'] ) ? sanitize_text_field($_POST['swpm_membership_level']) : '';
+		$membership_level_id = intval($membership_level_id);
+		
 		/**
 		 * Determine the account status for the new member record.
 		 * First, check if email activation is required. If so, assign the 'activation_required' account status.
@@ -306,7 +310,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$plain_password = $member_info['plain_password'];
 		unset( $member_info['plain_password'] );
 
+		SwpmLog::log_simple_debug('>>> Code came here: '. __LINE__, true);
 		if ( SwpmUtils::is_paid_registration() ) {
+			SwpmLog::log_simple_debug('>>> Code came here: '. __LINE__, true);
 			/* Paid membership registration path (the member's record is originally created after the payment). */
 
 			//Remove any empty values from the array. This will preserve address information if it was received via the payment gateway.
@@ -314,7 +320,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 			//Handle DB insert for paid registration scenario.
 			$member_info['reg_code'] = '';
-			$member_id = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
+			// $member_id = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
+			$member_id = isset( $_GET['member_id'] ) ? sanitize_text_field( $_GET['member_id'] ) : '';
+			$member_id = intval($member_id);
 			$code = isset( $_GET['code'] ) ? sanitize_text_field( stripslashes ( $_GET['code'] ) ) : '';
 
 			//Trigger the before member data save filter hook. It can be used to customize the member data before it gets saved in the database.

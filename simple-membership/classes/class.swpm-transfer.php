@@ -35,6 +35,9 @@ class SwpmTransfer {
         $this->message = get_option('swpm-messages');
     }
 
+    /**
+     * @return self
+     */
     public static function get_instance() {
         self::$_this = empty(self::$_this) ? new SwpmTransfer() : self::$_this;
         return self::$_this;

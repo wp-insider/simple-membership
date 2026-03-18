@@ -32,6 +32,14 @@ This executes `phpunit` command underneath.
 
 NOTE: You have to run this inside the `/app/tests` folder of the `swpm` container, which is the default directory when the interactive shell gets open.
 
+To exit from the interactive shell:
+```bash
+exit
+```
+To shutdown the running docker containers:
+```bash
+docker compose down -v
+```
 ### Thats all for running wp plugin integration test locally!
 
 ## Additional Instructions
@@ -45,12 +53,10 @@ To start containers in detached mode
 ```bash
 docker compose up -d
 ```
-
 To start an interactive shell
 ```bash
 docker compose run --rm swpm
 ```
-
 To run php tests using the interactive shell
 ```bash
 phpunit --testdox --verbose -c /app/tests/phpunit.xml.dist
@@ -60,8 +66,6 @@ To run php tests using composer alias, use:
 ```bash
 composer test
 ```
-
-
 Get the wp plugin integration tests suite scaffolding script if deleted accidentally.
 ```bash
 curl -o tests/bin/install-wp-tests.sh https://raw.githubusercontent.com/wp-cli/scaffold-command/main/templates/install-wp-tests.sh

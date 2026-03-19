@@ -170,7 +170,7 @@ class SwpmInstallation {
             member_id varchar(16) DEFAULT '',
             username varchar(255) DEFAULT '',
             ip_address varchar(128) DEFAULT '',
-            user_agent mediumtext DEFAULT ''
+            user_agent mediumtext NOT NULL
         )" . $charset_collate . " AUTO_INCREMENT=1;";
         dbDelta($sql);
 
@@ -319,7 +319,10 @@ class SwpmInstallation {
         if (empty($installed_version)) {
             //Do fresh install tasks
             //Create the mandatory pages (if they are not there)
-            SwpmMiscUtils::create_mandatory_wp_pages();
+            $allow_create_mandatory_wp_pages = apply_filters('swpm_allow_create_mandatory_wp_pages', true);
+            if ($allow_create_mandatory_wp_pages) {
+                SwpmMiscUtils::create_mandatory_wp_pages();
+            }
             //End of page creation
 
             $example_from_address = 'hello@' . SwpmMiscUtils::get_home_url_without_http_and_www();

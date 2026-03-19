@@ -107,6 +107,9 @@ class SwpmMembershipLevel {
         } else {
             $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
             SwpmTransfer::get_instance()->set('status', $message);
+        } else {
+            $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
+            SwpmTransfer::get_instance()->set('status', $message);
         }
     }
 
@@ -171,6 +174,9 @@ class SwpmMembershipLevel {
             SwpmTransfer::get_instance()->set('status', $message);
             wp_redirect('admin.php?page=simple_wp_membership_levels');
             exit(0);
+        } else {
+            $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
+            SwpmTransfer::get_instance()->set('status', $message);
         } else {
             $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
             SwpmTransfer::get_instance()->set('status', $message);

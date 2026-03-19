@@ -255,7 +255,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		global $wpdb;
 		$member = SwpmTransfer::$default_fields;
 		$form   = new SwpmFrontForm( $member );
+		SwpmLog::log_simple_debug('>>> Code came here: '. __LINE__, true);
 		if ( ! $form->is_valid() ) {
+			SwpmLog::log_simple_debug('>>> Code came here: '. __LINE__, true);
 			$message = array(
 				'succeeded' => false,
 				'message'   => SwpmUtils::_( 'Please correct the following' ),
@@ -307,7 +309,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$plain_password = $member_info['plain_password'];
 		unset( $member_info['plain_password'] );
 
+		SwpmLog::log_simple_debug('>>> Code came here: '. __LINE__, true);
 		if ( SwpmUtils::is_paid_registration() ) {
+			SwpmLog::log_simple_debug('>>> Code came here: '. __LINE__, true);
 			/* Paid membership registration path (the member's record is originally created after the payment). */
 
 			//Remove any empty values from the array. This will preserve address information if it was received via the payment gateway.

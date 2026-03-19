@@ -138,6 +138,12 @@ class SwpmForm {
 		// 	$phone = '';
 		// }
         $phone = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
+        // $phone = filter_input(INPUT_POST, 'phone', FILTER_UNSAFE_RAW);
+		// if (is_null($phone)){ 
+        //     // This check is used to prevent any PHP notice for null value.
+		// 	$phone = '';
+		// }
+        $phone = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
         $saned = wp_kses($phone, array());
         $this->sanitized['phone'] = $saned;
     }

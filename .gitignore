@@ -14,7 +14,3 @@ node_modules
 /tmp
 
 /tests/vendor
-
-/tests
-/docker
-docker-compose.yml

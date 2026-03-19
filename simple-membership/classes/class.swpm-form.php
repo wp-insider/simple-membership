@@ -20,7 +20,6 @@ class SwpmForm {
     }
     protected function validate_wp_user_email(){
         $user_name = isset($_POST['user_name']) ? sanitize_text_field(stripslashes($_POST['user_name'])) : '';
-        // $email = filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
         $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
         if (empty($user_name)) {
             return;
@@ -76,9 +75,7 @@ class SwpmForm {
     }
 
     protected function password() {
-        // $password = filter_input(INPUT_POST, 'password',FILTER_UNSAFE_RAW);
         $password = isset($_POST['password']) ? $_POST['password'] : '';
-        // $password_re = filter_input(INPUT_POST, 'password_re',FILTER_UNSAFE_RAW);
         $password_re = isset($_POST['password_re']) ? $_POST['password_re'] : '';
         if (empty($this->fields['password']) && empty($password)) {
             $this->errors['password'] = SwpmUtils::_('Password is required');
@@ -97,7 +94,6 @@ class SwpmForm {
 
     protected function email() {
         global $wpdb;
-        // $email = filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
         $email = isset($_POST['email']) ? sanitize_text_field($_POST['email']) : '';
         if (empty($email)) {
             $this->errors['email'] = SwpmUtils::_('Email is required');
@@ -110,7 +106,6 @@ class SwpmForm {
         $saned = sanitize_email($email);
         $query = "SELECT count(member_id) FROM {$wpdb->prefix}swpm_members_tbl WHERE email= %s";
 
-        // $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
         $member_id = isset($_GET['member_id']) ? (string) intval($_GET['member_id']) : null;
 
         if (!empty($member_id)) {
@@ -132,11 +127,6 @@ class SwpmForm {
     }
 
     protected function phone() {
-        // $phone = filter_input(INPUT_POST, 'phone', FILTER_UNSAFE_RAW);
-		// if (is_null($phone)){ 
-        //     // This check is used to prevent any PHP notice for null value.
-		// 	$phone = '';
-		// }
         $phone = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
         $saned = wp_kses($phone, array());
         $this->sanitized['phone'] = $saned;
@@ -173,7 +163,6 @@ class SwpmForm {
     }
 
     protected function member_since() {
-        // $member_since = filter_input(INPUT_POST, 'member_since', FILTER_UNSAFE_RAW);
         $member_since = isset($_POST['member_since']) ? sanitize_text_field($_POST['member_since']) : '';
         if (empty($member_since)) {return;}
         if (preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $member_since)){
@@ -217,7 +206,6 @@ class SwpmForm {
     }
 
     protected function membership_level() {
-        // $membership_level = filter_input(INPUT_POST, 'membership_level', FILTER_SANITIZE_NUMBER_INT);
         $membership_level = isset($_POST['membership_level']) ? (string) intval($_POST['membership_level']) : null;
         if ($membership_level == 1){
             $this->errors['membership_level'] = SwpmUtils::_('Invalid membership level');
@@ -229,10 +217,8 @@ class SwpmForm {
     }
 
     public static function get_membership_level_from_request() {
-        // $membership_level = filter_input(INPUT_POST, 'membership_level', FILTER_SANITIZE_NUMBER_INT);
         $membership_level = isset($_POST['membership_level']) ? (string) intval($_POST['membership_level']) : null;
         if (empty($membership_level)) {
-            // $membership_level = filter_input(INPUT_POST, 'swpm_membership_level', FILTER_SANITIZE_NUMBER_INT);
             $membership_level = isset($_POST['swpm_membership_level']) ? (string) intval($_POST['swpm_membership_level']) : null;
         }
         return $membership_level;

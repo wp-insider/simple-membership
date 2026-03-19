@@ -276,7 +276,6 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$member_info['member_since'] = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
 		$member_info['subscription_starts'] = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
 
-		// $membership_level_id = filter_input( INPUT_POST, 'swpm_membership_level', FILTER_SANITIZE_NUMBER_INT );
 		$membership_level_id = isset( $_POST['swpm_membership_level'] ) ? (string) intval($_POST['swpm_membership_level']) : null;
 		
 		/**
@@ -315,7 +314,6 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 			//Handle DB insert for paid registration scenario.
 			$member_info['reg_code'] = '';
-			// $member_id = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
 			$member_id = isset( $_GET['member_id'] ) ? (string) intval( $_GET['member_id'] ) : null;
 			$code = isset( $_GET['code'] ) ? sanitize_text_field( stripslashes ( $_GET['code'] ) ) : '';
 

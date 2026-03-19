@@ -545,7 +545,6 @@ abstract class SwpmUtils {
         }
         
 	public static function is_paid_registration() {
-		// $member_id = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
 		$member_id = isset( $_GET['member_id'] ) ? (string) intval( $_GET['member_id'] ) : null;
 		$code = isset( $_GET['code'] ) ? sanitize_text_field( stripslashes ( $_GET['code'] ) ) : '';
 		if ( ! empty( $member_id ) && ! empty( $code ) ) {

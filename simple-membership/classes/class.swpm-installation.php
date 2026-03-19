@@ -170,7 +170,7 @@ class SwpmInstallation {
             member_id varchar(16) DEFAULT '',
             username varchar(255) DEFAULT '',
             ip_address varchar(128) DEFAULT '',
-            user_agent mediumtext NOT NULL
+            user_agent mediumtext DEFAULT ''
         )" . $charset_collate . " AUTO_INCREMENT=1;";
         dbDelta($sql);
 

@@ -61,7 +61,6 @@ class SwpmMembershipLevel {
             $wpdb->insert($wpdb->prefix . "swpm_membership_tbl", $level_info);
             $id = $wpdb->insert_id;
             //save email_activation option
-            // $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
             $email_activation= isset($_POST['email_activation']) ? (string) intval($_POST['email_activation']) : null;
             update_option('swpm_email_activation_lvl_'.$id, $email_activation, false);
 
@@ -128,7 +127,6 @@ class SwpmMembershipLevel {
             $wpdb->update($wpdb->prefix . "swpm_membership_tbl", $form->get_sanitized(), array('id' => $id));
             //@todo meta table and collect all relevant info and pass as argument
             //save email_activation option
-            // $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
             $email_activation= isset($_POST['email_activation']) ? (string) intval($_POST['email_activation']) : null;
             update_option('swpm_email_activation_lvl_'.$id, $email_activation, false);
 

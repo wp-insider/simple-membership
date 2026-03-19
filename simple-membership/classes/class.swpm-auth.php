@@ -83,9 +83,7 @@ class SwpmAuth {
 		// If $user and $pass are not provided, the function was called from auth_init().
 		// In this case, we will attempt to retrieve the data from the login form's POST data.
 		global $wpdb;
-		// $swpm_user_name = empty( $user ) ? apply_filters( 'swpm_user_name', filter_input( INPUT_POST, 'swpm_user_name' ) ) : $user;
 		$swpm_user_name = empty( $user ) ? apply_filters( 'swpm_user_name', (isset($_POST['swpm_user_name']) ? ($_POST['swpm_user_name']) : '') ) : $user;
-		// $swpm_password = empty( $pass ) ? filter_input( INPUT_POST, 'swpm_password' ) : $pass;
 		$swpm_password = empty( $user ) ? (isset($_POST['swpm_password']) ? ($_POST['swpm_password']) : '') : $user;
 
 		if ( isset($_POST['swpm_user_name']) && empty ( $swpm_user_name )){

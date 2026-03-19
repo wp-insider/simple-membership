@@ -22,13 +22,17 @@ class SwpmLevelForm {
     }
 
     protected function alias() {
-        $alias = filter_input(INPUT_POST, 'alias');
-        $this->sanitized['alias'] = sanitize_text_field($alias);
+        // $alias = filter_input(INPUT_POST, 'alias');
+        // $this->sanitized['alias'] = sanitize_text_field($alias);
+
+        $this->sanitized['alias'] = isset($_POST['alias']) ? sanitize_text_field($_POST['alias']) : '';
     }
 
     protected function role() {
-        $role = filter_input(INPUT_POST, 'role');
-        $this->sanitized['role'] = sanitize_text_field($role);
+        // $role = filter_input(INPUT_POST, 'role');
+        // $this->sanitized['role'] = sanitize_text_field($role);
+
+        $this->sanitized['role'] = isset($_POST['role']) ? sanitize_text_field($_POST['role']) : '';
     }
 
     protected function permissions() {
@@ -57,6 +61,7 @@ class SwpmLevelForm {
 	    if ( $subscript_duration_type == SwpmMembershipLevel::ANNUAL_FIXED_DATE ){
 			if (!is_array($subscription_period)){
 				$this->errors['subscription_period'] = __("Annual expiry date is not valid.", "simple-membership");
+                return;
 			}
 
 			$subscription_period = implode('-', array(

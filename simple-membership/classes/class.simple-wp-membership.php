@@ -1134,7 +1134,8 @@ class SimpleWpMembership {
 
     public function plugins_loaded() {
         //Runs when plugins_loaded action gets fired
-        if (is_admin()) {
+        $run_db_installations = apply_filters('swpm_run_safe_installer_if_admin', is_admin());
+        if ($run_db_installations) {
             //Check and run DB upgrade operation (if needed)
             if (get_option('swpm_db_version') != SIMPLE_WP_MEMBERSHIP_DB_VER) {
                 include_once('class.swpm-installation.php');

@@ -61,7 +61,8 @@ class SwpmMembershipLevel {
             $wpdb->insert($wpdb->prefix . "swpm_membership_tbl", $level_info);
             $id = $wpdb->insert_id;
             //save email_activation option
-            $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
+            // $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
+            $email_activation= isset($_POST['email_activation']) ? (string) intval($_POST['email_activation']) : null;
             update_option('swpm_email_activation_lvl_'.$id, $email_activation, false);
 
 	        $after_activation_redirect_page = isset( $_POST['after_activation_redirect_page'] ) && !empty($_POST['after_activation_redirect_page']) ? sanitize_url( $_POST['after_activation_redirect_page'] ) : "";
@@ -103,9 +104,10 @@ class SwpmMembershipLevel {
             SwpmTransfer::get_instance()->set('status', $message);
             wp_redirect('admin.php?page=simple_wp_membership_levels');
             exit(0);
+        } else {
+            $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
+            SwpmTransfer::get_instance()->set('status', $message);
         }
-        $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
-        SwpmTransfer::get_instance()->set('status', $message);
     }
 
     public function edit_level($id) {
@@ -126,7 +128,8 @@ class SwpmMembershipLevel {
             $wpdb->update($wpdb->prefix . "swpm_membership_tbl", $form->get_sanitized(), array('id' => $id));
             //@todo meta table and collect all relevant info and pass as argument
             //save email_activation option
-            $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
+            // $email_activation=filter_input(INPUT_POST,'email_activation',FILTER_SANITIZE_NUMBER_INT);
+            $email_activation= isset($_POST['email_activation']) ? (string) intval($_POST['email_activation']) : null;
             update_option('swpm_email_activation_lvl_'.$id, $email_activation, false);
 
 	        $after_activation_redirect_page = isset( $_POST['after_activation_redirect_page'] ) && !empty($_POST['after_activation_redirect_page']) ? sanitize_url( $_POST['after_activation_redirect_page'] ) : "";
@@ -168,9 +171,10 @@ class SwpmMembershipLevel {
             SwpmTransfer::get_instance()->set('status', $message);
             wp_redirect('admin.php?page=simple_wp_membership_levels');
             exit(0);
+        } else {
+            $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
+            SwpmTransfer::get_instance()->set('status', $message);
         }
-        $message = array('succeeded' => false, 'message' => SwpmUtils::_('Please correct the following:'), 'extra' => $form->get_errors());
-        SwpmTransfer::get_instance()->set('status', $message);
     }
 
     private function save_custom_fields($level_id, $data) {

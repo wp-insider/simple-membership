@@ -1257,6 +1257,9 @@ class SwpmSettings {
 
 	}
 
+	/**
+	 * @return self
+	 */
 	public static function get_instance() {
 		self::$_this = empty( self::$_this ) ? new SwpmSettings() : self::$_this;
 		return self::$_this;
@@ -1563,16 +1566,16 @@ class SwpmSettings {
 		$output['enable-moretag']         = isset( $input['enable-moretag'] ) ? esc_attr( $input['enable-moretag'] ) : '';
 		$output['enable-debug']           = isset( $input['enable-debug'] ) ? esc_attr( $input['enable-debug'] ) : '';
 
-		$output['free-membership-id']       = ( $input['free-membership-id'] != 1 ) ? absint( $input['free-membership-id'] ) : '';
-		$output['login-page-url']           = esc_url( $input['login-page-url'] );
-		$output['registration-page-url']    = esc_url( $input['registration-page-url'] );
-		$output['profile-page-url']         = esc_url( $input['profile-page-url'] );
-		$output['reset-page-url']           = esc_url( $input['reset-page-url'] );
-		$output['thank-you-page-url']       = esc_url( $input['thank-you-page-url'] );
+		$output['free-membership-id']       = (isset( $input['free-membership-id'] ) && $input['free-membership-id'] != 1 ) ? absint( $input['free-membership-id'] ) : '';
+		$output['login-page-url']           = isset( $input['login-page-url'] ) ? esc_url( $input['login-page-url'] ) : '';
+		$output['registration-page-url']    = isset( $input['registration-page-url'] ) ? esc_url( $input['registration-page-url'] ) : '';
+		$output['profile-page-url']         = isset( $input['profile-page-url'] ) ? esc_url( $input['profile-page-url'] ) : '';
+		$output['reset-page-url']           = isset( $input['reset-page-url'] ) ? esc_url( $input['reset-page-url'] ) : '';
+		$output['thank-you-page-url']       = isset( $input['thank-you-page-url'] ) ? esc_url( $input['thank-you-page-url'] ) : '';
 		$output['password-reset-using-link'] = isset( $input['password-reset-using-link'] ) ? esc_attr( $input['password-reset-using-link'] ) : '';
-		$output['join-us-page-url']         = esc_url( $input['join-us-page-url'] );
-		$output['default-account-status']   = esc_attr( $input['default-account-status'] );
-		$output['default-account-status-after-payment']   = esc_attr( $input['default-account-status-after-payment'] );
+		$output['join-us-page-url']         = isset( $input['join-us-page-url'] ) ? esc_url( $input['join-us-page-url'] ) : '';
+		$output['default-account-status']   = isset( $input['default-account-status'] ) ? esc_attr( $input['default-account-status'] ) : '';
+		$output['default-account-status-after-payment']   = isset($input['default-account-status-after-payment']) ? esc_attr( $input['default-account-status-after-payment'] ) : '';
 		$output['members-login-to-comment'] = isset( $input['members-login-to-comment'] ) ? esc_attr( $input['members-login-to-comment'] ) : '';
 		$output['password-visibility-login-form'] = isset( $input['password-visibility-login-form'] ) ? esc_attr( $input['password-visibility-login-form'] ) : '';
 

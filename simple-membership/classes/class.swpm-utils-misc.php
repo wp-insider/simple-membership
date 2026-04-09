@@ -1356,10 +1356,12 @@ class SwpmMiscUtils {
 	}
 
 	public static function mail( $email, $subject, $email_body, $headers ) {
-		$settings     = SwpmSettings::get_instance();
+		$settings = SwpmSettings::get_instance();
 		$html_enabled = $settings->get_value( 'email-enable-html' );
 		if ( ! empty( $html_enabled ) ) {
-			$headers   .= "Content-Type: text/html; charset=UTF-8\r\n";
+			//HTML email option is enabled, so set content type header and convert new lines to <br> tags.
+			SwpmLog::log_simple_debug( 'HTML email option is enabled. Setting content type header to text/html.', true );
+			$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 			$email_body = nl2br( $email_body );
 		}
 		wp_mail( $email, $subject, $email_body, $headers );

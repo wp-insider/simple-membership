@@ -196,6 +196,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added a new action hook 'swpm_ipn_account_upgrade_event' that is triggered when an account upgrade event is processed in the IPN handler.
 - Added a new action hook 'swpm_ipn_account_renewal_event' that is triggered when an account renewal event is processed in the IPN handler.
 - Added a link to the warning message about the Stripe webhook signing secret key so users can more easily locate the setting needed to fix the issue.
+- Added debug logging for HTML email option in the mail() function.
 
 = 4.7.2 =
 - Improved compatibility with bbPress. Updating a member's WordPress role will no longer interfere with their existing forum roles.

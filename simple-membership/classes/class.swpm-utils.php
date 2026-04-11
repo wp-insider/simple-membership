@@ -648,6 +648,8 @@ abstract class SwpmUtils {
 			$user_ip   = $ip_values['0'];
 		}
 
+		$user_ip = sanitize_text_field( $user_ip );
+
 		return apply_filters( 'swpm_get_user_ip_address', $user_ip );
 	}
 

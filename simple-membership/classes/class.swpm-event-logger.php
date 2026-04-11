@@ -57,6 +57,8 @@ class SwpmEventLogger {
 	public static function insert_event_to_db( $event_type, $member_id, $username, $date_time, $ip ='', $user_agent='' ){
 		global $wpdb;
 
+		$ip = sanitize_text_field( $ip );
+
 		$data = array(
 			'event_type' => $event_type,
 			'event_date_time' => $date_time,

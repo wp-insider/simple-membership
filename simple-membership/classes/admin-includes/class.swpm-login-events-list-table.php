@@ -52,7 +52,7 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 	}
 
 	public function column_default( $item, $column_name ){
-		return $item[$column_name];
+		return esc_html($item[$column_name]);
 	}
 
 	public function column_member($item) {

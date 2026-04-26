@@ -13,3 +13,4 @@ node_modules
 
 /tmp
 /tests/vendor
+/tests/.phpunit.result.cache

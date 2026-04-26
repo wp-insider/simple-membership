@@ -57,6 +57,7 @@ class SwpmLevelForm {
 	    if ( $subscript_duration_type == SwpmMembershipLevel::ANNUAL_FIXED_DATE ){
 			if (!is_array($subscription_period)){
 				$this->errors['subscription_period'] = __("Annual expiry date is not valid.", "simple-membership");
+				return;
 			}
 
 			$subscription_period = implode('-', array(

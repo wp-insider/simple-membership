@@ -191,6 +191,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+= PHPUnit tests integrated.
+* An annual expiry date settings related bug fixed.
 
 = 4.7.3 =
 - Added a new action hook 'swpm_ipn_account_upgrade_event' that is triggered when an account upgrade event is processed in the IPN handler.

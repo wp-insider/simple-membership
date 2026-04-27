@@ -1449,9 +1449,9 @@ class SwpmMiscUtils {
 		SwpmLog::log_simple_debug( 'Account activation email for member ID: '.$member_id.' successfully sent to: ' . $to_email . '. From email address value used: ' . $from_address, true );
 	}
 
-
-	public static function get_months_data(int $year = null): array {
-		$year = $year ?? (int) date('Y');
+	public static function get_months_data( $year ) {
+		$year = !empty($year) ? $year : date('Y');
+		$year = (int) $year;
 		$data = array();
 
 		for ($m = 1; $m <= 12; $m++) {

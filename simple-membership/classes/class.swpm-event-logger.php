@@ -47,7 +47,7 @@ class SwpmEventLogger {
 		$username = sanitize_text_field($username);
 		$member = SwpmMemberUtils::get_user_by_user_name($username);
 		$member_id = !empty($member) ? $member->member_id : '';
-		$date_time = date('Y-m-d H:i:s');
+		$date_time = current_time('mysql');
 		$ip = SwpmUtils::get_user_ip_address();
 		$user_agent = serialize(self::get_parsed_user_agent());
 

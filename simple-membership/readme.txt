@@ -191,10 +191,10 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
-= PHPUnit tests integrated.
-* An annual expiry date settings related bug fixed.
 
 = WIP =
+- PHPUnit tests integrated.
+- An annual expiry date settings related bug fixed.
 - The login event timestamp is now recorded according to the WordPress site's timezone settings.
 
 = 4.7.3 =

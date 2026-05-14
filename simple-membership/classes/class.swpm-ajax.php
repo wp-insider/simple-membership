@@ -48,4 +48,22 @@ class SwpmAjax {
         exit;
     }
 
+	public static function old_stripe_api_notice_dismiss() {
+		if (!check_admin_referer( 'swpm_admin_script_nonce' )) {
+			wp_send_json_error(
+				array(
+					'message' => __('Nonce verification failed.', 'simple-membership'),
+				)
+			);
+		}
+
+		delete_option( 'swpm_stripe_received_api_old_version' );
+
+		wp_send_json_success(
+			array(
+				'message' => __('Notice dismissed successfully!', 'simple-membership'),
+			)
+		);
+	}
+
 }

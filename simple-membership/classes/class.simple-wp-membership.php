@@ -101,9 +101,11 @@ class SimpleWpMembership {
         add_action('wp_ajax_nopriv_swpm_validate_email', 'SwpmAjax::validate_email_ajax');
         add_action('wp_ajax_swpm_validate_user_name', 'SwpmAjax::validate_user_name_ajax');
         add_action('wp_ajax_nopriv_swpm_validate_user_name', 'SwpmAjax::validate_user_name_ajax');
+	    add_action( 'wp_ajax_swpm_old_stripe_api_notice_dismiss', 'SwpmAjax::old_stripe_api_notice_dismiss');
 
         //init is too early for settings api.
         add_action('admin_init', array(&$this, 'admin_init_hook'));
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts_hook'));
         add_action('plugins_loaded', array(&$this, "plugins_loaded"));
 
         //Filter to exclude the protected posts from the search results.
@@ -327,6 +329,20 @@ class SimpleWpMembership {
             do_action('swpm_addon_settings_save');
         }
     }
+
+	public function admin_enqueue_scripts_hook() {
+		wp_register_script( 'swpm_admin_scripts', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm-admin-scripts.js', null, SIMPLE_WP_MEMBERSHIP_VER, array(
+			'strategy' => 'defer',
+			'in_footer' => true,
+		) );
+
+		wp_localize_script( 'swpm_admin_scripts', 'swpm_admin_js_vars', apply_filters('swpm_admin_js_vars', array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce' => wp_create_nonce('swpm_admin_script_nonce'),
+		)));
+
+		wp_enqueue_script( 'swpm_admin_scripts' );
+	}
 
     public function hide_adminbar() {
 
@@ -700,6 +716,13 @@ class SimpleWpMembership {
             _e("Looks like you are using Stripe subscription payments, but the webhook signing secret is missing from the plugin settings. Please go to the <a href='admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe'>Stripe Settings</a> menu and configure the webhook signing secret.", "simple-membership"); 
             echo '</p></div>';
         }
+
+		$swpm_stripe_received_api_old_version = get_option('swpm_stripe_received_api_old_version', false);
+	    if (!empty($swpm_stripe_received_api_old_version)) {
+		    echo '<div class="notice notice-warning is-dismissible" id="swpm_stripe_api_old_version_notice"><p>';
+			printf(__("The plugin received a Stripe subscription API webhook using an outdated API version '%s'. Your Stripe API version may need to be upgraded.", 'simple-membership'), $swpm_stripe_received_api_old_version);
+		    echo '</p></div>';
+	    }
     }
 
     public function meta_box() {

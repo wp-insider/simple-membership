@@ -30,6 +30,7 @@ if ( ! defined( 'COOKIEHASH' ) ) {
 define( 'SIMPLE_WP_MEMBERSHIP_AUTH', 'simple_wp_membership_' . COOKIEHASH );
 define( 'SIMPLE_WP_MEMBERSHIP_SEC_AUTH', 'simple_wp_membership_sec_' . COOKIEHASH );
 define( 'SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS', serialize( array( 'JPY', 'MGA', 'VND', 'KRW' ) ) );
+define( 'SIMPLE_WP_MEMBERSHIP_STRIPE_MIN_API_VER', '2024-06-20' );
 
 //Include the main class file.
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.simple-wp-membership.php' );

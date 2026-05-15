@@ -1542,4 +1542,53 @@ class SwpmMiscUtils {
 
 		return $stripe_webhook_signing_key_config_required;
 	}
+
+    /**
+     * Parse a Stripe API version into [date, suffix] parts.
+     * e.g. '2026-04-22.dahlia' => ['2026-04-22', 'dahlia']
+     *      '2024-06-20'        => ['2024-06-20', '']
+     */
+    public static function parse_stripe_api_version( string $version ): array {
+        $parts = explode( '.', $version, 2 );
+
+        return [ $parts[0], $parts[1] ?? '' ];
+    }
+
+    /**
+     * Compare two Stripe API versions.
+     * Returns -1 if $a is older, 0 if equal, 1 if $a is newer.
+     */
+    public static function compare_stripe_api_versions( string $a, string $b ): int {
+        [ $dateA, $suffixA ] = self::parse_stripe_api_version( $a );
+        [ $dateB, $suffixB ] = self::parse_stripe_api_version( $b );
+
+        if ( $dateA !== $dateB ) {
+            return $dateA <=> $dateB;
+        }
+
+        // Same date: a suffix means newer than no suffix
+        if ( $suffixA === $suffixB ) {
+            return 0;
+        }
+
+        if ( $suffixA === '' ) {
+            return - 1;
+        } // a has no suffix, b does → a is older
+
+        if ( $suffixB === '' ) {
+            return 1;
+        }  // b has no suffix, a does → a is newer
+
+        // Both have suffixes on the same date — compare alphabetically
+        return $suffixA <=> $suffixB;
+    }
+
+    /**
+     * Check if a version is too old to be supported.
+     */
+    public static function check_if_old_stripe_api_version(string $version,): bool
+    {
+        return self::compare_stripe_api_versions($version, SIMPLE_WP_MEMBERSHIP_STRIPE_MIN_API_VER) < 0;
+    }
+
 }

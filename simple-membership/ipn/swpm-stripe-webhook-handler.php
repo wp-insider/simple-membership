@@ -50,6 +50,10 @@ class SwpmStripeWebhookHandler {
 		$stripe_api_version = isset($event_json->api_version) ? $event_json->api_version : '';
 		SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received: %s and api version: %s. Checking if we need to handle this webhook.', $type, $stripe_api_version ), true );
 
+		if(SwpmMiscUtils::check_if_old_stripe_api_version($event_json->api_version)){
+			update_option( 'swpm_stripe_received_api_old_version', $event_json->api_version );
+		}
+
 		if ( 'customer.subscription.deleted' === $type || 'charge.refunded' === $type ) {
 			// Subscription expired or refunded event
 			//SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );

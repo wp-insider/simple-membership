@@ -12,15 +12,15 @@ services:
       timeout: 5s
       retries: 10
 
-  phpmyadmin:
-    image: "phpmyadmin"
-    restart: always
-    env_file:
-      - docker/env/db.env
-    depends_on:
-      - db
-    ports:
-      - "7001:80"
+#  phpmyadmin:
+#    image: "phpmyadmin"
+#    restart: always
+#    env_file:
+#      - docker/env/db.env
+#    depends_on:
+#      - db
+#    ports:
+#      - "7001:80"
 
   swpm:
     build:
@@ -28,7 +28,6 @@ services:
       dockerfile: docker/swpm.dockerfile
     depends_on:
       - db
-      - phpmyadmin
     env_file:
       # These are passed into install-wp-tests.sh
       - docker/env/wp.env

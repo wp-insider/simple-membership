@@ -1586,7 +1586,7 @@ class SwpmMiscUtils {
     /**
      * Check if a version is too old to be supported.
      */
-    public static function check_if_old_stripe_api_version(string $version,): bool
+    public static function check_if_old_stripe_api_version(string $version): bool
     {
         return self::compare_stripe_api_versions($version, SIMPLE_WP_MEMBERSHIP_STRIPE_MIN_API_VER) < 0;
     }

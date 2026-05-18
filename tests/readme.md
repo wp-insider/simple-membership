@@ -7,6 +7,7 @@ https://www.docker.com/products/docker-desktop/
 ```
 Navigate to the repository root and run the following:
 ```bash
+docker compose up -d
 docker compose run --rm swpm
 ```
 This will do the followings:

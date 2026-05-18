@@ -28,6 +28,7 @@ services:
       dockerfile: docker/swpm.dockerfile
     depends_on:
       - db
+    restart: always
     env_file:
       # These are passed into install-wp-tests.sh
       - docker/env/wp.env

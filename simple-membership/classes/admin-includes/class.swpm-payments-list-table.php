@@ -229,6 +229,8 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		$search_term = isset( $_POST['swpm_txn_search'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_txn_search'] ) ) : '';
 		$search_term = trim( $search_term );
 
+		$search_term_for_member = isset( $_POST['swpm_txn_search_by_member'] ) ? sanitize_text_field( stripslashes ( $_POST['swpm_txn_search_by_member'] ) ) : '';
+
 		if ( $search_term ) {
 			// Only load the searched records.
 
@@ -273,7 +275,35 @@ class SWPMPaymentsListTable extends WP_List_Table {
 			
 			$total_items   = count( $post_ids );
 
-		} else { 
+		} else if (!empty($search_term_for_member)) {
+			$search_str = $search_term_for_member;
+			if ( !is_numeric( $search_str ) ) {
+				// admin entered a username.
+				$member = SwpmMemberUtils::get_user_by_user_name( $search_str );
+				if (!empty($member)) {
+					$search_str = $member->member_id;
+				}
+			}
+
+			$search_str = esc_sql( $search_str );
+
+			$post_ids = get_posts(
+				array(
+					'post_type'  => 'swpm_transactions',
+					'posts_per_page' => -1,
+					'fields'         => 'ids',
+					'meta_query' => array(
+						array(
+							'key'     => 'member_id',
+							'value'   => $search_str,
+							'compare' => '='
+						),
+					),
+				)
+			);
+
+			$total_items   = count( $post_ids );
+		} else {
 			// Load all data in an optimized way (so it is only loading data for the current page)
 
 			// Get the total transaction post counts.

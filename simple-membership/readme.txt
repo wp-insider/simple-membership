@@ -197,6 +197,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - An annual expiry date settings related bug fixed.
 - The login event timestamp is now recorded according to the WordPress site's timezone settings.
 - Now a admin notice will show up if received stripe webhook of outdate API version.
+- New payments table search option added to search payments made by a specific member.
 
 = 4.7.3 =
 - Added a new action hook 'swpm_ipn_account_upgrade_event' that is triggered when an account upgrade event is processed in the IPN handler.

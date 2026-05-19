@@ -9,11 +9,18 @@
 <div class="postbox">
     <h3 class="hndle"><label for="title">Search Transaction</label></h3>
     <div class="inside">
-        <?php echo SwpmUtils::_('Search for a transaction by using email, name, transaction ID or Subscr ID.'); ?>
-        <br /><br />
+        <p><label><?php _e('Search for a transaction by using email, name, transaction ID or Subscr ID.', 'simple-membership'); ?></label></p>
         <form method="post" action="">
             <input name="swpm_txn_search" type="text" size="40" value="<?php echo isset($_POST['swpm_txn_search']) ? esc_attr($_POST['swpm_txn_search']) : ''; ?>"/>
-            <input type="submit" name="swpm_txn_search_btn" class="button" value="<?php echo SwpmUtils::_('Search'); ?>" />
+            <input type="submit" name="swpm_txn_search_btn" class="button" value="<?php _e('Search', 'simple-membership'); ?>" />
+        </form>
+
+        <br />
+
+        <p><label><?php _e('Search for transactions by member ID or username.', 'simple-membership'); ?></label></p>
+        <form method="post" action="">
+            <input name="swpm_txn_search_by_member" type="text" size="40" value="<?php echo isset($_POST['swpm_txn_search_by_member']) ? esc_attr($_POST['swpm_txn_search_by_member']) : ''; ?>"/>
+            <input type="submit" name="swpm_txn_search_by_member_btn" class="button" value="<?php _e('Search', 'simple-membership'); ?>" />
         </form>
     </div>
 </div>

@@ -443,9 +443,9 @@ class SwpmMembers extends WP_List_Table {
 			if ( empty( $subject ) ) {
                 $subject = 'Account Activated!';
 			}
-			$body = $settings->get_value( 'bulk-activate-notify-mail-body' );
-			if ( empty( $body ) ) {
-                $body = 'Hi, Your account has been activated successfully!';
+			$body_raw = $settings->get_value( 'bulk-activate-notify-mail-body' );
+			if ( empty( $body_raw ) ) {
+                $body_raw = 'Hi, Your account has been activated successfully!';
 			}
 
 			$from_address = $settings->get_value( 'email-from' );
@@ -454,7 +454,7 @@ class SwpmMembers extends WP_List_Table {
             foreach ($members as $member) {
                 $member_email = $member->email;
                 $member_id = $member->member_id;
-                $body = SwpmMiscUtils::replace_dynamic_tags( $body, $member_id );
+                $body = SwpmMiscUtils::replace_dynamic_tags( $body_raw, $member_id );
 
                 //Send the activation email one by one to all the selected members.
                 $subject = apply_filters( 'swpm_email_bulk_set_status_subject', $subject );

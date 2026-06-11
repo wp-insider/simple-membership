@@ -193,6 +193,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 = WIP =
 - Bulk account activation notification email related issue fixed.
+- A Subscription webhook related security issue fixed.
 
 = 4.7.4 =
 - Fixed a bug related to the annual expiry date settings.

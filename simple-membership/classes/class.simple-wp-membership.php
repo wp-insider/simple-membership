@@ -720,7 +720,7 @@ class SimpleWpMembership {
 		$swpm_stripe_received_api_old_version = get_option('swpm_stripe_received_api_old_version', false);
 	    if (!empty($swpm_stripe_received_api_old_version)) {
 		    echo '<div class="notice notice-warning is-dismissible" id="swpm_stripe_api_old_version_notice"><p>';
-			printf(__("This site received a Stripe subscription webhook using an outdated API version '%s'. Upgrade your Stripe API version from your Stripe account dashboard, then dismiss this message.", 'simple-membership'), $swpm_stripe_received_api_old_version);
+			printf(__("This site received a Stripe subscription webhook using an outdated API version '%s'. Upgrade your Stripe API version from your Stripe account dashboard, then dismiss this message.", 'simple-membership'), esc_attr($swpm_stripe_received_api_old_version));
 		    echo '</p></div>';
 	    }
     }

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 4.7.4
+Stable tag: 4.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -191,9 +191,10 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
-= WIP =
-- Bulk account activation notification email related issue fixed.
-- A Subscription webhook related security issue fixed.
+
+= 4.7.5 =
+- Fixed an issue with the bulk account activation notification email.
+- Stripe subscription webhook: fixed a security issue.
 
 = 4.7.4 =
 - Fixed a bug related to the annual expiry date settings.

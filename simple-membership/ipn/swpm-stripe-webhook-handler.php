@@ -18,9 +18,10 @@ class SwpmStripeWebhookHandler {
 			echo 'Empty Webhook data received.';
 			die;
 		}
-		// SwpmLog::log_simple_debug($input, true);
+
 		$event_json = json_decode( $input );
 
+		//For now, we only accept and validate the webhook events related to the subscription payments that our plugin handles.
 		$events_to_validate = array(
 			'invoice.payment_succeeded',
 			'customer.subscription.deleted',
@@ -30,7 +31,7 @@ class SwpmStripeWebhookHandler {
 		if (!in_array($event_json->type, $events_to_validate)) {
 			// No need to validate other unused events.
 			//Skip unused webhook event, give 200 status then exit out.
-			SwpmLog::log_simple_debug( 'Skipping unused subscription webhook event. Webhook type: ' . $event_json->type, true );
+			SwpmLog::log_simple_debug( 'Ignoring unused Stripe webhook event. Webhook type: ' . $event_json->type, true );
 			http_response_code( 200 ); // Tells Stripe we received this notification
 			exit();
 		}

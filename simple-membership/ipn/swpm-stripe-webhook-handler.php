@@ -76,6 +76,14 @@ class SwpmStripeWebhookHandler {
 			// Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
 			$customer                  = $event_json->data->object->customer;
 			$subscr_id                 = $event_json->data->object->id;
+
+			$is_refunded = false;
+			if ($type == 'charge.refunded'){
+				$is_refunded = true;
+				// For charge object, we need to manually find the subscr_id from swpm_transactions cpt.
+				$subscr_id = SWPM_Utils_Subscriptions::get_subscr_id_from_swpm_transactions_cpt_by_charge_object($event_json->data->object);
+			}
+
 			$ipn_data                  = array();
 			$ipn_data['subscr_id']     = $subscr_id;
 			$ipn_data['parent_txn_id'] = $customer;
@@ -83,7 +91,7 @@ class SwpmStripeWebhookHandler {
 			// Update subscription status of the subscription agreement record in transactions cpt table.
 			SWPM_Utils_Subscriptions::update_subscription_agreement_record_status_to_cancelled( $subscr_id );
 
-			swpm_handle_subsc_cancel_stand_alone( $ipn_data );
+			swpm_handle_subsc_cancel_stand_alone( $ipn_data , $is_refunded);
 		}
 
 		if ( $type === 'invoice.payment_succeeded' ) {
@@ -296,14 +304,14 @@ class SwpmStripeWebhookHandler {
 
 				break;
 			case 'charge':
-				// Change object does not directly contains any sub id, so its not possible to get the sub agreement cpt id hence not the payment button id.
-				// So its not possible to get the stripe api secret key. Thats why we are only checking the event creation time to validate this event. 
 				if ((time() - $received_event->created) > $max_allowed_event_creation_time_diff  ) {
 					SwpmLog::log_simple_debug('Error: Event creation time is too far in the past!', false);
 					return false;
-				} else {
-					return true;
 				}
+
+				// Each swpm_transactions cpt ha txn_id and subscr_id post meta. So we can use the charge_id of event object to get a swpm_transactions cpt to get the subscr_id post meta.
+				$received_sub_id = SWPM_Utils_Subscriptions::get_subscr_id_from_swpm_transactions_cpt_by_charge_object($received_event_object);
+				break;
 			default:
 				SwpmLog::log_simple_debug("Error: Invalid webhook event object '" . $received_object_name . "'", false);
 				return false;
@@ -359,6 +367,16 @@ class SwpmStripeWebhookHandler {
 				case 'invoice':
 					$sub_id = isset($event_object->parent->subscription_details->subscription) ? $event_object->parent->subscription_details->subscription : '';
 					break;
+				case 'charge':
+					if ($event_object->id == $received_event_object->id
+					    && $event_object->created == $received_event_object->created
+						&& $event_object->customer == $received_event_object->customer
+					) {
+						return true;
+					} else {
+						SwpmLog::log_simple_debug("Error: Webhook event object mismatch!", false);
+						return false;
+					}
 				default:
 					SwpmLog::log_simple_debug("Error: Invalid webhook event object '" . $received_object_name . "'", false);
 					return false;

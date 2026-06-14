@@ -191,6 +191,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+= WIP =
+- Stripe subscription refund webhook: fixed a security issue.
 
 = 4.7.5 =
 - Fixed an issue with the bulk account activation notification email.

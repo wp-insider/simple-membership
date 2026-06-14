@@ -803,6 +803,52 @@ class SWPM_Utils_Subscriptions
     }
 
     /**
+     * Retrieves the subscription id from post meta (txn_id) of swpm_transactions cpts using the charge object.
+     *
+     * It utilizes the 'txn_id' post meta as a filter. It checks whether the 'txn_id' is equal to $charge->id or $charge->customer.
+     * NOTE: Here, we're using the $charge->customer as well because the sub agreement cpt saved customer id as txn_id.
+     *
+     * @param $charge object The Charge Object.
+     *
+     * @return string
+     */
+    public static function get_subscr_id_from_swpm_transactions_cpt_by_charge_object($charge)
+    {
+        $sub_id = '';
+
+        if (empty($charge)) {
+            return $sub_id;
+        }
+
+        $charge_id = $charge->id;
+        $customer_id = $charge->customer;
+
+        $txn_record_ids = get_posts( array(
+                'post_type'      => 'swpm_transactions',
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+                'meta_query'     => array(
+                        'relation' => 'OR',
+                        array(
+                                'key'     => 'txn_id',
+                                'value'   => array( $charge_id, $customer_id ),
+                                'compare' => 'IN',
+                        ),
+                ),
+        ) );
+
+        if (empty($txn_record_ids)) {
+            return $sub_id;
+        }
+
+        $txn_record_id = $txn_record_ids[0];
+
+        $sub_id = (string) get_post_meta($txn_record_id, 'subscr_id', true);
+
+        return $sub_id;
+    }
+
+    /**
      * Updates a meta value of a subscription agreement cpt record.
      *
      * First it retrieves the cpt id of a subscription agreement record using a subscription ID,

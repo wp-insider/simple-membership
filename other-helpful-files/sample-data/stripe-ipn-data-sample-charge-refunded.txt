@@ -1,0 +1,174 @@
+stdClass Object
+(
+    [id] => evt_3Ti52NPzMhAnhLxxxxxxxxxx
+    [object] => event
+    [api_version] => 2025-07-30.basil
+    [created] => 1781415234
+    [data] => stdClass Object
+        (
+            [object] => stdClass Object
+                (
+                    [id] => ch_3Ti52NPzMhAnhLnUxxxxxxxxx
+                    [object] => charge
+                    [amount] => 500
+                    [amount_captured] => 500
+                    [amount_refunded] => 500
+                    [application] =>
+                    [application_fee] =>
+                    [application_fee_amount] =>
+                    [balance_transaction] => txn_3Ti52NPzMhAnxxxxxxxxx
+                    [billing_details] => stdClass Object
+                        (
+                            [address] => stdClass Object
+                                (
+                                    [city] => 423
+                                    [country] => AU
+                                    [line1] => 221/B
+                                    [line2] => Chulia Street
+                                    [postal_code] => 2675
+                                    [state] => NSW
+                                )
+
+                            [email] => tommy@example.com
+                            [name] => Tommy
+                            [phone] =>
+                            [tax_id] =>
+                        )
+
+                    [calculated_statement_descriptor] => Stripe
+                    [captured] => 1
+                    [created] => 1781415234
+                    [currency] => usd
+                    [customer] => cus_UhU0X52s5xxxxxx
+                    [description] => Subscription creation
+                    [destination] =>
+                    [dispute] =>
+                    [disputed] =>
+                    [failure_balance_transaction] =>
+                    [failure_code] =>
+                    [failure_message] =>
+                    [fraud_details] => stdClass Object
+                        (
+                        )
+
+                    [livemode] =>
+                    [metadata] => stdClass Object
+                        (
+                        )
+
+                    [on_behalf_of] =>
+                    [order] =>
+                    [outcome] => stdClass Object
+                        (
+                            [advice_code] =>
+                            [network_advice_code] =>
+                            [network_decline_code] =>
+                            [network_status] => approved_by_network
+                            [reason] =>
+                            [risk_level] => normal
+                            [risk_score] => 39
+                            [seller_message] => Payment complete.
+                            [type] => authorized
+                        )
+
+                    [paid] => 1
+                    [payment_intent] => pi_3Ti52NPzMhAnhLnUxxxxxxxx
+                    [payment_method] => pm_1Ti52LPzMhAnhLnxxxxxxxxx
+                    [payment_method_details] => stdClass Object
+                        (
+                            [card] => stdClass Object
+                                (
+                                    [amount_authorized] => 500
+                                    [authorization_code] => 853345
+                                    [brand] => visa
+                                    [checks] => stdClass Object
+                                        (
+                                            [address_line1_check] => pass
+                                            [address_postal_code_check] => pass
+                                            [cvc_check] => pass
+                                        )
+
+                                    [country] => US
+                                    [ds_transaction_id] =>
+                                    [exp_month] => 4
+                                    [exp_year] => 2044
+                                    [extended_authorization] => stdClass Object
+                                        (
+                                            [status] => disabled
+                                        )
+
+                                    [fingerprint] => XcTVeVfcBxxxxxxxx
+                                    [funding] => credit
+                                    [incremental_authorization] => stdClass Object
+                                        (
+                                            [status] => unavailable
+                                        )
+
+                                    [installments] =>
+                                    [last4] => 4242
+                                    [mandate] =>
+                                    [multicapture] => stdClass Object
+                                        (
+                                            [status] => unavailable
+                                        )
+
+                                    [network] => visa
+                                    [network_token] => stdClass Object
+                                        (
+                                            [used] =>
+                                        )
+
+                                    [network_transaction_id] => 8899848610111111
+                                    [overcapture] => stdClass Object
+                                        (
+                                            [maximum_amount_capturable] => 500
+                                            [status] => unavailable
+                                        )
+
+                                    [regulated_status] => unregulated
+                                    [three_d_secure] =>
+                                    [transaction_link_id] =>
+                                    [wallet] =>
+                                )
+
+                            [type] => card
+                        )
+
+                    [radar_options] => stdClass Object
+                        (
+                        )
+
+                    [receipt_email] => tommy@example.com
+                    [receipt_number] =>
+                    [receipt_url] => https://pay.stripe.com/receipts/invoices/CAcaFwoVYWNjdF8xUnJ6N2FQek1oQW5oTG5Vxxxxxxxxxxxxxxxx-oAKM6LBaV5LD8ITa4b9BgIgzeIGLJ_xxxxxxxxxxxxxxxxxxx-Zf5TFGkaCLJ?s=ap
+                    [refunded] => 1
+                    [review] =>
+                    [shipping] =>
+                    [source] =>
+                    [source_transfer] =>
+                    [statement_descriptor] =>
+                    [statement_descriptor_suffix] =>
+                    [status] => succeeded
+                    [transfer_data] =>
+                    [transfer_group] =>
+                )
+
+            [previous_attributes] => stdClass Object
+                (
+                    [amount_refunded] => 0
+                    [receipt_url] => https://pay.stripe.com/receipts/invoices/CAcaFwoVYWNjdF8xUnJ6N2FQek1oQW5oTG5Vxxxxxxxxxxxxxxxx-oAKM6LBaV5LD8ITa4b9BgIgzeIGLJ_xxxxxxxxxxxxxxxxxxx-Zf5TFGkaCLJ?s=ap
+                    [refunded] =>
+                )
+
+        )
+
+    [livemode] =>
+    [pending_webhooks] => 3
+    [request] => stdClass Object
+        (
+            [id] => req_wkElrHPNnfZfasdf
+            [idempotency_key] => 90e598fds-703f-4eb8-a0a6-9cd9ed234feqwr
+        )
+
+    [type] => charge.refunded
+)

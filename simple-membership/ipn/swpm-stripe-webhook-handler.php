@@ -49,17 +49,10 @@ class SwpmStripeWebhookHandler {
 		}
 
 		SwpmLog::log_simple_debug( 'Validating webhook event...', true );
-		$event_json = self::validate_webhook_data( $input );
-		if ( empty( $event_json ) ) {
-			//Invalid webhook data received. Don't process this request.
-			$webhook_validation_error_msg = "Invalid webhook data received!";
-			SwpmLog::log_simple_debug( $webhook_validation_error_msg, false );
-			http_response_code( 400 );
-			echo 'Error: '. $webhook_validation_error_msg;
-			exit();
-		} else {
-			SwpmLog::log_simple_debug( 'Stripe webhook event data validated successfully!', true );
-		}
+		
+		self::validate_webhook_data( $input ); // Code exists if validation error.
+		
+		SwpmLog::log_simple_debug( 'Stripe webhook event data validated successfully!', true );
 
 		$type = isset($event_json->type) ? $event_json->type : '';
 		$stripe_api_version = isset($event_json->api_version) ? sanitize_text_field($event_json->api_version) : '';
@@ -259,26 +252,37 @@ class SwpmStripeWebhookHandler {
 		return $charge_id;
 	}
 
+	/**
+	 * This function checks that the event data is valid or not. It exits the script if it is not valid.
+	 * Stripe\Webhook::constructEvent() throws exceptions on validation error.
+	 */
 	public static function validate_webhook_data( $event_data_raw ){
 		// Include the Stripe library.
 		SwpmMiscUtils::load_stripe_lib();
 
-		$stripe_signature_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
+		$stripe_signature_header = isset($_SERVER['HTTP_STRIPE_SIGNATURE']) ? $_SERVER['HTTP_STRIPE_SIGNATURE'] : '';
 		$webhook_signing_secret = SwpmSettings::get_instance()->get_value( 'stripe-webhook-signing-secret' );
-
 		try {
-			$event_json = \Stripe\Webhook::constructEvent($event_data_raw, $stripe_signature_header, $webhook_signing_secret);
+			\Stripe\Webhook::constructEvent($event_data_raw, $stripe_signature_header, $webhook_signing_secret);
 		} catch(\UnexpectedValueException $e) {
 			// Invalid payload. Don't Process this request.
 			SwpmLog::log_simple_debug('Error parsing payload: ' . $e->getMessage() , false);
-			return false;
+			http_response_code(400);
+			echo 'Error parsing payload: ' . $e->getMessage();
+  			exit();
 		} catch(\Stripe\Exception\SignatureVerificationException $e) {
 			// Invalid signature. Don't Process this request.
-			SwpmLog::log_simple_debug('Error verifying webhook signature: ' . $e->getMessage() , false);
-			return false;
+			SwpmLog::log_simple_debug('Error verifying webhook signature: ' . $e->getMessage() , false );
+			http_response_code(400);
+			echo 'Error verifying webhook signature: ' . $e->getMessage();
+			exit();
+		}  catch (\Exception $e) {
+			// Unexpected error.
+			SwpmLog::log_simple_debug('Error validating webhook: ' . $e->getMessage(), false );
+			http_response_code(400);
+			echo 'Error validating webhook: ' . $e->getMessage();
+			exit();
 		}
-
-		return $event_json;
 	}
 }
 

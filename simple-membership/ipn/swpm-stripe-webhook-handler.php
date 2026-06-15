@@ -31,7 +31,7 @@ class SwpmStripeWebhookHandler {
 		if (!in_array($event_json->type, $events_to_validate)) {
 			// No need to validate other unused events.
 			//Skip unused webhook event, give 200 status then exit out.
-			SwpmLog::log_simple_debug( 'Ignoring unused Stripe webhook event. Webhook type: ' . $event_json->type, true );
+			SwpmLog::log_simple_debug( 'Ignoring unused stripe webhook event. Webhook type: ' . $event_json->type, true );
 			http_response_code( 200 ); // Tells Stripe we received this notification
 			exit();
 		}
@@ -39,26 +39,26 @@ class SwpmStripeWebhookHandler {
 		// Check if webhook event data needs to be validated.
 		//More details here: https://stripe.com/docs/webhooks#signatures
 		$webhook_signing_secret = SwpmSettings::get_instance()->get_value( 'stripe-webhook-signing-secret' );
-		if ( ! empty( $webhook_signing_secret ) ) {
-			SwpmLog::log_simple_debug( 'Stripe webhook signing secret is configured. Validating this webhook event...', true );
-			$event_json = self::validate_webhook_data( $input );
-			if ( empty( $event_json ) ) {
-				//Invalid webhook data received. Don't process this request.
-				http_response_code( 400 );
-				echo 'Error: Invalid webhook data received.';
-				exit();
-			} else {
-				SwpmLog::log_simple_debug( 'Stripe webhook event data validated successfully!', true );
-			}
+		if ( empty( $webhook_signing_secret ) ) {
+			$signing_secret_error_msg = sprintf("Stripe webhook signing secret is not configured. Can't process this webhook event '%s'.", $event_json->type);
+			SwpmLog::log_simple_debug( $signing_secret_error_msg, false );
+
+			http_response_code( 400 );
+			echo "Error: " . $signing_secret_error_msg;
+			exit();
+		}
+
+		SwpmLog::log_simple_debug( 'Validating webhook event...', true );
+		$event_json = self::validate_webhook_data( $input );
+		if ( empty( $event_json ) ) {
+			//Invalid webhook data received. Don't process this request.
+			$webhook_validation_error_msg = "Invalid webhook data received!";
+			SwpmLog::log_simple_debug( $webhook_validation_error_msg, false );
+			http_response_code( 400 );
+			echo 'Error: '. $webhook_validation_error_msg;
+			exit();
 		} else {
-			if ( empty( self::validate_webhook_data_no_signing_key($input) ) ) {
-				//Invalid webhook data received. Don't process this request.
-				http_response_code( 400 );
-				echo 'Error: Invalid webhook data received.';
-				exit();
-			} else {
-				SwpmLog::log_simple_debug( 'Stripe webhook event data validated successfully!', true );
-			}
+			SwpmLog::log_simple_debug( 'Stripe webhook event data validated successfully!', true );
 		}
 
 		$type = isset($event_json->type) ? $event_json->type : '';
@@ -76,6 +76,14 @@ class SwpmStripeWebhookHandler {
 			// Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
 			$customer                  = $event_json->data->object->customer;
 			$subscr_id                 = $event_json->data->object->id;
+
+			$is_refunded = false;
+			if ($type == 'charge.refunded'){
+				$is_refunded = true;
+				// For charge object, we need to manually find the subscr_id from swpm_transactions cpt.
+				$subscr_id = SWPM_Utils_Subscriptions::get_subscr_id_from_swpm_transactions_cpt_by_charge_object($event_json->data->object);
+			}
+
 			$ipn_data                  = array();
 			$ipn_data['subscr_id']     = $subscr_id;
 			$ipn_data['parent_txn_id'] = $customer;
@@ -83,7 +91,7 @@ class SwpmStripeWebhookHandler {
 			// Update subscription status of the subscription agreement record in transactions cpt table.
 			SWPM_Utils_Subscriptions::update_subscription_agreement_record_status_to_cancelled( $subscr_id );
 
-			swpm_handle_subsc_cancel_stand_alone( $ipn_data );
+			swpm_handle_subsc_cancel_stand_alone( $ipn_data , $is_refunded);
 		}
 
 		if ( $type === 'invoice.payment_succeeded' ) {
@@ -269,119 +277,6 @@ class SwpmStripeWebhookHandler {
 		}
 
 		return $event_json;
-	}
-
-	public static function validate_webhook_data_no_signing_key($event_data_raw){
-		$received_event = json_decode( $event_data_raw );
-
-		$max_allowed_event_creation_time_diff = 6 * 60 * 60; // 6 hours.
-
-		$received_sub_id = '';
-
-		$received_event_object = $received_event->data->object;
-		$received_object_name = $received_event_object->object;
-
-		switch(strtolower($received_object_name)){
-			case 'subscription':
-				$received_sub_id = isset($received_event_object->id) ? $received_event_object->id : '';
-				break;
-			case 'invoice':
-				$received_sub_id = isset($received_event_object->parent->subscription_details->subscription) ? $received_event_object->parent->subscription_details->subscription : '';
-				
-				$billing_reason = isset( $received_event_object->billing_reason ) ? $received_event_object->billing_reason : '';
-				if ( $billing_reason != 'subscription_cycle' ) {
-					// We don't need to validate invoice event with billing reason other than subscription_cycle.
-					return true;
-				}
-
-				break;
-			case 'charge':
-				// Change object does not directly contains any sub id, so its not possible to get the sub agreement cpt id hence not the payment button id.
-				// So its not possible to get the stripe api secret key. Thats why we are only checking the event creation time to validate this event. 
-				if ((time() - $received_event->created) > $max_allowed_event_creation_time_diff  ) {
-					SwpmLog::log_simple_debug('Error: Event creation time is too far in the past!', false);
-					return false;
-				} else {
-					return true;
-				}
-			default:
-				SwpmLog::log_simple_debug("Error: Invalid webhook event object '" . $received_object_name . "'", false);
-				return false;
-		}
-
-		$sub_agreement_cpt_id = SWPM_Utils_Subscriptions::get_subscription_agreement_cpt_id_by_subs_id($received_sub_id);
-
-		if (empty($sub_agreement_cpt_id)) {
-			SwpmLog::log_simple_debug("Error: can't retrieve subscription cpt record!", false);
-			return false;
-		}
-
-		// Check if the sandbox mode is enabled
-		$sandbox_enabled = SwpmSettings::get_instance()->get_value( 'enable-sandbox-testing' );
-
-		$payment_button_id = get_post_meta($sub_agreement_cpt_id, 'payment_button_id', true);
-
-		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $payment_button_id, !$sandbox_enabled );
-		
-		if (empty($api_keys['secret'])){
-			SwpmLog::log_simple_debug('Error: The Stripe API secret key could not be retrieved. Could not validate this webhook!', false);
-			return false;
-		}
-
-		// Include the Stripe library.
-		SwpmMiscUtils::load_stripe_lib();
-
-		\Stripe\Stripe::setApiKey( $api_keys['secret'] );
-
-		try {
-			// Re-fetch the event again by event id. Then check if the subscription id and creation time is valid or not.
-			$event = \Stripe\Event::retrieve($received_event->id);
-
-			// Check if invalid event creation time.
-			if ($event->created !== $received_event->created || (time() - $event->created) > $max_allowed_event_creation_time_diff  ) {
-				SwpmLog::log_simple_debug('Error: Event creation time is too far in the past!', false);
-				return false;
-			}
-
-			$sub_id = '';
-			$event_object = $event->data->object;
-			$event_object_name = $event_object->object;
-
-			if ($event_object_name != $received_object_name) {
-				SwpmLog::log_simple_debug("Error: Webhook event object mismatch!", false);
-				return false;
-			}
-
-			switch($event_object_name){
-				case 'subscription':
-					$sub_id = isset($event_object->id) ? $event_object->id : '';
-					break;
-				case 'invoice':
-					$sub_id = isset($event_object->parent->subscription_details->subscription) ? $event_object->parent->subscription_details->subscription : '';
-					break;
-				default:
-					SwpmLog::log_simple_debug("Error: Invalid webhook event object '" . $received_object_name . "'", false);
-					return false;
-			}
-
-			// Check if subscription id mismatch.
-			if ($sub_id != $received_sub_id) {
-				SwpmLog::log_simple_debug('Error: Subscription ID mismatch!', false);
-				return false;
-			}
-
-		} catch(\UnexpectedValueException $e) {
-			// Invalid payload. Don't Process this request.
-			SwpmLog::log_simple_debug('Error parsing payload: ' . $e->getMessage() , false);
-			return false;
-		} catch(\Exception $e) {
-			// Invalid signature. Don't Process this request.
-			SwpmLog::log_simple_debug('Error: ' . $e->getMessage() , false);
-			return false;
-		}
-
-		// Everything seems fine.
-		return true;
 	}
 }
 

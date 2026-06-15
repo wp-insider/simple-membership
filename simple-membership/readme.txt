@@ -192,7 +192,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 = WIP =
-- Stripe subscription refund webhook: fixed a security issue.
+- Now stripe webhook signing secret key is required for processing webhook events.
 
 = 4.7.5 =
 - Fixed an issue with the bulk account activation notification email.

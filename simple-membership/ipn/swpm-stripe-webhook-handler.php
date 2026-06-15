@@ -52,8 +52,10 @@ class SwpmStripeWebhookHandler {
 		$event_json = self::validate_webhook_data( $input );
 		if ( empty( $event_json ) ) {
 			//Invalid webhook data received. Don't process this request.
+			$webhook_validation_error_msg = "Invalid webhook data received!";
+			SwpmLog::log_simple_debug( $webhook_validation_error_msg, false );
 			http_response_code( 400 );
-			echo 'Error: Invalid webhook data received.';
+			echo 'Error: '. $webhook_validation_error_msg;
 			exit();
 		} else {
 			SwpmLog::log_simple_debug( 'Stripe webhook event data validated successfully!', true );

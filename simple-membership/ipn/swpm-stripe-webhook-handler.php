@@ -44,7 +44,7 @@ class SwpmStripeWebhookHandler {
 			SwpmLog::log_simple_debug( $signing_secret_error_msg, false );
 
 			http_response_code( 400 );
-			echo "Error: " . $signing_secret_error_msg;
+			echo "Error: " . esc_html( $signing_secret_error_msg );
 			exit();
 		}
 
@@ -63,12 +63,14 @@ class SwpmStripeWebhookHandler {
 
 		$type = isset($event_json->type) ? $event_json->type : '';
 		$stripe_api_version = isset($event_json->api_version) ? sanitize_text_field($event_json->api_version) : '';
-		SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received: %s and api version: %s. Checking if we need to handle this webhook.', $type, $stripe_api_version ), true );
+		SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received. Webhook type: %s, API version: %s. Checking if we need to handle this webhook.', $type, $stripe_api_version ), true );
 
+		// Check if this webhook event is from an older version of Stripe API. If yes, then save the API version so we can show a warning message in the admin area to update the API version.
 		if(SwpmMiscUtils::check_if_old_stripe_api_version($stripe_api_version)){
 			update_option( 'swpm_stripe_received_api_old_version', $stripe_api_version );
 		}
 
+		// Check the webhook event type and handle accordingly.
 		if ( 'customer.subscription.deleted' === $type || 'charge.refunded' === $type ) {
 			// Subscription expired or refunded event
 			//SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );

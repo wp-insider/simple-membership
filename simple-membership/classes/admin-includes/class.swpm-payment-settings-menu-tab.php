@@ -533,7 +533,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                             <td>
                                 <kbd><?php echo SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1&hook=1'; ?></kbd>
                                 <p class="description">
-                                    <?php _e('This is the webhook endpoint URL that you will need to configure in your Stripe account. You can get more info in the', 'simple-membership') ?> <a href="https://simple-membership-plugin.com/sca-compliant-stripe-subscription-button/#create-a-webhook-in-your-stripe-account" target="_blank"><?php _e('documentation', 'simple-membership') ?></a>.
+                                    <?php _e('This is the webhook endpoint URL that you will need to configure in your Stripe account. You can get more info in the', 'simple-membership') ?> <a href="https://simple-membership-plugin.com/create-a-webhook-in-your-stripe-account/" target="_blank"><?php _e('documentation', 'simple-membership') ?></a>.
                                 </p>
                             </td>
                         </tr>                        

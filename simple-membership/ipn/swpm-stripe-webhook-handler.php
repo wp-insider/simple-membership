@@ -36,7 +36,7 @@ class SwpmStripeWebhookHandler {
 			exit();
 		}
 
-		// Check if webhook event data needs to be validated.
+		//Check if the webhook signing secret is configured. If not, then we can't validate the webhook data and we should not process this webhook request.
 		//More details here: https://stripe.com/docs/webhooks#signatures
 		$webhook_signing_secret = SwpmSettings::get_instance()->get_value( 'stripe-webhook-signing-secret' );
 		if ( empty( $webhook_signing_secret ) ) {
@@ -48,9 +48,10 @@ class SwpmStripeWebhookHandler {
 			exit();
 		}
 
-		SwpmLog::log_simple_debug( 'Validating webhook event...', true );
+		SwpmLog::log_simple_debug( 'Validating Stripe webhook event...', true );
 		
-		self::validate_webhook_data( $input ); // Code exists if validation error.
+		//Validate the webhook data. This will throw exception and exit if the validation fails. If it returns successfully, it means the webhook data is valid and we can process it.
+		self::validate_webhook_data( $input );
 		
 		SwpmLog::log_simple_debug( 'Stripe webhook event data validated successfully!', true );
 
@@ -266,21 +267,18 @@ class SwpmStripeWebhookHandler {
 			\Stripe\Webhook::constructEvent($event_data_raw, $stripe_signature_header, $webhook_signing_secret);
 		} catch(\UnexpectedValueException $e) {
 			// Invalid payload. Don't Process this request.
-			SwpmLog::log_simple_debug('Error parsing payload: ' . $e->getMessage() , false);
+			SwpmLog::log_simple_debug('Error parsing webhook payload: ' . $e->getMessage() , false);
 			http_response_code(400);
-			echo 'Error parsing payload: ' . $e->getMessage();
   			exit();
 		} catch(\Stripe\Exception\SignatureVerificationException $e) {
 			// Invalid signature. Don't Process this request.
 			SwpmLog::log_simple_debug('Error verifying webhook signature: ' . $e->getMessage() , false );
 			http_response_code(400);
-			echo 'Error verifying webhook signature: ' . $e->getMessage();
 			exit();
 		}  catch (\Exception $e) {
 			// Unexpected error.
 			SwpmLog::log_simple_debug('Error validating webhook: ' . $e->getMessage(), false );
 			http_response_code(400);
-			echo 'Error validating webhook: ' . $e->getMessage();
 			exit();
 		}
 	}

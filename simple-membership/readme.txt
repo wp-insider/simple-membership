@@ -193,7 +193,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 
 = 4.7.6 =
-- Important Note: Stripe webhook signing secret key is required for processing Stripe subscription webhook events. This is a security improvement.
+- Important Note: A Stripe webhook signing secret is now required to process Stripe subscription webhook events. This provides an additional layer of security.
 - If you are using Stripe subscription payment buttons, please make sure to configure the webhook signing secret key in the plugin settings menu. Refer to [this documentation](https://simple-membership-plugin.com/configuring-the-stripe-webhook-signing-secret/) for more information.
 
 = 4.7.5 =

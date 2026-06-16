@@ -194,7 +194,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 = 4.7.6 =
 - Important Note: Stripe webhook signing secret key is required for processing Stripe subscription webhook events. This is a security improvement.
-- If are using Stripe subscription payment buttons, please make sure to configure the webhook signing secret key in the plugin settings menu. Refer to [this documentation](https://simple-membership-plugin.com/configuring-the-stripe-webhook-signing-secret/) for more information.
+- If you are using Stripe subscription payment buttons, please make sure to configure the webhook signing secret key in the plugin settings menu. Refer to [this documentation](https://simple-membership-plugin.com/configuring-the-stripe-webhook-signing-secret/) for more information.
 
 = 4.7.5 =
 - Fixed an issue with the bulk account activation notification email.

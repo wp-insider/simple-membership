@@ -347,7 +347,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		$configured_paypal_email = get_post_meta($button_id, 'paypal_email', true);;
 
 		// Check if paypal receiver email mismatch.
-		if ($receiver_email != $configured_paypal_email) {
+		if (empty($button_id) || $receiver_email !== $configured_paypal_email) {
 			$this->debug_log( 'Error: PayPal receiver email mismatch! Cannot handle this IPN data.', false );
 			return false;
 		}

@@ -1284,7 +1284,6 @@ class SwpmMiscUtils {
 			'pp_subscription'         => SwpmUtils::_( 'PayPal Subscription' ),
 			'pp_buy_now_new'     	  => SwpmUtils::_( 'PayPal Buy Now (New API)' ),
 			'pp_subscription_new'     => SwpmUtils::_( 'PayPal Subscription (New API)' ),
-			'pp_smart_checkout'       => SwpmUtils::_( 'PayPal Smart Checkout (Deprecated)' ),
 			'stripe_buy_now'          => SwpmUtils::_( 'Stripe Legacy Buy Now (Deprecated)' ),
 			'stripe_subscription'     => SwpmUtils::_( 'Stripe Legacy Subscription (Deprecated)' ),
 			'stripe_sca_buy_now'      => SwpmUtils::_( 'Stripe Buy Now' ),

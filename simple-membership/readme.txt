@@ -195,6 +195,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - A PHP warning issue fixed.
 - PayPal IPN data validation now also validates merchant email.
 - PayPal hosted button support removed.
+- Obsolete PayPal Smart Checkout related code removed.
 
 = 4.7.6 =
 - Important Note: A Stripe webhook signing secret is now required to process Stripe subscription webhook events. This provides an additional layer of security.

@@ -140,8 +140,8 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			$button_id           = $cart_item_data_num;// Button id is the item number.
 			$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 			if ( ! SwpmUtils::membership_level_id_exists( $membership_level_id ) ) {
-				$this->debug_log( 'This payment button was not created in the plugin. This is a paypal hosted button.', true );
-				$pp_hosted_button = true;
+				$this->debug_log( 'This payment button was not created in the plugin. This maybe a legacy PayPal hosted button which is no longer supported. Our plugin requires the payment button to be created within the plugin.', false);
+				return false;
 			}
 
 			// Price check
@@ -341,6 +341,16 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		// Get received values from post data
 		$validate_ipn  = array( 'cmd' => '_notify-validate' );
 		$validate_ipn += wp_unslash( $_POST );
+
+		$receiver_email = isset( $_POST['receiver_email'] ) ? sanitize_email($_POST['receiver_email']) : '';
+		$button_id = isset( $_POST['item_number'] ) ? sanitize_text_field($_POST['item_number']) : '';
+		$configured_paypal_email = get_post_meta($button_id, 'paypal_email', true);;
+
+		// Check if paypal receiver email mismatch.
+		if ($receiver_email != $configured_paypal_email) {
+			$this->debug_log( 'Error: PayPal receiver email mismatch! Cannot handle this IPN data.', false );
+			return false;
+		}
 
 		// Send back post vars to paypal
 		$params = array(

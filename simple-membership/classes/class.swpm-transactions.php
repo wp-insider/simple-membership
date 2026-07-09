@@ -19,7 +19,7 @@ class SwpmTransactions {
 		}
 
 		//Subscription ID
-		$subscr_id = $ipn_data['subscr_id'];
+		$subscr_id = isset($ipn_data['subscr_id']) ? sanitize_text_field($ipn_data['subscr_id']) : '';
 
 		//Prepare the transaction data array.
 		$txn_data = array();
@@ -40,7 +40,7 @@ class SwpmTransactions {
 
 		$txn_data['txn_date']       = $current_date;
 		$txn_data['txn_id']         = $ipn_data['txn_id'];
-		$txn_data['subscr_id']      = $ipn_data['subscr_id'];
+		$txn_data['subscr_id']      = $subscr_id;
 		$txn_data['reference']      = isset( $custom_var['reference'] ) ? $custom_var['reference'] : '';
 		$txn_data['payment_amount'] = $ipn_data['mc_gross'];
 		$txn_data['gateway']        = isset($ipn_data['gateway']) ? $ipn_data['gateway'] : '';

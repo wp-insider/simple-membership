@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 4.7.6
+Stable tag: 4.7.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -191,11 +191,12 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
-= WIP =
-- A PHP warning issue fixed.
-- PayPal IPN data validation now also validates merchant email.
-- PayPal hosted button support removed.
-- Obsolete PayPal Smart Checkout related code removed.
+
+= 4.7.7 =
+- Removed the obsolete PayPal Smart Checkout related code to clean up the codebase.
+- The PayPal Standard IPN data validation now also validates the merchant/receiver email. Thank you to Muni Nitish Kumar for reporting this.
+- The deprecated/legacy PayPal hosted button code removed from the plugin to clean up the codebase.
+- Fixed a minor PHP notice issue in the PayPal IPN handler code.
 
 = 4.7.6 =
 - Important Note: A Stripe webhook signing secret is now required to process Stripe subscription webhook events. This provides an additional layer of security.

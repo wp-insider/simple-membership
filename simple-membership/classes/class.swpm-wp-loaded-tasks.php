@@ -122,11 +122,6 @@ class SwpmWpLoadedTasks {
 		}
 
 		if ( wp_doing_ajax() ) {
-			//Listen and handle smart paypal checkout IPN
-			include SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-smart-checkout-ipn.php';
-			add_action( 'wp_ajax_swpm_process_pp_smart_checkout', 'swpm_pp_smart_checkout_ajax_hanlder' );
-			add_action( 'wp_ajax_nopriv_swpm_process_pp_smart_checkout', 'swpm_pp_smart_checkout_ajax_hanlder' );
-
 			//Listen and handle Stripe SCA checkout session create requests.
 			//Our Stripe session create request comes via ajax.
 			require_once SIMPLE_WP_MEMBERSHIP_PATH . 'ipn/swpm-stripe-sca-checkout-session-create.php';

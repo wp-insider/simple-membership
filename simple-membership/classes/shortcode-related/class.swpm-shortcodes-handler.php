@@ -54,6 +54,13 @@ class SwpmShortcodesHandler {
 			return $error_msg;
 		}
 
+		if (in_array( $button_type, array( 'pp_smart_checkout' ) ) ) {
+			$error_msg  = '<p class="swpm-red-box">';
+			$error_msg .= 'Error! The button type ('.esc_attr($button_type).') for button ID (' . esc_attr($button_id) . ') you specified in the shortcode does not exist. The payment gateway is obsolete. ';
+			$error_msg .= '</p>';
+			return $error_msg;
+		}
+
 		//Initialize the output variable.
 		$output = '';
 		$any_note_or_msg_output = '';
@@ -116,7 +123,6 @@ class SwpmShortcodesHandler {
 			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_button_shortcode_view.php' );
 			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_sca_button_shortcode_view.php' );
 			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/braintree_button_shortcode_view.php' );
-			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_smart_checkout_button_shortcode_view.php' );
 			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_buy_now_new_button_shortcode_view.php' );
 			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_subscription_new_button_shortcode_view.php' );
 

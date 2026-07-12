@@ -51,9 +51,22 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			return true;
 		}
 
-		$custom                   = urldecode( $this->ipn_data['custom'] );
+		$membership_level_id = get_post_meta( $this->ipn_data['item_number'], 'membership_level_id', true );
+		if ( ! SwpmUtils::membership_level_id_exists( $membership_level_id ) ) {
+			$this->debug_log( 'This payment button was not created in the plugin. This maybe a legacy PayPal hosted button which is no longer supported. Our plugin requires the payment button to be created within the plugin.', false);
+			return false;
+		}
+
+		$custom = urldecode( $this->ipn_data['custom'] );
 		$this->ipn_data['custom'] = $custom;
-		$customvariables          = SwpmTransactions::parse_custom_var( $custom );
+		$customvariables = SwpmTransactions::parse_custom_var( $custom );
+
+		// Check if subsc_ref mismatch
+		$received_membership_level_id = isset( $customvariables['subsc_ref'] ) ? sanitize_text_field($customvariables['subsc_ref']) : '';
+		if ( $received_membership_level_id != $membership_level_id ) {
+			$this->debug_log( 'Error: Invalid subsc_ref received! Cannot handle this IPN data.', false );
+			return false;
+		}
 
 		// Handle refunds
 		if ( $gross_total < 0 ) {
@@ -75,7 +88,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 
 			if ( ! empty( $subsc_ref ) ) {
 				$this->debug_log( 'Found a membership level ID. Creating member account...', true );
-				$swpm_id = $customvariables['swpm_id'];
+				$swpm_id = isset($customvariables['swpm_id']) ? sanitize_text_field($customvariables['swpm_id']) : '';
 				swpm_handle_subsc_signup_stand_alone( $this->ipn_data, $subsc_ref, $this->ipn_data['subscr_id'], $swpm_id );
 				
 				// Save in the Transactions CPT so there is a 'subscription created' entry for paypal standard subscriptions.
@@ -138,11 +151,6 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			// Get the button id
 			$pp_hosted_button    = false;
 			$button_id           = $cart_item_data_num;// Button id is the item number.
-			$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
-			if ( ! SwpmUtils::membership_level_id_exists( $membership_level_id ) ) {
-				$this->debug_log( 'This payment button was not created in the plugin. This maybe a legacy PayPal hosted button which is no longer supported. Our plugin requires the payment button to be created within the plugin.', false);
-				return false;
-			}
 
 			// Price check
 			$check_price = true;

@@ -191,6 +191,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+= WIP =
+- PayPal standard related security issue fixed.
 
 = 4.7.7 =
 - Removed the obsolete PayPal Smart Checkout related code to clean up the codebase.

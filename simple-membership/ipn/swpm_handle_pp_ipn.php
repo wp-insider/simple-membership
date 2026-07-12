@@ -51,20 +51,23 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			return true;
 		}
 
-		$membership_level_id = get_post_meta( $this->ipn_data['item_number'], 'membership_level_id', true );
-		if ( ! SwpmUtils::membership_level_id_exists( $membership_level_id ) ) {
-			$this->debug_log( 'This payment button was not created in the plugin. This maybe a legacy PayPal hosted button which is no longer supported. Our plugin requires the payment button to be created within the plugin.', false);
+		//Retrieve the membership level ID from the button's post meta data.
+		$button_id = isset( $this->ipn_data['item_number'] ) ? sanitize_text_field($this->ipn_data['item_number']) : '';
+		$configured_level_id = get_post_meta( $button_id, 'membership_level_id', true );
+		if ( !SwpmUtils::membership_level_id_exists( $configured_level_id ) ) {
+			$this->debug_log( 'Error! Could not find a valid membership level for the given item_number/button_id ('.$button_id.'). Cannot handle this IPN.', false);
 			return false;
 		}
 
+		// Parse the custom variable.
 		$custom = urldecode( $this->ipn_data['custom'] );
 		$this->ipn_data['custom'] = $custom;
 		$customvariables = SwpmTransactions::parse_custom_var( $custom );
 
-		// Check if subsc_ref mismatch
+		// Validate/verify the subsc_ref value in the custom variable.
 		$received_membership_level_id = isset( $customvariables['subsc_ref'] ) ? sanitize_text_field($customvariables['subsc_ref']) : '';
-		if ( $received_membership_level_id != $membership_level_id ) {
-			$this->debug_log( 'Error: Invalid subsc_ref received! Cannot handle this IPN data.', false );
+		if ( $received_membership_level_id != $configured_level_id ) {
+			$this->debug_log( 'Error: Invalid subsc_ref parameter received! Cannot handle this IPN data.', false );
 			return false;
 		}
 

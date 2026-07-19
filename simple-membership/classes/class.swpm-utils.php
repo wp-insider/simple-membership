@@ -380,7 +380,7 @@ abstract class SwpmUtils {
 			$wp_user_id = wp_create_user( $wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email'] );
 
 			if ( is_wp_error( $wp_user_id ) ) {
-				// Error occured when creating wp user, cant proceed this request.
+				// Error occured when creating wp user, cannot proceed with this request.
 				$error_msg = $wp_user_id->get_error_message();
 				wp_die( $error_msg );
 			}

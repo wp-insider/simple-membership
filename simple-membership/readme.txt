@@ -194,6 +194,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 = WIP =
 - Added validation of the 'subscr_ref' parameter in the PayPal standard IPN handling code. Thank you to Charles Vosburgh for reporting this.
+- A PayPal checkout related vuneraility issue fixed.
 
 = 4.7.7 =
 - Removed the obsolete PayPal Smart Checkout related code to clean up the codebase.

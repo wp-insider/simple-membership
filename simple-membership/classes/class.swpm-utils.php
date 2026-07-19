@@ -379,9 +379,15 @@ abstract class SwpmUtils {
                         //No existing user. Try to create a brand new WP user entry.
 			$wp_user_id = wp_create_user( $wp_user_data['user_login'], $wp_user_data['password'], $wp_user_data['user_email'] );
 
-                        //Update that newly created user's profile with additional data.
-                        $wp_user_data['ID'] = $wp_user_id;
-                        wp_update_user( $wp_user_data ); //Core WP function. Updates/Syncs the user info and role.
+			if ( is_wp_error( $wp_user_id ) ) {
+				//This Username belongs to an admin user. Cannot use/register using an existing admin user's username from front-end. Show error message then exit.
+				$error_msg = $wp_user_id->get_error_message();
+				wp_die( $error_msg );
+			}
+
+            //Update that newly created user's profile with additional data.
+            $wp_user_data['ID'] = $wp_user_id;
+            wp_update_user( $wp_user_data ); //Core WP function. Updates/Syncs the user info and role.
 
 		}
 

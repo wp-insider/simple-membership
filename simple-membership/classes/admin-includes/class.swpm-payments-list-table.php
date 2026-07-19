@@ -22,7 +22,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 	}
 
 	function column_default( $item, $column_name ) {
-		$val = $item[ $column_name ];
+		$val = isset( $item[ $column_name ] ) ? esc_html($item[ $column_name ]) : '';
 		switch ( $column_name ) {
 			case 'payment_amount':
 				$val = SwpmMiscUtils::format_money( $val );

@@ -11,9 +11,9 @@ class SWPM_PayPal_Utility_IPN_Related {
 
 		//Add the PayPal API order_id value to the reference parameter. So it gets saved with custom field data. This will be used to also save it to the reference DB column field when saving the transaction.
 		if(isset($data['order_id'])){
-			$data['custom_field'] = $custom . '&reference=' . $data['order_id'];
+			$data['custom_field'] = $custom . '&reference=' . sanitize_text_field($data['order_id']);
 		} else if(isset($data['orderID'])){
-			$data['custom_field'] = $custom . '&reference=' . $data['orderID'];
+			$data['custom_field'] = $custom . '&reference=' . sanitize_text_field($data['orderID']);
 		}
 
 		//Parse the custom field to read the IP address.
@@ -22,12 +22,12 @@ class SWPM_PayPal_Utility_IPN_Related {
 		$purchase_units = isset($txn_data['purchase_units']) ? $txn_data['purchase_units'] : array();
 
 		//The $data['orderID'] is the ID for the order created using createOrder API call. The Transaction ID is the ID for the captured payment.
-		$txn_id = isset($txn_data['purchase_units'][0]['payments']['captures'][0]['id']) ? $txn_data['purchase_units'][0]['payments']['captures'][0]['id'] : '';
+		$txn_id = isset($txn_data['purchase_units'][0]['payments']['captures'][0]['id']) ? sanitize_text_field($txn_data['purchase_units'][0]['payments']['captures'][0]['id']) : '';
 		
-		$address_street = isset($txn_data['purchase_units'][0]['shipping']['address']['address_line_1']) ? $txn_data['purchase_units'][0]['shipping']['address']['address_line_1'] : '';
+		$address_street = isset($txn_data['purchase_units'][0]['shipping']['address']['address_line_1']) ? sanitize_text_field($txn_data['purchase_units'][0]['shipping']['address']['address_line_1']) : '';
 		if ( isset ( $txn_data['purchase_units'][0]['shipping']['address']['address_line_2'] )){
 			//If address line 2 is present, add it to the address.
-			$address_street .= ", " . $txn_data['purchase_units'][0]['shipping']['address']['address_line_2'];
+			$address_street .= ", " . sanitize_text_field($txn_data['purchase_units'][0]['shipping']['address']['address_line_2']);
 		}
 
 		$ipn_data['gateway'] = 'paypal_buy_now_checkout';
@@ -37,21 +37,21 @@ class SWPM_PayPal_Utility_IPN_Related {
 		$ipn_data['subscr_id'] = $txn_id;//Same as txn_id for one-time payments.
 
 		//This will save the button ID in the swpm_transactions CPT (for a reference to the button used for the payment)
-		$ipn_data['payment_button_id'] = isset($data['button_id']) ? $data['button_id'] : '';
+		$ipn_data['payment_button_id'] = isset($data['button_id']) ? sanitize_text_field($data['button_id']) : '';
 
-		$ipn_data['item_number'] = isset($data['button_id']) ? $data['button_id'] : '';
-		$ipn_data['item_name'] = isset($data['item_name']) ? $data['item_name'] : '';
+		$ipn_data['item_number'] = isset($data['button_id']) ? sanitize_text_field($data['button_id']) : '';
+		$ipn_data['item_name'] = isset($data['item_name']) ? sanitize_text_field($data['item_name']) : '';
 
-		$ipn_data['status'] = isset($txn_data['status']) ? ucfirst( strtolower($txn_data['status']) ) : '';
-		$ipn_data['payment_status'] = isset($txn_data['status']) ? ucfirst( strtolower($txn_data['status']) ) : '';
+		$ipn_data['status'] = isset($txn_data['status']) ? ucfirst( strtolower( sanitize_text_field($txn_data['status'])) ) : '';
+		$ipn_data['payment_status'] = isset($txn_data['status']) ? ucfirst( strtolower( sanitize_text_field($txn_data['status'])) ) : '';
 
 		//Amount
 		if ( isset($txn_data['purchase_units'][0]['payments']['captures'][0]['amount']['value']) ){
 			//This is for PayPal checkout serverside capture.
-			$ipn_data['mc_gross'] = $txn_data['purchase_units'][0]['payments']['captures'][0]['amount']['value'];
+			$ipn_data['mc_gross'] = sanitize_text_field($txn_data['purchase_units'][0]['payments']['captures'][0]['amount']['value']);
 		} else if ( isset($txn_data['purchase_units'][0]['amount']['value']) ){
 			//This is for PayPal Checkout client-side capture (deprecated)
-			$ipn_data['mc_gross'] = $txn_data['purchase_units'][0]['amount']['value'];
+			$ipn_data['mc_gross'] = sanitize_text_field($txn_data['purchase_units'][0]['amount']['value']);
 		} else {
 			$ipn_data['mc_gross'] = 0;
 		}
@@ -59,10 +59,10 @@ class SWPM_PayPal_Utility_IPN_Related {
 		//Currency
 		if ( isset($txn_data['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code']) ){
 			//This is for PayPal checkout serverside capture.
-			$ipn_data['mc_currency'] = $txn_data['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
+			$ipn_data['mc_currency'] = sanitize_text_field($txn_data['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code']);
 		} else if ( isset( $txn_data['purchase_units'][0]['amount']['currency_code']) ){
 			//This is for PayPal Checkout client-side capture (deprecated)
-			$ipn_data['mc_currency'] = $txn_data['purchase_units'][0]['amount']['currency_code'];
+			$ipn_data['mc_currency'] = sanitize_text_field($txn_data['purchase_units'][0]['amount']['currency_code']);
 		} else {
 			$ipn_data['mc_currency'] = 0;
 		}
@@ -72,15 +72,15 @@ class SWPM_PayPal_Utility_IPN_Related {
 
 		// customer info.
 		$ipn_data['ip'] = isset($customvariables['user_ip']) ? $customvariables['user_ip'] : '';
-		$ipn_data['first_name'] = isset($txn_data['payer']['name']['given_name']) ? $txn_data['payer']['name']['given_name'] : '';
-		$ipn_data['last_name'] = isset($txn_data['payer']['name']['surname']) ? $txn_data['payer']['name']['surname'] : '';
-		$ipn_data['payer_email'] = isset($txn_data['payer']['email_address']) ? $txn_data['payer']['email_address'] : '';
-		$ipn_data['payer_id'] = isset($txn_data['payer']['payer_id']) ? $txn_data['payer']['payer_id'] : '';
+		$ipn_data['first_name'] = isset($txn_data['payer']['name']['given_name']) ? sanitize_text_field($txn_data['payer']['name']['given_name']) : '';
+		$ipn_data['last_name'] = isset($txn_data['payer']['name']['surname']) ? sanitize_text_field($txn_data['payer']['name']['surname']) : '';
+		$ipn_data['payer_email'] = isset($txn_data['payer']['email_address']) ? sanitize_email($txn_data['payer']['email_address']) : '';
+		$ipn_data['payer_id'] = isset($txn_data['payer']['payer_id']) ? sanitize_text_field($txn_data['payer']['payer_id']) : '';
 		$ipn_data['address_street'] = $address_street;
-		$ipn_data['address_city']    = isset($txn_data['purchase_units'][0]['shipping']['address']['admin_area_2']) ? $txn_data['purchase_units'][0]['shipping']['address']['admin_area_2'] : '';
-		$ipn_data['address_state']   = isset($txn_data['purchase_units'][0]['shipping']['address']['admin_area_1']) ? $txn_data['purchase_units'][0]['shipping']['address']['admin_area_1'] : '';
-		$ipn_data['address_zip']     = isset($txn_data['purchase_units'][0]['shipping']['address']['postal_code']) ? $txn_data['purchase_units'][0]['shipping']['address']['postal_code'] : '';
-		$country_code = isset($txn_data['purchase_units'][0]['shipping']['address']['country_code']) ? $txn_data['purchase_units'][0]['shipping']['address']['country_code'] : '';
+		$ipn_data['address_city']    = isset($txn_data['purchase_units'][0]['shipping']['address']['admin_area_2']) ? sanitize_text_field($txn_data['purchase_units'][0]['shipping']['address']['admin_area_2']) : '';
+		$ipn_data['address_state']   = isset($txn_data['purchase_units'][0]['shipping']['address']['admin_area_1']) ? sanitize_text_field($txn_data['purchase_units'][0]['shipping']['address']['admin_area_1']) : '';
+		$ipn_data['address_zip']     = isset($txn_data['purchase_units'][0]['shipping']['address']['postal_code']) ? sanitize_text_field($txn_data['purchase_units'][0]['shipping']['address']['postal_code']) : '';
+		$country_code = isset($txn_data['purchase_units'][0]['shipping']['address']['country_code']) ? sanitize_text_field($txn_data['purchase_units'][0]['shipping']['address']['country_code']) : '';
 		$ipn_data['address_country'] = SwpmMiscUtils::get_country_name_by_country_code($country_code);
 	
 
@@ -90,7 +90,7 @@ class SWPM_PayPal_Utility_IPN_Related {
 		/**********************************/
 		if( empty($ipn_data['payer_email']) || empty($ipn_data['first_name']) || empty($ipn_data['last_name']) ){
 			//Use the order ID to get the customer's email and name from the PayPal API.
-			$pp_order_id = isset($data['order_id']) ? $data['order_id'] : '';
+			$pp_order_id = isset($data['order_id']) ? sanitize_text_field($data['order_id']) : '';
 			SwpmLog::log_simple_debug( 'Customer Email or Name not set in the onApprove data. Going to query the PayPal API for order details. Order ID: ' . $pp_order_id, true );
 
 			//This is for on-site checkout only. So the 'mode' and API creds will be whatever is currently set in the settings.
@@ -108,15 +108,15 @@ class SWPM_PayPal_Utility_IPN_Related {
 				
 				if( empty($ipn_data['payer_email']) && isset($customer_data_array['email_address']) ){
 					//Set the payer email from the subscriber data.
-					$ipn_data['payer_email'] = $customer_data_array['email_address'];
+					$ipn_data['payer_email'] = sanitize_email($customer_data_array['email_address']);
 				}
 				if( empty($ipn_data['first_name']) && isset($customer_data_array['name']['given_name']) ){
 					//Set the payer first name from the subscriber data.
-					$ipn_data['first_name'] = $customer_data_array['name']['given_name'];
+					$ipn_data['first_name'] = sanitize_text_field($customer_data_array['name']['given_name']);
 				}
 				if( empty($ipn_data['last_name']) && isset($customer_data_array['name']['surname']) ){
 					//Set the payer last name from the subscriber data.
-					$ipn_data['last_name'] = $customer_data_array['name']['surname'];
+					$ipn_data['last_name'] = sanitize_text_field($customer_data_array['name']['surname']);
 				}
 				SwpmLog::log_simple_debug( 'Customer Email: ' . $ipn_data['payer_email'] . ', First Name: ' . $ipn_data['first_name'] . ', Last Name: ' . $ipn_data['last_name'], true );
 

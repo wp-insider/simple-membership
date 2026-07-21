@@ -18,6 +18,24 @@ $is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extr
 
 //Get the current expiry date based on the membership level of this member.
 $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user_id($member_id);
+
+$display_profile_form_password_toggle = SwpmSettings::get_instance()->get_value('password-visibility-profile-form');
+$password_toggler_type = SwpmSettings::get_instance()->get_value('password-visibility-toggler-profile-form');
+if (!empty($display_profile_form_password_toggle)) {
+    $all_password_input_selectors = '.swpm-form-password, .swpm-form-repass';
+    $password_inputs_to_attach = $password_toggler_type == 'checkbox' ? '#pass-strength-result' : $all_password_input_selectors;
+    SimpleWpMembership::enqueue_password_toggle_scripts('swpm.password-toggle', array(
+        'type' => $password_toggler_type,
+        'formId' => $form_id,
+        'passwordInputSelectors' => $all_password_input_selectors,
+        'passwordInputSelectorsToAttach' => $password_inputs_to_attach,
+        'checkboxTogglerInsertAfterSelector' => $password_inputs_to_attach,
+        'checkboxTogglerStyles' => [
+                'margin' => '10px 0 0',
+        ],
+    ));
+}
+
 ?>
 <div class="wrap" id="swpm-profile-page" type="edit">
     <form action="" method="post" name="swpm-edit-user" id="<?php echo $form_id ?>" enctype="multipart/form-data" class="swpm-form" <?php do_action('user_new_form_tag'); ?>>

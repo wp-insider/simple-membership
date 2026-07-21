@@ -194,6 +194,13 @@ abstract class SwpmUtils {
 		);
 	}
 
+	public static function get_pass_visibility_toggler_options() {
+		return array(
+			'icon'              => __( 'Icon', 'simple-membership' ),
+			'checkbox'            => __( 'Checkbox', 'simple-membership' ),
+		);
+	}
+
 	public static function account_state_dropdown( $selected = 'active' , $option_all = false) {
 		$options = self::get_account_state_options();
 		$html    = '';

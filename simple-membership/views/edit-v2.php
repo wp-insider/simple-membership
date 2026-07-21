@@ -38,6 +38,20 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
         'custom_pass_min_length_validator_msg' => $custom_pass_min_length_validator_msg,
     )
 );
+
+$display_profile_form_password_toggle = $settings->get_value('password-visibility-profile-form');
+$password_toggler_type = $settings->get_value('password-visibility-toggler-profile-form');
+if (!empty($display_profile_form_password_toggle)) {
+    $all_password_input_selectors = '.swpm-form-password, .swpm-form-repass';
+    $password_inputs_to_attach = $password_toggler_type == 'checkbox' ? '.swpm-form-password' : $all_password_input_selectors;
+    SimpleWpMembership::enqueue_password_toggle_scripts('swpm.password-toggle', array(
+        'type' => $password_toggler_type,
+        'formId' => $form_id,
+        'passwordInputSelectors' => $all_password_input_selectors,
+        'passwordInputSelectorsToAttach' => $password_inputs_to_attach,
+    ));
+}
+
 ?>
 <div class="swpm-edit-profile-form">
     <form id="<?php echo $form_id ?>" class="swpm-form" name="swpm-editprofile-form" method="post" action="">
@@ -167,6 +181,15 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
                 </div>
             </div>
             <?php echo apply_filters('swpm_edit_profile_form_after_membership_level', ''); ?>
+
+            <?php if( $display_profile_form_password_toggle && $password_toggler_type == 'checkbox' ) { ?>
+                <div class="swpm-form-row swpm-password-input-visibility">
+                    <label class="swpm-password-toggle-checkbox-label">
+                        <input type="checkbox" class="swpm-password-toggle-checkbox">
+                        <span class="swpm-password-toggle-label"> <?php _e('Show password', 'simple-membership') ?></span>
+                    </label>
+                </div>
+            <?php } ?>
         </div>
         <?php 
         // Trigger action hook. Can be used to add content to the registration form.

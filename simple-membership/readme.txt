@@ -191,6 +191,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+= WIP =
+- A PayPal subscription related vulnerability issue fixed.
+- Password visibility toggler support added to registration and profile form.
 
 = 4.7.8 =
 - Added validation of the 'subscr_ref' parameter in the PayPal standard IPN handling code. Thank you to Charles Vosburgh for reporting this.

@@ -13,6 +13,23 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
         'form_id' => $form_id,
     )
 );
+$settings = SwpmSettings::get_instance();
+$display_reg_form_password_toggle = $settings->get_value('password-visibility-registration-form', false);
+$password_toggler_type = $settings->get_value('password-visibility-toggler-reg-form');
+if (!empty($display_reg_form_password_toggle)) {
+    $all_password_input_selectors = '.swpm-form-password, .swpm-form-repass';
+    $password_inputs_to_attach = $password_toggler_type == 'checkbox' ? '#pass-strength-result' : $all_password_input_selectors;
+    SimpleWpMembership::enqueue_password_toggle_scripts('swpm.password-toggle', array(
+        'type' => $password_toggler_type,
+        'formId' => $form_id,
+        'passwordInputSelectors' => $all_password_input_selectors,
+        'passwordInputSelectorsToAttach' => $password_inputs_to_attach,
+        'checkboxTogglerInsertAfterSelector' => $password_inputs_to_attach,
+        'checkboxTogglerStyles' => [
+            'margin' => '10px 0 0',
+        ],
+    ));
+}
 
 ?>
 <div class="wrap" id="swpm-profile-page" type="add">

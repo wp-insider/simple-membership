@@ -49,6 +49,19 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
     )
 );
 
+$display_reg_form_password_toggle = $settings->get_value('password-visibility-registration-form');
+$password_toggler_type = $settings->get_value('password-visibility-toggler-reg-form');
+if (!empty($display_reg_form_password_toggle)) {
+    $all_password_input_selectors = '.swpm-form-password, .swpm-form-repass';
+    $password_inputs_to_attach = $password_toggler_type == 'checkbox' ? '.swpm-form-password' : $all_password_input_selectors;
+    SimpleWpMembership::enqueue_password_toggle_scripts('swpm.password-toggle', array(
+        'type' => $password_toggler_type,
+        'formId' => $form_id,
+        'passwordInputSelectors' => $all_password_input_selectors,
+        'passwordInputSelectorsToAttach' => $password_inputs_to_attach,
+    ));
+}
+
 ?>
 <div class="swpm-registration-widget-form">
     <form id="<?php echo $form_id ?>" class="swpm-form" name="swpm-registration-form" method="post" action="">
@@ -92,7 +105,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             </div>
             <div class="swpm-form-row swpm-firstname-row" <?php apply_filters('swpm_registration_form_firstname_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-firstname-label-wrap">
-                    <label for="first_name"><?php echo _e('First Name', "simple-membership") ?></label>
+                    <label for="first_name"><?php _e('First Name', "simple-membership") ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-firstname-input-wrap">
                     <input type="text" id="first_name" class="swpm-form-field swpm-form-firstname" value="<?php echo esc_attr($first_name); ?>" name="first_name" />
@@ -101,7 +114,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
             </div>
             <div class="swpm-form-row swpm-lastname-row" <?php apply_filters('swpm_registration_form_lastname_tr_attributes', ''); ?>>
                 <div class="swpm-form-label-wrap swpm-form-lastname-label-wrap">
-                    <label for="last_name"><?php echo _e('Last Name', "simple-membership") ?></label>
+                    <label for="last_name"><?php _e('Last Name', "simple-membership") ?></label>
                 </div>
                 <div class="swpm-form-input-wrap swpm-form-lastname-input-wrap">
                     <input type="text" id="last_name" class="swpm-form-field swpm-form-lastname" value="<?php echo esc_attr($last_name); ?>" name="last_name" />

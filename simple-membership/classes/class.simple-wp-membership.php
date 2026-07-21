@@ -923,7 +923,6 @@ class SimpleWpMembership {
         wp_register_script('jquery.validationEngine', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('jquery.validationEngine-en', SIMPLE_WP_MEMBERSHIP_URL . '/js/jquery.validationEngine-en.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
-        wp_register_script('swpm.password-toggle', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-toggle.js', array('jquery'), SIMPLE_WP_MEMBERSHIP_VER);
         wp_register_script('swpm-reg-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm-reg-form-validator.js', null, SIMPLE_WP_MEMBERSHIP_VER, true);
         wp_register_script('swpm-profile-form-validator', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm-profile-form-validator.js', null, SIMPLE_WP_MEMBERSHIP_VER, true);
 
@@ -1093,6 +1092,39 @@ class SimpleWpMembership {
         wp_localize_script('jquery.validationEngine-en', 'swpmRegForm', array('nonce' => $nonce));
     }
 
+	public static function enqueue_password_toggle_scripts( $handle, $params = array() ) {
+		if ( ! wp_script_is( $handle, 'registered' ) ) {
+			wp_register_script( $handle, SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.password-toggle.js', null , SIMPLE_WP_MEMBERSHIP_VER);
+		}
+
+		wp_localize_script( $handle, 'swpmPasswordToggleStrings', array(
+			'showPassword' => __('Show Password', 'simple-membership'),
+		));
+
+		wp_enqueue_script( $handle );
+
+		$params = wp_parse_args($params, array(
+			'type' => '',
+			'formId' => '',
+			'passwordInputSelectors' => "input[type='password']",
+			'passwordInputSelectorsToAttach' => "input[type='password']",
+			'checkboxTogglerSelector' => '',
+			'checkboxTogglerStyles' => [],
+		));
+
+		wp_print_inline_script_tag( '
+	        document.addEventListener("DOMContentLoaded", function () {
+	            new SWPM_Password_Visibility_Toggler({
+	                type: "'.esc_js($params['type']).'",
+	                formId: "'.esc_js($params['formId']).'",
+	                passwordInputSelectors: "'.esc_js($params['passwordInputSelectors']).'",
+	                passwordInputSelectorsToAttach: "'.esc_js($params['passwordInputSelectorsToAttach']).'",
+	                checkboxTogglerSelector: "'.esc_js($params['checkboxTogglerSelector']).'",
+	                checkboxTogglerStyles: '.json_encode($params['checkboxTogglerStyles']).',
+	            });
+	        });
+	    ');
+	}
 
     public function menu() {
         $menu_parent_slug = 'simple_wp_membership';

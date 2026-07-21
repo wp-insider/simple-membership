@@ -372,6 +372,16 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
 		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
 		if( $sub_details !== false ){
+
+			// Check if plan id mismatch.
+			$received_plan_id = isset($sub_details->plan_id) ? $sub_details->plan_id : '';
+			$configured_plan_id = get_post_meta( $button_id, 'pp_subscription_plan_id', true );
+			if ( !empty($received_plan_id) && $received_plan_id !== $configured_plan_id ) {
+				$validation_error_msg = 'Validation Error! PayPal subscription plan ID mismatch.';
+				SwpmLog::log_simple_debug( $validation_error_msg .' Received: '. $received_plan_id .' Actual: ' . $configured_plan_id, false );
+				return $validation_error_msg;
+			}
+
 			/*** Guard: Verify the subscriber email from PayPal API matches the email submitted in the request (prevent email spoofing in replayed requests). ***/
 			$api_subscriber = isset($sub_details->subscriber) ? $sub_details->subscriber : null;
 			if ( is_object($api_subscriber) ) {
@@ -411,6 +421,20 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 					SwpmLog::log_simple_debug( $validation_error_msg, false );
 					return $validation_error_msg;
 				}
+
+				// Check trial payment amount.
+				$configured_trial_billing_amount = (float) get_post_meta( $button_id, 'trial_billing_amount', true );
+				if (!empty($configured_trial_billing_amount)){
+					// Its a pain trial amount.
+					$received_trial_billing_amount = isset($billing_info['last_payment']['amount']['value']) ? (float) $billing_info['last_payment']['amount']['value'] : 0;
+
+					if( abs($configured_trial_billing_amount - $received_trial_billing_amount) > 0.01 ){
+						$validation_error_msg = 'Validation Error! Trial payment amount mismatch!';
+						SwpmLog::log_simple_debug( $validation_error_msg . ' Configured: ' . $configured_trial_billing_amount . ', Received: ' . $received_trial_billing_amount, false );
+						return $validation_error_msg;
+					}
+				}
+
 			} else {
 				//This is a regular subscription checkout (without trial). Check that the price matches.
 				$amount = isset($billing_info['last_payment']['amount']['value']) ? $billing_info['last_payment']['amount']['value'] : 0;

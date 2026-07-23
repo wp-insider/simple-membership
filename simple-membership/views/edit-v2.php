@@ -40,7 +40,7 @@ SimpleWpMembership::enqueue_validation_scripts_v2(
 );
 
 $display_profile_form_password_toggle = $settings->get_value('password-visibility-profile-form');
-$password_toggler_type = $settings->get_value('password-visibility-toggler-profile-form');
+$password_toggler_type = $settings->get_value('password-visibility-toggler-style-profile-form', 'icon');
 if (!empty($display_profile_form_password_toggle)) {
     $all_password_input_selectors = '.swpm-form-password, .swpm-form-repass';
     $password_inputs_to_attach = $password_toggler_type == 'checkbox' ? '.swpm-form-password' : $all_password_input_selectors;

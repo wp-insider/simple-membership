@@ -30,7 +30,7 @@ $form_id = 'swpm-login-form';
 
 $hide_join_us_link_enabled = SwpmSettings::get_instance()->get_value('hide-join-us-link');
 
-$password_toggler_type = SwpmSettings::get_instance()->get_value('password-visibility-toggler-login-form', 'checkbox');
+$password_toggler_type = SwpmSettings::get_instance()->get_value('password-visibility-toggler-style-login-form', 'icon');
 if (!empty($display_password_toggle)) {
     SimpleWpMembership::enqueue_password_toggle_scripts('swpm.password-toggle', array(
             'type' => $password_toggler_type,
@@ -56,7 +56,7 @@ if (!empty($display_password_toggle)) {
             <div class="swpm-password-input">                
                 <input type="password" class="swpm-text-field swpm-password-field" id="swpm_password" value="" size="25" name="swpm_password" />                
             </div>
-            <?php if( empty($display_password_toggle) || $password_toggler_type == 'checkbox' ){ ?>
+            <?php if( !empty($display_password_toggle) && $password_toggler_type == 'checkbox' ){ ?>
                 <div class="swpm-password-input-visibility">                                        
                     <span class="swpm-password-toggle-checkbox"><input type="checkbox" name="swpm-password-toggle-checkbox" id="swpm-password-toggle-checkbox" data-state="password-hidden" > </span>
                     <label for="swpm-password-toggle-checkbox" class="swpm-password-toggle-checkbox-label">

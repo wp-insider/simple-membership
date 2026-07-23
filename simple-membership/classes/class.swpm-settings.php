@@ -155,7 +155,7 @@ class SwpmSettings {
 				'item'    => 'password-visibility-login-form',
 				'message' => SwpmUtils::_( 'You can use it to show a toggle password visibility option in the login form. It will add a Show Password checkbox.' ),
                 'toggler_select' => array(
-                    'item'    => 'password-visibility-toggler-login-form',
+                    'item'    => 'password-visibility-toggler-style-login-form',
                     'options' => SwpmUtils::get_pass_visibility_toggler_options(),
                     'default' => 'icon',
                     'message' => __( 'Select toggler style.' , 'simple-membership'),
@@ -173,7 +173,7 @@ class SwpmSettings {
                 'item'    => 'password-visibility-registration-form',
                 'message' => __( 'You can use it to show a toggle password visibility option in the registration form.' , 'simple-membership'),
                 'toggler_select' => array(
-                    'item'    => 'password-visibility-toggler-reg-form',
+                    'item'    => 'password-visibility-toggler-style-reg-form',
                     'options' => SwpmUtils::get_pass_visibility_toggler_options(),
                     'default' => 'icon',
                     'message' => __( 'Select toggler style.' , 'simple-membership'),
@@ -191,7 +191,7 @@ class SwpmSettings {
                 'item'    => 'password-visibility-profile-form',
                 'message' => __( 'You can use it to show a toggle password visibility option in the profile form.' , 'simple-membership'),
                 'toggler_select' => array(
-                    'item'    => 'password-visibility-toggler-profile-form',
+                    'item'    => 'password-visibility-toggler-style-profile-form',
                     'options' => SwpmUtils::get_pass_visibility_toggler_options(),
                     'default' => 'icon',
                     'message' => __( 'Select toggler style.' , 'simple-membership'),
@@ -1644,11 +1644,11 @@ class SwpmSettings {
 		$output['default-account-status-after-payment']   = esc_attr( $input['default-account-status-after-payment'] );
 		$output['members-login-to-comment'] = isset( $input['members-login-to-comment'] ) ? esc_attr( $input['members-login-to-comment'] ) : '';
 		$output['password-visibility-login-form'] = isset( $input['password-visibility-login-form'] ) ? esc_attr( $input['password-visibility-login-form'] ) : '';
-		$output['password-visibility-toggler-login-form'] = isset( $input['password-visibility-toggler-login-form'] ) ? esc_attr( $input['password-visibility-toggler-login-form'] ) : '';
+		$output['password-visibility-toggler-style-login-form'] = isset( $input['password-visibility-toggler-style-login-form'] ) ? esc_attr( $input['password-visibility-toggler-style-login-form'] ) : '';
 		$output['password-visibility-registration-form'] = isset( $input['password-visibility-registration-form'] ) ? esc_attr( $input['password-visibility-registration-form'] ) : '';
-		$output['password-visibility-toggler-reg-form'] = isset( $input['password-visibility-toggler-reg-form'] ) ? esc_attr( $input['password-visibility-toggler-reg-form'] ) : '';
+		$output['password-visibility-toggler-style-reg-form'] = isset( $input['password-visibility-toggler-style-reg-form'] ) ? esc_attr( $input['password-visibility-toggler-style-reg-form'] ) : '';
 		$output['password-visibility-profile-form'] = isset( $input['password-visibility-profile-form'] ) ? esc_attr( $input['password-visibility-profile-form'] ) : '';
-		$output['password-visibility-toggler-profile-form'] = isset( $input['password-visibility-toggler-profile-form'] ) ? esc_attr( $input['password-visibility-toggler-profile-form'] ) : '';
+		$output['password-visibility-toggler-style-profile-form'] = isset( $input['password-visibility-toggler-style-profile-form'] ) ? esc_attr( $input['password-visibility-toggler-style-profile-form'] ) : '';
 
 		return $output;
 	}

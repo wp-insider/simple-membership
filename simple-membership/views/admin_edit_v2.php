@@ -20,7 +20,7 @@ $is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extr
 $member_current_expiry_date = SwpmMemberUtils::get_formatted_expiry_date_by_user_id($member_id);
 
 $display_profile_form_password_toggle = SwpmSettings::get_instance()->get_value('password-visibility-profile-form');
-$password_toggler_type = SwpmSettings::get_instance()->get_value('password-visibility-toggler-profile-form');
+$password_toggler_type = SwpmSettings::get_instance()->get_value('password-visibility-toggler-style-profile-form', 'icon');
 if (!empty($display_profile_form_password_toggle)) {
     $all_password_input_selectors = '.swpm-form-password, .swpm-form-repass';
     $password_inputs_to_attach = $password_toggler_type == 'checkbox' ? '#pass-strength-result' : $all_password_input_selectors;

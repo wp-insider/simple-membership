@@ -353,14 +353,11 @@ class SwpmInstallation {
         }
 
         if (version_compare($installed_version, SIMPLE_WP_MEMBERSHIP_VER) == -1) {
+            //Upgrade path. Tasks for existing users of the plugin.
 
 			/**
-	         * NOTE: Backward Compatibility.
-	         *
-			 * TODO: Won't needed in future releases.
-			 *
-	         * Set login form password visibility toggler style to 'checkbox' type if before updating the plugin login form password toggler was enabled.
-	         * Also check if the toggler type wasn't set before, so that it doesn't update the value on every plugin update.
+	         * Backwards compatibility: Set login form password visibility toggler style to 'checkbox' type if before updating the plugin the login form password toggler was already enabled.
+	         * Also check if the toggler style wasn't set before, so that it doesn't update the value on every plugin upgrade scenario.
 	         */
 	        if (!empty($settings->get_value('password-visibility-login-form')) && $settings->get_value('password-visibility-toggler-style-login-form', '') == ''){
 		        $settings->set_value("password-visibility-toggler-style-login-form", "checkbox");

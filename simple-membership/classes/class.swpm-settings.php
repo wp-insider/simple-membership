@@ -153,12 +153,12 @@ class SwpmSettings {
 			'general-settings',
 			array(
 				'item'    => 'password-visibility-login-form',
-				'message' => SwpmUtils::_( 'You can use it to show a toggle password visibility option in the login form. It will add a Show Password checkbox.' ),
+				'message' => SwpmUtils::_( 'You can use it to show a toggle password visibility option in the login form.' ),
                 'toggler_select' => array(
                     'item'    => 'password-visibility-toggler-style-login-form',
                     'options' => SwpmUtils::get_pass_visibility_toggler_options(),
                     'default' => 'icon',
-                    'message' => __( 'Select toggler style.' , 'simple-membership'),
+                    'message' => __( 'Select toggle style.' , 'simple-membership'),
                 ),
 			)
 		);
@@ -176,7 +176,7 @@ class SwpmSettings {
                     'item'    => 'password-visibility-toggler-style-reg-form',
                     'options' => SwpmUtils::get_pass_visibility_toggler_options(),
                     'default' => 'icon',
-                    'message' => __( 'Select toggler style.' , 'simple-membership'),
+                    'message' => __( 'Select toggle style.' , 'simple-membership'),
                 ),
             )
         );
@@ -194,7 +194,7 @@ class SwpmSettings {
                     'item'    => 'password-visibility-toggler-style-profile-form',
                     'options' => SwpmUtils::get_pass_visibility_toggler_options(),
                     'default' => 'icon',
-                    'message' => __( 'Select toggler style.' , 'simple-membership'),
+                    'message' => __( 'Select toggle style.' , 'simple-membership'),
                 ),
             )
         );

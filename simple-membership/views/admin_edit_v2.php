@@ -23,7 +23,7 @@ $display_profile_form_password_toggle = SwpmSettings::get_instance()->get_value(
 $password_toggler_type = SwpmSettings::get_instance()->get_value('password-visibility-toggler-style-profile-form', 'icon');
 if (!empty($display_profile_form_password_toggle)) {
     $all_password_input_selectors = '.swpm-form-password, .swpm-form-repass';
-    $password_inputs_to_attach = $password_toggler_type == 'checkbox' ? '#pass-strength-result' : $all_password_input_selectors;
+    $password_inputs_to_attach = $all_password_input_selectors;
     SimpleWpMembership::enqueue_password_toggle_scripts('swpm.password-toggle', array(
         'type' => $password_toggler_type,
         'formId' => $form_id,
@@ -31,7 +31,7 @@ if (!empty($display_profile_form_password_toggle)) {
         'passwordInputSelectorsToAttach' => $password_inputs_to_attach,
         'checkboxTogglerInsertAfterSelector' => $password_inputs_to_attach,
         'checkboxTogglerStyles' => [
-                'margin' => '10px 0 0',
+                'margin' => '10px 0 6px',
         ],
     ));
 }

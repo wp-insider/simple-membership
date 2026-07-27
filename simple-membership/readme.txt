@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 4.7.8
+Stable tag: 4.7.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -192,9 +192,10 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
-- A PayPal subscription related vulnerability issue fixed.
-- Password visibility toggler support added to registration and profile form.
+= 4.7.9 =
+- Added an option to enable a password visibility toggle on the 'registration' form. When enabled, users can show or hide the password as they type.
+- Added an option to enable a password visibility toggle on the 'edit profile' form. When enabled, users can show or hide the password as they type.
+- A PayPal subscription related security issue fixed. Thank you to Ananda Dhakal for reporting this.
 
 = 4.7.8 =
 - Added validation of the 'subscr_ref' parameter in the PayPal standard IPN handling code. Thank you to Charles Vosburgh for reporting this.

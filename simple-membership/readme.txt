@@ -195,7 +195,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 = 4.7.9 =
 - Added an option to enable a password visibility toggle on the 'registration' form. When enabled, users can show or hide the password as they type.
 - Added an option to enable a password visibility toggle on the 'edit profile' form. When enabled, users can show or hide the password as they type.
-- A PayPal subscription related security issue fixed. Thank you to Ananda Dhakal for reporting this.
+- A PayPal trial subscription related security issue fixed. Thank you to Ananda Dhakal for reporting this.
 
 = 4.7.8 =
 - Added validation of the 'subscr_ref' parameter in the PayPal standard IPN handling code. Thank you to Charles Vosburgh for reporting this.

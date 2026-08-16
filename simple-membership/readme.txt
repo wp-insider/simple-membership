@@ -191,6 +191,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+= WIP =
+- Gutenberg block compatibility for WordPress v7.1.
 
 = 4.7.9 =
 - Added an option to enable a password visibility toggle on the 'registration' form. When enabled, users can show or hide the password as they type.

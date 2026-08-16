@@ -81,6 +81,7 @@ class SWPM_Blocks
                     ),
                 ),
                 'editor_script' => 'swpm_payment_button_block',
+                'editor_style' => 'swpm.stripe.style',
                 'render_callback' => array($this, 'render_payment_button_block'),
             )
         );

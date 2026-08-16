@@ -22,7 +22,22 @@ swpm_registerBlockType( 'simple-membership/payment-button', {
 			const blockProps = swpm_useBlockProps();
 
 			return [
-				swpm_element('div', blockProps,
+				swpm_element('div',
+					{
+						...blockProps,
+
+						// Disable links in the editor preview.
+						onClickCapture: function (event) {
+							if (event.target.closest('a')) {
+								event.preventDefault();
+							}
+						},
+
+						// Disable form submission in the editor preview.
+						onSubmitCapture: function (event) {
+							event.preventDefault();
+						},
+					},
 					swpm_element(
 						swpm_serverSideRender,
 						{

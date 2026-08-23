@@ -460,19 +460,67 @@ class SwpmMemberUtils {
 	public static function wp_user_has_admin_role( $wp_user_id ) {
 		$caps = get_user_meta( $wp_user_id, 'wp_capabilities', true );
 		if ( is_array( $caps ) && in_array( 'administrator', array_keys( (array) $caps ) ) ) {
-                    //This wp user has "administrator" role.
-                    return true;
+			//This wp user has "administrator" role in the current site.
+			return true;
 		}
-                //Check if $caps was empty (It can happen on sites with customized roles and capbilities). If yes, then perform an additional role check.
-                if ( empty ( $caps ) ){
-                    //Try to retrieve roles from the user object.
-                    SwpmLog::log_simple_debug( 'Empty caps. Calling get_wp_user_roles_by_id() to retrieve role.', true );
-                    $roles = self::get_wp_user_roles_by_id($wp_user_id);
-                    if ( is_array( $roles ) && in_array( 'administrator', array_keys( (array) $roles ) ) ) {
-                        //This wp user has "administrator" role.
-                        return true;
-                    }
-                }
+		
+		//Check if $caps was empty (It can happen on sites with customized roles and capbilities). If yes, then perform an additional role check.
+		if ( empty ( $caps ) ){
+			//Try to retrieve roles from the user object.
+			SwpmLog::log_simple_debug( 'Empty caps. Calling get_wp_user_roles_by_id() to retrieve role.', true );
+			$roles = self::get_wp_user_roles_by_id($wp_user_id);
+			if ( is_array( $roles ) && in_array( 'administrator', array_keys( (array) $roles ) ) ) {
+				//This wp user has "administrator" role.
+				return true;
+			}
+		}
+
+		// If this is a multisite install, check network-level and per-site roles as well.
+		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+			// Network super-admins should always be treated as admins.
+			if ( function_exists( 'is_super_admin' ) && is_super_admin( $wp_user_id ) ) {
+				return true;
+			}
+
+			// Try to enumerate sites the user belongs to and inspect their roles on those sites.
+			if ( function_exists( 'get_blogs_of_user' ) ) {
+				$blogs = get_blogs_of_user( $wp_user_id );
+				if ( is_array( $blogs ) && ! empty( $blogs ) ) {
+					foreach ( $blogs as $blog ) {
+						// Support different shapes returned by WP versions.
+						$blog_id = null;
+						if ( is_object( $blog ) ) {
+							if ( isset( $blog->userblog_id ) ) {
+								$blog_id = $blog->userblog_id; // older WP versions
+							} elseif ( isset( $blog->blog_id ) ) {
+								$blog_id = $blog->blog_id;
+							}
+						} elseif ( is_array( $blog ) && isset( $blog['blog_id'] ) ) {
+							$blog_id = $blog['blog_id'];
+						}
+
+						if ( empty( $blog_id ) ) {
+							continue;
+						}
+
+						// Switch to that blog context and check capabilities/roles there.
+						switch_to_blog( $blog_id );
+						$local_caps = get_user_meta( $wp_user_id, 'wp_capabilities', true );
+						if ( is_array( $local_caps ) && array_key_exists( 'administrator', (array) $local_caps ) ) {
+							restore_current_blog();
+							return true;
+						}
+						$user_local = get_userdata( $wp_user_id );
+						if ( $user_local && ! empty( $user_local->roles ) && is_array( $user_local->roles ) && in_array( 'administrator', $user_local->roles ) ) {
+							restore_current_blog();
+							return true;
+						}
+
+						restore_current_blog();
+					}
+				}
+			}
+		}
 
 		return false;
 	}

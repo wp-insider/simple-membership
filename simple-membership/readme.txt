@@ -191,6 +191,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+= WIP =
+- Multisite related vulnerability issue fixed.
 
 = 4.8.0 =
 - Gutenberg block compatibility for WordPress v7.1.

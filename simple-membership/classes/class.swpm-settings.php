@@ -959,6 +959,18 @@ class SwpmSettings {
 		);
 
 		add_settings_field(
+			'allow-existing-wp-user-registration',
+			SwpmUtils::_( 'Allow Existing WP User Registration' ),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'advanced-settings',
+			array(
+				'item'    => 'allow-existing-wp-user-registration',
+				'message' => SwpmUtils::_( 'By default, a new registration is not allowed to attach to an already existing WP user account (matched by email or username) unless that WP user account is created by this plugin. Enable this option only if you intentionally want new registrations to bind to pre-existing WP user accounts (e.g. accounts created by another plugin). Leaving this disabled is recommended for security reasons.' ),
+			)
+		);
+
+		add_settings_field(
 			'payment-notification-forward-url',
 			SwpmUtils::_( 'Payment Notification Forward URL' ),
 			array( &$this, 'textfield_long_callback' ),
@@ -1729,6 +1741,7 @@ class SwpmSettings {
         $output['hide-rego-form-to-logged-users']    = isset( $input['hide-rego-form-to-logged-users'] ) ? esc_attr( $input['hide-rego-form-to-logged-users'] ) : '';
 		$output['hide-join-us-link']                = isset( $input['hide-join-us-link'] ) ? esc_attr( $input['hide-join-us-link'] ) : '';
 		$output['force-wp-user-sync']                = isset( $input['force-wp-user-sync'] ) ? esc_attr( $input['force-wp-user-sync'] ) : '';
+		$output['allow-existing-wp-user-registration'] = isset( $input['allow-existing-wp-user-registration'] ) ? esc_attr( $input['allow-existing-wp-user-registration'] ) : '';
 		$output['payment-notification-forward-url']  = esc_url( $input['payment-notification-forward-url'] );
 		$output['use-new-form-ui']            		 = isset( $input['use-new-form-ui'] ) ? esc_attr( $input['use-new-form-ui'] ) : '';
 		$output['hide-adminbar']                  = isset( $input['hide-adminbar'] ) ? esc_attr( $input['hide-adminbar'] ) : '';

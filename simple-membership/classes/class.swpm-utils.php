@@ -344,17 +344,22 @@ abstract class SwpmUtils {
 		$wp_user_id = email_exists( $wp_user_data['user_email'] );
 		if ( $wp_user_id ) {
 			//A wp user account exist with this email.
+                        //Binding a new registration to a pre-existing WP user is disabled unless the site admin has explicitly opted in.
+                        SwpmMemberUtils::check_and_die_if_existing_wp_user_binding_not_allowed( $wp_user_id, 'email', $wp_user_data['user_email'] );
                         //For signle site WP install, no new user will be created. The existing user ID will be returned.
 		} else {
                     //Check if the username belongs to an existing wp user account.
                     $wp_user_id = username_exists( $wp_user_data['user_login'] );
                     if ( $wp_user_id ) {
                         //A wp user account exist with this username.
+                        //Binding a new registration to a pre-existing WP user is disabled unless the site admin has explicitly opted in.
+                        SwpmMemberUtils::check_and_die_if_existing_wp_user_binding_not_allowed( $wp_user_id, 'username', $wp_user_data['user_login'] );
                         //For signle site WP install, no new user will be created. The existing user ID will be returned.
                     }
                 }
 
 		//At this point 1) A WP User with this email or username doesn't exist. Or 2) The associated wp user doesn't have admin role
+		//And binding to a pre-existing (non-admin) WP user is either not applicable or has been explicitly allowed by the site admin.
 		//Lets create a new wp user record or attach the SWPM profile to an existing user accordingly.
 
 		if ( self::is_multisite_install() ) {

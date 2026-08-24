@@ -193,6 +193,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 = WIP =
 - Multisite related vulnerability issue fixed.
+- New registrations no longer bind to a pre-existing WP user account (matched by email or username) by default. Site admins can re-enable this via the new "Allow Existing WP User Registration" option in Advanced Settings.
 
 = 4.8.0 =
 - Gutenberg block compatibility for WordPress v7.1.

@@ -228,6 +228,92 @@ class SwpmFrontRegistrationTest extends WP_UnitTestCase_Custom
         $this->assertTrue($result);
     }
 
+    public function test_create_swpm_user_die_if_matching_existing_non_admin_wp_user_is_submitted_and_binding_not_allowed(): void
+    {
+        SwpmSettings::get_instance()->set_value('allow-existing-wp-user-registration', '');
+        SwpmSettings::get_instance()->set_value('enable-free-membership', 1);
+        SwpmSettings::get_instance()->set_value('free-membership-id', $this->level_id);
+
+        self::factory()->user->create([
+            'user_login' => 'test-existing-subscriber-email',
+            'user_email' => 'test-existing-subscriber@example.com',
+            'role' => 'subscriber',
+        ]);
+
+        $_POST = $this->_valid_members_post([
+            'user_name' => 'test-existing-subscriber-email',
+            'password' => 'test-pass',
+            'password_re' => 'test-pass',
+            'email' => 'test-existing-subscriber@example.com',
+            'level_identifier' => md5($this->level_id),
+            'membership_level' => $this->level_id,
+        ]);
+
+        $this->expectException(WPDieException::class);
+
+        $this->_call_private_method($this->instance, 'create_swpm_user');
+    }
+
+    public function test_create_swpm_user_returns_false_when_existing_wp_username_is_submitted_with_different_email(): void
+    {
+        SwpmSettings::get_instance()->set_value('allow-existing-wp-user-registration', '');
+        SwpmSettings::get_instance()->set_value('enable-free-membership', 1);
+        SwpmSettings::get_instance()->set_value('free-membership-id', $this->level_id);
+
+        self::factory()->user->create([
+            'user_login' => 'test-existing-subscriber-username',
+            'user_email' => 'test-existing-subscriber-username@example.com',
+            'role' => 'subscriber',
+        ]);
+
+        $_POST = $this->_valid_members_post([
+            'user_name' => 'test-existing-subscriber-username',
+            'password' => 'test-pass',
+            'password_re' => 'test-pass',
+            'email' => 'test-new-registrant-username@example.com',
+            'level_identifier' => md5($this->level_id),
+            'membership_level' => $this->level_id,
+        ]);
+
+        $result = $this->_call_private_method($this->instance, 'create_swpm_user');
+        $transfer_data = $this->_get_transfer_status();
+
+        $this->assertFalse($result);
+        $this->assertFalse($transfer_data['succeeded']);
+        $this->assertArrayHasKey('wp_email', $transfer_data['extra']);
+    }
+
+    public function test_create_swpm_user_returns_true_when_binding_to_existing_wp_user_is_allowed(): void
+    {
+        SwpmSettings::get_instance()->set_value('allow-existing-wp-user-registration', '1');
+        SwpmSettings::get_instance()->set_value('enable-free-membership', 1);
+        SwpmSettings::get_instance()->set_value('free-membership-id', $this->level_id);
+
+        self::factory()->user->create([
+            'user_login' => 'test-existing-subscriber-allowed',
+            'user_email' => 'test-existing-subscriber-allowed@example.com',
+            'role' => 'subscriber',
+        ]);
+
+        $_POST = $this->_valid_members_post([
+            'user_name' => 'test-existing-subscriber-allowed',
+            'password' => 'test-pass',
+            'password_re' => 'test-pass',
+            'email' => 'test-existing-subscriber-allowed@example.com',
+            'level_identifier' => md5($this->level_id),
+            'membership_level' => $this->level_id,
+        ]);
+
+        $result = $this->_call_private_method($this->instance, 'create_swpm_user');
+
+        $this->assertTrue($result, 'Should return true when binding to a pre-existing WP user is explicitly allowed');
+
+        global $wpdb;
+        $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE user_name = 'test-existing-subscriber-allowed'", ARRAY_A);
+
+        $this->assertNotNull($row, 'Expected a new row in swpm_members_tbl.');
+    }
+
 
     // =========================================================================
     // Password Reset

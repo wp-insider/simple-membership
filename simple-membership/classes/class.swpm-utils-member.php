@@ -432,6 +432,45 @@ class SwpmMemberUtils {
                 }
             }
         }
+	
+	/**
+	 * Find a WordPress user by email or username.
+	 *
+	 * @param array $member_email_and_username Array containing 'email' and 'user_name' keys.
+	 * 
+	 * @return array Array containing 'wp_user_id', 'identified_by', and 'identifier_value' if a user is found, empty array otherwise.
+	 */
+	public static function find_wp_user_by_email_or_username($member_email_and_username){
+		// Check if the member_info belongs to any existing wp user account.
+		$wp_user_id = isset($member_email_and_username['email']) && !empty($member_email_and_username['email']) ? email_exists( $member_email_and_username['email'] ) : 0;
+		if (!empty($wp_user_id)) {
+			return array(
+				'wp_user_id' => $wp_user_id,
+				'identified_by' => 'email',
+				'identifier_value' => $member_email_and_username['email'],
+			);
+		}
+		
+		$wp_user_id = isset($member_email_and_username['user_name']) && !empty($member_email_and_username['user_name']) ? username_exists( $member_email_and_username['user_name'] ) : 0;
+		if (!empty($wp_user_id)) {
+			return array(
+				'wp_user_id' => $wp_user_id,
+				'identified_by' => 'username',
+				'identifier_value' => $member_email_and_username['user_name'],
+			);
+		}
+		
+		return array();
+	}
+
+	public static function is_existing_wp_user_binding_allowed() {
+		$allow_existing_wp_user_reg = SwpmSettings::get_instance()->get_value( 'allow-existing-wp-user-registration' );
+		if ( empty( $allow_existing_wp_user_reg ) ) {
+			return false;
+		}
+
+		return true;
+	}
 
         /**
          * Checks whether a registration attempt is allowed to bind (attach) to an already existing WP user account
@@ -448,8 +487,7 @@ class SwpmMemberUtils {
                 return;
             }
 
-            $allow_existing_wp_user_reg = SwpmSettings::get_instance()->get_value( 'allow-existing-wp-user-registration' );
-            if ( ! empty( $allow_existing_wp_user_reg ) ) {
+            if ( self::is_existing_wp_user_binding_allowed() ) {
                 //Site admin has explicitly allowed registrations to bind to pre-existing WP user accounts. Nothing to do here.
                 return;
             }

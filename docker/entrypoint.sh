@@ -18,7 +18,6 @@ else
     echo ">>> WordPress test suite already installed, skipping..."
 fi
 
-
 cd /app/tests
 
 if [ ! -f "/app/tests/vendor/autoload.php" ]; then

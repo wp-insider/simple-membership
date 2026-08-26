@@ -246,12 +246,13 @@ class SwpmInstallation {
 	    }
 
         $reset_email_subject = get_bloginfo('name') . ": New Password";
-        $reset_email_body = "Dear {first_name} {last_name}" .
-                "\n\nHere is your new password:" .
+        $reset_email_body = "Hi {first_name}," .
+                "\n\nWe received a request to reset the password for the following account:" .
                 "\n\nUsername: {user_name}" .
-                "\nPassword: {password}" .
-                "\n\nYou can change the password from the edit profile section of the site (after you log into the site)" .
-                "\n\nThank You";
+                "\n\nTo reset your password, please visit the following link:" .
+                "\n\n{password_reset_link}" .
+                "\n\nIf you did not request a password reset, you can safely ignore this email." .
+                "\n\nThank you.";
 
         $status_change_email_subject = "Account Updated!";
         $status_change_email_body = "Dear {first_name} {last_name}," .
@@ -346,6 +347,8 @@ class SwpmInstallation {
             //Preparing it to be enabled by default in the future.
             //$settings->set_value("force-wp-user-sync", "checked='checked'");
 
+            $settings->set_value("password-reset-using-link", "checked='checked'");
+            
             $settings->set_value("use-new-form-ui", "checked='checked'");
 
             $settings->set_value("max-failed-login-attempts", SwpmLimitFailedLoginAttempts::DEFAULT_MAX_FAILED_LOGIN_ATTEMPTS);

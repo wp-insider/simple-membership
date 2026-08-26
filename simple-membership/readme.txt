@@ -194,6 +194,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 = WIP =
 - Multisite related vulnerability issue fixed.
 - New registrations no longer bind to a pre-existing WP user account (matched by email or username) by default. Site admins can re-enable this via the new "Allow Existing WP User Registration" option in Advanced Settings.
+- Stripe SDK updated to v21.2.1 with api version to 2026-07-29.dahlia.
 
 = 4.8.0 =
 - Gutenberg block compatibility for WordPress v7.1.

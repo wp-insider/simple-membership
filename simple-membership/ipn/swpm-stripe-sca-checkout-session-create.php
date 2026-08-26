@@ -145,7 +145,7 @@ class SwpmStripeCheckoutSessionCreate{
 
 		try {
 			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
-			\Stripe\Stripe::setApiVersion("2025-02-24.acacia");
+			\Stripe\Stripe::setApiVersion("2026-07-29.dahlia");
 			if ( empty( $plan_id ) ) {
 				//This is one-off payment
 				$opts = array(
@@ -216,6 +216,10 @@ class SwpmStripeCheckoutSessionCreate{
 			if ( !empty($allow_promotion_codes) && $allow_promotion_codes == '1' ) {
 				$opts["allow_promotion_codes"] = true;
 			}
+
+			$opts['managed_payments'] = array(
+				'enabled' => false,
+			);
 			
 			$opts = apply_filters( 'swpm_stripe_sca_session_opts', $opts, $button_id );
 

@@ -213,9 +213,18 @@ class SwpmStripeWebhookHandler {
 
 		$secret_key = null;
 
-		// Try to get api secret key
-		if (isset($event_json->data->object->object) && $event_json->data->object->object == 'subscription' ){
+		$sub_id = '';
+
+		// Try to get subscription id to get button specific api secret key
+
+		if (isset($event_json->data->object->object) && $event_json->data->object->object == 'subscription') {
 			$sub_id = $event_json->data->object->id;
+		} else if ($event_json->data->object->parent->subscription_details->subscription) {
+			// For example, object type = invoice.
+			$sub_id = $event_json->data->object->parent->subscription_details->subscription;
+		}
+
+		if (!empty($sub_id)) {
 			$sub_agreement_cpt_id = SWPM_Utils_Subscriptions::get_subscription_agreement_cpt_id_by_subs_id($sub_id);
 			$payment_button_id = get_post_meta($sub_agreement_cpt_id, 'payment_button_id', true);
 			$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $payment_button_id, !$sandbox_enabled );
@@ -236,12 +245,24 @@ class SwpmStripeWebhookHandler {
 
 		try {
 			SwpmMiscUtils::load_stripe_lib();
-			\Stripe\Stripe::setApiKey( $secret_key );
+			\Stripe\Stripe::setApiKey($secret_key);
+			\Stripe\Stripe::setApiVersion("2026-07-29.dahlia");
 
-			$invoice = \Stripe\Invoice::retrieve( $invoice_id );
+			$params = array(
+				'id' => $invoice_id,
+				'expand' => array(
+					'payments.data.payment.payment_intent',
+				),
+			);
+			
+			$invoice = \Stripe\Invoice::retrieve($params);
 
-			if ( isset($invoice->charge) ){
+			if (isset($invoice->charge)) {
+				// In old api version, the charge id used to be directly available on the invoice object.
 				$charge_id = $invoice->charge;
+			} else if (isset($invoice->payments->data[0]->payment->payment_intent->latest_charge)) {
+				// In newer api versions, the charge id is nested within the payment intent of the first payment.
+				$charge_id = $invoice->payments->data[0]->payment->payment_intent->latest_charge;
 			} else {
 				SwpmLog::log_simple_debug( 'Error: charge id could not be retrieved from invoice object.', false );
 			}

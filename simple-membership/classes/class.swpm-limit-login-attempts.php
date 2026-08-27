@@ -234,8 +234,15 @@ class SwpmLimitFailedLoginAttempts {
 		$table = $wpdb->prefix . 'swpm_events_tbl';
 
 		$delete = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $table . ' WHERE event_type = %s AND ip_address = %s', SwpmEventLogger::EVENT_TYPE_LOGIN_FAILED, $visitor_ip ) );
-		if ( ! $delete ) {
-			SwpmLog::log_auth_debug( 'Failed login limit could not be reset for visitor ip: ' . $visitor_ip, false );
+		if ( $delete === false ) {
+			//A database error occurred while trying to delete the failed login attempt records.
+			SwpmLog::log_auth_debug( 'Failed login limit could not be reset for visitor IP address: ' . $visitor_ip . '. Database error occurred.', false );
+			return;
+		}
+
+		if ( $delete === 0 ) {
+			//No failed login attempt records existed for this IP address. Nothing needed to be reset.
+			//Note: $wpdb->query() returns false only on an actual database error, and 0 when the DELETE matched no rows.
 			return;
 		}
 

@@ -56,11 +56,16 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 
 	public function render_unique_member_login_count_by_date() {
 		global $wpdb;
-		$query   = "SELECT COUNT(DISTINCT member_id) AS count, DATE(event_date_time) as date 
+		$cutoff_date = date( 'Y-m-d', mktime( 0, 0, 0, date( 'm' ) - 1, date( 'd' ), date( 'Y' ) ) );
+		$query = $wpdb->prepare(
+			"SELECT COUNT(DISTINCT member_id) AS count, DATE(event_date_time) as date 
                 FROM " . $wpdb->prefix . "swpm_events_tbl 
-                WHERE event_date_time > " . date( 'Y-m-d', mktime( 0, 0, 0, date( 'm' ) - 1, date( 'd' ), date( 'Y' ) ) ) . " 
+                WHERE event_type = %s AND event_date_time > %s 
                 GROUP BY DATE(event_date_time) 
-                ORDER BY DATE(event_date_time) DESC";
+                ORDER BY DATE(event_date_time) DESC",
+			SwpmEventLogger::EVENT_TYPE_LOGIN_SUCCESS,
+			$cutoff_date
+		);
 		$results = $wpdb->get_results( $query );
 
 		ob_start();
@@ -118,11 +123,16 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 
 	public function render_member_login_count_by_date() {
 		global $wpdb;
-		$query   = "SELECT COUNT(member_id) AS count, DATE(event_date_time) as date 
+		$cutoff_date = date( 'Y-m-d', mktime( 0, 0, 0, date( 'm' ) - 1, date( 'd' ), date( 'Y' ) ) );
+		$query = $wpdb->prepare(
+			"SELECT COUNT(member_id) AS count, DATE(event_date_time) as date 
                 FROM " . $wpdb->prefix . "swpm_events_tbl 
-                WHERE event_date_time > " . date( 'Y-m-d', mktime( 0, 0, 0, date( 'm' ) - 1, date( 'd' ), date( 'Y' ) ) ) . " 
+                WHERE event_type = %s AND event_date_time > %s 
                 GROUP BY DATE(event_date_time) 
-                ORDER BY DATE(event_date_time) DESC";
+                ORDER BY DATE(event_date_time) DESC",
+			SwpmEventLogger::EVENT_TYPE_LOGIN_SUCCESS,
+			$cutoff_date
+		);
 		$results = $wpdb->get_results( $query );
 
 		ob_start();

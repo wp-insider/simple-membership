@@ -252,7 +252,7 @@ class SwpmInstallation {
                 "\n\nTo reset your password, please visit the following link:" .
                 "\n\n{password_reset_link}" .
                 "\n\nIf you did not request a password reset, you can safely ignore this email." .
-                "\n\nThank you.";
+                "\n\nThank you";
 
         $status_change_email_subject = "Account Updated!";
         $status_change_email_body = "Hi {first_name}," .

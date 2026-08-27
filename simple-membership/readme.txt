@@ -194,7 +194,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 = 4.8.1 =
 - Updated the Stripe SDK to v21.2.1 and the Stripe API version to 2026-07-29.dahlia.
-- Updated the login count charts on the **Reports** menu counting failed login attempt records, which caused past dates to be listed with a count of zero.
+- Updated the login count charts on the Reports menu counting failed login attempt records, which caused past dates to be listed with a count of zero.
 - Updated the date range condition in the login count queries so the one month window is applied correctly.
 - The Recent Login Events section in the Reports menu now displays login events from the last 30 days by default.
 - Fixed a false "Failed login limit could not be reset" entry appearing in the debug log after a successful login when no failed login attempts existed for that IP address.

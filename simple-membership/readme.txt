@@ -191,6 +191,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+= WIP =
+- Recent Login Events table now has default data filter of last one month.
 
 = 4.8.1 =
 - Updated the Stripe SDK to v21.2.1 and the Stripe API version to 2026-07-29.dahlia.

@@ -254,6 +254,12 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 
 	    $table = new SWPM_Login_Events_List_Table();
 
+        // Set default date range of last month.
+        $table->set_start_date(date('Y-m-d', strtotime('-1 month')));
+        $table->set_end_date(date('Y-m-d'));
+
+        // Check if any filter applied.        
+
 	    if ( isset( $_REQUEST['swpm_start_date'] ) && !empty( $_REQUEST['swpm_start_date'] ) ){
 		    $table->set_start_date(sanitize_text_field($_REQUEST['swpm_start_date']));
 	    }

@@ -204,13 +204,13 @@ class SwpmInstallation {
 
         //Set other default settings values
         $reg_prompt_email_subject = "Complete your registration";
-        $reg_prompt_email_body = "Dear {first_name} {last_name}" .
+        $reg_prompt_email_body = "Hi {first_name}," .
                 "\n\nThank you for joining us!" .
                 "\n\nPlease complete your registration by visiting the following link:" .
                 "\n\n{reg_link}" .
                 "\n\nThank You";
         $reg_email_subject = "Your registration is complete";
-        $reg_email_body = "Dear {first_name} {last_name}\n\n" .
+        $reg_email_body = "Hi {first_name}," .
                 "Your registration is now complete!\n\n" .
                 "Registration details:\n" .
                 "Username: {user_name}\n" .
@@ -227,12 +227,12 @@ class SwpmInstallation {
                 "Thank You";
 
         $upgrade_email_subject = "Account Upgrade Confirmation Email";
-        $upgrade_email_body = "Dear {first_name} {last_name}" .
+        $upgrade_email_body = "Hi {first_name}," .
                 "\n\nYour Account Has Been Upgraded." .
                 "\n\nThank You";
 
 	    $renew_email_subject = "Account Renewal Confirmation Email";
-	    $renew_email_body = "Dear {first_name} {last_name}" .
+	    $renew_email_body = "Hi {first_name}," .
 	                          "\n\nYour Account Has Been Renewed." .
 	                          "\n\nThank You";
 		// Set default value if it is not set.
@@ -245,7 +245,7 @@ class SwpmInstallation {
 		    $settings->set_value('renew-complete-mail-body', stripslashes($renew_email_body));
 	    }
 
-        $reset_email_subject = get_bloginfo('name') . ": New Password";
+        $reset_email_subject = get_bloginfo('name') . ": Password Reset Request";
         $reset_email_body = "Hi {first_name}," .
                 "\n\nWe received a request to reset the password for the following account:" .
                 "\n\nUsername: {user_name}" .
@@ -255,7 +255,7 @@ class SwpmInstallation {
                 "\n\nThank you.";
 
         $status_change_email_subject = "Account Updated!";
-        $status_change_email_body = "Dear {first_name} {last_name}," .
+        $status_change_email_body = "Hi {first_name}," .
                 "\n\nYour account status has been updated!" .
                 " Please login to the member area at the following URL:" .
                 "\n\n {login_link}" .
@@ -268,7 +268,7 @@ class SwpmInstallation {
                 "\n\nThank You";
 
         $email_activation_mail_subject = "Action Required to Activate Your Account";
-        $email_activation_mail_body = "Dear {first_name}" .
+        $email_activation_mail_body = "Hi {first_name}," .
                 "\n\nThank you for registering. To activate your account, please click on the following link (this will confirm your email address):" .
                 "\n\n{activation_link}" .
                 "\n\nThank You";
@@ -285,7 +285,7 @@ class SwpmInstallation {
         }
 
 	    $subscription_cancel_member_mail_subject = "Subscription payment agreement has been canceled or expired";
-	    $subscription_cancel_member_mail_body = "Dear {first_name}" .
+	    $subscription_cancel_member_mail_body = "Hi {first_name}," .
                 "\n\nYour subscription payment agreement with the details below has been canceled or expired." .
                 "\n\nMember ID: {member_id}" .
                 "\nSubscription ID: {subscription_id}" .
@@ -302,7 +302,7 @@ class SwpmInstallation {
 	    }
 
 	    $manual_approval_mail_subject = "Your account has been approved";
-	    $manual_approval_mail_body = "Dear {first_name}" .
+	    $manual_approval_mail_body = "Hi {first_name}," .
 	                                "\n\nYour account has been reviewed and approved successfully." .
 	                                "\n\nYou can now log in and start using your account." .
 	                                "\n\nThank You";

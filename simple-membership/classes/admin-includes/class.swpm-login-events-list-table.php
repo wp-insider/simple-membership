@@ -118,11 +118,12 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 	        $args[] = $username;
         }
 
-        if ( isset($this->start_date) && isset($this->end_date) ){
+        $date_range = $this->get_date_range_bounds();
+        if ( $date_range ) {
             $query .= " AND event_date_time BETWEEN %s AND %s";
 
-            $args[]  = $this->resolve_datetime( $this->start_date, '00:00:00' );
-            $args[]  = $this->resolve_datetime( $this->end_date,   '23:59:59' );
+            $args[] = $date_range['start'];
+            $args[] = $date_range['end'];
         }
 
         $query = !empty($args) ? $wpdb->prepare($query, ...$args) : $query;
@@ -137,6 +138,8 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 
         $query = "SELECT * FROM $table WHERE event_type = 'login_success'";
 
+        $args = array();
+
 		if ( isset($this->search) && !empty($this->search) ){
 			$username = "%" . $wpdb->esc_like($this->search) . "%";
 
@@ -145,11 +148,12 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 			$args[] = $username;
 		}
 
-		if ( isset($this->start_date) && isset($this->end_date) ){
+		$date_range = $this->get_date_range_bounds();
+		if ( $date_range ) {
 		    $query .= " AND event_date_time BETWEEN %s AND %s";
 
-            $args[]  = $this->resolve_datetime( $this->start_date, '00:00:00' );
-            $args[]  = $this->resolve_datetime( $this->end_date,   '23:59:59' );
+            $args[] = $date_range['start'];
+            $args[] = $date_range['end'];
 		}
 
         $query .= " ORDER BY event_id DESC LIMIT %d OFFSET %d";
@@ -162,15 +166,50 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 	}
 
     /**
-     * Resolves a date string to a full datetime string in the WP timezone.
-     * If the value already contains a time component, it is used as-is.
-     * Otherwise the supplied $default_time (e.g. "00:00:00") is applied.
+     * Returns the normalised ['start' => ..., 'end' => ...] datetime bounds for the
+     * current date filter, or null when no valid range is set.
+     *
+     * Login events are stored in site-local time (via current_time('mysql')), so the
+     * filter bounds are treated as site-local as well - no timezone conversion is applied.
+     */
+    private function get_date_range_bounds() {
+        if ( ! isset( $this->start_date ) || ! isset( $this->end_date ) ) {
+            return null;
+        }
+
+        $start = $this->resolve_datetime( $this->start_date, '00:00:00' );
+        $end   = $this->resolve_datetime( $this->end_date, '23:59:59' );
+
+        if ( null === $start || null === $end ) {
+            return null;
+        }
+
+        return array( 'start' => $start, 'end' => $end );
+    }
+
+    /**
+     * Normalises a user-supplied date (or datetime) string to "Y-m-d H:i:s".
+     * If the value already contains a time component, it is used as-is; otherwise
+     * the supplied $default_time (e.g. "00:00:00") is appended.
+     * Returns null when the value cannot be parsed, so the caller can skip the filter
+     * instead of triggering a fatal error on malformed input.
      */
     private function resolve_datetime( $date_string, $default_time ) {
-        $tz          = wp_timezone();
+        $date_string = trim( (string) $date_string );
+
+        if ( '' === $date_string ) {
+            return null;
+        }
+
         $has_time    = ( strpos( $date_string, ' ' ) !== false || strpos( $date_string, 'T' ) !== false );
         $parse_value = $has_time ? $date_string : $date_string . ' ' . $default_time;
-        return ( new DateTimeImmutable( $parse_value, $tz ) )->format( 'Y-m-d H:i:s' );
+
+        $timestamp = strtotime( $parse_value );
+        if ( false === $timestamp ) {
+            return null;
+        }
+
+        return date( 'Y-m-d H:i:s', $timestamp );
     }
 
 	protected function get_sortable_columns() {
@@ -242,8 +281,8 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 
 	public function display_filter_data_section() {
 
-        $start_date = empty($this->start_date) ? wp_date('Y-m-d') : wp_date('Y-m-d', strtotime($this->start_date));
-		$end_date = empty($this->end_date) ? wp_date('Y-m-d') : wp_date('Y-m-d', strtotime($this->end_date));
+        $start_date = empty($this->start_date) ? date('Y-m-d' ) : date('Y-m-d', strtotime($this->start_date));
+		$end_date = empty($this->end_date) ? date('Y-m-d' ) : date('Y-m-d', strtotime($this->end_date));
 
         ?>
         <fieldset id="swpm-login-events-filter-fieldset" class="alignleft actions searchactions" style="display: flex; align-items: end; flex-wrap: wrap; margin-bottom: 18px">

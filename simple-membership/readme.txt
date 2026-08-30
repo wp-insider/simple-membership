@@ -191,9 +191,10 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
-= WIP =
-- WP User binding option during front registration is completely removed and instead a new filter hook 'swpm_allow_existing_wp_user_registration' added to allow wp user binding.
-- The recent login events table now shows events captured between 12:00 AM on the start date and 11:59 PM on the end date.
+
+= 4.8.2 =
+- Removed the WP user binding option from front-end registration. Developers can use the new swpm_allow_existing_wp_user_registration filter hook to allow registration using an existing WordPress user account.
+- The Recent Login Events table now displays events recorded from 12:00 AM on the selected start date through 11:59 PM on the selected end date.
 
 = 4.8.1 =
 - Updated the Stripe SDK to v21.2.1 and the Stripe API version to 2026-07-29.dahlia.

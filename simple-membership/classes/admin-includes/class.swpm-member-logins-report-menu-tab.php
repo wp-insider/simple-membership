@@ -255,8 +255,8 @@ class SWPM_Member_Logins_Report_Menu_Tab {
 	    $table = new SWPM_Login_Events_List_Table();
 
         // Set default date range of last month.
-        $table->set_start_date(date('Y-m-d', strtotime('-1 month')));
-        $table->set_end_date(date('Y-m-d'));
+        $table->set_start_date(wp_date('Y-m-d', strtotime('-1 month')));
+        $table->set_end_date(wp_date('Y-m-d'));
 
         // Check if any filter applied.        
 

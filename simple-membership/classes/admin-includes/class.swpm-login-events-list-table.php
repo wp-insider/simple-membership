@@ -121,8 +121,8 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
         if ( isset($this->start_date) && isset($this->end_date) ){
             $query .= " AND event_date_time BETWEEN %s AND %s";
 
-	        $args[] = date("Y-m-d H:i:s", strtotime($this->start_date));
-	        $args[] = date("Y-m-d 11:59:59", strtotime($this->end_date));
+            $args[]  = $this->resolve_datetime( $this->start_date, '00:00:00' );
+            $args[]  = $this->resolve_datetime( $this->end_date,   '23:59:59' );
         }
 
         $query = !empty($args) ? $wpdb->prepare($query, ...$args) : $query;
@@ -148,8 +148,8 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 		if ( isset($this->start_date) && isset($this->end_date) ){
 		    $query .= " AND event_date_time BETWEEN %s AND %s";
 
-            $args[] = date("Y-m-d H:i:s", strtotime($this->start_date));
-			$args[] = date("Y-m-d 11:59:59", strtotime($this->end_date));
+            $args[]  = $this->resolve_datetime( $this->start_date, '00:00:00' );
+            $args[]  = $this->resolve_datetime( $this->end_date,   '23:59:59' );
 		}
 
         $query .= " ORDER BY event_id DESC LIMIT %d OFFSET %d";
@@ -160,6 +160,18 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 
 		return $wpdb->get_results($query, ARRAY_A);
 	}
+
+    /**
+     * Resolves a date string to a full datetime string in the WP timezone.
+     * If the value already contains a time component, it is used as-is.
+     * Otherwise the supplied $default_time (e.g. "00:00:00") is applied.
+     */
+    private function resolve_datetime( $date_string, $default_time ) {
+        $tz          = wp_timezone();
+        $has_time    = ( strpos( $date_string, ' ' ) !== false || strpos( $date_string, 'T' ) !== false );
+        $parse_value = $has_time ? $date_string : $date_string . ' ' . $default_time;
+        return ( new DateTimeImmutable( $parse_value, $tz ) )->format( 'Y-m-d H:i:s' );
+    }
 
 	protected function get_sortable_columns() {
 		return array(
@@ -230,8 +242,8 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 
 	public function display_filter_data_section() {
 
-        $start_date = empty($this->start_date) ? date('Y-m-d' ) : date('Y-m-d', strtotime($this->start_date));
-		$end_date = empty($this->end_date) ? date('Y-m-d' ) : date('Y-m-d', strtotime($this->end_date));
+        $start_date = empty($this->start_date) ? wp_date('Y-m-d') : wp_date('Y-m-d', strtotime($this->start_date));
+		$end_date = empty($this->end_date) ? wp_date('Y-m-d') : wp_date('Y-m-d', strtotime($this->end_date));
 
         ?>
         <fieldset id="swpm-login-events-filter-fieldset" class="alignleft actions searchactions" style="display: flex; align-items: end; flex-wrap: wrap; margin-bottom: 18px">

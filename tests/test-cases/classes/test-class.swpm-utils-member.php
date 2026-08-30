@@ -11,9 +11,6 @@ class SwpmUtilsMemberTest extends WP_UnitTestCase_Custom
 
     public function tearDown(): void
     {
-        // Make sure the setting doesn't leak into other tests.
-        SwpmSettings::get_instance()->set_value('allow-existing-wp-user-registration', '');
-
         $this->_allow_php_exit(true);
 
         parent::tearDown();
@@ -104,58 +101,70 @@ class SwpmUtilsMemberTest extends WP_UnitTestCase_Custom
     }
 
     // =========================================================================
-    // is_existing_wp_user_binding_allowed()
+    // check_and_die_if_existing_wp_user_exists()
     // =========================================================================
 
-    public function test_is_existing_wp_user_binding_allowed_returns_false_by_default(): void
+    public function test_check_and_die_if_existing_wp_user_exists_does_nothing_when_no_wp_user_match(): void
     {
-        SwpmSettings::get_instance()->set_value('allow-existing-wp-user-registration', '');
+        SwpmMemberUtils::check_and_die_if_existing_wp_user_exists([
+            'email' => 'no-match@example.com',
+            'user_name' => 'no-match-user',
+        ]);
 
-        $this->assertFalse(SwpmMemberUtils::is_existing_wp_user_binding_allowed());
-    }
-
-    public function test_is_existing_wp_user_binding_allowed_returns_true_when_setting_enabled(): void
-    {
-        SwpmSettings::get_instance()->set_value('allow-existing-wp-user-registration', '1');
-
-        $this->assertTrue(SwpmMemberUtils::is_existing_wp_user_binding_allowed());
-    }
-
-    // =========================================================================
-    // check_and_die_if_existing_wp_user_binding_not_allowed()
-    // =========================================================================
-
-    public function test_check_and_die_if_existing_wp_user_binding_not_allowed_does_nothing_when_wp_user_id_is_empty(): void
-    {
-        SwpmMemberUtils::check_and_die_if_existing_wp_user_binding_not_allowed(0, 'email', 'test-user@example.com');
-
-        // wp_die() was not triggered — reaching here means the assertion passed.
         $this->addToAssertionCount(1);
     }
 
-    public function test_check_and_die_if_existing_wp_user_binding_not_allowed_does_nothing_when_binding_allowed(): void
+    public function test_check_and_die_if_existing_wp_user_exists_dies_with_email_message_by_default(): void
     {
-        SwpmSettings::get_instance()->set_value('allow-existing-wp-user-registration', '1');
+        self::factory()->user->create([
+            'user_login' => 'test-existing-email-user',
+            'user_email' => 'test-user@example.com',
+            'role' => 'subscriber',
+        ]);
 
-        SwpmMemberUtils::check_and_die_if_existing_wp_user_binding_not_allowed(123, 'email', 'test-user@example.com');
-
-        // wp_die() was not triggered — reaching here means the assertion passed.
-        $this->addToAssertionCount(1);
-    }
-
-    public function test_check_and_die_if_existing_wp_user_binding_not_allowed_dies_with_email_message(): void
-    {
         $this->expectException(WPDieException::class);
         $this->expectExceptionMessageMatches('/test-user@example\\.com/');
 
-        SwpmMemberUtils::check_and_die_if_existing_wp_user_binding_not_allowed(123, 'email', 'test-user@example.com');
+        SwpmMemberUtils::check_and_die_if_existing_wp_user_exists([
+            'email' => 'test-user@example.com',
+            'user_name' => 'some-other-user',
+        ]);
     }
 
-    public function test_check_and_die_if_existing_wp_user_binding_not_allowed_dies_with_username_message(): void
+    public function test_check_and_die_if_existing_wp_user_exists_dies_with_username_message_by_default(): void
     {
+        self::factory()->user->create([
+            'user_login' => 'test-existing-username',
+            'user_email' => 'test-existing-username@example.com',
+            'role' => 'subscriber',
+        ]);
+
         $this->expectException(WPDieException::class);
         $this->expectExceptionMessageMatches('/test-existing-username/');
 
-        SwpmMemberUtils::check_and_die_if_existing_wp_user_binding_not_allowed(123, 'username', 'test-existing-username');
+        SwpmMemberUtils::check_and_die_if_existing_wp_user_exists([
+            'email' => 'different-email@example.com',
+            'user_name' => 'test-existing-username',
+        ]);
+    }
+
+    public function test_check_and_die_if_existing_wp_user_exists_does_nothing_when_filter_allows_binding(): void
+    {
+        self::factory()->user->create([
+            'user_login' => 'test-filter-user',
+            'user_email' => 'test-filter-user@example.com',
+            'role' => 'subscriber',
+        ]);
+
+        add_filter('swpm_allow_existing_wp_user_binding_on_registration', '__return_true');
+
+        SwpmMemberUtils::check_and_die_if_existing_wp_user_exists([
+            'email' => 'test-filter-user@example.com',
+            'user_name' => 'some-other-user',
+        ]);
+
+        remove_filter('swpm_allow_existing_wp_user_binding_on_registration', '__return_true');
+
+        $this->addToAssertionCount(1);
     }
 }

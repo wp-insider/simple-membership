@@ -191,6 +191,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+= WIP =
+- WP User binding option during front registration is completely removed and instead a new filter hook 'swpm_allow_existing_wp_user_registration' added to allow wp user binding.
 
 = 4.8.1 =
 - Updated the Stripe SDK to v21.2.1 and the Stripe API version to 2026-07-29.dahlia.

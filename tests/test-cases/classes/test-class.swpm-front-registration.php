@@ -230,7 +230,6 @@ class SwpmFrontRegistrationTest extends WP_UnitTestCase_Custom
 
     public function test_create_swpm_user_die_if_matching_existing_non_admin_wp_user_is_submitted_and_binding_not_allowed(): void
     {
-        SwpmSettings::get_instance()->set_value('allow-existing-wp-user-registration', '');
         SwpmSettings::get_instance()->set_value('enable-free-membership', 1);
         SwpmSettings::get_instance()->set_value('free-membership-id', $this->level_id);
 
@@ -256,7 +255,6 @@ class SwpmFrontRegistrationTest extends WP_UnitTestCase_Custom
 
     public function test_create_swpm_user_returns_false_when_existing_wp_username_is_submitted_with_different_email(): void
     {
-        SwpmSettings::get_instance()->set_value('allow-existing-wp-user-registration', '');
         SwpmSettings::get_instance()->set_value('enable-free-membership', 1);
         SwpmSettings::get_instance()->set_value('free-membership-id', $this->level_id);
 
@@ -283,9 +281,8 @@ class SwpmFrontRegistrationTest extends WP_UnitTestCase_Custom
         $this->assertArrayHasKey('wp_email', $transfer_data['extra']);
     }
 
-    public function test_create_swpm_user_returns_true_when_binding_to_existing_wp_user_is_allowed(): void
+    public function test_create_swpm_user_returns_true_when_binding_to_existing_wp_user_is_allowed_via_filter(): void
     {
-        SwpmSettings::get_instance()->set_value('allow-existing-wp-user-registration', '1');
         SwpmSettings::get_instance()->set_value('enable-free-membership', 1);
         SwpmSettings::get_instance()->set_value('free-membership-id', $this->level_id);
 
@@ -294,6 +291,8 @@ class SwpmFrontRegistrationTest extends WP_UnitTestCase_Custom
             'user_email' => 'test-existing-subscriber-allowed@example.com',
             'role' => 'subscriber',
         ]);
+
+        add_filter('swpm_allow_existing_wp_user_registration', '__return_true');
 
         $_POST = $this->_valid_members_post([
             'user_name' => 'test-existing-subscriber-allowed',
@@ -305,6 +304,8 @@ class SwpmFrontRegistrationTest extends WP_UnitTestCase_Custom
         ]);
 
         $result = $this->_call_private_method($this->instance, 'create_swpm_user');
+
+        remove_filter('swpm_allow_existing_wp_user_registration', '__return_true');
 
         $this->assertTrue($result, 'Should return true when binding to a pre-existing WP user is explicitly allowed');
 

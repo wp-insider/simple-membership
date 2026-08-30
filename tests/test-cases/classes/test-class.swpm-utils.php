@@ -122,7 +122,7 @@ class SwpmUtilsTest extends WP_UnitTestCase_Custom
         ]);
 
         // Binding to a pre-existing non-admin WP user is no longer blocked inside create_wp_user() itself
-        // (the caller is expected to have already checked this via SwpmMemberUtils::check_and_die_if_existing_wp_user_binding_not_allowed()).
+        // (the caller is expected to have already checked this via SwpmMemberUtils::check_and_die_if_existing_wp_user_exists()).
         $wp_user_id = SwpmUtils::create_wp_user($wp_user_data);
 
         $this->assertSame($existing_wp_user_id, $wp_user_id);

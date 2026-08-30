@@ -195,7 +195,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 		//Crete the member profile and send notification
 		if ( $this->create_swpm_user() ) {
-			// NOTE: check_and_die_if_existing_wp_user_binding_not_allowed() executes inside the create_swpm_user() method, so no need to add it to create_wp_user() in this code flow.
+			// NOTE: check_and_die_if_existing_wp_user_exists() executes inside the create_swpm_user() method, so no need to add it to create_wp_user() in this code flow.
 
 			//SWPM user creation was successful. Now create the corresponding WP user record and send the notification email.
 			if ( $this->prepare_and_create_wp_user_front_end() && $this->send_reg_email() ){
@@ -274,12 +274,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			'email' => isset($member_info['email']) ? $member_info['email'] : '',
 			'user_name' => isset($member_info['user_name']) ? $member_info['user_name'] : '',
 		);
-
-		$found_wp_user = SwpmMemberUtils::find_wp_user_by_email_or_username($member_email_and_username);
-		if(!empty($found_wp_user)) {
-			// A wp user account exist with this email or username. Check if binding a new registration to a pre-existing WP user is allowed.
-			SwpmMemberUtils::check_and_die_if_existing_wp_user_binding_not_allowed($found_wp_user['wp_user_id'], $found_wp_user['identified_by'], $found_wp_user['identifier_value']);
-		}
+		SwpmMemberUtils::check_and_die_if_existing_wp_user_exists($member_email_and_username);
 
 		//Check if the email belongs to an existing wp user account with admin role.
         SwpmMemberUtils::check_and_die_if_email_belongs_to_admin_user($member_info['email']);

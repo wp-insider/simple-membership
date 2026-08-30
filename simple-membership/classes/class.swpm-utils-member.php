@@ -463,45 +463,34 @@ class SwpmMemberUtils {
 		return array();
 	}
 
-	public static function is_existing_wp_user_binding_allowed() {
-		$allow_existing_wp_user_reg = SwpmSettings::get_instance()->get_value( 'allow-existing-wp-user-registration' );
-		if ( empty( $allow_existing_wp_user_reg ) ) {
-			return false;
+	public static function check_and_die_if_existing_wp_user_exists($member_email_and_username){
+		$found_wp_user = SwpmMemberUtils::find_wp_user_by_email_or_username($member_email_and_username);
+
+		if ( empty($found_wp_user) ) {
+			return;
 		}
 
-		return true;
+		list(
+			'wp_user_id' => $wp_user_id,
+			'identified_by' => $identified_by,
+			'identifier_value' => $identifier_value
+		) = $found_wp_user;
+
+		$allow_binding = apply_filters('swpm_allow_existing_wp_user_registration', false, $found_wp_user, $member_email_and_username);
+		if ( $allow_binding ) {
+			return;
+		}
+
+		if ( $identified_by === 'email' ) {
+			$error_msg = '<p>' . sprintf( __( 'This email address (%s) is already associated with an existing user account on this site.', 'simple-membership' ), $identifier_value ) . '</p>';
+		} else {
+			$error_msg = '<p>' . sprintf( __( 'This username (%s) is already associated with an existing user account on this site.', 'simple-membership' ), $identifier_value ) . '</p>';
+		}
+		$error_msg .= '<p>' . __( 'For security reasons, a new membership account cannot be automatically linked to an existing user account. Please use a different email address/username to register.', 'simple-membership' ) . '</p>';
+		$error_msg .= '<p>' . __( 'If this is your existing account, please contact the site admin so they can link it to a membership from the admin dashboard.', 'simple-membership' ) . '</p>';
+		SwpmLog::log_simple_debug( 'Registration blocked - attempted to bind to an existing WP user (ID: ' . $wp_user_id . ') via ' . $identified_by . '.', true );
+		wp_die( $error_msg );
 	}
-
-        /**
-         * Checks whether a registration attempt is allowed to bind (attach) to an already existing WP user account
-         * (identified via email_exists() or username_exists() by the caller). Binding to a pre-existing WP user
-         * without any proof of ownership (e.g. the account's current password) is disabled by default. Site admins
-         * can opt back into the old behavior via the "Allow Existing WP User Registration" option in Advanced Settings.
-         *
-         * @param int    $wp_user_id       The existing WP user ID that was matched.
-         * @param string $identifier_type  Either 'email' or 'username'. Used to build the correct error message.
-         * @param string $identifier_value The email or username value that was submitted.
-         */
-        public static function check_and_die_if_existing_wp_user_binding_not_allowed( $wp_user_id, $identifier_type, $identifier_value ) {
-            if ( empty( $wp_user_id ) ) {
-                return;
-            }
-
-            if ( self::is_existing_wp_user_binding_allowed() ) {
-                //Site admin has explicitly allowed registrations to bind to pre-existing WP user accounts. Nothing to do here.
-                return;
-            }
-
-            if ( $identifier_type === 'email' ) {
-                $error_msg = '<p>' . sprintf( __( 'This email address (%s) is already associated with an existing user account on this site.', 'simple-membership' ), $identifier_value ) . '</p>';
-            } else {
-                $error_msg = '<p>' . sprintf( __( 'This username (%s) is already associated with an existing user account on this site.', 'simple-membership' ), $identifier_value ) . '</p>';
-            }
-            $error_msg .= '<p>' . __( 'For security reasons, a new membership account cannot be automatically linked to an existing user account. Please use a different email address/username to register.', 'simple-membership' ) . '</p>';
-            $error_msg .= '<p>' . __( 'If this is your existing account, please contact the site admin so they can link it to a membership from the admin dashboard.', 'simple-membership' ) . '</p>';
-            SwpmLog::log_simple_debug( 'Registration blocked - attempted to bind to an existing WP user (ID: ' . $wp_user_id . ') via ' . $identifier_type . '. The "Allow Existing WP User Registration" option is disabled.', true );
-            wp_die( $error_msg );
-        }
 
         /**
          * Get wp user roles by user ID.

@@ -482,13 +482,13 @@ class SwpmMemberUtils {
 		}
 
 		if ( $identified_by === 'email' ) {
-			$error_msg = '<p>' . sprintf( __( 'This email address (%s) is already associated with an existing user account on this site.', 'simple-membership' ), $identifier_value ) . '</p>';
+			$error_msg = '<p>' . sprintf( __( 'This email address (%s) is already associated with an existing WordPress user account on this site.', 'simple-membership' ), $identifier_value ) . '</p>';
 		} else {
-			$error_msg = '<p>' . sprintf( __( 'This username (%s) is already associated with an existing user account on this site.', 'simple-membership' ), $identifier_value ) . '</p>';
+			$error_msg = '<p>' . sprintf( __( 'This username (%s) is already associated with an existing WordPress user account on this site.', 'simple-membership' ), $identifier_value ) . '</p>';
 		}
-		$error_msg .= '<p>' . __( 'For security reasons, a new membership account cannot be automatically linked to an existing user account. Please use a different email address/username to register.', 'simple-membership' ) . '</p>';
+		$error_msg .= '<p>' . __( 'For security reasons, a new membership account cannot be automatically linked to an existing WordPress user account. Please use a different email address/username to register.', 'simple-membership' ) . '</p>';
 		$error_msg .= '<p>' . __( 'If this is your existing account, please contact the site admin so they can link it to a membership from the admin dashboard.', 'simple-membership' ) . '</p>';
-		SwpmLog::log_simple_debug( 'Registration blocked - attempted to bind to an existing WP user (ID: ' . $wp_user_id . ') via ' . $identified_by . '.', true );
+		SwpmLog::log_simple_debug( 'Registration prevented: Attempted to bind the member account to an existing WordPress user (ID: ' . $wp_user_id . ') account using ' . $identified_by . ': ' . $identifier_value . '.', true );
 		wp_die( $error_msg );
 	}
 

@@ -192,6 +192,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Applied a fix for the "Auto Prune Login Events" feature in the reports menu.
+
 = 4.8.2 =
 - The Recent Login Events table now displays events recorded from 12:00 AM on the selected start date through 11:59 PM on the selected end date.
 - Removed the WP user binding option from front-end registration. Users can use the new swpm_allow_existing_wp_user_registration filter hook to allow registration using an existing WordPress user account.

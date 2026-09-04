@@ -124,7 +124,7 @@ class SwpmCronJob {
 	public function handle_daily_cron_event(){
 		$auto_prune_login_events = SwpmSettings::get_instance()->get_value('auto_prune_login_events');
 		if ( $auto_prune_login_events ){
-            $prune_cuttoff_date = date("Y-m-d H:i:s", strtotime("- 1 day"));
+            $prune_cuttoff_date = date("Y-m-d H:i:s", strtotime("- 1 year"));
 			SwpmEventLogger::prune_events_db_table(SwpmEventLogger::EVENT_TYPE_LOGIN_SUCCESS, $prune_cuttoff_date);
 		}
 	}

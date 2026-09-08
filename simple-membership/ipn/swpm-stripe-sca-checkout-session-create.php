@@ -122,11 +122,17 @@ class SwpmStripeCheckoutSessionCreate{
 		$hashed_ip = md5($user_ip);
 		$ref_id = 'swpm_' . $hashed_ip . '|' . $button_id;
 
+		//URL-encode the ref_id before embedding it in the success_url. The raw value contains a pipe (|) character
+		//which is not URL-legal, so it can get dropped/mangled in transit on the return from Stripe (resulting in a
+		//"Payment button (ID: 0) does not exist" error after a completed payment). The client_reference_id below is
+		//sent to Stripe as an API field (not via a URL) so it keeps the raw value for the exact match on return.
+		$ref_id_for_url = rawurlencode( $ref_id );
+
 		//Return, cancel, notifiy URLs.
 		if ( empty( $plan_id ) ) {
-			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_buy_now=1&ref_id=%s', $ref_id );
+			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_buy_now=1&ref_id=%s', $ref_id_for_url );
 		} else {
-			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_subscription=1&ref_id=%s', $ref_id );
+			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_subscription=1&ref_id=%s', $ref_id_for_url );
 		}
 
 		//The url to redirect to when user clicks on the back button in the stripe sca buy now button checkout page. If no url set, there will be no back button.

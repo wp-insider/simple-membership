@@ -34,6 +34,12 @@ class SwpmStripeSCABuyNowIpnHandler {
 
 		}
 
+		//The ref_id is sent as "swpm_<hash>|<button_id>". If the pipe separator is missing but a percent-encoded
+		//pipe is present, an intermediary double-encoded the value on the way back from Stripe. Decode and retry.
+		if ( strpos( $ref_id, '|' ) === false && stripos( $ref_id, '%7C' ) !== false ) {
+			$ref_id = rawurldecode( $ref_id );
+		}
+
 		$trans_info = explode( '|', $ref_id );
 		$button_id  = isset( $trans_info[1] ) ? absint( $trans_info[1] ) : false;
 

@@ -194,6 +194,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 = WIP =
 - Applied a fix for the "Auto Prune Login Events" feature in the reports menu.
+- Fixed a Stripe SCA payment button issue where an unencoded reference ID in the checkout success URL could cause a "Payment button (ID: 0) does not exist" error after a completed payment.
 
 = 4.8.2 =
 - The Recent Login Events table now displays events recorded from 12:00 AM on the selected start date through 11:59 PM on the selected end date.

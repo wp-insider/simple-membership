@@ -106,7 +106,15 @@ class SwpmStripeSubscriptionIpnHandler {
 		$custom_var = SwpmTransactions::parse_custom_var( $custom );
 		$swpm_id    = isset( $custom_var['swpm_id'] ) ? $custom_var['swpm_id'] : '';
 
-		$payment_amount = $customer->subscriptions->data[0]->plan->amount / 100;
+		$plan_amount   = $customer->subscriptions->data[0]->plan->amount;
+		$currency_code = strtoupper( $customer->subscriptions->data[0]->plan->currency );
+		$zero_cents    = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
+		if ( in_array( $currency_code, $zero_cents, true ) ) {
+			//Zero-decimal currency (e.g. JPY). The amount is not in cents, so use it as is.
+			$payment_amount = $plan_amount;
+		} else {
+			$payment_amount = $plan_amount / 100;
+		}
 
 		// Create the $ipn_data array.
 		$ipn_data                     = array();

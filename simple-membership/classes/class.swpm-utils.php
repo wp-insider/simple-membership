@@ -101,22 +101,26 @@ abstract class SwpmUtils {
 		} else if ( SwpmMembershipLevel::ANNUAL_FIXED_DATE == $permission->get( 'subscription_duration_type' ) ) {
 			$user_sub_start_date = new DateTime($user->subscription_starts);
 
-			$current_year = intval(date('Y'));
+			// Anchor the fixed month/day to the year the member's subscription started,
+			// NOT the current calendar year. Using date('Y') here made the result depend
+			// on when the check happened to run, so a member's expiration could shift by
+			// a full year simply because the calendar rolled over between two checks.
+			$anchor_year = intval($user_sub_start_date->format('Y'));
 
 			$expiry_date = new DateTime($permission->get( 'subscription_period' ));
 
-			// Replace year with current year
+			// Set the fixed date within the subscription start year.
 			$expiry_date->setDate(
-				$current_year,
+				$anchor_year,
 				(int) $expiry_date->format('m'),
 				(int) $expiry_date->format('d')
 			);
 
 			$expiry_timestamp = $expiry_date->getTimestamp();
 
-			// Check if expiry date has reached or not.
+			// Check whether the fixed date within the start year is still ahead of the subscription start.
 			if ($user_sub_start_date < $expiry_date) {
-				// Expiry date has not reached year. Now check if expiry date and user subscription date satisfies min period days.
+				// Fixed date is ahead of the subscription start. Check that it also satisfies the minimum period days.
 
 				$diff = $user_sub_start_date->diff($expiry_date);
 
@@ -130,8 +134,9 @@ abstract class SwpmUtils {
 					$expiry_timestamp = $expiry_date->getTimestamp();
 				}
 			} else {
-				// User sub started AFTER membership level expiry date of this year.
-				$expiry_date->modify('+1 year'); // expiry date is in next year.
+				// Subscription started on or after the fixed date in its start year, so the
+				// first expiry is the fixed date in the following year.
+				$expiry_date->modify('+1 year');
 
 				$expiry_timestamp = $expiry_date->getTimestamp();
 			}

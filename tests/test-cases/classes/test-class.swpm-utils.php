@@ -144,4 +144,95 @@ class SwpmUtilsTest extends WP_UnitTestCase_Custom
 
         $this->assertSame($existing_wp_user_id, $wp_user_id);
     }
+
+    // =========================================================================
+    // get_expiration_timestamp() — ANNUAL_FIXED_DATE
+    // =========================================================================
+
+    /**
+     * Creates an ANNUAL_FIXED_DATE level. The stored subscription_period is a full
+     * Y-m-d string (that is how SwpmLevelForm saves it); only the month/day matter
+     * at runtime, so the year here is deliberately arbitrary.
+     */
+    private function _make_annual_fixed_date_level(string $month_day, int $min_period_days): int
+    {
+        $level_id = self::_insert_membership_level([
+            'alias'                      => 'test-annual-fixed-' . uniqid(),
+            'subscription_period'        => '2000-' . $month_day,
+            'subscription_duration_type' => (string) SwpmMembershipLevel::ANNUAL_FIXED_DATE,
+        ]);
+
+        SwpmMembershipLevelCustom::get_instance_by_id($level_id)->set([
+            'meta_key'     => 'annual_fixed_date_min_period',
+            'meta_value'   => (string) $min_period_days,
+            'meta_context' => 'default',
+        ]);
+
+        return $level_id;
+    }
+
+    private function _member_on_level(int $level_id, string $subscription_starts): stdClass
+    {
+        $user = new stdClass();
+        $user->member_id          = 123;
+        $user->membership_level   = $level_id;
+        $user->subscription_starts = $subscription_starts;
+
+        return $user;
+    }
+
+    private function _expiration_date(stdClass $user): string
+    {
+        return date('Y-m-d', SwpmUtils::get_expiration_timestamp($user));
+    }
+
+    /**
+     * Regression test for the calendar-year instability bug: the expiration must be
+     * derived from the member's subscription_starts year, never from date('Y'). The
+     * subscription below started years before "now", so any dependence on the current
+     * year would produce a different (and drifting) result.
+     */
+    public function test_annual_fixed_date_expiration_is_anchored_to_subscription_start_year() {
+        $level_id = $this->_make_annual_fixed_date_level('03-31', 91);
+
+        // Started after the fixed date in the start year (2020-03-31), so the first
+        // expiry is the fixed date in the following year.
+        $user = $this->_member_on_level($level_id, '2020-12-31');
+
+        $this->assertSame('2021-03-31', $this->_expiration_date($user));
+    }
+
+    /** The same member/level must resolve to the same expiration no matter when it is evaluated. */
+    public function test_annual_fixed_date_expiration_is_stable_across_repeated_calls() {
+        $level_id = $this->_make_annual_fixed_date_level('03-31', 91);
+        $user     = $this->_member_on_level($level_id, '2020-12-31');
+
+        $first  = SwpmUtils::get_expiration_timestamp($user);
+        $second = SwpmUtils::get_expiration_timestamp($user);
+
+        $this->assertSame($first, $second);
+    }
+
+    public function test_annual_fixed_date_expiration_uses_fixed_date_in_start_year_when_far_enough_ahead() {
+        $level_id = $this->_make_annual_fixed_date_level('06-30', 30);
+        $user     = $this->_member_on_level($level_id, '2021-01-15');
+
+        $this->assertSame('2021-06-30', $this->_expiration_date($user));
+    }
+
+    public function test_annual_fixed_date_expiration_rolls_to_next_year_when_started_after_fixed_date() {
+        $level_id = $this->_make_annual_fixed_date_level('06-30', 30);
+        $user     = $this->_member_on_level($level_id, '2021-08-01');
+
+        $this->assertSame('2022-06-30', $this->_expiration_date($user));
+    }
+
+    public function test_annual_fixed_date_expiration_rolls_forward_when_below_min_period() {
+        $level_id = $this->_make_annual_fixed_date_level('06-30', 30);
+
+        // Only 10 days between the subscription start and the fixed date -> below the 30 day minimum.
+        $user = $this->_member_on_level($level_id, '2021-06-20');
+
+        $this->assertSame('2022-06-30', $this->_expiration_date($user));
+    }
 }

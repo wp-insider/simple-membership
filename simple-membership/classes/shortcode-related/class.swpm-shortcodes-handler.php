@@ -40,6 +40,10 @@ class SwpmShortcodesHandler {
 			return '<p class="swpm-red-box">Error! You must specify a button ID with this shortcode. Check the usage documentation.</p>';
 		}
 
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $id ) ) {
+			return '<p class="swpm-red-box">'.__("Error! Invalid payment button ID.", "simple-membership").'</p>';
+		}
+
 		//Add a quick escaping to the shortcode arguments.
 		$args = array_map( 'esc_attr', $args );
 

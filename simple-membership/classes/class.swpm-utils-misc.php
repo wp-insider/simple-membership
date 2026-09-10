@@ -1590,4 +1590,13 @@ class SwpmMiscUtils {
         return self::compare_stripe_api_versions($version, SIMPLE_WP_MEMBERSHIP_STRIPE_MIN_API_VER) < 0;
     }
 
+	public static function check_if_valid_payment_btn_cpt_id( $cpt_id ) {
+		$cpt_type = get_post_type( $cpt_id );
+		$cpt_status = get_post_status( $cpt_id );
+		if ( $cpt_type != 'swpm_payment_button' || $cpt_status != 'publish' ) {
+			return false;
+		}
+
+		return true;
+	}
 }

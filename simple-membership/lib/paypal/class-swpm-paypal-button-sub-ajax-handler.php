@@ -51,8 +51,20 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		}
 
 		$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';
+		
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg' => __( 'Error! Invalid payment button ID.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
+
 		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
 		SwpmLog::log_simple_debug( 'swpm_pp_create_subscription ajax request received for createSubscription. Button ID: '.$button_id.', On Page Button ID: ' . $on_page_button_id, true );
+
 
 		// Check nonce.
 		if ( ! check_ajax_referer( $on_page_button_id, '_wpnonce', false ) ) {
@@ -166,6 +178,16 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';
 		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
 		SwpmLog::log_simple_debug( 'OnApprove ajax request received for createSubscription. On Page Button ID: ' . $on_page_button_id, true );
+
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg' => __( 'Error! Invalid payment button ID.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
 
 		// Check nonce.
 		if ( ! check_ajax_referer( $on_page_button_id, '_wpnonce', false ) ) {
@@ -357,6 +379,11 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		//Get the subscription details from PayPal API endpoint - v1/billing/subscriptions/{$subscription_id}
 		$subscription_id = $data['subscriptionID'];
 		$button_id = $data['button_id'];
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			$validation_error_msg = 'Validation Error! Invalid payment button ID. Button ID: ' . $button_id;
+			SwpmLog::log_simple_debug( $validation_error_msg, false );
+			return $validation_error_msg;
+		}
 
 		$validation_error_msg = '';
 

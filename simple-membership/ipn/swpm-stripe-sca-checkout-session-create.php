@@ -20,6 +20,11 @@ class SwpmStripeCheckoutSessionCreate{
 		if ( empty( $button_id ) ) {
 			wp_send_json( array( 'error' => 'No button ID provided' ) );
 		}
+		
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			wp_send_json( array( 'error' => 'Error! Invalid payment button ID.' ) );
+			exit;
+		}
 
         SwpmLog::log_simple_debug( 'Stripe SCA checkout session create request received. Processing request...', true );
 

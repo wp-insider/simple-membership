@@ -139,6 +139,11 @@ class SWPM_PayPal_Utility_IPN_Related {
 		//Get the transaction/order details from PayPal API endpoint - /v2/checkout/orders/{$order_id}
 		$pp_orderID = isset($data['order_id']) ? $data['order_id'] : $data['orderID'];//backward compatibility.
 		$button_id = $data['button_id'];
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			$validation_error_msg = 'Validation Error! Invalid payment button ID!';
+			SwpmLog::log_simple_debug( $validation_error_msg, false );
+			return $validation_error_msg;
+		}
 
 		$validation_error_msg = '';
 
@@ -217,6 +222,10 @@ class SWPM_PayPal_Utility_IPN_Related {
 		}
 		
 		$button_id = $data['button_id'];
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			SwpmLog::log_simple_debug( 'Invalid payment button ID received while creating membership. Button ID: ' . $button_id, false );
+			return false;
+		}
 		$txn_id = isset($ipn_data['txn_id']) ? $ipn_data['txn_id'] : '';
 		$txn_type = isset($ipn_data['txn_type']) ? $ipn_data['txn_type'] : '';
 		SwpmLog::log_simple_debug( 'Transaction type: ' . $txn_type . ', Transaction ID: ' . $txn_id, true );

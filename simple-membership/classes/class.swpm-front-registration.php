@@ -255,6 +255,20 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		 */
 
 		global $wpdb;
+		$paid_member = null;
+		if ( SwpmUtils::is_paid_registration() ) {
+			//Prove ownership of an unfinished registration before saving or creating any account.
+			$paid_member = SwpmUtils::get_paid_member_info();
+			if ( empty( $paid_member ) || ! empty( $paid_member->user_name ) ||
+				empty( $paid_member->reg_code ) || empty( $paid_member->membership_level ) ||
+				(int) SwpmForm::get_membership_level_from_request() !== (int) $paid_member->membership_level ) {
+				SwpmTransfer::get_instance()->set( 'status', array(
+					'succeeded' => false,
+					'message' => SwpmUtils::_( 'Invalid or already used registration completion link, or membership level mismatch.' ),
+				) );
+				return false;
+			}
+		}
 		$member = SwpmTransfer::$default_fields;
 		$form   = new SwpmFrontForm( $member );
 		if ( ! $form->is_valid() ) {
@@ -286,6 +300,10 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$member_info['subscription_starts'] = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
 
 		$membership_level_id = filter_input( INPUT_POST, 'swpm_membership_level', FILTER_SANITIZE_NUMBER_INT );
+		if ( $paid_member !== null ) {
+			$membership_level_id = $paid_member->membership_level;
+			$this->email_activation = get_option( 'swpm_email_activation_lvl_' . $membership_level_id );
+		}
 
 		/**
 		 * Determine the account status for the new member record.
@@ -315,7 +333,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$plain_password = $member_info['plain_password'];
 		unset( $member_info['plain_password'] );
 
-		if ( SwpmUtils::is_paid_registration() ) {
+		if ( $paid_member !== null ) {
 			/* Paid membership registration path (the member's record is originally created after the payment). */
 
 			//Remove any empty values from the array. This will preserve address information if it was received via the payment gateway.
@@ -323,11 +341,14 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 			//Handle DB insert for paid registration scenario.
 			$member_info['reg_code'] = '';
-			$member_id = filter_input( INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT );
-			$code = isset( $_GET['code'] ) ? sanitize_text_field( stripslashes ( $_GET['code'] ) ) : '';
+			$member_id = $paid_member->member_id;
+			$code = $paid_member->reg_code;
 
 			//Trigger the before member data save filter hook. It can be used to customize the member data before it gets saved in the database.
 			$member_info = apply_filters( 'swpm_registration_data_before_save', $member_info );
+			//Keep the validated level and consume the code even if a filter changes the form data.
+			$member_info['membership_level'] = $paid_member->membership_level;
+			$member_info['reg_code'] = '';
 
 			//Update the member's record in the database. 
 			$query_result = $wpdb->update(
@@ -336,12 +357,14 @@ class SwpmFrontRegistration extends SwpmRegistration {
 				array(/*where*/
 					'member_id' => $member_id,
 					'reg_code'  => $code,
+					'user_name' => $paid_member->user_name,
+					'membership_level' => $paid_member->membership_level,
 				)
 			);
 
 			//Verify that the update was successful. Otherwise, set error message and return false so the process stops here.
-			if ( $query_result === false ) {
-				SwpmLog::log_simple_debug( 'Error! Failed to update the member record on registration form submit. Check that the member ID ('.$member_id.') and the reg_code ('.$code.') are correct.', false );
+			if ( $query_result !== 1 ) {
+				SwpmLog::log_simple_debug( 'Error! Registration completion did not update exactly one pending member record. Member ID: ' . $member_id, false );
 				$message = array(
 					'succeeded' => false,
 					'message'   => SwpmUtils::_( 'Unexpected Error! Failed to update the member record. Enable the debug log file then try the process again to get more details.' ),
@@ -350,8 +373,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 				return false;
 			}
 
-			$query = $wpdb->prepare( 'SELECT membership_level FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id=%d', $member_id );
-			$member_info['membership_level'] = $wpdb->get_var( $query );
+			$member_info['membership_level'] = $paid_member->membership_level;
 			$last_insert_id = $member_id;
 		} elseif ( ! empty( $free_level ) ) {
 			/* Free account/membership registration path. */

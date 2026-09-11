@@ -35,6 +35,11 @@ class SwpmStripeBuyNowIpnHandler {
 			$price_in_cents = $payment_amount * 100;// The amount (in cents). This value is used in Stripe API.
 		}
 
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			SwpmLog::log_simple_debug( 'Fatal Error! Invalid payment button ID received: ' . $button_id, false );
+			wp_die( esc_html( 'Fatal Error! Invalid payment button ID.' ) );
+		}
+
 		$stripe_token = isset( $_POST['stripeToken'] ) ? sanitize_text_field( stripslashes ( $_POST['stripeToken'] ) ) : '';
 		$stripe_token_type = isset( $_POST['stripeTokenType'] ) ? sanitize_text_field( stripslashes ( $_POST['stripeTokenType'] ) ) : '';
 		$stripe_email = filter_input( INPUT_POST, 'stripeEmail', FILTER_SANITIZE_EMAIL );

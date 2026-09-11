@@ -53,6 +53,10 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 
 		//Retrieve the membership level ID from the button's post meta data.
 		$button_id = isset( $this->ipn_data['item_number'] ) ? sanitize_text_field($this->ipn_data['item_number']) : '';
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			$this->debug_log( 'Error! Invalid payment button ID received: ' . $button_id . '. Cannot handle this IPN data.', false );
+			return false;
+		}
 		$configured_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 		if ( !SwpmUtils::membership_level_id_exists( $configured_level_id ) ) {
 			$this->debug_log( 'Error! Could not find a valid membership level for the given item_number/button_id ('.$button_id.'). Cannot handle this IPN.', false);
@@ -357,6 +361,11 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		$button_id = isset( $_POST['item_number'] ) ? sanitize_text_field($_POST['item_number']) : '';
 		if (empty($button_id) ){
 			$this->debug_log( 'Error: Empty item number received! Cannot handle this IPN data.', false );
+			return false;
+		}
+
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			$this->debug_log( 'Error: Invalid payment button ID received: ' . $button_id . '. Cannot handle this IPN data.', false );
 			return false;
 		}
 

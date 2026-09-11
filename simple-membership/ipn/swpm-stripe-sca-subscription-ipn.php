@@ -44,6 +44,11 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		$trans_info = explode( '|', $ref_id );
 		$button_id  = isset( $trans_info[1] ) ? absint( $trans_info[1] ) : false;
 
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			SwpmLog::log_simple_debug( 'Fatal Error! Invalid payment button ID received: ' . $button_id, false );
+			wp_die( esc_html( 'Fatal Error! Invalid payment button ID.' ) );
+		}
+
 		// Retrieve the CPT for this button
 		$button_cpt = get_post( $button_id );
 		if ( ! $button_cpt ) {

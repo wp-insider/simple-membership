@@ -45,6 +45,17 @@ class SWPM_PayPal_Button_Ajax_Hander {
 		}
 
 		$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';
+
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg' => __( 'Error! Invalid payment button ID.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
+
 		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
 		SwpmLog::log_simple_debug( 'swpm_pp_create_order ajax request received for createOrder. Button ID: '.$button_id.', On Page Button ID: ' . $on_page_button_id, true );
 
@@ -145,6 +156,16 @@ class SWPM_PayPal_Button_Ajax_Hander {
 		}
 
 		$button_id = isset( $data['button_id'] ) ? sanitize_text_field( $data['button_id'] ) : '';
+		if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'err_msg' => __( 'Error! Invalid payment button ID.', 'simple-membership' ),
+				)
+			);
+			exit;
+		}
+
 		$on_page_button_id = isset( $data['on_page_button_id'] ) ? sanitize_text_field( $data['on_page_button_id'] ) : '';
 		SwpmLog::log_simple_debug( 'Received request - swpm_pp_capture_order. Order ID: ' . $order_id . ', Button ID: '.$button_id.', On Page Button ID: ' . $on_page_button_id, true );
 

@@ -12,6 +12,10 @@ function swpm_render_pp_buy_now_button_sc_output($button_code, $args) {
         return '<p class="swpm-red-box">Error! swpm_render_pp_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
     }
 
+    if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+	    return '<p class="swpm-red-box">'.__("Error! Invalid payment button ID.", 'simple-membership').'</p>';
+    }
+
     //Check new_window parameter
     $window_target = isset($args['new_window']) ? 'target="_blank"' : '';
 
@@ -119,6 +123,10 @@ function swpm_render_pp_subscription_button_sc_output($button_code, $args) {
     $button_id = isset($args['id']) ? $args['id'] : '';
     if (empty($button_id)) {
         return '<p style="color: red;">Error! swpm_render_pp_subscription_button_sc_output() function requires the button ID value to be passed to it.</p>';
+    }
+    
+    if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+	    return '<p class="swpm-red-box">'.__("Error! Invalid payment button ID!", 'simple-membership').'</p>';
     }
 
     //Check new_window parameter

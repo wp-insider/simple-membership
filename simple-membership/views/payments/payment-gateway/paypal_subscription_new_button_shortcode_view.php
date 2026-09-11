@@ -11,6 +11,10 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
     if (empty($button_id)) {
         return '<p class="swpm-red-box">'.__('Error! swpm_render_pp_subscription_new_button_sc_output() function requires the button ID value to be passed to it.', 'simple-membership').'</p>';
     }
+    
+    if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+        return '<p class="swpm-red-box">'.__('Error! Invalid payment button ID.', 'simple-membership').'</p>';
+    }
 
     //Membership level for this button
     $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);

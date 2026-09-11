@@ -12,6 +12,10 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 		return '<p class="swpm-red-box">Error! swpm_render_stripe_sca_buy_now_button_sc_output() function requires the button ID value to be passed to it.</p>';
 	}
 
+	if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+        return '<p class="swpm-red-box">'.__("Error! Invalid payment button ID.", 'simple-membership').'</p>';
+	}
+
 	//Get class option for button styling, set Stripe's default if none specified
 	$class = isset( $args['class'] ) ? sanitize_html_class($args['class']) : 'stripe-button-el';
 
@@ -183,6 +187,10 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$button_id = isset( $args['id'] ) ? sanitize_html_class($args['id']) : '';
 	if ( empty( $button_id ) ) {
 		return '<p class="swpm-red-box">'.__('Error! swpm_render_stripe_sca_buy_now_button_sc_output() function requires the button ID value to be passed to it.', 'simple-membership').'</p>';
+	}
+	
+	if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
+		return '<p class="swpm-red-box">'.__('Error! Invalid payment button ID.', 'simple-membership').'</p>';
 	}
 
 	//Get class option for button styling, set Stripe's default if none specified

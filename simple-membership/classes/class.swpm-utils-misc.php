@@ -462,6 +462,13 @@ class SwpmMiscUtils {
 			$expiry_date,
 		);
 		
+		//Payment tags are available when the notification supplies their values.
+		foreach ( array( 'payment_amount', 'payment_currency', 'transaction_id', 'next_billing_date' ) as $payment_tag ) {
+			if ( is_array( $additional_args ) && array_key_exists( $payment_tag, $additional_args ) ) {
+				$tags[] = '{' . $payment_tag . '}';
+				$vals[] = $additional_args[ $payment_tag ];
+			}
+		}
 		$msg_body = str_replace( $tags, $vals, $msg_body );
 
 		//Allow any addons to add their own custom tags.

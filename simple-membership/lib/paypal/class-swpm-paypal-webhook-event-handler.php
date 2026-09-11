@@ -283,6 +283,10 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$ipn_data['txn_id'] = $txn_id;
 		$ipn_data['subscr_id'] = $subscription_id;
 		$ipn_data['mc_gross'] = isset($billing_info['last_payment']['amount']['value']) ? $billing_info['last_payment']['amount']['value'] : '';
+		//Use the event's payment amount in the notification, including delayed webhook deliveries.
+		$ipn_data['payment_amount'] = $event['resource']['amount']['total'] ?? $ipn_data['mc_gross'];
+		$ipn_data['mc_currency'] = $event['resource']['amount']['currency'] ?? ( $billing_info['last_payment']['amount']['currency_code'] ?? '' );
+		$ipn_data['next_billing_date'] = $billing_info['next_billing_time'] ?? '';
 		$ipn_data['gateway'] = 'paypal_subscription_checkout';
 		$ipn_data['txn_type'] = 'pp_subscription_sale_completed_webhook';
 		$ipn_data['status'] = 'Completed';

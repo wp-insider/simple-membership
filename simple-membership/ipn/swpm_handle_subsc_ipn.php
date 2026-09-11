@@ -494,6 +494,90 @@ function swpm_send_subscription_cancel_notification_email($member_id, $subscript
 	}
 }
 
+/**
+ * Optional receipt for an automatic subscription payment, independent of manual renewal emails.
+ * Called before the gateway saves the current transaction.
+ */
+function swpm_send_subscription_renewal_notification_email( $member_id, $ipn_data ) {
+	$settings = SwpmSettings::get_instance();
+	$notify_member = $settings->get_value( 'subscription-renewal-member-mail-enable', false );
+	$notify_admin = $settings->get_value( 'subscription-renewal-admin-mail-enable', false );
+	if ( empty( $notify_member ) && empty( $notify_admin ) ) {
+		return;
+	}
+
+	$subscription_id = $ipn_data['subscr_id'] ?? '';
+	$transaction_id = $ipn_data['txn_id'] ?? '';
+	if ( empty( $subscription_id ) || empty( $transaction_id ) ) {
+		return;
+	}
+	//Gateway retries must not send another receipt for an already recorded payment.
+	if ( SwpmTransactions::get_transaction_row_by_txn_id_and_subscription_id( $transaction_id, $subscription_id ) ) {
+		return;
+	}
+	$txn_type = $ipn_data['txn_type'] ?? '';
+	if ( in_array( $txn_type, array( 'subscr_payment', 'pp_subscription_sale_completed_webhook' ), true ) ) {
+		//PayPal also sends its first payment through the shared recurring-payment handler.
+		$previous = SwpmTransactions::get_transaction_row_by_subscr_id( $subscription_id, true );
+		$created_statuses = array( 'subscription created', strtolower( __( 'subscription created', 'simple-membership' ) ) );
+		if ( empty( $previous ) || in_array( strtolower( $previous->status ?? '' ), $created_statuses, true ) ) {
+			return;
+		}
+	} elseif ( $txn_type !== 'recurring_payment' ) {
+		return;
+	}
+
+	$member = SwpmMemberUtils::get_user_by_id( $member_id );
+	if ( empty( $member ) || ! apply_filters( 'swpm_send_recurring_payment_email', true, $ipn_data, $member_id ) ) {
+		return;
+	}
+	//Keep standard member tags and supply the recurring payment details.
+	$additional_args = array(
+		'subscription_id' => $subscription_id,
+		'transaction_id' => $transaction_id,
+		'payment_amount' => $ipn_data['payment_amount'] ?? ( $ipn_data['mc_gross'] ?? '' ),
+		'payment_currency' => strtoupper( $ipn_data['mc_currency'] ?? '' ),
+		'membership_level' => $member->membership_level,
+		'next_billing_date' => $ipn_data['next_billing_date'] ?? '',
+	);
+
+	$headers = array( 'From: ' . $settings->get_value( 'email-from' ) );
+	$html = $settings->get_value( 'email-enable-html', false );
+	if ( $html ) {
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
+	}
+	$messages = array();
+	if ( $notify_member ) {
+		$messages['member'] = array(
+			'to' => $member->email,
+			'subject' => $settings->get_value( 'subscription-renewal-member-mail-subject', 'Your subscription payment has been received' ),
+			'body' => $settings->get_value( 'subscription-renewal-member-mail-body', "Hi {first_name},\n\nWe have received your automatic subscription payment.\n\nMembership level: {membership_level_name}\nAccess starts: {subscription_starts}\nExpiry date: {expiry_date}\n\nThank You" ),
+		);
+	}
+	if ( $notify_admin ) {
+		$messages['admin'] = array(
+			'to' => $settings->get_value( 'subscription-renewal-admin-mail-address' ),
+			'subject' => 'An automatic subscription payment has been received',
+			'body' => "Dear Admin,\n\nAn automatic subscription payment has been received.\n\nMember ID: {member_id}\n\nYou can view more details in the Payments menu of the plugin.",
+		);
+	}
+	foreach ( $messages as $recipient => $message ) {
+		$message['subject'] = SwpmMiscUtils::replace_dynamic_tags( $message['subject'], $member_id, $additional_args );
+		$message['body'] = SwpmMiscUtils::replace_dynamic_tags( $message['body'], $member_id, $additional_args );
+		if ( $html ) {
+			$message['body'] = nl2br( $message['body'] );
+		}
+		$message['headers'] = $headers;
+		//Customize the final recipient, subject, body or headers; return false to skip this recipient.
+		$message = apply_filters( 'swpm_recurring_payment_email_args', $message, $recipient, $ipn_data, $member_id );
+		if ( ! is_array( $message ) || empty( $message['to'] ) ) {
+			continue;
+		}
+		$sent = wp_mail( $message['to'], $message['subject'], $message['body'], $message['headers'] );
+		swpm_debug_log_subsc( 'Automatic subscription payment notification to ' . $recipient . ( $sent ? ' accepted by mailer.' : ' failed.' ), (bool) $sent );
+	}
+}
+
 function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 	global $wpdb;
 	$email = isset( $ipn_data['payer_email'] ) ? $ipn_data['payer_email'] : '';
@@ -521,7 +605,7 @@ function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 
 		$subscription_starts = SwpmUtils::get_current_date_in_wp_zone();
 
-		$wpdb->query(
+		$update_result = $wpdb->query(
 			$wpdb->prepare(
 				"UPDATE {$wpdb->prefix}swpm_members_tbl SET account_state=%s,subscription_starts=%s WHERE member_id=%d",
 				$account_state,
@@ -533,6 +617,9 @@ function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
 		// Lets check to see if the subscriber ID and the subscription start date value was updated correctly.
 		$member_record = SwpmMemberUtils::get_user_by_id( $swpm_id );
 		swpm_debug_log_subsc( 'Value after update - Subscriber ID: ' . $member_record->subscr_id . ', Start Date: ' . $member_record->subscription_starts, true );
+		if ( $update_result !== false ) {
+			swpm_send_subscription_renewal_notification_email( $swpm_id, $ipn_data );
+		}
 	} else {
 		swpm_debug_log_subsc( 'Did not find an existing record in the members table for subscriber ID: ' . $subscr_id, true );
 		swpm_debug_log_subsc( 'This could be a new subscription payment for a new subscription agreement.', true );

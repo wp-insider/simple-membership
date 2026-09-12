@@ -69,17 +69,16 @@ class SwpmSelfActionHandler {
             // Allow hooks to change the value of login_page_url
             $login_page_url = apply_filters('swpm_after_reg_callback_login_page_url', $login_page_url);
 
-            $encoded_pass = base64_encode($user_data['plain_password']);
-            $swpm_auto_login_nonce = wp_create_nonce('swpm-auto-login-nonce');
-            $arr_params = array(
-                'swpm_auto_login' => '1',
-                'swpm_user_name' => urlencode($user_data['user_name']),
-                'swpm_encoded_pw' => $encoded_pass,
-                'swpm_auto_login_nonce' => $swpm_auto_login_nonce,
-                'swpm_login_origination_flag' => '1',
-            );
-            $redirect_page = add_query_arg($arr_params, $login_page_url);
-            wp_redirect($redirect_page);
+            //Authenticate in this request. Never send the password through a redirect URL.
+            //These internal request flags preserve WP login synchronization and the after-login hooks.
+            $_REQUEST['swpm_auto_login'] = '1';
+            $_REQUEST['swpm_user_name'] = $user_data['user_name'];
+            $_REQUEST['swpm_login_origination_flag'] = '1';
+            SwpmAuth::get_instance()->login($user_data['user_name'], $user_data['plain_password']);
+
+            //Successful login normally redirects via the after-login hook. If login is denied
+            //or that hook returns, send the member to the login page without credentials.
+            wp_redirect($login_page_url);
             exit(0);
         }
 

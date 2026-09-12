@@ -198,6 +198,10 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Fixed an issue where Stripe subscription renewal payments in zero-decimal currencies (JPY, KRW, VND, MGA) were recorded incorrectly.
 - Fixed an issue with the "Annual - Fixed Date" membership level where a member's expiration date was calculated from the current calendar year instead of the member's subscription start year, causing the expiration to shift by a year once the calendar rolled over. Thanks to mcl_10 for reporting this.
 - Added check to validate payment button IDs in payment notification handlers.
+- Security: Payment buttons and payment handlers now reject invalid or unpublished payment button records.
+- Security: Strengthened paid registration completion to reject invalid or reused links and preserve the purchased membership level.
+- Security: Automatic login after registration no longer includes passwords in redirect URLs.
+- Added optional member and admin email notifications for automatic subscription renewal payments, with payment amount, currency, subscription ID, transaction ID, and next billing date merge tags alongside standard member tags.
 
 = 4.8.2 =
 - The Recent Login Events table now displays events recorded from 12:00 AM on the selected start date through 11:59 PM on the selected end date.

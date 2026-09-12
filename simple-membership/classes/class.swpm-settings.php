@@ -729,6 +729,64 @@ class SwpmSettings {
 			)
 		);
 
+		//Subscription Auto-Renewal email settings.
+		add_settings_section( 'subscription-renewal-email-settings', __( 'Email Settings (Subscription Auto-Renewal Notification)', 'simple-membership'), array( &$this, 'subscription_renewal_email_settings_callback' ), 'simple_wp_membership_settings' );
+		add_settings_field(
+			'subscription-renewal-member-mail-enable',
+			__( 'Send Notification to Member', 'simple-membership'),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'subscription-renewal-email-settings',
+			array(
+				'item'    => 'subscription-renewal-member-mail-enable',
+				'message' => __( 'Enable this option to send an email notification to members after a successful automatic subscription payment. Disabled by default.', 'simple-membership'),
+			)
+		);
+        add_settings_field(
+			'subscription-renewal-member-mail-subject',
+			__( 'Email Subject', 'simple-membership'),
+			array( &$this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'subscription-renewal-email-settings',
+			array(
+				'item'    => 'subscription-renewal-member-mail-subject',
+				'message' => '',
+			)
+		);
+		add_settings_field(
+			'subscription-renewal-member-mail-body',
+			__( 'Email Body', 'simple-membership'),
+			array( &$this, 'wp_editor_callback' ),
+			'simple_wp_membership_settings',
+			'subscription-renewal-email-settings',
+			array(
+				'item'    => 'subscription-renewal-member-mail-body',
+				'message' => '',
+			)
+		);
+		add_settings_field(
+			'subscription-renewal-admin-mail-enable',
+			__( 'Send Notification to Admin', 'simple-membership'),
+			array( &$this, 'checkbox_callback' ),
+			'simple_wp_membership_settings',
+			'subscription-renewal-email-settings',
+			array(
+				'item'    => 'subscription-renewal-admin-mail-enable',
+				'message' => __( 'Enable this option to send a notification to the admin.', 'simple-membership'),
+			)
+		);
+		add_settings_field(
+			'subscription-renewal-admin-mail-address',
+			__( 'Admin Email Address', 'simple-membership' ),
+			array( &$this, 'textfield_callback' ),
+			'simple_wp_membership_settings',
+			'subscription-renewal-email-settings',
+			array(
+				'item'    => 'subscription-renewal-admin-mail-address',
+				'message' => __( 'Enter the email address where you want the admin notification email to be sent to.', 'simple-membership'),
+			)
+		);
+
 		//Manual account approval email settings.
 		add_settings_section( 'manual-account-approve-email-settings', __( 'Email Settings (Manual Account Approval)', 'simple-membership'), array( &$this, 'manual_account_approve_email_settings_callback' ), 'simple_wp_membership_settings' );
 		add_settings_field(
@@ -1499,6 +1557,10 @@ class SwpmSettings {
 		_e( 'This email will be sent if Email Activation is enabled for a Membership Level.', 'simple-membership' );
 	}
 
+    public function subscription_renewal_email_settings_callback() {
+		_e( 'Optional notifications for successful automatic subscription payments. Manual account renewal emails are configured separately.', 'simple-membership' );
+	}
+
     public function subscription_cancel_email_settings_callback() {
 		_e( "This email will be sent when a member's subscription is canceled or expires.", 'simple-membership' );
 	}
@@ -1693,6 +1755,13 @@ class SwpmSettings {
 
         $output['subscription-cancel-admin-mail-enable']       = isset( $input['subscription-cancel-admin-mail-enable'] ) ? esc_attr( $input['subscription-cancel-admin-mail-enable'] ) : '';
         $output['subscription-cancel-admin-mail-address'] = sanitize_text_field( $input['subscription-cancel-admin-mail-address'] );
+
+		$output['subscription-renewal-member-mail-enable']       = isset( $input['subscription-renewal-member-mail-enable'] ) ? esc_attr( $input['subscription-renewal-member-mail-enable'] ) : '';
+		$output['subscription-renewal-member-mail-subject']    = sanitize_text_field( ( $input['subscription-renewal-member-mail-subject'] ?? '' ) );
+		$output['subscription-renewal-member-mail-body']    = wp_kses_post( ( $input['subscription-renewal-member-mail-body'] ?? '' ) );
+
+        $output['subscription-renewal-admin-mail-enable']       = isset( $input['subscription-renewal-admin-mail-enable'] ) ? esc_attr( $input['subscription-renewal-admin-mail-enable'] ) : '';
+        $output['subscription-renewal-admin-mail-address'] = sanitize_text_field( ( $input['subscription-renewal-admin-mail-address'] ?? '' ) );
 
 		$output['manual-account-approve-member-mail-enable'] = isset( $input['manual-account-approve-member-mail-enable'] ) ? esc_attr( $input['manual-account-approve-member-mail-enable'] ) : '';
 		$output['manual-account-approve-member-mail-subject'] = sanitize_text_field( $input['manual-account-approve-member-mail-subject'] );

@@ -301,6 +301,25 @@ class SwpmInstallation {
 		    $settings->set_value('subscription-cancel-member-mail-body', stripslashes($subscription_cancel_member_mail_body));
 	    }
 
+        $subscription_payment_email_subject = 'Your subscription payment has been received';
+        $subscription_payment_email_body = "Hi {first_name}," .
+	                          "\n\nWe have received your automatic subscription payment." .
+	                          "\n\nThank You";
+
+        //Auto-renewal notifications are opt-in for new and existing installations.
+        $renewal_defaults = array(
+            'subscription-renewal-member-mail-enable' => '',
+            'subscription-renewal-admin-mail-enable' => '',
+            'subscription-renewal-admin-mail-address' => '',
+            'subscription-renewal-member-mail-subject' => $subscription_payment_email_subject,
+            'subscription-renewal-member-mail-body' => $subscription_payment_email_body,
+        );
+        foreach ( $renewal_defaults as $key => $value ) {
+            if ( $settings->get_value( $key, false ) === false ) {
+                $settings->set_value( $key, $value );
+            }
+        }
+
 	    $manual_approval_mail_subject = "Your account has been approved";
 	    $manual_approval_mail_body = "Hi {first_name}," .
 	                                "\n\nYour account has been reviewed and approved successfully." .

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.8.2
+Stable tag: 4.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -192,16 +192,16 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
+= 4.8.3 =
+- Added an option to send email notifications to members and the admin after automatic subscription renewal payments.
+- Added check to validate payment button IDs in payment notification handlers.
 - Applied a fix for the "Auto Prune Login Events" feature in the reports menu.
 - Fixed a Stripe SCA payment button issue where an unencoded reference ID in the checkout success URL could cause a "Payment button (ID: 0) does not exist" error after a completed payment. Thanks to Filip for reporting this.
 - Fixed an issue where Stripe subscription renewal payments in zero-decimal currencies (JPY, KRW, VND, MGA) were recorded incorrectly.
 - Fixed an issue with the "Annual - Fixed Date" membership level where a member's expiration date was calculated from the current calendar year instead of the member's subscription start year, causing the expiration to shift by a year once the calendar rolled over. Thanks to mcl_10 for reporting this.
-- Added check to validate payment button IDs in payment notification handlers.
-- Security: Payment buttons and payment handlers now reject invalid or unpublished payment button records.
-- Security: Strengthened paid registration completion to reject invalid or reused links and preserve the purchased membership level.
-- Security: Automatic login after registration no longer includes passwords in redirect URLs.
-- Added optional member and admin email notifications for automatic subscription renewal payments, with payment amount, currency, subscription ID, transaction ID, and next billing date merge tags alongside standard member tags.
+- Security improvement: Payment buttons and payment handlers now reject invalid or unpublished payment button records.
+- Security improvement: Strengthened paid registration completion to reject invalid or reused links and preserve the purchased membership level.
+- Security improvement: Automatic login after registration no longer includes passwords in redirect URLs.
 
 = 4.8.2 =
 - The Recent Login Events table now displays events recorded from 12:00 AM on the selected start date through 11:59 PM on the selected end date.

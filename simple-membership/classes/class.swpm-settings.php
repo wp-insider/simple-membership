@@ -1515,12 +1515,14 @@ class SwpmSettings {
 
 	public function reset_password_settings_callback() {
 		_e( 'This email will be sent to your users when they use the password reset functionality.', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/password-reset-notification-email-customization/" target="_blank">' . __( 'Password reset feature  documentation', 'simple-membership' ) . '</a>.';
 	}
 
 	public function email_settings_overview_callback() {
 		echo '<div class="swpm-grey-box">';
 		echo '<p>';
-		_e( 'This interface lets you customize the various emails that get sent to your members for various actions. The default settings should be good to get your started.', 'simple-membership' );
+		_e( 'This interface lets you customize the various emails that get sent to your members for various actions. The default settings should be good to get you started.', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/default-email-settings-values-resetting-email-settings/" target="_blank">' . __( 'Default email settings documentation', 'simple-membership' ) . '</a>.';
 		echo '</p>';
 
 		echo '<p>';
@@ -1543,10 +1545,12 @@ class SwpmSettings {
 
 	public function upgrade_email_settings_callback() {
 		_e( 'This email will be sent to your users after account upgrade (when an existing member pays for a new membership level).', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/creating-membership-upgrade-button/" target="_blank">' . __( 'Membership upgrade button documentation', 'simple-membership' ) . '</a>.';
 	}
 
 	public function renewal_email_settings_callback() {
 		_e( 'This email will be sent to your users after account renewal (when an existing member pays for their current membership level).', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">' . __( 'Membership renewal button documentation', 'simple-membership' ) . '</a>.';
 	}
 
 	public function bulk_activate_email_settings_callback() {
@@ -1555,10 +1559,12 @@ class SwpmSettings {
 
 	public function email_activation_email_settings_callback() {
 		_e( 'This email will be sent if Email Activation is enabled for a Membership Level.', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . __( 'Email activation feature documentation', 'simple-membership' ) . '</a>.';
 	}
 
     public function subscription_renewal_email_settings_callback() {
-		_e( 'Optional notifications for successful automatic subscription payments. Manual account renewal emails are configured separately.', 'simple-membership' );
+		_e( 'Optional email notifications for successful automatic subscription payments. Use this email to notify members when their subscription renews automatically. Notifications for renewals made via one-time payments are configured separately.', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">' . __( 'Membership renewal button documentation', 'simple-membership' ) . '</a>.';
 	}
 
     public function subscription_cancel_email_settings_callback() {

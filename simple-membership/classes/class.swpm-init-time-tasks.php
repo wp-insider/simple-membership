@@ -7,6 +7,8 @@ class SwpmInitTimeTasks {
 	}
 
 	public function do_init_tasks() {
+		SwpmEmailActivation::remove_legacy_passwords();
+
 		//Standard init time tasks.
 		if ( ! isset( $_COOKIE['swpm_session'] ) ) {
 			// Give a unique ID to current session.

@@ -24,6 +24,7 @@ include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-log.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-messages.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-ajax.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-registration.php');
+include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-email-activation.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-front-registration.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-admin-registration.php');
 include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'classes/class.swpm-membership-level.php');

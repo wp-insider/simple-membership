@@ -16,6 +16,16 @@ abstract class SwpmRegistration {
 		}
 
 		$member_info = $this->member_info;
+		$swpm_user = SwpmMemberUtils::get_user_by_user_name( $member_info['user_name'] );
+		if ( empty( $swpm_user ) || ! is_email( $swpm_user->email ) ) {
+			SwpmLog::log_simple_debug( 'Cannot send registration email: member or registered email is invalid.', false );
+			return false;
+		}
+		$member_id = $swpm_user->member_id;
+		$email = $swpm_user->email;
+		$member_info['email'] = $email;
+		// Only change the email copy. Account creation and auto-login still need the password in memory.
+		$member_info['plain_password'] = SwpmEmailActivation::password_email_notice();
 		$settings    = SwpmSettings::get_instance();
 		$subject     = $settings->get_value( 'reg-complete-mail-subject' );
 		$body        = $settings->get_value( 'reg-complete-mail-body' );
@@ -26,17 +36,11 @@ abstract class SwpmRegistration {
 			//Note: this function is called again after the email activation is completed to send the standard registration complete email.
 
 			SwpmLog::log_simple_debug( 'send_reg_email() - email activation is enabled. Generating activation link so it can be inserted into the registration complete email.', true );
-			$swpm_user = SwpmMemberUtils::get_user_by_user_name( $member_info['user_name'] );
-			$member_id = $swpm_user->member_id;
-			$act_code  = md5( uniqid() . $member_id );
-			$enc_pass  = SwpmUtils::crypt( $member_info['plain_password'] );
-			$user_data = array(
-				'timestamp'      => time(),
-				'act_code'       => $act_code,
-				'plain_password' => $enc_pass,
-			);
-			$user_data = apply_filters( 'swpm_email_activation_data', $user_data );
-			update_option( 'swpm_email_activation_data_usr_' . $member_id, $user_data, false );
+			$user_data = SwpmEmailActivation::get_or_create( $member_id );
+			if ( $user_data === false ) {
+				return false;
+			}
+			$act_code = $user_data['act_code'];
 			$body                           = $settings->get_value( 'email-activation-mail-body' );
 			$subject                        = $settings->get_value( 'email-activation-mail-subject' );
 			$activation_link                = add_query_arg(
@@ -68,15 +72,7 @@ abstract class SwpmRegistration {
 		$body                                 = html_entity_decode( $body );
 		$body                                 = str_replace( $keys, $values, $body );
 
-		$swpm_user = SwpmMemberUtils::get_user_by_user_name( $member_info['user_name'] );
-		$member_id = $swpm_user->member_id;
 		$body      = SwpmMiscUtils::replace_dynamic_tags( $body, $member_id ); //Do the standard merge var replacement.
-
-		$email = isset($_POST['email']) && !empty($_POST['email']) ? sanitize_email($_POST['email']) : '';
-
-		if ( empty( $email ) ) {
-			$email = $swpm_user->email;
-		}
 
 		//Trigger filter hooks so that the email content can be modified dynamically.
 		$subject = apply_filters( 'swpm_email_registration_complete_subject', $subject );

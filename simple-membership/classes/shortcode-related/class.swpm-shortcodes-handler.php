@@ -201,11 +201,21 @@ class SwpmShortcodesHandler {
 		if ( SwpmMemberUtils::is_member_logged_in() ) {
 			$auth        = SwpmAuth::get_instance();
 			$expiry_date = $auth->get_expire_date();
-			$output     .= __( 'Expiry: ', 'simple-membership' ) . esc_attr($expiry_date);
+
+			//Trigger filter to allow customization of the displayed expiry date value.
+			//The raw expiry timestamp is passed so the date can be reformatted or adjusted (PHP_INT_MAX means no expiry).
+			$member_id        = SwpmMemberUtils::get_logged_in_members_id();
+			$expiry_timestamp = SwpmMemberUtils::get_expiry_date_timestamp_by_user_id( $member_id );
+			$expiry_date      = apply_filters( 'swpm_show_expiry_date_value', $expiry_date, $expiry_timestamp, $member_id, $args );
+
+			$output .= __( 'Expiry: ', 'simple-membership' ) . esc_html( $expiry_date );
 		} else {
 			$output .= __( 'You are not logged-in as a member', 'simple-membership' );
 		}
 		$output .= '</div>';
+
+		//Trigger filter to allow customization of the full shortcode output.
+		$output = apply_filters( 'swpm_show_expiry_date_output', $output, $args );
 		return $output;
 	}
 

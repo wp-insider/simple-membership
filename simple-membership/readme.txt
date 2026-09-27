@@ -192,6 +192,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Added two new filter hooks (swpm_show_expiry_date_value and swpm_show_expiry_date_output) to the [swpm_show_expiry_date] shortcode to allow customization of the displayed expiry date and the shortcode output.
+
 = 4.8.3 =
 - Added an option to send email notifications to members and the admin after automatic subscription renewal payments.
 - Added check to validate payment button IDs in payment notification handlers.

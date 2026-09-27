@@ -214,7 +214,7 @@ class SwpmInstallation {
                 "Your registration is now complete!\n\n" .
                 "Registration details:\n" .
                 "Username: {user_name}\n" .
-                "Password: {password}\n\n" .
+                "Use your password to log in. If you need to set or reset it, use the password reset option on the login page.\n\n" .
                 "Please login to the member area at the following URL:\n\n" .
                 "{login_link}\n\n" .
                 "Thank You";

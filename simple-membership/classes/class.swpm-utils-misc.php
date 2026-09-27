@@ -1394,30 +1394,19 @@ class SwpmMiscUtils {
 			SwpmTransfer::get_instance()->set('resend_activation_email_error', sprintf(__('Account activation for member ID: %d already done.', 'simple-membership'), $member_id));
 			return;
 		}
-		$act_data = get_option( 'swpm_email_activation_data_usr_' . $member_id, array() );
-		if ( empty( $act_data ) ) {
-			//looks like activation data has been removed for some reason. We won't be able to have member's plain password in this case
-			$act_data['plain_password'] = '';
+		if ( ! is_email( $member->email ) ) {
+			SwpmTransfer::get_instance()->set( 'resend_activation_email_error', SwpmUtils::_( 'The member does not have a valid registered email address.' ) );
+			return;
 		}
-
-		delete_option( 'swpm_email_activation_data_usr_' . $member_id );
-
-		$member_info_array =  (array) $member;
-		$member_info_array['plain_password'] = isset($act_data['plain_password']) && !empty($act_data['plain_password']) ?  SwpmUtils::crypt( $act_data['plain_password'], 'd' ) : '';
-
+		$user_data = SwpmEmailActivation::get_or_create( $member_id );
+		if ( $user_data === false ) {
+			SwpmTransfer::get_instance()->set( 'resend_activation_email_error', SwpmUtils::_( 'Could not save the activation data. Please try again.' ) );
+			return;
+		}
+		$member_info_array = (array) $member;
+		$member_info_array['plain_password'] = SwpmEmailActivation::password_email_notice();
 		$settings = SwpmSettings::get_instance();
-
-		//Generate the activation code and store it in the DB
-		$act_code  = md5( uniqid() . $member_id );
-		$user_data = array(
-			'timestamp'      => time(),
-			'act_code'       => $act_code,
-			'plain_password' => $member_info_array['plain_password'],
-		);
-
-		$user_data = apply_filters( 'swpm_email_activation_data', $user_data );
-
-		update_option( 'swpm_email_activation_data_usr_' . $member_id, $user_data, false );
+		$act_code = $user_data['act_code'];
 
 		$activation_link = add_query_arg(
 			array(

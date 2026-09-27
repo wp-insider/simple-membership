@@ -199,7 +199,7 @@ class SwpmFrontRegistrationTest extends WP_UnitTestCase_Custom
             'password' => 'test-pass',
             'email' => '',
             'membership_level' => $this->level_id,
-            'reg_code' => md5($md5_code),
+            'reg_code' => $md5_code,
         ];
 
         $member_id = self::_insert_member($data);
@@ -219,13 +219,19 @@ class SwpmFrontRegistrationTest extends WP_UnitTestCase_Custom
 
         global $wpdb;
 
-        $wpdb = $this->createMock(wpdb::class);
-        // $wpdb->prefix = 'wptests_';
-        $wpdb->expects($this->once())->method('update');
-
         $result = $this->_call_private_method($this->instance, 'create_swpm_user');
 
         $this->assertTrue($result);
+
+        $member = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = %d",
+            $member_id
+        ));
+        $this->assertSame('test-paid-user', $member->user_name);
+        $this->assertSame('test-paid-user@example.com', $member->email);
+        $this->assertSame($this->level_id, (int) $member->membership_level);
+        $this->assertSame('', $member->reg_code, 'Successful completion must consume the registration code.');
+        $this->assertTrue(wp_check_password('test-pass', $member->password));
     }
 
     public function test_create_swpm_user_die_if_matching_existing_non_admin_wp_user_is_submitted_and_binding_not_allowed(): void

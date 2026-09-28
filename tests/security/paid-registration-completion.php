@@ -60,8 +60,8 @@ function verify_completion($condition, $message) { if (!$condition) { throw new 
 require dirname(__DIR__, 2) . '/simple-membership/classes/class.swpm-registration.php';
 require dirname(__DIR__, 2) . '/simple-membership/classes/class.swpm-front-registration.php';
 class CompletionRegistration extends SwpmFrontRegistration {
-    //Stop after account creation so this test does not send mail or redirect.
-    protected function send_reg_email() { return false; }
+    //Skip delivery while allowing normal completion handling to run.
+    protected function send_reg_email() { return true; }
 }
 $pending = (object) array('member_id' => 42, 'reg_code' => 'valid-code', 'user_name' => '', 'membership_level' => 9);
 $used = clone $pending;

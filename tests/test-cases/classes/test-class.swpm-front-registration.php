@@ -234,6 +234,74 @@ class SwpmFrontRegistrationTest extends WP_UnitTestCase_Custom
         $this->assertTrue(wp_check_password('test-pass', $member->password));
     }
 
+    /** @dataProvider registration_email_failure_cases */
+    public function test_email_preparation_failure_preserves_registration_and_completion_hooks($activation, $paid = false): void
+    {
+        $settings = SwpmSettings::get_instance();
+        $settings->set_value('enable-free-membership', 1);
+        $settings->set_value('free-membership-id', $this->level_id);
+        $settings->set_value('auto-login-after-rego', 1);
+        $settings->set_value('after-rego-redirect-page-url', 'https://example.org/should-not-hide-recovery');
+        update_option('swpm_email_activation_lvl_' . $this->level_id, $activation);
+        if ($activation) {
+            $this->_mock_static_method('SwpmEmailActivation', 'get_or_create', function () { return false; });
+        } else {
+            $this->_mock_static_method('SwpmRegistration', 'send_reg_email', function () { return false; });
+        }
+        $this->auth_mock->expects($this->never())->method('login');
+        $legacy_calls = 0;
+        $completed = null;
+        add_action('swpm_front_end_registration_complete', function () use (&$legacy_calls) { $legacy_calls++; });
+        add_action('swpm_front_end_registration_complete_user_data', function ($data) use (&$completed) { $completed = $data; });
+        $_POST = $this->_valid_members_post([
+            'user_name' => 'test-mail-failure', 'email' => 'test-mail-failure@example.org',
+            'level_identifier' => md5($this->level_id),
+            'password' => 'MemberSecret!123', 'password_re' => 'MemberSecret!123',
+            'swpm_membership_level' => $this->level_id,
+            'swpm_level_hash' => md5(get_option('swpm_private_key_one') . '|' . $this->level_id),
+        ]);
+        if ($paid) {
+            $pending_id = self::_insert_member([
+                'user_name' => '', 'email' => '', 'password' => '',
+                'reg_code' => 'test-paid-mail-failure', 'membership_level' => $this->level_id,
+            ]);
+            $_GET = ['member_id' => $pending_id, 'code' => 'test-paid-mail-failure'];
+        }
+        try {
+            $this->instance->register_front_end();
+        } finally {
+            $settings->set_value('auto-login-after-rego', 0);
+            $settings->set_value('after-rego-redirect-page-url', '');
+        }
+        $member = SwpmMemberUtils::get_user_by_user_name('test-mail-failure');
+        $this->assertNotEmpty($member);
+        $this->assertNotFalse(get_user_by('login', 'test-mail-failure'));
+        $this->assertSame(1, $legacy_calls);
+        $this->assertTrue($completed['registration_email_failed']);
+        $status = $this->_get_transfer_status();
+        $this->assertTrue($status['succeeded']);
+        $this->assertStringContainsString('Your account was created', $status['message']);
+        $this->assertStringContainsString('Please do not register again', $status['message']);
+        if ($paid) {
+            $this->assertSame($pending_id, (int) $member->member_id);
+            $this->assertSame('', $member->reg_code);
+        }
+        if ($activation) {
+            $this->assertSame('activation_required', $member->account_state);
+            $this->assertStringContainsString('swpm_resend_activation_email=1', $status['message']);
+            $this->assertFalse(get_option('swpm_email_activation_data_usr_' . $member->member_id));
+        }
+    }
+
+    public function registration_email_failure_cases(): array
+    {
+        return [
+            'activation token save failure' => [true],
+            'notification preparation failure' => [false],
+            'paid registration activation failure' => [true, true],
+        ];
+    }
+
     public function test_create_swpm_user_die_if_matching_existing_non_admin_wp_user_is_submitted_and_binding_not_allowed(): void
     {
         SwpmSettings::get_instance()->set_value('enable-free-membership', 1);

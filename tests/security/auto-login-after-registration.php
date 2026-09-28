@@ -69,4 +69,12 @@ foreach (array('swpm_front_end_registration_complete_user_data', 'swpm_front_end
         }
     }
 }
-echo "PASS: core and Form Builder callbacks authenticate server-side; redirects contain no credentials; disabled setting is respected.\n";
+foreach (array('swpm_front_end_registration_complete_user_data', 'swpm_front_end_registration_complete_fb') as $hook) {
+    SwpmSettings::$enabled = true;
+    SwpmAuth::$calls = array();
+    call_user_func($GLOBALS['test_hooks'][$hook], array(
+        'user_name' => 'new_member', 'plain_password' => 'secret', 'registration_email_failed' => true,
+    ));
+    check_auto_login(SwpmAuth::$calls === array(), 'Email recovery instructions must not be hidden by auto-login.');
+}
+echo "PASS: core and Form Builder callbacks authenticate server-side; redirects contain no credentials; email recovery instructions remain visible.\n";

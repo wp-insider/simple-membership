@@ -198,9 +198,24 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			// NOTE: check_and_die_if_existing_wp_user_exists() executes inside the create_swpm_user() method, so no need to add it to create_wp_user() in this code flow.
 
 			//SWPM user creation was successful. Now create the corresponding WP user record and send the notification email.
-			if ( $this->prepare_and_create_wp_user_front_end() && $this->send_reg_email() ){
+			if ( $this->prepare_and_create_wp_user_front_end() ){
+				$email_prepared = $this->send_reg_email();
+				if ( ! $email_prepared ) {
+					// Account creation succeeded. Keep the completion hooks and show recovery
+					// instructions instead of asking the member to register again.
+					$this->member_info['registration_email_failed'] = true;
+					$member = SwpmMemberUtils::get_user_by_user_name( $this->member_info['user_name'] );
+					$member_id = ! empty( $member ) ? $member->member_id : 0;
+					SwpmTransfer::get_instance()->set( 'status', array(
+						'succeeded' => true,
+						'message' => SwpmEmailActivation::registration_email_failure_message( $member_id, $this->email_activation ),
+					) );
+				}
 				do_action( 'swpm_front_end_registration_complete' ); //Keep this action hook for people who are using it (so their implementation doesn't break).
 				do_action( 'swpm_front_end_registration_complete_user_data', $this->member_info );
+				if ( ! $email_prepared ) {
+					return;
+				}
 
 				//Check if there is after registration redirect (for non-email activation scenario).
 				if ( ! $this->email_activation ) {
@@ -797,11 +812,11 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$act_data = get_option( 'swpm_email_activation_data_usr_' . $member_id );
 		if ( empty( $code ) || ! SwpmEmailActivation::is_valid( $act_data ) || ! hash_equals( $act_data['act_code'], $code ) ) {
 			//code mismatch
-			wp_die( SwpmUtils::_( 'Activation code mismatch. Cannot activate this account. Please contact the site admin.' ) );
+			wp_die( SwpmEmailActivation::invalid_link_message( $member_id ) );
 		}
 		//activation code match
 		if ( ! SwpmEmailActivation::consume( $member_id, $act_data ) ) {
-			wp_die( SwpmUtils::_( 'Activation code mismatch. Cannot activate this account. Please contact the site admin.' ) );
+			wp_die( SwpmEmailActivation::invalid_link_message( $member_id ) );
 		}
 		//store rego form id in constant so FB addon could use it
 		if ( ! empty( $act_data['fb_form_id'] ) ) {

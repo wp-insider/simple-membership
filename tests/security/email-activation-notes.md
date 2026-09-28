@@ -54,3 +54,38 @@ with the repository's WordPress PHPUnit environment before release.
 
 The standalone tests do not establish full third-party addon compatibility or
 exercise a live SMTP server. Test those integrations in staging before release.
+
+## Form Builder and failure recovery
+
+The updated Form Builder addon uses the core token helper, the persisted member
+email, and password-reset guidance in registration email templates. Its custom
+templates, custom field substitutions, and form ID metadata are preserved. Deploy
+the matching core update before or alongside the addon: new Form Builder
+registrations stop with an update message on older core versions, while profile
+editing remains available.
+
+Account creation and completion hooks now finish even if email preparation fails.
+Core and Form Builder display an account-created message with recovery links;
+automatic login and configured redirects do not hide that message. This detects
+preparation failures, not downstream SMTP delivery failures.
+
+The second cleanup pass also handles records saved after the original migration.
+Its progress marker is autoloaded, and database errors defer another attempt for
+five minutes. Invalid or expired activation links offer the existing rate-limited
+resend endpoint.
+
+To include the actual Form Builder implementation in the WordPress integration
+suite, mount the addon into the test container and set
+`SWPM_FORM_BUILDER_TEST_PATH` to that directory. For example, from the core repo:
+
+```sh
+docker compose run --rm --no-deps \
+  -v "$(pwd)/../simple-membership-addons/swpm-form-builder:/form-builder:ro" \
+  -e SWPM_FORM_BUILDER_TEST_PATH=/form-builder \
+  -e TERM=xterm --workdir /app/tests --entrypoint composer swpm test
+```
+
+The optional addon tests verify the real email implementation, templates, token
+storage, failure recovery, custom-field persistence, and completion hooks. Run
+`php tests/security/form-builder-core-requirement.php /path/to/swpm-form-builder`
+separately to verify the older-core compatibility guard.

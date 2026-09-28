@@ -59,6 +59,10 @@ class SwpmSelfActionHandler {
     }
 
     public function after_registration_callback($user_data){
+        // Keep notification recovery instructions visible after successful account creation.
+        if ( ! empty( $user_data['registration_email_failed'] ) ) {
+            return;
+        }
 
         //Handle auto login after registration if enabled
         $enable_auto_login = SwpmSettings::get_instance()->get_value('auto-login-after-rego');

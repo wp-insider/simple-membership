@@ -88,6 +88,55 @@ class SwpmEmailActivationTest extends WP_UnitTestCase {
         $this->assertFalse( get_option( $this->key ) );
     }
 
+    public function test_metadata_is_stored_without_allowing_token_or_password_overrides() {
+        $data = SwpmEmailActivation::get_or_create( $this->member_id, array(
+            'fb_form_id' => 73, 'plain_password' => 'secret', 'act_code' => 'unsafe', 'timestamp' => 1,
+        ) );
+        $this->assertSame( 73, $data['fb_form_id'] );
+        $this->assertArrayNotHasKey( 'plain_password', $data );
+        $this->assertNotSame( 'unsafe', $data['act_code'] );
+        $this->assertTrue( SwpmEmailActivation::is_valid( $data ) );
+        $this->assertSame( $data, SwpmEmailActivation::get_or_create( $this->member_id, array( 'fb_form_id' => 99 ) ) );
+    }
+
+    public function test_completed_cleanup_is_autoloaded() {
+        global $wpdb;
+        delete_option( 'swpm_activation_password_cleanup' );
+        update_option( $this->key, array( 'timestamp' => time(), 'act_code' => 'old-addon-token', 'plain_password' => 'old-addon-password' ), false );
+        SwpmEmailActivation::remove_legacy_passwords();
+        $this->assertArrayNotHasKey( 'plain_password', get_option( $this->key ) );
+        wp_cache_flush();
+        $alloptions = wp_load_alloptions();
+        $this->assertSame( 'done', $alloptions['swpm_activation_password_cleanup'] );
+        $queries = $wpdb->num_queries;
+        SwpmEmailActivation::remove_legacy_passwords();
+        $this->assertSame( $queries, $wpdb->num_queries, 'Finished cleanup must not issue its own database query.' );
+    }
+
+    public function test_failed_cleanup_defers_retry_and_keeps_progress() {
+        global $wpdb;
+        delete_option( 'swpm_activation_password_cleanup' );
+        uopz_set_return( 'wpdb', 'get_results', function () { return null; }, true );
+        try {
+            SwpmEmailActivation::remove_legacy_passwords();
+        } finally {
+            uopz_unset_return( 'wpdb', 'get_results' );
+        }
+        $progress = get_option( 'swpm_activation_password_cleanup' );
+        $this->assertSame( 0, $progress['cursor'] );
+        $this->assertGreaterThan( time(), $progress['retry_after'] );
+        $queries = $wpdb->num_queries;
+        SwpmEmailActivation::remove_legacy_passwords();
+        $this->assertSame( $queries, $wpdb->num_queries );
+    }
+
+    public function test_invalid_link_message_offers_a_resend_for_the_same_member() {
+        $message = SwpmEmailActivation::invalid_link_message( $this->member_id );
+        $this->assertStringContainsString( 'invalid or has expired', $message );
+        $this->assertStringContainsString( 'swpm_resend_activation_email=1', $message );
+        $this->assertStringContainsString( 'swpm_member_id=' . $this->member_id, $message );
+    }
+
     public function test_migration_removes_passwords_without_changing_links_or_unrelated_options() {
         delete_option( 'swpm_activation_password_cleanup' );
         $data = array( 'act_code' => 'legacy', 'timestamp' => time(), 'plain_password' => 'old-secret', 'fb_form_id' => 19 );

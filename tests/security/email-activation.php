@@ -18,6 +18,8 @@ function absint( $value ) { return abs( (int) $value ); }
 function wp_unslash( $value ) { return stripslashes( $value ); }
 function sanitize_text_field( $value ) { return trim( strip_tags( $value ) ); }
 function sanitize_url( $value ) { return $value; }
+function esc_url( $value ) { return htmlspecialchars( $value, ENT_QUOTES ); }
+function esc_html( $value ) { return htmlspecialchars( $value, ENT_QUOTES ); }
 function is_email( $value ) { return filter_var( $value, FILTER_VALIDATE_EMAIL ); }
 function get_home_url() { return 'https://example.test'; }
 function add_query_arg( $args, $url ) { return $url . '?' . http_build_query( $args ); }
@@ -78,7 +80,10 @@ class SwpmSettings {
     public static function get_instance() { return new self(); }
     public function get_value( $key, $default = '' ) { return self::$values[$key] ?? $default; }
 }
-class SwpmLog { public static function log_simple_debug( ...$args ) {} }
+class SwpmLog {
+    public static $messages = array();
+    public static function log_simple_debug( ...$args ) { self::$messages[] = $args; }
+}
 class SwpmUtils {
     public static function _( $text ) { return $text; }
     public static function get_formatted_date_according_to_wp_settings( $date ) { return $date; }
@@ -132,6 +137,7 @@ function response( $callback ) {
     throw new RuntimeException( 'Expected an endpoint response.' );
 }
 function fixture() {
+    SwpmLog::$messages = array();
     $GLOBALS['options'] = $GLOBALS['transients'] = $GLOBALS['mail'] = $GLOBALS['filters'] = array();
     $GLOBALS['option_id'] = 0;
     $GLOBALS['write_failure'] = false;
@@ -189,11 +195,15 @@ echo "PASS: public/admin resend, existing links, Form Builder metadata, cooldown
 
 fixture();
 for ( $id = 1; $id <= 10; $id++ ) { check_activation( SwpmEmailActivation::allow_public_resend( $id ), 'Source limit applied too early.' ); }
+check_activation( SwpmLog::$messages === array(), 'Allowed resends must not log a rate-limit failure.' );
 $_SERVER['HTTP_X_FORWARDED_FOR'] = '192.0.2.200';
 check_activation( ! SwpmEmailActivation::allow_public_resend( 11 ), 'Source limit bypassed.' );
+check_activation( count( SwpmLog::$messages ) === 1 && strpos( SwpmLog::$messages[0][0], 'source rate limit reached (10 requests per 10 minutes). Member ID: 11' ) !== false && SwpmLog::$messages[0][1] === false, 'Source rate-limit failure must be logged.' );
 $_SERVER['REMOTE_ADDR'] = '192.0.2.2';
 check_activation( SwpmEmailActivation::allow_public_resend( 11 ), 'Independent source blocked.' );
+check_activation( count( SwpmLog::$messages ) === 1, 'Allowed resend from another source must not log a rate-limit failure.' );
 check_activation( ! SwpmEmailActivation::allow_public_resend( 1 ), 'Member cooldown must apply across sources.' );
+check_activation( count( SwpmLog::$messages ) === 2 && strpos( SwpmLog::$messages[1][0], 'member rate limit reached (one request per 60 seconds). Member ID: 1' ) !== false && SwpmLog::$messages[1][1] === false, 'Member rate-limit failure must be logged.' );
 echo "PASS: per-source limit ignores spoofed forwarding headers; member limit spans sources\n";
 
 fixture();

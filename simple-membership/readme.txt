@@ -191,6 +191,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
+= WIP =
+- A security related issue fixed in profile form.
 
 = 4.8.4 =
 - Added two new filter hooks (swpm_show_expiry_date_value and swpm_show_expiry_date_output) to the [swpm_show_expiry_date] shortcode to allow customization of the displayed expiry date and the shortcode output.

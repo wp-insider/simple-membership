@@ -1054,17 +1054,17 @@ class SwpmMiscUtils {
 		}
 		$countries_dropdown = '';
 		//let's add "(Please select)" option
-		$countries_dropdown .= "\r\n" . '<option value=""' . ( $country == '' ? ' selected' : '' ) . '>' . __( '(Please Select)', 'simple-membership' ) . '</option>';
+		$countries_dropdown .= "\r\n" . '<option value=""' . ( $country == '' ? ' selected' : '' ) . '>' . esc_html__( '(Please Select)', 'simple-membership' ) . '</option>';
 		if ( $guess_country == '' && $country != '' ) {
 			//since we haven't guessed the country name, let's add current value to the options
-			$countries_dropdown .= "\r\n" . '<option value="' . $country . '" selected>' . $country . '</option>';
+			$countries_dropdown .= "\r\n" . '<option value="' . esc_attr( $country ) . '" selected>' . esc_html( $country ) . '</option>';
 		}
 		if ( $guess_country != '' ) {
 			$country = $guess_country;
 		}
 		foreach ( $countries as $country_name ) {
-			//The country name strings are already in the POT file from the swpm_dummy_country_names_for_translation() function, so we can use __() function to output the country names.
-			$countries_dropdown .= "\r\n" . '<option value="' . $country_name . '"' . ( strtolower( $country_name ) == strtolower( $country ) ? ' selected' : '' ) . '>' . __($country_name, 'simple-membership') . '</option>';
+			//The country name strings are already in the POT file from the swpm_dummy_country_names_for_translation() function.
+			$countries_dropdown .= "\r\n" . '<option value="' . esc_attr( $country_name ) . '"' . ( strtolower( $country_name ) == strtolower( $country ) ? ' selected' : '' ) . '>' . esc_html__( $country_name, 'simple-membership' ) . '</option>';
 		}
 		return $countries_dropdown;
 	}

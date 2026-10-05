@@ -243,6 +243,10 @@ class SimpleWpMembership {
         if (is_admin()) {//No need to filter on the admin side
             return $content;
         }
+        if (!did_action('init')) {
+            //Too early (some themes request attachments before init). Skip to avoid running the access control checks (and loading translations) before init.
+            return $content;
+        }
 
         $acl = SwpmAccessControl::get_instance();
         if (has_post_thumbnail($post_id)) {
@@ -279,6 +283,10 @@ class SimpleWpMembership {
 
     public function filter_attachment_url($content, $post_id) {
         if (is_admin()) {//No need to filter on the admin side
+            return $content;
+        }
+        if (!did_action('init')) {
+            //Too early (some themes request attachments before init). Skip to avoid running the access control checks (and loading translations) before init.
             return $content;
         }
         $acl = SwpmAccessControl::get_instance();

@@ -193,6 +193,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 = WIP =
 - A security related issue fixed in profile form.
+- The attachment URL and metadata filters no longer run before the init hook. This prevents the "_load_textdomain_just_in_time" notice with themes (e.g. Cocoon) that request attachments early.
 
 = 4.8.4 =
 - Added two new filter hooks (swpm_show_expiry_date_value and swpm_show_expiry_date_output) to the [swpm_show_expiry_date] shortcode to allow customization of the displayed expiry date and the shortcode output.

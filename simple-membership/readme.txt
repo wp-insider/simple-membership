@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.8.4
+Stable tag: 4.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -191,9 +191,10 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 5. Example of membership level management.
 
 == Changelog ==
-= WIP =
-- A security related issue fixed in profile form.
+
+= 4.8.5 =
 - The attachment URL and metadata filters no longer run before the init hook. This prevents the "_load_textdomain_just_in_time" notice with themes (e.g. Cocoon) that request attachments early.
+- Added output escaping to the country field in the profile form.
 
 = 4.8.4 =
 - Added two new filter hooks (swpm_show_expiry_date_value and swpm_show_expiry_date_output) to the [swpm_show_expiry_date] shortcode to allow customization of the displayed expiry date and the shortcode output.

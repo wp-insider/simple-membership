@@ -6333,7 +6333,7 @@ msgstr " Le reste du contenu n’est pas autorisé pour votre niveau d’adhési
 
 #: classes/class.swpm-access-control.php:209
 msgid "You need to be logged in to view the rest of the content. "
-msgstr "Vous devez être connecté pour voir ce contenu. "
+msgstr "Vous devez être connecté pour voir la suite de ce contenu. "
 
 #: classes/class.swpm-access-control.php:84
 #: classes/class.swpm-access-control.php:153

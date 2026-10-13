@@ -229,8 +229,10 @@ class SwpmAuth {
 		//SwpmLog::log_auth_debug("validate() - " . $_COOKIE[$auth_cookie_name], true);
 		list($username, $expiration, $hmac, $remember) = $cookie_elements;
 		$expired = $expiration;
-		// Allow a grace period for POST and AJAX requests
-		if ( defined( 'DOING_AJAX' ) || 'POST' == $_SERVER['REQUEST_METHOD'] ) {
+		// Allow a grace period for POST and AJAX requests.
+		// Skip it for login form submissions so an expired cookie doesn't prevent the login from being processed (and a fresh cookie from being set).
+		$is_login_form_submission = isset( $_POST['swpm_user_name'] );
+		if ( ! $is_login_form_submission && ( defined( 'DOING_AJAX' ) || 'POST' == $_SERVER['REQUEST_METHOD'] ) ) {
 			$expired += HOUR_IN_SECONDS;
 		}
 		// Quick check to see if an honest cookie has expired
@@ -450,6 +452,8 @@ class SwpmAuth {
 		SwpmLog::log_auth_debug( 'SwpmAuth::logout() - Logout request received for username: ' . $member_username, true );
 
 		if ( ! $this->isLoggedIn ) {
+			// The login session is not valid (example: expired cookie). Clear any stale auth cookies that may still be in the browser.
+			$this->swpm_clear_auth_cookies();
 			return;
 		}
 

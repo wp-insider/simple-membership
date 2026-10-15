@@ -673,7 +673,7 @@ msgstr "E-Mail-Adresse: "
 
 #: classes/class.swpm-front-registration.php:449
 msgid "Password reset link has been sent to your email address."
-msgstr "Ein Link zum Zurücksetzen des Passwort wurde an Ihre E-Mail-Adresse gesendet."
+msgstr "Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail-Adresse gesendet."
 
 #: classes/class.swpm-front-registration.php:467
 msgid "New password has been sent to your email address."

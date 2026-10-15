@@ -45,13 +45,20 @@ class SwpmWpLoadedTasks {
 	 */
 	public function synchronise_swpm_logout_for_wp_users() {
 		if ( function_exists('is_user_logged_in') && ! is_user_logged_in() ) {
-			/* WP user is logged out. So logout the SWPM user (if applicable) */
+			//WP is currently logged out, but checking the SWPM session below may change that.
 			if ( SwpmMemberUtils::is_member_logged_in() ) {
+				//is_member_logged_in() lazily initializes SwpmAuth, which can process a submitted login
+				//and sign the WP user in. This can also happen with Fancy Login addon's admin-ajax.php request,
+				//where the frontend-only auth initialization at init was skipped.
+				//Recheck WP's current state so we do not log out a member who just signed in.
+				if ( is_user_logged_in() ) {
+					return;
+				}
 
 				//Check if force WP user login sync is enabled or not
 				$force_wp_user_sync = SwpmSettings::get_instance()->get_value( 'force-wp-user-sync' );
 				if ( empty( $force_wp_user_sync ) ) {
-					return '';
+					return;
 				}
 				/* Force WP user login sync is enabled. */
 				/* SWPM user is logged in the system. Log him out. */

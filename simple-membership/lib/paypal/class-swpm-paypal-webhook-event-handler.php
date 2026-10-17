@@ -35,7 +35,12 @@ class SWPM_PayPal_Webhook_Event_Handler {
 
 		//If using simulator, this will need to be commented out.
 		//Verify the webhook for the given mode.
-		if ( ! self::verify_webhook_event_for_given_mode( $event, $mode ) ) {
+		$verification_result = self::verify_webhook_event_for_given_mode( $event, $mode );
+		if ( $verification_result === 'error' ) {
+			//The verification API call could not be completed. Send a 500 status code so PayPal retries this webhook event later.
+			self::send_error_response_and_exit();
+		}
+		if ( ! $verification_result ) {
 			status_header(200);//Send a 200 status code to PayPal to indicate that the webhook event was received successfully.
 			wp_die();
 		}
@@ -62,6 +67,10 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			case 'BILLING.SUBSCRIPTION.SUSPENDED':
 				// A subscription is suspended.
 				$this->handle_subscription_status_update('suspended', $event, $mode );
+				break;
+			case 'BILLING.SUBSCRIPTION.PAYMENT.FAILED':
+				// A payment failed on a subscription.
+				$this->handle_subscription_payment_failed( $event, $mode );
 				break;
 			case 'PAYMENT.SALE.COMPLETED':
 				// A payment is made on a subscription. Update access starts date (if needed).
@@ -149,6 +158,29 @@ class SWPM_PayPal_Webhook_Event_Handler {
 	}
 
 	/**
+	 * Handle subscription payment failed.
+	 * This doesn't change the account status. PayPal suspends the subscription after the failure threshold set in the plan (handled by the SUSPENDED webhook event).
+	 * Sites can use the 'swpm_paypal_subscription_payment_failed' action hook to apply a stricter policy.
+	 */
+	public function handle_subscription_payment_failed( $event, $mode ) {
+		//Get the subscription ID from the event data.
+		$subscription_id = isset( $event['resource']['id'] ) ? $event['resource']['id'] : '';
+		SwpmLog::log_simple_debug( 'Handling Webhook subscription payment failed event. Subscription ID: ' . $subscription_id, true );
+
+		//Retrieve the member record for this subscription (if any).
+		$member_record = ! empty( $subscription_id ) ? SwpmMemberUtils::get_user_by_subsriber_id( $subscription_id ) : false;
+		if ( $member_record ) {
+			SwpmLog::log_simple_debug( 'Subscription payment failed for member ID: ' . $member_record->member_id, true );
+		} else {
+			$member_record = false;
+			SwpmLog::log_simple_debug( 'Could not find an existing member record for the given subscriber ID: ' . $subscription_id, true );
+		}
+
+		//Trigger an action hook so sites can handle the failed payment (example: send a notification or restrict access).
+		do_action( 'swpm_paypal_subscription_payment_failed', $event, $member_record );
+	}
+
+	/**
 	 * Handle subscription payment received.
 	 */
 	public function handle_subscription_payment_received( $payment_status, $event, $mode ){
@@ -187,6 +219,11 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			//Create the IPN data array from the subscription details.
 			$ipn_data = self::create_ipn_data_from_paypal_api_subscription_details_data( $sub_details, $event );
 			//SwpmLog::log_array_data_to_debug( $ipn_data, true );//Debugging only.
+			if( $ipn_data === false ){
+				SwpmLog::log_simple_debug( 'Error! Failed to create the IPN data from the PayPal subscription details. Subscription ID: ' . $subscription_id, false );
+				//Send a 500 status code so PayPal retries this webhook event later.
+				self::send_error_response_and_exit();
+			}
 
 			//Update the "Access starts date" of the member account to the current date.
 			swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
@@ -202,8 +239,22 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			//Error getting subscription details.
 			SwpmLog::log_simple_debug( 'Error! Failed to get subscription details from the PayPal API.', false );
 			//TODO - Show additional error details if available.
-			return;
+			//Send a 500 status code so PayPal retries this webhook event later (this payment hasn't been recorded yet).
+			self::send_error_response_and_exit();
 		}
+	}
+
+	/**
+	 * Sends a 500 status code (so PayPal retries the webhook event later) and exits.
+	 * Used when the webhook event could not be processed due to a temporary error (example: a failed PayPal API call).
+	 */
+	public static function send_error_response_and_exit(){
+		SwpmLog::log_simple_debug( 'Sending a 500 status code so PayPal retries this webhook event later.', false );
+		if ( ! headers_sent() ) {
+			status_header( 500 );
+		}
+		echo '500 Error';
+		exit;
 	}
 
 	public function handle_payment_refunded( $payment_status, $event, $mode ){
@@ -324,6 +375,11 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		return $headers;
 	}
 
+	/**
+	 * Verifies the webhook event signature with the PayPal API.
+	 *
+	 * @return bool|string true if verified, false if verification failed (discard the event), 'error' if the verification API call could not be completed (PayPal should retry).
+	 */
 	public static function verify_webhook_event_for_given_mode( $event, $mode ){
 		//Get HTTP headers received from the PayPal webhook.
 		$headers = self::get_paypal_webhook_headers();
@@ -335,7 +391,20 @@ class SWPM_PayPal_Webhook_Event_Handler {
 
 		$response = $pp_webhook->verify_webhook_signature( $event, $headers );
 
-		if( $response !== false && $response->verification_status === 'SUCCESS' ){
+		if ( is_wp_error( $response ) ) {
+			//The PayPal webhook headers are missing (this request didn't come from PayPal). Retrying won't help, so discard it.
+			SwpmLog::log_simple_debug( 'Error! Webhook verification failed! Environment mode: '. $mode . ', Error: ' . $response->get_error_code(), false );
+			return false;
+		}
+
+		if ( $response === false ) {
+			//The verification API call could not be completed. Return 'error' so PayPal retries this webhook event.
+			//We can check the SWPM_PayPal_Request_API->last_error to find additional details if needed.
+			SwpmLog::log_simple_debug( 'Error! Webhook verification API call failed! Environment mode: '. $mode, false );
+			return 'error';
+		}
+
+		if( isset( $response->verification_status ) && $response->verification_status === 'SUCCESS' ){
 			//Webhook verification success!
 			return true;
 		}
@@ -345,9 +414,8 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			return false;
 		}
 
-		//If we are here then something went wrong. Log the error and return false.
-		//We can check the SWPM_PayPal_Request_API->last_error to find additional details if needed.
+		//If we are here then something went wrong (unexpected response). Log the error and return 'error' so PayPal retries.
 		SwpmLog::log_simple_debug( 'Error! Webhook verification failed! Environment mode: '. $mode, false );
-		return false;
+		return 'error';
 	}
 }

@@ -33,6 +33,14 @@ class SwpmTransactions {
 		if( empty( $txn_data['member_id'] ) ){
 			$txn_data['member_id'] = isset ( $ipn_data['member_id'] ) ? $ipn_data['member_id'] : '';
 		}
+		//If the member ID is still empty, try to find the member using the subscription ID (example: a recurring payment of a subscription).
+		if( empty( $txn_data['member_id'] ) && ! empty( $subscr_id ) ){
+			$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $subscr_id );
+			if( $member_record ){
+				$txn_data['member_id'] = $member_record->member_id;
+				SwpmLog::log_simple_debug( 'Member ID was not available in the payment data. Found the member using the subscription ID (' . $subscr_id . '). Member ID: ' . $txn_data['member_id'], true );
+			}
+		}
 		//SwpmLog::log_simple_debug( 'Member ID value: ' . $txn_data['member_id'], true );
 
 		//Get the membership level reference.

@@ -578,7 +578,8 @@ function swpm_send_subscription_renewal_notification_email( $member_id, $ipn_dat
 	}
 }
 
-function swpm_update_member_subscription_start_date_if_applicable( $ipn_data ) {
+//Note: $ipn_data is passed by reference so the caller gets the 'member_id' value (used when saving the transaction record).
+function swpm_update_member_subscription_start_date_if_applicable( &$ipn_data ) {
 	global $wpdb;
 	$email = isset( $ipn_data['payer_email'] ) ? $ipn_data['payer_email'] : '';
 	$subscr_id = isset( $ipn_data['subscr_id'] ) ? $ipn_data['subscr_id'] : '';

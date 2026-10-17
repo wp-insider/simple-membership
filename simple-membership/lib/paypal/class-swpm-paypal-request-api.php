@@ -174,6 +174,7 @@ class SWPM_PayPal_Request_API {
 			array(
 				'headers' => $headers,
 				'body' => $this->encode_params( $params ),
+				'timeout' => 30,
 			)
 		);
 
@@ -226,6 +227,7 @@ class SWPM_PayPal_Request_API {
 		$payload = array(
 			'headers' => $headers,
 			'body' => json_encode( $params ),
+			'timeout' => 30,
 		);
 
 		//=== Debug purposes (Useful for PayPal Tech Support) ===

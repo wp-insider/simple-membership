@@ -53,7 +53,7 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 			</tr>
 			</table>
 	<?php
-	apply_filters( 'swpm_new_button_select_button_type', '' );
+	echo apply_filters( 'swpm_new_button_select_button_type', '' );
 	wp_nonce_field( 'swpm_admin_create_btns', 'swpm_admin_create_btns' );
 	?>
 

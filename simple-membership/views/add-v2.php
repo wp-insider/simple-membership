@@ -146,7 +146,7 @@ if (!empty($display_reg_form_password_toggle)) {
                 </div>
             </div>
             <?php
-            apply_filters('swpm_registration_form_before_terms_and_conditions', '');
+            echo apply_filters('swpm_registration_form_before_terms_and_conditions', '');
 
             // Check if we need to display Terms and Conditions checkbox.
             if (!empty($terms_enabled)) {

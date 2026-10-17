@@ -61,7 +61,7 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                 </td>
             </tr>
             <?php
-            apply_filters('swpm_registration_form_before_terms_and_conditions', '');
+            echo apply_filters('swpm_registration_form_before_terms_and_conditions', '');
             //check if we need to display Terms and Conditions checkbox
             $terms_enabled = $settings->get_value('enable-terms-and-conditions');
             if (!empty($terms_enabled)) {

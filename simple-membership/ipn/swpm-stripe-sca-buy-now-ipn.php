@@ -295,6 +295,7 @@ class SwpmStripeSCABuyNowIpnHandler {
 		// Create the $ipn_data array.
 		$ipn_data                     = array();
 		$ipn_data['mc_gross']         = $payment_amount;
+		$ipn_data['mc_currency']      = $currency_code;
 		$ipn_data['first_name']       = $first_name;
 		$ipn_data['last_name']        = $last_name;
 		$ipn_data['payer_email']      = $stripe_email;

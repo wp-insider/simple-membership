@@ -197,6 +197,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - The logout request now clears any leftover (expired) login cookies from the browser, even when the login session is no longer valid.
 - Fixed a grammatical error in the German translation of the password reset message. Thanks to Annika for reporting this.
 - Fixed an issue where the Force WP User Synchronization feature could log a member out right after a successful login.
+- Stripe Buy Now: the payment currency, billing country code, payment method type, card country and Stripe fee are now included in the payment data passed to the swpm_payment_ipn_processed hook. Thanks to Th0masL for the contribution.
 
 = 4.8.5 =
 - The attachment URL and metadata filters no longer run before the init hook. This prevents the "_load_textdomain_just_in_time" notice with themes (e.g. Cocoon) that request attachments early.

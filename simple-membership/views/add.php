@@ -14,9 +14,9 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
     <form id="swpm-registration-form" class="swpm-validate-form" name="swpm-registration-form" method="post" action="">
         <input type ="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
         <table>
-            <tr class="swpm-registration-username-row" <?php apply_filters('swpm_registration_form_username_tr_attributes', ''); ?>>
+            <tr class="swpm-registration-username-row" <?php echo apply_filters('swpm_registration_form_username_tr_attributes', ''); ?>>
                 <td><label for="user_name"><?php _e('Username', 'simple-membership') ?></label></td>
-                <td><input type="text" id="user_name" class="validate[required,custom[noapostrophe],custom[SWPMUserName],minSize[4],ajax[ajaxUserCall]]" value="<?php echo esc_attr($user_name); ?>" size="50" name="user_name" <?php apply_filters('swpm_registration_form_username_input_attributes', ''); ?>/></td>
+                <td><input type="text" id="user_name" class="validate[required,custom[noapostrophe],custom[SWPMUserName],minSize[4],ajax[ajaxUserCall]]" value="<?php echo esc_attr($user_name); ?>" size="50" name="user_name" <?php echo apply_filters('swpm_registration_form_username_input_attributes', ''); ?>/></td>
             </tr>
             <tr class="swpm-registration-email-row">
                 <td><label for="email"><?php _e('Email', 'simple-membership') ?></label></td>
@@ -30,17 +30,17 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                 <td><label for="password_re"><?php _e('Repeat Password', 'simple-membership') ?></label></td>
                 <td><input type="password" autocomplete="off" id="password_re" value="" size="50" name="password_re" /></td>
             </tr>
-            <tr class="swpm-registration-firstname-row" <?php apply_filters('swpm_registration_form_firstname_tr_attributes', ''); ?>>
+            <tr class="swpm-registration-firstname-row" <?php echo apply_filters('swpm_registration_form_firstname_tr_attributes', ''); ?>>
                 <td><label for="first_name"><?php _e('First Name', 'simple-membership') ?></label></td>
                 <td><input type="text" id="first_name" value="<?php echo esc_attr($first_name); ?>" size="50" name="first_name" /></td>
             </tr>
-            <tr class="swpm-registration-lastname-row" <?php apply_filters('swpm_registration_form_lastname_tr_attributes', ''); ?>>
+            <tr class="swpm-registration-lastname-row" <?php echo apply_filters('swpm_registration_form_lastname_tr_attributes', ''); ?>>
                 <td><label for="last_name"><?php _e('Last Name', 'simple-membership') ?></label></td>
                 <td><input type="text" id="last_name" value="<?php echo esc_attr($last_name); ?>" size="50" name="last_name" /></td>
             </tr>
             <tr
                 class="swpm-registration-membership-level-row"
-                <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>
+                <?php echo apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>
                 style="<?php echo !empty($hide_membership_level_field) ? 'display:none' : '' ?>"
             >
                 <td><label for="membership_level"><?php _e('Membership Level', 'simple-membership') ?></label></td>
@@ -61,7 +61,7 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                 </td>
             </tr>
             <?php
-            apply_filters('swpm_registration_form_before_terms_and_conditions', '');
+            echo apply_filters('swpm_registration_form_before_terms_and_conditions', '');
             //check if we need to display Terms and Conditions checkbox
             $terms_enabled = $settings->get_value('enable-terms-and-conditions');
             if (!empty($terms_enabled)) {

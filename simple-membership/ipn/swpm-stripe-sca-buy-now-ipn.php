@@ -162,8 +162,14 @@ class SwpmStripeSCABuyNowIpnHandler {
 			$charge_id = $pi->latest_charge;
 			//For Stripe API version 2022-11-15 or later, the charge object is not included in the payment intents object. It needs to be retrieved using the charge ID.
 			try {
-				//Retrieve the charge object using the charge ID
-				$charge = \Stripe\Charge::retrieve($charge_id);
+				//Retrieve the charge object using the charge ID (with its balance transaction, for the Stripe fee)
+				try {
+					$charge = \Stripe\Charge::retrieve( array( 'id' => $charge_id, 'expand' => array( 'balance_transaction' ) ) );
+				} catch ( \Stripe\Exception\PermissionException $e ) {
+					//Safety net: retrieve the charge without its balance transaction (the fee will be empty).
+					SwpmLog::log_simple_debug( 'Could not expand the balance transaction, so the Stripe fee will be empty. Retrieving the charge without it: ' . $e->getMessage(), false );
+					$charge = \Stripe\Charge::retrieve( $charge_id );
+				}
 			} catch (\Stripe\Exception\ApiErrorException $e) {
 				// Handle the error
 				SwpmLog::log_simple_debug( 'Stripe error occurred trying to retrieve the charge object using the charge ID. ' . $e->getMessage(), false );
@@ -351,13 +357,12 @@ class SwpmStripeSCABuyNowIpnHandler {
 	}
 
 	/**
-	 * Details of the payment read from the Stripe charge, added to the IPN data:
-	 * - payment_method_type: 'card', 'bancontact', 'eps'... (empty if not known);
+	 * Details of the payment read from the Stripe charge, added to the IPN data (empty string when not known):
+	 * - payment_method_type: 'card', 'bancontact', 'eps'...
 	 * - card_country: 2-letter country of the bank that issued the card (cards only);
-	 * - payment_fee / payment_fee_currency: Stripe's fee for this payment, in the currency of the Stripe account.
-	 *   Empty when not available yet: with some payment methods (e.g. Bancontact, EPS) Stripe creates the balance
-	 *   transaction a few seconds after the buyer is back on the site.
-	 * Reading the fee may need one more API call; any error is only logged, the payment is processed anyway.
+	 * - payment_fee / payment_fee_currency: the balance transaction's fee, in the currency of the Stripe balance
+	 *   (can differ from mc_currency). Read from the expanded charge, no extra API call. Empty when Stripe has not
+	 *   created the balance transaction yet (seen with Bancontact and EPS).
 	 */
 	public static function get_charge_details( $charge ) {
 		$details = array(
@@ -374,21 +379,15 @@ class SwpmStripeSCABuyNowIpnHandler {
 			$details['card_country'] = strtoupper( $charge->payment_method_details->card->country );
 		}
 
-		if ( empty( $charge->balance_transaction ) ) {
-			return $details;
-		}
-		try {
-			$bt = is_object( $charge->balance_transaction ) ? $charge->balance_transaction : \Stripe\BalanceTransaction::retrieve( $charge->balance_transaction );
-			if ( isset( $bt->fee ) && ! empty( $bt->currency ) ) {
-				$currency            = strtoupper( $bt->currency );
-				$zero_cents_currency = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
-				$fee                 = in_array( $currency, $zero_cents_currency, true ) ? $bt->fee : $bt->fee / 100;
+		// The balance transaction is an object only when it was expanded (otherwise just its ID, or empty).
+		$bt = isset( $charge->balance_transaction ) ? $charge->balance_transaction : null;
+		if ( is_object( $bt ) && isset( $bt->fee ) && ! empty( $bt->currency ) ) {
+			$currency            = strtoupper( $bt->currency );
+			$zero_cents_currency = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
+			$fee                 = in_array( $currency, $zero_cents_currency, true ) ? $bt->fee : $bt->fee / 100;
 
-				$details['payment_fee']          = round( floatval( $fee ), 2 );
-				$details['payment_fee_currency'] = $currency;
-			}
-		} catch ( \Exception $e ) {
-			SwpmLog::log_simple_debug( 'Could not read the Stripe fee of this payment: ' . $e->getMessage(), true );
+			$details['payment_fee']          = round( floatval( $fee ), 2 );
+			$details['payment_fee_currency'] = $currency;
 		}
 
 		return $details;

@@ -203,6 +203,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added handling for the PayPal BILLING.SUBSCRIPTION.PAYMENT.FAILED webhook event. It logs the failed payment and triggers the new swpm_paypal_subscription_payment_failed action hook.
 - Fixed some registration form and payment button filter hooks that were not printing the value returned by the callback. Thanks to Th0masL for the contribution.
 - Improved PayPal and Stripe refund handling and synchronization of payment and subscription statuses.
+- Added two options in the Payment Settings menu to keep the member account active when a one-time or subscription payment is refunded (by default, the account is deactivated). Also added the swpm_deactivate_account_on_refund filter hook.
 
 = 4.8.5 =
 - The attachment URL and metadata filters no longer run before the init hook. This prevents the "_load_textdomain_just_in_time" notice with themes (e.g. Cocoon) that request attachments early.

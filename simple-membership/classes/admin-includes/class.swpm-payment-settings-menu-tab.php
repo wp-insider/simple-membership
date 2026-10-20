@@ -113,6 +113,15 @@ class SWPM_Payment_Settings_Menu_Tab {
             echo '<div class="notice notice-success"><p>' . __('Test mode settings updated successfully.', 'simple-membership') . '</p></div>';
         }
 
+        // Check refund settings submit.
+        if (isset($_POST['swpm-refund-settings-submit']) && check_admin_referer('swpm-refund-settings-nonce')) {
+            $settings->set_value('disable-deactivation-on-one-time-refund' ,(( isset($_POST['disable-deactivation-on-one-time-refund']) && $_POST['disable-deactivation-on-one-time-refund'] == '1' ) ? "checked=\"checked\"" : ''));
+            $settings->set_value('disable-deactivation-on-subscription-refund' ,(( isset($_POST['disable-deactivation-on-subscription-refund']) && $_POST['disable-deactivation-on-subscription-refund'] == '1' ) ? "checked=\"checked\"" : ''));
+            $settings->save();
+
+            echo '<div class="notice notice-success"><p>' . __('Refund settings updated successfully.', 'simple-membership') . '</p></div>';
+        }
+
         // Check PayPal settings submit.
         if (isset($_POST['swpm-paypal-settings-submit']) && check_admin_referer('swpm-paypal-settings-nonce')) {
             $settings->set_value('paypal-live-client-id' ,( isset($_POST['paypal-live-client-id']) ? sanitize_text_field($_POST['paypal-live-client-id']) : ''));
@@ -209,6 +218,60 @@ class SWPM_Payment_Settings_Menu_Tab {
                     _e('Subscription plan modes cannot be switched between test and live modes. For testing, create all subscription plans and buttons in test mode. ', 'simple-membership'); 
                     _e('Once testing is complete, switch the plugin to live mode and recreate the plans and buttons for live use. Avoid reusing test mode plans/buttons in live mode to prevent errors from the payment gateway. ', 'simple-membership');
                     echo '<a href="https://simple-membership-plugin.com/payment-testing-checklist-for-simple-membership/" target="_blank">' . __('Read this payment testing checklist.', 'simple-membership') . '</a>';
+                    ?>
+                </div>
+            </div>
+        </div>
+        <?php
+        // Refund settings
+        $disable_deactivation_on_one_time_refund = $settings->get_value( 'disable-deactivation-on-one-time-refund' );
+        $disable_deactivation_on_subscription_refund = $settings->get_value( 'disable-deactivation-on-subscription-refund' );
+        ?>
+        <div class="postbox">
+            <h2><?php _e("Refund Settings", 'simple-membership'); ?></h2>
+
+            <div class="inside">
+                <p>
+                    <?php _e( 'This section allows you to control what happens to the member account when a payment is refunded. By default, the member account is deactivated when a one-time or subscription payment is refunded. The payment is always marked as refunded in the transactions list. These options apply to PayPal and Stripe payments. ', 'simple-membership' ); ?>
+                    <?php echo '<a href="https://simple-membership-plugin.com/what-happens-when-a-payment-is-refunded/" target="_blank">' . __('Read more about how refunds are handled.', 'simple-membership') . '</a>'; ?>
+                </p>
+                <form action="" method="POST">
+                    <table class="form-table">
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="">
+                                <?php _e('Do Not Deactivate Account on One-time Payment Refund', 'simple-membership');?>
+                                </label>
+                            </th>
+                            <td>
+                                <input type="checkbox" name="disable-deactivation-on-one-time-refund" value="1" <?php echo $disable_deactivation_on_one_time_refund;?> />
+                                <p class="description">
+                                <?php _e('Enable this option to keep the member account active when a one-time payment is refunded. By default (unchecked), the member account is deactivated.', 'simple-membership');?>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="">
+                                <?php _e('Do Not Deactivate Account on Subscription Payment Refund', 'simple-membership');?>
+                                </label>
+                            </th>
+                            <td>
+                                <input type="checkbox" name="disable-deactivation-on-subscription-refund" value="1" <?php echo $disable_deactivation_on_subscription_refund;?> />
+                                <p class="description">
+                                <?php _e('Enable this option to keep the member account active when a subscription payment is refunded. By default (unchecked), the member account is deactivated.', 'simple-membership');?>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="submit" name="swpm-refund-settings-submit" class="button-primary" value="<?php _e('Save Changes', 'simple-membership'); ?>" />
+                    <?php wp_nonce_field('swpm-refund-settings-nonce');?>
+                </form>
+                <div class="swpm-blue-box">
+                    <?php
+                    echo '<strong>' . __('Note: ','simple-membership') . '</strong>';
+                    _e('These options only apply to refunds. When a subscription is canceled or expires, the member account is updated according to the access duration settings of the membership level (for example, a "No Expiry" level account is deactivated immediately). ', 'simple-membership');
+                    echo '<a href="https://simple-membership-plugin.com/what-happens-when-paypal-subscription-cancelled/" target="_blank">' . __('Read what happens when a subscription is canceled.', 'simple-membership') . '</a>';
                     ?>
                 </div>
             </div>

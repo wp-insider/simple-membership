@@ -288,6 +288,8 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$ipn_data['parent_txn_id'] = $orig_capture_txn_id;//Important for one time transactions refund.
 		$ipn_data['subscr_id'] = '';
 		$ipn_data['payment_status'] = $payment_status;
+		// A sale refund is for a subscription payment. A capture refund is for a one-time payment.
+		$ipn_data['refund_payment_type'] = ( $payment_status === 'sale_refunded' ) ? 'subscription' : 'one_time';
 		// Use the verified webhook's environment for subsequent PayPal subscription lookups.
 		$ipn_data['paypal_mode'] = $mode;
 		swpm_handle_refund_using_parent_txn_id( $ipn_data );

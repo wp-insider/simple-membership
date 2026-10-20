@@ -115,6 +115,14 @@ class SwpmStripeWebhookHandler {
 			$ipn_data['parent_txn_id'] = $is_refunded ? $txn_id : $customer;
 			// Enable strict matching for Stripe refunds without changing legacy PayPal IPN handling in the shared function.
 			$ipn_data['require_exact_refund_match'] = $is_refunded;
+			if ( $is_refunded && ! empty( $subscr_id ) ) {
+				// Subscription payments use the subscription ID (sub_...). One-time payments use the charge ID as the subscr_id.
+				if ( strpos( $subscr_id, 'sub_' ) === 0 ) {
+					$ipn_data['refund_payment_type'] = 'subscription';
+				} else if ( $subscr_id === $txn_id ) {
+					$ipn_data['refund_payment_type'] = 'one_time';
+				}
+			}
 
 			// Unresolved subscriptions fall back only to the original charge, never the shared customer ID.
 

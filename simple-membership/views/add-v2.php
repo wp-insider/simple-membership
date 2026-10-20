@@ -34,10 +34,11 @@ $is_strong_password_enabled = empty($force_strong_pass) ? 'false' : 'true';
 SimpleWpMembership::enqueue_validation_scripts_v2(
     'swpm-reg-form-validator',
     array(
-        'query_args' => array(
+        // Addons can add their own query args to the AJAX validation requests of this form.
+        'query_args' => apply_filters('swpm_registration_form_validation_query_args', array(
             'member_id' => filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT),
             'nonce' => wp_create_nonce('swpm-rego-form-ajax-nonce'),
-        ),
+        )),
         'form_id' => $form_id,
         'is_terms_enabled' => $is_terms_enabled,
         'is_pp_enabled' => $is_pp_enabled,

@@ -1,0 +1,86 @@
+Array
+(
+    [id] => WH-9X2356FASDF50GX1H-7KD878FASDFA63633
+    [event_version] => 1.0
+    [create_time] => 2026-10-18T06:44:14.867Z
+    [resource_type] => refund
+    [event_type] => PAYMENT.SALE.REFUNDED
+    [summary] => A $ 2.0 USD sale payment was refunded
+    [resource] => Array
+        (
+            [id] => 7CA09FASDF465423S
+            [state] => completed
+            [amount] => Array
+                (
+                    [total] => 2.00
+                    [currency] => USD
+                )
+
+            [refund_from_received_amount] => Array
+                (
+                    [value] => 1.93
+                    [currency] => USD
+                )
+
+            [refund_from_transaction_fee] => Array
+                (
+                    [value] => 0.07
+                    [currency] => USD
+                )
+
+            [total_refunded_amount] => Array
+                (
+                    [value] => 2.00
+                    [currency] => USD
+                )
+
+            [refund_to_payer] => Array
+                (
+                    [value] => 2.00
+                    [currency] => USD
+                )
+
+            [invoice_number] => 
+            [sale_id] => 8U687766FDSA6262G
+            [create_time] => 2026-10-18T06:42:52Z
+            [update_time] => 2026-10-18T06:42:52Z
+            [links] => Array
+                (
+                    [0] => Array
+                        (
+                            [href] => https://api.sandbox.paypal.com/v1/payments/refund/7CA09FASDF465423S
+                            [rel] => self
+                            [method] => GET
+                        )
+
+                    [1] => Array
+                        (
+                            [href] => https://api.sandbox.paypal.com/v1/payments/sale/8U687766FDSA6262G
+                            [rel] => sale
+                            [method] => GET
+                        )
+
+                )
+
+            [refund_reason_code] => REFUND
+        )
+
+    [links] => Array
+        (
+            [0] => Array
+                (
+                    [href] => https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-9X2356FASDF50GX1H-7KD878FASDFA63633
+                    [rel] => self
+                    [method] => GET
+                )
+
+            [1] => Array
+                (
+                    [href] => https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-9X2356FASDF50GX1H-7KD878FASDFA63633/resend
+                    [rel] => resend
+                    [method] => POST
+                )
+
+        )
+
+)

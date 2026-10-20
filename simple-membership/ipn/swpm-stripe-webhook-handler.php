@@ -55,7 +55,7 @@ class SwpmStripeWebhookHandler {
 		
 		SwpmLog::log_simple_debug( 'Stripe webhook event data validated successfully!', true );
 
-		$type = isset($event_json->type) ? $event_json->type : '';
+		$type = isset($event_json->type) ? sanitize_text_field($event_json->type) : '';
 		$stripe_api_version = isset($event_json->api_version) ? sanitize_text_field($event_json->api_version) : '';
 		SwpmLog::log_simple_debug( sprintf( 'Stripe subscription webhook received. Webhook type: %s, API version: %s. Checking if we need to handle this webhook.', $type, $stripe_api_version ), true );
 
@@ -70,22 +70,53 @@ class SwpmStripeWebhookHandler {
 			//SwpmLog::log_simple_debug( sprintf( 'Stripe Subscription Webhook %s received. Processing request...', $type ), true );
 
 			// Let's form minimal ipn_data array for swpm_handle_subsc_cancel_stand_alone
-			$customer                  = $event_json->data->object->customer;
-			$subscr_id                 = $event_json->data->object->id;
+			$customer = $event_json->data->object->customer;
 
 			$is_refunded = false;
 			if ($type == 'charge.refunded'){
+				// Known limitation: partial and full refunds currently follow the same handling.
+				// A matching payment is marked 'Refunded', and the associated member is deactivated below.
+				// Maybe add distinct partial-refund reporting and review the member-access policy in a future update.
 				$is_refunded = true;
 				// For charge object, we need to manually find the subscr_id from swpm_transactions cpt.
 				$subscr_id = SWPM_Utils_Subscriptions::get_subscr_id_from_swpm_transactions_cpt_by_charge_object($event_json->data->object);
+
+				$txn_id = isset($event_json->data->object->id) ? sanitize_text_field($event_json->data->object->id) : '';
+				if( empty( $txn_id )){
+					SwpmLog::log_simple_debug( 'Transaction ID value is empty. Ignoring this Stripe webhook event.', true );
+					return;
+				}
+
+				$txn_db_row = SwpmTransactions::get_transaction_row_by_txn_id( $txn_id, true);
+				if ( $txn_db_row ) {
+					SwpmTransactions::update_transaction_status( $txn_db_row->id,'Refunded' );
+				} else {
+					SwpmLog::log_simple_debug( 'No transaction record found for transaction ID: ' . $txn_id, true );
+				}
+
+				// One-time payments store a charge ID (ch_...) as subscr_id. Only query subscription status for subscription IDs (sub_...).
+				// Member refund handling below still applies to both payment types.
+				if ( ! empty( $subscr_id ) && strpos( $subscr_id, 'sub_' ) === 0 ) {
+					// Select credentials using the verified event's environment, including test events where livemode is false.
+					$mode = isset( $event_json->livemode ) ? ( $event_json->livemode ? 'production' : 'sandbox' ) : '';
+					// Optional status reconciliation; lookup failure must not interrupt the refund handling below.
+					SWPM_Utils_Subscriptions::sync_canceled_subscription_record_status_with_gateway( $subscr_id, 'stripe', $mode );
+				}
+			} else { // customer.subscription.deleted
+				$subscr_id = $event_json->data->object->id;
+
+				// Update subscription status of the subscription agreement record in transactions cpt table.
+				SWPM_Utils_Subscriptions::update_subscription_agreement_record_status_to_cancelled( $subscr_id );
 			}
 
 			$ipn_data                  = array();
 			$ipn_data['subscr_id']     = $subscr_id;
-			$ipn_data['parent_txn_id'] = $customer;
+			// One-time refunds fall back to the original charge ID stored in the member's subscr_id.
+			$ipn_data['parent_txn_id'] = $is_refunded ? $txn_id : $customer;
+			// Enable strict matching for Stripe refunds without changing legacy PayPal IPN handling in the shared function.
+			$ipn_data['require_exact_refund_match'] = $is_refunded;
 
-			// Update subscription status of the subscription agreement record in transactions cpt table.
-			SWPM_Utils_Subscriptions::update_subscription_agreement_record_status_to_cancelled( $subscr_id );
+			// Unresolved subscriptions fall back only to the original charge, never the shared customer ID.
 
 			swpm_handle_subsc_cancel_stand_alone( $ipn_data , $is_refunded);
 		}

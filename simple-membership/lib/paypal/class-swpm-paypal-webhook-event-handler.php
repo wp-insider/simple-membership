@@ -265,12 +265,6 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		SwpmLog::log_simple_debug( 'Processing the payment refund/reversal webhook event.', true );
 		SwpmLog::log_array_data_to_debug( $event, true );//Debugging only.
 
-		if( $payment_status != 'capture_refunded'){
-			//At the moment we are only processing the capture refunded event.
-			SwpmLog::log_simple_debug( 'This is not a capture refund event. Ignore this event.', true );
-			return;
-		}
-
 		$refund_txn_id = isset( $event['resource']['id'] ) ? $event['resource']['id'] : '';
 		$rerfund_amount = isset( $event['resource']['amount']['value'] ) ? $event['resource']['amount']['value'] : 0;
 		$refund_currency = isset( $event['resource']['amount']['currency_code'] ) ? $event['resource']['amount']['currency_code'] : '';
@@ -286,13 +280,16 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		SwpmLog::log_simple_debug( 'Transaction ID from resource. Transaction ID: ' . $orig_capture_txn_id . '. Original Capture Link: ' . $link_capture_txn, true );
 		
 		if( empty( $orig_capture_txn_id )){
-			SwpmLog::log_simple_debug( 'Transaction ID value is empty. Ignoring this webhook event.', true );
+			SwpmLog::log_simple_debug( 'Transaction ID value is empty. Ignoring this PayPal webhook event.', true );
 			return;
 		}
 		
 		$ipn_data = array();
 		$ipn_data['parent_txn_id'] = $orig_capture_txn_id;//Important for one time transactions refund.
 		$ipn_data['subscr_id'] = '';
+		$ipn_data['payment_status'] = $payment_status;
+		// Use the verified webhook's environment for subsequent PayPal subscription lookups.
+		$ipn_data['paypal_mode'] = $mode;
 		swpm_handle_refund_using_parent_txn_id( $ipn_data );
 	}
 

@@ -803,49 +803,134 @@ class SWPM_Utils_Subscriptions
     }
 
     /**
-     * Retrieves the subscription id from post meta (txn_id) of swpm_transactions cpts using the charge object.
+     * Resolves a refunded charge to its locally recorded subscription or one-time payment.
+     * Exact charge matches take priority. Customer matches are used only when all records
+     * identify the same subscription; ambiguous matches leave member access unchanged.
      *
-     * It utilizes the 'txn_id' post meta as a filter. It checks whether the 'txn_id' is equal to $charge->id or $charge->customer.
-     * NOTE: Here, we're using the $charge->customer as well because the sub agreement cpt saved customer id as txn_id.
-     *
-     * @param $charge object The Charge Object.
-     *
-     * @return string
+     * @param object $charge Stripe charge object.
+     * @return string Subscription/payment ID, or empty string when it cannot be resolved safely.
      */
     public static function get_subscr_id_from_swpm_transactions_cpt_by_charge_object($charge)
     {
-        $sub_id = '';
-
-        if (empty($charge)) {
-            return $sub_id;
+        if ( empty( $charge->id ) ) {
+            return '';
         }
 
-        $charge_id = $charge->id;
-        $customer_id = $charge->customer;
+        $lookup_ids = array( $charge->id );
+        if ( ! empty( $charge->customer ) && is_string( $charge->customer ) ) {
+            $lookup_ids[] = $charge->customer;
+        }
 
-        $txn_record_ids = get_posts( array(
-                'post_type'      => 'swpm_transactions',
-                'posts_per_page' => 1,
-                'fields'         => 'ids',
-                'meta_query'     => array(
-                        'relation' => 'OR',
-                        array(
-                                'key'     => 'txn_id',
-                                'value'   => array( $charge_id, $customer_id ),
-                                'compare' => 'IN',
-                        ),
+        foreach ( $lookup_ids as $lookup_id ) {
+            $record_ids = get_posts( array(
+                'post_type' => 'swpm_transactions',
+                'posts_per_page' => -1,
+                'fields' => 'ids',
+                'meta_query' => array(
+                    array( 'key' => 'txn_id', 'value' => $lookup_id, 'compare' => '=' ),
                 ),
-        ) );
+            ) );
+            if ( empty( $record_ids ) ) {
+                continue;
+            }
 
-        if (empty($txn_record_ids)) {
-            return $sub_id;
+            $subscription_ids = array();
+            foreach ( $record_ids as $record_id ) {
+                $subscription_id = (string) get_post_meta( $record_id, 'subscr_id', true );
+                // An incomplete match cannot establish which subscription funded access.
+                if ( $subscription_id === '' ) {
+                    return '';
+                }
+                $subscription_ids[] = $subscription_id;
+            }
+            $subscription_ids = array_values( array_unique( $subscription_ids ) );
+            if ( count( $subscription_ids ) === 1 ) {
+                return $subscription_ids[0];
+            }
+
+            SwpmLog::log_simple_debug( 'Ambiguous Stripe refund subscription match for charge: ' . $charge->id . '. Skipping subscription-based member updates.', false );
+            return '';
         }
 
-        $txn_record_id = $txn_record_ids[0];
+        return '';
+    }
 
-        $sub_id = (string) get_post_meta($txn_record_id, 'subscr_id', true);
+    /**
+     * Retrieves the current PayPal subscription status.
+     *
+     * @param string $subscription_id The PayPal subscription ID.
+     * @param string $mode Optional. 'production' or 'sandbox'. Defaults to the plugin's current setting.
+     *
+     * @return string PayPal status in lowercase, or empty string if the ID is empty or the lookup fails.
+     */
+    public static function get_paypal_subscription_status( $subscription_id, $mode = '' ) {
+        $subscription_id = sanitize_text_field( $subscription_id );
 
-        return $sub_id;
+        if ( empty( $subscription_id ) ) {
+            return '';
+        }
+
+        $api_injector = new SWPM_PayPal_Request_API_Injector();
+        if ( $mode !== '' ) {
+            if ( ! in_array( $mode, array( 'production', 'sandbox' ), true ) ) {
+                return '';
+            }
+            $api_injector->set_mode_and_api_creds_based_on_mode( $mode );
+        }
+        $subscription = $api_injector->get_paypal_subscription_details( $subscription_id );
+        if ( ! is_object( $subscription ) || empty( $subscription->status ) ) {
+            return '';
+        }
+
+        return strtolower( $subscription->status );
+    }
+
+    /**
+     * Retrieves the current Stripe subscription status.
+     * Uses the saved agreement's credentials and mode, or global settings if no agreement exists.
+     * An explicit mode overrides the saved or configured environment.
+     *
+     * @param string $subscription_id The Stripe subscription ID.
+     * @param string $mode Optional. 'production' or 'sandbox'.
+     *
+     * @return string Stripe status in lowercase, or empty string if the lookup fails.
+     */
+    public static function get_stripe_subscription_status( $subscription_id, $mode = '' ) {
+        $subscription_id = sanitize_text_field( $subscription_id );
+        if ( empty( $subscription_id ) ) {
+            return '';
+        }
+
+        if ( $mode !== '' && ! in_array( $mode, array( 'production', 'sandbox' ), true ) ) {
+            return '';
+        }
+
+        $settings = SwpmSettings::get_instance();
+        $is_live = $mode !== '' ? $mode === 'production' : ! $settings->get_value( 'enable-sandbox-testing' );
+        $agreement_id = self::get_subscription_agreement_cpt_id_by_subs_id( $subscription_id );
+        if ( ! empty( $agreement_id ) ) {
+            if ( $mode === '' ) {
+                $is_live = ! empty( get_post_meta( $agreement_id, 'is_live', true ) );
+            }
+            $button_id = get_post_meta( $agreement_id, 'payment_button_id', true );
+            $api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $button_id, $is_live );
+            $secret_key = $api_keys['secret'];
+        } else {
+            $secret_key = $settings->get_value( $is_live ? 'stripe-live-secret-key' : 'stripe-test-secret-key' );
+        }
+
+        if ( empty( $secret_key ) ) {
+            return '';
+        }
+
+        SwpmMiscUtils::load_stripe_lib();
+        try {
+            $subscription = \Stripe\Subscription::retrieve( $subscription_id, array( 'api_key' => $secret_key ) );
+            return empty( $subscription->status ) ? '' : strtolower( $subscription->status );
+        } catch ( \Stripe\Exception\ApiErrorException $e ) {
+            SwpmLog::log_simple_debug( 'Could not retrieve Stripe subscription status for subscription ID: ' . $subscription_id, false );
+            return '';
+        }
     }
 
     /**
@@ -888,6 +973,43 @@ class SWPM_Utils_Subscriptions
 		//Note: it is important not to update the 'status' post meta as that one is used in the cancel shortcode at the moment.
 		//In the future when we update that cancel shortcode to use the 'txn_type' post meta, then we can change/update the 'status' column.
         self::update_subscription_agreement_record_meta_by_sub_id($subscr_id, 'subscr_status', 'canceled');
+    }
+
+    /**
+     * Check if the actual subscription status is canceled, if so then update the local record accordingly.
+     *
+     * This is an optional, best-effort reconciliation during refund processing.
+     * A failed lookup intentionally leaves the local agreement unchanged. It must not
+     * block refund handling or require a webhook retry solely for this additional check.
+     * Cancellation notifications are handled separately; this lookup does not decide member access.
+     *
+     * @param $subscr_id string The subscription if of gateway
+     * @param $gateway string Either paypal or stripe.
+     * @param string $mode Optional gateway environment: 'production' or 'sandbox'.
+     *
+     * @return void
+     */
+    public static function sync_canceled_subscription_record_status_with_gateway($subscr_id, $gateway, $mode = ''){
+        SwpmLog::log_simple_debug( 'Check and update the local subscription agreement record status if out of sync.', true);
+
+        switch ($gateway) {
+            case 'paypal':
+                $actual_sub_status = self::get_paypal_subscription_status($subscr_id, $mode);
+                break;
+            case 'stripe':
+                $actual_sub_status = self::get_stripe_subscription_status($subscr_id, $mode);
+                break;
+            default:
+                SwpmLog::log_simple_debug( sprintf("Invalid gateway '%s'. Can't sync canceled subscription record status!", $gateway), false );
+                return;
+        }
+
+        $canceled_statuses = array('canceled', 'cancelled');
+        if (in_array($actual_sub_status, $canceled_statuses)) {
+            // The subscription has already canceled in the gateway, means the local subscription agreement record status in payments table is out of sync.
+            // Update the record status to canceled.
+            SWPM_Utils_Subscriptions::update_subscription_agreement_record_status_to_cancelled( $subscr_id );
+        }
     }
 
 	/**

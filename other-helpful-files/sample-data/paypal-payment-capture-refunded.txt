@@ -1,0 +1,94 @@
+Array
+(
+    [id] => WH-5VE84443DSFDSF6864P-4578SDFS2581937854X
+    [event_version] => 1.0
+    [create_time] => 2026-10-18T09:18:54.741Z
+    [resource_type] => refund
+    [resource_version] => 2.0
+    [event_type] => PAYMENT.CAPTURE.REFUNDED
+    [summary] => A $ 2.5 USD capture payment was refunded
+    [resource] => Array
+        (
+            [id] => 3RY01749SS085FD10
+            [amount] => Array
+                (
+                    [currency_code] => USD
+                    [value] => 2.50
+                )
+
+            [seller_payable_breakdown] => Array
+                (
+                    [gross_amount] => Array
+                        (
+                            [currency_code] => USD
+                            [value] => 2.50
+                        )
+
+                    [paypal_fee] => Array
+                        (
+                            [currency_code] => USD
+                            [value] => 0.09
+                        )
+
+                    [net_amount] => Array
+                        (
+                            [currency_code] => USD
+                            [value] => 2.41
+                        )
+
+                    [total_refunded_amount] => Array
+                        (
+                            [currency_code] => USD
+                            [value] => 2.50
+                        )
+
+                )
+
+            [status] => COMPLETED
+            [create_time] => 2026-10-18T02:18:50-07:00
+            [update_time] => 2026-10-18T02:18:50-07:00
+            [payer] => Array
+                (
+                    [email_address] => johndoe@yahoo.com
+                    [merchant_id] => USVADMFASR5E2
+                )
+
+            [links] => Array
+                (
+                    [0] => Array
+                        (
+                            [href] => https://api.sandbox.paypal.com/v2/payments/refunds/3RY01749SS085FD10
+                            [rel] => self
+                            [method] => GET
+                        )
+
+                    [1] => Array
+                        (
+                            [href] => https://api.sandbox.paypal.com/v2/payments/captures/D1643682FAASD132Y
+                            [rel] => up
+                            [method] => GET
+                        )
+
+                )
+
+        )
+
+    [links] => Array
+        (
+            [0] => Array
+                (
+                    [href] => https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-5VE84443DSFDSF6864P-4578SDFS2581937854X
+                    [rel] => self
+                    [method] => GET
+                )
+
+            [1] => Array
+                (
+                    [href] => https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-5VE84443DSFDSF6864P-4578SDFS2581937854X/resend
+                    [rel] => resend
+                    [method] => POST
+                )
+
+        )
+
+)

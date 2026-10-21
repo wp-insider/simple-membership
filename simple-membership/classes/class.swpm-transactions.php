@@ -50,7 +50,7 @@ class SwpmTransactions {
 		$txn_data['txn_id']         = $ipn_data['txn_id'];
 		$txn_data['subscr_id']      = $subscr_id;
 		$txn_data['reference']      = isset( $custom_var['reference'] ) ? $custom_var['reference'] : '';
-		$txn_data['payment_amount'] = $ipn_data['mc_gross'];
+		$txn_data['payment_amount'] = isset($ipn_data['payment_amount']) ? $ipn_data['payment_amount'] : $ipn_data['mc_gross'];
 		$txn_data['gateway']        = isset($ipn_data['gateway']) ? $ipn_data['gateway'] : '';
 		$txn_data['status']         = isset($ipn_data['status']) ? $ipn_data['status'] : '';
 

@@ -36,6 +36,13 @@ class SwpmAjax {
             echo '[ "' . esc_attr($field_id) .  '",false, "'.SwpmUtils::_('Nonce check failed. Please reload the page.').'" ]' ;
             exit;
         }
+        //Addons can answer this check themselves (for example when the username is generated automatically):
+        //return true (available) or false (not available) to skip the checks below, or null to keep them.
+        $override = apply_filters( 'swpm_validate_user_name_ajax_override', null, $field_value, $field_id );
+        if ( null !== $override ) {
+            echo '[ "' . esc_attr($field_id) . ( $override ? '",true,"&radic;&nbsp;'.SwpmUtils::_('Available'). '"]' : '",false,"&chi;&nbsp;'. SwpmUtils::_('Already taken'). '"]' );
+            exit;
+        }
         if (!SwpmMemberUtils::is_valid_user_name($field_value)){
             echo '[ "' . esc_attr($field_id) . '",false,"&chi;&nbsp;'. SwpmUtils::_('Name contains invalid character'). '"]';
             exit;

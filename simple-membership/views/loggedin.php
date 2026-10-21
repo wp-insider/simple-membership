@@ -10,7 +10,7 @@ $is_attached_subscription_canceled = SwpmMemberUtils::get_subscription_data_extr
 <div class="swpm-login-widget-logged">
     <div class="swpm-logged-username">
         <div class="swpm-logged-username-label swpm-logged-label"><?php _e('Logged in as', 'simple-membership') ?></div>
-        <div class="swpm-logged-username-value swpm-logged-value"><?php echo $auth->get('user_name'); ?></div>
+        <div class="swpm-logged-username-value swpm-logged-value"><?php echo apply_filters('swpm_login_widget_logged_in_username', $auth->get('user_name')); ?></div>
     </div>
     <div class="swpm-logged-status">
         <div class="swpm-logged-status-label swpm-logged-label"><?php _e('Account Status', 'simple-membership') ?></div>

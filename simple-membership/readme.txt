@@ -204,6 +204,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Fixed some registration form and payment button filter hooks that were not printing the value returned by the callback. Thanks to Th0masL for the contribution.
 - Improved PayPal and Stripe refund handling and synchronization of payment and subscription statuses.
 - Added two options in the Payment Settings menu to keep the member account active when a one-time or subscription payment is refunded (by default, the account is deactivated). Also added the swpm_deactivate_account_on_refund filter hook.
+- Added 3 new filter hooks: swpm_validate_user_name_ajax_override, swpm_registration_form_validation_query_args and swpm_login_widget_logged_in_username. Thanks to Th0masL for the contribution.
 
 = 4.8.5 =
 - The attachment URL and metadata filters no longer run before the init hook. This prevents the "_load_textdomain_just_in_time" notice with themes (e.g. Cocoon) that request attachments early.

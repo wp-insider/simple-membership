@@ -117,6 +117,7 @@ You can create a free forum account to ask your questions.
 * Option to hide the registration/join option. Useful if you prefer visitors not to see the registration option on your site.
 * Option to automatically logout the members when they close the browser.
 * Ability to forward the payment notification to an external URL for further processing.
+* Automatically deactivates a member's account when their PayPal or Stripe payment is refunded, with options to keep the account active for one-time or subscription refunds.
 * Option to configure whitelisting for user email addresses to allow registration only from specific email addresses or email domains.
 * Option to configure blacklisting for user email addresses to block registration from certain email addresses or email domains.
 * Allows you to set an active login limit for members, helping to prevent account sharing.

@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.8.5
+Stable tag: 4.8.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -192,7 +192,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
+= 4.8.6 =
 - Fixed a login loop that could happen when the login form was submitted shortly after the member's login session expired. The login request is now processed normally and a fresh login session is created. Thanks to freetiermorioka555 for reporting this.
 - The logout request now clears any leftover (expired) login cookies from the browser, even when the login session is no longer valid.
 - Fixed a grammatical error in the German translation of the password reset message. Thanks to Annika for reporting this.

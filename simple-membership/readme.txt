@@ -193,6 +193,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Fixed an issue where a PayPal subscription renewal payment could be saved with the wrong amount (for example, when the webhook arrived late). The amount from the webhook event is now saved. Thanks to Th0masL for the contribution.
+
 = 4.8.6 =
 - Fixed a login loop that could happen when the login form was submitted shortly after the member's login session expired. The login request is now processed normally and a fresh login session is created. Thanks to freetiermorioka555 for reporting this.
 - The logout request now clears any leftover (expired) login cookies from the browser, even when the login session is no longer valid.

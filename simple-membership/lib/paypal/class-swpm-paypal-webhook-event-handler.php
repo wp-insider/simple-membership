@@ -288,6 +288,12 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$ipn_data['parent_txn_id'] = $orig_capture_txn_id;//Important for one time transactions refund.
 		$ipn_data['subscr_id'] = '';
 		$ipn_data['payment_status'] = $payment_status;
+		// Total refunded so far for this payment: v2 capture refund (seller_payable_breakdown) or v1 sale refund.
+		if ( isset( $event['resource']['seller_payable_breakdown']['total_refunded_amount']['value'] ) ) {
+			$ipn_data['total_refunded'] = $event['resource']['seller_payable_breakdown']['total_refunded_amount']['value'];
+		} else if ( isset( $event['resource']['total_refunded_amount']['value'] ) ) {
+			$ipn_data['total_refunded'] = $event['resource']['total_refunded_amount']['value'];
+		}
 		// A sale refund is for a subscription payment. A capture refund is for a one-time payment.
 		$ipn_data['refund_payment_type'] = ( $payment_status === 'sale_refunded' ) ? 'subscription' : 'one_time';
 		// Use the verified webhook's environment for subsequent PayPal subscription lookups.

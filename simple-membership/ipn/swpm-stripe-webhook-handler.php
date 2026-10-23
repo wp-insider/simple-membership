@@ -74,9 +74,8 @@ class SwpmStripeWebhookHandler {
 
 			$is_refunded = false;
 			if ($type == 'charge.refunded'){
-				// Known limitation: partial and full refunds currently follow the same handling.
-				// A matching payment is marked 'Refunded', and the associated member is deactivated below.
-				// Maybe add distinct partial-refund reporting and review the member-access policy in a future update.
+				// A matching payment is marked 'Refunded' (or 'Partially Refunded'). The member account is handled below
+				// (deactivated, unless the refund settings keep it active), the same way for partial and full refunds.
 				$is_refunded = true;
 				// For charge object, we need to manually find the subscr_id from swpm_transactions cpt.
 				$subscr_id = SWPM_Utils_Subscriptions::get_subscr_id_from_swpm_transactions_cpt_by_charge_object($event_json->data->object);
@@ -89,7 +88,8 @@ class SwpmStripeWebhookHandler {
 
 				$txn_db_row = SwpmTransactions::get_transaction_row_by_txn_id( $txn_id, true);
 				if ( $txn_db_row ) {
-					SwpmTransactions::update_transaction_status( $txn_db_row->id,'Refunded' );
+					// The charge's "refunded" flag is true once the whole amount has been refunded.
+					swpm_update_refunded_transaction_status( $txn_db_row, ! empty( $event_json->data->object->refunded ) );
 				} else {
 					SwpmLog::log_simple_debug( 'No transaction record found for transaction ID: ' . $txn_id, true );
 				}

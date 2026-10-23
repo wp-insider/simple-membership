@@ -300,9 +300,21 @@ function swpm_should_deactivate_account_on_refund( $member_id, $ipn_data ) {
 }
 
 /*
+ * Marks a refunded transaction as "Refunded" (full refund) or "Partially Refunded".
+ * A transaction already marked "Refunded" is not set back to "Partially Refunded" (notifications can arrive out of order).
+ */
+function swpm_update_refunded_transaction_status( $txn_db_row, $is_full_refund ) {
+	if ( ! $is_full_refund && isset( $txn_db_row->status ) && strtolower( $txn_db_row->status ) === 'refunded' ) {
+		swpm_debug_log_subsc( 'Partial refund notification for a transaction already marked as Refunded. Status unchanged.', true );
+		return;
+	}
+	SwpmTransactions::update_transaction_status( $txn_db_row->id, $is_full_refund ? 'Refunded' : 'Partially Refunded' );
+}
+
+/*
  * This function will handle the refund notification from PayPal as long as the parent transaction ID is present.
  * It will deactivate the corresponding member account.
- * It will also mark the transaction as "Refunded" in the transactions list.
+ * It will also mark the transaction as "Refunded" (or "Partially Refunded") in the transactions list.
  */
 function swpm_handle_refund_using_parent_txn_id( $ipn_data ){
 	swpm_debug_log_subsc( 'Refund notification - lets see if a member account needs to be deactivated.', true );
@@ -318,10 +330,12 @@ function swpm_handle_refund_using_parent_txn_id( $ipn_data ){
 		swpm_debug_log_subsc("No transaction record found for the transaction id: " . $parent_txn_id, true);
 		return;
 	}
-	//Mark the transaction as refunded.
-	$txn_row_id = $txn_db_row->id;
-	// Update the postmeta for the corresponding transaction cpt.
-	SwpmTransactions::update_transaction_status( $txn_row_id, 'Refunded' );
+	//Mark the transaction as refunded. It is a full refund, unless the notification gives a total refunded lower than the amount paid.
+	$is_full_refund = true;
+	if ( isset( $ipn_data['total_refunded'] ) && is_numeric( $ipn_data['total_refunded'] ) && is_numeric( $txn_db_row->payment_amount ) ) {
+		$is_full_refund = round( (float) $ipn_data['total_refunded'], 2 ) >= round( (float) $txn_db_row->payment_amount, 2 );
+	}
+	swpm_update_refunded_transaction_status( $txn_db_row, $is_full_refund );
 
 	$payment_status = isset($ipn_data['payment_status']) ? sanitize_key($ipn_data['payment_status']) : '';
 	if( $payment_status == 'sale_refunded'){

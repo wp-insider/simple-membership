@@ -312,6 +312,26 @@ function swpm_update_refunded_transaction_status( $txn_db_row, $is_full_refund )
 }
 
 /*
+ * Adds a refund to the total refunded so far for a transaction ("refunded_amount" meta) and returns the new total.
+ * The refund ID is kept in the "refund_ids" meta, so a refund notification sent again is not counted twice (returns false).
+ */
+function swpm_add_refund_to_transaction( $txn_db_row, $refund_id, $refund_amount ) {
+	$refund_ids = (array) get_post_meta( $txn_db_row->id, 'refund_ids', true );
+	if ( ! empty( $refund_id ) && in_array( $refund_id, $refund_ids, true ) ) {
+		swpm_debug_log_subsc( 'Refund ' . $refund_id . ' was already counted for this transaction. Ignoring it.', true );
+		return false;
+	}
+
+	$total_refunded = round( (float) get_post_meta( $txn_db_row->id, 'refunded_amount', true ) + abs( (float) $refund_amount ), 2 );
+	update_post_meta( $txn_db_row->id, 'refunded_amount', $total_refunded );
+	if ( ! empty( $refund_id ) ) {
+		$refund_ids[] = $refund_id;
+		update_post_meta( $txn_db_row->id, 'refund_ids', array_values( array_filter( $refund_ids ) ) );
+	}
+	return $total_refunded;
+}
+
+/*
  * This function will handle the refund notification from PayPal as long as the parent transaction ID is present.
  * It will deactivate the corresponding member account.
  * It will also mark the transaction as "Refunded" (or "Partially Refunded") in the transactions list.

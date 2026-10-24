@@ -3634,6 +3634,18 @@ msgstr ""
 msgid "Not a Member?"
 msgstr ""
 
+#. translators: %1$s and %2$s: start and end of the link to the login page.
+#: classes/class.swpm-utils-misc.php:496
+#, php-format
+msgid "Please %1$sLog In%2$s."
+msgstr ""
+
+#. translators: %1$s and %2$s: start and end of the link to the join us page.
+#: classes/class.swpm-utils-misc.php:508
+#, php-format
+msgid "Not a Member? %1$sJoin Us%2$s"
+msgstr ""
+
 #: classes/class.swpm-utils-misc.php:498
 msgid "renew"
 msgstr ""

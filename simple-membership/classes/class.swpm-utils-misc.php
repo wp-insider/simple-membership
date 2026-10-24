@@ -491,11 +491,27 @@ class SwpmMiscUtils {
 		//Create the login/protection message
 		$filtered_login_url = apply_filters( 'swpm_get_login_link_url', $login_url ); //Addons can override the login URL value using this filter.
 		$login_msg = '';
-		$login_msg .= SwpmUtils::_( 'Please' ) . ' <a class="swpm-login-link" href="' . $filtered_login_url . '">' . SwpmUtils::_( 'Log In' ) . '</a>. ';
+		$login_link_start = '<a class="swpm-login-link" href="' . $filtered_login_url . '">';
+		/* translators: %1$s and %2$s: start and end of the link to the login page. */
+		$login_sentence = __( 'Please %1$sLog In%2$s.', 'simple-membership' );
+		if ( 'Please %1$sLog In%2$s.' === $login_sentence ) {
+			//Not translated yet (e.g. a language pack without this sentence): use the older separate words.
+			$login_msg .= SwpmUtils::_( 'Please' ) . ' ' . $login_link_start . SwpmUtils::_( 'Log In' ) . '</a>. ';
+		} else {
+			$login_msg .= sprintf( $login_sentence, $login_link_start, '</a>' ) . ' ';
+		}
 
 		if (empty($hide_join_us_link_enabled)){
 			//Show the join us option
-			$login_msg .= SwpmUtils::_( 'Not a Member?' ) . ' <a href="' . $joinus_url . '">' . SwpmUtils::_( 'Join Us' ) . '</a>';
+			$joinus_link_start = '<a href="' . $joinus_url . '">';
+			/* translators: %1$s and %2$s: start and end of the link to the join us page. */
+			$joinus_sentence = __( 'Not a Member? %1$sJoin Us%2$s', 'simple-membership' );
+			if ( 'Not a Member? %1$sJoin Us%2$s' === $joinus_sentence ) {
+				//Not translated yet: use the older separate words.
+				$login_msg .= SwpmUtils::_( 'Not a Member?' ) . ' ' . $joinus_link_start . SwpmUtils::_( 'Join Us' ) . '</a>';
+			} else {
+				$login_msg .= sprintf( $joinus_sentence, $joinus_link_start, '</a>' );
+			}
 		}
 		return $login_msg;
 	}

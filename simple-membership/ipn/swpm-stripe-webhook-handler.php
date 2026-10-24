@@ -73,6 +73,7 @@ class SwpmStripeWebhookHandler {
 			$customer = $event_json->data->object->customer;
 
 			$is_refunded = false;
+			$refund_data = false;
 			if ($type == 'charge.refunded'){
 				// A matching payment is marked 'Refunded' (or 'Partially Refunded'). The member account is handled below
 				// (deactivated, unless the refund settings keep it active), the same way for partial and full refunds.
@@ -87,12 +88,11 @@ class SwpmStripeWebhookHandler {
 				}
 
 				$txn_db_row = SwpmTransactions::get_transaction_row_by_txn_id( $txn_id, true);
-				if ( $txn_db_row ) {
-					// The charge's "refunded" flag is true once the whole amount has been refunded.
-					swpm_update_refunded_transaction_status( $txn_db_row, ! empty( $event_json->data->object->refunded ) );
-				} else {
+				if ( ! $txn_db_row ) {
 					SwpmLog::log_simple_debug( 'No transaction record found for transaction ID: ' . $txn_id, true );
 				}
+				// Mark the transaction as refunded and keep the refund data for the swpm_payment_refunded action (fired below).
+				$refund_data = swpm_save_payment_refund( $txn_db_row, self::get_refund_data_from_charge_event( $event_json, $subscr_id ) );
 
 				// One-time payments store a charge ID (ch_...) as subscr_id. Only query subscription status for subscription IDs (sub_...).
 				// Member refund handling below still applies to both payment types.
@@ -127,6 +127,9 @@ class SwpmStripeWebhookHandler {
 			// Unresolved subscriptions fall back only to the original charge, never the shared customer ID.
 
 			swpm_handle_subsc_cancel_stand_alone( $ipn_data , $is_refunded);
+
+			// Only for refunds ($refund_data is false otherwise).
+			swpm_trigger_payment_refunded_action( $refund_data );
 		}
 
 		if ( $type === 'invoice.payment_succeeded' ) {
@@ -239,6 +242,34 @@ class SwpmStripeWebhookHandler {
 		//Give 200 status then exit out.
 		SwpmLog::log_simple_debug( 'End of Stripe subscription webhook processing. Webhook type: ' . $type, true );
 		http_response_code( 200 ); // Tells Stripe we received this notification
+	}
+
+	/**
+	 * Builds the refund data for swpm_save_payment_refund() from a "charge.refunded" event.
+	 * The charge gives the total refunded so far, and its previous_attributes the total before this refund.
+	 * Its "refunded" flag is true once the whole amount has been refunded.
+	 */
+	public static function get_refund_data_from_charge_event( $event_json, $subscr_id = '' ) {
+		$charge   = $event_json->data->object;
+		$currency = isset( $charge->currency ) ? strtoupper( sanitize_text_field( $charge->currency ) ) : '';
+
+		// Amounts are in cents, except for zero-decimal currencies.
+		$zero_cents_currencies = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
+		$divider               = in_array( $currency, $zero_cents_currencies, true ) ? 1 : 100;
+
+		$total_refunded    = isset( $charge->amount_refunded ) ? $charge->amount_refunded / $divider : 0;
+		$previous_refunded = isset( $event_json->data->previous_attributes->amount_refunded ) ? $event_json->data->previous_attributes->amount_refunded / $divider : 0;
+
+		return array(
+			'gateway'        => 'stripe',
+			'txn_id'         => sanitize_text_field( $charge->id ),
+			'refund_id'      => isset( $event_json->id ) ? sanitize_text_field( $event_json->id ) : '',
+			'refund_amount'  => $total_refunded - $previous_refunded,
+			'total_refunded' => $total_refunded,
+			'currency'       => $currency,
+			'is_full_refund' => ! empty( $charge->refunded ),
+			'subscr_id'      => $subscr_id,
+		);
 	}
 
 	public static function get_charge_id_from_event_data( $event_json ) {

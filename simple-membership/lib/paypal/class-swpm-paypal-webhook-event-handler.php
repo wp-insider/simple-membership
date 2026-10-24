@@ -298,7 +298,26 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$ipn_data['refund_payment_type'] = ( $payment_status === 'sale_refunded' ) ? 'subscription' : 'one_time';
 		// Use the verified webhook's environment for subsequent PayPal subscription lookups.
 		$ipn_data['paypal_mode'] = $mode;
+
+		// Mark the transaction as refunded and keep the refund data for the swpm_payment_refunded action (fired below).
+		// v2 capture refunds give the amount in amount.value, v1 sale refunds in amount.total.
+		$txn_db_row  = SwpmTransactions::get_transaction_row_by_txn_id( $orig_capture_txn_id, true );
+		$has_total   = isset( $ipn_data['total_refunded'] ) && is_numeric( $ipn_data['total_refunded'] );
+		$refund_data = swpm_save_payment_refund( $txn_db_row, array(
+			'gateway'        => 'paypal',
+			'txn_id'         => sanitize_text_field( $orig_capture_txn_id ),
+			'refund_id'      => sanitize_text_field( $refund_txn_id ),
+			'refund_amount'  => isset( $event['resource']['amount']['total'] ) ? $event['resource']['amount']['total'] : $rerfund_amount,
+			'total_refunded' => $has_total ? (float) $ipn_data['total_refunded'] : null,
+			'currency'       => sanitize_text_field( ! empty( $refund_currency ) ? $refund_currency : ( isset( $event['resource']['amount']['currency'] ) ? $event['resource']['amount']['currency'] : '' ) ),
+			// Without the total refunded so far, the payment is marked "Refunded" (as before).
+			'is_full_refund' => $has_total ? null : true,
+		) );
+		$ipn_data['refund_saved'] = true;
+
 		swpm_handle_refund_using_parent_txn_id( $ipn_data );
+
+		swpm_trigger_payment_refunded_action( $refund_data );
 	}
 
 	public static function create_ipn_data_from_paypal_api_subscription_details_data( $sub_details, $event ){

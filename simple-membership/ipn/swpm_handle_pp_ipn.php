@@ -19,7 +19,8 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 	}
 
 	/**
-	 * Refund or reversal of a payment: marks the transaction as "Refunded" or "Partially Refunded".
+	 * Refund or reversal of a payment: marks the transaction as "Refunded" or "Partially Refunded", and returns the refund
+	 * data for the swpm_payment_refunded action (false if this refund was already saved).
 	 * PayPal Standard only sends the amount of each refund, so they are added up and compared with the amount paid.
 	 */
 	public function update_refunded_transaction( $gross_total ) {
@@ -27,19 +28,21 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		$txn_db_row    = empty( $parent_txn_id ) ? null : SwpmTransactions::get_transaction_row_by_txn_id( $parent_txn_id, true );
 		if ( ! $txn_db_row ) {
 			$this->debug_log( 'No transaction record found for the parent transaction ID: ' . $parent_txn_id, true );
-			return;
 		}
 
-		$refund_txn_id  = isset( $this->ipn_data['txn_id'] ) ? sanitize_text_field( $this->ipn_data['txn_id'] ) : '';
-		$total_refunded = swpm_add_refund_to_transaction( $txn_db_row, $refund_txn_id, $gross_total );
-		if ( false === $total_refunded ) {
-			return;
-		}
-
-		// A reversal (chargeback) takes back the whole payment. A full refund also if the amount paid is not known.
-		$payment_status = isset( $this->ipn_data['payment_status'] ) ? $this->ipn_data['payment_status'] : '';
-		$is_full_refund = ( 'Reversed' === $payment_status ) || ! is_numeric( $txn_db_row->payment_amount ) || $total_refunded >= round( (float) $txn_db_row->payment_amount, 2 );
-		swpm_update_refunded_transaction_status( $txn_db_row, $is_full_refund );
+		$payment_status  = isset( $this->ipn_data['payment_status'] ) ? $this->ipn_data['payment_status'] : '';
+		$customvariables = SwpmTransactions::parse_custom_var( isset( $this->ipn_data['custom'] ) ? $this->ipn_data['custom'] : '' );
+		return swpm_save_payment_refund( $txn_db_row, array(
+			'gateway'        => 'paypal',
+			'txn_id'         => $parent_txn_id,
+			'refund_id'      => isset( $this->ipn_data['txn_id'] ) ? sanitize_text_field( $this->ipn_data['txn_id'] ) : '',
+			'refund_amount'  => $gross_total,
+			'currency'       => isset( $this->ipn_data['mc_currency'] ) ? sanitize_text_field( $this->ipn_data['mc_currency'] ) : '',
+			// A reversal (chargeback) takes back the whole payment. Otherwise, the total refunded is compared with the amount paid.
+			'is_full_refund' => ( 'Reversed' === $payment_status ) ? true : null,
+			'subscr_id'      => isset( $this->ipn_data['subscr_id'] ) ? sanitize_text_field( $this->ipn_data['subscr_id'] ) : '',
+			'member_id'      => isset( $customvariables['swpm_id'] ) ? sanitize_text_field( $customvariables['swpm_id'] ) : '',
+		) );
 	}
 
 	public function swpm_validate_and_create_membership() {
@@ -103,14 +106,16 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		if ( $gross_total < 0 ) {
 			// This is a refund or reversal
 			$this->debug_log( 'This is a refund notification. Refund amount: ' . $gross_total, true );
-			$this->update_refunded_transaction( $gross_total );
+			$refund_data = $this->update_refunded_transaction( $gross_total );
 			swpm_handle_subsc_cancel_stand_alone( $this->ipn_data, true );
+			swpm_trigger_payment_refunded_action( $refund_data );
 			return true;
 		}
 		if ( isset( $this->ipn_data['reason_code'] ) && 'refund' === $this->ipn_data['reason_code'] ) {
 			$this->debug_log( 'This is a refund notification. Refund amount: ' . $gross_total, true );
-			$this->update_refunded_transaction( $gross_total );
+			$refund_data = $this->update_refunded_transaction( $gross_total );
 			swpm_handle_subsc_cancel_stand_alone( $this->ipn_data, true );
+			swpm_trigger_payment_refunded_action( $refund_data );
 			return true;
 		}
 

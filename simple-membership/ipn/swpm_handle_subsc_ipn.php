@@ -313,16 +313,23 @@ function swpm_update_refunded_transaction_status( $txn_db_row, $is_full_refund )
 
 /*
  * Adds a refund to the total refunded so far for a transaction ("refunded_amount" meta) and returns the new total.
+ * When the gateway sends the total refunded so far ($total_refunded), it is used instead of adding the amounts up.
  * The refund ID is kept in the "refund_ids" meta, so a refund notification sent again is not counted twice (returns false).
  */
-function swpm_add_refund_to_transaction( $txn_db_row, $refund_id, $refund_amount ) {
+function swpm_add_refund_to_transaction( $txn_db_row, $refund_id, $refund_amount, $total_refunded = null ) {
 	$refund_ids = (array) get_post_meta( $txn_db_row->id, 'refund_ids', true );
 	if ( ! empty( $refund_id ) && in_array( $refund_id, $refund_ids, true ) ) {
 		swpm_debug_log_subsc( 'Refund ' . $refund_id . ' was already counted for this transaction. Ignoring it.', true );
 		return false;
 	}
 
-	$total_refunded = round( (float) get_post_meta( $txn_db_row->id, 'refunded_amount', true ) + abs( (float) $refund_amount ), 2 );
+	$previous_total = (float) get_post_meta( $txn_db_row->id, 'refunded_amount', true );
+	if ( null === $total_refunded ) {
+		$total_refunded = round( $previous_total + abs( (float) $refund_amount ), 2 );
+	} else {
+		// Never lower: an older notification can arrive after a newer one.
+		$total_refunded = max( $previous_total, round( (float) $total_refunded, 2 ) );
+	}
 	update_post_meta( $txn_db_row->id, 'refunded_amount', $total_refunded );
 	if ( ! empty( $refund_id ) ) {
 		$refund_ids[] = $refund_id;
@@ -332,9 +339,129 @@ function swpm_add_refund_to_transaction( $txn_db_row, $refund_id, $refund_amount
 }
 
 /*
+ * Saves a refund on the transaction record of the refunded payment and returns the data for the "swpm_payment_refunded"
+ * action (see swpm_trigger_payment_refunded_action()), or false if this refund was already saved (notification sent again).
+ * Used by the Stripe webhook, the PayPal webhooks and the PayPal Standard IPN.
+ *
+ * With a transaction record: adds the refund to the total refunded so far and marks the transaction "Refunded" or
+ * "Partially Refunded". Without one ($txn_db_row empty): nothing is saved, and "is_full_refund" is a guess.
+ *
+ * $refund keys: gateway ('stripe' or 'paypal'), txn_id (the refunded payment), refund_id (ID of this refund, used to
+ * ignore repeated notifications), refund_amount (this refund), total_refunded (total so far, when the gateway sends it),
+ * currency, is_full_refund (when the gateway says it; otherwise the total is compared with the amount paid), subscr_id,
+ * member_id (when the notification gives it; the member ID of the transaction record is used first).
+ */
+function swpm_save_payment_refund( $txn_db_row, $refund ) {
+	$refund = wp_parse_args( $refund, array(
+		'gateway'        => '',
+		'txn_id'         => '',
+		'refund_id'      => '',
+		'refund_amount'  => 0,
+		'total_refunded' => null,
+		'currency'       => '',
+		'is_full_refund' => null,
+		'subscr_id'      => '',
+		'member_id'      => '',
+	) );
+	$refund['refund_amount']  = round( abs( (float) $refund['refund_amount'] ), 2 );
+	$refund['payment_amount'] = '';
+	$refund['txn_record_id']  = 0;
+
+	if ( $txn_db_row ) {
+		$previous_total = (float) get_post_meta( $txn_db_row->id, 'refunded_amount', true );
+		$total_refunded = swpm_add_refund_to_transaction( $txn_db_row, $refund['refund_id'], $refund['refund_amount'], $refund['total_refunded'] );
+		if ( false === $total_refunded ) {
+			return false;
+		}
+		$refund['total_refunded'] = $total_refunded;
+		$refund['txn_record_id']  = (int) $txn_db_row->id;
+		$refund['payment_amount'] = isset( $txn_db_row->payment_amount ) ? $txn_db_row->payment_amount : '';
+		if ( ! empty( $txn_db_row->member_id ) ) {
+			$refund['member_id'] = $txn_db_row->member_id;
+		}
+		if ( empty( $refund['subscr_id'] ) && ! empty( $txn_db_row->subscr_id ) ) {
+			$refund['subscr_id'] = $txn_db_row->subscr_id;
+		}
+
+		// Full or partial: what the gateway says, otherwise the total refunded compared with the amount paid (full if not known).
+		$paid = is_numeric( $refund['payment_amount'] ) ? round( (float) $refund['payment_amount'], 2 ) : 0;
+		if ( null === $refund['is_full_refund'] ) {
+			$refund['is_full_refund'] = ( $paid <= 0 || $total_refunded >= $paid );
+		}
+		swpm_update_refunded_transaction_status( $txn_db_row, $refund['is_full_refund'] );
+
+		if ( ! $refund['is_full_refund'] && isset( $txn_db_row->status ) && strtolower( $txn_db_row->status ) === 'refunded' ) {
+			// The transaction stays "Refunded". If the refunds saved before already cover the amount paid, this is an older
+			// notification arriving late: the payment is fully refunded. Otherwise, keep what the gateway says.
+			$refund['is_full_refund'] = ( $paid > 0 && $previous_total >= $paid );
+		}
+	} else {
+		if ( null === $refund['total_refunded'] ) {
+			$refund['total_refunded'] = $refund['refund_amount'];
+		}
+		if ( null === $refund['is_full_refund'] ) {
+			$refund['is_full_refund'] = true;
+		}
+	}
+	$refund['total_refunded'] = round( (float) $refund['total_refunded'], 2 );
+	$refund['is_full_refund'] = (bool) $refund['is_full_refund'];
+
+	// No member ID on the transaction record or in the notification: find the member with the subscription ID
+	// (one-time payments use the transaction ID). It matches subscr_id or subscr_id|123, like the member handling.
+	// Never with an empty ID (it would match any member without one).
+	$lookup_id = ! empty( $refund['subscr_id'] ) ? $refund['subscr_id'] : $refund['txn_id'];
+	if ( empty( $refund['member_id'] ) && ! empty( $lookup_id ) ) {
+		global $wpdb;
+		$member = $wpdb->get_row( $wpdb->prepare( "SELECT member_id FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s OR subscr_id LIKE %s", $lookup_id, $wpdb->esc_like( $lookup_id ) . '|%' ) );
+		$refund['member_id'] = isset( $member->member_id ) ? (string) $member->member_id : '';
+	}
+
+	return $refund;
+}
+
+/*
+ * Fires the "swpm_payment_refunded" action, after the member account was handled (deactivated or not).
+ * Only for refunds of a payment made with this plugin (a transaction record or a member account was found).
+ *
+ * @param array|false $refund_data The value returned by swpm_save_payment_refund() (false: nothing to do).
+ */
+function swpm_trigger_payment_refunded_action( $refund_data ) {
+	if ( empty( $refund_data ) ) {
+		return;
+	}
+	if ( empty( $refund_data['txn_record_id'] ) && empty( $refund_data['member_id'] ) ) {
+		swpm_debug_log_subsc( 'Refund: no transaction record or member account found. Not a payment of this site, the swpm_payment_refunded action is not fired.', true );
+		return;
+	}
+
+	/**
+	 * Fires when a payment is refunded, fully or partially (Stripe, PayPal webhooks and PayPal Standard).
+	 * A notification sent again is ignored when the payment has a transaction record. Without one, the action can fire
+	 * more than once for the same refund.
+	 *
+	 * @param array $refund_data {
+	 *     @type string $gateway        'stripe' or 'paypal'.
+	 *     @type string $txn_id         Transaction ID of the refunded payment.
+	 *     @type string $refund_id      ID of this refund (Stripe: the webhook event ID; PayPal: the refund ID).
+	 *     @type float  $refund_amount  Amount of this refund.
+	 *     @type float  $total_refunded Total refunded for this payment so far.
+	 *     @type string $currency       Currency code.
+	 *     @type bool   $is_full_refund True if the payment is fully refunded now (also for an older notification arriving late;
+	 *                                  a guess when no transaction record was found).
+	 *     @type string $payment_amount Amount of the refunded payment (empty if no transaction record was found).
+	 *     @type int    $txn_record_id  ID of the transaction record (0 if none was found).
+	 *     @type string $member_id      ID of the member account (empty if not found).
+	 *     @type string $subscr_id      Subscription ID, when known (for one-time payments, usually the transaction ID; can be empty).
+	 * }
+	 */
+	do_action( 'swpm_payment_refunded', $refund_data );
+}
+
+/*
  * This function will handle the refund notification from PayPal as long as the parent transaction ID is present.
  * It will deactivate the corresponding member account.
- * It will also mark the transaction as "Refunded" (or "Partially Refunded") in the transactions list.
+ * It will also mark the transaction as "Refunded" (or "Partially Refunded") in the transactions list (unless the caller
+ * already saved the refund with swpm_save_payment_refund() and set 'refund_saved').
  */
 function swpm_handle_refund_using_parent_txn_id( $ipn_data ){
 	swpm_debug_log_subsc( 'Refund notification - lets see if a member account needs to be deactivated.', true );
@@ -351,11 +478,13 @@ function swpm_handle_refund_using_parent_txn_id( $ipn_data ){
 		return;
 	}
 	//Mark the transaction as refunded. It is a full refund, unless the notification gives a total refunded lower than the amount paid.
-	$is_full_refund = true;
-	if ( isset( $ipn_data['total_refunded'] ) && is_numeric( $ipn_data['total_refunded'] ) && is_numeric( $txn_db_row->payment_amount ) ) {
-		$is_full_refund = round( (float) $ipn_data['total_refunded'], 2 ) >= round( (float) $txn_db_row->payment_amount, 2 );
+	if ( empty( $ipn_data['refund_saved'] ) ) {
+		$is_full_refund = true;
+		if ( isset( $ipn_data['total_refunded'] ) && is_numeric( $ipn_data['total_refunded'] ) && is_numeric( $txn_db_row->payment_amount ) ) {
+			$is_full_refund = round( (float) $ipn_data['total_refunded'], 2 ) >= round( (float) $txn_db_row->payment_amount, 2 );
+		}
+		swpm_update_refunded_transaction_status( $txn_db_row, $is_full_refund );
 	}
-	swpm_update_refunded_transaction_status( $txn_db_row, $is_full_refund );
 
 	$payment_status = isset($ipn_data['payment_status']) ? sanitize_key($ipn_data['payment_status']) : '';
 	if( $payment_status == 'sale_refunded'){

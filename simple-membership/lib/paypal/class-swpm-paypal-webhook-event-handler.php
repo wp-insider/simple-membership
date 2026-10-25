@@ -314,6 +314,8 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			'is_full_refund' => $has_total ? null : true,
 		) );
 		$ipn_data['refund_saved'] = true;
+		// For the swpm_deactivate_account_on_refund filter: full or partial, amounts.
+		$ipn_data['refund_data'] = $refund_data;
 
 		swpm_handle_refund_using_parent_txn_id( $ipn_data );
 

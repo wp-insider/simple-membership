@@ -5232,6 +5232,18 @@ msgstr "renouveler"
 msgid "Not a Member?"
 msgstr "Vous n'êtes pas membre ?"
 
+#. translators: %1$s and %2$s: start and end of the link to the login page.
+#: classes/class.swpm-utils-misc.php:496
+#, php-format
+msgid "Please %1$sLog In%2$s."
+msgstr "Veuillez %1$svous connecter%2$s."
+
+#. translators: %1$s and %2$s: start and end of the link to the join us page.
+#: classes/class.swpm-utils-misc.php:508
+#, php-format
+msgid "Not a Member? %1$sJoin Us%2$s"
+msgstr "Pas encore membre ? %1$sRejoignez-nous%2$s"
+
 #: classes/class.swpm-utils-misc.php:227
 msgid "Action Status"
 msgstr "Statut de cette action"

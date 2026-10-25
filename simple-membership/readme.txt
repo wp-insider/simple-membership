@@ -196,6 +196,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 = WIP =
 - Fixed an issue where a PayPal subscription renewal payment could be saved with the wrong amount (for example, when the webhook arrived late). The amount from the webhook event is now saved. Thanks to Th0masL for the contribution.
 - Partial refunds are now shown as 'Partially Refunded' in the payments list (Stripe, PayPal PPCP and PayPal Standard). PayPal Standard refunds now also update the transaction's status. Thanks to Th0masL for the contribution.
+- Added the swpm_payment_refunded action hook. It fires when a payment is fully or partially refunded (Stripe, PayPal PPCP and PayPal Standard). Thanks to Th0masL for the contribution.
 
 = 4.8.6 =
 - Fixed a login loop that could happen when the login form was submitted shortly after the member's login session expired. The login request is now processed normally and a fresh login session is created. Thanks to freetiermorioka555 for reporting this.

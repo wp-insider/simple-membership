@@ -29,6 +29,8 @@ class SWPMPaymentsListTable extends WP_List_Table {
 				$val = apply_filters( 'swpm_transactions_page_amount_display', $val, $item );
 				break;
 			default:
+				//Allows an addon to set the value of a column, e.g. its own columns (return escaped HTML).
+				$val = apply_filters( 'swpm_transactions_page_column_' . $column_name, $val, $item );
 				break;
 		}
 		return $val;
@@ -127,6 +129,8 @@ class SWPMPaymentsListTable extends WP_List_Table {
 			'membership_level' => __( 'Membership Level' , 'simple-membership'),
 			'status'           => __( 'Status/Note' , 'simple-membership'),
 		);
+		//Allows an addon to add its own columns (column key => title), like the members list (swpm_admin_members_table_columns).
+		$columns = apply_filters( 'swpm_transactions_page_columns', $columns );
 		return $columns;
 	}
 

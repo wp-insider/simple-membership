@@ -60,6 +60,13 @@ class SwpmWpLoadedTasks {
 				if ( empty( $force_wp_user_sync ) ) {
 					return;
 				}
+				//Do not run the sync on the WP login page. WP may be mid-login there (example: a 2FA plugin like Wordfence
+				//checks the password first, then logs the WP user in on wp-login.php after wp_loaded).
+				//The sync will run again on the next page load if the WP user is still logged out.
+				if ( isset( $GLOBALS['pagenow'] ) && 'wp-login.php' === $GLOBALS['pagenow'] ) {
+					SwpmLog::log_auth_debug( 'synchronise_swpm_logout_for_wp_users() - This is the WP login page (wp-login.php). Skipping the force wp user login sync for this request.', true );
+					return;
+				}
 				/* Force WP user login sync is enabled. */
 				/* SWPM user is logged in the system. Log him out. */
 				SwpmLog::log_auth_debug( 'synchronise_swpm_logout_for_wp_users() - Force wp user login sync is enabled. ', true );

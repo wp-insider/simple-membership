@@ -291,6 +291,8 @@ function swpm_should_deactivate_account_on_refund( $member_id, $ipn_data ) {
 	$deactivate = empty( SwpmSettings::get_instance()->get_value( $setting_key ) );
 
 	// Allow sites to apply their own refund policy. Example: deactivate only on a full refund.
+	// $ipn_data['refund_data'] has the refund data when known (the swpm_payment_refunded array, plus 'repeat' => true for
+	// a repeated notification).
 	$deactivate = apply_filters( 'swpm_deactivate_account_on_refund', $deactivate, $member_id, $ipn_data, $refund_payment_type );
 
 	if ( ! $deactivate ) {
@@ -340,7 +342,9 @@ function swpm_add_refund_to_transaction( $txn_db_row, $refund_id, $refund_amount
 
 /*
  * Saves a refund on the transaction record of the refunded payment and returns the data for the "swpm_payment_refunded"
- * action (see swpm_trigger_payment_refunded_action()), or false if this refund was already saved (notification sent again).
+ * action (see swpm_trigger_payment_refunded_action()). If this refund was already saved (notification sent again),
+ * nothing is saved again and the data is returned with 'repeat' => true: the action is not fired again, but the
+ * swpm_deactivate_account_on_refund filter still gets the refund data.
  * Used by the Stripe webhook, the PayPal webhooks and the PayPal Standard IPN.
  *
  * With a transaction record: adds the refund to the total refunded so far and marks the transaction "Refunded" or
@@ -371,7 +375,9 @@ function swpm_save_payment_refund( $txn_db_row, $refund ) {
 		$previous_total = (float) get_post_meta( $txn_db_row->id, 'refunded_amount', true );
 		$total_refunded = swpm_add_refund_to_transaction( $txn_db_row, $refund['refund_id'], $refund['refund_amount'], $refund['total_refunded'] );
 		if ( false === $total_refunded ) {
-			return false;
+			// Already saved: the total saved then already includes this refund.
+			$refund['repeat'] = true;
+			$total_refunded   = $previous_total;
 		}
 		$refund['total_refunded'] = $total_refunded;
 		$refund['txn_record_id']  = (int) $txn_db_row->id;
@@ -388,7 +394,9 @@ function swpm_save_payment_refund( $txn_db_row, $refund ) {
 		if ( null === $refund['is_full_refund'] ) {
 			$refund['is_full_refund'] = ( $paid <= 0 || $total_refunded >= $paid );
 		}
-		swpm_update_refunded_transaction_status( $txn_db_row, $refund['is_full_refund'] );
+		if ( empty( $refund['repeat'] ) ) {
+			swpm_update_refunded_transaction_status( $txn_db_row, $refund['is_full_refund'] );
+		}
 
 		if ( ! $refund['is_full_refund'] && isset( $txn_db_row->status ) && strtolower( $txn_db_row->status ) === 'refunded' ) {
 			// The transaction stays "Refunded". If the refunds saved before already cover the amount paid, this is an older
@@ -423,10 +431,10 @@ function swpm_save_payment_refund( $txn_db_row, $refund ) {
  * Fires the "swpm_payment_refunded" action, after the member account was handled (deactivated or not).
  * Only for refunds of a payment made with this plugin (a transaction record or a member account was found).
  *
- * @param array|false $refund_data The value returned by swpm_save_payment_refund() (false: nothing to do).
+ * @param array|false $refund_data The value returned by swpm_save_payment_refund() (false or a repeat: nothing to do).
  */
 function swpm_trigger_payment_refunded_action( $refund_data ) {
-	if ( empty( $refund_data ) ) {
+	if ( empty( $refund_data ) || ! empty( $refund_data['repeat'] ) ) {
 		return;
 	}
 	if ( empty( $refund_data['txn_record_id'] ) && empty( $refund_data['member_id'] ) ) {

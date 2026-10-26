@@ -20,7 +20,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 
 	/**
 	 * Refund or reversal of a payment: marks the transaction as "Refunded" or "Partially Refunded", and returns the refund
-	 * data for the swpm_payment_refunded action (false if this refund was already saved).
+	 * data for the swpm_payment_refunded action (with 'repeat' => true if this refund was already saved).
 	 * PayPal Standard only sends the amount of each refund, so they are added up and compared with the amount paid.
 	 */
 	public function update_refunded_transaction( $gross_total ) {
@@ -107,6 +107,8 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			// This is a refund or reversal
 			$this->debug_log( 'This is a refund notification. Refund amount: ' . $gross_total, true );
 			$refund_data = $this->update_refunded_transaction( $gross_total );
+			// For the swpm_deactivate_account_on_refund filter: full or partial, amounts.
+			$this->ipn_data['refund_data'] = $refund_data;
 			swpm_handle_subsc_cancel_stand_alone( $this->ipn_data, true );
 			swpm_trigger_payment_refunded_action( $refund_data );
 			return true;
@@ -114,6 +116,8 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		if ( isset( $this->ipn_data['reason_code'] ) && 'refund' === $this->ipn_data['reason_code'] ) {
 			$this->debug_log( 'This is a refund notification. Refund amount: ' . $gross_total, true );
 			$refund_data = $this->update_refunded_transaction( $gross_total );
+			// For the swpm_deactivate_account_on_refund filter: full or partial, amounts.
+			$this->ipn_data['refund_data'] = $refund_data;
 			swpm_handle_subsc_cancel_stand_alone( $this->ipn_data, true );
 			swpm_trigger_payment_refunded_action( $refund_data );
 			return true;

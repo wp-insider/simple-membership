@@ -126,6 +126,10 @@ class SwpmStripeWebhookHandler {
 
 			// Unresolved subscriptions fall back only to the original charge, never the shared customer ID.
 
+			if ( $refund_data ) {
+				// For the swpm_deactivate_account_on_refund filter: full or partial, amounts.
+				$ipn_data['refund_data'] = $refund_data;
+			}
 			swpm_handle_subsc_cancel_stand_alone( $ipn_data , $is_refunded);
 
 			// Only for refunds ($refund_data is false otherwise).

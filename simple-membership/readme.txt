@@ -194,10 +194,13 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 
 = WIP =
-- Fixed an issue where a PayPal subscription renewal payment could be saved with the wrong amount (for example, when the webhook arrived late). The amount from the webhook event is now saved. Thanks to Th0masL for the contribution.
-- Partial refunds are now shown as 'Partially Refunded' in the payments list (Stripe, PayPal PPCP and PayPal Standard). PayPal Standard refunds now also update the transaction's status. Thanks to Th0masL for the contribution.
 - Fixed an issue where the Force WP User Synchronization feature could log a user out during a two-factor authentication (2FA) login on the WordPress login page (for example, with Wordfence 2FA).
-- Added the swpm_payment_refunded action hook. It fires when a payment is fully or partially refunded (Stripe, PayPal PPCP and PayPal Standard). Thanks to Th0masL for the contribution.
+- Fixed an issue where a PayPal subscription renewal payment could be saved with the wrong amount (for example, when the webhook arrived late). The amount from the webhook event is now saved.
+- Partial refunds are now shown as 'Partially Refunded' in the payments list (Stripe, PayPal PPCP and PayPal Standard). PayPal Standard refunds now also update the transaction's status.
+- Added the swpm_payment_refunded action hook. It fires when a payment is fully or partially refunded (Stripe, PayPal PPCP and PayPal Standard).
+- Added refund details (full or partial, amounts) to the data passed to the swpm_deactivate_account_on_refund filter.
+- Added the swpm_transactions_page_columns and swpm_transactions_page_column_{column_name} filter hooks to add columns to the payments list.
+- Thanks to Th0masL for contributing the PayPal, refund and payments list changes in this release.
 
 = 4.8.6 =
 - Fixed a login loop that could happen when the login form was submitted shortly after the member's login session expired. The login request is now processed normally and a fresh login session is created. Thanks to freetiermorioka555 for reporting this.

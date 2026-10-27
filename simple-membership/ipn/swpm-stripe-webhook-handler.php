@@ -88,11 +88,21 @@ class SwpmStripeWebhookHandler {
 				}
 
 				$txn_db_row = SwpmTransactions::get_transaction_row_by_txn_id( $txn_id, true);
+				$refund     = self::get_refund_data_from_charge_event( $event_json, $subscr_id );
+				$customer_id_first_payment = false;
 				if ( ! $txn_db_row ) {
 					SwpmLog::log_simple_debug( 'No transaction record found for transaction ID: ' . $txn_id, true );
+					// A first payment saved with the customer ID, on the "subscription created" record: use that record
+					// when this charge is surely that payment.
+					$txn_db_row = self::get_customer_id_first_payment_record( $event_json->data->object, $subscr_id, ! empty( $event_json->livemode ) );
+					if ( $txn_db_row ) {
+						$customer_id_first_payment        = true;
+						$refund['gateway_txn_id'] = $refund['txn_id'];
+						$refund['txn_id']         = $txn_db_row->txn_id;// The ID the payment was saved with (commission, other plugins).
+					}
 				}
 				// Mark the transaction as refunded and keep the refund data for the swpm_payment_refunded action (fired below).
-				$refund_data = swpm_save_payment_refund( $txn_db_row, self::get_refund_data_from_charge_event( $event_json, $subscr_id ) );
+				$refund_data = swpm_save_payment_refund( $txn_db_row, $refund, $customer_id_first_payment );
 
 				// One-time payments store a charge ID (ch_...) as subscr_id. Only query subscription status for subscription IDs (sub_...).
 				// Member refund handling below still applies to both payment types.
@@ -274,6 +284,89 @@ class SwpmStripeWebhookHandler {
 			'is_full_refund' => ! empty( $charge->refunded ),
 			'subscr_id'      => $subscr_id,
 		);
+	}
+
+	/**
+	 * A Stripe SCA subscription whose first payment has no record of its own: the payment is saved with the customer ID,
+	 * on the "subscription created" record (an agreement without the stripe_payment_model marker of
+	 * save_first_payment_record()). Returns that record for a refunded charge only when Stripe confirms the charge is that
+	 * first payment: one agreement record of this subscription and customer, without that marker, the subscription's one first invoice ('subscription_create')
+	 * paid by exactly this charge, with the saved amount. Otherwise null (failed matching checks are logged): nothing is
+	 * guessed.
+	 */
+	public static function get_customer_id_first_payment_record( $charge, $subscr_id, $livemode ) {
+		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php';
+		$customer_id = StripeUtilFunctions::get_object_id( isset( $charge->customer ) ? $charge->customer : '' );
+		if ( empty( $subscr_id ) || strpos( $subscr_id, 'sub_' ) !== 0 || empty( $customer_id ) || empty( $charge->id ) ) {
+			return null;
+		}
+		$fail = function ( $reason ) use ( $charge ) {
+			SwpmLog::log_simple_debug( 'Refund of charge ' . $charge->id . ': the payment could not be matched for sure to a first payment saved with the customer ID (' . $reason . ').', true );
+			return null;
+		};
+
+		$record_ids = get_posts( array(
+			'post_type'      => 'swpm_transactions',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'meta_query'     => array(
+				array( 'key' => 'subscr_id', 'value' => $subscr_id ),
+				array( 'key' => 'txn_id', 'value' => $customer_id ),
+				array( 'key' => 'gateway', 'value' => 'stripe-sca-subs' ),
+			),
+		) );
+		if ( count( $record_ids ) !== 1 ) {
+			return $fail( count( $record_ids ) . ' records with this customer ID and subscription' );
+		}
+		$record = SwpmTransactions::get_txn_post_meta_data_in_object_format( (int) $record_ids[0] );
+		if ( strtolower( $record->status ) !== 'subscription created' ) {
+			return $fail( 'not a subscription agreement record' );
+		}
+		if ( '' !== (string) get_post_meta( $record->id, 'stripe_payment_model', true ) ) {
+			return $fail( 'the agreement has the stripe_payment_model marker of a separate first payment record' );
+		}
+		if ( (bool) $record->is_live !== (bool) $livemode ) {
+			return $fail( 'live / test mode differs' );
+		}
+		$api_keys = SwpmMiscUtils::get_stripe_api_keys_from_payment_button( $record->payment_button_id, (bool) $livemode );
+		if ( empty( $api_keys['secret'] ) ) {
+			return $fail( 'no API key for the payment button' );
+		}
+
+		try {
+			SwpmMiscUtils::load_stripe_lib();
+			if ( ! StripeUtilFunctions::has_methods( array( '\Stripe\Invoice' => 'all' ) ) ) {
+				return $fail( 'the loaded Stripe library cannot list invoices' );
+			}
+			$invoices = \Stripe\Invoice::all( array( 'subscription' => $subscr_id, 'customer' => $customer_id, 'limit' => 100 ), StripeUtilFunctions::get_request_options( $api_keys['secret'] ) );
+		} catch ( \Throwable $e ) {
+			return $fail( 'invoice list: ' . $e->getMessage() );
+		}
+		if ( ! isset( $invoices->data ) || ! isset( $invoices->has_more ) || $invoices->has_more !== false ) {
+			return $fail( 'invoice list incomplete' );
+		}
+		$first_invoices = array();
+		foreach ( $invoices->data as $invoice ) {
+			if ( isset( $invoice->billing_reason ) && $invoice->billing_reason === 'subscription_create' ) {
+				$first_invoices[] = $invoice;
+			}
+		}
+		if ( count( $first_invoices ) !== 1 ) {
+			return $fail( count( $first_invoices ) . ' first invoices' );
+		}
+
+		$result = StripeUtilFunctions::get_invoice_payment_charge( $first_invoices[0]->id, $api_keys['secret'], $customer_id, $livemode, $subscr_id );
+		if ( 'paid' !== $result['state'] || $result['charge_id'] !== $charge->id ) {
+			return $fail( 'first invoice: ' . $result['state'] . ( $result['reason'] ? ' (' . $result['reason'] . ')' : ', another charge' ) );
+		}
+		if ( ! isset( $charge->currency ) || strtoupper( $charge->currency ) !== $result['currency'] ) {
+			return $fail( 'the currency differs' );
+		}
+		if ( StripeUtilFunctions::get_amount_in_stripe_units( $record->payment_amount, $result['currency'] ) !== $result['amount'] ) {
+			return $fail( 'the saved amount is not the charge amount' );
+		}
+		SwpmLog::log_simple_debug( 'Refund of charge ' . $charge->id . ': matched to the first payment of subscription ' . $subscr_id . ', saved with the customer ID (record ' . $record->id . ').', true );
+		return $record;
 	}
 
 	public static function get_charge_id_from_event_data( $event_json ) {

@@ -354,8 +354,12 @@ function swpm_add_refund_to_transaction( $txn_db_row, $refund_id, $refund_amount
  * ignore repeated notifications), refund_amount (this refund), total_refunded (total so far, when the gateway sends it),
  * currency, is_full_refund (when the gateway says it; otherwise the total is compared with the amount paid), subscr_id,
  * member_id (when the notification gives it; the member ID of the transaction record is used first).
+ *
+ * $keep_status: true for a subscription agreement record ("subscription created") that stands for the first payment of
+ * a Stripe subscription, saved with the customer ID (see SwpmStripeWebhookHandler::get_customer_id_first_payment_record()): the
+ * refund is saved on it, but its status is not changed, because the agreement lookups need it.
  */
-function swpm_save_payment_refund( $txn_db_row, $refund ) {
+function swpm_save_payment_refund( $txn_db_row, $refund, $keep_status = false ) {
 	$refund = wp_parse_args( $refund, array(
 		'gateway'        => '',
 		'txn_id'         => '',
@@ -394,11 +398,17 @@ function swpm_save_payment_refund( $txn_db_row, $refund ) {
 		if ( null === $refund['is_full_refund'] ) {
 			$refund['is_full_refund'] = ( $paid <= 0 || $total_refunded >= $paid );
 		}
-		if ( empty( $refund['repeat'] ) ) {
+		if ( empty( $refund['repeat'] ) && ! $keep_status ) {
 			swpm_update_refunded_transaction_status( $txn_db_row, $refund['is_full_refund'] );
 		}
 
-		if ( ! $refund['is_full_refund'] && isset( $txn_db_row->status ) && strtolower( $txn_db_row->status ) === 'refunded' ) {
+		if ( $keep_status ) {
+			// The status stays "subscription created": an older partial notification arriving after the full refund is
+			// recognised from the refunds saved before.
+			if ( ! $refund['is_full_refund'] && $paid > 0 && $previous_total >= $paid ) {
+				$refund['is_full_refund'] = true;
+			}
+		} else if ( ! $refund['is_full_refund'] && isset( $txn_db_row->status ) && strtolower( $txn_db_row->status ) === 'refunded' ) {
 			// The transaction stays "Refunded". If the refunds saved before already cover the amount paid, this is an older
 			// notification arriving late: the payment is fully refunded. Otherwise, keep what the gateway says.
 			$refund['is_full_refund'] = ( $paid > 0 && $previous_total >= $paid );
@@ -460,6 +470,8 @@ function swpm_trigger_payment_refunded_action( $refund_data ) {
 	 *     @type int    $txn_record_id  ID of the transaction record (0 if none was found).
 	 *     @type string $member_id      ID of the member account (empty if not found).
 	 *     @type string $subscr_id      Subscription ID, when known (for one-time payments, usually the transaction ID; can be empty).
+	 *     @type string $gateway_txn_id Only for the first payment of a Stripe subscription saved with the customer ID: the
+	 *                                  refunded charge ID ($txn_id is then the customer ID the payment was saved with).
 	 * }
 	 */
 	do_action( 'swpm_payment_refunded', $refund_data );

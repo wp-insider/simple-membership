@@ -107,10 +107,12 @@ class SwpmStripeSCASubscriptionIpnHandler {
 
 		$pm = \Stripe\PaymentMethod::retrieve( $sub->default_payment_method );
 
-		// Grab the charge ID and set it as the transaction ID.
-		$txn_id = $sub->customer;
-		// The charge ID can be used to retrieve the transaction details using hte following call.
-		// \Stripe\Charge::retrieve($charge->$data[0]->id);
+		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php';
+
+		// The customer ID is the transaction ID of the "subscription created" record (the subscription agreement).
+		// The first payment gets its own record with its charge ID (see save_first_payment_record()).
+		$customer_id = StripeUtilFunctions::get_object_id( $sub->customer );
+		$txn_id      = $customer_id;
 
 		//check if this payment has already been processed
 		$payment = get_posts(
@@ -147,6 +149,18 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		$payment_amount = floatval( $payment_amount );
 
 		$payment_amount = apply_filters( 'swpm_payment_amount_filter', $payment_amount, $button_id );
+
+		// The charge of the first payment. False: the customer ID is used as the payment's transaction ID.
+		$first_payment = self::get_first_payment_charge( $sess, $ref_id, $sub_id, $customer_id, $api_keys['secret'], ! $sandbox_enabled, $price_in_cents, $payment_amount, $currency_code );
+		if ( $first_payment && SwpmTransactions::get_transaction_row_by_txn_id( $first_payment['charge_id'] ) ) {
+			//This first payment has already been processed. Redirecting user to return_url
+			$return_url = get_post_meta( $button_id, 'return_url', true );
+			if ( empty( $return_url ) ) {
+				$return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+			}
+			SwpmMiscUtils::redirect_to_url( $return_url );
+			return;
+		}
 
 		$membership_level_id = get_post_meta( $button_id, 'membership_level_id', true );
 
@@ -225,19 +239,164 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		// Handle the membership signup related tasks.
 		swpm_handle_subsc_signup_stand_alone( $ipn_data, $membership_level_id, $txn_id, $swpm_id );
 
-		// Save the transaction record
+		// Save the transaction record (the "subscription created" record of the agreement)
 		SwpmTransactions::save_txn_record( $ipn_data );
-		SwpmLog::log_simple_debug( 'Transaction data saved.', true );
+		$agreement_id = self::get_saved_record_id( $ipn_data, 'subscription created', 'stripe_subscription_new' );
 
-		// Trigger the stripe IPN processed action hook (so other plugins can can listen for this event).
-		do_action( 'swpm_stripe_sca_ipn_processed', $ipn_data );
+		// Then the first payment's own record. The hooks get the agreement's data; when the first payment record is saved,
+		// with the charge ID as the transaction ID (so a refund of the charge finds the payment and the commission).
+		$hook_ipn_data = $ipn_data;
+		if ( ! $agreement_id ) {
+			$first_payment_saved = 'uncertain';
+		} else {
+			SwpmLog::log_simple_debug( 'Transaction data saved.', true );
+			$first_payment_saved = $first_payment ? self::save_first_payment_record( $agreement_id, $ipn_data, $first_payment ) : 'not_saved';
+		}
+		if ( 'saved' === $first_payment_saved ) {
+			$hook_ipn_data['txn_id']             = $first_payment['charge_id'];
+			$hook_ipn_data['stripe_customer_id'] = $customer_id;
+		}
 
-		do_action( 'swpm_payment_ipn_processed', $ipn_data );
+		if ( 'uncertain' === $first_payment_saved ) {
+			// No hook when a record may be incomplete (a commission would be given with a reference a refund can't
+			// find, or twice when the page is opened again): the payment needs a manual check.
+			SwpmLog::log_simple_debug( 'Error! The payment of subscription ' . $sub_id . ' (customer ' . $customer_id . ( $first_payment ? ', charge ' . $first_payment['charge_id'] : '' ) . ') may not be saved correctly (the agreement record' . ( $first_payment ? ', its markers or the first payment record' : '' ) . '). The payment hooks were not triggered. Check this payment manually.', false );
+		} else {
+			// Trigger the stripe IPN processed action hook (so other plugins can can listen for this event).
+			do_action( 'swpm_stripe_sca_ipn_processed', $hook_ipn_data );
+
+			do_action( 'swpm_payment_ipn_processed', $hook_ipn_data );
+		}
 
 		SwpmLog::log_simple_debug( 'End of Stripe SCA Subscription IPN processing.', true, true );
 
 		// Redirect the user to the registration URL or return URL (or to the homepage if a return URL is not specified for this payment button).
 		SwpmMiscUtils::handle_after_payment_redirect( $button_id );
+	}
+
+	/**
+	 * Finds the charge of the subscription's first payment (the first invoice of the checkout session).
+	 * Returns the result of StripeUtilFunctions::get_invoice_payment_charge() plus 'invoice_id', or false when the charge is
+	 * not certain (no amount due, payment not finished, API error...) or its amount is not the amount of this checkout.
+	 */
+	private static function get_first_payment_charge( $sess, $ref_id, $sub_id, $customer_id, $secret_key, $livemode, $price_in_cents, $payment_amount, $currency_code ) {
+		try {
+			if ( ! StripeUtilFunctions::has_methods( array( '\Stripe\Checkout\Session' => 'retrieve' ) ) ) {
+				SwpmLog::log_simple_debug( 'Stripe first payment: the loaded Stripe library cannot retrieve a checkout session. The customer ID is used as the transaction ID.', true );
+				return false;
+			}
+			// The session in the event has the API version of the event: retrieve it with StripeUtilFunctions::API_VERSION.
+			$session = \Stripe\Checkout\Session::retrieve( $sess->id, StripeUtilFunctions::get_request_options( $secret_key ) );
+		} catch ( \Throwable $e ) {
+			SwpmLog::log_simple_debug( 'Stripe first payment: could not retrieve the checkout session. The customer ID is used as the transaction ID. ' . $e->getMessage(), false );
+			return false;
+		}
+		$session_checks = array(
+			'reference'    => isset( $session->client_reference_id ) && $session->client_reference_id === $ref_id,
+			'subscription' => StripeUtilFunctions::get_object_id( isset( $session->subscription ) ? $session->subscription : '' ) === $sub_id,
+			'customer'     => StripeUtilFunctions::get_object_id( isset( $session->customer ) ? $session->customer : '' ) === $customer_id,
+			'mode'         => isset( $session->livemode ) && (bool) $session->livemode === (bool) $livemode,
+			'amount'       => isset( $session->amount_total ) && is_int( $session->amount_total ) && $session->amount_total === (int) $price_in_cents,
+			'currency'     => isset( $session->currency ) && strtoupper( $session->currency ) === $currency_code,
+		);
+		$failed = array_keys( array_filter( $session_checks, function ( $ok ) { return ! $ok; } ) );
+		if ( ! empty( $failed ) ) {
+			SwpmLog::log_simple_debug( 'Stripe first payment: the checkout session does not match this subscription (' . implode( ', ', $failed ) . '). The customer ID is used as the transaction ID.', false );
+			return false;
+		}
+
+		$invoice_id = StripeUtilFunctions::get_object_id( isset( $session->invoice ) ? $session->invoice : '' );
+		$result     = StripeUtilFunctions::get_invoice_payment_charge( $invoice_id, $secret_key, $customer_id, $livemode, $sub_id );
+		if ( 'paid' !== $result['state'] ) {
+			SwpmLog::log_simple_debug( 'Stripe first payment of subscription ' . $sub_id . ': ' . $result['state'] . ' (' . $result['reason'] . '). The customer ID is used as the transaction ID.', true );
+			return false;
+		}
+		// The charge must be the amount of this checkout, in its currency, before and after the swpm_payment_amount_filter
+		// (a refund is a part of what was really paid, so the saved amount must be that).
+		if ( $result['currency'] !== $currency_code || $result['amount'] !== (int) $price_in_cents || StripeUtilFunctions::get_amount_in_stripe_units( $payment_amount, $currency_code ) !== $result['amount'] ) {
+			SwpmLog::log_simple_debug( 'Stripe first payment of subscription ' . $sub_id . ': the charge amount (' . $result['amount'] . ') is not the checkout amount. The customer ID is used as the transaction ID.', true );
+			return false;
+		}
+		$result['invoice_id'] = $invoice_id;
+		return $result;
+	}
+
+	/**
+	 * Saves the first payment of the subscription as its own record (charge ID as the transaction ID), next to the
+	 * "subscription created" record of the agreement, which gets the markers stripe_payment_model = 2,
+	 * stripe_first_charge_id and stripe_first_invoice_id (they mark an agreement whose first payment has its own record).
+	 *
+	 * Returns 'saved', 'not_saved' (nothing written: the hooks get the customer ID as the transaction ID) or 'uncertain'
+	 * (a record may be incomplete: no hook).
+	 */
+	private static function save_first_payment_record( $agreement_id, $ipn_data, $first_payment ) {
+		$markers = array(
+			'stripe_payment_model'    => '2',
+			'stripe_first_charge_id'  => $first_payment['charge_id'],
+			'stripe_first_invoice_id' => $first_payment['invoice_id'],
+		);
+		foreach ( $markers as $key => $value ) {
+			update_post_meta( $agreement_id, $key, $value );
+		}
+		foreach ( $markers as $key => $value ) {
+			if ( get_post_meta( $agreement_id, $key, true ) !== $value ) {
+				foreach ( array_keys( $markers ) as $marker ) {
+					delete_post_meta( $agreement_id, $marker );
+				}
+				if ( '' === get_post_meta( $agreement_id, 'stripe_payment_model', true ) ) {
+					SwpmLog::log_simple_debug( 'Stripe first payment: the markers could not be saved on the agreement record ' . $agreement_id . '. The customer ID is used as the transaction ID.', false );
+					return 'not_saved';
+				}
+				return 'uncertain';
+			}
+		}
+
+		$payment_ipn_data             = $ipn_data;
+		$payment_ipn_data['txn_id']   = $first_payment['charge_id'];
+		$payment_ipn_data['status']   = 'subscription';// Like the Stripe renewal payments (not a "subscription created" record).
+		$payment_ipn_data['txn_type'] = 'stripe_subscription_first_payment';
+		SwpmTransactions::save_txn_record( $payment_ipn_data );
+
+		$payment_id = self::get_saved_record_id( $payment_ipn_data, 'subscription', 'stripe_subscription_first_payment' );
+		if ( ! $payment_id ) {
+			return 'uncertain';
+		}
+		SwpmLog::log_simple_debug( 'Stripe first payment saved with the charge ID: ' . $first_payment['charge_id'] . '. Agreement record: ' . $agreement_id . ', payment record: ' . $payment_id, true );
+		return 'saved';
+	}
+
+	/**
+	 * Checks that a record saved by SwpmTransactions::save_txn_record() is complete, in both places it is saved (the
+	 * swpm_transactions post and its row of the payments table): exactly one post with this transaction ID, subscription
+	 * and gateway, the expected status and txn_type, the amount, and its payments table row. Returns the post ID, or 0.
+	 */
+	private static function get_saved_record_id( $ipn_data, $status, $txn_type ) {
+		global $wpdb;
+		$ids = get_posts(
+			array(
+				'post_type'      => 'swpm_transactions',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					array( 'key' => 'txn_id', 'value' => $ipn_data['txn_id'] ),
+					array( 'key' => 'subscr_id', 'value' => $ipn_data['subscr_id'] ),
+					array( 'key' => 'gateway', 'value' => $ipn_data['gateway'] ),
+				),
+			)
+		);
+		if ( count( $ids ) !== 1 ) {
+			return 0;
+		}
+		$id     = (int) $ids[0];
+		$amount = round( (float) $ipn_data['mc_gross'], 2 );
+		if ( get_post_meta( $id, 'status', true ) !== $status || get_post_meta( $id, 'txn_type', true ) !== $txn_type || round( (float) get_post_meta( $id, 'payment_amount', true ), 2 ) !== $amount ) {
+			return 0;
+		}
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT txn_id, subscr_id, payment_amount FROM {$wpdb->prefix}swpm_payments_tbl WHERE id = %d", (int) get_post_meta( $id, 'db_row_id', true ) ) );
+		if ( ! $row || $row->txn_id !== $ipn_data['txn_id'] || $row->subscr_id !== $ipn_data['subscr_id'] || round( (float) $row->payment_amount, 2 ) !== $amount ) {
+			return 0;
+		}
+		return $id;
 	}
 }
 

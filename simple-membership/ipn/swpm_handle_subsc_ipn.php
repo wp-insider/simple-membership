@@ -559,7 +559,7 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 	$swpm_id = '';
 	if ( isset( $ipn_data['custom'] ) && !empty( $ipn_data['custom'] ) ){
 		$customvariables = SwpmTransactions::parse_custom_var( $ipn_data['custom'] );
-		$swpm_id = $customvariables['swpm_id'];
+		$swpm_id = isset( $customvariables['swpm_id'] ) ? $customvariables['swpm_id'] : '';
 	}
 
     $subscr_id = isset( $ipn_data['subscr_id'] ) && ! empty( $ipn_data['subscr_id'] ) ? $ipn_data['subscr_id'] : '';

@@ -843,8 +843,17 @@ class SwpmMiscUtils {
 		return $country;
 	}
 
-	public static function get_countries_dropdown( $country = '' ) {
-		//Note: the country names are output using the __() function below so that they can be translated. The POT file just needs to have the country names in it.
+	/**
+	 * Returns the canonical list of country names used by the plugin.
+	 *
+	 * This is kept separate from get_countries_dropdown() so addons (and anything else that needs
+	 * to validate a country value rather than render a select element) can reuse the same list
+	 * instead of keeping a copy of it that drifts out of sync.
+	 *
+	 * @return array
+	 */
+	public static function get_countries_list() {
+		//Note: the country names are output using the __() function elsewhere so that they can be translated. The POT file just needs to have the country names in it.
 		$countries = array(
 			'Afghanistan',
 			'Albania',
@@ -1049,6 +1058,13 @@ class SwpmMiscUtils {
 			'Zambia',
 			'Zimbabwe',
 		);
+
+		return apply_filters( 'swpm_countries_list', $countries );
+	}
+
+	public static function get_countries_dropdown( $country = '' ) {
+		$countries = self::get_countries_list();
+
 		//let's try to "guess" country name
 		$curr_lev      = -1;
 		$guess_country = '';

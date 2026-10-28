@@ -229,6 +229,9 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		SwpmTransactions::save_txn_record( $ipn_data );
 		SwpmLog::log_simple_debug( 'Transaction data saved.', true );
 
+		// Save the first payment (charge) of the subscription as its own transaction record (the record above is the subscription agreement).
+		self::save_first_payment_record( $sub, $ipn_data );
+
 		// Trigger the stripe IPN processed action hook (so other plugins can can listen for this event).
 		do_action( 'swpm_stripe_sca_ipn_processed', $ipn_data );
 
@@ -238,6 +241,94 @@ class SwpmStripeSCASubscriptionIpnHandler {
 
 		// Redirect the user to the registration URL or return URL (or to the homepage if a return URL is not specified for this payment button).
 		SwpmMiscUtils::handle_after_payment_redirect( $button_id );
+	}
+
+	/*
+	 * Saves the first payment (charge) of a new subscription as its own transaction record, with the charge ID as the transaction ID.
+	 * This way every subscription charge has a payment record (the renewal payments are saved by the webhook handler). It also lets a refund of the first charge find its record.
+	 * It is skipped (nothing is saved) when there is no charge for the first invoice (example: a free trial) or the invoice details can't be retrieved.
+	 */
+	public static function save_first_payment_record( $sub, $ipn_data ) {
+		$invoice_id = isset( $sub->latest_invoice ) ? $sub->latest_invoice : '';
+		if ( is_object( $invoice_id ) ) {
+			$invoice_id = isset( $invoice_id->id ) ? $invoice_id->id : '';
+		}
+		if ( empty( $invoice_id ) ) {
+			SwpmLog::log_simple_debug( 'Stripe subscription first payment: the subscription has no invoice ID. The first payment record will not be saved.', true );
+			return;
+		}
+
+		try {
+			//Use the same API version as the webhook handler, so the invoice has the same structure (the charge ID is in the payment intent of the invoice payment).
+			$invoice = \Stripe\Invoice::retrieve(
+				array(
+					'id'     => $invoice_id,
+					'expand' => array( 'payments.data.payment.payment_intent' ),
+				),
+				array( 'stripe_version' => '2026-07-29.dahlia' )
+			);
+		} catch ( \Exception $e ) {
+			SwpmLog::log_simple_debug( 'Stripe subscription first payment: could not retrieve the invoice (' . $invoice_id . '). The first payment record will not be saved. ' . $e->getMessage(), false );
+			return;
+		}
+
+		$amount_paid = isset( $invoice->amount_paid ) ? (int) $invoice->amount_paid : 0;
+		if ( ! isset( $invoice->status ) || 'paid' !== $invoice->status || $amount_paid <= 0 ) {
+			//Example: a free trial or a 100% discount. There is no charge for the first invoice.
+			SwpmLog::log_simple_debug( 'Stripe subscription first payment: no charge for the first invoice (' . $invoice_id . '). The first payment record will not be saved.', true );
+			return;
+		}
+
+		//Get the charge ID of the invoice payment.
+		$charge_id = '';
+		if ( isset( $invoice->charge ) && is_string( $invoice->charge ) ) {
+			// In old api version, the charge id used to be directly available on the invoice object.
+			$charge_id = $invoice->charge;
+		} else if ( isset( $invoice->payments->data ) ) {
+			foreach ( $invoice->payments->data as $invoice_payment ) {
+				if ( ! isset( $invoice_payment->status ) || 'paid' !== $invoice_payment->status ) {
+					continue;
+				}
+				if ( isset( $invoice_payment->payment->payment_intent->latest_charge ) ) {
+					$charge_id = $invoice_payment->payment->payment_intent->latest_charge;
+				} else if ( isset( $invoice_payment->payment->charge ) ) {
+					$charge_id = $invoice_payment->payment->charge;
+				}
+				break;
+			}
+		}
+		if ( is_object( $charge_id ) ) {
+			$charge_id = isset( $charge_id->id ) ? $charge_id->id : '';
+		}
+		if ( empty( $charge_id ) ) {
+			SwpmLog::log_simple_debug( 'Stripe subscription first payment: could not find the charge ID of the invoice (' . $invoice_id . '). The first payment record will not be saved.', false );
+			return;
+		}
+
+		//Check if this charge has already been saved.
+		if ( SwpmTransactions::get_transaction_row_by_txn_id( $charge_id ) ) {
+			SwpmLog::log_simple_debug( 'Stripe subscription first payment: a transaction record already exists for the charge ID: ' . $charge_id, true );
+			return;
+		}
+
+		//The amount that was charged.
+		$currency_code = isset( $invoice->currency ) ? strtoupper( $invoice->currency ) : '';
+		$zero_cents    = unserialize( SIMPLE_WP_MEMBERSHIP_STRIPE_ZERO_CENTS );
+		if ( in_array( $currency_code, $zero_cents, true ) ) {
+			$payment_amount = $amount_paid;
+		} else {
+			$payment_amount = $amount_paid / 100;
+		}
+
+		//Same data as the subscription agreement record, with the details of this payment.
+		$payment_ipn_data             = $ipn_data;
+		$payment_ipn_data['txn_id']   = $charge_id;
+		$payment_ipn_data['mc_gross'] = floatval( $payment_amount );
+		$payment_ipn_data['txn_type'] = 'stripe_subscription_first_payment';
+		$payment_ipn_data['status']   = 'subscription';//Same status as the renewal payments of the subscription.
+
+		SwpmTransactions::save_txn_record( $payment_ipn_data );
+		SwpmLog::log_simple_debug( 'Stripe subscription first payment record saved. Charge ID: ' . $charge_id . ', Subscription ID: ' . $payment_ipn_data['subscr_id'], true );
 	}
 }
 

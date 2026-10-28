@@ -195,6 +195,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 = WIP =
 - Fixed an issue where the Force WP User Synchronization feature could log a user out during a two-factor authentication (2FA) login on the WordPress login page (for example, with Wordfence 2FA).
+- Fixed an issue where a subscription renewal payment could change the member's reference to the original subscription checkout transaction record. It now only changes when the member makes a new subscription checkout.
 - Fixed an issue where a PayPal subscription renewal payment could be saved with the wrong amount (for example, when the webhook arrived late). The amount from the webhook event is now saved.
 - Partial refunds are now shown as 'Partially Refunded' in the payments list (Stripe, PayPal PPCP and PayPal Standard). PayPal Standard refunds now also update the transaction's status.
 - Added the swpm_payment_refunded action hook. It fires when a payment is fully or partially refunded (Stripe, PayPal PPCP and PayPal Standard).

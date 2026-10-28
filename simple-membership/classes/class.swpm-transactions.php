@@ -81,8 +81,14 @@ class SwpmTransactions {
 
 		//Save additional data based on the checkout gateway.
 		if( isset( $ipn_data['gateway'])) {
+			//The txn_type values of the subscription agreement record (the "subscription created" record of a new subscription checkout).
+			//The payments of a subscription (example: renewal payments) are saved with the same gateway, but a different txn_type.
+			$sub_agreement_txn_types = array( 'stripe_subscription_new', 'pp_subscription_new', 'pp_std_subscription_new' );
+			$is_sub_agreement_record = isset( $ipn_data['txn_type'] ) && in_array( $ipn_data['txn_type'], $sub_agreement_txn_types, true );
+
 			//Check if this is a PayPal std subscription, or PayPal PPCP subscription, or a Stripe subscription checkout.
-			if ( $ipn_data['gateway'] == 'paypal_subscription_checkout' || $ipn_data['gateway'] == 'stripe-sca-subs' || $ipn_data['gateway'] == 'paypal_std_sub_checkout' ) {
+			//Only for the subscription agreement record, so the orig_swpm_txn_cpt_id of the member keeps pointing to it (until the member does a new subscription checkout).
+			if ( $is_sub_agreement_record && ( $ipn_data['gateway'] == 'paypal_subscription_checkout' || $ipn_data['gateway'] == 'stripe-sca-subs' || $ipn_data['gateway'] == 'paypal_std_sub_checkout' ) ) {
 				//Save the swpm_transactions CPT post ID of the original checkout in the member's proifle. Useful to retreive some of the original checkout txn data (example: custom_field data).
 				$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $subscr_id );
 				if( ! $member_record ){

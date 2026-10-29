@@ -367,9 +367,10 @@ function swpm_save_payment_refund( $txn_db_row, $refund ) {
 		'subscr_id'      => '',
 		'member_id'      => '',
 	) );
-	$refund['refund_amount']  = round( abs( (float) $refund['refund_amount'] ), 2 );
-	$refund['payment_amount'] = '';
-	$refund['txn_record_id']  = 0;
+	$refund['refund_amount']   = round( abs( (float) $refund['refund_amount'] ), 2 );
+	$refund['payment_amount']  = '';
+	$refund['txn_record_id']   = 0;
+	$refund['checkout_txn_id'] = '';
 
 	if ( $txn_db_row ) {
 		$previous_total = (float) get_post_meta( $txn_db_row->id, 'refunded_amount', true );
@@ -387,6 +388,16 @@ function swpm_save_payment_refund( $txn_db_row, $refund ) {
 		}
 		if ( empty( $refund['subscr_id'] ) && ! empty( $txn_db_row->subscr_id ) ) {
 			$refund['subscr_id'] = $txn_db_row->subscr_id;
+		}
+
+		// The first payment record of a Stripe subscription is saved at checkout, together with the subscription agreement
+		// record. The checkout hooks (example: swpm_payment_ipn_processed) used the transaction ID of the agreement record
+		// (the customer ID), so pass it too (example: an affiliate plugin can find the commission saved with that ID).
+		if ( 'stripe_subscription_first_payment' === get_post_meta( $txn_db_row->id, 'txn_type', true ) && ! empty( $txn_db_row->subscr_id ) ) {
+			$sub_agreement_cpt_id = SWPM_Utils_Subscriptions::get_subscription_agreement_cpt_id_by_subs_id( $txn_db_row->subscr_id );
+			if ( ! empty( $sub_agreement_cpt_id ) ) {
+				$refund['checkout_txn_id'] = (string) get_post_meta( $sub_agreement_cpt_id, 'txn_id', true );
+			}
 		}
 
 		// Full or partial: what the gateway says, otherwise the total refunded compared with the amount paid (full if not known).
@@ -460,6 +471,9 @@ function swpm_trigger_payment_refunded_action( $refund_data ) {
 	 *     @type int    $txn_record_id  ID of the transaction record (0 if none was found).
 	 *     @type string $member_id      ID of the member account (empty if not found).
 	 *     @type string $subscr_id      Subscription ID, when known (for one-time payments, usually the transaction ID; can be empty).
+	 *     @type string $checkout_txn_id Only for the first payment of a Stripe subscription: the transaction ID that the checkout
+	 *                                  hooks (example: swpm_payment_ipn_processed) used for this payment (the customer ID).
+	 *                                  Empty otherwise.
 	 * }
 	 */
 	do_action( 'swpm_payment_refunded', $refund_data );

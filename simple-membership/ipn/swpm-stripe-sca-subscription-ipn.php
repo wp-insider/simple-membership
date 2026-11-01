@@ -248,6 +248,11 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		// Handle the membership signup related tasks.
 		swpm_handle_subsc_signup_stand_alone( $ipn_data, $membership_level_id, $txn_id, $swpm_id );
 
+		// For a new member: only show the paid registration link to the browser that made the payment (the member also gets it by email).
+		if ( ! empty( $ipn_data['member_id'] ) ) {
+			SwpmUtils::set_paid_registration_link_browser_only( $ipn_data['member_id'], $is_checkout_browser );
+		}
+
 		// Save the transaction record
 		SwpmTransactions::save_txn_record( $ipn_data );
 		SwpmLog::log_simple_debug( 'Transaction data saved.', true );

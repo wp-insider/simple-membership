@@ -158,6 +158,7 @@ class SwpmShortcodesHandler {
 		//If user is not-logged in then lets see if there is a pending registration that needs to be completed.
 		$output .= '<div class="swpm-ty-page-registration">';
 		$member_data = SwpmUtils::get_incomplete_paid_member_info_by_ip();
+		$member_by_ip = SwpmMemberUtils::get_user_by_ip_address();
 		if ( $member_data ) {
 			//Found a member profile record for this IP that needs to be completed
 			$reg_page_url      = $settings->get_value( 'registration-page-url' );
@@ -174,8 +175,9 @@ class SwpmShortcodesHandler {
 			$output .= '</div>';
 			//Allow addons to modify the output
 			$output = apply_filters( 'swpm_ty_page_registration_msg_with_link', $output, $rego_complete_url );
-		} else if ( SwpmMemberUtils::get_user_by_ip_address() ) {
+		} else if ( $member_by_ip && ! empty( $member_by_ip->user_name ) ) {
 			//Found a member profile record for this IP but it is not a pending registration
+			//(a pending registration whose link is only shown to the browser that made the payment gets the message below: the link is sent by email).
 			$output .= '<div class="swpm-ty-page-registration-link swpm-found-user-by-ip swpm-yellow-box">';
 			$output .= __( "It looks like you have already completed the registration process. You can now log in to the site and start enjoying your membership benefits.", "simple-membership" );
 			$output .= '</div>';

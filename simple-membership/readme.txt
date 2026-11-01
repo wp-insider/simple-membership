@@ -194,7 +194,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 
 = WIP =
-- Security improvement for the Stripe checkout: the completed checkout session is now retrieved using its ID, and the payment is only applied to the logged-in account (or redirected to the paid registration link) in the browser that started the checkout. Thanks to terminalstate for reporting this.
+- Security improvement for the Stripe checkout: the completed checkout session is now retrieved using its ID, and the payment is only applied to the logged-in account (or redirected to the paid registration link) in the browser that started the checkout. For a new member from a Stripe checkout, the thank you page now only shows the paid registration link in the browser that made the payment (the link is also sent by email). Thanks to terminalstate for reporting this.
 - Fixed an issue where the Force WP User Synchronization feature could log a user out during a two-factor authentication (2FA) login on the WordPress login page (for example, with Wordfence 2FA).
 - Fixed an issue where a subscription renewal payment could change the member's reference to the original subscription checkout transaction record. It now only changes when the member makes a new subscription checkout.
 - Stripe subscriptions: the first payment of a new subscription is now also saved as its own payment record (with the charge ID), in addition to the "subscription created" record. Every subscription charge now has a payment record, and a refund of the first payment can find its record. For a refund of this first payment, the swpm_payment_refunded action data also includes the checkout's transaction ID (checkout_txn_id).

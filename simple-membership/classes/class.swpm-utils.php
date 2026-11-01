@@ -592,10 +592,48 @@ abstract class SwpmUtils {
 			$username = '';
 			$query    = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE last_accessed_from_ip=%s AND user_name=%s ORDER BY member_id DESC';
 			$query    = $wpdb->prepare( $query, $user_ip, $username );
-			$result   = $wpdb->get_row( $query );
-			return $result;
+			$results  = $wpdb->get_results( $query );
+			foreach ( $results as $result ) {
+				//Some paid registration links are only shown to the browser that made the payment (see set_paid_registration_link_browser_only()).
+				if ( self::is_paid_registration_link_allowed_in_this_browser( $result ) ) {
+					return $result;
+				}
+			}
 		}
 		return null;
+	}
+
+	/*
+	 * Makes the paid registration link of a new (incomplete) member available only to the browser that made the payment.
+	 * Used by the checkouts that can identify the buyer's browser (example: Stripe checkout). The member's registration code is saved in a cookie in that browser.
+	 * The members of other checkouts (example: PayPal) are still found using the IP address only.
+	 */
+	public static function set_paid_registration_link_browser_only( $member_id, $is_checkout_browser ) {
+		$member = SwpmMemberUtils::get_user_by_id( $member_id );
+		if ( empty( $member ) || ! empty( $member->user_name ) || empty( $member->reg_code ) ) {
+			//Not a member that needs to complete the paid registration.
+			return;
+		}
+		SwpmMembersMeta::update( $member_id, 'paid_reg_link_browser_only', '1' );
+
+		if ( $is_checkout_browser ) {
+			$secure = is_ssl();
+			setcookie( 'swpm_paid_reg_code', $member->reg_code, time() + WEEK_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
+			//So it can also be used in this request (example: the redirect to the paid registration link after the payment).
+			$_COOKIE['swpm_paid_reg_code'] = $member->reg_code;
+		}
+	}
+
+	public static function is_paid_registration_link_allowed_in_this_browser( $member ) {
+		if ( ! SwpmMembersMeta::get( $member->member_id, 'paid_reg_link_browser_only', true ) ) {
+			//This link can be shown using the IP address only.
+			return true;
+		}
+		$cookie_reg_code = isset( $_COOKIE['swpm_paid_reg_code'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['swpm_paid_reg_code'] ) ) : '';
+		if ( empty( $cookie_reg_code ) || empty( $member->reg_code ) ) {
+			return false;
+		}
+		return hash_equals( (string) $member->reg_code, $cookie_reg_code );
 	}
 
 	public static function account_delete_confirmation_ui( $msg = '' ) {

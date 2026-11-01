@@ -142,6 +142,25 @@ class SwpmTransactions {
 			update_post_meta( $post_id, $key, $value );
 		}
 
+		//Save the trial info of the subscription checkout on the subscription agreement record.
+		//is_trial_txn: 'yes' or 'no' (not saved when unknown). trial_amount: the price of the trial (example: '0' or '0.00' for a free trial), only when is_trial_txn is 'yes'.
+		//Saved here, not with $txn_data, because array_filter() can remove a zero amount.
+		//Not for the PayPal subscription checkout (pp_subscription_new): its trial flag comes from the data sent by the browser.
+		$trial_info_txn_types = array( 'stripe_subscription_new', 'pp_std_subscription_new' );
+		if ( isset( $ipn_data['txn_type'] ) && in_array( $ipn_data['txn_type'], $trial_info_txn_types, true ) ) {
+			$is_trial_txn = isset( $ipn_data['is_trial_txn'] ) ? $ipn_data['is_trial_txn'] : '';
+			if ( $is_trial_txn === 'yes' || $is_trial_txn === 'no' ) {
+				update_post_meta( $post_id, 'is_trial_txn', $is_trial_txn );
+			}
+			if ( $is_trial_txn === 'yes' && isset( $ipn_data['trial_amount'] ) ) {
+				if ( is_numeric( $ipn_data['trial_amount'] ) && $ipn_data['trial_amount'] >= 0 ) {
+					update_post_meta( $post_id, 'trial_amount', (string) $ipn_data['trial_amount'] );
+				} else {
+					SwpmLog::log_simple_debug( 'The trial amount is not valid. It is not saved. Value: ' . $ipn_data['trial_amount'], false );
+				}
+			}
+		}
+
         //Trigger the action hook.
 		do_action( 'swpm_txn_record_saved', $txn_data, $db_row_id, $post_id );
 

@@ -340,8 +340,14 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 		if(isset($incoming_ipn_data['amount1'])){
 			$sub_created_ipn_data['mc_gross'] = $incoming_ipn_data['amount1'];
 			$sub_created_ipn_data['is_trial_txn'] = 'yes';
+			//The price of the trial ('0.00' for a free trial). Saved on the subscription agreement record.
+			$sub_created_ipn_data['trial_amount'] = $incoming_ipn_data['amount1'];
 		}else{
 			$sub_created_ipn_data['mc_gross'] = isset($incoming_ipn_data['amount3']) ? $incoming_ipn_data['amount3'] : 0;
+			//No trial, unless PayPal sent other trial fields (then it stays unknown).
+			if ( ! isset( $incoming_ipn_data['mc_amount1'] ) && ! isset( $incoming_ipn_data['period1'] ) ) {
+				$sub_created_ipn_data['is_trial_txn'] = 'no';
+			}
 		}
 		$sub_created_ipn_data['mc_currency'] = isset($incoming_ipn_data['mc_currency']) ? $incoming_ipn_data['mc_currency'] : '';
 		$sub_created_ipn_data['quantity'] = 1;

@@ -204,6 +204,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added refund details (full or partial, amounts) to the data passed to the swpm_deactivate_account_on_refund filter.
 - Added the swpm_transactions_page_columns and swpm_transactions_page_column_{column_name} filter hooks to add columns to the payments list.
 - Added the SwpmMiscUtils::get_countries_list() function so addons can reuse the plugin's country list instead of keeping their own copy. The get_countries_dropdown() function now builds its output from it. Added the swpm_countries_list filter hook.
+- The trial info of a new subscription (trial or not, and the trial amount) is now saved on its subscription agreement record (Stripe and PayPal Standard subscriptions).
 - Thanks to Th0masL for contributing the PayPal, refund and payments list changes in this release.
 
 = 4.8.6 =

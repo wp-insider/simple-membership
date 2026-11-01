@@ -27,6 +27,7 @@ class SwpmStripeSCASubscriptionIpnHandler {
 
 		// Read and sanitize the request parameters.
 		$ref_id = isset( $_GET['ref_id'] ) ? sanitize_text_field( stripslashes ( $_GET['ref_id'] ) ) : '';
+		$session_id = isset( $_GET['session_id'] ) ? sanitize_text_field( stripslashes ( $_GET['session_id'] ) ) : '';
 
 		if ( empty( $ref_id ) ) {
 			//no ref id provided, cannot proceed
@@ -69,22 +70,32 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		try {
 			\Stripe\Stripe::setApiKey( $api_keys['secret'] );
 
-			$events = \Stripe\Event::all(
-				array(
-					'type'    => 'checkout.session.completed',
-					'created' => array(
-						'gte' => time() - 60 * 60,
-					),
-				)
-			);
-
 			$sess = false;
 
-			foreach ( $events->autoPagingIterator() as $event ) {
-				$session = $event->data->object;
-				if ( isset( $session->client_reference_id ) && $session->client_reference_id === $ref_id ) {
+			if ( ! empty( $session_id ) ) {
+				//Retrieve the checkout session using the session ID from the return URL.
+				$session = \Stripe\Checkout\Session::retrieve( $session_id );
+				if ( isset( $session->client_reference_id ) && $session->client_reference_id === $ref_id && isset( $session->status ) && $session->status === 'complete' ) {
 					$sess = $session;
-					break;
+				}
+			} else {
+				//Return URL without the session ID (a checkout started before the session ID was added to the return URL).
+				//Find the session in the completed checkout sessions of the last hour.
+				$events = \Stripe\Event::all(
+					array(
+						'type'    => 'checkout.session.completed',
+						'created' => array(
+							'gte' => time() - 60 * 60,
+						),
+					)
+				);
+
+				foreach ( $events->autoPagingIterator() as $event ) {
+					$session = $event->data->object;
+					if ( isset( $session->client_reference_id ) && $session->client_reference_id === $ref_id ) {
+						$sess = $session;
+						break;
+					}
 				}
 			}
 
@@ -94,6 +105,13 @@ class SwpmStripeSCASubscriptionIpnHandler {
 				SwpmLog::log_simple_debug( $error_msg, false );
 				wp_die( esc_html( $error_msg ) );
 				return;
+			}
+
+			//Check if the return URL is opened in the browser that started the checkout.
+			require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php';
+			$is_checkout_browser = StripeUtilFunctions::is_checkout_from_this_browser( $sess->client_reference_id, $button_id );
+			if ( ! $is_checkout_browser ) {
+				SwpmLog::log_simple_debug( 'The return URL was not opened in the browser that started the checkout. The payment will be processed, but it will not be applied to the logged-in account (if any) and the paid registration link will not be shown.', true );
 			}
 
 			$sub_id = isset( $sess->subscription ) ? $sess->subscription : '';
@@ -158,11 +176,16 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		$stripe_email = $customer->email;
 
 		$user_ip = SwpmUtils::get_user_ip_address();
+		if ( ! $is_checkout_browser ) {
+			//Not the browser that started the checkout. Use the buyer's IP address saved with the session (the IP address is used to show the paid registration link).
+			$user_ip = isset( $sess->metadata->swpm_user_ip ) ? sanitize_text_field( $sess->metadata->swpm_user_ip ) : '';
+		}
 
 		//Custom field data
 		$custom_field_value  = 'subsc_ref=' . $membership_level_id;
 		$custom_field_value .= '&user_ip=' . $user_ip;
-		if ( SwpmMemberUtils::is_member_logged_in() ) {
+		if ( $is_checkout_browser && SwpmMemberUtils::is_member_logged_in() ) {
+			//Apply the payment to the logged-in account (only in the browser that started the checkout).
 			$custom_field_value .= '&swpm_id=' . SwpmMemberUtils::get_logged_in_members_id();
 		}
 		$custom_field_value = apply_filters( 'swpm_custom_field_value_filter', $custom_field_value );
@@ -238,6 +261,16 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		do_action( 'swpm_payment_ipn_processed', $ipn_data );
 
 		SwpmLog::log_simple_debug( 'End of Stripe SCA Subscription IPN processing.', true, true );
+
+		if ( ! $is_checkout_browser ) {
+			//Not the browser that started the checkout. Don't redirect to the paid registration link (the member gets it by email). Redirect to the return URL.
+			$return_url = get_post_meta( $button_id, 'return_url', true );
+			if ( empty( $return_url ) ) {
+				$return_url = SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL;
+			}
+			SwpmMiscUtils::redirect_to_url( $return_url );
+			return;
+		}
 
 		// Redirect the user to the registration URL or return URL (or to the homepage if a return URL is not specified for this payment button).
 		SwpmMiscUtils::handle_after_payment_redirect( $button_id );

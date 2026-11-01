@@ -123,9 +123,12 @@ class SwpmStripeCheckoutSessionCreate{
 				$automatic_tax = true;
 		}
 
-		//Generate a reference ID for this Stripe transaction
-		$hashed_ip = md5($user_ip);
-		$ref_id = 'swpm_' . $hashed_ip . '|' . $button_id;
+		//Generate a reference ID for this Stripe transaction.
+		//It contains a random token that is also saved in a cookie in this browser. On return from Stripe, the token must match
+		//before the payment is applied to the logged-in account or the paid registration link is shown (see StripeUtilFunctions).
+		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php';
+		$checkout_token = StripeUtilFunctions::create_checkout_browser_token( $button_id );
+		$ref_id = 'swpm_' . $checkout_token . '|' . $button_id;
 
 		//URL-encode the ref_id before embedding it in the success_url. The raw value contains a pipe (|) character
 		//which is not URL-legal, so it can get dropped/mangled in transit on the return from Stripe (resulting in a
@@ -134,11 +137,13 @@ class SwpmStripeCheckoutSessionCreate{
 		$ref_id_for_url = rawurlencode( $ref_id );
 
 		//Return, cancel, notifiy URLs.
+		//Stripe replaces {CHECKOUT_SESSION_ID} with the ID of the checkout session, so the session can be retrieved directly on return.
 		if ( empty( $plan_id ) ) {
 			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_buy_now=1&ref_id=%s', $ref_id_for_url );
 		} else {
 			$notify_url = sprintf( SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_sca_subscription=1&ref_id=%s', $ref_id_for_url );
 		}
+		$notify_url .= '&session_id={CHECKOUT_SESSION_ID}';
 
 		//The url to redirect to when user clicks on the back button in the stripe sca buy now button checkout page. If no url set, there will be no back button.
 		$cancel_url = get_post_meta( $button_id, 'cancel_url', true );
@@ -231,7 +236,10 @@ class SwpmStripeCheckoutSessionCreate{
 			$opts['managed_payments'] = array(
 				'enabled' => false,
 			);
-			
+
+			//Save the buyer's IP address with the session. It is used when the return URL is not opened in this browser.
+			$opts['metadata']['swpm_user_ip'] = $user_ip;
+
 			$opts = apply_filters( 'swpm_stripe_sca_session_opts', $opts, $button_id );
 
 			$session = \Stripe\Checkout\Session::create( $opts );

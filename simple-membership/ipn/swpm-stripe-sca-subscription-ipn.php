@@ -227,6 +227,17 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		$ipn_data['txn_type']		  = 'stripe_subscription_new';//Can be used to find sub-created type transactions.
 		$ipn_data['status']           = 'subscription created';
 
+		//Trial info of this checkout (saved on the subscription agreement record). The trial of this checkout (trial_period_days) is free.
+		//A trial that starts with the subscription is the checkout's trial. A trial added later doesn't tell if the checkout had one, so nothing is set.
+		//Missing fields in the subscription data leave it unknown.
+		$sub_fields = $sub->toArray();
+		if ( array_key_exists( 'trial_start', $sub_fields ) && empty( $sub_fields['trial_start'] ) ) {
+			$ipn_data['is_trial_txn'] = 'no';
+		} elseif ( ! empty( $sub_fields['trial_start'] ) && ! empty( $sub_fields['start_date'] ) && (int) $sub_fields['trial_start'] === (int) $sub_fields['start_date'] ) {
+			$ipn_data['is_trial_txn'] = 'yes';
+			$ipn_data['trial_amount'] = '0';
+		}
+
 		$bd_addr = $pm->billing_details->address;
 
 		$ipn_data['address_street']  = isset( $bd_addr->line1 ) ? $bd_addr->line1 : '';

@@ -10,14 +10,21 @@ class StripeUtilFunctions {
      * and in the session's client_reference_id (format: swpm_<token>|<button_id>). When the buyer returns from Stripe, the
      * token in the cookie must match, so the payment is only applied to the account (and paid registration link) of the browser that started the checkout.
      */
-    public static function get_checkout_browser_token_cookie_name($button_id) {
-        return 'swpm_stripe_checkout_' . absint($button_id);
+    public static function get_checkout_browser_token_cookie_name($button_id, $token = '') {
+        $cookie_name = 'swpm_stripe_checkout_' . absint($button_id);
+        //Each checkout needs its own cookie, even when several tabs use the same button.
+        //Hash the reference token to keep the cookie name short and safe for HTTP headers.
+        //An omitted token returns the old name for checkouts started before this change.
+        if ($token !== '') {
+            $cookie_name .= '_' . hash('sha256', $token);
+        }
+        return $cookie_name;
     }
 
     public static function create_checkout_browser_token($button_id) {
         $token = wp_generate_password(32, false);
         $secure = is_ssl();
-        setcookie(self::get_checkout_browser_token_cookie_name($button_id), $token, time() + DAY_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure, true);
+        setcookie(self::get_checkout_browser_token_cookie_name($button_id, $token), $token, time() + DAY_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure, true);
         return $token;
     }
 
@@ -26,7 +33,13 @@ class StripeUtilFunctions {
         $ref_parts = explode('|', (string) $client_reference_id);
         $token = (strpos($ref_parts[0], 'swpm_') === 0) ? substr($ref_parts[0], 5) : '';
 
-        $cookie_name = self::get_checkout_browser_token_cookie_name($button_id);
+        //Check this checkout's cookie first. Starting another checkout must not revoke it.
+        $cookie_name = self::get_checkout_browser_token_cookie_name($button_id, $token);
+        if (!isset($_COOKIE[$cookie_name])) {
+            //Accept the per-button cookie for a checkout already in progress during an update.
+            //New checkouts never write that cookie, so they cannot overwrite an older checkout's token.
+            $cookie_name = self::get_checkout_browser_token_cookie_name($button_id);
+        }
         $cookie_token = isset($_COOKIE[$cookie_name]) ? sanitize_text_field(wp_unslash($_COOKIE[$cookie_name])) : '';
 
         if (empty($token) || empty($cookie_token)) {

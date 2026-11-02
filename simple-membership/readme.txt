@@ -194,6 +194,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 
 = WIP =
+- Stripe checkout: starting another checkout with the same payment button no longer overwrites the browser token for an earlier checkout. Each checkout now has its own cookie, preserving browser verification when returning from either checkout.
 - Security improvement for the Stripe checkout: the completed checkout session is now retrieved using its ID, and the payment is only applied to the logged-in account (or redirected to the paid registration link) in the browser that started the checkout. For a new member from a Stripe checkout, the thank you page now only shows the paid registration link in the browser that made the payment (the link is also sent by email). Thanks to terminalstate for reporting this.
 - Fixed an issue where the Force WP User Synchronization feature could log a user out during a two-factor authentication (2FA) login on the WordPress login page (for example, with Wordfence 2FA).
 - Fixed an issue where a subscription renewal payment could change the member's reference to the original subscription checkout transaction record. It now only changes when the member makes a new subscription checkout.

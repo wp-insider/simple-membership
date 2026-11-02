@@ -249,7 +249,8 @@ class SwpmStripeCheckoutSessionCreate{
 		}
 
         SwpmLog::log_simple_debug( 'Stripe SCA checkout session created successfully.', true );
-		wp_send_json( array( 'session_id' => $session->id ) );
+		//The session URL is used to redirect to the checkout page (the redirectToCheckout method is not available in newer Stripe.js versions). The session ID is kept for the fallback.
+		wp_send_json( array( 'session_id' => $session->id, 'session_url' => $session->url ) );
 	}
 
 }

@@ -205,6 +205,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added the swpm_transactions_page_columns and swpm_transactions_page_column_{column_name} filter hooks to add columns to the payments list.
 - Added the SwpmMiscUtils::get_countries_list() function so addons can reuse the plugin's country list instead of keeping their own copy. The get_countries_dropdown() function now builds its output from it. Added the swpm_countries_list filter hook.
 - The trial info of a new subscription (trial or not, and the trial amount) is now saved on its subscription agreement record (Stripe and PayPal Standard subscriptions).
+- Stripe Checkout buttons now redirect to the checkout page using the Checkout Session URL, for compatibility with newer Stripe.js versions (Clover) loaded by other plugins or themes.
 - Thanks to Th0masL for contributing the PayPal, refund and payments list changes in this release.
 
 = 4.8.6 =

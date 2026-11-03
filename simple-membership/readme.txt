@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.8.6
+Stable tag: 4.8.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -193,12 +193,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
-- Security improvement for the Stripe checkout: the completed checkout session is now retrieved using its ID, and the payment is only applied to the logged-in account (or redirected to the paid registration link) in the browser that started the checkout. For a new member from a Stripe checkout, the thank you page now only shows the paid registration link in the browser that made the payment (the link is also sent by email). Thanks to terminalstate for reporting this.
-- Fixed an issue where the Force WP User Synchronization feature could log a user out during a two-factor authentication (2FA) login on the WordPress login page (for example, with Wordfence 2FA).
-- Fixed an issue where a subscription renewal payment could change the member's reference to the original subscription checkout transaction record. It now only changes when the member makes a new subscription checkout.
+= 4.8.7 =
 - Stripe subscriptions: the first payment of a new subscription is now also saved as its own payment record (with the charge ID), in addition to the "subscription created" record. Every subscription charge now has a payment record, and a refund of the first payment can find its record. For a refund of this first payment, the swpm_payment_refunded action data also includes the checkout's transaction ID (checkout_txn_id).
-- Fixed an issue where a PayPal subscription renewal payment could be saved with the wrong amount (for example, when the webhook arrived late). The amount from the webhook event is now saved.
 - Partial refunds are now shown as 'Partially Refunded' in the payments list (Stripe, PayPal PPCP and PayPal Standard). PayPal Standard refunds now also update the transaction's status.
 - Added the swpm_payment_refunded action hook. It fires when a payment is fully or partially refunded (Stripe, PayPal PPCP and PayPal Standard).
 - Added refund details (full or partial, amounts) to the data passed to the swpm_deactivate_account_on_refund filter.
@@ -206,6 +202,10 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Added the SwpmMiscUtils::get_countries_list() function so addons can reuse the plugin's country list instead of keeping their own copy. The get_countries_dropdown() function now builds its output from it. Added the swpm_countries_list filter hook.
 - The trial info of a new subscription (trial or not, and the trial amount) is now saved on its subscription agreement record (Stripe and PayPal Standard subscriptions).
 - Stripe Checkout buttons now redirect to the checkout page using the Checkout Session URL, for compatibility with newer Stripe.js versions (Clover) loaded by other plugins or themes.
+- Security improvement for the Stripe checkout: the completed checkout session is now retrieved using its ID, and the payment is only applied to the logged-in account (or redirected to the paid registration link) in the browser that started the checkout. For a new member from a Stripe checkout, the thank you page now only shows the paid registration link in the browser that made the payment (the link is also sent by email). Thanks to terminalstate for reporting this.
+- Fixed an issue where a PayPal subscription renewal payment could be saved with the wrong amount (for example, when the webhook arrived late). The amount from the webhook event is now saved.
+- Fixed an issue where the Force WP User Synchronization feature could log a user out during a two-factor authentication (2FA) login on the WordPress login page (for example, with Wordfence 2FA).
+- Fixed an issue where a subscription renewal payment could change the member's reference to the original subscription checkout transaction record. It now only changes when the member makes a new subscription checkout.
 - Thanks to Th0masL for contributing the PayPal, refund and payments list changes in this release.
 
 = 4.8.6 =

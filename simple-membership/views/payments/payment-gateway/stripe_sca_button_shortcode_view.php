@@ -97,6 +97,16 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	<script>
         document.addEventListener('DOMContentLoaded', function (){
             const swpmStripeSCAPaymentFrom = document.getElementById('swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>');
+
+            // Re-enable the button when the page is restored from the browser's back/forward cache (example: the browser's Back button on the Stripe checkout page).
+            window.addEventListener('pageshow', function (e){
+                if (e.persisted) {
+                    swpmStripeSCAPaymentFrom?.querySelectorAll('button, input[type="image"]').forEach(function (el){
+                        el.removeAttribute('disabled');
+                    });
+                }
+            });
+
             swpmStripeSCAPaymentFrom?.addEventListener('submit', async function (e){
                 e.preventDefault();
 
@@ -108,7 +118,8 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 
                 submitBUtton?.setAttribute('disabled', true);
 
-                const stripe_js_obj = <?php echo $stripe_js_obj;?>;
+                // The Stripe object may not exist if Stripe.js failed to load. It is only needed for the fallback redirect.
+                const stripe_js_obj = typeof <?php echo $stripe_js_obj;?> !== 'undefined' ? <?php echo $stripe_js_obj;?> : null;
                 const request_url = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
                 const payload = new URLSearchParams({
                     action: 'swpm_stripe_sca_create_checkout_session',
@@ -134,11 +145,23 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
                     response = await response.json();
 
                     if (!response.error) {
-                        stripe_js_obj.redirectToCheckout({
-                            sessionId: response.session_id
-                        }).then(function (result) {
-                            //
-                        });
+                        if (response.session_url) {
+                            // Redirect to the Checkout Session URL (Stripe's recommended way. The redirectToCheckout method is not available in newer Stripe.js versions).
+                            window.location.href = response.session_url;
+                        } else if (response.session_id && stripe_js_obj && typeof stripe_js_obj.redirectToCheckout === 'function') {
+                            // Fallback for older Stripe.js versions.
+                            stripe_js_obj.redirectToCheckout({
+                                sessionId: response.session_id
+                            }).then(function (result) {
+                                if (result && result.error) {
+                                    alert(result.error.message);
+                                    submitBUtton?.removeAttribute('disabled');
+                                }
+                            });
+                        } else {
+                            alert("Error! Could not redirect to the Stripe checkout page.");
+                            submitBUtton?.removeAttribute('disabled');
+                        }
                     } else {
                         alert(response.error);
                         submitBUtton?.removeAttribute('disabled');
@@ -280,6 +303,16 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	<script>
         document.addEventListener('DOMContentLoaded', function (){
             const swpmStripeScaSubsPaymentFrom = document.getElementById('swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>');
+
+            // Re-enable the button when the page is restored from the browser's back/forward cache (example: the browser's Back button on the Stripe checkout page).
+            window.addEventListener('pageshow', function (e){
+                if (e.persisted) {
+                    swpmStripeScaSubsPaymentFrom?.querySelectorAll('button, input[type="image"]').forEach(function (el){
+                        el.removeAttribute('disabled');
+                    });
+                }
+            });
+
             swpmStripeScaSubsPaymentFrom?.addEventListener('submit', async function (e){
                 e.preventDefault();
 
@@ -291,7 +324,8 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 
                 submitBUtton?.setAttribute('disabled', true);
 
-	            const stripe_js_obj = <?php echo $stripe_js_obj;?>;
+	            // The Stripe object may not exist if Stripe.js failed to load. It is only needed for the fallback redirect.
+	            const stripe_js_obj = typeof <?php echo $stripe_js_obj;?> !== 'undefined' ? <?php echo $stripe_js_obj;?> : null;
                 const request_url = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
                 const payload = new URLSearchParams({
                     action: 'swpm_stripe_sca_create_checkout_session',
@@ -318,11 +352,23 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
                     response = await response.json();
 
                     if (!response.error) {
-                        stripe_js_obj.redirectToCheckout({
-                            sessionId: response.session_id
-                        }).then(function (result) {
-                            //
-                        });
+                        if (response.session_url) {
+                            // Redirect to the Checkout Session URL (Stripe's recommended way. The redirectToCheckout method is not available in newer Stripe.js versions).
+                            window.location.href = response.session_url;
+                        } else if (response.session_id && stripe_js_obj && typeof stripe_js_obj.redirectToCheckout === 'function') {
+                            // Fallback for older Stripe.js versions.
+                            stripe_js_obj.redirectToCheckout({
+                                sessionId: response.session_id
+                            }).then(function (result) {
+                                if (result && result.error) {
+                                    alert(result.error.message);
+                                    submitBUtton?.removeAttribute('disabled');
+                                }
+                            });
+                        } else {
+                            alert("Error! Could not redirect to the Stripe checkout page.");
+                            submitBUtton?.removeAttribute('disabled');
+                        }
                     } else {
                         alert(response.error);
                         submitBUtton?.removeAttribute('disabled');

@@ -124,11 +124,11 @@ class SwpmStripeCheckoutSessionCreate{
 		}
 
 		//Generate a reference ID for this Stripe transaction.
-		//It contains a random token that is also saved in a cookie in this browser. On return from Stripe, the token must match
+		//It contains the hash of a random token that is saved in a cookie in this browser. On return from Stripe, the token must match
 		//before the payment is applied to the logged-in account or the paid registration link is shown (see StripeUtilFunctions).
 		require_once SIMPLE_WP_MEMBERSHIP_PATH . 'lib/stripe-util-functions.php';
-		$checkout_token = StripeUtilFunctions::create_checkout_browser_token( $button_id );
-		$ref_id = 'swpm_' . $checkout_token . '|' . $button_id;
+		$checkout_token_hash = StripeUtilFunctions::create_checkout_browser_token( $button_id );
+		$ref_id = 'swpm_' . $checkout_token_hash . '|' . $button_id;
 
 		//URL-encode the ref_id before embedding it in the success_url. The raw value contains a pipe (|) character
 		//which is not URL-legal, so it can get dropped/mangled in transit on the return from Stripe (resulting in a
@@ -249,7 +249,8 @@ class SwpmStripeCheckoutSessionCreate{
 		}
 
         SwpmLog::log_simple_debug( 'Stripe SCA checkout session created successfully.', true );
-		wp_send_json( array( 'session_id' => $session->id ) );
+		//The session URL is used to redirect to the checkout page (the redirectToCheckout method is not available in newer Stripe.js versions). The session ID is kept for the fallback.
+		wp_send_json( array( 'session_id' => $session->id, 'session_url' => $session->url ) );
 	}
 
 }

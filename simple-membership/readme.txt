@@ -193,6 +193,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Fixed comment protection not applying to the Comment Content block in block themes (for example, Twenty Twenty-Five).
+
 = 4.8.7 =
 - Stripe subscriptions: the first payment of a new subscription is now also saved as its own payment record (with the charge ID), in addition to the "subscription created" record. Every subscription charge now has a payment record, and a refund of the first payment can find its record. For a refund of this first payment, the swpm_payment_refunded action data also includes the checkout's transaction ID (checkout_txn_id).
 - Partial refunds are now shown as 'Partially Refunded' in the payments list (Stripe, PayPal PPCP and PayPal Standard). PayPal Standard refunds now also update the transaction's status.

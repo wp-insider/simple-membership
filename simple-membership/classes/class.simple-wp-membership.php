@@ -70,7 +70,7 @@ class SimpleWpMembership {
         add_filter('the_content', array(&$this, 'filter_content'), 20, 1);
         add_filter('widget_text', 'do_shortcode');
         add_filter('show_admin_bar', array(&$this, 'hide_adminbar'));
-        add_filter('comment_text', array(&$this, 'filter_comment'));
+        add_filter('comment_text', array(&$this, 'filter_comment'), 10, 2);
         add_filter('comment_form_defaults', array('SwpmCommentFormRelated', 'customize_comment_fields'));
         add_filter('wp_get_attachment_url', array(&$this, 'filter_attachment_url'), 10, 2);
         add_filter('wp_get_attachment_metadata', array(&$this, 'filter_attachment'), 10, 2);
@@ -864,15 +864,18 @@ class SimpleWpMembership {
         return $enable_protection;
     }
 
-    public function filter_comment($content) {
+    public function filter_comment($content, $comment = null) {
         if (is_admin()) {
             //Do not apply filtering for admin side viewing
             return $content;
         }
 
+        //Use the comment passed by the filter (the Comment Content block of block themes doesn't set the global $comment).
+        //Fallback to the global $comment for callers that don't pass the comment object.
+        $the_comment = is_a($comment, 'WP_Comment') ? $comment : (isset($GLOBALS['comment']) ? $GLOBALS['comment'] : null);
+
         $acl = SwpmAccessControl::get_instance();
-        global $comment;
-        return $acl->filter_comment($comment, $content);
+        return $acl->filter_comment($the_comment, $content);
     }
 
     public function filter_content($content) {

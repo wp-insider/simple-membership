@@ -160,6 +160,21 @@ class SwpmTransactions {
 			}
 		}
 
+		//PayPal subscription checkout: save the payment reported at checkout on the agreement record. A later sale webhook is matched to it.
+		//See SWPM_PayPal_Webhook_Event_Handler::get_checkout_payment_classification().
+		if ( isset( $ipn_data['txn_type'] ) && $ipn_data['txn_type'] === 'pp_subscription_new' ) {
+			foreach ( array( 'checkout_payment_time', 'checkout_payment_amount', 'checkout_payment_currency', 'checkout_last_payment_absent' ) as $key ) {
+				if ( isset( $ipn_data[ $key ] ) && is_string( $ipn_data[ $key ] ) && $ipn_data[ $key ] !== '' ) {
+					update_post_meta( $post_id, $key, $ipn_data[ $key ] );
+				}
+			}
+		}
+
+		//PayPal subscription payment: is it the payment of the checkout? 'checkout', 'after_checkout' or 'unknown'.
+		if ( isset( $ipn_data['txn_type'] ) && $ipn_data['txn_type'] === 'pp_subscription_sale_completed_webhook' && isset( $ipn_data['checkout_payment'] ) && in_array( $ipn_data['checkout_payment'], array( 'checkout', 'after_checkout', 'unknown' ), true ) ) {
+			update_post_meta( $post_id, 'checkout_payment', $ipn_data['checkout_payment'] );
+		}
+
         //Trigger the action hook.
 		do_action( 'swpm_txn_record_saved', $txn_data, $db_row_id, $post_id );
 

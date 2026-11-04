@@ -11,6 +11,9 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 	//The trial info of the checkout, from the PayPal API data (set when the validation passes).
 	public $verified_trial_info = array();
 
+	//The payment reported at checkout, from the PayPal API data (set when the validation passes).
+	public $checkout_payment_info = array();
+
 	public function __construct() {
 		//Handle it at 'wp_loaded' since custom post types will also be available at that point.
 		add_action( 'wp_loaded', array(&$this, 'setup_ajax_request_actions' ) );
@@ -235,6 +238,13 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		//Use the trial info from the PayPal API data instead of the browser data. It is left out when it is not known.
 		unset( $this->ipn_data['is_trial_txn'], $this->ipn_data['trial_amount'] );
 		$this->ipn_data = array_merge( $this->ipn_data, $this->verified_trial_info );
+
+		//The payment reported at checkout. It is saved on the agreement record, so the sale webhook of this payment can be matched to this checkout.
+		//When no payment is reported, the amount used for the checkout (mc_gross) must also be 0.
+		if ( isset( $this->checkout_payment_info['checkout_last_payment_absent'] ) && SWPM_PayPal_Utility_Functions::normalize_amount( (string) $this->ipn_data['mc_gross'] ) !== '0' ) {
+			$this->checkout_payment_info = array();
+		}
+		$this->ipn_data = array_merge( $this->ipn_data, $this->checkout_payment_info );
 
 		//Process the IPN data array
 		SwpmLog::log_simple_debug( 'Validation passed. Going to create/update member account and save transaction data.', true );
@@ -511,7 +521,58 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 				$this->verified_trial_info['trial_amount'] = is_numeric( $trial_amount ) ? $trial_amount : '0';
 			}
 		}
+
+		$this->checkout_payment_info = $this->get_checkout_payment_info( $sub_details, $billing_info );
 		return true;
+	}
+
+	/**
+	 * Gets the payment reported at checkout, from the subscription details of the PayPal API.
+	 * Returns checkout_payment_time, checkout_payment_amount and checkout_payment_currency (the last_payment of the first billing cycle),
+	 * or checkout_last_payment_absent = 'yes' (a trial with no payment reported), or an empty array when it is not clear.
+	 * Only for a subscription that does not report subscription-level plan overrides (plan_overridden false). SM plans have no setup fee.
+	 */
+	public function get_checkout_payment_info( $sub_details, $billing_info ) {
+		if ( ! isset( $sub_details->plan_overridden ) || $sub_details->plan_overridden !== false || ! is_array( $billing_info ) ) {
+			return array();
+		}
+
+		//Exactly one billing cycle must be completed: the first one.
+		$executions = isset( $billing_info['cycle_executions'] ) ? $billing_info['cycle_executions'] : null;
+		if ( ! is_array( $executions ) || empty( $executions ) ) {
+			return array();
+		}
+		$cycles_completed = 0;
+		$trial_cycles_completed = 0;
+		foreach ( $executions as $execution ) {
+			if ( ! isset( $execution['tenure_type'], $execution['cycles_completed'] ) || ! in_array( $execution['tenure_type'], array( 'TRIAL', 'REGULAR' ), true ) || ! is_int( $execution['cycles_completed'] ) || $execution['cycles_completed'] < 0 ) {
+				return array();
+			}
+			$cycles_completed += $execution['cycles_completed'];
+			if ( $execution['tenure_type'] === 'TRIAL' ) {
+				$trial_cycles_completed += $execution['cycles_completed'];
+			}
+		}
+		if ( $cycles_completed !== 1 ) {
+			return array();
+		}
+
+		if ( ! array_key_exists( 'last_payment', $billing_info ) ) {
+			//No payment reported. Only kept for a trial.
+			return $trial_cycles_completed === 1 ? array( 'checkout_last_payment_absent' => 'yes' ) : array();
+		}
+
+		$time = isset( $billing_info['last_payment']['time'] ) ? $billing_info['last_payment']['time'] : null;
+		$amount = isset( $billing_info['last_payment']['amount']['value'] ) ? $billing_info['last_payment']['amount']['value'] : null;
+		$currency = isset( $billing_info['last_payment']['amount']['currency_code'] ) ? $billing_info['last_payment']['amount']['currency_code'] : '';
+		if ( SWPM_PayPal_Utility_Functions::get_timestamp_from_paypal_time( $time ) === false || SWPM_PayPal_Utility_Functions::normalize_amount( $amount ) === false || ! is_string( $currency ) || $currency === '' ) {
+			return array();
+		}
+		return array(
+			'checkout_payment_time' => $time,
+			'checkout_payment_amount' => $amount,
+			'checkout_payment_currency' => $currency,
+		);
 	}
 
 }

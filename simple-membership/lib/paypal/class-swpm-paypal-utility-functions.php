@@ -245,4 +245,92 @@ class SWPM_PayPal_Utility_Functions{
         //add_action( 'admin_notices', array( $this, 'show_webhooks_admin_notice' ) );
     }
 
+	/**
+	 * Normalizes a PayPal amount (example: '10.0' and '10.00' both give '10'), so two amounts can be compared exactly.
+	 * Returns false when the value is not a decimal number of zero or more.
+	 */
+	public static function normalize_amount( $value ) {
+		if ( ! is_string( $value ) || ! preg_match( '/\A[0-9]+(?:\.[0-9]+)?\z/', $value ) ) {
+			return false;
+		}
+		if ( strpos( $value, '.' ) !== false ) {
+			$value = rtrim( rtrim( $value, '0' ), '.' );
+		}
+		$value = ltrim( $value, '0' );
+		if ( $value === '' || $value[0] === '.' ) {
+			$value = '0' . $value;
+		}
+		return $value;
+	}
+
+	/**
+	 * Converts a PayPal time (example: '2026-11-02T03:01:53Z') to a Unix timestamp, so two times can be compared exactly.
+	 * Fractions of a second are only accepted when they are zero (example: '.000Z'). Returns false for any other value.
+	 */
+	public static function get_timestamp_from_paypal_time( $value ) {
+		if ( ! is_string( $value ) || ! preg_match( '/\A(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?(?:Z|([+-])(\d{2}):(\d{2}))\z/', $value, $m ) ) {
+			return false;
+		}
+		if ( isset( $m[7] ) && $m[7] !== '' && trim( $m[7], '0' ) !== '' ) {
+			return false;
+		}
+		$year = (int) $m[1];
+		$month = (int) $m[2];
+		$day = (int) $m[3];
+		$hour = (int) $m[4];
+		$minute = (int) $m[5];
+		$second = (int) $m[6];
+		if ( ! checkdate( $month, $day, $year ) || $hour > 23 || $minute > 59 || $second > 59 ) {
+			return false;
+		}
+		$offset = 0;
+		if ( isset( $m[8] ) && $m[8] !== '' ) {
+			$offset_hours = (int) $m[9];
+			$offset_minutes = (int) $m[10];
+			if ( $offset_hours > 23 || $offset_minutes > 59 ) {
+				return false;
+			}
+			$offset = ( $offset_hours * 3600 + $offset_minutes * 60 ) * ( $m[8] === '-' ? -1 : 1 );
+		}
+		return gmmktime( $hour, $minute, $second, $month, $day, $year ) - $offset;
+	}
+
+	/**
+	 * Gets the subscription agreement record (txn_type 'pp_subscription_new') of a PayPal subscription checkout.
+	 * Found by the transaction type, not by the status (the status is saved translated).
+	 * $mode: 'production' or 'sandbox' (the environment of the verified webhook). The record must be for that environment.
+	 * Returns the record's post ID, or 0 when there is no record, more than one, it is for the other environment, or the mode is not valid.
+	 */
+	public static function get_subscription_checkout_agreement_record_id( $subscr_id, $mode ) {
+		if ( empty( $subscr_id ) || ! in_array( $mode, array( 'production', 'sandbox' ), true ) ) {
+			return 0;
+		}
+		$record_ids = get_posts( array(
+			'post_type' => 'swpm_transactions',
+			'posts_per_page' => 2,
+			'fields' => 'ids',
+			'meta_query' => array(
+				array( 'key' => 'subscr_id', 'value' => $subscr_id, 'compare' => '=' ),
+				array( 'key' => 'txn_type', 'value' => 'pp_subscription_new', 'compare' => '=' ),
+			),
+		) );
+		if ( count( $record_ids ) !== 1 ) {
+			return 0;
+		}
+		$is_live = get_post_meta( $record_ids[0], 'is_live', true );
+		if ( $is_live !== ( $mode === 'production' ? 'yes' : 'no' ) ) {
+			return 0;
+		}
+		return (int) $record_ids[0];
+	}
+
+	/**
+	 * Gets the sale IDs matched to the payment of a PayPal subscription checkout (the 'checkout_sale_id' meta of the agreement record).
+	 * Normally zero or one. More than one means a conflict: then none of them can be used.
+	 */
+	public static function get_checkout_sale_ids( $agreement_record_id ) {
+		$sale_ids = get_post_meta( $agreement_record_id, 'checkout_sale_id', false );
+		return array_values( array_unique( array_map( 'strval', (array) $sale_ids ) ) );
+	}
+
 }

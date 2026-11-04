@@ -353,7 +353,8 @@ function swpm_add_refund_to_transaction( $txn_db_row, $refund_id, $refund_amount
  * $refund keys: gateway ('stripe' or 'paypal'), txn_id (the refunded payment), refund_id (ID of this refund, used to
  * ignore repeated notifications), refund_amount (this refund), total_refunded (total so far, when the gateway sends it),
  * currency, is_full_refund (when the gateway says it; otherwise the total is compared with the amount paid), subscr_id,
- * member_id (when the notification gives it; the member ID of the transaction record is used first).
+ * member_id (when the notification gives it; the member ID of the transaction record is used first), paypal_mode (PayPal
+ * webhooks: 'production' or 'sandbox', the environment of the verified webhook; not returned).
  */
 function swpm_save_payment_refund( $txn_db_row, $refund ) {
 	$refund = wp_parse_args( $refund, array(
@@ -366,7 +367,10 @@ function swpm_save_payment_refund( $txn_db_row, $refund ) {
 		'is_full_refund' => null,
 		'subscr_id'      => '',
 		'member_id'      => '',
+		'paypal_mode'    => '',
 	) );
+	$paypal_mode = $refund['paypal_mode'];
+	unset( $refund['paypal_mode'] );
 	$refund['refund_amount']   = round( abs( (float) $refund['refund_amount'] ), 2 );
 	$refund['payment_amount']  = '';
 	$refund['txn_record_id']   = 0;
@@ -398,6 +402,12 @@ function swpm_save_payment_refund( $txn_db_row, $refund ) {
 			if ( ! empty( $sub_agreement_cpt_id ) ) {
 				$refund['checkout_txn_id'] = (string) get_post_meta( $sub_agreement_cpt_id, 'txn_id', true );
 			}
+		}
+
+		// The same for a PayPal subscription (PPCP): the checkout hooks used the order ID of the agreement record. Only for the sale
+		// matched to the payment reported at checkout (not for a renewal).
+		if ( 'pp_subscription_sale_completed_webhook' === get_post_meta( $txn_db_row->id, 'txn_type', true ) ) {
+			$refund['checkout_txn_id'] = SWPM_PayPal_Webhook_Event_Handler::get_checkout_txn_id_for_refunded_sale( $txn_db_row, $refund['txn_id'], $paypal_mode );
 		}
 
 		// Full or partial: what the gateway says, otherwise the total refunded compared with the amount paid (full if not known).
@@ -471,9 +481,10 @@ function swpm_trigger_payment_refunded_action( $refund_data ) {
 	 *     @type int    $txn_record_id  ID of the transaction record (0 if none was found).
 	 *     @type string $member_id      ID of the member account (empty if not found).
 	 *     @type string $subscr_id      Subscription ID, when known (for one-time payments, usually the transaction ID; can be empty).
-	 *     @type string $checkout_txn_id Only for the first payment of a Stripe subscription: the transaction ID that the checkout
-	 *                                  hooks (example: swpm_payment_ipn_processed) used for this payment (the customer ID).
-	 *                                  Empty otherwise.
+	 *     @type string $checkout_txn_id Only for the payment made at the checkout of a subscription: the transaction ID that the
+	 *                                  checkout hooks (example: swpm_payment_ipn_processed) used for this payment. Stripe: the
+	 *                                  first payment (the customer ID). PayPal subscription (PPCP): the sale matched to the saved
+	 *                                  checkout payment (the order ID). Empty otherwise.
 	 * }
 	 */
 	do_action( 'swpm_payment_refunded', $refund_data );

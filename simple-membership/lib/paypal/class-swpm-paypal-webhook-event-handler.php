@@ -225,6 +225,9 @@ class SWPM_PayPal_Webhook_Event_Handler {
 				self::send_error_response_and_exit();
 			}
 
+			//Is this the payment of the subscription checkout? Set before the hooks run, and saved with the transaction.
+			$ipn_data['checkout_payment'] = self::get_checkout_payment_classification( $event, $mode );
+
 			//Update the "Access starts date" of the member account to the current date.
 			swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
 
@@ -312,7 +315,11 @@ class SWPM_PayPal_Webhook_Event_Handler {
 			'currency'       => sanitize_text_field( ! empty( $refund_currency ) ? $refund_currency : ( isset( $event['resource']['amount']['currency'] ) ? $event['resource']['amount']['currency'] : '' ) ),
 			// Without the total refunded so far, the payment is marked "Refunded" (as before).
 			'is_full_refund' => $has_total ? null : true,
+			'paypal_mode'    => $mode,
 		) );
+		if ( empty( $txn_db_row ) && $payment_status === 'sale_refunded' ) {
+			SwpmLog::log_simple_debug( 'Refund: no transaction record found for the refunded PayPal subscription payment. The checkout transaction ID is not passed. Sale ID: ' . $orig_capture_txn_id, true );
+		}
 		$ipn_data['refund_saved'] = true;
 		// For the swpm_deactivate_account_on_refund filter: full or partial, amounts.
 		$ipn_data['refund_data'] = $refund_data;
@@ -369,6 +376,111 @@ class SWPM_PayPal_Webhook_Event_Handler {
 		$ipn_data['status'] = 'Completed';
 
 		return $ipn_data;
+	}
+
+	/**
+	 * Is this sale the payment of the subscription checkout? Returns 'checkout', 'after_checkout' or 'unknown', and logs the reason.
+	 * 'checkout': the sale matches the payment reported at checkout (same time, amount and currency). Its ID is then saved on the
+	 * agreement record ('checkout_sale_id'), once.
+	 * 'after_checkout': another sale is already matched to the checkout, or the checkout was a free trial with no payment reported.
+	 * 'unknown': anything else (example: an older checkout, or a renewal processed before the checkout's sale).
+	 * Supported: subscriptions of SM plans (no setup fee) without plan changes, with the payment made at approval.
+	 */
+	public static function get_checkout_payment_classification( $event, $mode ) {
+		$subscription_id = isset( $event['resource']['billing_agreement_id'] ) ? $event['resource']['billing_agreement_id'] : '';
+		$sale_id = isset( $event['resource']['id'] ) ? (string) $event['resource']['id'] : '';
+		$value = 'unknown';
+
+		$agreement_id = SWPM_PayPal_Utility_Functions::get_subscription_checkout_agreement_record_id( $subscription_id, $mode );
+		if ( $sale_id === '' ) {
+			$reason = 'no sale ID';
+		} else if ( empty( $agreement_id ) ) {
+			$reason = 'no agreement record for this subscription and mode (or more than one)';
+		} else {
+			$sale_time = SWPM_PayPal_Utility_Functions::get_timestamp_from_paypal_time( isset( $event['resource']['create_time'] ) ? $event['resource']['create_time'] : null );
+			$sale_amount = SWPM_PayPal_Utility_Functions::normalize_amount( isset( $event['resource']['amount']['total'] ) ? $event['resource']['amount']['total'] : null );
+			$sale_currency = isset( $event['resource']['amount']['currency'] ) ? (string) $event['resource']['amount']['currency'] : '';
+			$checkout_time = SWPM_PayPal_Utility_Functions::get_timestamp_from_paypal_time( get_post_meta( $agreement_id, 'checkout_payment_time', true ) );
+			$checkout_amount = SWPM_PayPal_Utility_Functions::normalize_amount( get_post_meta( $agreement_id, 'checkout_payment_amount', true ) );
+			$checkout_currency = (string) get_post_meta( $agreement_id, 'checkout_payment_currency', true );
+
+			$sale_valid = ( $sale_time !== false && $sale_amount !== false && $sale_currency !== '' );
+			$checkout_valid = ( $checkout_time !== false && $checkout_amount !== false && $checkout_currency !== '' );
+			$same_payment = ( $sale_valid && $checkout_valid && $sale_time === $checkout_time && $sale_amount === $checkout_amount && $sale_currency === $checkout_currency );
+			$bound_sale_ids = SWPM_PayPal_Utility_Functions::get_checkout_sale_ids( $agreement_id );
+
+			if ( count( $bound_sale_ids ) > 1 ) {
+				$reason = 'more than one sale is matched to the checkout';
+			} else if ( count( $bound_sale_ids ) === 1 ) {
+				if ( $bound_sale_ids[0] === $sale_id ) {
+					$value = 'checkout';
+					$reason = 'this sale is matched to the checkout';
+				} else if ( ! $sale_valid || ! $checkout_valid ) {
+					$reason = 'another sale is matched to the checkout, but the time or amount of this sale or of the checkout payment is not valid';
+				} else if ( $same_payment || $sale_time < $checkout_time ) {
+					$reason = 'another sale is matched to the checkout, and this sale conflicts with the checkout payment';
+				} else {
+					$value = 'after_checkout';
+					$reason = 'another sale is matched to the checkout';
+				}
+			} else if ( get_post_meta( $agreement_id, 'checkout_last_payment_absent', true ) === 'yes' ) {
+				//No payment was reported at checkout. A free trial: every sale comes after the checkout.
+				$is_free_trial = get_post_meta( $agreement_id, 'is_trial_txn', true ) === 'yes' && SWPM_PayPal_Utility_Functions::normalize_amount( (string) get_post_meta( $agreement_id, 'trial_amount', true ) ) === '0';
+				if ( $is_free_trial ) {
+					$value = 'after_checkout';
+					$reason = 'free trial, no payment reported at checkout';
+				} else {
+					$reason = 'no payment reported at checkout, and it is not a free trial';
+				}
+			} else if ( $same_payment ) {
+				//Save this sale ID on the agreement record (only if none is saved), then read it again.
+				add_post_meta( $agreement_id, 'checkout_sale_id', $sale_id, true );
+				if ( SWPM_PayPal_Utility_Functions::get_checkout_sale_ids( $agreement_id ) === array( $sale_id ) ) {
+					$value = 'checkout';
+					$reason = 'this sale matches the payment reported at checkout';
+				} else {
+					$reason = 'this sale matches the payment reported at checkout, but it could not be saved as the checkout sale';
+				}
+			} else if ( ! $checkout_valid ) {
+				$reason = 'no valid payment saved at checkout';
+			} else {
+				$reason = 'this sale does not match the payment reported at checkout';
+			}
+		}
+
+		SwpmLog::log_simple_debug( 'Checkout payment: ' . $value . ' (' . $reason . '). Sale ID: ' . $sale_id . ', Subscription ID: ' . $subscription_id, true );
+		return $value;
+	}
+
+	/**
+	 * Gets the order ID used by the checkout hooks, for a refund of a PayPal subscription payment (txn_type 'pp_subscription_sale_completed_webhook').
+	 * Only when the refunded sale is the sale matched to the payment reported at checkout. Otherwise returns an empty string, and logs why.
+	 */
+	public static function get_checkout_txn_id_for_refunded_sale( $txn_db_row, $sale_id, $mode ) {
+		$sale_id = (string) $sale_id;
+		$agreement_id = SWPM_PayPal_Utility_Functions::get_subscription_checkout_agreement_record_id( isset( $txn_db_row->subscr_id ) ? $txn_db_row->subscr_id : '', $mode );
+		if ( empty( $agreement_id ) ) {
+			$reason = 'no agreement record for this subscription and mode (or more than one)';
+		} else {
+			$bound_sale_ids = SWPM_PayPal_Utility_Functions::get_checkout_sale_ids( $agreement_id );
+			$order_id = (string) get_post_meta( $agreement_id, 'txn_id', true );
+			if ( empty( $bound_sale_ids ) ) {
+				$reason = 'no sale is matched to the checkout';
+			} else if ( count( $bound_sale_ids ) > 1 ) {
+				$reason = 'more than one sale is matched to the checkout';
+			} else if ( $bound_sale_ids[0] !== $sale_id ) {
+				$reason = 'another sale is matched to the checkout';
+			} else if ( get_post_meta( $txn_db_row->id, 'checkout_payment', true ) === 'after_checkout' ) {
+				$reason = 'this sale was saved as after_checkout';
+			} else if ( $order_id === '' ) {
+				$reason = 'the order ID of the checkout is empty';
+			} else {
+				SwpmLog::log_simple_debug( 'Refund: this sale is the checkout payment. Checkout transaction ID (order ID): ' . $order_id . '. Sale ID: ' . $sale_id, true );
+				return $order_id;
+			}
+		}
+		SwpmLog::log_simple_debug( 'Refund: the checkout transaction ID is not passed (' . $reason . '). Sale ID: ' . $sale_id, true );
+		return '';
 	}
 
 	public static function is_sale_completed_webhook_already_processed( $event ){

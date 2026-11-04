@@ -8,6 +8,9 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 
 	public $ipn_data  = array();
 
+	//The trial info of the checkout, from the PayPal API (set when the validation passes).
+	public $verified_trial_info = array();
+
 	public function __construct() {
 		//Handle it at 'wp_loaded' since custom post types will also be available at that point.
 		add_action( 'wp_loaded', array(&$this, 'setup_ajax_request_actions' ) );
@@ -229,6 +232,10 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 			exit;
 		}
 
+		//Use the trial info from the PayPal API instead of the browser data. It is left out when it is not known.
+		unset( $this->ipn_data['is_trial_txn'], $this->ipn_data['trial_amount'] );
+		$this->ipn_data = array_merge( $this->ipn_data, $this->verified_trial_info );
+
 		//Process the IPN data array
 		SwpmLog::log_simple_debug( 'Validation passed. Going to create/update member account and save transaction data.', true );
 		SWPM_PayPal_Utility_IPN_Related::create_membership_and_save_txn_data( $data, $txn_data, $this->ipn_data );
@@ -397,7 +404,8 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 
 		//This is for on-site checkout only. So the 'mode' and API creds will be whatever is currently set in the settings.
 		$api_injector = new SWPM_PayPal_Request_API_Injector();
-		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id );
+		//Also get the subscription's plan. It is used for the trial info.
+		$sub_details = $api_injector->get_paypal_subscription_details( $subscription_id, array( 'fields' => 'plan' ) );
 		if( $sub_details !== false ){
 
 			// Check if plan id mismatch.
@@ -492,7 +500,89 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		}
 
 		//All good. The data is valid.
+		$this->verified_trial_info = $this->get_trial_info_from_subscription_details( $sub_details, $billing_info );
 		return true;
+	}
+
+	/**
+	 * Gets the trial info of the checkout from the subscription details (requested with fields=plan).
+	 * Returns array( 'is_trial_txn' => 'yes' or 'no', 'trial_amount' => price of the trial ), or an empty array when it is not known.
+	 * trial_amount is only set when the price is verified: '0' for a free trial (a TRIAL cycle with no pricing_scheme).
+	 */
+	public function get_trial_info_from_subscription_details( $sub_details, $billing_info ) {
+		$subscription_id = isset( $sub_details->id ) ? $sub_details->id : '';
+
+		//The cycles that have run so far (TRIAL and/or REGULAR).
+		$executions = isset( $billing_info['cycle_executions'] ) ? $billing_info['cycle_executions'] : null;
+		$execution_types = SWPM_PayPal_Utility_Functions::get_tenure_types( $executions );
+		$executions_have_trial = ( $execution_types === false ) ? null : in_array( 'TRIAL', $execution_types, true );
+
+		$plan = isset( $sub_details->plan ) ? json_decode( json_encode( $sub_details->plan ), true ) : null;
+		$billing_cycles = isset( $plan['billing_cycles'] ) ? $plan['billing_cycles'] : null;
+		$cycle_types = SWPM_PayPal_Utility_Functions::get_tenure_types( $billing_cycles );
+
+		if ( empty( $plan ) ) {
+			//No plan in the response. Only the cycles that have run are available, so the trial price is not known.
+			//At checkout, the cycles that have run include the trial cycle when there is one.
+			SwpmLog::log_simple_debug( 'The subscription plan is not available. The trial price is not saved. Subscription ID: ' . $subscription_id, true );
+			if ( $executions_have_trial === null ) {
+				return array();
+			}
+			return array( 'is_trial_txn' => $executions_have_trial ? 'yes' : 'no' );
+		}
+
+		if ( $cycle_types === false ) {
+			SwpmLog::log_simple_debug( 'The billing cycles of the subscription plan are not valid. The trial info is not saved. Subscription ID: ' . $subscription_id, false );
+			return array();
+		}
+
+		$trial_cycles = array();
+		foreach ( $billing_cycles as $cycle ) {
+			if ( $cycle['tenure_type'] === 'TRIAL' ) {
+				$trial_cycles[] = $cycle;
+			}
+		}
+
+		if ( $executions_have_trial === null || $executions_have_trial !== ! empty( $trial_cycles ) ) {
+			SwpmLog::log_simple_debug( 'The subscription plan and the cycles that have run do not agree about the trial. The trial info is not saved. Subscription ID: ' . $subscription_id, false );
+			return array();
+		}
+
+		if ( empty( $trial_cycles ) ) {
+			return array( 'is_trial_txn' => 'no' );
+		}
+
+		if ( count( $trial_cycles ) > 1 ) {
+			//More than one trial cycle. There is no single trial price.
+			SwpmLog::log_simple_debug( 'The subscription plan has more than one trial cycle. The trial price is not saved. Subscription ID: ' . $subscription_id, true );
+			return array( 'is_trial_txn' => 'yes' );
+		}
+
+		$trial_cycle = $trial_cycles[0];
+		$last_payment = isset( $billing_info['last_payment'] ) ? $billing_info['last_payment'] : null;
+
+		if ( ! array_key_exists( 'pricing_scheme', $trial_cycle ) ) {
+			//A free trial. No payment should be reported at checkout.
+			if ( is_array( $billing_info ) && array_key_exists( 'last_payment', $billing_info ) ) {
+				SwpmLog::log_simple_debug( 'The trial is free but a payment is reported. The trial price is not saved. Subscription ID: ' . $subscription_id, false );
+				return array( 'is_trial_txn' => 'yes' );
+			}
+			return array( 'is_trial_txn' => 'yes', 'trial_amount' => '0' );
+		}
+
+		//A paid trial. The price in the plan must be the payment made at checkout.
+		$trial_price = isset( $trial_cycle['pricing_scheme']['fixed_price'] ) ? $trial_cycle['pricing_scheme']['fixed_price'] : array();
+		$trial_value = SWPM_PayPal_Utility_Functions::normalize_amount( isset( $trial_price['value'] ) ? $trial_price['value'] : null );
+		$trial_currency = isset( $trial_price['currency_code'] ) ? $trial_price['currency_code'] : '';
+		$paid_value = SWPM_PayPal_Utility_Functions::normalize_amount( isset( $last_payment['amount']['value'] ) ? $last_payment['amount']['value'] : null );
+		$paid_currency = isset( $last_payment['amount']['currency_code'] ) ? $last_payment['amount']['currency_code'] : '';
+
+		if ( $trial_value === false || $paid_value === false || $trial_value !== $paid_value || empty( $trial_currency ) || $trial_currency !== $paid_currency ) {
+			SwpmLog::log_simple_debug( 'The trial price could not be verified with the payment made at checkout. The trial price is not saved. Subscription ID: ' . $subscription_id, false );
+			return array( 'is_trial_txn' => 'yes' );
+		}
+
+		return array( 'is_trial_txn' => 'yes', 'trial_amount' => $trial_price['value'] );
 	}
 
 }

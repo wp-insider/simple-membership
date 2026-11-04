@@ -225,10 +225,10 @@ class SWPM_PayPal_Request_API_Injector {
         /*
          * Show the details of a paypal subscription.
          * https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_get
+         * $params: optional query parameters. Example: array( 'fields' => 'plan' ) also returns the subscription's plan (billing cycles and payment preferences).
          */
-        public function get_paypal_subscription_details( $sub_id ){
+        public function get_paypal_subscription_details( $sub_id, $params = array() ){
             $endpoint = '/v1/billing/subscriptions/' . $sub_id;
-            $params = array();
             $response = $this->paypal_req_api->get($endpoint, $params);
             if ( $response !== false){
                 $sub_details = $response;

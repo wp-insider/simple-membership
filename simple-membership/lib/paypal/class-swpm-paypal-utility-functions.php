@@ -245,4 +245,39 @@ class SWPM_PayPal_Utility_Functions{
         //add_action( 'admin_notices', array( $this, 'show_webhooks_admin_notice' ) );
     }
 
+	/**
+	 * Returns the tenure types ('TRIAL' or 'REGULAR') of a list of billing cycles, or false when the list is missing, empty or has an unknown entry.
+	 */
+	public static function get_tenure_types( $cycles ) {
+		if ( ! is_array( $cycles ) || empty( $cycles ) ) {
+			return false;
+		}
+		$types = array();
+		foreach ( $cycles as $cycle ) {
+			if ( ! isset( $cycle['tenure_type'] ) || ! in_array( $cycle['tenure_type'], array( 'TRIAL', 'REGULAR' ), true ) ) {
+				return false;
+			}
+			$types[] = $cycle['tenure_type'];
+		}
+		return $types;
+	}
+
+	/**
+	 * Normalizes a PayPal amount (example: '2.0' and '2.00' both give '2'), so two amounts can be compared exactly.
+	 * Returns false when the value is not a decimal number of zero or more.
+	 */
+	public static function normalize_amount( $value ) {
+		if ( ! is_string( $value ) || ! preg_match( '/\A[0-9]+(?:\.[0-9]+)?\z/', $value ) ) {
+			return false;
+		}
+		if ( strpos( $value, '.' ) !== false ) {
+			$value = rtrim( rtrim( $value, '0' ), '.' );
+		}
+		$value = ltrim( $value, '0' );
+		if ( $value === '' || $value[0] === '.' ) {
+			$value = '0' . $value;
+		}
+		return $value;
+	}
+
 }

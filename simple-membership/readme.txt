@@ -195,6 +195,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 = WIP =
 - Fixed comment protection not applying to the Comment Content block in block themes (for example, Twenty Twenty-Five).
+- The trial info of a new subscription (trial or not, and the trial amount) is now also saved on the subscription agreement record for the PayPal (PPCP) subscription checkout. It uses the subscription data from the PayPal API.
+- Thanks to Th0masL for contributing the subscription trial info changes in this release.
 
 = 4.8.7 =
 - Stripe subscriptions: the first payment of a new subscription is now also saved as its own payment record (with the charge ID), in addition to the "subscription created" record. Every subscription charge now has a payment record, and a refund of the first payment can find its record. For a refund of this first payment, the swpm_payment_refunded action data also includes the checkout's transaction ID (checkout_txn_id).

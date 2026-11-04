@@ -8,6 +8,9 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 
 	public $ipn_data  = array();
 
+	//The trial info of the checkout, from the PayPal API data (set when the validation passes).
+	public $verified_trial_info = array();
+
 	public function __construct() {
 		//Handle it at 'wp_loaded' since custom post types will also be available at that point.
 		add_action( 'wp_loaded', array(&$this, 'setup_ajax_request_actions' ) );
@@ -229,6 +232,10 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 			exit;
 		}
 
+		//Use the trial info from the PayPal API data instead of the browser data. It is left out when it is not known.
+		unset( $this->ipn_data['is_trial_txn'], $this->ipn_data['trial_amount'] );
+		$this->ipn_data = array_merge( $this->ipn_data, $this->verified_trial_info );
+
 		//Process the IPN data array
 		SwpmLog::log_simple_debug( 'Validation passed. Going to create/update member account and save transaction data.', true );
 		SWPM_PayPal_Utility_IPN_Related::create_membership_and_save_txn_data( $data, $txn_data, $this->ipn_data );
@@ -301,7 +308,7 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		$ipn['mc_gross'] = isset($txn_data['billing_info']['last_payment']['amount']['value']) ? sanitize_text_field($txn_data['billing_info']['last_payment']['amount']['value']) : 0;
 		$ipn['mc_currency'] = isset($txn_data['billing_info']['last_payment']['amount']['currency_code']) ? sanitize_text_field($txn_data['billing_info']['last_payment']['amount']['currency_code']) : '';
 		if( $this->is_trial_payment( $billing_info )){
-			//TODO: May need to get the trial amount from the 'cycle_executions' array
+			//This value is from the browser data. It is replaced by the trial info from the PayPal API data after the validation.
 			$ipn['is_trial_txn'] = 'yes';
 		}
 		$ipn['quantity'] = 1;
@@ -492,6 +499,18 @@ class SWPM_PayPal_Button_Sub_Ajax_Hander {
 		}
 
 		//All good. The data is valid.
+
+		//The trial info of this checkout, from the PayPal API data (not the browser data). The subscription's plan is this button's plan (checked above),
+		//so the button's trial amount is the price of the trial (a paid trial amount was also checked above).
+		$executions = isset( $billing_info['cycle_executions'] ) && is_array( $billing_info['cycle_executions'] ) ? $billing_info['cycle_executions'] : array();
+		if ( ! empty( $executions ) ) {
+			$has_trial = in_array( 'TRIAL', array_column( $executions, 'tenure_type' ), true );
+			$this->verified_trial_info = array( 'is_trial_txn' => $has_trial ? 'yes' : 'no' );
+			if ( $has_trial ) {
+				$trial_amount = trim( (string) get_post_meta( $button_id, 'trial_billing_amount', true ) );
+				$this->verified_trial_info['trial_amount'] = is_numeric( $trial_amount ) ? $trial_amount : '0';
+			}
+		}
 		return true;
 	}
 

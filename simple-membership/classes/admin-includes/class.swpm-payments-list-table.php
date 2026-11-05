@@ -182,11 +182,13 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		if ( ! is_numeric( $post_id ) ) {
 			wp_die( __('Error! ID must be numeric.', 'simple-membership') );
 		}
+		// Get the row ID of the old custom swpm_payments_tbl table first. Deleting the post (below) also deletes its post meta.
+		$db_row_id = get_post_meta($post_id, 'db_row_id', true);
+
 		// Delete the record form posts table
 		$deletion_result = wp_delete_post( $post_id, true );
 
 		// Delete the record from old custom swpm_payments_tbl table as well (if exists).
-		$db_row_id = get_post_meta($post_id, 'db_row_id', true);
 		if (!empty($db_row_id)) {
 			global $wpdb;
 			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'swpm_payments_tbl WHERE id = %d', $db_row_id ) );

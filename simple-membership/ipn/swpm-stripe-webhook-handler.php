@@ -151,6 +151,17 @@ class SwpmStripeWebhookHandler {
 					}
 				}
 
+				//Several sites can use the same Stripe account (each with its own webhook endpoint), and Stripe sends every event to every endpoint.
+				//Ignore the renewal of a subscription that was not created on this site, so no payment record (without a member) is saved here.
+				//The 'swpm_stripe_webhook_skip_unknown_subscription' filter can be used to turn this check off (return false).
+				if ( ! empty( $sub_id ) && apply_filters( 'swpm_stripe_webhook_skip_unknown_subscription', true, $sub_id, $event_json ) ) {
+					if ( ! self::is_subscription_created_on_this_site( $sub_id ) ) {
+						SwpmLog::log_simple_debug( 'Subscription ' . $sub_id . ' was not created on this site. Ignoring this renewal event.', true );
+						http_response_code( 200 ); // Tells Stripe we received this notification
+						exit();
+					}
+				}
+
 				//$cust_id = $event_json->data->object->billing_reason;
 				//$date = $event_json->data->object->date;
 				$price_in_cents = $event_json->data->object->amount_paid; //amount in cents
@@ -274,6 +285,31 @@ class SwpmStripeWebhookHandler {
 			'is_full_refund' => ! empty( $charge->refunded ),
 			'subscr_id'      => $subscr_id,
 		);
+	}
+
+	/**
+	 * Checks if the subscription was created on this site: its checkout transaction record exists, or a member has this subscription ID.
+	 * The checkout record is any record of the subscription except the renewal payments (status 'subscription'), since older versions
+	 * saved it with the status 'completed' or 'stripe subscription created' (now 'subscription created').
+	 * The renewal payment records are not used, because older versions also saved the renewals of other sites' subscriptions.
+	 */
+	public static function is_subscription_created_on_this_site( $sub_id ) {
+		$record_ids = get_posts( array(
+			'post_type'      => 'swpm_transactions',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'meta_query'     => array(
+				array( 'key' => 'subscr_id', 'value' => $sub_id, 'compare' => '=' ),
+			),
+		) );
+		foreach ( $record_ids as $record_id ) {
+			if ( strtolower( (string) get_post_meta( $record_id, 'status', true ) ) !== 'subscription' ) {
+				return true;
+			}
+		}
+
+		//The checkout record may have been deleted. A member with this subscription ID also means it was created on this site.
+		return SwpmMemberUtils::get_user_by_subsriber_id( $sub_id ) ? true : false;
 	}
 
 	public static function get_charge_id_from_event_data( $event_json ) {

@@ -198,7 +198,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - The trial info of a new subscription (trial or not, and the trial amount) is now also saved on the subscription agreement record for the PayPal (PPCP) subscription checkout. It uses the subscription data from the PayPal API.
 - Stripe: a subscription renewal payment notification for a subscription that was not created on this site is now ignored (for example, when two sites use the same Stripe account). It no longer saves a payment record without a member. Added the swpm_stripe_webhook_skip_unknown_subscription filter hook to turn this check off.
 - Fixed an issue where deleting a payment record from the payments menu did not delete its row in the old payments database table.
-- Thanks to Th0masL for contributing the subscription trial info changes in this release.
+- PayPal subscriptions (PPCP): for a refund of the payment made at checkout, the swpm_payment_refunded action data now also includes the checkout's transaction ID (checkout_txn_id, the order ID), the same as for Stripe subscriptions.
+- Thanks to Th0masL for contributing the subscription trial info and refund changes in this release.
 
 = 4.8.7 =
 - Stripe subscriptions: the first payment of a new subscription is now also saved as its own payment record (with the charge ID), in addition to the "subscription created" record. Every subscription charge now has a payment record, and a refund of the first payment can find its record. For a refund of this first payment, the swpm_payment_refunded action data also includes the checkout's transaction ID (checkout_txn_id).

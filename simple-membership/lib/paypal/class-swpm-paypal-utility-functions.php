@@ -245,4 +245,63 @@ class SWPM_PayPal_Utility_Functions{
         //add_action( 'admin_notices', array( $this, 'show_webhooks_admin_notice' ) );
     }
 
+	/**
+	 * For a refund of a PayPal subscription (PPCP) payment: gets the order ID that the checkout hooks used (the txn_id of the agreement record),
+	 * if the refunded payment is the payment made at checkout. Otherwise returns an empty string.
+	 * The payment made at checkout is the first sale record of the subscription (a renewal comes a billing cycle later),
+	 * unless the checkout was a free trial (then the first sale is the payment after the trial).
+	 */
+	public static function get_checkout_txn_id_if_first_sale( $txn_db_row ) {
+		$subscr_id = isset( $txn_db_row->subscr_id ) ? $txn_db_row->subscr_id : '';
+		if ( empty( $subscr_id ) || empty( $txn_db_row->id ) ) {
+			return '';
+		}
+
+		//The subscription agreement record of the checkout (there must be only one).
+		$agreement_ids = get_posts( array(
+			'post_type'      => 'swpm_transactions',
+			'posts_per_page' => 2,
+			'fields'         => 'ids',
+			'meta_query'     => array(
+				array( 'key' => 'subscr_id', 'value' => $subscr_id, 'compare' => '=' ),
+				array( 'key' => 'txn_type', 'value' => 'pp_subscription_new', 'compare' => '=' ),
+			),
+		) );
+		if ( count( $agreement_ids ) !== 1 ) {
+			return '';
+		}
+		$agreement_id = $agreement_ids[0];
+
+		//A free trial: no payment was made at checkout.
+		$trial_amount = get_post_meta( $agreement_id, 'trial_amount', true );
+		if ( get_post_meta( $agreement_id, 'is_trial_txn', true ) === 'yes' && is_numeric( $trial_amount ) && (float) $trial_amount == 0 ) {
+			return '';
+		}
+
+		//The refunded payment must be the first sale record of the subscription.
+		$first_sale_ids = get_posts( array(
+			'post_type'      => 'swpm_transactions',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'orderby'        => 'ID',
+			'order'          => 'ASC',
+			'meta_query'     => array(
+				array( 'key' => 'subscr_id', 'value' => $subscr_id, 'compare' => '=' ),
+				array( 'key' => 'txn_type', 'value' => 'pp_subscription_sale_completed_webhook', 'compare' => '=' ),
+			),
+		) );
+		if ( empty( $first_sale_ids ) || (int) $first_sale_ids[0] !== (int) $txn_db_row->id ) {
+			return '';
+		}
+
+		//It must also be saved within a day of the checkout (for older checkouts without the trial info, a first sale after a free trial is later).
+		$agreement_time = strtotime( get_post_field( 'post_date_gmt', $agreement_id ) );
+		$sale_time      = strtotime( get_post_field( 'post_date_gmt', $txn_db_row->id ) );
+		if ( empty( $agreement_time ) || empty( $sale_time ) || abs( $sale_time - $agreement_time ) > DAY_IN_SECONDS ) {
+			return '';
+		}
+
+		return (string) get_post_meta( $agreement_id, 'txn_id', true );
+	}
+
 }

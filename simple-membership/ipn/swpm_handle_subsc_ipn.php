@@ -400,6 +400,12 @@ function swpm_save_payment_refund( $txn_db_row, $refund ) {
 			}
 		}
 
+		// The same for a PayPal subscription (PPCP): the checkout hooks used the order ID of the agreement record.
+		// Only for the payment made at checkout (the first payment of the subscription, not the first payment after a free trial).
+		if ( 'pp_subscription_sale_completed_webhook' === get_post_meta( $txn_db_row->id, 'txn_type', true ) && ! empty( $txn_db_row->subscr_id ) ) {
+			$refund['checkout_txn_id'] = SWPM_PayPal_Utility_Functions::get_checkout_txn_id_if_first_sale( $txn_db_row );
+		}
+
 		// Full or partial: what the gateway says, otherwise the total refunded compared with the amount paid (full if not known).
 		$paid = is_numeric( $refund['payment_amount'] ) ? round( (float) $refund['payment_amount'], 2 ) : 0;
 		if ( null === $refund['is_full_refund'] ) {
@@ -471,9 +477,10 @@ function swpm_trigger_payment_refunded_action( $refund_data ) {
 	 *     @type int    $txn_record_id  ID of the transaction record (0 if none was found).
 	 *     @type string $member_id      ID of the member account (empty if not found).
 	 *     @type string $subscr_id      Subscription ID, when known (for one-time payments, usually the transaction ID; can be empty).
-	 *     @type string $checkout_txn_id Only for the first payment of a Stripe subscription: the transaction ID that the checkout
-	 *                                  hooks (example: swpm_payment_ipn_processed) used for this payment (the customer ID).
-	 *                                  Empty otherwise.
+	 *     @type string $checkout_txn_id Only for the payment made at the checkout of a subscription: the transaction ID that the
+	 *                                  checkout hooks (example: swpm_payment_ipn_processed) used for this payment. Stripe: the
+	 *                                  first payment (the customer ID). PayPal subscription (PPCP): the first payment, when it
+	 *                                  was paid at checkout (the order ID). Empty otherwise.
 	 * }
 	 */
 	do_action( 'swpm_payment_refunded', $refund_data );

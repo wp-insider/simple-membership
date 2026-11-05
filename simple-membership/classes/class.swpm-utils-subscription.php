@@ -957,7 +957,7 @@ class SWPM_Utils_Subscriptions
 
         // Check if record exits.
         if (empty($cpt_id)) {
-            SwpmLog::log_simple_debug("Subscription agreement record not found for subscription ID: " . $subscr_id . ". Nothing to update.", false);
+            SwpmLog::log_simple_debug("Subscription agreement record not found for subscription ID: " . $subscr_id . ". Nothing to update.", true);
             return;
         }
 

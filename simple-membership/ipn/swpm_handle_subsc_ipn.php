@@ -797,7 +797,9 @@ function swpm_send_subscription_renewal_notification_email( $member_id, $ipn_dat
 		//PayPal also sends its first payment through the shared recurring-payment handler.
 		$previous = SwpmTransactions::get_transaction_row_by_subscr_id( $subscription_id, true );
 		$created_statuses = array( 'subscription created', strtolower( __( 'subscription created', 'simple-membership' ) ) );
-		if ( empty( $previous ) || in_array( strtolower( $previous->status ?? '' ), $created_statuses, true ) ) {
+		//The txn_type is also checked, in case the site language changed since the agreement record was saved.
+		$agreement_txn_types = array( 'pp_subscription_new', 'pp_std_subscription_new' );
+		if ( empty( $previous ) || in_array( strtolower( $previous->status ?? '' ), $created_statuses, true ) || in_array( $previous->txn_type ?? '', $agreement_txn_types, true ) ) {
 			return;
 		}
 	} elseif ( $txn_type !== 'recurring_payment' ) {
@@ -917,7 +919,9 @@ function swpm_is_paypal_recurring_payment($payment_data){
         swpm_debug_log_subsc('Is recurring payment check debug data: ' . $item_number . "|" . $subscr_id, true);
 
         $result = SwpmTransactions::get_transaction_row_by_subscr_id($subscr_id, true);
-        if (isset($result) && strtolower($result->status) != 'subscription created') {
+        //The subscription agreement record is not a payment. Its status is saved translated, so the txn_type is checked too.
+        $is_sub_agreement_record = isset($result) && ( strtolower($result->status) == 'subscription created' || ( isset($result->txn_type) && $result->txn_type == 'pp_std_subscription_new' ) );
+        if (isset($result) && !$is_sub_agreement_record) {
             swpm_debug_log_subsc('This subscr_id exists in the transactions db. Recurring payment check flag value is true.', true);
             $recurring_payment = true;
             return $recurring_payment;

@@ -221,7 +221,9 @@ function swpm_show_edit_txn_form($post)
     $subscr_status = get_post_meta($post_id, 'subscr_status', true);
 
     $is_subscr_agreement_post = false;
-    if ($status == 'subscription created' && in_array($gateway_raw, array('stripe-sca-subs', 'paypal_subscription_checkout'))){
+    //The status of the PayPal subscription agreement record is saved translated, so the txn_type is checked too.
+    $is_sub_agreement_txn_type = in_array($txn_type_raw, array('stripe_subscription_new', 'pp_subscription_new'), true);
+    if (($status == 'subscription created' || $is_sub_agreement_txn_type) && in_array($gateway_raw, array('stripe-sca-subs', 'paypal_subscription_checkout'))){
         $is_subscr_agreement_post = true;
     }
 

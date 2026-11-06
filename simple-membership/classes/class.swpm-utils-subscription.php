@@ -252,9 +252,10 @@ class SWPM_Utils_Subscriptions
 
                 break;
             case 'paypal_subscription_checkout':
-                //Check if this is a valid PayPal PPCP subscription created entry.
+                //Check if this is a valid PayPal PPCP subscription created entry. The status is saved translated, so the txn_type is checked too.
                 $txn_status = get_post_meta($post_id, 'status', true);
-                if( $txn_status != 'subscription created' ){
+                $txn_type = get_post_meta($post_id, 'txn_type', true);
+                if( $txn_status != 'subscription created' && $txn_type != 'pp_subscription_new' ){
                     //This is not a PPCP subscription created entry. Nothing to do here. Go to the next entry.
                     return null;
                 }
@@ -762,7 +763,8 @@ class SWPM_Utils_Subscriptions
     /**
      * Retrieves the cpt id of a subscription agreement transaction record by a subscription ID.
      *
-     * It utilizes the 'status' post meta as a filter. It checks whether the 'status' is set to 'subscription created' or not.
+     * Returns the first record (lowest ID) that has a subscription agreement 'txn_type' or the 'status' 'subscription created' (in English).
+     * The 'status' is saved translated for some gateways, and older records may not have a 'txn_type'.
      *
      * @param $subscr_id string Subscription ID.
      *
@@ -789,11 +791,15 @@ class SWPM_Utils_Subscriptions
             ),
         ));
 
+        //The txn_type values of the subscription agreement record (same as in SwpmTransactions::save_txn_record()).
+        $sub_agreement_txn_types = array('stripe_subscription_new', 'pp_subscription_new', 'pp_std_subscription_new');
+
         $sub_agreement_record_id = null;
         foreach ($subscription_records as $key => $record_id) {
             $status = get_post_meta($record_id, 'status', true);
+            $txn_type = get_post_meta($record_id, 'txn_type', true);
 
-            if (strtolower($status) == 'subscription created') {
+            if (strtolower($status) == 'subscription created' || in_array($txn_type, $sub_agreement_txn_types, true)) {
                 $sub_agreement_record_id = $record_id;
                 break;
             }

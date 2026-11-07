@@ -431,6 +431,7 @@ class SwpmTransactions {
             'payment_amount' => get_post_meta($post_id, 'payment_amount', true),
             'gateway' => get_post_meta($post_id, 'gateway', true),
             'status' => get_post_meta($post_id, 'status', true),
+            'txn_type' => get_post_meta($post_id, 'txn_type', true),
             'subscr_status' => get_post_meta($post_id, 'subscr_status', true), // For subscription type transactions only.
             'ip_address' => get_post_meta($post_id, 'ip_address', true),
             'payment_button_id' => get_post_meta($post_id, 'payment_button_id', true),

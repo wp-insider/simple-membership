@@ -200,6 +200,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Fixed an issue where deleting a payment record from the payments menu did not delete its row in the old payments database table.
 - PayPal subscriptions (PPCP): for a refund of the payment made at checkout, the swpm_payment_refunded action data now also includes the checkout's transaction ID (checkout_txn_id, the order ID), the same as for Stripe subscriptions.
 - Fixed an issue where a PayPal subscription agreement record was not recognized on sites where its 'subscription created' status is saved translated (for example, in the cancel subscription shortcode, the subscription status updates and the transaction details page in admin). For a PayPal Standard subscription with a paid trial, this could also cause the trial payment to be rejected as an amount mismatch.
+- Improvement: the debug log files are now saved in a "logs" folder of the plugin that blocks direct access (on Apache/LiteSpeed servers), and their file names now use a longer random suffix that is hard to guess. Existing sites get new log file names.
 - Thanks to Th0masL for contributing the subscription trial info, refund and PayPal subscription changes in this release.
 
 = 4.8.7 =

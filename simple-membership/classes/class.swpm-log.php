@@ -14,6 +14,25 @@ class SwpmLog {
 		return SIMPLE_WP_MEMBERSHIP_PATH . 'logs/';
 	}
 
+	//Restore missing protection files before creating or writing logs. Preserve existing files.
+	private static function ensure_log_dir() {
+		$log_dir = self::get_log_dir();
+		if ( ! wp_mkdir_p( $log_dir ) ) {
+			return false;
+		}
+		$protection_files = array(
+			'.htaccess' => "<IfModule mod_authz_core.c>\n    Require all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\n    Deny from all\n</IfModule>\n",
+			'index.html' => '',
+		);
+		foreach ( $protection_files as $name => $contents ) {
+			$path = $log_dir . $name;
+			if ( ! file_exists( $path ) && false === file_put_contents( $path, $contents ) ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private static function gen_log_file_names() {
 		if ( ! empty( self::$log_file ) && ! empty( self::$log_auth_file ) ) {
 			return;
@@ -81,7 +100,9 @@ class SwpmLog {
 
 		//Lets write to the log file
 		self::gen_log_file_names();
-		wp_mkdir_p( self::get_log_dir() );//Only creates the folder if it is missing (example: a manual install).
+		if ( ! self::ensure_log_dir() ) {
+			return;
+		}
 		$debug_log_file_name = self::get_log_dir() . self::$log_file;
 
 		// Timestamp
@@ -105,7 +126,9 @@ class SwpmLog {
 
 		//Lets write to the log file
 		self::gen_log_file_names();
-		wp_mkdir_p( self::get_log_dir() );//Only creates the folder if it is missing (example: a manual install).
+		if ( ! self::ensure_log_dir() ) {
+			return;
+		}
 		$debug_log_file_name = self::get_log_dir() . self::$log_file;
 
 		// Timestamp
@@ -135,7 +158,9 @@ class SwpmLog {
 
 		//Lets write to the log file
 		self::gen_log_file_names();
-		wp_mkdir_p( self::get_log_dir() );//Only creates the folder if it is missing (example: a manual install).
+		if ( ! self::ensure_log_dir() ) {
+			return;
+		}
 		$debug_log_file_name = self::get_log_dir() . self::$log_auth_file;
 
 		// Timestamp
@@ -159,7 +184,9 @@ class SwpmLog {
 
 		//Lets write to the log file
 		self::gen_log_file_names();
-		wp_mkdir_p( self::get_log_dir() );//Only creates the folder if it is missing (example: a manual install).
+		if ( ! self::ensure_log_dir() ) {
+			return;
+		}
 		$debug_log_file_name = self::get_log_dir() . self::$log_auth_file;
 
 		// Timestamp
@@ -201,7 +228,9 @@ class SwpmLog {
 	public static function reset_swmp_log_files() {
 		$log_reset = true;
 		self::gen_log_file_names();
-		wp_mkdir_p( self::get_log_dir() );//Only creates the folder if it is missing (example: a manual install).
+		if ( ! self::ensure_log_dir() ) {
+			return false;
+		}
 		$logfile_list = array(
 			self::get_log_dir() . self::$log_file,
 			self::get_log_dir() . self::$log_auth_file,

@@ -113,8 +113,10 @@ class SwpmLog {
 		}
 		// Write to log
 		$fp = fopen( $debug_log_file_name, 'a' );
-		fwrite( $fp, $text );
-		fclose( $fp );  // close file
+		if ( $fp ) {//The log file may not be writeable. Skip this log entry in that case.
+			fwrite( $fp, $text );
+			fclose( $fp );  // close file
+		}
 	}
 
 	public static function log_array_data_to_debug( $array_to_write, $success, $end = false ) {
@@ -145,8 +147,10 @@ class SwpmLog {
 		}
 		// Write to log
 		$fp = fopen( $debug_log_file_name, 'a' );
-		fwrite( $fp, $text );
-		fclose( $fp );  // close file
+		if ( $fp ) {//The log file may not be writeable. Skip this log entry in that case.
+			fwrite( $fp, $text );
+			fclose( $fp );  // close file
+		}
 	}
 
 	public static function log_auth_debug( $message, $success, $end = false ) {
@@ -171,8 +175,10 @@ class SwpmLog {
 		}
 		// Write to log
 		$fp = fopen( $debug_log_file_name, 'a' );
-		fwrite( $fp, $text );
-		fclose( $fp );  // close file
+		if ( $fp ) {//The log file may not be writeable. Skip this log entry in that case.
+			fwrite( $fp, $text );
+			fclose( $fp );  // close file
+		}
 	}
 
 	public static function log_auth_debug_array_data( $array_to_write, $success, $end = false ) {
@@ -203,8 +209,10 @@ class SwpmLog {
 		}
 		// Write to log
 		$fp = fopen( $debug_log_file_name, 'a' );
-		fwrite( $fp, $text );
-		fclose( $fp );  // close file
+		if ( $fp ) {//The log file may not be writeable. Skip this log entry in that case.
+			fwrite( $fp, $text );
+			fclose( $fp );  // close file
+		}
 	}
 
 	public static function handle_reset_log_action(){

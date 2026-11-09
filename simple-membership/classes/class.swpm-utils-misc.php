@@ -617,7 +617,7 @@ class SwpmMiscUtils {
 	}
 
 	public static function get_country_name_by_country_code( $country_code ) {
-		$countries = self::get_countries_list();
+		$countries = self::get_raw_countries_list();
 
 		$country_code = isset( $country_code ) ? strtoupper( $country_code ) : '';
 		$country = isset($countries[$country_code]) ? $countries[$country_code] : $country_code;
@@ -625,17 +625,16 @@ class SwpmMiscUtils {
 	}
 
 	/**
-	 * Returns the canonical list of countries used by the plugin, as country code => country name.
+	 * Returns the unfiltered canonical country list, as country code => country name.
 	 *
-	 * This is the single source for the countries dropdown and for converting the country code a
-	 * payment gateway sends into a name, so a member's country is stored the same way however they
-	 * joined. Addons can use it to validate a country value.
+	 * Shared by country-code conversion and the filtered dropdown list. Payment country-code
+	 * conversion uses this list directly so dropdown filters cannot change its mappings.
 	 *
 	 * @return array
 	 */
-	public static function get_countries_list() {
+	public static function get_raw_countries_list(){
 		//Note: the country names are output using the __() function elsewhere so that they can be translated. The POT file just needs to have the country names in it.
-		$countries = array(
+		return array(
 			'AF' => 'Afghanistan',
 			'AL' => 'Albania',
 			'DZ' => 'Algeria',
@@ -857,8 +856,19 @@ class SwpmMiscUtils {
 			'ZM' => 'Zambia',
 			'ZW' => 'Zimbabwe',
 		);
+	}
 
-		return apply_filters( 'swpm_countries_list', $countries );
+	/**
+	 * Returns the country list after applying the swpm_countries_list filter.
+	 *
+	 * Used by the countries dropdown and available to addons for country-value validation.
+	 * The default list maps country codes to names; filters may change its keys and values.
+	 * This filter does not affect payment country-code conversion.
+	 *
+	 * @return array
+	 */
+	public static function get_countries_list() {
+		return apply_filters( 'swpm_countries_list', self::get_raw_countries_list() );
 	}
 
 	public static function get_countries_dropdown( $country = '' ) {

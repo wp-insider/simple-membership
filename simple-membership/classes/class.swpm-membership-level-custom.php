@@ -81,7 +81,17 @@
                 isset($field['meta_context'])? sanitize_text_field($field['meta_context']): 'default'
                 );
 
-        $wpdb->query($query);
+        $result = $wpdb->query($query);
+
+        // The table has no unique key on level_id and meta_key, so REPLACE always adds a new row. Remove the older copies of this field.
+        if ($result && $wpdb->insert_id){
+            $wpdb->query($wpdb->prepare(
+                'DELETE FROM ' . $wpdb->prefix . 'swpm_membership_meta_tbl WHERE level_id = %d AND meta_key = %s AND id < %d',
+                $this->level_id,
+                $meta_key,
+                $wpdb->insert_id
+            ));
+        }
     }
     public static function get_value_by_key($level_id, $key, $default= ''){
         return SwpmMembershipLevelCustom::get_instance_by_id($level_id)->get($key, $default);

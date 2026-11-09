@@ -203,6 +203,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Improvement: the debug log files are now saved in a "logs" folder of the plugin that blocks direct access (on Apache/LiteSpeed servers), and their file names now use a longer random suffix that is hard to guess. Existing sites get new log file names.
 - The country list now has one source: SwpmMiscUtils::get_countries_list() returns country code => country name, and get_country_name_by_country_code() uses it. Members created from a PayPal or Stripe payment now get the same country name as the countries dropdown (for example, 'United States of America' instead of 'United States').
 - Added 19 territories to the countries dropdown (for example, Puerto Rico, Guam and Bermuda) and fixed the spelling of Nepal. Removed 'Swaziland', which was listed twice along with 'Eswatini'.
+- Fixed an issue where each save of a membership level added duplicate rows for its settings in the membership level meta table. Saving a level now keeps one row per setting and removes any older copies for that level.
 - Thanks to Th0masL for contributing the subscription trial info, refund and PayPal subscription changes in this release.
 
 = 4.8.7 =

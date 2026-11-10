@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.8.7
+Stable tag: 4.8.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -193,7 +193,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
+= 4.8.8 =
 - Fixed comment protection not applying to the Comment Content block in block themes (for example, Twenty Twenty-Five).
 - The trial info of a new subscription (trial or not, and the trial amount) is now also saved on the subscription agreement record for the PayPal (PPCP) subscription checkout. It uses the subscription data from the PayPal API.
 - Stripe: a subscription renewal payment notification for a subscription that was not created on this site is now ignored (for example, when two sites use the same Stripe account). It no longer saves a payment record without a member. Added the swpm_stripe_webhook_skip_unknown_subscription filter hook to turn this check off.

@@ -193,6 +193,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Fixed a PHP warning when a membership level setting is saved more than once in the same request (for example, by an addon).
+
 = 4.8.8 =
 - Fixed comment protection not applying to the Comment Content block in block themes (for example, Twenty Twenty-Five).
 - The trial info of a new subscription (trial or not, and the trial amount) is now also saved on the subscription agreement record for the PayPal (PPCP) subscription checkout. It uses the subscription data from the PayPal API.

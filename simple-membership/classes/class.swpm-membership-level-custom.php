@@ -38,7 +38,10 @@
             'meta_context'=> $item['meta_context'],
             );
         if (isset($this->fields[$meta_key])){
-            $new['id'] = $this->fields[$meta_key]['id'];
+            // A field added earlier in this request may not have its row id recorded yet.
+            if (isset($this->fields[$meta_key]['id'])){
+                $new['id'] = $this->fields[$meta_key]['id'];
+            }
             $this->fields[$meta_key] = $new;
         }
         else{
@@ -91,6 +94,11 @@
                 $meta_key,
                 $wpdb->insert_id
             ));
+
+            // Keep the cached field pointing at the row that now holds its value.
+            if (isset($this->fields[$meta_key])){
+                $this->fields[$meta_key]['id'] = $wpdb->insert_id;
+            }
         }
     }
     public static function get_value_by_key($level_id, $key, $default= ''){

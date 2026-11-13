@@ -65,6 +65,17 @@ class SwpmShortcodesHandler {
 			return $error_msg;
 		}
 
+		//The Stripe Legacy buttons have been removed. Show a note to the site admin only (visitors see nothing).
+		if ( in_array( $button_type, array( 'stripe_buy_now', 'stripe_subscription' ), true ) ) {
+			if ( current_user_can( SWPM_MANAGEMENT_PERMISSION ) ) {
+				$error_msg  = '<p class="swpm-red-box">';
+				$error_msg .= sprintf( __( 'Note for the site admin: the Stripe Legacy payment button (ID: %s) used here has been removed from the plugin. Create a new Stripe Buy Now or Stripe Subscription button and use its shortcode instead. Only site admins can see this note.', 'simple-membership' ), esc_attr( $button_id ) );
+				$error_msg .= '</p>';
+				return $error_msg;
+			}
+			return '';
+		}
+
 		//Initialize the output variable.
 		$output = '';
 		$any_note_or_msg_output = '';
@@ -124,7 +135,6 @@ class SwpmShortcodesHandler {
 		$hide_payment_btn = apply_filters( 'swpm_hide_payment_button', $hide_payment_btn, $button_id, $button_type );
 		if ( !$hide_payment_btn ){
 			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_button_shortcode_view.php' );
-			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_button_shortcode_view.php' );
 			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/stripe_sca_button_shortcode_view.php' );
 			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/braintree_button_shortcode_view.php' );
 			include_once( SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/paypal_buy_now_new_button_shortcode_view.php' );

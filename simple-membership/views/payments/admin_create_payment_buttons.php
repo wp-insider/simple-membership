@@ -5,9 +5,7 @@ require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_p
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_new_button.php';//PayPal Subscription button (New API)
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_buy_now_button.php';//Standard
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_button.php';//Standard
-require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_buy_now_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php';
-require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_subscription_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_sca_subscription_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_braintree_buy_now_button.php';
 
@@ -43,10 +41,6 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 				<label><input type="radio" name="button_type" value="stripe_sca_buy_now" /> <?php _e( 'Stripe Buy Now (Recommended)', 'simple-membership' ); ?></label>
 				<br />
 				<label><input type="radio" name="button_type" value="stripe_sca_subscription" /> <?php _e( 'Stripe Subscription (Recommended)', 'simple-membership' ); ?></label>
-				<br />
-				<label><input type="radio" name="button_type" value="stripe_buy_now" /> <?php _e( 'Stripe Legacy Buy Now (Deprecated)', 'simple-membership' ); ?></label>
-				<br />
-				<label><input type="radio" name="button_type" value="stripe_subscription" /> <?php _e( 'Stripe Legacy Subscription (Deprecated)', 'simple-membership' ); ?></label>
 				<br />
 			</fieldset>
 			</td>

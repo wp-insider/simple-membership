@@ -5,8 +5,6 @@ require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_p
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_new_button.php';//PayPal Subscription button (New API)
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_buy_now_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_subscription_button.php';
-require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_buy_now_button.php';
-require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_subscription_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_sca_buy_now_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_sca_subscription_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_braintree_buy_now_button.php';
@@ -24,5 +22,12 @@ do_action( 'swpm_edit_payment_button_process_submission' ); //Addons can use thi
 $button_type = sanitize_text_field( $_REQUEST['button_type'] );
 $button_id   = sanitize_text_field( $_REQUEST['button_id'] );
 $button_id   = absint( $button_id );
+
+//The Stripe Legacy buttons have been removed. They can't be edited anymore.
+if ( in_array( $button_type, array( 'stripe_buy_now', 'stripe_subscription' ), true ) ) {
+	echo '<div class="swpm-yellow-box"><p>' . esc_html__( 'This Stripe Legacy payment button type has been removed from the plugin, so it can no longer be edited or used for new payments. Create a new Stripe Buy Now or Stripe Subscription button instead, then you can delete this button. Existing Stripe Legacy subscriptions are still handled by the Stripe webhook.', 'simple-membership' ) . '</p></div>';
+	return;
+}
+
 do_action( 'swpm_edit_payment_button_for_' . $button_type, $button_id );
 

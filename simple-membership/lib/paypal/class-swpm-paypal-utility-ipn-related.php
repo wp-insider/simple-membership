@@ -245,7 +245,13 @@ class SWPM_PayPal_Utility_IPN_Related {
 
 			// Process the user profile creation/update.
 			swpm_handle_subsc_signup_stand_alone( $ipn_data, $membership_level_id, $txn_id, $swpm_id );
-			
+
+			// This runs in the buyer's browser (the onApprove request). For a new member, save the paid registration code in a cookie of this browser,
+			// so the paid registration link is only shown in it (the member also gets it by email).
+			if ( ! empty( $ipn_data['member_id'] ) ) {
+				SwpmUtils::set_paid_registration_link_browser_only( $ipn_data['member_id'], true );
+			}
+
 		} else {
 			SwpmLog::log_simple_debug( 'Membership level ID is missing in the button configuration! Cannot process this notification.', false );
 		}

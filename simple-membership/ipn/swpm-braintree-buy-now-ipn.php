@@ -140,6 +140,12 @@ class SwpmBraintreeBuyNowIpnHandler {
             //Handle the membership signup related tasks.
             swpm_handle_subsc_signup_stand_alone($ipn_data, $membership_level_id, $txn_id, $swpm_id);
 
+            //This request is the payment form submitted by the buyer's browser. For a new member, save the paid registration code in a cookie of this browser,
+            //so the paid registration link is only shown in it (the member also gets it by email).
+            if (!empty($ipn_data['member_id'])) {
+                SwpmUtils::set_paid_registration_link_browser_only($ipn_data['member_id'], true);
+            }
+
             //Save the transaction record
             SwpmTransactions::save_txn_record($ipn_data);
             SwpmLog::log_simple_debug('Transaction data saved.', true);

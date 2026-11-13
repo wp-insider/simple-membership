@@ -584,19 +584,46 @@ abstract class SwpmUtils {
 		return null;
 	}
 
+	/*
+	 * Returns the new member (that needs to complete the paid registration) of a payment made in this browser, or null.
+	 * Note: the name is kept for backward compatibility. The member is no longer found using the IP address (it can be spoofed),
+	 * only using the proof saved in the browser that made the payment (see get_paid_member_of_this_browser()).
+	 */
 	public static function get_incomplete_paid_member_info_by_ip() {
+		$member = self::get_paid_member_of_this_browser();
+		if ( $member && empty( $member->user_name ) ) {
+			return $member;
+		}
+		return null;
+	}
+
+	/*
+	 * Returns the member record of a payment made in this browser (it may have completed the registration already), or null.
+	 * The browser that made the payment has one of these cookies:
+	 * - 'swpm_paid_reg_code': the member's registration code. Set when the checkout returns to this site in the buyer's browser (Stripe, PayPal PPCP, Braintree).
+	 * - 'swpm_pp_checkout_tokens': random tokens created when a PayPal Standard button is clicked. The IPN saves the token's hash on the new member.
+	 * Other browsers get nothing. The member gets the paid registration link by email too.
+	 */
+	public static function get_paid_member_of_this_browser() {
 		global $wpdb;
-		$user_ip = self::get_user_ip_address();
-		if ( ! empty( $user_ip ) ) {
-			//Lets check if a payment has been confirmed from this user's IP and the profile needs to be completed (where username is empty).
-			$username = '';
-			$query    = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE last_accessed_from_ip=%s AND user_name=%s ORDER BY member_id DESC';
-			$query    = $wpdb->prepare( $query, $user_ip, $username );
-			$results  = $wpdb->get_results( $query );
-			foreach ( $results as $result ) {
-				//Some paid registration links are only shown to the browser that made the payment (see set_paid_registration_link_browser_only()).
-				if ( self::is_paid_registration_link_allowed_in_this_browser( $result ) ) {
-					return $result;
+
+		$cookie_reg_code = isset( $_COOKIE['swpm_paid_reg_code'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['swpm_paid_reg_code'] ) ) : '';
+		if ( ! empty( $cookie_reg_code ) ) {
+			$query  = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE reg_code=%s ORDER BY member_id DESC';
+			$member = $wpdb->get_row( $wpdb->prepare( $query, $cookie_reg_code ) );
+			if ( $member && hash_equals( (string) $member->reg_code, $cookie_reg_code ) ) {
+				return $member;
+			}
+		}
+
+		//The newest token first.
+		foreach ( array_reverse( self::get_paypal_std_checkout_tokens() ) as $token ) {
+			$query     = 'SELECT member_id FROM ' . SwpmMembersMeta::get_table_name() . ' WHERE meta_key=%s AND meta_value=%s ORDER BY member_id DESC';
+			$member_id = $wpdb->get_var( $wpdb->prepare( $query, 'paid_reg_browser_token_hash', hash( 'sha256', $token ) ) );
+			if ( ! empty( $member_id ) ) {
+				$member = SwpmMemberUtils::get_user_by_id( $member_id );
+				if ( $member ) {
+					return $member;
 				}
 			}
 		}
@@ -604,36 +631,64 @@ abstract class SwpmUtils {
 	}
 
 	/*
-	 * Makes the paid registration link of a new (incomplete) member available only to the browser that made the payment.
-	 * Used by the checkouts that can identify the buyer's browser (example: Stripe checkout). The member's registration code is saved in a cookie in that browser.
-	 * The members of other checkouts (example: PayPal) are still found using the IP address only.
+	 * Saves the paid registration code of a new member in a cookie of this browser, so the paid registration link can be shown in it.
+	 * Call it only when the request is made by the buyer's browser after the payment (example: the checkout return URL or the onApprove request).
+	 * $is_checkout_browser: false when the request may not come from the buyer's browser (then nothing is saved, the member gets the link by email).
 	 */
-	public static function set_paid_registration_link_browser_only( $member_id, $is_checkout_browser ) {
+	public static function set_paid_registration_link_browser_only( $member_id, $is_checkout_browser = true ) {
+		if ( ! $is_checkout_browser ) {
+			return;
+		}
 		$member = SwpmMemberUtils::get_user_by_id( $member_id );
 		if ( empty( $member ) || ! empty( $member->user_name ) || empty( $member->reg_code ) ) {
 			//Not a member that needs to complete the paid registration.
 			return;
 		}
-		SwpmMembersMeta::update( $member_id, 'paid_reg_link_browser_only', '1' );
-
-		if ( $is_checkout_browser ) {
-			$secure = is_ssl();
-			setcookie( 'swpm_paid_reg_code', $member->reg_code, time() + WEEK_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
-			//So it can also be used in this request (example: the redirect to the paid registration link after the payment).
-			$_COOKIE['swpm_paid_reg_code'] = $member->reg_code;
-		}
+		$secure = is_ssl();
+		setcookie( 'swpm_paid_reg_code', $member->reg_code, time() + WEEK_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
+		//So it can also be used in this request (example: the redirect to the paid registration link after the payment).
+		$_COOKIE['swpm_paid_reg_code'] = $member->reg_code;
 	}
 
-	public static function is_paid_registration_link_allowed_in_this_browser( $member ) {
-		if ( ! SwpmMembersMeta::get( $member->member_id, 'paid_reg_link_browser_only', true ) ) {
-			//This link can be shown using the IP address only.
-			return true;
+	/*
+	 * PayPal Standard: saves the hash of the checkout token (created in the buyer's browser when the button was clicked, sent in the 'custom' field) on the new member.
+	 * The IPN is sent by PayPal (not the buyer's browser), so the token is how the thank you page finds the buyer's browser.
+	 */
+	public static function save_paid_registration_browser_token( $member_id, $token ) {
+		if ( empty( $member_id ) || ! is_string( $token ) || ! preg_match( '/^[0-9a-f]{24}$/', $token ) ) {
+			return;
 		}
-		$cookie_reg_code = isset( $_COOKIE['swpm_paid_reg_code'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['swpm_paid_reg_code'] ) ) : '';
-		if ( empty( $cookie_reg_code ) || empty( $member->reg_code ) ) {
+		$member = SwpmMemberUtils::get_user_by_id( $member_id );
+		if ( empty( $member ) || ! empty( $member->user_name ) ) {
+			//Not a member that needs to complete the paid registration.
+			return;
+		}
+		SwpmMembersMeta::update( $member_id, 'paid_reg_browser_token_hash', hash( 'sha256', $token ) );
+	}
+
+	/*
+	 * Returns the PayPal Standard checkout tokens of this browser (the 'swpm_pp_checkout_tokens' cookie, set by JavaScript when a PayPal Standard button is clicked). Oldest first.
+	 */
+	public static function get_paypal_std_checkout_tokens() {
+		$cookie_value = isset( $_COOKIE['swpm_pp_checkout_tokens'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['swpm_pp_checkout_tokens'] ) ) : '';
+		$tokens = array();
+		foreach ( array_slice( explode( '.', $cookie_value ), -5 ) as $token ) {
+			if ( preg_match( '/^[0-9a-f]{24}$/', $token ) ) {
+				$tokens[] = $token;
+			}
+		}
+		return $tokens;
+	}
+
+	/*
+	 * Checks if the paid registration link of the member can be shown in this browser (the browser that made the payment).
+	 */
+	public static function is_paid_registration_link_allowed_in_this_browser( $member ) {
+		if ( empty( $member ) || empty( $member->member_id ) ) {
 			return false;
 		}
-		return hash_equals( (string) $member->reg_code, $cookie_reg_code );
+		$browser_member = self::get_paid_member_of_this_browser();
+		return $browser_member && (int) $browser_member->member_id === (int) $member->member_id;
 	}
 
 	public static function account_delete_confirmation_ui( $msg = '' ) {

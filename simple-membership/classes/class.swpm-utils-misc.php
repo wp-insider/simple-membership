@@ -281,6 +281,7 @@ class SwpmMiscUtils {
 		}
 
 		$settings = SwpmSettings::get_instance();
+		//The new member of a payment made in this browser (if any). It is not found using the IP address.
 		$incomplete_member_data = SwpmUtils::get_incomplete_paid_member_info_by_ip();
 
 		//Check if the regdirect to paid registration link option is enabled for this button.

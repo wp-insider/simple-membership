@@ -132,7 +132,9 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 				$this->debug_log( 'Found a membership level ID. Creating member account...', true );
 				$swpm_id = isset($customvariables['swpm_id']) ? sanitize_text_field($customvariables['swpm_id']) : '';
 				swpm_handle_subsc_signup_stand_alone( $this->ipn_data, $subsc_ref, $this->ipn_data['subscr_id'], $swpm_id );
-				
+				// For a new member: save the checkout token of the buyer's browser, so the paid registration link is only shown in it.
+				SwpmUtils::save_paid_registration_browser_token( isset( $this->ipn_data['member_id'] ) ? $this->ipn_data['member_id'] : '', isset( $customvariables['swpm_pp_ct'] ) ? $customvariables['swpm_pp_ct'] : '' );
+
 				// Save in the Transactions CPT so there is a 'subscription created' entry for paypal standard subscriptions.
 				$pp_std_sub_created_ipn = $this->create_pp_std_sub_created_ipn_data($this->ipn_data);
 				//SwpmLog::log_array_data_to_debug($pp_std_sub_created_ipn, true);
@@ -271,6 +273,8 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 				if ( $transaction_type == 'web_accept' ) {
 					$this->debug_log( 'Transaction type: web_accept. Creating member account...', true );
 					swpm_handle_subsc_signup_stand_alone( $this->ipn_data, $subsc_ref, $this->ipn_data['txn_id'], $swpm_id );
+					// For a new member: save the checkout token of the buyer's browser, so the paid registration link is only shown in it.
+					SwpmUtils::save_paid_registration_browser_token( isset( $this->ipn_data['member_id'] ) ? $this->ipn_data['member_id'] : '', isset( $customvariables['swpm_pp_ct'] ) ? $customvariables['swpm_pp_ct'] : '' );
 				} elseif ( $transaction_type == 'subscr_payment' ) {
 					$this->debug_log( 'Transaction type: subscr_payment. Checking if the member profile needed to be updated', true );
 					swpm_update_member_subscription_start_date_if_applicable( $this->ipn_data );

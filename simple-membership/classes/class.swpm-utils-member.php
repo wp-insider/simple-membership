@@ -626,7 +626,114 @@ class SwpmMemberUtils {
 		// This does not trigger the 'set_user_role' action hook, so it won't cause other plugins to run their code that is hooked to that action (which is what we want in this case). 
 		$user->add_role( $role ); 
 	
-		SwpmLog::log_simple_debug( 'WP user role updated. Role: ' . $role . ', User email: ' . $user->user_email, true ); 
+		SwpmLog::log_simple_debug( 'WP user role updated. Role: ' . $role . ', User email: ' . $user->user_email, true );
+	}
+
+	/**
+	 * Returns the WP roles that can be selected for the "WordPress Role After Expiry" option of a membership level.
+	 * The administrator role is never offered.
+	 *
+	 * @return array Role key => role name.
+	 */
+	public static function get_roles_for_role_after_expiry() {
+		$roles = wp_roles()->get_names();
+		unset( $roles['administrator'] );
+		return $roles;
+	}
+
+	/**
+	 * Returns the "WordPress Role After Expiry" value of a membership level.
+	 * An empty value means the feature is not used for that level (no role change on expiry or payment).
+	 *
+	 * @param int $level_id The membership level ID.
+	 * @return string The role key or an empty string.
+	 */
+	public static function get_role_after_expiry_of_level( $level_id ) {
+		if ( empty( $level_id ) ) {
+			return '';
+		}
+		return sanitize_text_field( SwpmMembershipLevelCustom::get_value_by_key( $level_id, 'role_after_expiry' ) );
+	}
+
+	/**
+	 * Finds the WP user of a member record (by username, then by email, the same way the level change handler does it).
+	 *
+	 * @param object $member The member record (row of the members table).
+	 * @return WP_User|null
+	 */
+	private static function get_wp_user_of_member_record( $member ) {
+		$wp_user = ! empty( $member->user_name ) ? get_user_by( 'login', $member->user_name ) : false;
+		if ( ! $wp_user instanceof WP_User && ! empty( $member->email ) ) {
+			$wp_user = get_user_by( 'email', $member->email );
+		}
+		return $wp_user instanceof WP_User ? $wp_user : null;
+	}
+
+	/**
+	 * Applies the "WordPress Role After Expiry" role of the member's level to the member's WP user.
+	 * Does nothing if the option is not set for the member's level.
+	 *
+	 * @param int $member_id The member ID.
+	 */
+	public static function apply_expiry_role( $member_id ) {
+		$member = self::get_user_by_id( $member_id );
+		if ( ! $member ) {
+			return;
+		}
+
+		$role_after_expiry = self::get_role_after_expiry_of_level( $member->membership_level );
+		if ( empty( $role_after_expiry ) ) {
+			//The option is not used for this level. Nothing to do.
+			return;
+		}
+
+		if ( ! array_key_exists( $role_after_expiry, self::get_roles_for_role_after_expiry() ) ) {
+			//The role may have been deleted after the level was saved.
+			SwpmLog::log_simple_debug( 'Role after expiry (' . $role_after_expiry . ') of level ID ' . $member->membership_level . ' is not a valid role. No role change for member ID: ' . $member_id, false );
+			return;
+		}
+
+		$wp_user = self::get_wp_user_of_member_record( $member );
+		if ( ! $wp_user ) {
+			SwpmLog::log_simple_debug( 'Role after expiry - WP user not found for member ID: ' . $member_id . '. No role change.', true );
+			return;
+		}
+
+		SwpmLog::log_simple_debug( 'Role after expiry - Membership expired. Changing the WP user role to: ' . $role_after_expiry . '. Member ID: ' . $member_id, true );
+		self::update_wp_user_role( $wp_user->ID, $role_after_expiry );
+	}
+
+	/**
+	 * Applies the "Default WordPress Role" of the member's current level to the member's WP user.
+	 * Used after a payment or an admin reactivation. Only does something when the member's level uses the "WordPress Role After Expiry" option.
+	 *
+	 * @param int $member_id The member ID.
+	 */
+	public static function restore_level_role( $member_id ) {
+		$member = self::get_user_by_id( $member_id );
+		if ( ! $member ) {
+			return;
+		}
+
+		$role_after_expiry = self::get_role_after_expiry_of_level( $member->membership_level );
+		if ( empty( $role_after_expiry ) ) {
+			//The option is not used for this level. Nothing to do.
+			return;
+		}
+
+		$level_row = SwpmUtils::get_membership_level_row_by_id( $member->membership_level );
+		if ( ! $level_row || empty( $level_row->role ) ) {
+			return;
+		}
+
+		$wp_user = self::get_wp_user_of_member_record( $member );
+		if ( ! $wp_user ) {
+			SwpmLog::log_simple_debug( 'Role after expiry - WP user not found for member ID: ' . $member_id . '. Could not restore the level role.', true );
+			return;
+		}
+
+		SwpmLog::log_simple_debug( 'Role after expiry - Restoring the default WP role of the level: ' . $level_row->role . '. Member ID: ' . $member_id, true );
+		self::update_wp_user_role( $wp_user->ID, $level_row->role );
 	}
 
 	//if a username is provided, it will return sanitized email of the user

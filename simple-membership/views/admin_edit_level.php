@@ -82,7 +82,25 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
                 <?php _e('Note: This setting has no effect if email activation is enabled.', 'simple-membership'); ?>
             </p>
         </td>
-    </tr>    
+    </tr>
+    <tr class="form-field">
+        <th scope="row"><label for="role_after_expiry"><?php esc_html_e( 'WordPress Role After Expiry', 'simple-membership' ); ?> <span class="description"><?php esc_html_e( '(optional)', 'simple-membership' ); ?></span></label></th>
+        <td>
+            <select name="role_after_expiry" id="role_after_expiry">
+                <option value=""><?php esc_html_e( 'No change (keep current role)', 'simple-membership' ); ?></option>
+                <?php
+                $role_after_expiry = isset( $role_after_expiry ) ? $role_after_expiry : '';
+                foreach ( SwpmMemberUtils::get_roles_for_role_after_expiry() as $swpm_role_key => $swpm_role_name ) {
+                    echo '<option value="' . esc_attr( $swpm_role_key ) . '"' . selected( $role_after_expiry, $swpm_role_key, false ) . '>' . esc_html( translate_user_role( $swpm_role_name ) ) . '</option>';
+                }
+                ?>
+            </select>
+            <p class="description">
+                <?php esc_html_e( 'Optional. When a member of this level expires, their WordPress role is changed to the role selected here. When the member makes a new payment (renewal or subscription payment), or an admin reactivates the account, the level\'s Default WordPress Role is applied again. Leave this set to "No change" to keep the current behaviour.', 'simple-membership' ); ?>
+                <?php echo '<a href="https://simple-membership-plugin.com/wordpress-role-after-membership-expiry/" target="_blank">' . esc_html__( 'View Documentation', 'simple-membership' ) . '</a>.'; ?>
+            </p>
+        </td>
+    </tr>
     <tr>
         <th scope="row">
             <label for="email_activation"><?php echo  SwpmUtils::_('Email Activation'); ?></label>

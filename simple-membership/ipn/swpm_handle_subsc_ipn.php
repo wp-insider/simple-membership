@@ -112,6 +112,9 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 			)
 		);
 
+		//A new payment restores the level's default WP role, if the level uses the "WordPress Role After Expiry" option.
+		SwpmMemberUtils::restore_level_role( $swpm_id );
+
 
 		$email   = $ipn_data['payer_email'];
 		$from_address = $settings->get_value( 'email-from' );
@@ -898,6 +901,9 @@ function swpm_update_member_subscription_start_date_if_applicable( &$ipn_data ) 
 		$member_record = SwpmMemberUtils::get_user_by_id( $swpm_id );
 		swpm_debug_log_subsc( 'Value after update - Subscriber ID: ' . $member_record->subscr_id . ', Start Date: ' . $member_record->subscription_starts, true );
 		if ( $update_result !== false ) {
+			//A new payment restores the level's default WP role, if the level uses the "WordPress Role After Expiry" option.
+			SwpmMemberUtils::restore_level_role( $swpm_id );
+
 			swpm_send_subscription_renewal_notification_email( $swpm_id, $ipn_data );
 		}
 	} else {

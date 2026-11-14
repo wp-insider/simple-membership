@@ -39,8 +39,6 @@ Non-members who try to view a protected page will be prompted to log in or becom
 = Have Free and Paid Memberships =
 You can configure your site to offer free memberships, paid memberships, or both. Paid membership payments are handled securely via PayPal, Stripe, or Braintree.
 
-Both one-time and recurring (subscription) payments are supported for PayPal and Stripe.
-
 Both one-time and recurring/subscription payments are supported for PayPal and Stripe. Use the subscription payment feature to offer memberships that renew automatically on a regular basis (for example, every month or every year), or offer one-time payment memberships that do not renew automatically.
 
 Braintree supports one-time membership payments.
@@ -51,6 +49,11 @@ For free memberships, you can enable email activation or email confirmation duri
 
 = Membership Payments Log =
 All the payments from your members are recorded in the plugin. You can view them anytime by visiting the payments menu from the admin dashboard.
+
+= WordPress Roles for Members =
+Assign a WordPress role to the members of each membership level. You can optionally switch members to a different role when their membership expires, and the level's role is given back automatically when they renew.
+
+This is useful for granting and removing access in other plugins that work with WordPress roles (for example, forum or course plugins).
 
 = Developer API =
 
@@ -194,6 +197,8 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 
 = WIP =
+- New optional "WordPress Role After Expiry" setting on each membership level. When a member of the level expires, their WordPress role is changed to the selected role. The level's Default WordPress Role is applied again when the member makes a new payment (renewal or subscription payment), or when an admin reactivates an expired account. Leaving it set to "No change" keeps the current behavior.
+- Added the swpm_account_status_updated_to_expired_at_login and swpm_bulk_account_status_updated action hooks.
 - Security fix: the paid registration link on the thank you page (and the redirect to it after the payment) is now only shown in the browser that made the payment, for all payment gateways (Stripe, PayPal, PayPal Standard and Braintree). It is no longer found using the visitor's IP address, which could be spoofed. In any other browser, the member uses the link sent by email. Thanks to Jonathan Schemoul (libertai Security) for reporting this.
 - Removed the deprecated "Stripe Legacy Buy Now" and "Stripe Legacy Subscription" payment buttons (they used Stripe's old Checkout, which does not support SCA). Use the Stripe Buy Now and Stripe Subscription buttons instead. An existing Stripe Legacy button no longer shows on the page (site admins see a note to replace it). Existing Stripe Legacy subscriptions keep working: their renewals and cancellations are still handled by the Stripe webhook.
 - Fixed a PHP warning when a membership level setting is saved more than once in the same request (for example, by an addon).

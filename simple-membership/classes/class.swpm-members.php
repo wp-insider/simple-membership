@@ -430,9 +430,30 @@ class SwpmMembers extends WP_List_Table {
 			return;
 		}
 		global $wpdb;
+
+		//When activating, note which of the selected members are currently expired (used for the "WordPress Role After Expiry" option).
+		$expired_member_ids = array();
+		if ( 'active' === $status ) {
+			$expired_member_ids = $wpdb->get_col( 'SELECT member_id FROM ' . $wpdb->prefix . "swpm_members_tbl WHERE account_state = 'expired' AND member_id IN (" . $ids . ')' );
+		}
+
 		$query = 'UPDATE ' . $wpdb->prefix . 'swpm_members_tbl ' .
 				" SET account_state = '" . $status . "' WHERE member_id in (" . $ids . ')';
 		$wpdb->query( $query );
+
+		//Handle the "WordPress Role After Expiry" option of the members' levels (does nothing for levels that don't use it).
+		if ( 'expired' === $status ) {
+			foreach ( explode( ',', $ids ) as $member_id ) {
+				SwpmMemberUtils::apply_expiry_role( $member_id );
+			}
+		} elseif ( 'active' === $status ) {
+			foreach ( $expired_member_ids as $member_id ) {
+				SwpmMemberUtils::restore_level_role( $member_id );
+			}
+		}
+
+		//Trigger an action hook so other plugins can handle this bulk account status update.
+		do_action( 'swpm_bulk_account_status_updated', array_map( 'absint', explode( ',', $ids ) ), $status );
 
 		if ( $notify ) {
 			$settings = SwpmSettings::get_instance();

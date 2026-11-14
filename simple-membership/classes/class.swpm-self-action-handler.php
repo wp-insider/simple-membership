@@ -13,6 +13,10 @@ class SwpmSelfActionHandler {
         //Handle membership level change action hook.
         add_action('swpm_membership_level_changed', array(&$this, 'handle_membership_level_changed_action'));
 
+        //Handle the "WordPress Role After Expiry" option of membership levels (expiry by cronjob and account status change by admin).
+        add_action('swpm_cronjob_account_status_updated_to_expired', array(&$this, 'handle_cronjob_account_status_updated_to_expired'));
+        add_action('swpm_admin_account_status_updated', array(&$this, 'handle_admin_account_status_updated'));
+
         add_action('swpm_payment_ipn_processed', array(&$this, 'handle_swpm_payment_ipn_processed'));
 
         add_filter('swpm_after_logout_redirect_url', array(&$this, 'handle_after_logout_redirection'));
@@ -129,6 +133,37 @@ class SwpmSelfActionHandler {
             SwpmMemberUtils::update_wp_user_role($wp_user_id, $user_role);
         }
 
+    }
+
+    /**
+     * Applies the "WordPress Role After Expiry" role (if set for the level) to the members expired by the cronjob.
+     */
+    public function handle_cronjob_account_status_updated_to_expired($expired_member_ids){
+        if (!is_array($expired_member_ids)){
+            return;
+        }
+        foreach ($expired_member_ids as $member_id){
+            SwpmMemberUtils::apply_expiry_role($member_id);
+        }
+    }
+
+    /**
+     * Handles the "WordPress Role After Expiry" option when an admin changes a member's account status from the edit member interface.
+     * Expired: apply the role after expiry. Expired to active: restore the level's default role.
+     */
+    public function handle_admin_account_status_updated($args){
+        $member_id = isset($args['member_id']) ? $args['member_id'] : '';
+        $from_status = isset($args['from_status']) ? $args['from_status'] : '';
+        $to_status = isset($args['to_status']) ? $args['to_status'] : '';
+        if (empty($member_id)){
+            return;
+        }
+
+        if ($to_status == 'expired'){
+            SwpmMemberUtils::apply_expiry_role($member_id);
+        } else if ($to_status == 'active' && $from_status == 'expired'){
+            SwpmMemberUtils::restore_level_role($member_id);
+        }
     }
 
     public function handle_whitelist_blacklist_registration()

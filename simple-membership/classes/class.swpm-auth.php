@@ -369,6 +369,12 @@ class SwpmAuth {
 			if ( $this->userData->account_state == 'active' ) {
 				//This is an additional check at login validation time to ensure the user account gets set to expired state even if the cronjob fails to do it.
 				$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'account_state' => 'expired' ), array( 'member_id' => $this->userData->member_id ), array( '%s' ), array( '%d' ) );
+
+				//Apply the "WordPress Role After Expiry" role of the level (if set).
+				SwpmMemberUtils::apply_expiry_role( $this->userData->member_id );
+
+				//Trigger an action hook so other plugins can handle this expiry.
+				do_action( 'swpm_account_status_updated_to_expired_at_login', $this->userData->member_id );
 			}
 			if ( empty( $enable_expired_login ) ) {
 				//Account has expired and expired login is not enabled.

@@ -169,6 +169,7 @@ class SwpmMembershipLevels extends WP_List_Table {
         $after_activation_redirect_page = sanitize_url($custom_fields->get('after_activation_redirect_page'));
         $default_account_status = sanitize_text_field($custom_fields->get('default_account_status'));
 	    $annual_fixed_date_min_period = sanitize_text_field($custom_fields->get('annual_fixed_date_min_period'));
+        $role_after_expiry = sanitize_text_field($custom_fields->get('role_after_expiry'));
         include_once(SIMPLE_WP_MEMBERSHIP_PATH . 'views/admin_edit_level.php');
         return false;
     }

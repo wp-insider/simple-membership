@@ -97,7 +97,7 @@ $is_email_activation_conflicting = SwpmSettings::get_instance()->get_value( 'def
             </select>
             <p class="description">
                 <?php esc_html_e( 'Optional. When a member of this level expires, their WordPress role is changed to the role selected here. When the member makes a new payment (renewal or subscription payment), or an admin reactivates the account, the level\'s Default WordPress Role is applied again. Leave this set to "No change" to keep the current behaviour.', 'simple-membership' ); ?>
-                <?php echo '<a href="https://simple-membership-plugin.com/wordpress-role-after-membership-expiry/" target="_blank">' . esc_html__( 'View Documentation', 'simple-membership' ) . '</a>.'; ?>
+                <?php echo '<a href="https://simple-membership-plugin.com/wordpress-roles-for-members-assign-and-change-roles-on-expiry/" target="_blank">' . esc_html__( 'View Documentation', 'simple-membership' ) . '</a>.'; ?>
             </p>
         </td>
     </tr>

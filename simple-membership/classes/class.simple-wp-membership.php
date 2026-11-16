@@ -565,6 +565,11 @@ class SimpleWpMembership {
             return;
         }
 
+        //The plugin is updating the WP user with the data it has already saved in the member record (example: a password reset). Nothing to sync.
+        if ( SwpmUtils::$is_updating_wp_user ) {
+            return;
+        }
+
         //Trigger a filter hook to allow any addon(s) to override the wp profile_update hook handling.
         $overriden_msg = apply_filters('swpm_wp_profile_update_hook_override', '');
         if( !empty( $overriden_msg ) ){
@@ -589,13 +594,17 @@ class SimpleWpMembership {
         //SwpmLog::log_array_data_to_debug($wp_user_data, true);
         //SwpmLog::log_array_data_to_debug($userdata, true);
 
-        //Update the SWPM user profile with the latest WP user data that we received via the 'profile_update' action hook.  
-        $profile['user_name'] = $wp_user_data->user_login;
-        $profile['email'] = $wp_user_data->user_email;
-        $profile['first_name'] = $wp_user_data->user_firstname;
-        $profile['last_name'] = $wp_user_data->user_lastname;
-        $profile['password'] = $wp_user_data->user_pass;
-        $wpdb->update($wpdb->prefix . "swpm_members_tbl", $profile, array('member_id' => $profile['member_id']));
+        //Update the SWPM user profile with the latest WP user data that we received via the 'profile_update' action hook.
+        //Use the data being saved (the hook's $userdata) first: reading the WP user again can return the old data on some sites (example: a persistent object cache).
+        //Only the synced columns are updated (not the whole row, so other columns changed in the meantime are not overwritten).
+        $profile_data = array(
+            'user_name'  => $wp_user_data->user_login,
+            'email'      => isset( $userdata['user_email'] ) ? $userdata['user_email'] : $wp_user_data->user_email,
+            'first_name' => isset( $userdata['first_name'] ) ? $userdata['first_name'] : $wp_user_data->user_firstname,
+            'last_name'  => isset( $userdata['last_name'] ) ? $userdata['last_name'] : $wp_user_data->user_lastname,
+            'password'   => ! empty( $userdata['user_pass'] ) ? $userdata['user_pass'] : $wp_user_data->user_pass,
+        );
+        $wpdb->update($wpdb->prefix . "swpm_members_tbl", $profile_data, array('member_id' => $profile['member_id']));
 
         //===============/
         //TODO - Only reset SWPM auth cookies only since this is an update from WP end. WP will handle their cookie reset. 

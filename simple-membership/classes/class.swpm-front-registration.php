@@ -692,14 +692,18 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$password = apply_filters( 'swpm_password_reset_generated_pass', $password );
 	
 			$password_hash = SwpmUtils::encrypt_password( trim( $password ) );
-			$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'password' => $password_hash ), array( 'member_id' => $user->member_id ) );
-	
+			$member_updated = $wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'password' => $password_hash ), array( 'member_id' => $user->member_id ) );
+
 			//Update wp user password
 			add_filter( 'send_password_change_email', array( &$this, 'dont_send_password_change_email' ), 1, 3 ); //Stop WordPress from sending a reset password email to admin.
-			SwpmUtils::update_wp_user( $user->user_name, array( 'plain_password' => $password ) );
+			$wp_user_updated = SwpmUtils::update_wp_user( $user->user_name, array( 'plain_password' => $password ) );
 
 			$additional_args["password"] = $password;
-			SwpmLog::log_simple_debug( 'Member password has been reset.', true );
+			if ( false === $member_updated || is_wp_error( $wp_user_updated ) ) {
+				SwpmLog::log_simple_debug( 'Error! The member password could not be saved. Member ID: ' . $user->member_id . ( is_wp_error( $wp_user_updated ) ? '. WP user error: ' . $wp_user_updated->get_error_message() : '' ), false );
+			} else {
+				SwpmLog::log_simple_debug( 'Member password has been reset.', true );
+			}
 			$message .= '<div class="swpm-reset-pw-success">' . SwpmUtils::_( 'New password has been sent to your email address.' ) . '</div>';
 		}
 
@@ -763,13 +767,17 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		}
 	
 		$password_hash = SwpmUtils::encrypt_password( trim( $password ) );
-		$wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'password' => $password_hash ), array( 'member_id' => $user->member_id ) );
+		$member_updated = $wpdb->update( $wpdb->prefix . 'swpm_members_tbl', array( 'password' => $password_hash ), array( 'member_id' => $user->member_id ) );
 
 		//Update wp user password
 		add_filter( 'send_password_change_email', array( &$this, 'dont_send_password_change_email' ), 1, 3 ); //Stop WordPress from sending a reset password email to admin.
-		SwpmUtils::update_wp_user( $user->user_name, array( 'plain_password' => $password ) );
+		$wp_user_updated = SwpmUtils::update_wp_user( $user->user_name, array( 'plain_password' => $password ) );
 
-		SwpmLog::log_simple_debug( 'Member password has been reset. Email: ' . $email, true );
+		if ( false === $member_updated || is_wp_error( $wp_user_updated ) ) {
+			SwpmLog::log_simple_debug( 'Error! The member password could not be saved. Email: ' . $email . ( is_wp_error( $wp_user_updated ) ? '. WP user error: ' . $wp_user_updated->get_error_message() : '' ), false );
+		} else {
+			SwpmLog::log_simple_debug( 'Member password has been reset. Email: ' . $email, true );
+		}
 
 		//Trigger action hook
 		do_action( 'swpm_front_end_reset_password_using_link_completed', $user_data, $password);

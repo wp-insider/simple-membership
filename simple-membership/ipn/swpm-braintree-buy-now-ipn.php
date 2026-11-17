@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /*
  * Braintree Buy Now IPN handler
  * 
@@ -25,7 +29,7 @@ class SwpmBraintreeBuyNowIpnHandler {
 
         if ( ! SwpmMiscUtils::check_if_valid_payment_btn_cpt_id( $button_id ) ) {
             SwpmLog::log_simple_debug("Fatal Error! Invalid payment button ID received: " . $button_id, false);
-            wp_die("Fatal Error! Invalid payment button ID.");
+            wp_die( wp_kses_post( "Fatal Error! Invalid payment button ID." ));
         }
 
         //Retrieve the CPT for this button
@@ -33,7 +37,7 @@ class SwpmBraintreeBuyNowIpnHandler {
         if (!$button_cpt) {
             //Fatal error. Could not find this payment button post object.
             SwpmLog::log_simple_debug("Fatal Error! Failed to retrieve the payment button post object for the given button ID: " . $button_id, false);
-            wp_die("Fatal Error! Payment button (ID: " . $button_id . ") does not exist. This request will fail.");
+            wp_die( wp_kses_post( "Fatal Error! Payment button (ID: " . $button_id . ") does not exist. This request will fail." ));
         }
 
         $membership_level_id = get_post_meta($button_id, 'membership_level_id', true);
@@ -45,7 +49,7 @@ class SwpmBraintreeBuyNowIpnHandler {
             //Fatal error. Payment amount may have been tampered with.
             $error_msg = 'Fatal Error! Received payment amount (' . $payment_amount . ') does not match with the original amount (' . $true_payment_amount . ')';
             SwpmLog::log_simple_debug($error_msg, false);
-            wp_die($error_msg);
+            wp_die( wp_kses_post( $error_msg ));
         }
 
         //Validation passed. Go ahead with the charge.
@@ -96,14 +100,14 @@ class SwpmBraintreeBuyNowIpnHandler {
             ]);
         } catch (Exception $e) {
             SwpmLog::log_simple_debug("Braintree library error occurred: " . get_class($e) . ", button ID: " . $button_id, false);
-            wp_die('Braintree library error occurred: ' . get_class($e));
+            wp_die( wp_kses_post( 'Braintree library error occurred: ' . get_class($e) ));
         }
 
         if (!$result->success) {
             
             
             SwpmLog::log_simple_debug("Braintree transaction error occurred: " . $result->transaction->status . ", message: ".$result->getMessage."  , button ID: " . $button_id, false);
-            wp_die("Braintree transaction error occurred: " . $result->transaction->status);
+            wp_die( wp_kses_post( "Braintree transaction error occurred: " . $result->transaction->status ));
         } else {
 
             //Everything went ahead smoothly with the charge.

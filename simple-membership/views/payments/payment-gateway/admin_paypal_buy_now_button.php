@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /* * ***************************************************************
  * Render the new PayPal Buy now payment button creation interface
  * ************************************************************** */
@@ -9,11 +13,11 @@ function swpm_create_new_pp_buy_now_button() {
     ?>
 
     <div class="swpm-orange-box">
-        <?php _e('View the', 'simple-membership') ?> <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-buy-now-button-inside-the-simple-membership-plugin/"><?php _e('documentation', 'simple-membership') ?></a>&nbsp; <?php _e('to learn how to create a PayPal Buy Now payment button and use it.', 'simple-membership') ?>
+        <?php esc_attr_e('View the', 'simple-membership') ?> <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-buy-now-button-inside-the-simple-membership-plugin/"><?php esc_attr_e('documentation', 'simple-membership') ?></a>&nbsp; <?php esc_attr_e('to learn how to create a PayPal Buy Now payment button and use it.', 'simple-membership') ?>
     </div>
 
     <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php _e('PayPal Buy Now Button Configuration', 'simple-membership'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php esc_attr_e('PayPal Buy Now Button Configuration', 'simple-membership'); ?></label></h3>
         <div class="inside">
 
             <form id="pp_button_config_form" method="post">
@@ -23,33 +27,33 @@ function swpm_create_new_pp_buy_now_button() {
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Button Title', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Button Title', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="button_name" value="" required />
-                            <p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Membership Level', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Membership Level', 'simple-membership'); ?></th>
                         <td>
                             <select id="membership_level_id" name="membership_level_id">
-                                <?php echo SwpmUtils::membership_level_dropdown(); ?>
+                                <?php echo wp_kses( SwpmUtils::membership_level_dropdown(), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
                             </select>
-                            <p class="description"><?php _e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Payment Amount', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Payment Amount', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="6" name="payment_amount" value="" required />
-                            <p class="description"> <?php _e('Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership') ?></p>
+                            <p class="description"> <?php esc_attr_e('Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Payment Currency', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Payment Currency', 'simple-membership'); ?></th>
                         <td>
                             <select id="payment_currency" name="payment_currency">
                                 <option selected="selected" value="USD">US Dollars ($)</option>
@@ -84,39 +88,39 @@ function swpm_create_new_pp_buy_now_button() {
                                 <option value="TRY">Turkish Lira</option>
                                 <option value="VND">Vietnamese Dong</option>
                             </select>
-                            <p class="description"><?php _e('Select the currency for this payment button.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Select the currency for this payment button.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Return URL', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Return URL', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="100" name="return_url" value="" />
-                            <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('PayPal Email', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('PayPal Email', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="paypal_email" value="" required />
-                            <p class="description"><?php _e('Enter your PayPal email address. The payment will go to this PayPal account.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Enter your PayPal email address. The payment will go to this PayPal account.', 'simple-membership') ?></p>
                         </td>
                     </tr>                    
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Button Image URL', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Button Image URL', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="100" name="button_image_url" value="" />
-                            <p class="description"><?php _e('If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Custom Checkout Page Logo Image', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Custom Checkout Page Logo Image', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="100" name="checkout_logo_image_url" value="" />
-                            <p class="description"><?php _e('Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.', 'simple-membership') ?></p>
                         </td>
                     </tr>
                     
@@ -124,7 +128,7 @@ function swpm_create_new_pp_buy_now_button() {
 
                 <p class="submit">
                     <?php wp_nonce_field('swpm_admin_add_edit_pp_buy_now_btn','swpm_admin_create_pp_buy_now_btn') ?>
-                    <input type="submit" name="swpm_pp_buy_now_save_submit" class="button-primary" value="<?php _e('Save Payment Data', 'simple-membership'); ?>" >
+                    <input type="submit" name="swpm_pp_buy_now_save_submit" class="button-primary" value="<?php esc_attr_e('Save Payment Data', 'simple-membership'); ?>" >
                 </p>
 
             </form>
@@ -204,7 +208,7 @@ function swpm_edit_pp_buy_now_button() {
     
     ?>
     <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php _e('PayPal Buy Now Button Configuration', 'simple-membership'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php esc_attr_e('PayPal Buy Now Button Configuration', 'simple-membership'); ?></label></h3>
         <div class="inside">
 
             <form id="pp_button_config_form" method="post">
@@ -213,41 +217,41 @@ function swpm_edit_pp_buy_now_button() {
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Button ID', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Button ID', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="10" name="button_id" value="<?php echo esc_attr($button_id); ?>" readonly required />
-                            <p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Button Title', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Button Title', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="button_name" value="<?php echo esc_attr($button->post_title); ?>" required />
-                            <p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Membership Level', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Membership Level', 'simple-membership'); ?></th>
                         <td>
                             <select id="membership_level_id" name="membership_level_id">
-                                <?php echo SwpmUtils::membership_level_dropdown($membership_level_id); ?>
+                                <?php echo wp_kses( SwpmUtils::membership_level_dropdown($membership_level_id), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
                             </select>
-                            <p class="description"><?php _e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Payment Amount', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Payment Amount', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="6" name="payment_amount" value="<?php echo esc_attr($payment_amount); ?>" required />
-                            <p class="description"><?php _e('Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Payment Currency', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Payment Currency', 'simple-membership'); ?></th>
                         <td>                            
                             <select id="payment_currency" name="payment_currency">
                                 <option value="USD" <?php echo ($payment_currency == 'USD') ? 'selected="selected"' : ''; ?>>US Dollars ($)</option>
@@ -282,39 +286,39 @@ function swpm_edit_pp_buy_now_button() {
                                 <option value="TRY" <?php echo ($payment_currency == 'TRY') ? 'selected="selected"' : ''; ?>>Turkish Lira</option>
                                 <option value="VND" <?php echo ($payment_currency == 'VND') ? 'selected="selected"' : ''; ?>>Vietnamese Dong</option>
                             </select>
-                            <p class="description"><?php _e('Select the currency for this payment button.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Select the currency for this payment button.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Return URL', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Return URL', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="100" name="return_url" value="<?php echo esc_url_raw($return_url); ?>" />
-                            <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('PayPal Email', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('PayPal Email', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="paypal_email" value="<?php echo esc_attr($paypal_email); ?>" required />
-                            <p class="description"><?php _e('Enter your PayPal email address. The payment will go to this PayPal account.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Enter your PayPal email address. The payment will go to this PayPal account.', 'simple-membership') ?></p>
                         </td>
                     </tr>                    
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Button Image URL', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Button Image URL', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="100" name="button_image_url" value="<?php echo esc_url_raw($button_image_url); ?>" />
-                            <p class="description"><?php _e('If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership') ?></p>
                         </td>
                     </tr> 
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Custom Checkout Page Logo Image', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Custom Checkout Page Logo Image', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="100" name="checkout_logo_image_url" value="<?php echo esc_url_raw($checkout_logo_image_url); ?>" />
-                            <p class="description"><?php _e('Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Specify an image URL if you want to customize the paypal checkout page with a custom logo/image. The image URL must be a "https" URL.', 'simple-membership') ?></p>
                         </td>
                     </tr>
                     
@@ -322,7 +326,7 @@ function swpm_edit_pp_buy_now_button() {
 
                 <p class="submit">
                 <?php wp_nonce_field('swpm_admin_add_edit_pp_buy_now_btn','swpm_admin_edit_pp_buy_now_btn') ?>
-                <input type="submit" name="swpm_pp_buy_now_edit_submit" class="button-primary" value="<?php _e('Save Payment Data', 'simple-membership'); ?>" >
+                <input type="submit" name="swpm_pp_buy_now_edit_submit" class="button-primary" value="<?php esc_attr_e('Save Payment Data', 'simple-membership'); ?>" >
                 </p>
 
             </form>
@@ -365,7 +369,7 @@ function swpm_edit_pp_buy_now_button_data() {
         update_post_meta($button_id, 'button_image_url', trim(sanitize_text_field($_REQUEST['button_image_url'])));
         update_post_meta($button_id, 'checkout_logo_image_url', trim(sanitize_text_field($_REQUEST['checkout_logo_image_url'])));
 
-        echo '<div id="message" class="updated fade"><p>'.  __('Payment button data successfully updated!', 'simple-membership'). '</p></div>';
+        echo '<div id="message" class="updated fade"><p>'.  esc_html__( 'Payment button data successfully updated!', 'simple-membership' ). '</p></div>';
     }
 }
 

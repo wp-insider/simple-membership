@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /* * ************************************************
  * Braintree Buy Now button shortcode handler
@@ -112,8 +116,8 @@ function swpm_render_braintree_buy_now_button_sc_output($button_code, $args)
     $output .= '<button id="swpm-show-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-show-form-button-' . esc_attr($button_id) . ' ' . esc_attr($class) . '" type="button" onclick="swpm_braintree_show_form_' . $uniqid . '();"><span>' . esc_attr($button_text) . '</span></button>';
     $output .= '<button id="swpm-submit-form-btn-' . $uniqid . '" class="swpm-braintree-pay-now-button swpm-braintree-submit-form-button-' . esc_attr($button_id) . ' ' . esc_attr($class) . '" type="submit" style="display: none;"><span>' . esc_attr($button_text) . '</span></button>';
     
-    $output .= '<script src="https://js.braintreegateway.com/web/3.88.2/js/client.min.js"></script>';
-    $output .= '<script src="https://js.braintreegateway.com/web/dropin/1.33.4/js/dropin.min.js"></script>';    
+    $output .= '<script src="https://js.braintreegateway.com/web/3.88.2/js/client.min.js"></script>'; // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent, PluginCheck.CodeAnalysis.Offloading.OffloadedContent, WordPress.WP.EnqueuedResources.NonEnqueuedScript, WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- Third-party PayPal/Braintree SDK resources must be loaded from the provider.
+    $output .= '<script src="https://js.braintreegateway.com/web/dropin/1.33.4/js/dropin.min.js"></script>'; // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent, PluginCheck.CodeAnalysis.Offloading.OffloadedContent, WordPress.WP.EnqueuedResources.NonEnqueuedScript, WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- Third-party PayPal/Braintree SDK resources must be loaded from the provider.
 
 
     ob_start();

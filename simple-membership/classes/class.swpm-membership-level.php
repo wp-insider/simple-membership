@@ -50,7 +50,7 @@ class SwpmMembershipLevel {
         //Check nonce
         if ( !isset($_POST['_wpnonce_create_swpmlevel_admin_end']) || !wp_verify_nonce($_POST['_wpnonce_create_swpmlevel_admin_end'], 'create_swpmlevel_admin_end' )){
             //Nonce check failed.
-            wp_die(SwpmUtils::_("Error! Nonce verification failed for membership level creation from admin end."));
+            wp_die(esc_html__( "Error! Nonce verification failed for membership level creation from admin end.", 'simple-membership' ));
         }
         
         global $wpdb;
@@ -116,12 +116,12 @@ class SwpmMembershipLevel {
         //Check nonce
         if ( !isset($_POST['_wpnonce_edit_swpmlevel_admin_end']) || !wp_verify_nonce($_POST['_wpnonce_edit_swpmlevel_admin_end'], 'edit_swpmlevel_admin_end' )){
             //Nonce check failed.
-            wp_die(SwpmUtils::_("Error! Nonce verification failed for membership level edit from admin end."));
+            wp_die(esc_html__( "Error! Nonce verification failed for membership level edit from admin end.", 'simple-membership' ));
         }
         
         global $wpdb;
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $id);
-        $level = $wpdb->get_row($query, ARRAY_A);
+        
+        $level = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $id), ARRAY_A);
         $form = new SwpmLevelForm($level);
         if ($form->is_valid()) {
             $wpdb->update($wpdb->prefix . "swpm_membership_tbl", $form->get_sanitized(), array('id' => $id));

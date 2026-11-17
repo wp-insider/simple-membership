@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 include_once('class.swpm-protection-base.php');
 
@@ -78,8 +82,7 @@ class SwpmProtection extends SwpmProtectionBase {
 
         //Get all the protected post IDs from the database (it is stored in the membership level table with ID 1).
         $level_id = 1; // Default level ID for General Protection.
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_membership_tbl WHERE id = %d", absint($level_id));
-        $result = $wpdb->get_row($query);
+        $result = $wpdb->get_row( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_membership_tbl WHERE id = %d", absint($level_id)) );
 
         $standard_posts_list = isset($result->post_list) ? (array) unserialize($result->post_list) : array();
         $standard_pages_list = isset($result->page_list) ? (array) unserialize($result->page_list) : array();

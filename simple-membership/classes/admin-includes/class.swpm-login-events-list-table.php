@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SWPM_Login_Events_List_Table extends WP_List_Table {
 
@@ -60,7 +64,7 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 	}
 
 	public function column_event_date_time( $item ) {
-		return date(SwpmReportsAdminMenu::get_date_format() . ' \a\t ' . SwpmReportsAdminMenu::get_time_format(), strtotime($item['event_date_time']));
+		return gmdate(SwpmReportsAdminMenu::get_date_format() . ' \a\t ' . SwpmReportsAdminMenu::get_time_format(), strtotime($item['event_date_time']));
 	}
 
 	public function column_browser($item){
@@ -102,68 +106,31 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 		$this->items = $this->table_data;
 	}
 
-	public function get_total_item_count() {
-		global $wpdb;
+    public function get_total_item_count() {
+        global $wpdb;
+        $search = isset( $this->search ) ? (string) $this->search : '';
+        $range = $this->get_date_range_bounds();
+        $start = $range ? $range['start'] : '1000-01-01 00:00:00';
+        $end = $range ? $range['end'] : '9999-12-31 23:59:59';
+        return $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->prefix}swpm_events_tbl WHERE event_type = 'login_success'
+                AND (%s = '' OR username LIKE %s) AND (%d = 0 OR event_date_time BETWEEN %s AND %s)",
+            $search, '%' . $wpdb->esc_like( $search ) . '%', (int) (bool) $range, $start, $end
+        ) );
+    }
 
-		$table = $wpdb->prefix . 'swpm_events_tbl';
-
-        $query = "SELECT COUNT(*) FROM $table WHERE event_type = 'login_success'";
-
-        $args = array();
-
-        if ( isset($this->search) && !empty($this->search) ){
-	        $username = "%" . $wpdb->esc_like($this->search) . "%";
-	        $query .= " AND username LIKE %s";
-
-	        $args[] = $username;
-        }
-
-        $date_range = $this->get_date_range_bounds();
-        if ( $date_range ) {
-            $query .= " AND event_date_time BETWEEN %s AND %s";
-
-            $args[] = $date_range['start'];
-            $args[] = $date_range['end'];
-        }
-
-        $query = !empty($args) ? $wpdb->prepare($query, ...$args) : $query;
-
-		return $wpdb->get_var( $query );
-	}
-
-	private function get_table_data( $limit, $offset ) {
-		global $wpdb;
-
-		$table = $wpdb->prefix . 'swpm_events_tbl';
-
-        $query = "SELECT * FROM $table WHERE event_type = 'login_success'";
-
-        $args = array();
-
-		if ( isset($this->search) && !empty($this->search) ){
-			$username = "%" . $wpdb->esc_like($this->search) . "%";
-
-			$query .= " AND username LIKE %s";
-
-			$args[] = $username;
-		}
-
-		$date_range = $this->get_date_range_bounds();
-		if ( $date_range ) {
-		    $query .= " AND event_date_time BETWEEN %s AND %s";
-
-            $args[] = $date_range['start'];
-            $args[] = $date_range['end'];
-		}
-
-        $query .= " ORDER BY event_id DESC LIMIT %d OFFSET %d";
-        $args[] = $limit;
-        $args[] = $offset;
-
-		$query = !empty($args) ? $wpdb->prepare($query, ...$args) : $query;
-
-		return $wpdb->get_results($query, ARRAY_A);
-	}
+    private function get_table_data( $limit, $offset ) {
+        global $wpdb;
+        $search = isset( $this->search ) ? (string) $this->search : '';
+        $range = $this->get_date_range_bounds();
+        $start = $range ? $range['start'] : '1000-01-01 00:00:00';
+        $end = $range ? $range['end'] : '9999-12-31 23:59:59';
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}swpm_events_tbl WHERE event_type = 'login_success'
+                AND (%s = '' OR username LIKE %s) AND (%d = 0 OR event_date_time BETWEEN %s AND %s) ORDER BY event_id DESC LIMIT %d OFFSET %d",
+            $search, '%' . $wpdb->esc_like( $search ) . '%', (int) (bool) $range, $start, $end, $limit, $offset
+        ), ARRAY_A );
+    }
 
     /**
      * Returns the normalised ['start' => ..., 'end' => ...] datetime bounds for the
@@ -209,7 +176,7 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
             return null;
         }
 
-        return date( 'Y-m-d H:i:s', $timestamp );
+        return gmdate( 'Y-m-d H:i:s', $timestamp );
     }
 
 	protected function get_sortable_columns() {
@@ -252,11 +219,11 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 			$action = 'bulk-' . $this->_args['plural'];
 
 			if ( ! wp_verify_nonce( $nonce, $action ) ) {
-				wp_die( __( 'Nonce verification failed!', 'simple-membership' ) );
+				wp_die( esc_html__( 'Nonce verification failed!', 'simple-membership' ) );
 			}
 
 			if ( ! isset( $_POST['bulk-delete'] ) || empty($_POST['bulk-delete']) ) {
-				echo '<div class="notice notice-error"><strong>' . __( 'No entries were selected.', 'simple-membership' ) . '</strong></div>';
+				echo '<div class="notice notice-error"><strong>' . esc_html__( 'No entries were selected.', 'simple-membership' ) . '</strong></div>';
 				return;
 			}
 
@@ -269,73 +236,45 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 
 			global $wpdb;
 			$table = $wpdb->prefix . 'swpm_events_tbl';
-			$del_row = $wpdb->query('DELETE FROM ' . $table . ' WHERE event_id IN ( '. $row_ids .' )');
+			$del_row = $wpdb->query('DELETE FROM ' . $table . ' WHERE event_id IN ( '. $row_ids .' )'); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- IDs are cast with intval.
 
 			if ( $del_row ) {
-				echo '<div class="notice notice-success"><p>' . __( 'Event entries deleted successfully!', 'simple-membership' ) . '</p></div>';
+				echo '<div class="notice notice-success"><p>' . esc_html__( 'Event entries deleted successfully!', 'simple-membership' ) . '</p></div>';
 			} else {
-				echo '<div class="notice notice-error"><p>' . __( 'Error: event entries could not be deleted!', 'simple-membership' ) . '</p></div>';
+				echo '<div class="notice notice-error"><p>' . esc_html__( 'Error: event entries could not be deleted!', 'simple-membership' ) . '</p></div>';
 			}
 		}
 	}
 
 	public function display_filter_data_section() {
 
-        $start_date = empty($this->start_date) ? date('Y-m-d' ) : date('Y-m-d', strtotime($this->start_date));
-		$end_date = empty($this->end_date) ? date('Y-m-d' ) : date('Y-m-d', strtotime($this->end_date));
+        $start_date = empty($this->start_date) ? gmdate('Y-m-d' ) : gmdate('Y-m-d', strtotime($this->start_date));
+		$end_date = empty($this->end_date) ? gmdate('Y-m-d' ) : gmdate('Y-m-d', strtotime($this->end_date));
 
         ?>
         <fieldset id="swpm-login-events-filter-fieldset" class="alignleft actions searchactions" style="display: flex; align-items: end; flex-wrap: wrap; margin-bottom: 18px">
             <div>
-                <label for="swpm_date_range_start"><?php _e('Start Date', 'simple-membership') ?></label>
+                <label for="swpm_date_range_start"><?php esc_attr_e('Start Date', 'simple-membership') ?></label>
                 <br>
-                <input type="date" name="swpm_start_date" id="swpm_date_range_start" value="<?php esc_attr_e($start_date);?>">
+                <input type="date" name="swpm_start_date" id="swpm_date_range_start" value="<?php echo esc_attr( $start_date );?>">
             </div>
 
             <div>
-                <label for="swpm_date_range_end"><?php _e('End Date', 'simple-membership') ?></label>
+                <label for="swpm_date_range_end"><?php esc_attr_e('End Date', 'simple-membership') ?></label>
                 <br>
-                <input type="date" name="swpm_end_date" id="swpm_date_range_end" value="<?php esc_attr_e($end_date);?>">
+                <input type="date" name="swpm_end_date" id="swpm_date_range_end" value="<?php echo esc_attr( $end_date );?>">
             </div>
 
             <div>
-                <label for="swpm-search-input"><?php _e('Search', 'simple-membership') ?>:</label>
+                <label for="swpm-search-input"><?php esc_attr_e('Search', 'simple-membership') ?>:</label>
                 <br>
                 <input type="search" id="swpm-search-input" name="swpm_search" value="<?php _admin_search_query(); ?>"/>
             </div>
 
             <button class="button-secondary" type="submit" id="swpm-login-events-filter-submit">
-                <?php _e('Apply Filter', 'simple-membership')?>
+                <?php esc_attr_e('Apply Filter', 'simple-membership')?>
             </button>
         </fieldset>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function (){
-                const submitBtn = document.getElementById('swpm-login-events-filter-submit');
-                const fieldset = document.getElementById('swpm-login-events-filter-fieldset');
-                const fields = fieldset?.querySelectorAll('input');
-
-                submitBtn?.addEventListener('click', function (e){
-                    e.preventDefault();
-
-                    const currentURL = new URL(window.location.href);
-
-                    fields.forEach(input => {
-                        const inputValue = input.value.trim();
-
-                        if (inputValue.length){
-                            currentURL.searchParams.set(input.name, inputValue) // Append query arg.
-                        }else{
-                            currentURL.searchParams.delete(input.name) // Remove existing empty query args.
-                        }
-
-                        currentURL.searchParams.delete('paged') // Always remove the pagination args when filter is applied.
-                    });
-
-                    window.location.replace(currentURL);
-                })
-            })
-        </script>
         <?php
 	}
 
@@ -343,50 +282,12 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
         ?>
         <div>
             <button type="button" id="swpm-reset-login-event-entries" class="button">
-                <?php _e('Reset All Login Event Entries', 'simple-membership') ?>
+                <?php esc_attr_e('Reset All Login Event Entries', 'simple-membership') ?>
             </button>
             <p class="description">
-                <?php _e('This button will reset all login event entries in the database.', 'simple-membership') ?>
+                <?php esc_attr_e('This button will reset all login event entries in the database.', 'simple-membership') ?>
             </p>
         </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function(){
-                const resetBtn = document.getElementById('swpm-reset-login-event-entries');
-                resetBtn.addEventListener('click', async function (e){
-                    if(!confirm("Are you sure you want to delete all logs?")) {
-                        return;
-                    }
-                    try {
-                        const payload = new URLSearchParams({
-                            action: 'swpm_reset_login_events',
-                            nonce: '<?php echo wp_create_nonce('swpm_reset_login_events') ?>'
-                        })
-                        const response = await fetch('<?php echo admin_url( 'admin-ajax.php')?>', {
-                            method: 'post',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            },
-                            body: payload,
-                        })
-
-                        const result = await response.json();
-
-                        if (!result.success) {
-                            throw new Error(result.data.message);
-                        }
-
-                        alert(result.data.message);
-
-                        window.location.replace(window.location.href);
-                    } catch (error) {
-                        console.log(error);
-                        alert(error.message);
-                    }
-                })
-            })
-        </script>
-
         <?php
     }
 
@@ -400,5 +301,13 @@ class SWPM_Login_Events_List_Table extends WP_List_Table {
 		<br>
 		<?php $this->display_reset_events_section() ?>
         <?php
+        wp_enqueue_script( 'swpm_admin_login_events_related', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm-admin-login-events-related.js', null, SIMPLE_WP_MEMBERSHIP_VER, array(
+            'strategy' => 'defer',
+            'in_footer' => true,
+        ) );
+        wp_localize_script( 'swpm_admin_login_events_related', 'swpm_admin_login_events_vars', array(
+            'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+            'nonce' => wp_create_nonce('swpm_reset_login_events'),
+        ));
     }
 }

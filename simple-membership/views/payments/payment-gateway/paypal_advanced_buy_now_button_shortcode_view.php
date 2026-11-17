@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /**************************************************
  * PayPal PPCP Buy Now button shortcode handler
@@ -160,10 +164,11 @@ function swpm_render_pp_buy_now_ppcp_button_sc_output( $button_code, $args ) {
 	ob_start();
 	?>
 <!-- To be replaced with your own stylesheet -->
-<link rel="stylesheet" type="text/css" href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"/>
+<?php echo '<link rel="stylesheet" type="text/css" href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"/>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, PluginCheck.CodeAnalysis.Offloading.OffloadedContent, WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- Stylesheet required by PayPal card fields. ?>
 
 <!-- Express fills in the clientId and clientToken variables -->
-<script src="<?php echo $sdk_src_url; ?>" data-partner-attribution-id="TipsandTricks_SP_PPCP" data-client-token="<?php echo $client_token; ?>"></script>
+<?php // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent, PluginCheck.CodeAnalysis.Offloading.OffloadedContent, WordPress.WP.EnqueuedResources.NonEnqueuedScript, WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- Third-party PayPal/Braintree SDK resources must be loaded from the provider. ?>
+<script src="<?php echo esc_url( $sdk_src_url ); ?>" data-partner-attribution-id="TipsandTricks_SP_PPCP" data-client-token="<?php echo esc_attr( $client_token ); ?>"></script>
 
 <div class="swpm-button-wrapper swpm-paypal-buy-now-button-wrapper">
 
@@ -203,13 +208,13 @@ paypal
         console.log('dataObj: ' + JSON.stringify(dataObj));
 
         // Using fetch API for AJAX
-        let postData = 'action=swpm_acdc_setup_order&data=' + JSON.stringify(dataObj) + '&_wpnonce=<?php echo $wp_nonce; ?>';
+        let postData = 'action=swpm_acdc_setup_order&data=' + JSON.stringify(dataObj) + '&_wpnonce=<?php echo esc_attr( $wp_nonce ); ?>';
         console.log('Goign to send off Ajax request to the server that will create the order.');
         console.log('Post Data: ' + postData);
         //This alert will allow us to see the console log before going forward.
         alert('About to send the ajax request');
                                                 
-        return fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+        return fetch(<?php echo esc_url( admin_url('admin-ajax.php') ); ?>, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -254,13 +259,13 @@ const cardField = paypal.CardFields({
         console.log('dataObj: ' + JSON.stringify(dataObj));
 
         // Using fetch API for AJAX
-        let postData = 'action=swpm_acdc_setup_order&data=' + JSON.stringify(dataObj) + '&_wpnonce=<?php echo $wp_nonce; ?>';
+        let postData = 'action=swpm_acdc_setup_order&data=' + JSON.stringify(dataObj) + '&_wpnonce=<?php echo esc_attr( $wp_nonce ); ?>';
         console.log('Goign to send off Ajax request to the server that will create the order.');
         console.log('Post Data: ' + postData);
         //This alert will allow us to see the console log before going forward.
         //alert('About to send the ajax request');
                                                 
-        return fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
+        return fetch(<?php echo esc_url( admin_url('admin-ajax.php') ); ?>, {
             method: "post",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -287,10 +292,10 @@ const formData = new FormData();
 formData.append('action', 'swpm_acdc_capture_order');
 formData.append('order_id', orderID);
 formData.append('on_page_button_id', '<?php echo esc_js($on_page_embed_button_id); ?>');
-formData.append('_wpnonce', '<?php echo $wp_nonce; ?>');
+formData.append('_wpnonce', '<?php echo esc_attr( $wp_nonce ); ?>');
 console.log( 'Going to do capture order AJAX. Form Data: ' +  JSON.stringify(formData) );
 
-        return fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
+        return fetch(<?php echo esc_url( admin_url('admin-ajax.php') ); ?>, {
             method: "post",
             body: formData
         })

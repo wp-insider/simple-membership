@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /*
 It uses the following action hooks to render the button's form then process the form submission.
@@ -168,8 +172,8 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
     if ( empty($live_client_id) && empty($sandbox_client_id) ) {
         //API credentials are not configured. Show a warning message and return.
         echo '<div class="swpm-orange-box">';
-        echo __('You need to configure your PayPal API credentials first. ', 'simple-membership');
-        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api" target="_blank">'.__('Click here', 'simple-membership').'</a> ' . __('to configure your PayPal API credentials in the payment settings menu.', 'simple-membership');
+        echo esc_html__( 'You need to configure your PayPal API credentials first. ', 'simple-membership' );
+        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api" target="_blank">'.esc_html__( 'Click here', 'simple-membership' ).'</a> ' . esc_html__( 'to configure your PayPal API credentials in the payment settings menu.', 'simple-membership' );
         echo '</div>';
         return;
     }
@@ -177,12 +181,12 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
     ?>
 
     <div class="swpm-orange-box">
-        <?php _e('View the', 'simple-membership') ?> <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-subscription-buttons-paypal-api/"><?php _e('documentation', 'simple-membership') ?></a>&nbsp;
-        <?php _e('to learn how to create and use a PayPal Subscription (New API) payment button.', 'simple-membership') ?>
+        <?php esc_attr_e('View the', 'simple-membership') ?> <a target="_blank" href="https://simple-membership-plugin.com/create-paypal-subscription-buttons-paypal-api/"><?php esc_attr_e('documentation', 'simple-membership') ?></a>&nbsp;
+        <?php esc_attr_e('to learn how to create and use a PayPal Subscription (New API) payment button.', 'simple-membership') ?>
     </div>
 
     <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php _e('PayPal Subscription (New API) Button Configuration', 'simple-membership'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php esc_attr_e('PayPal Subscription (New API) Button Configuration', 'simple-membership'); ?></label></h3>
         <div class="inside">
 
             <form id="pp_subscription_new_button_config_form" method="post">
@@ -194,41 +198,41 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
                     <?php if ($is_edit_mode) { ?>
                         <tr valign="top">
-                            <th scope="row"><?php _e('Button ID', 'simple-membership'); ?></th>
+                            <th scope="row"><?php esc_attr_e('Button ID', 'simple-membership'); ?></th>
                             <td>
                                 <input type="text" size="10" name="button_id" value="<?php echo esc_attr($bt_opts['button_id']); ?>" readonly required />
-                                <p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
+                                <p class="description"><?php esc_attr_e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
                             </td>
                         </tr>
                         <tr valign="top">
-                            <th scope="row"><?php _e('Button Shortcode', 'simple-membership'); ?></th>
+                            <th scope="row"><?php esc_attr_e('Button Shortcode', 'simple-membership'); ?></th>
                             <td>
                                 <?php
                                 $shortcode = SwpmUtils::get_shortcode_for_admin_ui_display($bt_opts['button_id'], 50);
-                                echo $shortcode;
+                                echo wp_kses( $shortcode, SwpmKsesUtils::shortcode_display_tags() );
                                 ?>
                                 <p class="description">
-                                    <?php _e('Use this shortcode to embed the payment button in your posts, pages, or on your ', 'simple-membership') ?>
-                                    <?php echo '<a href="https://simple-membership-plugin.com/membership-join-us-page/" target="_blank">' . __('join-us landing page', 'simple-membership') . '</a>.' ?>
+                                    <?php esc_attr_e('Use this shortcode to embed the payment button in your posts, pages, or on your ', 'simple-membership') ?>
+                                    <?php echo '<a href="https://simple-membership-plugin.com/membership-join-us-page/" target="_blank">' . esc_html__( 'join-us landing page', 'simple-membership' ) . '</a>.' ?>
                                 </p>
                             </td>
                         </tr>
                     <?php } ?>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Button Title', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Button Title', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="button_name" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['button_name']) : ''); ?>" required />
-                            <p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Membership Level', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Membership Level', 'simple-membership'); ?></th>
                         <td>
                             <select id="membership_level_id" name="membership_level_id">
-                                <?php echo ($is_edit_mode ? SwpmUtils::membership_level_dropdown($bt_opts['membership_level_id']) : SwpmUtils::membership_level_dropdown()); ?>
+                                <?php wp_kses(($is_edit_mode ? SwpmUtils::membership_level_dropdown($bt_opts['membership_level_id']) : SwpmUtils::membership_level_dropdown()), SwpmKsesUtils::wp_kses_select_option_tags());?>
                             </select>
-                            <p class="description"><?php _e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
@@ -237,32 +241,32 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
 					if ( $is_edit_mode && !empty($bt_opts['pp_subscription_plan_id'])) {
                         ?>
                         <tr valign="top">
-                            <th colspan="2"><div class="swpm-grey-box"><?php _e('PayPal Billing Plan Details for This Button', 'simple-membership'); ?></div></th>
+                            <th colspan="2"><div class="swpm-grey-box"><?php esc_attr_e('PayPal Billing Plan Details for This Button', 'simple-membership'); ?></div></th>
                         </tr>
 
                         <tr valign="top">
-                            <th scope="row"><?php _e('Subscription Plan Mode', 'simple-membership'); ?></th>
+                            <th scope="row"><?php esc_attr_e('Subscription Plan Mode', 'simple-membership'); ?></th>
                             <td>
                                 <input type="text" size="20" name="pp_subscription_plan_mode" value="<?php echo esc_attr($bt_opts['pp_subscription_plan_mode']); ?>" readonly />
-                                <p class="description"><?php _e('This is the paypal mode this subscription button was created in.', 'simple-membership') ?></p>
+                                <p class="description"><?php esc_attr_e('This is the paypal mode this subscription button was created in.', 'simple-membership') ?></p>
                             </td>
                         </tr>
                         <tr valign="top">
-                            <th scope="row"><?php _e('Subscription Plan ID', 'simple-membership'); ?></th>
+                            <th scope="row"><?php esc_attr_e('Subscription Plan ID', 'simple-membership'); ?></th>
                             <td>
                                 <input type="text" size="20" name="pp_subscription_plan_id" value="<?php echo esc_attr($bt_opts['pp_subscription_plan_id']); ?>" readonly />
-                                <p class="description"><?php _e('This is the paypal subscription plan ID.', 'simple-membership') ?></p>
+                                <p class="description"><?php esc_attr_e('This is the paypal subscription plan ID.', 'simple-membership') ?></p>
                             </td>
                         <?php                    
 					}
                     ?>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Subscription/Recurring Billing Details', 'simple-membership'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php esc_attr_e('Subscription/Recurring Billing Details', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Payment Currency', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Payment Currency', 'simple-membership'); ?></th>
                         <td>
                             <select id="payment_currency" name="payment_currency">
                                 <option value="USD" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'USD') ? 'selected="selected"' : ''; ?>>US Dollars ($)</option>
@@ -297,20 +301,20 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                                 <option value="TRY" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'TRY') ? 'selected="selected"' : ''; ?>>Turkish Lira</option>
                                 <option value="VND" <?php echo (isset($bt_opts['payment_currency']) && $bt_opts['payment_currency'] == 'VND') ? 'selected="selected"' : ''; ?>>Vietnamese Dong</option>
                             </select>
-                            <p class="description"><?php _e('Select the currency for this payment button.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Select the currency for this payment button.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Recurring Billing Amount', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Recurring Billing Amount', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" min="0" step="0.01" size="10" name="recurring_billing_amount" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['recurring_billing_amount']) : ''); ?>" required />
-                            <p class="description"><?php _e('Amount to be charged on every billing cycle. If used with a trial period then this amount will be charged after the trial period is over. Example values: 9.90 or 25.00 or 299.90 etc (do not enter currency symbol).', 'simple-membership'); ?></p>
+                            <p class="description"><?php esc_attr_e('Amount to be charged on every billing cycle. If used with a trial period then this amount will be charged after the trial period is over. Example values: 9.90 or 25.00 or 299.90 etc (do not enter currency symbol).', 'simple-membership'); ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Recurring Billing Cycle', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Recurring Billing Cycle', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" min="0" step="1" size="10" name="recurring_billing_cycle" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['recurring_billing_cycle']) : ''); ?>" required />
                             <select id="recurring_billing_cycle_term" name="recurring_billing_cycle_term">
@@ -318,40 +322,40 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                                 <option value="M"<?php echo (isset($bt_opts['recurring_billing_cycle_term']) && $bt_opts['recurring_billing_cycle_term'] === 'M') ? ' selected' : ''; ?>>Month(s)</option>
                                 <option value="Y"<?php echo (isset($bt_opts['recurring_billing_cycle_term']) && $bt_opts['recurring_billing_cycle_term'] === 'Y') ? ' selected' : ''; ?>>Year(s)</option>
                             </select>
-                            <p class="description"><?php _e('Set the interval of the recurring payment. Example value: 1 Month (if you want to charge every month)', 'simple-membership'); ?></p>
+                            <p class="description"><?php esc_attr_e('Set the interval of the recurring payment. Example value: 1 Month (if you want to charge every month)', 'simple-membership'); ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Recurring Billing Cycle Count', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Recurring Billing Cycle Count', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="10" name="recurring_billing_cycle_count" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['recurring_billing_cycle_count']) : ''); ?>" />
-                            <p class="description"><?php _e('After how many cycles should billing stop. Leave this field empty (or enter 0) if you want the payment to continue until the subscription is canceled.', 'simple-membership'); ?></p>
+                            <p class="description"><?php esc_attr_e('After how many cycles should billing stop. Leave this field empty (or enter 0) if you want the payment to continue until the subscription is canceled.', 'simple-membership'); ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Re-attempt on Failure', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Re-attempt on Failure', 'simple-membership'); ?></th>
                         <td>
                             <input type="checkbox" name="recurring_billing_reattempt" value="1" <?php echo (isset($bt_opts['recurring_billing_reattempt']) && !empty($bt_opts['recurring_billing_reattempt']) ) ? ' checked' : ''; ?> />
-                            <p class="description"><?php _e('When checked, the payment will be re-attempted two more times if the payment fails. After the third failure, the subscription will be canceled.', 'simple-membership'); ?></p>
+                            <p class="description"><?php esc_attr_e('When checked, the payment will be re-attempted two more times if the payment fails. After the third failure, the subscription will be canceled.', 'simple-membership'); ?></p>
                         </td>
                     </tr>                    
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Trial Billing Details (Leave empty if you are not offering a trial period)', 'simple-membership'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php esc_attr_e('Trial Billing Details (Leave empty if you are not offering a trial period)', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Trial Billing Amount', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Trial Billing Amount', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" step="0.01" min="0" size="10" name="trial_billing_amount" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['trial_billing_amount']) : ''); ?>" />
-                            <p class="description"><?php _e('Amount to be charged for the trial period. Enter 0 if you want to offer a free trial period.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Amount to be charged for the trial period. Enter 0 if you want to offer a free trial period.', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Trial Billing Period', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Trial Billing Period', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" min="0" step="1" size="10" name="trial_billing_cycle" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['trial_billing_cycle']) : ''); ?>" />
                             <select id="trial_billing_cycle_term" name="trial_billing_cycle_term">
@@ -359,87 +363,87 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                                 <option value="M"<?php echo (isset($bt_opts['trial_billing_cycle_term']) && $bt_opts['trial_billing_cycle_term'] === 'M') ? ' selected' : ''; ?>>Month(s)</option>
                                 <option value="Y"<?php echo (isset($bt_opts['trial_billing_cycle_term']) && $bt_opts['trial_billing_cycle_term'] === 'Y') ? ' selected' : ''; ?>>Year(s)</option>
                             </select>
-                            <p class="description"><?php _e('Length of the trial period', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Length of the trial period', 'simple-membership') ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Button Style Settings (Optional)', 'simple-membership'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php esc_attr_e('Button Style Settings (Optional)', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e("Button Type/Label", "simple-membership"); ?></th>
+                        <th scope="row"><?php esc_attr_e("Button Type/Label", "simple-membership"); ?></th>
                         <td>
                             <select name="pp_subscription_new_btn_type" style="min-width: 150px;">
-                                <option value="checkout"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'checkout') ? ' selected' : ''; ?>><?php _e("Checkout", "simple-membership"); ?></option>                                
-                                <option value="pay"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'pay') ? ' selected' : ''; ?>><?php _e("Pay", "simple-membership"); ?></option>
-                                <option value="paypal"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'paypal') ? ' selected' : ''; ?>><?php _e("PayPal", "simple-membership"); ?></option>
-                                <option value="buynow"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'buynow') ? ' selected' : ''; ?>><?php _e("Buy Now", "simple-membership"); ?></option>
-                                <option value="subscribe"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'subscribe') ? ' selected' : ''; ?>><?php _e("Subscribe", "simple-membership"); ?></option>
+                                <option value="checkout"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'checkout') ? ' selected' : ''; ?>><?php esc_attr_e("Checkout", "simple-membership"); ?></option>
+                                <option value="pay"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'pay') ? ' selected' : ''; ?>><?php esc_attr_e("Pay", "simple-membership"); ?></option>
+                                <option value="paypal"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'paypal') ? ' selected' : ''; ?>><?php esc_attr_e("PayPal", "simple-membership"); ?></option>
+                                <option value="buynow"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'buynow') ? ' selected' : ''; ?>><?php esc_attr_e("Buy Now", "simple-membership"); ?></option>
+                                <option value="subscribe"<?php echo (isset($bt_opts['pp_subscription_new_btn_type']) && $bt_opts['pp_subscription_new_btn_type'] === 'subscribe') ? ' selected' : ''; ?>><?php esc_attr_e("Subscribe", "simple-membership"); ?></option>
                             </select>
-                            <p class="description"><?php _e("Select button type/label.", "simple-membership"); ?></p>
+                            <p class="description"><?php esc_attr_e("Select button type/label.", "simple-membership"); ?></p>
                         </td>
                     </tr>                    
                     <tr valign="top">
-                        <th scope="row"><?php _e("Button Shape", "simple-membership"); ?></th>
+                        <th scope="row"><?php esc_attr_e("Button Shape", "simple-membership"); ?></th>
                         <td>
-                            <p><label><input type="radio" name="pp_subscription_new_btn_shape" value="rect"<?php echo (isset($bt_opts['pp_subscription_new_btn_shape']) && $bt_opts['pp_subscription_new_btn_shape'] === 'rect' || empty($bt_opts['pp_subscription_new_btn_shape'])) ? ' checked' : ''; ?>> <?php _e("Rectangular", "simple-membership"); ?></label></p>
-                            <p><label><input type="radio" name="pp_subscription_new_btn_shape" value="pill"<?php echo (isset($bt_opts['pp_subscription_new_btn_shape']) && $bt_opts['pp_subscription_new_btn_shape'] === 'pill') ? ' checked' : ''; ?>> <?php _e("Pill", "simple-membership"); ?></label></p>
-                            <p class="description"><?php _e("Select button shape.", "simple-membership"); ?></p>
+                            <p><label><input type="radio" name="pp_subscription_new_btn_shape" value="rect"<?php echo (isset($bt_opts['pp_subscription_new_btn_shape']) && $bt_opts['pp_subscription_new_btn_shape'] === 'rect' || empty($bt_opts['pp_subscription_new_btn_shape'])) ? ' checked' : ''; ?>> <?php esc_attr_e("Rectangular", "simple-membership"); ?></label></p>
+                            <p><label><input type="radio" name="pp_subscription_new_btn_shape" value="pill"<?php echo (isset($bt_opts['pp_subscription_new_btn_shape']) && $bt_opts['pp_subscription_new_btn_shape'] === 'pill') ? ' checked' : ''; ?>> <?php esc_attr_e("Pill", "simple-membership"); ?></label></p>
+                            <p class="description"><?php esc_attr_e("Select button shape.", "simple-membership"); ?></p>
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php _e("Button Layout", "simple-membership"); ?></th>
+                        <th scope="row"><?php esc_attr_e("Button Layout", "simple-membership"); ?></th>
                         <td>
-                            <p><label><input type="radio" name="pp_subscription_new_btn_layout" value="vertical"<?php echo (isset($bt_opts['pp_subscription_new_btn_layout']) && $bt_opts['pp_subscription_new_btn_layout'] === 'vertical' || empty($bt_opts['pp_subscription_new_btn_layout'])) ? ' checked' : ''; ?>> <?php _e("Vertical", "simple-membership"); ?></label></p>
-                            <p><label><input type="radio" name="pp_subscription_new_btn_layout" value="horizontal"<?php echo (isset($bt_opts['pp_subscription_new_btn_layout']) && $bt_opts['pp_subscription_new_btn_layout'] === 'horizontal') ? ' checked' : ''; ?>> <?php _e("Horizontal", "simple-membership"); ?></label></p>
-                            <p class="description"><?php _e("Select button layout.", "simple-membership"); ?></p>
+                            <p><label><input type="radio" name="pp_subscription_new_btn_layout" value="vertical"<?php echo (isset($bt_opts['pp_subscription_new_btn_layout']) && $bt_opts['pp_subscription_new_btn_layout'] === 'vertical' || empty($bt_opts['pp_subscription_new_btn_layout'])) ? ' checked' : ''; ?>> <?php esc_attr_e("Vertical", "simple-membership"); ?></label></p>
+                            <p><label><input type="radio" name="pp_subscription_new_btn_layout" value="horizontal"<?php echo (isset($bt_opts['pp_subscription_new_btn_layout']) && $bt_opts['pp_subscription_new_btn_layout'] === 'horizontal') ? ' checked' : ''; ?>> <?php esc_attr_e("Horizontal", "simple-membership"); ?></label></p>
+                            <p class="description"><?php esc_attr_e("Select button layout.", "simple-membership"); ?></p>
                         </td>
                     </tr>               
                     <tr valign="top">
-                        <th scope="row"><?php _e("Button Height", "simple-membership"); ?></th>
+                        <th scope="row"><?php esc_attr_e("Button Height", "simple-membership"); ?></th>
                         <td>
                             <select name="pp_subscription_new_btn_height" style="min-width: 150px;">
-                                <option value="small"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'small') ? ' selected' : ''; ?>><?php _e("Small", "simple-membership"); ?></option>                                
-                                <option value="medium"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'medium') ? ' selected' : ''; ?>><?php _e("Medium", "simple-membership"); ?></option>
-                                <option value="large"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'large') ? ' selected' : ''; ?>><?php _e("Large", "simple-membership"); ?></option>
-                                <option value="extra-large"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'extra-large') ? ' selected' : ''; ?>><?php _e("Extra Large", "simple-membership"); ?></option>
+                                <option value="small"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'small') ? ' selected' : ''; ?>><?php esc_attr_e("Small", "simple-membership"); ?></option>
+                                <option value="medium"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'medium') ? ' selected' : ''; ?>><?php esc_attr_e("Medium", "simple-membership"); ?></option>
+                                <option value="large"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'large') ? ' selected' : ''; ?>><?php esc_attr_e("Large", "simple-membership"); ?></option>
+                                <option value="extra-large"<?php echo (isset($bt_opts['pp_subscription_new_btn_height']) && $bt_opts['pp_subscription_new_btn_height'] === 'extra-large') ? ' selected' : ''; ?>><?php esc_attr_e("Extra Large", "simple-membership"); ?></option>
                             </select>
-                            <p class="description"><?php _e("Select button height.", "simple-membership"); ?></p>
+                            <p class="description"><?php esc_attr_e("Select button height.", "simple-membership"); ?></p>
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Button Width', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Button Width', 'simple-membership'); ?></th>
                         <td>
                             <input type="number" step="1" min="0" size="10" name="pp_subscription_new_btn_width" value="300" style="min-width: 150px;" />
-                            <p class="description"><?php _e("Select button width.", "simple-membership"); ?></p>
+                            <p class="description"><?php esc_attr_e("Select button width.", "simple-membership"); ?></p>
                         </td>
                     </tr>                    
                     <tr valign="top">
-                        <th scope="row"><?php _e("Button Color", "simple-membership"); ?></th>
+                        <th scope="row"><?php esc_attr_e("Button Color", "simple-membership"); ?></th>
                         <td>
                             <select name="pp_subscription_new_btn_color" style="min-width: 150px;">
-                                <option value="gold"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'gold') ? ' selected' : ''; ?>><?php _e("Gold", "simple-membership"); ?></option>
-                                <option value="blue"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'blue') ? ' selected' : ''; ?>><?php _e("Blue", "simple-membership"); ?></option>
-                                <option value="silver"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'silver') ? ' selected' : ''; ?>><?php _e("Silver", "simple-membership"); ?></option>
-                                <option value="white"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'white') ? ' selected' : ''; ?>><?php _e("White", "simple-membership"); ?></option>
-                                <option value="black"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'black') ? ' selected' : ''; ?>><?php _e("Black", "simple-membership"); ?></option>
+                                <option value="gold"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'gold') ? ' selected' : ''; ?>><?php esc_attr_e("Gold", "simple-membership"); ?></option>
+                                <option value="blue"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'blue') ? ' selected' : ''; ?>><?php esc_attr_e("Blue", "simple-membership"); ?></option>
+                                <option value="silver"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'silver') ? ' selected' : ''; ?>><?php esc_attr_e("Silver", "simple-membership"); ?></option>
+                                <option value="white"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'white') ? ' selected' : ''; ?>><?php esc_attr_e("White", "simple-membership"); ?></option>
+                                <option value="black"<?php echo (isset($bt_opts['pp_subscription_new_btn_color']) && $bt_opts['pp_subscription_new_btn_color'] === 'black') ? ' selected' : ''; ?>><?php esc_attr_e("Black", "simple-membership"); ?></option>
                             </select>
-                            <p class="description"><?php _e("Select button color.", "simple-membership"); ?></p>
+                            <p class="description"><?php esc_attr_e("Select button color.", "simple-membership"); ?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php _e('Additional Settings (Optional)', 'simple-membership'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php esc_attr_e('Additional Settings (Optional)', 'simple-membership'); ?></div></th>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e("Disable Funding", "simple-membership"); ?></th>
+                        <th scope="row"><?php esc_attr_e("Disable Funding", "simple-membership"); ?></th>
                         <td>
-                        <p><label><input type="checkbox" name="pp_subscription_new_disable_funding_card" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_disable_funding_card']) ) ? ' checked' : ''; ?>> <?php _e("Credit or debit cards", "simple-membership"); ?></label></p>
-                            <p><label><input type="checkbox" name="pp_subscription_new_disable_funding_credit" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_disable_funding_credit']) ) ? ' checked' : ''; ?>> <?php _e("PayPal Credit", "simple-membership"); ?></label></p>
-                            <p><label><input type="checkbox" name="pp_subscription_new_disable_funding_venmo" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_disable_funding_venmo']) ) ? ' checked' : ''; ?>> <?php _e("Venmo", "simple-membership"); ?></label></p>
-                            <p class="description"><?php _e("By default, funding source eligibility is smartly decided based on a variety of factors. You can force disable funding options by selecting them here.", "simple-membership"); ?></p>
+                        <p><label><input type="checkbox" name="pp_subscription_new_disable_funding_card" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_disable_funding_card']) ) ? ' checked' : ''; ?>> <?php esc_attr_e("Credit or debit cards", "simple-membership"); ?></label></p>
+                            <p><label><input type="checkbox" name="pp_subscription_new_disable_funding_credit" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_disable_funding_credit']) ) ? ' checked' : ''; ?>> <?php esc_attr_e("PayPal Credit", "simple-membership"); ?></label></p>
+                            <p><label><input type="checkbox" name="pp_subscription_new_disable_funding_venmo" value="1"<?php echo (!empty($bt_opts['pp_subscription_new_disable_funding_venmo']) ) ? ' checked' : ''; ?>> <?php esc_attr_e("Venmo", "simple-membership"); ?></label></p>
+                            <p class="description"><?php esc_attr_e("By default, funding source eligibility is smartly decided based on a variety of factors. You can force disable funding options by selecting them here.", "simple-membership"); ?></p>
                         </td>
                     </tr>
 
@@ -448,22 +452,22 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
 	                ?>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
                         <td>
                             <input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" <?php echo esc_attr($redirect_to_paid_reg_link_after_payment) ?> />
                             <p class="description">
-				                <?php _e('Enable this option to automatically redirect the user to the unique paid registration link after a successful payment. ', 'simple-membership') ?>
-                                <a href="https://simple-membership-plugin.com/automatically-redirect-users-to-the-paid-registration-link-after-payment/" target="_blank"><?php _e('Read this documentation', 'simple-membership') ?></a>
-                                <?php _e(' to learn how it works.', 'simple-membership') ?>
+				                <?php esc_attr_e( 'Enable this option to automatically redirect the user to the unique paid registration link after a successful payment. ', 'simple-membership' ) ?>
+                                <a href="https://simple-membership-plugin.com/automatically-redirect-users-to-the-paid-registration-link-after-payment/" target="_blank"><?php esc_attr_e('Read this documentation', 'simple-membership') ?></a>
+                                <?php esc_attr_e(' to learn how it works.', 'simple-membership') ?>
                             </p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Return URL', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Return URL', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? esc_url_raw($bt_opts['return_url']) : ''); ?>" />
-                            <p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
 
                             <?php if ($redirect_to_paid_reg_link_after_payment) { ?>
                                 <p class="description">
@@ -475,35 +479,35 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
 
                     <tr valign="top">
                         <th colspan="2">
-                            <div class="swpm-grey-box"><?php _e('Active Subscription Check', 'simple-membership'); ?></div>
+                            <div class="swpm-grey-box"><?php esc_attr_e('Active Subscription Check', 'simple-membership'); ?></div>
                                 <p class="description">
-		                        <?php _e('The options in this section allow you to check if the logged-in member already has an active subscription and display a warning message if needed.', 'simple-membership') ?>
+		                        <?php esc_attr_e( 'The options in this section allow you to check if the logged-in member already has an active subscription and display a warning message if needed.', 'simple-membership' ) ?>
                             </p>
                         </th>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e( 'Show Warning for Existing Subscription' , 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e( 'Show Warning for Existing Subscription' , 'simple-membership'); ?></th>
                         <td>
                             <input type="checkbox" name="show_warning_if_any_active_sub" value="1" <?php echo ( $is_edit_mode ? ( ( isset( $bt_opts['show_warning_if_any_active_sub'] ) && $bt_opts['show_warning_if_any_active_sub'] === '1' ) ? ' checked' : '' ) : '' ); ?> />
-                            <p class="description"><?php _e('Enable this option to display a warning message next to the subscription button if the logged-in member already has an active subscription.', 'simple-membership') ?></p>
+                            <p class="description"><?php esc_attr_e('Enable this option to display a warning message next to the subscription button if the logged-in member already has an active subscription.', 'simple-membership') ?></p>
 
                             <br />
-                            <p><strong><?php _e( 'Message to Display for Existing Subscription' , 'simple-membership'); ?></strong></p>
+                            <p><strong><?php esc_attr_e( 'Message to Display for Existing Subscription' , 'simple-membership'); ?></strong></p>
                             <input type="text" size="100" name="warning_msg_for_existing_sub" value="<?php echo ( $is_edit_mode && isset( $bt_opts['warning_msg_for_existing_sub'] ) ? esc_attr($bt_opts['warning_msg_for_existing_sub']) : '' ); ?>" />
                             <p class="description">
 				                <?php
-				                _e('Enter the custom message you want to show to logged-in members who already have an active subscription.', 'simple-membership');
-				                echo ' ' . __('You may include a link to a page with ', 'simple-membership');
-				                echo '<a href="https://simple-membership-plugin.com/show-active-subscriptions-and-providing-a-cancellation-option/" target="_blank">' . __('self-cancellation instructions', 'simple-membership') . '</a>.';
+				                esc_attr_e( 'Enter the custom message you want to show to logged-in members who already have an active subscription.', 'simple-membership' );
+				                echo ' ' . esc_html__( 'You may include a link to a page with ', 'simple-membership' );
+				                echo '<a href="https://simple-membership-plugin.com/show-active-subscriptions-and-providing-a-cancellation-option/" target="_blank">' . esc_html__( 'self-cancellation instructions', 'simple-membership' ) . '</a>.';
 				                ?>
                             </p>
 
                             <br />
                             <input type="checkbox" name="hide_btn_if_any_active_sub" value="1" <?php echo ( $is_edit_mode ? ( ( isset( $bt_opts['hide_btn_if_any_active_sub'] ) && $bt_opts['hide_btn_if_any_active_sub'] === '1' ) ? ' checked' : '' ) : '' ); ?> />
-                            <strong><?php echo ' ' . __( 'Hide Payment Button if Another Subscription is Active' , 'simple-membership'); ?></strong>
+                            <strong><?php echo ' ' . esc_html__( 'Hide Payment Button if Another Subscription is Active', 'simple-membership' ); ?></strong>
                             <p class="description">
-				                <?php _e('Check this option to hide the subscription button when the warning message is displayed for an existing active subscription.', 'simple-membership') ?>
+				                <?php esc_attr_e( 'Check this option to hide the subscription button when the warning message is displayed for an existing active subscription.', 'simple-membership' ) ?>
                             </p>
                         </td>
                     </tr>
@@ -512,7 +516,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
 
                 <p class="submit">
                     <?php wp_nonce_field('swpm_admin_add_edit_pp_subscription_new_btn','swpm_admin_add_edit_pp_subscription_new_btn') ?>
-                    <input type="submit" name="swpm_pp_subscription_new_<?php echo ($is_edit_mode ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php _e('Save Payment Data'); ?>" >
+                    <input type="submit" name="swpm_pp_subscription_new_<?php echo ($is_edit_mode ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php esc_attr_e('Save Payment Data', 'simple-membership'); ?>" >
                 </p>
 
             </form>

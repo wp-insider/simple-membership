@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmPaymentsAdminMenu {
 
@@ -20,14 +24,14 @@ class SwpmPaymentsAdminMenu {
 
         <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-            <h1><?php _e('Payments') ?></h1><!-- page title -->
+            <h1><?php esc_attr_e('Payments', 'simple-membership') ?></h1><!-- page title -->
 
             <!-- start nav menu tabs -->
             <h2 class="nav-tab-wrapper">
-                <a class="nav-tab <?php echo ($tab == '') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments"><?php _e('Transactions', 'simple-membership'); ?></a>
-                <a class="nav-tab <?php echo ($tab == 'payment_settings') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings"><?php _e('Payment Settings', 'simple-membership'); ?></a>
-                <a class="nav-tab <?php echo ($tab == 'payment_buttons') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons"><?php _e('Manage Payment Buttons', 'simple-membership'); ?></a>
-                <a class="nav-tab <?php echo ($tab == 'create_new_button') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=create_new_button"><?php _e('Create New Button', 'simple-membership'); ?></a>
+                <a class="nav-tab <?php echo ($tab == '') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments"><?php esc_attr_e('Transactions', 'simple-membership'); ?></a>
+                <a class="nav-tab <?php echo ($tab == 'payment_settings') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings"><?php esc_attr_e('Payment Settings', 'simple-membership'); ?></a>
+                <a class="nav-tab <?php echo ($tab == 'payment_buttons') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_buttons"><?php esc_attr_e('Manage Payment Buttons', 'simple-membership'); ?></a>
+                <a class="nav-tab <?php echo ($tab == 'create_new_button') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=create_new_button"><?php esc_attr_e('Create New Button', 'simple-membership'); ?></a>
                 <?php
                 if ($tab == 'edit_button') {//Only show the "edit button" tab when a button is being edited.
                     echo '<a class="nav-tab nav-tab-active" href="#">Edit Button</a>';
@@ -45,7 +49,7 @@ class SwpmPaymentsAdminMenu {
                 $menu_tabs = apply_filters('swpm_payments_menu_additional_menu_tabs_array', array());
                 foreach ($menu_tabs as $menu_action => $title){
                     ?>
-                    <a class="nav-tab <?php echo ($selected == $menu_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=<?php echo $menu_action; ?>" ><?php _e($title, 'simple-membership'); ?></a>
+                    <a class="nav-tab <?php echo ($selected == $menu_action) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=<?php echo esc_attr( $menu_action ); ?>" ><?php echo esc_attr( $title ); ?></a>
                     <?php
                 }
 
@@ -61,7 +65,7 @@ class SwpmPaymentsAdminMenu {
             $output = apply_filters('swpm_payments_menu_body_override', '', $tab);
             if (!empty($output)) {
                 //An addon has overriden the body of this page for the given tab/action. So no need to do anything in core.
-                echo $output;
+                echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
                 echo '</div>';//<!-- end of wrap -->
                 return;
             }

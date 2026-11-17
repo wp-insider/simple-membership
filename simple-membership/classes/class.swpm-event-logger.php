@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 
 class SwpmEventLogger {
@@ -22,16 +26,14 @@ class SwpmEventLogger {
 
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'swpm_events_tbl';
-
-		$count = $wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM ' . $table . ' WHERE event_type = %s', self::EVENT_TYPE_LOGIN_SUCCESS));
+		$count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}swpm_events_tbl WHERE event_type = %s", self::EVENT_TYPE_LOGIN_SUCCESS));
 		if ($count == 0){
 			wp_send_json_success(array(
 				'message' => __( 'No log entries exists!', 'simple-membership' ),
 			));
 		}
 
-		$delete = $wpdb->query($wpdb->prepare('DELETE FROM ' . $table . ' WHERE event_type = %s', self::EVENT_TYPE_LOGIN_SUCCESS));
+		$delete = $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->prefix}swpm_events_tbl WHERE event_type = %s", self::EVENT_TYPE_LOGIN_SUCCESS));
 		if ( ! $delete ) {
 			wp_send_json_error( array(
 				'message' => __( 'Error: log entries could not be deleted!', 'simple-membership' ),
@@ -150,9 +152,8 @@ class SwpmEventLogger {
 		$cuttoff_date = apply_filters('swpm_prune_events_db_table_cuttoff_date', $cuttoff_date, $event_name);
 		//Delete all the events that are older than the cuttoff date.
 		global $wpdb;
-		$table = $wpdb->prefix . 'swpm_events_tbl';
-		$query = $wpdb->prepare("DELETE FROM " . $table . " WHERE event_type = %s AND event_date_time < %s", $event_name, $cuttoff_date);
-		$wpdb->query($query);
+
+		$wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}swpm_events_tbl WHERE event_type = %s AND event_date_time < %s", $event_name, $cuttoff_date) );
 	}
 
 	public static function has_event_entries($event_type = '') {
@@ -165,13 +166,11 @@ class SwpmEventLogger {
 
 	public static function count_events($event_type = '') {
 		global $wpdb;
-		$table = $wpdb->prefix . 'swpm_events_tbl';
+
 		if( empty($event_type) ){
-			$query = "SELECT COUNT(*) FROM " . $table;
-			$count = $wpdb->get_var($query);
+			$count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}swpm_events_tbl");
 		} else {
-			$query = "SELECT COUNT(*) FROM " . $table . " WHERE event_type = %s";
-			$count = $wpdb->get_var($wpdb->prepare($query, $event_type));
+			$count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}swpm_events_tbl WHERE event_type = %s", $event_type));
 		}
 		return $count;
 	}

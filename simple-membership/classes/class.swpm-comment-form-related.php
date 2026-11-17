@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmCommentFormRelated {
 
@@ -17,7 +21,7 @@ class SwpmCommentFormRelated {
         ?>
         <script type="text/javascript">
             jQuery(document).ready(function($) {
-                $('#respond').html('<?php echo $comment_form_msg; ?>');
+                $('#respond').html(<?php echo wp_json_encode( wp_kses_post( $comment_form_msg ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ); ?>);
             });
         </script>
         <?php
@@ -76,7 +80,7 @@ class SwpmCommentFormRelated {
 
         //Stop this request -> 1)we are on the front-side. 2) Comment posted by a not logged in member. 3) comment_post_ID missing.
         $_POST = array();
-        wp_die(SwpmUtils::_('Comments not allowed by a non-member.'));
+        wp_die(esc_html__( 'Comments not allowed by a non-member.', 'simple-membership' ));
     }
 
 }

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /*
 * This class handles the new Stripe (SCA) Buy Now buttons related functionality. 
 * 

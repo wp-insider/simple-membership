@@ -1,8 +1,13 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmReportsAdminMenu {
 
 	public function __construct() {
+		// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent -- Google Charts loader must be loaded from Google.
 		wp_enqueue_script( 'swpm-charts-api', 'https://www.gstatic.com/charts/loader.js', null, SIMPLE_WP_MEMBERSHIP_VER, array(
             'strategy' => 'defer',
             'in_footer' => true
@@ -25,16 +30,16 @@ class SwpmReportsAdminMenu {
 		?>
         <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-        <h1><?php _e( 'Reports' , 'simple-membership') ?></h1><!-- page title -->
+        <h1><?php esc_attr_e( 'Reports' , 'simple-membership') ?></h1><!-- page title -->
 
         <!-- start nav menu tabs -->
         <h2 class="nav-tab-wrapper">
             <a class="nav-tab <?php echo ( $tab == '' || $tab == 'member-logins' ) ? 'nav-tab-active' : ''; ?>"
-               href="admin.php?page=simple_wp_membership_reports"><?php _e( 'Member Logins', 'simple-membership' ); ?></a>
+               href="admin.php?page=simple_wp_membership_reports"><?php esc_attr_e( 'Member Logins', 'simple-membership' ); ?></a>
             <a class="nav-tab <?php echo ( $tab == 'members' ) ? 'nav-tab-active' : ''; ?>"
-               href="admin.php?page=simple_wp_membership_reports&tab=members"><?php _e( 'Members', 'simple-membership' ); ?></a>
+               href="admin.php?page=simple_wp_membership_reports&tab=members"><?php esc_attr_e( 'Members', 'simple-membership' ); ?></a>
             <a class="nav-tab <?php echo ( $tab == 'membership-level' ) ? 'nav-tab-active' : ''; ?>"
-               href="admin.php?page=simple_wp_membership_reports&tab=membership-level"><?php _e( 'Membership Levels', 'simple-membership' ); ?></a>
+               href="admin.php?page=simple_wp_membership_reports&tab=membership-level"><?php esc_attr_e( 'Membership Levels', 'simple-membership' ); ?></a>
 			<?php
 
 			//Trigger hooks that allows an extension to add extra nav tabs in the payments menu.
@@ -44,7 +49,7 @@ class SwpmReportsAdminMenu {
 			foreach ( $menu_tabs as $menu_action => $title ) {
 				?>
                 <a class="nav-tab <?php echo ( $selected == $menu_action ) ? 'nav-tab-active' : ''; ?>"
-                   href="admin.php?page=simple_wp_membership_payments&tab=<?php echo $menu_action; ?>"><?php _e( $title, 'simple-membership' ); ?></a>
+                   href="admin.php?page=simple_wp_membership_payments&tab=<?php echo esc_attr( $menu_action ); ?>"><?php echo esc_attr( $title ); ?></a>
 				<?php
 			}
 			?>
@@ -59,7 +64,7 @@ class SwpmReportsAdminMenu {
 		$output = apply_filters( 'swpm_reports_menu_body_override', '', $tab );
 		if ( ! empty( $output ) ) {
 			//An addon has overriden the body of this page for the given tab/action. So no need to do anything in core.
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 			echo '</div>';//<!-- end of wrap -->
 
 			return;
@@ -94,8 +99,8 @@ class SwpmReportsAdminMenu {
 
 
     public static function date_range_selector($stats_name = '', $start_date = 'Y-m-d', $end_date = 'Y-m-d') {
-	    $start_date = date($start_date);
-	    $end_date = date($end_date);
+	    $start_date = gmdate($start_date);
+	    $end_date = gmdate($end_date);
 
         $form_name = 'swpm_date_range_form';
         if (!empty($stats_name)){
@@ -117,23 +122,23 @@ class SwpmReportsAdminMenu {
         ?>
         <form action="" method="post" class="swpm_report_date_range_form">
             <div>
-                <label for="swpm_date_range_start"><?php _e('Start Date', 'simple-membership') ?></label><br>
-                <input type="date" name="<?php esc_attr_e($form_name);?>[start_date]" id="swpm_date_range_start" value="<?php esc_attr_e($start_date);?>">
+                <label for="swpm_date_range_start"><?php esc_attr_e('Start Date', 'simple-membership') ?></label><br>
+                <input type="date" name="<?php echo esc_attr( $form_name );?>[start_date]" id="swpm_date_range_start" value="<?php echo esc_attr( $start_date );?>">
             </div>
             <div>
-                <label for="swpm_date_range_end"><?php _e('End Date', 'simple-membership') ?></label><br>
-                <input type="date" name="<?php esc_attr_e($form_name);?>[end_date]" id="swpm_date_range_end" value="<?php esc_attr_e($end_date);?>">
+                <label for="swpm_date_range_end"><?php esc_attr_e('End Date', 'simple-membership') ?></label><br>
+                <input type="date" name="<?php echo esc_attr( $form_name );?>[end_date]" id="swpm_date_range_end" value="<?php echo esc_attr( $end_date );?>">
             </div>
             <div>
-                <input type="submit" class="button button-secondary" value="<?php _e('Apply', 'simple-membership');?>">
+                <input type="submit" class="button button-secondary" value="<?php esc_attr_e('Apply', 'simple-membership');?>">
             </div>
         </form>
         <?php
 	    $output .= ob_get_clean();
 
         return array(
-            date("Y-m-d H:i:s", strtotime($start_date)),
-            date("Y-m-d 11:59:59", strtotime($end_date)),
+            gmdate("Y-m-d H:i:s", strtotime($start_date)),
+            gmdate("Y-m-d 11:59:59", strtotime($end_date)),
             $output,
         );
     }

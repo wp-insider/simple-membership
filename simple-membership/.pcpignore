@@ -1,0 +1,4 @@
+lib/stripe-gateway/
+lib/braintree/
+
+logs/.htaccess

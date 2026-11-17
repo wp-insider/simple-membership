@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
@@ -71,7 +75,8 @@ class SwpmMembers extends WP_List_Table {
 			//For better translation support.
 			$acc_state_str = __( 'Activation Required', 'simple-membership' );
 		} else {
-			$acc_state_str = __( ucfirst( $account_state_column_val ), 'simple-membership' );
+			$states = SwpmUtils::get_account_state_options();
+			$acc_state_str = isset( $states[ $account_state_column_val ] ) ? $states[ $account_state_column_val ] : ucfirst( $account_state_column_val );
 		}
 		return $acc_state_str;
 	}
@@ -114,8 +119,8 @@ class SwpmMembers extends WP_List_Table {
         ob_start();
         ?>
         <div class="swpm-tooltip-notes-container">
-			<a href="javascript:void(0)" onclick="const tooltip=document.getElementById('<?php echo $notes_tooltip_id; ?>'); tooltip.style.display = (tooltip.style.display === 'block' ? 'none' : 'block');">
-    		<?php _e('Show/Hide Notes', 'simple-membership'); ?>
+			<a href="javascript:void(0)" onclick="const tooltip=document.getElementById('<?php echo esc_js( $notes_tooltip_id ); ?>'); tooltip.style.display = (tooltip.style.display === 'block' ? 'none' : 'block');">
+    		<?php esc_attr_e( 'Show/Hide Notes', 'simple-membership' ); ?>
 			</a>
             <div class="swpm-tooltip-notes-style-1" id="<?php echo esc_attr($notes_tooltip_id)?>" onclick="this.style.display='none'">
 				<?php echo esc_attr($admin_notes_text) ?>
@@ -132,121 +137,55 @@ class SwpmMembers extends WP_List_Table {
 		);
 	}
 
-	function prepare_items() {
-		global $wpdb;
-
-		$this->process_bulk_action();
-
-		$records_query_head = 'SELECT member_id,user_name,first_name,last_name,email,alias,subscription_starts,account_state,notes,last_accessed';
-		$count_query_head   = 'SELECT COUNT(member_id)';
-
-		$query  = ' ';
-		$query .= ' FROM ' . $wpdb->prefix . 'swpm_members_tbl';
-		$query .= ' LEFT JOIN ' . $wpdb->prefix . 'swpm_membership_tbl';
-		$query .= ' ON ( membership_level = id ) ';
-
-		//Get the search string (if any)
-		$s = filter_input( INPUT_GET, 's' );
-		if ( empty( $s ) ) {
-			$s = filter_input( INPUT_POST, 's' );
-		}
-
-		$status = filter_input( INPUT_GET, 'status' );
-                $status = esc_attr( $status );//Escape value
-
-		$filters = array();
-
-		//Add the search parameter to the query
-		if ( ! empty( $s ) ) {
-			$s = sanitize_text_field( $s );
-			$s = trim( $s ); //Trim the input
-                        $s = esc_sql( $s );
-			$filters[] = "( user_name LIKE '%" . strip_tags( $s ) . "%' "
-					. " OR first_name LIKE '%" . strip_tags( $s ) . "%' "
-					. " OR last_name LIKE '%" . strip_tags( $s ) . "%' "
-					. " OR email LIKE '%" . strip_tags( $s ) . "%' "
-					. " OR address_city LIKE '%" . strip_tags( $s ) . "%' "
-					. " OR address_state LIKE '%" . strip_tags( $s ) . "%' "
-					. " OR country LIKE '%" . strip_tags( $s ) . "%' "
-					. " OR company_name LIKE '%" . strip_tags( $s ) . "%' )";
-		}
-
-		//Add account status filtering to the query
-		if ( ! empty( $status ) ) {
-			if ( $status == 'incomplete' ) {
-				$filters[] = "user_name = ''";
-			} else {
-				$filters[] = "account_state = '" . $status . "'";
-			}
-		}
-
-		//Add membership level filtering
-		$membership_level = filter_input( INPUT_GET, 'membership_level', FILTER_SANITIZE_NUMBER_INT );
-
-		if ( ! empty( $membership_level ) ) {
-			$filters[] = sprintf( "membership_level = '%d'", $membership_level );
-		}
-
-		//Build the WHERE clause of the query string
-		if ( ! empty( $filters ) ) {
-			$filter_str = '';
-			foreach ( $filters as $ind => $filter ) {
-				$filter_str .= $ind === 0 ? $filter : ' AND ' . $filter;
-			}
-			$query .= 'WHERE ' . $filter_str;
-		}
-
-		//Build the orderby and order query parameters
-		$orderby          = filter_input( INPUT_GET, 'orderby' );
-		$orderby          = apply_filters( 'swpm_admin_members_table_orderby', $orderby );
-		$orderby          = empty( $orderby ) ? 'member_id' : $orderby;
-		$order            = filter_input( INPUT_GET, 'order' );
-		$order            = empty( $order ) ? 'DESC' : $order;
-		$sortable_columns = $this->get_sortable_columns();
-		$orderby          = SwpmUtils::sanitize_value_by_array( $orderby, $sortable_columns );
-		$order            = SwpmUtils::sanitize_value_by_array(
-			$order,
-			array(
-				'DESC' => '1',
-				'ASC'  => '1',
-			)
-		);
-		$query           .= ' ORDER BY ' . $orderby . ' ' . $order;
-
-		//Execute the query
-		$totalitems = $wpdb->get_var( $count_query_head . $query );
-		//Pagination setup
-		$perpage = apply_filters( 'swpm_members_menu_items_per_page', 50 );
-		$paged   = filter_input( INPUT_GET, 'paged' );
-		if ( empty( $paged ) || ! is_numeric( $paged ) || $paged <= 0 ) {
-			$paged = 1;
-		}
-		$totalpages = ceil( $totalitems / $perpage );
-		if ( ! empty( $paged ) && ! empty( $perpage ) ) {
-			$offset = ( $paged - 1 ) * $perpage;
-			$query .= ' LIMIT ' . (int) $offset . ',' . (int) $perpage;
-		}
-		$this->set_pagination_args(
-			array(
-				'total_items' => $totalitems,
-				'total_pages' => $totalpages,
-				'per_page'    => $perpage,
-			)
-		);
-
-		$columns  = $this->get_columns();
-		$hidden   = array();
-		$sortable = $this->get_sortable_columns();
-
-		$this->_column_headers = array( $columns, $hidden, $sortable );
-		$this->items           = $wpdb->get_results( $records_query_head . $query, ARRAY_A );
-		$this->items           = apply_filters( 'swpm_admin_members_table_items', $this->items );
-	}
+    function prepare_items() {
+        global $wpdb;
+        $this->process_bulk_action();
+        $search = filter_input( INPUT_GET, 's' );
+        if ( empty( $search ) ) { $search = filter_input( INPUT_POST, 's' ); }
+        $search = trim( sanitize_text_field( (string) $search ) );
+        $like = '%' . $wpdb->esc_like( $search ) . '%';
+        $status = sanitize_text_field( (string) filter_input( INPUT_GET, 'status' ) );
+        $membership_level = absint( filter_input( INPUT_GET, 'membership_level', FILTER_SANITIZE_NUMBER_INT ) );
+        $orderby = apply_filters( 'swpm_admin_members_table_orderby', filter_input( INPUT_GET, 'orderby' ) );
+        $sortable = $this->get_sortable_columns();
+        $orderby = isset( $sortable[ $orderby ] ) ? $orderby : 'member_id';
+        $order = strtoupper( (string) filter_input( INPUT_GET, 'order' ) );
+        $order = $order === 'ASC' ? 'ASC' : 'DESC';
+        $totalitems = $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(member_id) FROM {$wpdb->prefix}swpm_members_tbl
+                LEFT JOIN {$wpdb->prefix}swpm_membership_tbl ON (membership_level = id)
+                WHERE (%s = '' OR user_name LIKE %s OR first_name LIKE %s OR last_name LIKE %s
+                    OR email LIKE %s OR address_city LIKE %s OR address_state LIKE %s OR country LIKE %s OR company_name LIKE %s)
+                AND (%s = '' OR (%s = 'incomplete' AND user_name = '') OR (%s <> 'incomplete' AND account_state = %s))
+                AND (%d = 0 OR membership_level = %d)",
+                $search, $like, $like, $like, $like, $like, $like, $like, $like,
+                $status, $status, $status, $status, $membership_level, $membership_level
+        ) );
+        $perpage = max( 1, absint( apply_filters( 'swpm_members_menu_items_per_page', 50 ) ) );
+        $paged = max( 1, absint( filter_input( INPUT_GET, 'paged' ) ) );
+        $offset = ( $paged - 1 ) * $perpage;
+        $this->set_pagination_args( array(
+            'total_items' => $totalitems, 'total_pages' => ceil( $totalitems / $perpage ), 'per_page' => $perpage,
+        ) );
+        $this->_column_headers = array( $this->get_columns(), array(), $sortable );
+        $this->items = $wpdb->get_results( $wpdb->prepare(
+            "SELECT member_id,user_name,first_name,last_name,email,alias,subscription_starts,account_state,notes,last_accessed
+                FROM {$wpdb->prefix}swpm_members_tbl
+                LEFT JOIN {$wpdb->prefix}swpm_membership_tbl ON (membership_level = id)
+                WHERE (%s = '' OR user_name LIKE %s OR first_name LIKE %s OR last_name LIKE %s
+                    OR email LIKE %s OR address_city LIKE %s OR address_state LIKE %s OR country LIKE %s OR company_name LIKE %s)
+                AND (%s = '' OR (%s = 'incomplete' AND user_name = '') OR (%s <> 'incomplete' AND account_state = %s))
+                AND (%d = 0 OR membership_level = %d) ORDER BY " . esc_sql( $orderby ) . ' ' . esc_sql( $order ) . " LIMIT %d OFFSET %d",
+                $search, $like, $like, $like, $like, $like, $like, $like, $like,
+                $status, $status, $status, $status, $membership_level, $membership_level, $perpage, $offset
+        ), ARRAY_A );
+        $this->items = apply_filters( 'swpm_admin_members_table_items', $this->items );
+    }
 
 	function get_user_count_by_account_state() {
 		global $wpdb;
-		$query  = 'SELECT count(member_id) AS count, account_state FROM ' . $wpdb->prefix . 'swpm_members_tbl GROUP BY account_state';
-		$result = $wpdb->get_results( $query, ARRAY_A );
+		
+		$result = $wpdb->get_results( 'SELECT count(member_id) AS count, account_state FROM ' . $wpdb->prefix . 'swpm_members_tbl GROUP BY account_state', ARRAY_A );
 		$count  = array();
 
 		$all = 0;
@@ -257,13 +196,13 @@ class SwpmMembers extends WP_List_Table {
 		$count ['all'] = $all;
 
 		$count_incomplete_query = 'SELECT COUNT(*) FROM ' . $wpdb->prefix . "swpm_members_tbl WHERE user_name = ''";
-		$count['incomplete']    = $wpdb->get_var( $count_incomplete_query );
+		$count['incomplete']    = $wpdb->get_var( $count_incomplete_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Query is built with prepared/sanitized parts.
 
 		return $count;
 	}
 
 	function no_items() {
-		_e( 'No member found.', 'simple-membership' );
+		esc_attr_e( 'No member found.', 'simple-membership' );
 	}
 
 	function process_form_request() {
@@ -271,7 +210,7 @@ class SwpmMembers extends WP_List_Table {
 			//This is a member profile edit action
 			$record_id = sanitize_text_field( $_REQUEST['member_id'] );
 			if ( ! is_numeric( $record_id ) ) {
-				wp_die( 'Error! ID must be numeric.' );
+				wp_die( wp_kses_post( 'Error! ID must be numeric.' ));
 			}
 			return $this->edit( absint( $record_id ) );
 		}
@@ -301,25 +240,25 @@ class SwpmMembers extends WP_List_Table {
 
 	function add() {
         if(!SwpmMembershipLevelUtils::is_membership_level_configured()){
-            echo self::membership_lvl_not_configured_msg_box();
+            echo self::membership_lvl_not_configured_msg_box(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
             return;
         }
 
 		$form = apply_filters( 'swpm_admin_registration_form_override', '' );
 		if ( ! empty( $form ) ) {
-			echo $form;
+			echo $form; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 			return;
 		}
 		global $wpdb;
 		$member                        = SwpmTransfer::$default_fields;
-		$member['member_since']        = SwpmUtils::get_current_date_in_wp_zone();//date( 'Y-m-d' );
-		$member['subscription_starts'] = SwpmUtils::get_current_date_in_wp_zone();//date( 'Y-m-d' );
+		$member['member_since']        = SwpmUtils::get_current_date_in_wp_zone();//gmdate( 'Y-m-d' );
+		$member['subscription_starts'] = SwpmUtils::get_current_date_in_wp_zone();//gmdate( 'Y-m-d' );
 		if ( isset( $_POST['createswpmuser'] ) ) {
 			$member = array_map( 'sanitize_text_field', $_POST );
 		}
 		extract( $member, EXTR_SKIP );
-		$query  = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE  id !=1 ';
-		$levels = $wpdb->get_results( $query, ARRAY_A );
+		
+		$levels = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE  id !=1 ', ARRAY_A );
 
 		$render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui');
 		if (!empty($render_new_form_ui)) {
@@ -335,19 +274,18 @@ class SwpmMembers extends WP_List_Table {
 
 	function edit( $id ) {
         if(!SwpmMembershipLevelUtils::is_membership_level_configured()){
-            echo self::membership_lvl_not_configured_msg_box();
+            echo self::membership_lvl_not_configured_msg_box(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
             return;
         }
 
 		global $wpdb;
 		$id = absint( $id );
-		$query = "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = $id";
-		$member = $wpdb->get_row( $query, ARRAY_A );
+		$member = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = %d", $id ), ARRAY_A );
 		if ( ! $member ) {
 			//Member record not found. Show an error message.
 			$error_msg = __( 'Error! Member record not found. You may have deleted this member profile. ', 'simple-membership' );
 			$error_msg .= __( 'Please go back to the members menu and try to edit another member profile.', 'simple-membership' );
-			echo '<div class="swpm-erro-msg swpm-red-box"><p>' . $error_msg . '</p></div>';
+			echo '<div class="swpm-erro-msg swpm-red-box"><p>' . wp_kses_post( $error_msg ) . '</p></div>';
 			return;
 		}
 
@@ -364,8 +302,8 @@ class SwpmMembers extends WP_List_Table {
 			}
 		}
 		extract( $member, EXTR_SKIP );
-		$query  = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE  id !=1 ';
-		$levels = $wpdb->get_results( $query, ARRAY_A );
+		
+		$levels = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE  id !=1 ', ARRAY_A );
 
 
 		$render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui');
@@ -403,7 +341,7 @@ class SwpmMembers extends WP_List_Table {
 		if ( 'bulk_delete' === $current_action ) {
 			foreach ( $members as $record_id ) {
 				if ( ! is_numeric( $record_id ) ) {
-					wp_die( 'Error! ID must be numeric.' );
+					wp_die( wp_kses_post( 'Error! ID must be numeric.' ));
 				}
 				self::delete_user_by_id( $record_id );
 			}
@@ -434,12 +372,15 @@ class SwpmMembers extends WP_List_Table {
 		//When activating, note which of the selected members are currently expired (used for the "WordPress Role After Expiry" option).
 		$expired_member_ids = array();
 		if ( 'active' === $status ) {
-			$expired_member_ids = $wpdb->get_col( 'SELECT member_id FROM ' . $wpdb->prefix . "swpm_members_tbl WHERE account_state = 'expired' AND member_id IN (" . $ids . ')' );
+			$expired_member_ids = $wpdb->get_col( 'SELECT member_id FROM ' . $wpdb->prefix . "swpm_members_tbl WHERE account_state = 'expired' AND member_id IN (" . $ids . ')' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- IDs are cast with absint.
 		}
 
-		$query = 'UPDATE ' . $wpdb->prefix . 'swpm_members_tbl ' .
-				" SET account_state = '" . $status . "' WHERE member_id in (" . $ids . ')';
-		$wpdb->query( $query );
+        $member_ids = array_map( 'absint', $members );
+        $placeholders = implode( ',', array_fill( 0, count( $member_ids ), '%d' ) );
+        $wpdb->query( $wpdb->prepare(
+            "UPDATE {$wpdb->prefix}swpm_members_tbl SET account_state = %s WHERE member_id IN ($placeholders)", // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Placeholders are generated from the ID count.
+            array_merge( array( $status ), $member_ids )
+        ) );
 
 		//Handle the "WordPress Role After Expiry" option of the members' levels (does nothing for levels that don't use it).
 		if ( 'expired' === $status ) {
@@ -458,7 +399,7 @@ class SwpmMembers extends WP_List_Table {
 		if ( $notify ) {
 			$settings = SwpmSettings::get_instance();
 
-			$members = $wpdb->get_results( 'SELECT email, member_id FROM ' . $wpdb->prefix . 'swpm_members_tbl ' . " WHERE member_id IN ( $ids  ) " );
+			$members = $wpdb->get_results( 'SELECT email, member_id FROM ' . $wpdb->prefix . 'swpm_members_tbl ' . " WHERE member_id IN ( $ids  ) " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- IDs are cast with absint.
 
 			$subject = $settings->get_value( 'bulk-activate-notify-mail-subject' );
 			if ( empty( $subject ) ) {
@@ -496,7 +437,7 @@ class SwpmMembers extends WP_List_Table {
 			//Check nonce
 			if ( ! isset( $_REQUEST['delete_swpmuser_nonce'] ) || ! wp_verify_nonce( $_REQUEST['delete_swpmuser_nonce'], 'delete_swpmuser_admin_end' ) ) {
 				//Nonce check failed.
-				wp_die( SwpmUtils::_( 'Error! Nonce verification failed for user delete from admin end.' ) );
+				wp_die( esc_html__( 'Error! Nonce verification failed for user delete from admin end.', 'simple-membership' ) );
 			}
 
 			$id = sanitize_text_field( $_REQUEST['member_id'] );
@@ -507,7 +448,7 @@ class SwpmMembers extends WP_List_Table {
 
 	public static function delete_user_by_id( $id ) {
 		if ( ! is_numeric( $id ) ) {
-			wp_die( 'Error! Member ID must be numeric.' );
+			wp_die( wp_kses_post( 'Error! Member ID must be numeric.' ));
 		}
 
 		//Trigger action hook
@@ -523,8 +464,7 @@ class SwpmMembers extends WP_List_Table {
 	public static function delete_swpm_user_by_id( $id ) {
 		self::delete_user_subs( $id );
 		global $wpdb;
-		$query = 'DELETE FROM ' . $wpdb->prefix . "swpm_members_tbl WHERE member_id = $id";
-		$wpdb->query( $query );
+		$wpdb->delete( $wpdb->prefix . 'swpm_members_tbl', array( 'member_id' => $id ), array( '%d' ) );
 	}
 
 	public static function delete_wp_user( $user_name ) {
@@ -616,7 +556,7 @@ class SwpmMembers extends WP_List_Table {
 			$swpm_bulk_change_level_nonce = filter_input( INPUT_POST, 'swpm_bulk_change_level_nonce' );
 			if ( ! wp_verify_nonce( $swpm_bulk_change_level_nonce, 'swpm_bulk_change_level_nonce_action' ) ) {
 				//Nonce check failed.
-				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Change Membership Level action. Clear cache and try again.' ) );
+				wp_die( esc_html__( 'Error! Nonce security verification failed for Bulk Change Membership Level action. Clear cache and try again.', 'simple-membership' ) );
 			}
 
 			$error_msg = '';
@@ -644,7 +584,7 @@ class SwpmMembers extends WP_List_Table {
 				$message = SwpmUtils::_( 'Membership level change operation completed successfully.' );
 			}
 			echo '<div id="message" class="updated fade"><p><strong>';
-			echo $message;
+			echo wp_kses_post( $message );
 			echo '</strong></p></div>';
 		}
 
@@ -653,7 +593,7 @@ class SwpmMembers extends WP_List_Table {
 			$swpm_bulk_start_date_nonce = filter_input( INPUT_POST, 'swpm_bulk_start_date_nonce' );
 			if ( ! wp_verify_nonce( $swpm_bulk_start_date_nonce, 'swpm_bulk_start_date_nonce_action' ) ) {
 				//Nonce check failed.
-				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Change Access Starts Date action. Clear cache and try again.' ) );
+				wp_die( esc_html__( 'Error! Nonce security verification failed for Bulk Change Access Starts Date action. Clear cache and try again.', 'simple-membership' ) );
 			}
 
 			$error_msg = '';
@@ -681,7 +621,7 @@ class SwpmMembers extends WP_List_Table {
 				$message = SwpmUtils::_( 'Access starts date change operation successfully completed.' );
 			}
 			echo '<div id="message" class="updated fade"><p><strong>';
-			echo $message;
+			echo wp_kses_post( $message );
 			echo '</strong></p></div>';
 		}
 
@@ -690,7 +630,7 @@ class SwpmMembers extends WP_List_Table {
 			$swpm_bulk_change_level_nonce = filter_input( INPUT_POST, 'swpm_bulk_account_status_change_nonce' );
 			if ( ! wp_verify_nonce( $swpm_bulk_change_level_nonce, 'swpm_bulk_account_status_change_nonce_action' ) ) {
 				//Nonce check failed.
-				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Change Account Status action. Clear cache and try again.' ) );
+				wp_die( esc_html__( 'Error! Nonce security verification failed for Bulk Change Account Status action. Clear cache and try again.', 'simple-membership' ) );
 			}
 
 			$error_msg = '';
@@ -716,11 +656,11 @@ class SwpmMembers extends WP_List_Table {
 
 			if ( ! empty( $error_msg ) ) {
 				echo '<div id="message" class="notice notice-error"><p><strong>';
-				echo $error_msg;
+				echo wp_kses_post( $error_msg );
 				echo '</strong></p></div>';
 			}else{
 				echo '<div id="message" class="notice notice-success"><p><strong>';
-				_e( 'Account status change operation completed successfully.', 'simple-membership');
+				esc_attr_e( 'Account status change operation completed successfully.', 'simple-membership' );
 				echo '</strong></p></div>';
 			}
 		}
@@ -730,7 +670,7 @@ class SwpmMembers extends WP_List_Table {
 			$swpm_bulk_delete_account_nonce = filter_input( INPUT_POST, 'swpm_bulk_delete_account_nonce' );
 			if ( ! wp_verify_nonce( $swpm_bulk_delete_account_nonce, 'swpm_bulk_delete_account_nonce_action' ) ) {
 				//Nonce check failed.
-				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Delete Account action. Clear cache and try again.' ) );
+				wp_die( esc_html__( 'Error! Nonce security verification failed for Bulk Delete Account action. Clear cache and try again.', 'simple-membership' ) );
 			}
 
 			$error_msg = '';
@@ -754,11 +694,11 @@ class SwpmMembers extends WP_List_Table {
 
 			if ( ! empty( $error_msg ) ) {
 				echo '<div id="message" class="notice notice-error"><p><strong>';
-				echo $error_msg;
+				echo wp_kses_post( $error_msg );
 				echo '</strong></p></div>';
 			}else{	
 				echo '<div id="message" class="notice notice-success"><p><strong>';
-				_e( 'Bulk delete of member accounts completed successfully.', 'simple-membership');
+				esc_attr_e( 'Bulk delete of member accounts completed successfully.', 'simple-membership' );
 				echo '</strong></p></div>';
 			}
 		}		
@@ -768,7 +708,7 @@ class SwpmMembers extends WP_List_Table {
 			$swpm_bulk_delete_account_by_status_nonce = filter_input( INPUT_POST, 'swpm_bulk_delete_account_by_status_nonce' );
 			if ( ! wp_verify_nonce( $swpm_bulk_delete_account_by_status_nonce, 'swpm_bulk_delete_account_by_status_nonce_action' ) ) {
 				//Nonce check failed.
-				wp_die( SwpmUtils::_( 'Error! Nonce security verification failed for Bulk Delete Account by Status action. Clear cache and try again.' ) );
+				wp_die( esc_html__( 'Error! Nonce security verification failed for Bulk Delete Account by Status action. Clear cache and try again.', 'simple-membership' ) );
 			}
 
 			$error_msg = '';
@@ -792,56 +732,56 @@ class SwpmMembers extends WP_List_Table {
 
 			if ( ! empty( $error_msg ) ) {
 				echo '<div id="message" class="notice notice-error"><p><strong>';
-				echo $error_msg;
+				echo wp_kses_post( $error_msg );
 				echo '</strong></p></div>';
 			}else{
 				echo '<div id="message" class="notice notice-success"><p><strong>';
-				_e( 'Bulk delete of member accounts by status completed successfully.', 'simple-membership');
+				esc_attr_e( 'Bulk delete of member accounts by status completed successfully.', 'simple-membership' );
 				echo '</strong></p></div>';
 			}
 		}
 		?>
 
 		<div class="postbox">
-			<h3 class="hndle"><label for="title"><?php _e( 'Bulk Update Membership Level of Members', 'simple-membership' ); ?></label></h3>
+			<h3 class="hndle"><label for="title"><?php esc_attr_e( 'Bulk Update Membership Level of Members', 'simple-membership' ); ?></label></h3>
 			<div class="inside">
 				<p>
-					<?php _e( 'You can manually change the membership level of any member by editing the record from the members menu. ', 'simple-membership' ); ?>
-					<?php _e( 'You can use the following option to bulk update the membership level of users who belong to the level you select below.', 'simple-membership' ); ?>
+					<?php esc_attr_e( 'You can manually change the membership level of any member by editing the record from the members menu. ', 'simple-membership' ); ?>
+					<?php esc_attr_e( 'You can use the following option to bulk update the membership level of users who belong to the level you select below.', 'simple-membership' ); ?>
 				</p>
 				<form method="post" action="">
-					<input type="hidden" name="swpm_bulk_change_level_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_change_level_nonce_action' ); ?>" />
+					<input type="hidden" name="swpm_bulk_change_level_nonce" value="<?php echo esc_attr( wp_create_nonce( 'swpm_bulk_change_level_nonce_action' ) ); ?>" />
 
 					<table width="100%" border="0" cellspacing="0" cellpadding="6">
 						<tr valign="top">
 							<td width="25%" align="left">
-								<strong><?php _e( 'Membership Level: ', 'simple-membership' ); ?></strong>
+								<strong><?php esc_attr_e( 'Membership Level: ', 'simple-membership' ); ?></strong>
 							</td>
 							<td align="left">
 								<select name="swpm_bulk_change_level_from">
-									<option value="please_select"><?php _e( 'Select Current Level', 'simple-membership' ); ?></option>
-									<?php echo SwpmUtils::membership_level_dropdown(); ?>
+									<option value="please_select"><?php esc_attr_e( 'Select Current Level', 'simple-membership' ); ?></option>
+									<?php echo wp_kses( SwpmUtils::membership_level_dropdown(), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
 								</select>
-								<p class="description"><?php _e( 'Select the current membership level (the membership level of all members who are in this level will be updated).', 'simple-membership' ); ?></p>
+								<p class="description"><?php esc_attr_e( 'Select the current membership level (the membership level of all members who are in this level will be updated).', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<strong><?php _e( 'Level to Change to: ', 'simple-membership' ); ?></strong>
+								<strong><?php esc_attr_e( 'Level to Change to: ', 'simple-membership' ); ?></strong>
 							</td>
 							<td align="left">
 								<select name="swpm_bulk_change_level_to">
-									<option value="please_select"><?php _e( 'Select Target Level', 'simple-membership' ); ?></option>
-									<?php echo SwpmUtils::membership_level_dropdown(); ?>
+									<option value="please_select"><?php esc_attr_e( 'Select Target Level', 'simple-membership' ); ?></option>
+									<?php echo wp_kses( SwpmUtils::membership_level_dropdown(), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
 								</select>
-								<p class="description"><?php _e( 'Select the new membership level.', 'simple-membership' ); ?></p>
+								<p class="description"><?php esc_attr_e( 'Select the new membership level.', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<input type="submit" class="button" name="swpm_bulk_change_level_process" value="<?php _e( 'Bulk Change Membership Level', 'simple-membership' ); ?>" />
+								<input type="submit" class="button" name="swpm_bulk_change_level_process" value="<?php esc_attr_e( 'Bulk Change Membership Level', 'simple-membership' ); ?>" />
 							</td>
 							<td align="left"></td>
 						</tr>
@@ -852,41 +792,41 @@ class SwpmMembers extends WP_List_Table {
 		</div>
 
 		<div class="postbox">
-			<h3 class="hndle"><label for="title"><?php _e( 'Bulk Update Access Starts Date of Members', 'simple-membership' ); ?></label></h3>
+			<h3 class="hndle"><label for="title"><?php esc_attr_e( 'Bulk Update Access Starts Date of Members', 'simple-membership' ); ?></label></h3>
 			<div class="inside">
 
 				<p>
-					<?php _e( 'The access starts date of a member is set to the day the user registers. This date value is used to calculate how long the member can access your content that are protected with a duration type protection in the membership level. ', 'simple-membership' ); ?>
-					<?php _e( 'You can manually set a specific access starts date value of all members who belong to a particular level using the following option.', 'simple-membership' ); ?>
+					<?php esc_attr_e( 'The access starts date of a member is set to the day the user registers. This date value is used to calculate how long the member can access your content that are protected with a duration type protection in the membership level. ', 'simple-membership' ); ?>
+					<?php esc_attr_e( 'You can manually set a specific access starts date value of all members who belong to a particular level using the following option.', 'simple-membership' ); ?>
 				</p>
 				<form method="post" action="">
-					<input type="hidden" name="swpm_bulk_start_date_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_start_date_nonce_action' ); ?>" />
+					<input type="hidden" name="swpm_bulk_start_date_nonce" value="<?php echo esc_attr( wp_create_nonce( 'swpm_bulk_start_date_nonce_action' ) ); ?>" />
 
 					<table width="100%" border="0" cellspacing="0" cellpadding="6">
 						<tr valign="top">
 							<td width="25%" align="left">
-								<strong><?php _e( 'Membership Level: ', 'simple-membership' ); ?></strong>
+								<strong><?php esc_attr_e( 'Membership Level: ', 'simple-membership' ); ?></strong>
 							</td><td align="left">
 								<select name="swpm_bulk_user_start_date_change_level">
-									<option value="please_select"><?php _e( 'Select Level', 'simple-membership' ); ?></option>
-									<?php echo SwpmUtils::membership_level_dropdown(); ?>
+									<option value="please_select"><?php esc_attr_e( 'Select Level', 'simple-membership' ); ?></option>
+									<?php echo wp_kses( SwpmUtils::membership_level_dropdown(), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
 								</select>
-								<p class="description"><?php _e( 'Select the Membership level (the access start date of all members who are in this level will be updated).', 'simple-membership' ); ?></p>
+								<p class="description"><?php esc_attr_e( 'Select the Membership level (the access start date of all members who are in this level will be updated).', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<strong><?php _e( 'Access Starts Date: ', 'simple-membership' ); ?></strong>
+								<strong><?php esc_attr_e( 'Access Starts Date: ', 'simple-membership' ); ?></strong>
 							</td><td align="left">
-								<input name="swpm_bulk_user_start_date_change_date" id="swpm_bulk_user_start_date_change_date" class="swpm-select-date" type="text" size="20" value="<?php echo ( date( 'Y-m-d' ) ); ?>" />
-								<p class="description"><?php _e( 'Specify the Access Starts date value.', 'simple-membership' ); ?></p>
+								<input name="swpm_bulk_user_start_date_change_date" id="swpm_bulk_user_start_date_change_date" class="swpm-select-date" type="text" size="20" value="<?php echo esc_attr( ( gmdate( 'Y-m-d' ) ) ); ?>" />
+								<p class="description"><?php esc_attr_e( 'Specify the Access Starts date value.', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<input type="submit" class="button" name="swpm_bulk_user_start_date_change_process" value="<?php _e( 'Bulk Change Access Starts Date', 'simple-membership' ); ?>" />
+								<input type="submit" class="button" name="swpm_bulk_user_start_date_change_process" value="<?php esc_attr_e( 'Bulk Change Access Starts Date', 'simple-membership' ); ?>" />
 							</td>
 							<td align="left"></td>
 						</tr>
@@ -903,44 +843,44 @@ class SwpmMembers extends WP_List_Table {
 		</script>
 
 		<div class="postbox">
-			<h3 class="hndle"><label for="title"><?php _e( 'Bulk Update Account Status of Members', 'simple-membership' ); ?></label></h3>
+			<h3 class="hndle"><label for="title"><?php esc_attr_e( 'Bulk Update Account Status of Members', 'simple-membership' ); ?></label></h3>
 			<div class="inside">
 				<p>
-					<?php _e( 'You can manually change the account status of any member by editing the record from the members menu. You can use the following option to bulk update the account status of users who belong to the level you select below.', 'simple-membership' ); ?>
+					<?php esc_attr_e( 'You can manually change the account status of any member by editing the record from the members menu. You can use the following option to bulk update the account status of users who belong to the level you select below.', 'simple-membership' ); ?>
 				</p>
 				<form method="post" action="">
-					<input type="hidden" name="swpm_bulk_account_status_change_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_account_status_change_nonce_action' ); ?>" />
+					<input type="hidden" name="swpm_bulk_account_status_change_nonce" value="<?php echo esc_attr( wp_create_nonce( 'swpm_bulk_account_status_change_nonce_action' ) ); ?>" />
 
 					<table width="100%" border="0" cellspacing="0" cellpadding="6">
 						<tr valign="top">
 							<td width="25%" align="left">
-								<strong><?php _e( 'Membership Level: ', 'simple-membership' ); ?></strong>
+								<strong><?php esc_attr_e( 'Membership Level: ', 'simple-membership' ); ?></strong>
 							</td>
 							<td align="left">
 								<select name="swpm_bulk_account_status_change_level_of">
-									<option value="please_select"><?php _e( 'Select Level', 'simple-membership' ); ?></option>
-									<?php echo SwpmUtils::membership_level_dropdown(); ?>
+									<option value="please_select"><?php esc_attr_e( 'Select Level', 'simple-membership' ); ?></option>
+									<?php echo wp_kses( SwpmUtils::membership_level_dropdown(), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
 								</select>
-								<p class="description"><?php _e( 'Select the Membership level (the account status of all members who are in this level will be updated).', 'simple-membership' ); ?></p>
+								<p class="description"><?php esc_attr_e( 'Select the Membership level (the account status of all members who are in this level will be updated).', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<strong><?php _e( 'Account Status to Change to: ', 'simple-membership' ); ?></strong>
+								<strong><?php esc_attr_e( 'Account Status to Change to: ', 'simple-membership' ); ?></strong>
 							</td>
 							<td align="left">
 								<select name="swpm_bulk_change_account_status_to">
-									<option value="please_select"><?php _e( 'Select Target Status', 'simple-membership' ); ?></option>
-									<?php echo SwpmUtils::account_state_dropdown('please_select'); ?>
+									<option value="please_select"><?php esc_attr_e( 'Select Target Status', 'simple-membership' ); ?></option>
+									<?php echo wp_kses( SwpmUtils::account_state_dropdown('please_select'), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
 								</select>
-								<p class="description"><?php _e( 'Select the new account status.', 'simple-membership' ); ?></p>
+								<p class="description"><?php esc_attr_e( 'Select the new account status.', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<input type="submit" class="button" name="swpm_bulk_account_status_change_process" value="<?php _e( 'Bulk Change Account Status', 'simple-membership' ); ?>" />
+								<input type="submit" class="button" name="swpm_bulk_account_status_change_process" value="<?php esc_attr_e( 'Bulk Change Account Status', 'simple-membership' ); ?>" />
 							</td>
 							<td align="left"></td>
 						</tr>
@@ -951,32 +891,32 @@ class SwpmMembers extends WP_List_Table {
 		</div>
 
 		<div class="postbox">
-			<h3 class="hndle"><label for="title"><?php _e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?></label></h3>
+			<h3 class="hndle"><label for="title"><?php esc_attr_e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?></label></h3>
 			<div class="inside">
 				<p>
-					<?php _e( 'This option allows you to bulk delete all members from a selected level, including their associated WordPress user records. ', 'simple-membership' ); ?>
-					<?php _e('The WP user record will be deleted only if the user is not an administrator user.', 'simple-membership'); ?>
+					<?php esc_attr_e( 'This option allows you to bulk delete all members from a selected level, including their associated WordPress user records. ', 'simple-membership' ); ?>
+					<?php esc_attr_e( 'The WP user record will be deleted only if the user is not an administrator user.', 'simple-membership' ); ?>
 				</p>
 				<form method="post" action="">
-					<input type="hidden" name="swpm_bulk_delete_account_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_delete_account_nonce_action' ); ?>" />
+					<input type="hidden" name="swpm_bulk_delete_account_nonce" value="<?php echo esc_attr( wp_create_nonce( 'swpm_bulk_delete_account_nonce_action' ) ); ?>" />
 
 					<table width="100%" border="0" cellspacing="0" cellpadding="6">
 						<tr valign="top">
 							<td width="25%" align="left">
-								<strong><?php _e( 'Membership Level: ', 'simple-membership' ); ?></strong>
+								<strong><?php esc_attr_e( 'Membership Level: ', 'simple-membership' ); ?></strong>
 							</td>
 							<td align="left">
 								<select name="swpm_bulk_delete_account_level_of">
-									<option value="please_select"><?php _e( 'Select Level', 'simple-membership' ); ?></option>
-									<?php echo SwpmUtils::membership_level_dropdown(); ?>
+									<option value="please_select"><?php esc_attr_e( 'Select Level', 'simple-membership' ); ?></option>
+									<?php echo wp_kses( SwpmUtils::membership_level_dropdown(), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
 								</select>
-								<p class="description"><?php _e( 'Select the Membership level (the accounts of all members who are in this level will be deleted).', 'simple-membership' ); ?></p>
+								<p class="description"><?php esc_attr_e( 'Select the Membership level (the accounts of all members who are in this level will be deleted).', 'simple-membership' ); ?></p>
 							</td>
 						</tr>
 
 						<tr valign="top">
 							<td width="25%" align="left">
-								<input type="submit" class="button" style="color:red;" name="swpm_bulk_delete_account_process" value="<?php _e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?>" onclick="return confirm('Are you sure you want to bulk delete all member accounts with the selected membership level?');" />
+								<input type="submit" class="button" style="color:red;" name="swpm_bulk_delete_account_process" value="<?php esc_attr_e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?>" onclick="return confirm('Are you sure you want to bulk delete all member accounts with the selected membership level?');" />
 							</td>
 							<td align="left"></td>
 						</tr>
@@ -987,32 +927,32 @@ class SwpmMembers extends WP_List_Table {
 		</div>
 
         <div class="postbox">
-            <h3 class="hndle"><label for="title"><?php _e( 'Bulk Delete Member Accounts By Status', 'simple-membership' ); ?></label></h3>
+            <h3 class="hndle"><label for="title"><?php esc_attr_e( 'Bulk Delete Member Accounts By Status', 'simple-membership' ); ?></label></h3>
             <div class="inside">
                 <p>
-					<?php _e( 'This option enables you to bulk delete all members with a specific account status, including their associated WordPress user records. ', 'simple-membership' ); ?>
-					<?php _e( 'The WP user record will be deleted only if the user is not an administrator user.', 'simple-membership' ); ?>
+					<?php esc_attr_e( 'This option enables you to bulk delete all members with a specific account status, including their associated WordPress user records. ', 'simple-membership' ); ?>
+					<?php esc_attr_e( 'The WP user record will be deleted only if the user is not an administrator user.', 'simple-membership' ); ?>
                 </p>
                 <form method="post" action="">
-                    <input type="hidden" name="swpm_bulk_delete_account_by_status_nonce" value="<?php echo wp_create_nonce( 'swpm_bulk_delete_account_by_status_nonce_action' ); ?>" />
+                    <input type="hidden" name="swpm_bulk_delete_account_by_status_nonce" value="<?php echo esc_attr( wp_create_nonce( 'swpm_bulk_delete_account_by_status_nonce_action' ) ); ?>" />
 
                     <table width="100%" border="0" cellspacing="0" cellpadding="6">
                         <tr valign="top">
                             <td width="25%" align="left">
-                                <strong><?php _e( 'Account Status: ', 'simple-membership' ); ?></strong>
+                                <strong><?php esc_attr_e( 'Account Status: ', 'simple-membership' ); ?></strong>
                             </td>
                             <td align="left">
                                 <select name="swpm_bulk_delete_account_status_of">
-                                    <option value="please_select"><?php _e( 'Select Status', 'simple-membership' ); ?></option>
-	                                <?php echo SwpmUtils::account_state_dropdown('please_select'); ?>
+                                    <option value="please_select"><?php esc_attr_e( 'Select Status', 'simple-membership' ); ?></option>
+	                                <?php echo wp_kses( SwpmUtils::account_state_dropdown('please_select'), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
                                 </select>
-                                <p class="description"><?php _e( 'Select the Account Status (the accounts of all members with this account status will be deleted).', 'simple-membership' ); ?></p>
+                                <p class="description"><?php esc_attr_e( 'Select the Account Status (the accounts of all members with this account status will be deleted).', 'simple-membership' ); ?></p>
                             </td>
                         </tr>
 
                         <tr valign="top">
                             <td width="25%" align="left">
-                                <input type="submit" class="button" style="color:red;" name="swpm_bulk_delete_account_status_process" value="<?php _e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?>" onclick="return confirm('Are you sure you want to bulk delete all member accounts with the selected account status?');" />
+                                <input type="submit" class="button" style="color:red;" name="swpm_bulk_delete_account_status_process" value="<?php esc_attr_e( 'Bulk Delete Member Accounts', 'simple-membership' ); ?>" onclick="return confirm('Are you sure you want to bulk delete all member accounts with the selected account status?');" />
                             </td>
                             <td align="left"></td>
                         </tr>
@@ -1055,20 +995,20 @@ class SwpmMembers extends WP_List_Table {
 		?>
 		<div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-		<h1><?php _e('Members'); ?><!-- page title -->
+		<h1><?php esc_attr_e( 'Members', 'simple-membership' ); ?><!-- page title -->
 			<a href="admin.php?page=simple_wp_membership&member_action=add"
-			   class="add-new-h2"><?php echo SwpmUtils::_('Add New'); ?></a>
+			   class="add-new-h2"><?php echo esc_html__( 'Add New', 'simple-membership' ); ?></a>
 		</h1>
 
 		<h2 class="nav-tab-wrapper swpm-members-nav-tab-wrapper"><!-- start nav menu tabs -->
 			<a class="nav-tab <?php echo ($selected == '') ? 'nav-tab-active' : ''; ?>"
-			   href="admin.php?page=simple_wp_membership"><?php echo SwpmUtils::_('Members'); ?></a>
+			   href="admin.php?page=simple_wp_membership"><?php echo esc_html__( 'Members', 'simple-membership' ); ?></a>
 			<a class="nav-tab <?php echo ($selected == 'add') ? 'nav-tab-active' : ''; ?>"
-			   href="admin.php?page=simple_wp_membership&member_action=add"><?php echo SwpmUtils::_('Add Member'); ?></a>
+			   href="admin.php?page=simple_wp_membership&member_action=add"><?php echo esc_html__( 'Add Member', 'simple-membership' ); ?></a>
 			<a class="nav-tab <?php echo ($selected == 'bulk') ? 'nav-tab-active' : ''; ?>"
-			   href="admin.php?page=simple_wp_membership&member_action=bulk"><?php echo SwpmUtils::_('Bulk Operation'); ?></a>
+			   href="admin.php?page=simple_wp_membership&member_action=bulk"><?php echo esc_html__( 'Bulk Operation', 'simple-membership' ); ?></a>
 			<a class="nav-tab <?php echo ($selected == 'send_direct_email') ? 'nav-tab-active' : ''; ?>"
-			   href="admin.php?page=simple_wp_membership&member_action=send_direct_email"><?php echo SwpmUtils::_('Send Direct Email'); ?></a>
+			   href="admin.php?page=simple_wp_membership&member_action=send_direct_email"><?php echo esc_html__( 'Send Direct Email', 'simple-membership' ); ?></a>
 			<?php
 			if ($selected == 'edit') {//Only show the "edit member" tab when a member profile is being edited from the admin side.
 				echo '<a class="nav-tab nav-tab-active" href="#">Edit Member</a>';
@@ -1080,7 +1020,7 @@ class SwpmMembers extends WP_List_Table {
 			$menu_tabs = apply_filters('swpm_members_additional_menu_tabs_array', array());
 			foreach ($menu_tabs as $member_action => $title) {
 					?>
-					<a class="nav-tab <?php echo ( $selected == $member_action ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=<?php echo $member_action; ?>" ><?php _e( $title, 'simple-membership' ); ?></a>
+					<a class="nav-tab <?php echo ( $selected == $member_action ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership&member_action=<?php echo esc_attr( $member_action ); ?>" ><?php echo esc_attr( $title ); ?></a>
 					<?php
 				}
 				?>
@@ -1095,7 +1035,7 @@ class SwpmMembers extends WP_List_Table {
 			$output = apply_filters( 'swpm_members_menu_body_override', '', $action );
 			if ( ! empty( $output ) ) {
 				//An addon has overriden the body of this page for the given action. So no need to do anything in core.
-				echo $output;
+				echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 				echo '</div>'; //<!-- end of wrap -->
 				return;
 			}
@@ -1104,7 +1044,7 @@ class SwpmMembers extends WP_List_Table {
 			switch ( $action ) {
 				case 'members_list':
 					//Show the members listing
-					echo $this->show_all_members();
+					echo $this->show_all_members(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 					break;
 				case 'add':
 					//Process member profile add
@@ -1126,7 +1066,7 @@ class SwpmMembers extends WP_List_Table {
 					break;
 				default:
 					//Show the members listing page by default.
-					echo $this->show_all_members();
+					echo $this->show_all_members(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 					break;
 			}
 

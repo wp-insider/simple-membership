@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmSettings {
 
@@ -310,40 +314,14 @@ class SwpmSettings {
 		$debug_field_help_text .= '<br />- ' . __( 'View general debug log file by ', 'simple-membership' ) . '<a href="' . $debug_log_url . '" target="_blank">' . __( 'clicking here', 'simple-membership' ) . '</a>.';
 		$debug_field_help_text .= '<br />- ' . __( 'View login related debug log file by ', 'simple-membership' ) . '<a href="' . $auth_log_url . '" target="_blank">' . __( 'clicking here', 'simple-membership' ) . '</a>.';
 		$debug_field_help_text .= '<br />- ' . __( 'Reset debug log files by ', 'simple-membership' ) . '<a href="javascript:void(0)" style="color: #CC0000;" id="swpm_reset_log_anchor">' . __( 'clicking here', 'simple-membership') . '</a>.';
-		ob_start();
-        ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function (){
-                const swpm_reset_log_anchor = document.getElementById('swpm_reset_log_anchor');
-                swpm_reset_log_anchor.addEventListener('click', function (e){
-                    e.preventDefault();
-                    const ajaxUrl = '<?php echo admin_url( 'admin-ajax.php' )?>';
-                    const payload = new URLSearchParams();
-                    payload.append('action', 'swpm_reset_log_action');
-                    payload.append('nonce',  '<?php echo esc_js( wp_create_nonce( 'swpm_reset_log_action' ) ) ?>');
-                    fetch(
-                        ajaxUrl,
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            body: payload.toString()
-                        }
-                    ).then((response) => {
-                        return response.json();
-                    }).then((res) => {
-                        alert(res.data.message);
-                    }).catch(err => {
-                        alert('The ajax request to reset the log files has failed unexpectedly. Please try again later.');
-                    })
-                });
-            })
-
-
-        </script>
-        <?php
-		$debug_field_help_text .= ob_get_clean();
+        wp_enqueue_script( 'swpm_reset_logs_scripts', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm-reset-logs.js', null, SIMPLE_WP_MEMBERSHIP_VER, array(
+                'strategy' => 'defer',
+                'in_footer' => true,
+        ) );
+        wp_localize_script( 'swpm_reset_logs_scripts', 'swpm_reset_logs_vars', array(
+                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                'nonce' => wp_create_nonce('swpm_reset_log_action'),
+        ));
 
 		add_settings_field(
 			'enable-debug',
@@ -1036,7 +1014,7 @@ class SwpmSettings {
 			'advanced-settings',
 			array(
 				'item'    => 'use-new-form-ui',
-				'message' => __( 'Enable the improved user interface for registration and profile editing, featuring enhanced validation that adapts seamlessly across various devices and screen sizes.' ),
+				'message' => __( 'Enable the improved user interface for registration and profile editing, featuring enhanced validation that adapts seamlessly across various devices and screen sizes.', 'simple-membership' ),
 			)
 		);
 
@@ -1368,29 +1346,29 @@ class SwpmSettings {
 		$default  = $args['default'];
 		$msg      = isset( $args['message'] ) ? $args['message'] : '';
 		$selected = esc_attr( $this->get_value( $item, $default ) );
-		echo "<select name='swpm-settings[" . $item . "]' >";
+		echo "<select name='swpm-settings[" . esc_attr( $item ) . "]' >";
 		foreach ( $options as $key => $value ) {
 			$is_selected = ( $key == $selected ) ? 'selected="selected"' : '';
-			echo '<option ' . $is_selected . ' value="' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</option>';
+			echo '<option ' . selected( $key, $selected, false ) . ' value="' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</option>';
 		}
 		echo '</select>';
-		echo '<p class="description">' . $msg . '</p>';
+		echo '<p class="description">' . wp_kses_post( $msg ) . '</p>';
 	}
 
 	public function checkbox_callback( $args ) {
 		$item = $args['item'];
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
 		$is   = esc_attr( $this->get_value( $item ) );
-		echo "<input type='checkbox' $is name='swpm-settings[" . $item . "]' value=\"checked='checked'\" />";
-		echo '<p class="description">' . $msg . '</p>';
+		echo "<input type='checkbox' " . checked( ! empty( $this->get_value( $item ) ), true, false ) . " name='swpm-settings[" . esc_attr( $item ) . "]' value=\"checked='checked'\" />";
+		echo '<p class="description">' . wp_kses_post( $msg ) . '</p>';
 	}
 
     public function password_toggler_checkbox_callback($args) {
         $item = $args['item'];
         $msg  = isset( $args['message'] ) ? $args['message'] : '';
         $is   = esc_attr( $this->get_value( $item ) );
-        echo "<input type='checkbox' $is name='swpm-settings[" . $item . "]' value=\"checked='checked'\" />";
-        echo '<p class="description">' . $msg . '</p>';
+        echo "<input type='checkbox' " . checked( ! empty( $this->get_value( $item ) ), true, false ) . " name='swpm-settings[" . esc_attr( $item ) . "]' value=\"checked='checked'\" />";
+        echo '<p class="description">' . wp_kses_post( $msg ) . '</p>';
 
         if (isset($args['toggler_select'])) {
             $toggler_args = $args['toggler_select'];
@@ -1401,14 +1379,14 @@ class SwpmSettings {
             $msg      = isset( $toggler_args['message'] ) ? $toggler_args['message'] : '';
             $selected = esc_attr( $this->get_value( $item, $default ) );
 
-            $select_input = "<select name='swpm-settings[" . $item . "]' >";
+            $select_input = "<select name='swpm-settings[" . esc_attr( $item ) . "]' >";
             foreach ( $options as $key => $value ) {
                 $is_selected = ( $key == $selected ) ? 'selected="selected"' : '';
-                $select_input .= '<option ' . $is_selected . ' value="' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</option>';
+                $select_input .= '<option ' . selected( $key, $selected, false ) . ' value="' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</option>';
             }
             $select_input .= '</select>';
 
-            echo '<p class="description">'. $select_input . '<br>' . sprintf($msg, $select_input) . '</p>';
+            echo '<p class="description">' . wp_kses( $select_input . '<br>' . sprintf( $msg, $select_input ), SwpmKsesUtils::wp_kses_post_tags_with_form() ) . '</p>';
         }
     }
 
@@ -1416,16 +1394,16 @@ class SwpmSettings {
 		$item = $args['item'];
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
 		$text = esc_attr( $this->get_value( $item ) );
-		echo "<textarea name='swpm-settings[" . $item . "]'  rows='6' cols='60' >" . $text . '</textarea>';
-		echo '<p class="description">' . $msg . '</p>';
+		echo "<textarea name='swpm-settings[" . esc_attr( $item ) . "]'  rows='6' cols='60' >" . esc_textarea( $this->get_value( $item ) ) . '</textarea>';
+		echo '<p class="description">' . wp_kses_post( $msg ) . '</p>';
 	}
 
 	public function textfield_small_callback( $args ) {
 		$item = $args['item'];
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
 		$text = esc_attr( $this->get_value( $item ) );
-		echo "<input type='text' name='swpm-settings[" . $item . "]'  size='5' value='" . $text . "' />";
-		echo '<p class="description">' . $msg . '</p>';
+		echo "<input type='text' name='swpm-settings[" . esc_attr( $item ) . "]'  size='5' value='" . esc_attr( $text ) . "' />";
+		echo '<p class="description">' . wp_kses_post( $msg ) . '</p>';
 	}
 
 	public function textfield_callback( $args ) {
@@ -1433,15 +1411,15 @@ class SwpmSettings {
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
 		$text = $this->get_value( $item );
 		echo sprintf( '<input type="text" name="swpm-settings[%s]" size="50" value="%s" />', esc_attr( $item ), esc_attr( $text ) );
-		echo sprintf( '<p class="description">%s</p>', $msg );
+		echo sprintf( '<p class="description">%s</p>', wp_kses_post( $msg ) );
 	}
 
 	public function textfield_long_callback( $args ) {
 		$item = $args['item'];
 		$msg  = isset( $args['message'] ) ? $args['message'] : '';
 		$text = esc_attr( $this->get_value( $item ) );
-		echo "<input type='text' name='swpm-settings[" . $item . "]'  size='100' value='" . $text . "' />";
-		echo '<p class="description">' . $msg . '</p>';
+		echo "<input type='text' name='swpm-settings[" . esc_attr( $item ) . "]'  size='100' value='" . esc_attr( $text ) . "' />";
+		echo '<p class="description">' . wp_kses_post( $msg ) . '</p>';
 	}
 
 	public function set_default_editor( $r ) {
@@ -1460,21 +1438,21 @@ class SwpmSettings {
 			html_entity_decode( $text ),
 			$item,
 			array(
-				'textarea_name'  => 'swpm-settings[' . $item . ']',
+				'textarea_name'  => 'swpm-settings[' . esc_attr( $item ) . ']',
 				'teeny'          => true,
 				'default_editor' => ! empty( $html_enabled ) ? 'QuickTags' : '',
 				'textarea_rows'  => 15,
 			)
 		);
 		remove_filter( 'wp_default_editor', array( $this, 'set_default_editor' ) );
-		echo "<p class=\"description\">{$msg}</p>";
+		echo '<p class="description">' . wp_kses_post( $msg ) . '</p>';
 	}
 
 	public function swpm_documentation_callback() {
 		?>
 		<div class="swpm-orange-box">
-			<?php printf( SwpmUtils::_( 'Visit the %s to read setup and configuration documentation.' ), '<a target="_blank" href="https://simple-membership-plugin.com/">' . SwpmUtils::_( 'Simple Membership Plugin Site' ) . '</a>' ); ?>
-			<?php printf( SwpmUtils::_( 'Please %s if you like the plugin.' ), '<a href="https://wordpress.org/support/view/plugin-reviews/simple-membership?filter=5" target="_blank">' . SwpmUtils::_( 'give us a rating' ) . '</a>' ); ?>
+			<?php /* translators: %s: link to the plugin site */ printf( esc_html__( 'Visit the %s to read setup and configuration documentation.', 'simple-membership' ), '<a target="_blank" href="https://simple-membership-plugin.com/">' . esc_html__( 'Simple Membership Plugin Site', 'simple-membership' ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Arguments are escaped. ?>
+			<?php /* translators: %s: link to rating page */ printf( esc_html__( 'Please %s if you like the plugin.', 'simple-membership' ), '<a href="https://wordpress.org/support/view/plugin-reviews/simple-membership?filter=5" target="_blank">' . esc_html__( 'give us a rating', 'simple-membership' ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Arguments are escaped. ?>
 		</div>
 		<?php
 	}
@@ -1482,52 +1460,52 @@ class SwpmSettings {
 	public function swpm_general_post_submit_check_callback() {
 		//Show settings updated message
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
-			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
+			echo '<div id="message" class="updated fade"><p>' . esc_html__( 'Settings updated!', 'simple-membership' ) . '</p></div>';
 		}
 	}
 
 	public function general_settings_callback() {
-		_e( 'General Plugin Settings.', 'simple-membership' );
+		esc_attr_e( 'General Plugin Settings.', 'simple-membership' );
 	}
 
 	public function pages_settings_callback() {
-		_e( 'Page Setup and URL Related settings.', 'simple-membership' );
+		esc_attr_e( 'Page Setup and URL Related settings.', 'simple-membership' );
 
 		echo '<p>';
-		_e( 'The following pages are required for the plugin to function correctly. These pages were automatically created by the plugin at install time.', 'simple-membership' );
-		_e( ' Read <a href="https://simple-membership-plugin.com/recreating-required-pages-simple-membership-plugin/" target="_blank">this documentation</a> to learn how to recreate them (if needed).', 'simple-membership' );
+		esc_attr_e( 'The following pages are required for the plugin to function correctly. These pages were automatically created by the plugin at install time.', 'simple-membership' );
+		echo wp_kses_post( __( ' Read <a href="https://simple-membership-plugin.com/recreating-required-pages-simple-membership-plugin/" target="_blank">this documentation</a> to learn how to recreate them (if needed).', 'simple-membership' ) );
 		echo '</p>';
 	}
 
 	public function optional_pages_settings_callback() {
 		echo '<p>';
-		_e( 'Optional page. It is automatically created by the plugin when you install the plugin for the first time.', 'simple-membership' );
+		esc_attr_e( 'Optional page. It is automatically created by the plugin when you install the plugin for the first time.', 'simple-membership' );
 		echo '</p>';
 	}
 
 	public function testndebug_settings_callback() {
-		_e( 'Testing and Debug Related Settings.', 'simple-membership' );
+		esc_attr_e( 'Testing and Debug Related Settings.', 'simple-membership' );
 	}
 
 	public function reg_email_settings_callback() {
-		_e( 'This email will be sent to your users when they complete the registration and become a member.', 'simple-membership' );
+		esc_attr_e( 'This email will be sent to your users when they complete the registration and become a member.', 'simple-membership' );
 	}
 
 	public function reset_password_settings_callback() {
-		_e( 'This email will be sent to your users when they use the password reset functionality.', 'simple-membership' );
-		echo ' ' . '<a href="https://simple-membership-plugin.com/password-reset-notification-email-customization/" target="_blank">' . __( 'Password reset feature  documentation', 'simple-membership' ) . '</a>.';
+		esc_attr_e( 'This email will be sent to your users when they use the password reset functionality.', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/password-reset-notification-email-customization/" target="_blank">' . esc_html__( 'Password reset feature  documentation', 'simple-membership' ) . '</a>.';
 	}
 
 	public function email_settings_overview_callback() {
 		echo '<div class="swpm-grey-box">';
 		echo '<p>';
-		_e( 'This interface lets you customize the various emails that get sent to your members for various actions. The default settings should be good to get you started.', 'simple-membership' );
-		echo ' ' . '<a href="https://simple-membership-plugin.com/default-email-settings-values-resetting-email-settings/" target="_blank">' . __( 'Default email settings documentation', 'simple-membership' ) . '</a>.';
+		esc_attr_e( 'This interface lets you customize the various emails that get sent to your members for various actions. The default settings should be good to get you started.', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/default-email-settings-values-resetting-email-settings/" target="_blank">' . esc_html__( 'Default email settings documentation', 'simple-membership' ) . '</a>.';
 		echo '</p>';
 
 		echo '<p>';
-		echo '<a href="https://simple-membership-plugin.com/email-merge-tags-email-shortcodes-for-email-customization/" target="_blank">' . SwpmUtils::_( 'This documentation' ) . '</a>';
-		_e( ' explains what email merge tags you can use in the email body field to customize it (if you want to).', 'simple-membership' );
+		echo '<a href="https://simple-membership-plugin.com/email-merge-tags-email-shortcodes-for-email-customization/" target="_blank">' . esc_html__( 'This documentation', 'simple-membership' ) . '</a>';
+		esc_attr_e( ' explains what email merge tags you can use in the email body field to customize it (if you want to).', 'simple-membership' );
 		echo '</p>';
 		echo '</div>';
 	}
@@ -1537,47 +1515,47 @@ class SwpmSettings {
 		//Show settings updated message when it is updated
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
 			//This status message need to be in the callback function to prevent header sent warning
-			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
+			echo '<div id="message" class="updated fade"><p>' . esc_html__( 'Settings updated!', 'simple-membership' ) . '</p></div>';
 		}
 
-		_e( 'Settings in this section apply to all emails.', 'simple-membership' );
+		esc_attr_e( 'Settings in this section apply to all emails.', 'simple-membership' );
 	}
 
 	public function upgrade_email_settings_callback() {
-		_e( 'This email will be sent to your users after account upgrade (when an existing member pays for a new membership level).', 'simple-membership' );
-		echo ' ' . '<a href="https://simple-membership-plugin.com/creating-membership-upgrade-button/" target="_blank">' . __( 'Membership upgrade button documentation', 'simple-membership' ) . '</a>.';
+		esc_attr_e( 'This email will be sent to your users after account upgrade (when an existing member pays for a new membership level).', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/creating-membership-upgrade-button/" target="_blank">' . esc_html__( 'Membership upgrade button documentation', 'simple-membership' ) . '</a>.';
 	}
 
 	public function renewal_email_settings_callback() {
-		_e( 'This email will be sent to your users after account renewal (when an existing member pays for their current membership level).', 'simple-membership' );
-		echo ' ' . '<a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">' . __( 'Membership renewal button documentation', 'simple-membership' ) . '</a>.';
+		esc_attr_e( 'This email will be sent to your users after account renewal (when an existing member pays for their current membership level).', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">' . esc_html__( 'Membership renewal button documentation', 'simple-membership' ) . '</a>.';
 	}
 
 	public function bulk_activate_email_settings_callback() {
-		_e( 'This email will be sent to your members when you use the bulk account activate and notify action.', 'simple-membership' );
+		esc_attr_e( 'This email will be sent to your members when you use the bulk account activate and notify action.', 'simple-membership' );
 	}
 
 	public function email_activation_email_settings_callback() {
-		_e( 'This email will be sent if Email Activation is enabled for a Membership Level.', 'simple-membership' );
-		echo ' ' . '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . __( 'Email activation feature documentation', 'simple-membership' ) . '</a>.';
+		esc_attr_e( 'This email will be sent if Email Activation is enabled for a Membership Level.', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . esc_html__( 'Email activation feature documentation', 'simple-membership' ) . '</a>.';
 	}
 
     public function subscription_renewal_email_settings_callback() {
-		_e( 'Optional email notifications for successful automatic subscription payments. Use this email to notify members when their subscription renews automatically. Notifications for renewals made via one-time payments are configured separately.', 'simple-membership' );
-		echo ' ' . '<a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">' . __( 'Membership renewal button documentation', 'simple-membership' ) . '</a>.';
+		esc_attr_e( 'Optional email notifications for successful automatic subscription payments. Use this email to notify members when their subscription renews automatically. Notifications for renewals made via one-time payments are configured separately.', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/creating-membership-renewal-button/" target="_blank">' . esc_html__( 'Membership renewal button documentation', 'simple-membership' ) . '</a>.';
 	}
 
     public function subscription_cancel_email_settings_callback() {
-		_e( "This email will be sent when a member's subscription is canceled or expires.", 'simple-membership' );
+		esc_attr_e( "This email will be sent when a member's subscription is canceled or expires.", 'simple-membership' );
 	}
 
     public function manual_account_approve_email_settings_callback() {
-		_e( 'This email is sent to notify a member when their account has been manually approved by an administrator.', 'simple-membership' );
-		echo ' ' . '<a href="https://simple-membership-plugin.com/manually-approve-members-membership-site" target="_blank">' . __( 'Manual approval documentation', 'simple-membership' ) . '</a>.';
+		esc_attr_e( 'This email is sent to notify a member when their account has been manually approved by an administrator.', 'simple-membership' );
+		echo ' ' . '<a href="https://simple-membership-plugin.com/manually-approve-members-membership-site" target="_blank">' . esc_html__( 'Manual approval documentation', 'simple-membership' ) . '</a>.';
 	}
 
 	public function reg_prompt_email_settings_callback() {
-		_e( 'This email will be sent to prompt users to complete registration after the payment.', 'simple-membership' );
+		esc_attr_e( 'This email will be sent to prompt users to complete registration after the payment.', 'simple-membership' );
 	}
 
 	public function advanced_settings_callback() {
@@ -1585,7 +1563,7 @@ class SwpmSettings {
 		//Show settings updated message when it is updated
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
 			//This status message need to be in the callback function to prevent header sent warning
-			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
+			echo '<div id="message" class="updated fade"><p>' . esc_html__( 'Settings updated!', 'simple-membership' ) . '</p></div>';
 
 				/* Check if any conflicting setting options have been enabled together. */
 				$disable_wp_dashboard_for_non_admins = $this->get_value('disable-access-to-wp-dashboard');
@@ -1600,7 +1578,7 @@ class SwpmSettings {
 						//Show warning and reset the option value to default.
 						$this->set_value('admin-dashboard-access-permission', 'manage_options');
 						$this->save();
-						echo '<div id="message" class="error"><p>' . SwpmUtils::_( 'Note: You cannot enable both the "Disable Access to WP Dashboard" and "Admin Dashboard Access Permission" options at the same time. Only use one of those options.' ) . '</p></div>';
+						echo '<div id="message" class="error"><p>' . esc_html__( 'Note: You cannot enable both the "Disable Access to WP Dashboard" and "Admin Dashboard Access Permission" options at the same time. Only use one of those options.', 'simple-membership' ) . '</p></div>';
 					}
 				}
 				/* End of conflicting options check */
@@ -1608,7 +1586,7 @@ class SwpmSettings {
 
         echo '<div class="swpm-grey-box">';
 		echo '<p>';
-		_e( 'This page allows you to configure some advanced features of the plugin.', 'simple-membership' );
+		esc_attr_e( 'This page allows you to configure some advanced features of the plugin.', 'simple-membership' );
 		echo '</p>';
 		echo '</div>';
 	}
@@ -1617,47 +1595,47 @@ class SwpmSettings {
 		//Show settings updated message when it is updated
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
 			//This status message need to be in the callback function to prevent header sent warning
-			echo '<div id="message" class="updated fade"><p>' . SwpmUtils::_( 'Settings updated!' ) . '</p></div>';
+			echo '<div id="message" class="updated fade"><p>' . esc_html__( 'Settings updated!', 'simple-membership' ) . '</p></div>';
 		}
 
 		echo '<div class="swpm-grey-box">';
 		echo '<p>';
-		_e( 'This interface lets you configure blacklisting & whitelisting for email addresses. ', 'simple-membership' );
-		echo '<a href="https://simple-membership-plugin.com/blacklisting-whitelisting-feature/" target="_blank">' . SwpmUtils::_( 'This blacklisting & whitelisting documentation' ) . '</a>';
-		_e( ' explains how to use this feature.', 'simple-membership' );
+		esc_attr_e( 'This interface lets you configure blacklisting & whitelisting for email addresses. ', 'simple-membership' );
+		echo '<a href="https://simple-membership-plugin.com/blacklisting-whitelisting-feature/" target="_blank">' . esc_html__( 'This blacklisting & whitelisting documentation', 'simple-membership' ) . '</a>';
+		esc_attr_e( ' explains how to use this feature.', 'simple-membership' );
 		echo '</p>';
 		echo '</div>';
 	}
 
 	public function whitelist_settings_callback() {
-		_e( 'This section allows you to configure whitelisting settings.', 'simple-membership' );
+		esc_attr_e( 'This section allows you to configure whitelisting settings.', 'simple-membership' );
 	}
 
 	public function blacklist_settings_callback() {
-		_e( 'This section allows you to configure blacklisting settings.', 'simple-membership' );
+		esc_attr_e( 'This section allows you to configure blacklisting settings.', 'simple-membership' );
 	}
 
 	public function advanced_settings_wp_toolbar_related_section_callback() {
-		_e( "The options in this section allow you to customize the default behavior of the WordPress toolbar. If you choose to use them, ensure you test and verify that the behavior meets your needs.", "simple-membership" );
+		esc_attr_e( "The options in this section allow you to customize the default behavior of the WordPress toolbar. If you choose to use them, ensure you test and verify that the behavior meets your needs.", 'simple-membership' );
 	}
 
 	public function advanced_settings_auto_create_swpm_uses_settings_callback() {
-		_e( 'This section allows you to configure automatic creation of member accounts when new WP User records are created by another plugin. It can be useful if you are using another plugin that creates WP user records and you want them to be recognized in the membership plugin.', 'simple-membership' );
+		esc_attr_e( 'This section allows you to configure automatic creation of member accounts when new WP User records are created by another plugin. It can be useful if you are using another plugin that creates WP user records and you want them to be recognized in the membership plugin.', 'simple-membership' );
 	}
 
 	public function advanced_settings_terms_and_conditions_callback() {
-		_e( 'This section allows you to configure terms and conditions and privacy policy that users must accept at registration time.', 'simple-membership' );
-		echo ' <a href="https://simple-membership-plugin.com/adding-a-terms-and-conditions-and-privacy-policy-to-member-registration-page/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
+		esc_attr_e( 'This section allows you to configure terms and conditions and privacy policy that users must accept at registration time.', 'simple-membership' );
+		echo ' <a href="https://simple-membership-plugin.com/adding-a-terms-and-conditions-and-privacy-policy-to-member-registration-page/" target="_blank">' . esc_html__( 'Read this documentation', 'simple-membership' ) . '</a>' . esc_html__( ' to learn more.', 'simple-membership' );
 	}
 
 	public function advanced_settings_limit_active_logins_callback() {
-		_e( 'This section lets you set active login limits for your members.', 'simple-membership' );
-		echo ' <a href="https://simple-membership-plugin.com/configuring-active-login-limit/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
+		esc_attr_e( 'This section lets you set active login limits for your members.', 'simple-membership' );
+		echo ' <a href="https://simple-membership-plugin.com/configuring-active-login-limit/" target="_blank">' . esc_html__( 'Read this documentation', 'simple-membership' ) . '</a>' . esc_html__( ' to learn more.', 'simple-membership' );
 	}
 
 	public function advanced_settings_failed_login_attempt_limit_callback() {
-		_e( 'This section allows you to enable and configure limits for failed login attempts on user accounts.', 'simple-membership' );
-		echo ' <a href="https://simple-membership-plugin.com/configuring-the-failed-login-attempt-limit-feature/" target="_blank">' . __('Read this documentation', 'simple-membership') . '</a>' . __(' to learn more.', 'simple-membership');
+		esc_attr_e( 'This section allows you to enable and configure limits for failed login attempts on user accounts.', 'simple-membership' );
+		echo ' <a href="https://simple-membership-plugin.com/configuring-the-failed-login-attempt-limit-feature/" target="_blank">' . esc_html__( 'Read this documentation', 'simple-membership' ) . '</a>' . esc_html__( ' to learn more.', 'simple-membership' );
 	}
 
 	public function maximum_active_login_callback( $args ) {
@@ -1869,7 +1847,7 @@ class SwpmSettings {
 		?>
 		<h2 class="nav-tab-wrapper">
 			<?php foreach ( $this->tabs as $id => $label ) { ?>
-				<a class="nav-tab <?php echo ( $current == $id ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=<?php echo $id; ?>"><?php echo $label; ?></a>
+				<a class="nav-tab <?php echo ( $current == $id ) ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_settings&tab=<?php echo esc_attr( $id ); ?>"><?php echo esc_attr( $label ); ?></a>
 			<?php } ?>
 		</h2>
 		<?php
@@ -1884,7 +1862,7 @@ class SwpmSettings {
 		?>
 		<div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-			<h1><?php _e( 'Settings' ); ?></h1><!-- page title -->
+			<h1><?php esc_attr_e( 'Settings', 'simple-membership' ); ?></h1><!-- page title -->
 
 			<!-- start nav menu tabs -->
 			<?php do_action( 'swpm-draw-settings-nav-tabs' ); ?>

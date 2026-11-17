@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 abstract class SwpmUtils {
 
@@ -88,7 +92,7 @@ abstract class SwpmUtils {
 				return;
 			}else{
 				//This is getting called from the front-end side (example: at member login time). So we need to show a critical error message to the member and end the script.
-            	wp_die($critical_error_msg);
+            	wp_die( wp_kses_post( $critical_error_msg ));
 				//The script will die here. So the rest of the code will not be executed.
 			}
         }
@@ -218,8 +222,8 @@ abstract class SwpmUtils {
 	public static function membership_level_dropdown( $selected = 0, $option_all = false ) {
 		$options = '';
 		global $wpdb;
-		$query  = 'SELECT alias, id FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id != 1';
-		$levels = $wpdb->get_results( $query );
+		
+		$levels = $wpdb->get_results( 'SELECT alias, id FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id != 1' );
 		foreach ( $levels as $level ) {
 			$options .= '<option ' . ( $selected == $level->id ? 'selected="selected"' : '' ) . ' value="' . $level->id . '" >' . $level->alias . '</option>';
 		}
@@ -229,13 +233,13 @@ abstract class SwpmUtils {
 	public static function get_all_membership_level_ids() {
 		global $wpdb;
 		$query = 'SELECT id FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id != 1';
-		return $wpdb->get_col( $query );
+		return $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Query is built with prepared/sanitized parts.
 	}
 
 	public static function get_membership_level_row_by_id( $level_id ) {
 		global $wpdb;
-		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id=%d', $level_id );
-		$level_resultset = $wpdb->get_row( $query );
+		
+		$level_resultset = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id=%d', $level_id ) );
 		return $level_resultset;
 	}
 
@@ -258,12 +262,12 @@ abstract class SwpmUtils {
 				if ( empty( $member_id ) ) {
 					return array();
 				}
-				$query   = $wpdb->prepare( "SELECT * FROM  {$wpdb->prefix}swpm_members_tbl WHERE member_id =  %d", $member_id );
-				$members = $wpdb->get_results( $query );
+				
+				$members = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM  {$wpdb->prefix}swpm_members_tbl WHERE member_id =  %d", $member_id ) );
 				break;
 			case 'all':
-				$query   = "SELECT * FROM  {$wpdb->prefix}swpm_members_tbl WHERE reg_code != '' ";
-				$members = $wpdb->get_results( $query );
+				
+				$members = $wpdb->get_results( "SELECT * FROM  {$wpdb->prefix}swpm_members_tbl WHERE reg_code != '' " );
 				break;
 		}
 		$settings  = SwpmSettings::get_instance();
@@ -402,7 +406,7 @@ abstract class SwpmUtils {
 			if ( is_wp_error( $wp_user_id ) ) {
 				// Error occured when creating wp user, cannot proceed with this request.
 				$error_msg = $wp_user_id->get_error_message();
-				wp_die( $error_msg );
+				wp_die( wp_kses_post( $error_msg ));
 			}
 
             //Update that newly created user's profile with additional data.
@@ -423,11 +427,11 @@ abstract class SwpmUtils {
 	}
 
 	public static function _( $msg ) {
-		return __( $msg, 'simple-membership' );
+		return translate( $msg, 'simple-membership' ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Message is translated dynamically by design.
 	}
 
 	public static function e( $msg ) {
-		_e( $msg, 'simple-membership' );
+		echo wp_kses_post( translate( $msg, 'simple-membership' ) ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- Message is translated dynamically by design.
 	}
 
 	/*
@@ -502,8 +506,8 @@ abstract class SwpmUtils {
 	public static function swpm_username_exists( $user_name ) {
 		global $wpdb;
 		$member_table = $wpdb->prefix . 'swpm_members_tbl';
-		$query        = $wpdb->prepare( 'SELECT member_id FROM ' . $member_table . ' WHERE user_name=%s', sanitize_user( $user_name ) );
-		return $wpdb->get_var( $query );
+		
+		return $wpdb->get_var( $wpdb->prepare( "SELECT member_id FROM {$wpdb->prefix}swpm_members_tbl WHERE user_name=%s", sanitize_user( $user_name ) ) );
 	}
 
 	public static function get_free_level() {
@@ -519,7 +523,7 @@ abstract class SwpmUtils {
                             if ( isset ( $_POST['swpm-fb-submit'] ) ){//Form builder submission potentially
                                 $msg .= '<p>If you are using the Form Builder addon, please update the addon and try again.</p>';
                             }
-                            wp_die( $msg );
+                            wp_die( wp_kses_post( $msg ));
                     }
 
                     return SwpmPermission::get_instance( $encrypted )->get( 'id' );
@@ -584,9 +588,7 @@ abstract class SwpmUtils {
                 $code = isset( $_GET['code'] ) ? sanitize_text_field( stripslashes ( $_GET['code'] ) ) : '';
 		global $wpdb;
 		if ( ! empty( $member_id ) && ! empty( $code ) ) {
-			$query = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id= %d AND reg_code=%s';
-			$query = $wpdb->prepare( $query, $member_id, $code );
-			return $wpdb->get_row( $query );
+			return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id = %d AND reg_code = %s", $member_id, $code ) );
 		}
 		return null;
 	}
@@ -616,8 +618,8 @@ abstract class SwpmUtils {
 
 		$cookie_reg_code = isset( $_COOKIE['swpm_paid_reg_code'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['swpm_paid_reg_code'] ) ) : '';
 		if ( ! empty( $cookie_reg_code ) ) {
-			$query  = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE reg_code=%s ORDER BY member_id DESC';
-			$member = $wpdb->get_row( $wpdb->prepare( $query, $cookie_reg_code ) );
+			
+			$member = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE reg_code=%s ORDER BY member_id DESC', $cookie_reg_code ) );
 			if ( $member && hash_equals( (string) $member->reg_code, $cookie_reg_code ) ) {
 				return $member;
 			}
@@ -625,8 +627,8 @@ abstract class SwpmUtils {
 
 		//The newest token first.
 		foreach ( array_reverse( self::get_paypal_std_checkout_tokens() ) as $token ) {
-			$query     = 'SELECT member_id FROM ' . SwpmMembersMeta::get_table_name() . ' WHERE meta_key=%s AND meta_value=%s ORDER BY member_id DESC';
-			$member_id = $wpdb->get_var( $wpdb->prepare( $query, 'paid_reg_browser_token_hash', hash( 'sha256', $token ) ) );
+			
+			$member_id = $wpdb->get_var( $wpdb->prepare( "SELECT member_id FROM {$wpdb->prefix}swpm_members_meta_tbl WHERE meta_key=%s AND meta_value=%s ORDER BY member_id DESC", 'paid_reg_browser_token_hash', hash( 'sha256', $token ) ) );
 			if ( ! empty( $member_id ) ) {
 				$member = SwpmMemberUtils::get_user_by_id( $member_id );
 				if ( $member ) {
@@ -703,7 +705,7 @@ abstract class SwpmUtils {
 		include SIMPLE_WP_MEMBERSHIP_PATH . 'views/account_delete_warning.php';
 		ob_get_flush();
 		$title = __( 'Confirm Account Deletion', 'simple-membership' );
-		wp_die( '', $title, array( 'back_link' => true ) );
+		wp_die( '', esc_html( $title ), array( 'back_link' => true ) );
 	}
 
 	public static function delete_account_button() {
@@ -744,7 +746,7 @@ abstract class SwpmUtils {
 
         public static function swpm_sanitize_text( $text ) {
                 $text = htmlspecialchars( $text );
-                $text = strip_tags( $text );
+                $text = wp_strip_all_tags( $text );
                 $text = sanitize_text_field( $text );
                 $text = esc_attr( $text );
                 return $text;
@@ -950,7 +952,7 @@ abstract class SwpmUtils {
 		$level_id = get_post_meta($button_id, 'membership_level_id', true);
 		if(!SwpmUtils::membership_level_id_exists($level_id)){
 			//This membership level doesn't exist. Show an error instead of the shortcode.
-			$shortcode = '<span style="color:red;">' . __('Error! The membership level you specified in this button does not exist. You may have deleted this level. Edit this button and select a valid membership level.', 'simple-membership') . '</span>';
+			$shortcode = '<span style="color:red;">' . esc_html__('Error! The membership level you specified in this button does not exist. You may have deleted this level. Edit this button and select a valid membership level.', 'simple-membership') . '</span>';
 		} else {
 			//If $size is empty, add 'large-text' class and no size attribute (so it adjusts responsively).
 			if( empty ($size) ){

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 $settings = SwpmSettings::get_instance();
 
@@ -15,7 +19,7 @@ if ( isset( $_POST['default_content_protection_form_submit'] ) && check_admin_re
     $settings->set_value('default_protection_membership_levels', $default_protection_membership_levels);
     $settings->save();
 
-    echo '<div class="notice notice-success"><p>'. __('Default Content Protection Settings Updated.', 'simple-membership') .'</p></div>';
+    echo '<div class="notice notice-success"><p>'. esc_html__( 'Default Content Protection Settings Updated.', 'simple-membership' ) .'</p></div>';
 }
 
 $enable_default_content_protection = $settings->get_value('enable_default_content_protection', false);
@@ -27,46 +31,46 @@ $default_protection_membership_levels = $settings->get_value('default_protection
 <div id="poststuff"><div id="post-body">
 
         <div class="swpm-yellow-box">
-            <?php _e('Read the ', 'simple-membership'); ?> <a href="https://simple-membership-plugin.com/apply-content-protection/" target="_blank"><?php _e('content protection documentation', 'simple-membership'); ?></a> <?php _e('to learn more.', 'simple-membership'); ?>
+            <?php esc_attr_e('Read the ', 'simple-membership'); ?> <a href="https://simple-membership-plugin.com/apply-content-protection/" target="_blank"><?php esc_attr_e('content protection documentation', 'simple-membership'); ?></a> <?php esc_attr_e('to learn more.', 'simple-membership'); ?>
         </div>
-        <h3><?php _e('How to Apply Content Protection', 'simple-membership'); ?></h3>
+        <h3><?php esc_attr_e('How to Apply Content Protection', 'simple-membership'); ?></h3>
 
-        <p><?php _e('Take the following steps to apply protection to your content so only members can have access to it.', 'simple-membership'); ?></p>
+        <p><?php esc_attr_e('Take the following steps to apply protection to your content so only members can have access to it.', 'simple-membership'); ?></p>
 
         <ol>
-            <li><?php _e('Edit the Post or Page that you want to protect in WordPress editor.', 'simple-membership'); ?></li>
-            <li><?php _e('Scroll down to the section titled \'Simple WP Membership Protection\'.', 'simple-membership'); ?></li>
-            <li><?php _e('Select \'Yes, Protect this content\' option.', 'simple-membership'); ?></li>
-            <li><?php _e('Check the membership levels that should have access to that page\'s content.', 'simple-membership'); ?></li>
-            <li><?php _e('Hit the Update/Save Button to save the changes.', 'simple-membership'); ?></li>
+            <li><?php esc_attr_e('Edit the Post or Page that you want to protect in WordPress editor.', 'simple-membership'); ?></li>
+            <li><?php esc_attr_e('Scroll down to the section titled \'Simple WP Membership Protection\'.', 'simple-membership'); ?></li>
+            <li><?php esc_attr_e('Select \'Yes, Protect this content\' option.', 'simple-membership'); ?></li>
+            <li><?php esc_attr_e('Check the membership levels that should have access to that page\'s content.', 'simple-membership'); ?></li>
+            <li><?php esc_attr_e('Hit the Update/Save Button to save the changes.', 'simple-membership'); ?></li>
         </ol>
         <br/>
-        <h3><?php echo SwpmUtils::_('Example Content Protection Settings') ?></h3>
+        <h3><?php echo esc_html__( 'Example Content Protection Settings', 'simple-membership' ) ?></h3>
 
-        <img src="<?php echo SIMPLE_WP_MEMBERSHIP_URL . '/images/simple-membership-content-protection-usage.png'; ?>" alt="Content protection example usage">
+        <img src="<?php echo SIMPLE_WP_MEMBERSHIP_URL . '/images/simple-membership-content-protection-usage.png'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters. ?>" alt="Content protection example usage">
 
     </div>
 
     <br>
     <div>
-        <h3><?php _e('Default Content Protection Settings', 'simple-membership') ?></h3>
+        <h3><?php esc_attr_e('Default Content Protection Settings', 'simple-membership') ?></h3>
 
         <form action="" method="post">
             <table class="form-table">
                 <tbody>
                 <tr>
                     <th>
-                        <label><?php _e('Enable Default Content Protection', 'simple-membership') ?></label>
+                        <label><?php esc_attr_e('Enable Default Content Protection', 'simple-membership') ?></label>
                     </th>
                     <td>
                         <input
                                 type="checkbox"
                                 name="enable_default_content_protection"
                                 id="enable_default_content_protection"
-                            <?php esc_attr_e($enable_default_content_protection) ?>
+                            <?php echo esc_attr( $enable_default_content_protection ) ?>
                         >
                         <p class="description">
-                            <?php _e('When creating a new post or page, the content protection settings will be pre-filled based on the default protection template you set below.', 'simple-membership') ?>
+                            <?php esc_attr_e('When creating a new post or page, the content protection settings will be pre-filled based on the default protection template you set below.', 'simple-membership') ?>
                         </p>
                     </td>
                 </tr>
@@ -74,12 +78,12 @@ $default_protection_membership_levels = $settings->get_value('default_protection
             </table>
 
             <div>
-                <h3><?php _e('Default Content Protection Template', 'simple-membership') ?></h3>
+                <h3><?php esc_attr_e('Default Content Protection Template', 'simple-membership') ?></h3>
 
-                <h4><?php _e("Do you want to protect this content?", 'simple-membership') ?></h4>
-                <input type="radio" <?php echo !$default_protect_this_content ? 'checked' : "" ?>  name="default_protect_this_content" value="1" /><?php _e('No, Do not protect this content.', 'simple-membership') ?><br/>
-                <input type="radio" <?php echo $default_protect_this_content ? 'checked' : "" ?>  name="default_protect_this_content" value="2" /><?php _e('Yes, Protect this content.', 'simple-membership') ?><br/>
-                <h4><?php _e("Select the membership level that can access this content:", 'simple-membership') ?></h4>
+                <h4><?php esc_attr_e("Do you want to protect this content?", 'simple-membership') ?></h4>
+                <input type="radio" <?php echo !$default_protect_this_content ? 'checked' : "" ?>  name="default_protect_this_content" value="1" /><?php esc_attr_e('No, Do not protect this content.', 'simple-membership') ?><br/>
+                <input type="radio" <?php echo $default_protect_this_content ? 'checked' : "" ?>  name="default_protect_this_content" value="2" /><?php esc_attr_e('Yes, Protect this content.', 'simple-membership') ?><br/>
+                <h4><?php esc_attr_e("Select the membership level that can access this content:", 'simple-membership') ?></h4>
 
                 <?php
                 $membership_levels = SwpmMembershipLevelUtils::get_all_membership_levels_in_array();
@@ -88,16 +92,16 @@ $default_protection_membership_levels = $settings->get_value('default_protection
 	                $is_checked = in_array($level_id, $default_protection_membership_levels);
 
 	                echo '<input type="checkbox" ' . ($is_checked ? "checked='checked'" : "") .
-	                     ' name="default_protection_membership_levels[' . $level_id . ']" value="' . $level_id . '" /> ' . $level_alias . "<br/>";
+	                     ' name="default_protection_membership_levels[' . esc_attr( $level_id ) . ']" value="' . esc_attr( $level_id ) . '" /> ' . esc_html( $level_alias ) . "<br/>";
                 }
 
                 ?>
             </div>
 
-            <?php echo wp_nonce_field('default_content_protection_form_nonce'); ?>
+            <?php wp_nonce_field('default_content_protection_form_nonce'); ?>
 
             <p class="submit">
-                <input type="submit" class="button-primary" name="default_content_protection_form_submit"  value="<?php _e('Save Changes', 'simple-membership') ?>">
+                <input type="submit" class="button-primary" name="default_content_protection_form_submit"  value="<?php esc_attr_e('Save Changes', 'simple-membership') ?>">
             </p>
         </form>
     </div>

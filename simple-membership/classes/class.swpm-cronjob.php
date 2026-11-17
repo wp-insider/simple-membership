@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /**
  * The cron job class that handles the cron job tasks.
@@ -21,12 +25,11 @@ class SwpmCronJob {
     public function update_account_status() {
         global $wpdb;
         for ($counter = 0;; $counter += 100) {
-            $query = $wpdb->prepare("SELECT member_id, membership_level, subscription_starts, account_state
+            $results = $wpdb->get_results( $wpdb->prepare("SELECT member_id, membership_level, subscription_starts, account_state
                     FROM {$wpdb->prefix}swpm_members_tbl
                     WHERE membership_level NOT IN ( SELECT id FROM {$wpdb->prefix}swpm_membership_tbl
                     WHERE subscription_period = '' OR subscription_period = '0' )
-                    LIMIT %d, 100", $counter);
-            $results = $wpdb->get_results($query);
+                    LIMIT %d, 100", $counter) );
             if (empty($results)) {
                 //No more records to process. Break out of the loop.
                 break;
@@ -39,9 +42,11 @@ class SwpmCronJob {
                 }
             }
             if (count($expired) > 0) {
-                $query = "UPDATE {$wpdb->prefix}swpm_members_tbl
-                SET account_state='expired'  WHERE member_id IN (" . implode(',', $expired) . ")";
-                $wpdb->query($query);
+                $placeholders = implode( ',', array_fill( 0, count( $expired ), '%d' ) );
+                $wpdb->query( $wpdb->prepare(
+                    "UPDATE {$wpdb->prefix}swpm_members_tbl SET account_state='expired' WHERE member_id IN ($placeholders)", // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Placeholders are generated from the ID count.
+                    $expired
+                ) );
                 
                 //Trigger an action hook
                 do_action('swpm_cronjob_account_status_updated_to_expired', $expired);
@@ -56,8 +61,7 @@ class SwpmCronJob {
             return;
         }
         for ($counter = 0;; $counter += 100) {
-            $query = $wpdb->prepare("SELECT member_id FROM {$wpdb->prefix}swpm_members_tbl WHERE account_state='pending' AND subscription_starts < DATE_SUB(NOW(), INTERVAL %d MONTH) LIMIT %d, 100", $interval, $counter);
-            $results = $wpdb->get_results($query);
+            $results = $wpdb->get_results( $wpdb->prepare("SELECT member_id FROM {$wpdb->prefix}swpm_members_tbl WHERE account_state='pending' AND subscription_starts < DATE_SUB(NOW(), INTERVAL %d MONTH) LIMIT %d, 100", $interval, $counter) );
             if (empty($results)) {
                 //No more records to process. Break out of the loop.
                 break;
@@ -68,9 +72,11 @@ class SwpmCronJob {
             }
             if (count($to_delete) > 0) {
                 SwpmLog::log_simple_debug("Auto deleting pending account.", true);
-                $query = "DELETE FROM {$wpdb->prefix}swpm_members_tbl
-                          WHERE member_id IN (" . implode(',', $to_delete) . ")";
-                $wpdb->query($query);
+                $placeholders = implode( ',', array_fill( 0, count( $to_delete ), '%d' ) );
+                $wpdb->query( $wpdb->prepare(
+                    "DELETE FROM {$wpdb->prefix}swpm_members_tbl WHERE member_id IN ($placeholders)", // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Placeholders are generated from the ID count.
+                    $to_delete
+                ) );
             }
         }
     }
@@ -78,8 +84,10 @@ class SwpmCronJob {
     public function delete_pending_email_activation_data() {
         //Delete pending email activation data after 1 day (24 hours).
         global $wpdb;
-        $q = "SELECT * FROM {$wpdb->prefix}options WHERE option_name LIKE '%swpm_email_activation_data_usr_%'";
-        $res = $wpdb->get_results($q);
+        $res = $wpdb->get_results( $wpdb->prepare(
+            "SELECT * FROM {$wpdb->options} WHERE option_name LIKE %s",
+            '%' . $wpdb->esc_like( 'swpm_email_activation_data_usr_' ) . '%'
+        ) );
         if (empty($res)) {
             return;
         }
@@ -100,8 +108,7 @@ class SwpmCronJob {
         global $wpdb;
         for ($counter = 0;; $counter += 100) {
             //Get 100 member records at a time to process.
-            $query = $wpdb->prepare("SELECT member_id FROM {$wpdb->prefix}swpm_members_tbl LIMIT %d, 100", $counter);
-            $results = $wpdb->get_results($query);
+            $results = $wpdb->get_results( $wpdb->prepare("SELECT member_id FROM {$wpdb->prefix}swpm_members_tbl LIMIT %d, 100", $counter) );
             if (empty($results)) {
                 //No more records to process. Break out of the loop.
                 break;
@@ -124,7 +131,7 @@ class SwpmCronJob {
 	public function handle_daily_cron_event(){
 		$auto_prune_login_events = SwpmSettings::get_instance()->get_value('auto_prune_login_events');
 		if ( $auto_prune_login_events ){
-            $prune_cuttoff_date = date("Y-m-d H:i:s", strtotime("- 1 year"));
+            $prune_cuttoff_date = gmdate("Y-m-d H:i:s", strtotime("- 1 year"));
 			SwpmEventLogger::prune_events_db_table(SwpmEventLogger::EVENT_TYPE_LOGIN_SUCCESS, $prune_cuttoff_date);
 		}
 	}

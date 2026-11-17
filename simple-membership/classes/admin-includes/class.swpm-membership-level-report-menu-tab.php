@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SWPM_Membership_Level_Report_Menu_Tab {
 
@@ -23,33 +27,33 @@ class SWPM_Membership_Level_Report_Menu_Tab {
 
 		$output = apply_filters( 'swpm_membership_level_report_menu_tab_content', $output );
 
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 	}
 
     public function render_members_by_membership_level() {
 	    global $wpdb;
-	    $query = 'SELECT COUNT(member_id) AS count, alias FROM ' . $wpdb->prefix . 'swpm_members_tbl '
+	    
+	    $results = $wpdb->get_results( 'SELECT COUNT(member_id) AS count, alias FROM ' . $wpdb->prefix . 'swpm_members_tbl '
 	             . ' LEFT JOIN ' . $wpdb->prefix . 'swpm_membership_tbl ON (membership_level=id) '
-	             . ' GROUP BY (membership_level)';
-	    $results = $wpdb->get_results( $query );
+	             . ' GROUP BY (membership_level)' );
 
 	    ob_start();
 	    ?>
         <div class="postbox">
             <h3 class="hndle">
-                <label for="title"><?php _e('Members by Membership Level', 'simple-membership');?></label>
+                <label for="title"><?php esc_attr_e('Members by Membership Level', 'simple-membership');?></label>
             </h3>
             <div class="char-column" id="member-by-level"></div>
             <div class="inside swpm-stats-container">
                 <div class="table-column">
 	                <?php if (empty($results)) {
-		                echo __('No entries found.', 'simple-membership');
+		                echo esc_html__( 'No entries found.', 'simple-membership' );
 	                } else { ?>
                     <table class="widefat striped">
                         <thead>
                         <tr>
-                            <th><?php _e('Membership Level', 'simple-membership'); ?></th>
-                            <th><?php _e('Count', 'simple-membership'); ?></th>
+                            <th><?php esc_attr_e('Membership Level', 'simple-membership'); ?></th>
+                            <th><?php esc_attr_e('Count', 'simple-membership'); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -59,10 +63,10 @@ class SWPM_Membership_Level_Report_Menu_Tab {
 					    foreach ( $results as $result ) { ?>
                             <tr>
                                 <td>
-								    <?php echo ucfirst( $result->alias ); ?>
+								    <?php echo esc_attr( ucfirst( $result->alias ) ); ?>
                                 </td>
                                 <td>
-								    <?php echo $result->count; ?>
+								    <?php echo esc_attr( $result->count ); ?>
 								    <?php
 								    $stats[] = array( ucfirst( $result->alias ), intval( $result->count ) );
 								    $count   += $result->count;
@@ -73,7 +77,7 @@ class SWPM_Membership_Level_Report_Menu_Tab {
                     </table>
                     <div class="swpm_report_total_container">
                         <p class="description">
-						    <?php echo __('Total members: ', 'simple-membership') . $count; ?>
+						    <?php echo esc_html__( 'Total members: ', 'simple-membership' ) . esc_html( $count ); ?>
                         </p>
                     </div>
 	                <?php } ?>

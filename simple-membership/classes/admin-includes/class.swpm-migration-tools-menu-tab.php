@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SWPM_Migration_Tools_Menu_Tab {
 
@@ -19,8 +23,8 @@ class SWPM_Migration_Tools_Menu_Tab {
 		?>
         <div class="swpm-yellow-box">
             <p class="description">
-				<?php _e( "To migrate the Simple Membership plugin's data to another WordPress installation, please download and install the free ", "simple-membership" ) ?>
-				<?php echo '<a href="https://simple-membership-plugin.com/simple-membership-data-migration-between-wordpress-sites/" target="_blank">' . __( "Data Migration Addon", "simple-membership" ) . '</a>.'; ?>
+				<?php esc_attr_e( "To migrate the Simple Membership plugin's data to another WordPress installation, please download and install the free ", 'simple-membership' ) ?>
+				<?php echo '<a href="https://simple-membership-plugin.com/simple-membership-data-migration-between-wordpress-sites/" target="_blank">' . esc_html__( "Data Migration Addon", 'simple-membership' ) . '</a>.'; ?>
             </p>
         </div>
 		<?php
@@ -28,6 +32,6 @@ class SWPM_Migration_Tools_Menu_Tab {
 
 		$output = apply_filters( 'swpm_migration_tools_menu_tab_content', $output );
 
-        echo $output;
+        echo wp_kses_post($output);
 	}
 }

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /** Shared activation token handling for registration and both resend paths. */
 class SwpmEmailActivation {

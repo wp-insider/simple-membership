@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 //Trigger an action hook
 do_action('swpm_before_login_form_widget');
 //Get the auth object
@@ -45,13 +49,13 @@ if (!empty($display_password_toggle)) {
         <input type="hidden" name="swpm_login_origination_flag" value="1" />
         <div class="swpm-login-form-inner">
             <div class="swpm-username-label">
-                <label for="swpm_user_name" class="swpm-label"><?php _e($swpm_username_label, 'simple-membership') ?></label>
+                <label for="swpm_user_name" class="swpm-label"><?php echo esc_attr( $swpm_username_label ) ?></label>
             </div>
             <div class="swpm-username-input">
                 <input type="text" class="swpm-text-field swpm-username-field" id="swpm_user_name" value="" size="25" name="swpm_user_name" />
             </div>
             <div class="swpm-password-label">
-                <label for="swpm_password" class="swpm-label"><?php _e('Password', 'simple-membership') ?></label>
+                <label for="swpm_password" class="swpm-label"><?php esc_attr_e('Password', 'simple-membership') ?></label>
             </div>
             <div class="swpm-password-input">                
                 <input type="password" class="swpm-text-field swpm-password-field" id="swpm_password" value="" size="25" name="swpm_password" />                
@@ -60,35 +64,35 @@ if (!empty($display_password_toggle)) {
                 <div class="swpm-password-input-visibility">                                        
                     <span class="swpm-password-toggle-checkbox"><input type="checkbox" name="swpm-password-toggle-checkbox" id="swpm-password-toggle-checkbox" data-state="password-hidden" > </span>
                     <label for="swpm-password-toggle-checkbox" class="swpm-password-toggle-checkbox-label">
-                        <span class="swpm-password-toggle-label"> <?php _e('Show password', 'simple-membership') ?></span>
+                        <span class="swpm-password-toggle-label"> <?php esc_attr_e('Show password', 'simple-membership') ?></span>
                     </label>
                 </div>
             <?php } ?>
             <div class="swpm-remember-me">
                 <span class="swpm-remember-checkbox"><input type="checkbox" name="rememberme" id="swpm-rememberme"></span>
                 <label for="swpm-rememberme" class="swpm-rememberme-label">
-                    <span class="swpm-rember-label"> <?php _e('Remember Me', 'simple-membership') ?></span>
+                    <span class="swpm-rember-label"> <?php esc_attr_e('Remember Me', 'simple-membership') ?></span>
                 </label>
             </div>
 
-            <div class="swpm-before-login-submit-section"><?php echo apply_filters('swpm_before_login_form_submit_button', ''); ?></div>
+            <div class="swpm-before-login-submit-section"><?php echo apply_filters('swpm_before_login_form_submit_button', ''); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters. ?></div>
 
             <div class="swpm-login-submit">
-                <input type="submit" class="<?php echo esc_attr($login_submit_class); ?>" name="swpm-login" value="<?php _e('Log In', 'simple-membership') ?>"/>
+                <input type="submit" class="<?php echo esc_attr($login_submit_class); ?>" name="swpm-login" value="<?php esc_attr_e('Log In', 'simple-membership') ?>"/>
             </div>
             <div class="swpm-forgot-pass-link">
-                <a id="forgot_pass" class="swpm-login-form-pw-reset-link"  href="<?php echo esc_url($password_reset_url); ?>"><?php _e('Forgot Password?', 'simple-membership') ?></a>
+                <a id="forgot_pass" class="swpm-login-form-pw-reset-link"  href="<?php echo esc_url($password_reset_url); ?>"><?php esc_attr_e('Forgot Password?', 'simple-membership') ?></a>
             </div>
             <?php if (empty($hide_join_us_link_enabled)) { ?>
             <div class="swpm-join-us-link">
-                <a id="register" class="swpm-login-form-register-link" href="<?php echo esc_url($join_url); ?>"><?php _e('Join Us', 'simple-membership') ?></a>
+                <a id="register" class="swpm-login-form-register-link" href="<?php echo esc_url($join_url); ?>"><?php esc_attr_e('Join Us', 'simple-membership') ?></a>
             </div>
             <?php } ?>
             <div class="swpm-login-action-msg">
-                <span class="swpm-login-widget-action-msg"><?php echo apply_filters( 'swpm_login_form_action_msg', $auth->get_message() ); ?></span>
+                <span class="swpm-login-widget-action-msg"><?php echo apply_filters( 'swpm_login_form_action_msg', $auth->get_message() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters. ?></span>
             </div>
         </div>
     </form>
 
-    <?php echo apply_filters('swpm_after_login_form_output', ''); ?>
+    <?php echo apply_filters('swpm_after_login_form_output', ''); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters. ?>
 </div>

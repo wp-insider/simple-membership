@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SWPM_PayPal_Utility_Functions{
     
@@ -213,7 +217,7 @@ class SWPM_PayPal_Utility_Functions{
         $pp_api_injector = new SWPM_PayPal_Request_API_Injector();
 
         //Use the "Show plan details" API call to verify that the plan exists for the given account and mode.
-        https://developer.paypal.com/docs/api/subscriptions/v1/#plans_get
+        // https://developer.paypal.com/docs/api/subscriptions/v1/#plans_get
         $plan_details = $pp_api_injector->get_paypal_billing_plan_details( $plan_id );
         if( $plan_details !== false ){
             //Plan exists. Return true.

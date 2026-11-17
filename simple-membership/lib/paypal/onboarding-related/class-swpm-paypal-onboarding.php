@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /**
  * A Helper class for PPCP Onboarding.
@@ -94,10 +98,10 @@ class SWPM_PayPal_PPCP_Onboarding {
 				const formData = new FormData();
 				formData.append('action', 'swpm_handle_onboarded_callback_data');
 				formData.append('data', data);
-				formData.append('_wpnonce', '<?php echo $wp_nonce; ?>');
+				formData.append('_wpnonce', '<?php echo esc_attr( $wp_nonce ); ?>');
 
 				//Post the AJAX request to the server.
-				fetch('<?php echo $ajax_post_url; ?>', {
+				fetch('<?php echo esc_url( $ajax_post_url ); ?>', {
 					method: 'POST',
 					body: formData,
 				}).then(response => response.json())
@@ -120,8 +124,9 @@ class SWPM_PayPal_PPCP_Onboarding {
 		</script>
 		<a class="button button-primary direct" target="_blank"
 			data-paypal-onboard-complete="swpm_ppcp_onboarded_callback_sandbox"
-			href="<?php echo ($sandbox_singup_link); ?>"
+			href="<?php echo esc_url( $sandbox_singup_link ); ?>"
 			data-paypal-button="true">Activate PayPal Sandbox</a>
+		<?php // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent, PluginCheck.CodeAnalysis.Offloading.OffloadedContent, WordPress.WP.EnqueuedResources.NonEnqueuedScript, WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- Third-party PayPal/Braintree SDK resources must be loaded from the provider. ?>
 		<script id="paypal-js" src="https://www.sandbox.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js"></script>
 
 		<?php
@@ -133,7 +138,7 @@ class SWPM_PayPal_PPCP_Onboarding {
 		$sandbox_disconnect_url = admin_url($disonnect_link_path);
 		$ac_disconnect_nonce = wp_create_nonce('swpm_ac_disconnect_nonce_sandbox');
 		$sandbox_disconnect_url_nonced = add_query_arg('_wpnonce', $ac_disconnect_nonce, $sandbox_disconnect_url);
-		echo '<a class="button" href="' . $sandbox_disconnect_url_nonced . '" onclick="return confirm(\'Are you sure you want to disconnect the PayPal sandbox account?\')">Disconnect Sandbox Account</a>';	
+		echo '<a class="button" href="' . esc_url( $sandbox_disconnect_url_nonced ) . '" onclick="return confirm(\'Are you sure you want to disconnect the PayPal sandbox account?\')">Disconnect Sandbox Account</a>';	
 	}
 
 	public function output_production_onboarding_link_code() {
@@ -157,10 +162,10 @@ class SWPM_PayPal_PPCP_Onboarding {
 				const formData = new FormData();
 				formData.append('action', 'swpm_handle_onboarded_callback_data');
 				formData.append('data', data);
-				formData.append('_wpnonce', '<?php echo $wp_nonce; ?>');
+				formData.append('_wpnonce', '<?php echo esc_attr( $wp_nonce ); ?>');
 
 				//Post the AJAX request to the server.
-				fetch('<?php echo $ajax_post_url; ?>', {
+				fetch('<?php echo esc_url( $ajax_post_url ); ?>', {
 					method: 'POST',
 					body: formData,
 				}).then(response => response.json())
@@ -183,8 +188,9 @@ class SWPM_PayPal_PPCP_Onboarding {
 		</script>
 		<a class="button button-primary direct" target="_blank"
 			data-paypal-onboard-complete="swpm_ppcp_onboarded_callback_production"
-			href="<?php echo ($singup_link); ?>"
+			href="<?php echo esc_url( $singup_link ); ?>"
 			data-paypal-button="true">Activate PayPal</a>
+		<?php // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent, PluginCheck.CodeAnalysis.Offloading.OffloadedContent, WordPress.WP.EnqueuedResources.NonEnqueuedScript, WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- Third-party PayPal/Braintree SDK resources must be loaded from the provider. ?>
 		<script id="paypal-js" src="https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js"></script>
 		<?php
 	}
@@ -194,7 +200,7 @@ class SWPM_PayPal_PPCP_Onboarding {
 		$disconnect_url = admin_url($disonnect_link_path);
 		$ac_disconnect_nonce = wp_create_nonce('swpm_ac_disconnect_nonce_production');
 		$disconnect_url_nonced = add_query_arg('_wpnonce', $ac_disconnect_nonce, $disconnect_url);
-		echo '<a class="button" href="' . $disconnect_url_nonced . '" onclick="return confirm(\'Are you sure you want to disconnect the PayPal account?\')">Disconnect PayPal Account</a>';	
+		echo '<a class="button" href="' . esc_url( $disconnect_url_nonced ) . '" onclick="return confirm(\'Are you sure you want to disconnect the PayPal account?\')">Disconnect PayPal Account</a>';	
 	}
 
 }

@@ -42,9 +42,9 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 				<br />
 				<label><input type="radio" name="button_type" value="braintree_buy_now" /> <?php esc_attr_e( 'Braintree Buy Now', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_sca_buy_now" /> <?php esc_attr_e( 'Stripe Buy Now (Recommended)', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_sca_buy_now" /> <?php esc_attr_e( 'Stripe Buy Now', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_sca_subscription" /> <?php esc_attr_e( 'Stripe Subscription (Recommended)', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_sca_subscription" /> <?php esc_attr_e( 'Stripe Subscription', 'simple-membership' ); ?></label>
 				<br />
 			</fieldset>
 			</td>

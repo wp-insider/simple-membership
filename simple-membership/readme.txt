@@ -197,6 +197,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 == Changelog ==
 
 = WIP =
+- Fixed an issue where a password reset could be undone on some sites (for example, with a persistent object cache), so the member could not log in with the new password. The WP user profile sync no longer runs while the plugin is updating the WP user itself, it uses the data being saved, and it only updates the synced fields of the member record.
 - New optional "WordPress Role After Expiry" setting on each membership level. When a member of the level expires, their WordPress role is changed to the selected role. The level's Default WordPress Role is applied again when the member makes a new payment (renewal or subscription payment), or when an admin reactivates an expired account. Leaving it set to "No change" keeps the current behavior.
 - Added the swpm_account_status_updated_to_expired_at_login and swpm_bulk_account_status_updated action hooks.
 - Security fix: the paid registration link on the thank you page (and the redirect to it after the payment) is now only shown in the browser that made the payment, for all payment gateways (Stripe, PayPal, PayPal Standard and Braintree). It is no longer found using the visitor's IP address, which could be spoofed. In any other browser, the member uses the link sent by email. Thanks to Jonathan Schemoul (libertai Security) for reporting this.

@@ -335,10 +335,17 @@ abstract class SwpmUtils {
 
 		if ( $wp_user ) {
 			$wp_user_info['ID'] = $wp_user->ID;
-			return wp_update_user( $wp_user_info );
+			//The plugin saves this data in the member record itself. So don't sync it back from the WP user (see SimpleWpMembership::sync_with_wp_profile()).
+			self::$is_updating_wp_user = true;
+			$result = wp_update_user( $wp_user_info );
+			self::$is_updating_wp_user = false;
+			return $result;
 		}
 		return false;
 	}
+
+	//True while the plugin is updating a WP user (see update_wp_user()).
+	public static $is_updating_wp_user = false;
 
 	public static function create_wp_user( $wp_user_data ) {
 

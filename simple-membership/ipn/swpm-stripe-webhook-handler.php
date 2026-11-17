@@ -159,7 +159,8 @@ class SwpmStripeWebhookHandler {
 				//Ignore the renewal of a subscription that was not created on this site, so no payment record (without a member) is saved here.
 				//The 'swpm_stripe_webhook_skip_unknown_subscription' filter can be used to turn this check off (return false).
 				if ( ! empty( $sub_id ) && apply_filters( 'swpm_stripe_webhook_skip_unknown_subscription', true, $sub_id, $event_json ) ) {
-					if ( ! self::is_subscription_created_on_this_site( $sub_id ) ) {
+					$customer_id = isset( $event_json->data->object->customer ) ? $event_json->data->object->customer : '';
+					if ( ! self::is_subscription_created_on_this_site( $sub_id, $customer_id ) ) {
 						SwpmLog::log_simple_debug( 'Subscription ' . $sub_id . ' was not created on this site. Ignoring this renewal event.', true );
 						http_response_code( 200 ); // Tells Stripe we received this notification
 						exit();
@@ -296,8 +297,11 @@ class SwpmStripeWebhookHandler {
 	 * The checkout record is any record of the subscription except the renewal payments (status 'subscription'), since older versions
 	 * saved it with the status 'completed' or 'stripe subscription created' (now 'subscription created').
 	 * The renewal payment records are not used, because older versions also saved the renewals of other sites' subscriptions.
+	 * $customer_id: the Stripe customer of the subscription. The (removed) Stripe Legacy subscription button saved the customer ID as the member's
+	 * subscr_id and as the checkout record's txn_id (and records before 2023 have no subscr_id meta), so they are found by the customer ID.
+	 * Each checkout creates its own Stripe customer, so a customer belongs to one site.
 	 */
-	public static function is_subscription_created_on_this_site( $sub_id ) {
+	public static function is_subscription_created_on_this_site( $sub_id, $customer_id = '' ) {
 		$record_ids = get_posts( array(
 			'post_type'      => 'swpm_transactions',
 			'posts_per_page' => -1,
@@ -313,7 +317,24 @@ class SwpmStripeWebhookHandler {
 		}
 
 		//The checkout record may have been deleted. A member with this subscription ID also means it was created on this site.
-		return SwpmMemberUtils::get_user_by_subsriber_id( $sub_id ) ? true : false;
+		if ( SwpmMemberUtils::get_user_by_subsriber_id( $sub_id ) ) {
+			return true;
+		}
+
+		//Stripe Legacy subscriptions: a member, a checkout record or an old payments table row with this customer ID.
+		//(Renewal records use the charge ID as the txn_id, so they don't match.)
+		if ( ! empty( $customer_id ) && is_string( $customer_id ) ) {
+			global $wpdb;
+			$member_id = $wpdb->get_var( $wpdb->prepare( "SELECT member_id FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s OR subscr_id LIKE %s LIMIT 1", $customer_id, $wpdb->esc_like( $customer_id ) . '|%' ) );
+			if ( ! empty( $member_id ) || SwpmTransactions::get_transaction_row_by_txn_id( $customer_id ) ) {
+				return true;
+			}
+			$payment_row_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$wpdb->prefix}swpm_payments_tbl WHERE txn_id = %s LIMIT 1", $customer_id ) );
+			if ( ! empty( $payment_row_id ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static function get_charge_id_from_event_data( $event_json ) {

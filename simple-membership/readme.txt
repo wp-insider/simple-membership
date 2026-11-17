@@ -203,6 +203,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Security fix: the paid registration link on the thank you page (and the redirect to it after the payment) is now only shown in the browser that made the payment, for all payment gateways (Stripe, PayPal, PayPal Standard and Braintree). It is no longer found using the visitor's IP address, which could be spoofed. In any other browser, the member uses the link sent by email. Thanks to Jonathan Schemoul (libertai Security) for reporting this.
 - Removed the deprecated "Stripe Legacy Buy Now" and "Stripe Legacy Subscription" payment buttons (they used Stripe's old Checkout, which does not support SCA). Use the Stripe Buy Now and Stripe Subscription buttons instead. An existing Stripe Legacy button no longer shows on the page (site admins see a note to replace it). Existing Stripe Legacy subscriptions keep working: their renewals and cancellations are still handled by the Stripe webhook.
 - Fixed a PHP warning when a membership level setting is saved more than once in the same request (for example, by an addon).
+- Fixed an issue (since version 4.8.8) where the renewal payments of a Stripe Legacy subscription were not recorded. The check that ignores the renewals of another site's subscription now also recognizes Stripe Legacy subscriptions (they are linked to the member by the Stripe customer ID).
 - Plugin Check (PCP) reported issues fixed.
 
 = 4.8.8 =

@@ -5,6 +5,9 @@
  * never using the visitor's IP address (it can be spoofed with the X-Forwarded-For header).
  * No WordPress database is needed.
  */
+if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', __DIR__ . '/' );
+}
 ob_start();//Buffer the output so setcookie() can still send its header.
 define('WEEK_IN_SECONDS', 604800);
 define('COOKIEPATH', '/');

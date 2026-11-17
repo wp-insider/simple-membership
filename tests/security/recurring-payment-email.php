@@ -1,5 +1,8 @@
 <?php
 /** Run: php tests/security/recurring-payment-email.php. No network or mail is used. */
+if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', __DIR__ . '/' );
+}
 define('OBJECT', 'OBJECT');
 class SwpmSettings {
     public static $values = array();
@@ -10,6 +13,7 @@ class SwpmMemberUtils {
     public static $member;
     public static function get_user_by_id($id) { return self::$member; }
     public static function get_formatted_expiry_date_by_user_id($id) { return '2027-03-31'; }
+    public static function restore_level_role($id) {}//The "WordPress Role After Expiry" option is not tested here.
 }
 class SwpmMembershipLevelUtils {
     public static function get_membership_level_name_of_a_member($id) { return 'Premium'; }

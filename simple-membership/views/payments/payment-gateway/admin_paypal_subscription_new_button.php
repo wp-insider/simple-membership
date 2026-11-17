@@ -230,7 +230,7 @@ function render_save_edit_pp_subscription_new_button_interface($bt_opts, $is_edi
                         <th scope="row"><?php esc_attr_e('Membership Level', 'simple-membership'); ?></th>
                         <td>
                             <select id="membership_level_id" name="membership_level_id">
-                                <?php wp_kses(($is_edit_mode ? SwpmUtils::membership_level_dropdown($bt_opts['membership_level_id']) : SwpmUtils::membership_level_dropdown()), SwpmKsesUtils::wp_kses_select_option_tags());?>
+                                <?php echo wp_kses(($is_edit_mode ? SwpmUtils::membership_level_dropdown($bt_opts['membership_level_id']) : SwpmUtils::membership_level_dropdown()), SwpmKsesUtils::wp_kses_select_option_tags());?>
                             </select>
                             <p class="description"><?php esc_attr_e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
                         </td>

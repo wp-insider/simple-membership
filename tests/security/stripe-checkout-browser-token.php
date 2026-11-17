@@ -4,6 +4,9 @@
  * Exercises the real browser check with the cookie written by several checkouts.
  * No WordPress database or Stripe connection is needed.
  */
+if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', __DIR__ . '/' );
+}
 ob_start();//Buffer the output so setcookie() can still send its header.
 function absint($value) { return abs((int) $value); }
 function sanitize_text_field($value) { return trim(strip_tags($value)); }

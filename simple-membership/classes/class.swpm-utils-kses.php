@@ -153,6 +153,6 @@ class SwpmKsesUtils {
 	public static function wp_kses_post_tags($additional_tags = array()){
 		$allowed_tags = array_replace_recursive( wp_kses_allowed_html( 'post' ), $additional_tags );
 
-		return apply_filters( 'wp_kses_post_tags', $allowed_tags );
+		return apply_filters( 'swpm_kses_post_tags', $allowed_tags );
 	}
 }

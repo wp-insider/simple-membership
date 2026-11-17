@@ -4,6 +4,9 @@
  * Runs the real registration, activation and both resend implementations with
  * in-memory WordPress/database doubles. No email or network requests are sent.
  */
+if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', __DIR__ . '/' );
+}
 error_reporting( E_ALL );
 set_error_handler( function ( $severity, $message, $file, $line ) {
     throw new ErrorException( $message, 0, $severity, $file, $line );
@@ -19,6 +22,12 @@ function wp_unslash( $value ) { return stripslashes( $value ); }
 function sanitize_text_field( $value ) { return trim( strip_tags( $value ) ); }
 function sanitize_url( $value ) { return $value; }
 function esc_url( $value ) { return htmlspecialchars( $value, ENT_QUOTES ); }
+function esc_url_raw( $value ) { return $value; }
+function esc_attr( $value ) { return htmlspecialchars( $value, ENT_QUOTES ); }
+function esc_html__( $text, $domain = '' ) { return htmlspecialchars( $text, ENT_QUOTES ); }
+function esc_attr_e( $text, $domain = '' ) { echo htmlspecialchars( $text, ENT_QUOTES ); }
+function wp_kses_post( $value ) { return $value; }
+function wp_parse_url( $url, $component = -1 ) { return parse_url( $url, $component ); }
 function esc_html( $value ) { return htmlspecialchars( $value, ENT_QUOTES ); }
 function is_email( $value ) { return filter_var( $value, FILTER_VALIDATE_EMAIL ); }
 function get_home_url() { return 'https://example.test'; }

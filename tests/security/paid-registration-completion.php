@@ -1,5 +1,8 @@
 <?php
 /** Standalone regression check: php tests/security/paid-registration-completion.php */
+if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', __DIR__ . '/' );
+}
 class SwpmUtils {
     public static $paid = true;
     public static $member;
@@ -54,6 +57,7 @@ class CompletionDatabase {
 function do_action($hook, ...$args) {}
 function apply_filters($hook, $value) { return $value; }
 function sanitize_text_field($value) { return $value; }
+function esc_url($value) { return htmlspecialchars($value, ENT_QUOTES); }
 function get_option($key) { return $key === 'swpm_private_key_one' ? 'test-key' : false; }
 function wp_die($message) { throw new RuntimeException($message); }
 function verify_completion($condition, $message) { if (!$condition) { throw new RuntimeException($message); } }

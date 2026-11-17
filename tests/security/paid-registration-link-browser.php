@@ -128,6 +128,15 @@ check_link('A cookie made from the saved hash gets no link', found_member_id() =
 $_COOKIE = array('swpm_pp_checkout_tokens' => 'bad.<script>.' . $token_a);
 check_link('Invalid cookie values are ignored', found_member_id() === 41);
 
+//A completed registration must not hide a pending checkout of the same browser (pay for A, then B, complete B first).
+$wpdb->members[1]->user_name = 'completed_b';
+$_COOKIE = array('swpm_pp_checkout_tokens' => $token_a . '.' . $token_b);
+check_link('A completed newer checkout does not hide a pending older one', found_member_id() === 41);
+$_COOKIE = array('swpm_pp_checkout_tokens' => $token_b);
+$browser_member = SwpmUtils::get_paid_member_of_this_browser();
+check_link('A completed checkout alone gets no link, but is found for the "already completed" message', found_member_id() === 0 && $browser_member && (int) $browser_member->member_id === 42);
+$wpdb->members[1]->user_name = '';
+
 //The check for one member.
 $_COOKIE = array('swpm_paid_reg_code' => md5('pending'));
 check_link('The link of the member of this browser is allowed', SwpmUtils::is_paid_registration_link_allowed_in_this_browser($wpdb->members[1]) === true);

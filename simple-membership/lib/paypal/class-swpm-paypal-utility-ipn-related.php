@@ -252,7 +252,8 @@ class SWPM_PayPal_Utility_IPN_Related {
 
 			// This runs in the buyer's browser (the onApprove request). For a new member, save the paid registration code in a cookie of this browser,
 			// so the paid registration link is only shown in it (the member also gets it by email).
-			if ( ! empty( $ipn_data['member_id'] ) ) {
+			// Only for a member created by this checkout (never for an existing member found by the swpm_id or email, which the browser can change).
+			if ( ! empty( $ipn_data['member_id'] ) && ! empty( $ipn_data['new_member_created'] ) ) {
 				SwpmUtils::set_paid_registration_link_browser_only( $ipn_data['member_id'], true );
 			}
 

@@ -264,7 +264,8 @@ class SwpmStripeSCASubscriptionIpnHandler {
 		swpm_handle_subsc_signup_stand_alone( $ipn_data, $membership_level_id, $txn_id, $swpm_id );
 
 		// For a new member: only show the paid registration link to the browser that made the payment (the member also gets it by email).
-		if ( ! empty( $ipn_data['member_id'] ) ) {
+		// Only for a member created by this checkout (never for an existing member found by the swpm_id or email).
+		if ( ! empty( $ipn_data['member_id'] ) && ! empty( $ipn_data['new_member_created'] ) ) {
 			SwpmUtils::set_paid_registration_link_browser_only( $ipn_data['member_id'], $is_checkout_browser );
 		}
 

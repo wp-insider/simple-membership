@@ -220,6 +220,8 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 
 		//Add the member ID value to the $ipn_data (pass by reference will ensure that we will have it available in our save transaction function).
 		$ipn_data['member_id'] = $member_id;
+		//This checkout created the member (not an existing member found by the swpm_id, email or reference). Only then the paying browser gets the paid registration link proof.
+		$ipn_data['new_member_created'] = true;
 
 		//Create the signup/registration complete URL for the paid membership.
 		$rego_page_url = $settings->get_value( 'registration-page-url' );

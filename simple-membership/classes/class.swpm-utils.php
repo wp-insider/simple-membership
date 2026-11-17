@@ -629,18 +629,23 @@ abstract class SwpmUtils {
 			}
 		}
 
-		//The newest token first.
+		//The newest token first. A member that still needs to complete the registration is preferred: a completed one is only
+		//returned when there is no pending one (for the "already completed" message), so it can't hide a pending checkout of this browser.
+		$completed_member = null;
 		foreach ( array_reverse( self::get_paypal_std_checkout_tokens() ) as $token ) {
-			
+
 			$member_id = $wpdb->get_var( $wpdb->prepare( "SELECT member_id FROM {$wpdb->prefix}swpm_members_meta_tbl WHERE meta_key=%s AND meta_value=%s ORDER BY member_id DESC", 'paid_reg_browser_token_hash', hash( 'sha256', $token ) ) );
 			if ( ! empty( $member_id ) ) {
 				$member = SwpmMemberUtils::get_user_by_id( $member_id );
-				if ( $member ) {
+				if ( $member && empty( $member->user_name ) ) {
 					return $member;
+				}
+				if ( $member && null === $completed_member ) {
+					$completed_member = $member;
 				}
 			}
 		}
-		return null;
+		return $completed_member;
 	}
 
 	/*

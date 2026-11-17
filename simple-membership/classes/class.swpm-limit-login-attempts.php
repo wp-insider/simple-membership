@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmLimitFailedLoginAttempts {
 
@@ -82,7 +86,7 @@ class SwpmLimitFailedLoginAttempts {
 
 			$lockdown_end_time_for_this_visitor = $last_attempt_time->add( new DateInterval( "PT{$lockdown_time_period}M" ) );
 
-			$current_time = date_create( date( 'Y-m-d G:i:s' ) );
+			$current_time = date_create( gmdate( 'Y-m-d G:i:s' ) );
 
 			$interval_in_second = $current_time->getTimestamp() - $lockdown_end_time_for_this_visitor->getTimestamp();
 
@@ -103,7 +107,9 @@ class SwpmLimitFailedLoginAttempts {
 				return new \WP_Error(
 					'swpm_failed_login_attempt_error',
 					sprintf(
-						__( 'You have reached the maximum number of login attempts. Please try again after the lockout period. Lockout period: %s.', 'simple-membership' ),
+						
+                /* translators: %s: duration of the login lockout period. */
+                __( 'You have reached the maximum number of login attempts. Please try again after the lockout period. Lockout period: %s.', 'simple-membership' ),
 						self::format_seconds_to_readable_timestamp( $interval_in_second )
 					),
 					array(
@@ -118,7 +124,9 @@ class SwpmLimitFailedLoginAttempts {
 		$wp_error->add(
 			'swpm_failed_login_attempt_error',
 			"<br>".sprintf(
-				__('You have %d login attempt(s) remaining.', 'simple-membership'),
+				
+                /* translators: %d: number of login attempts remaining. */
+                __('You have %d login attempt(s) remaining.', 'simple-membership'),
 				$attempts_left
 			),
 			array(
@@ -197,14 +205,13 @@ class SwpmLimitFailedLoginAttempts {
 		$visitor_ip = SwpmUtils::get_user_ip_address();
 
 		$table = $wpdb->prefix . 'swpm_events_tbl';
-		$query = "SELECT COUNT(*) FROM " . $table . " WHERE event_type = %s AND ip_address = %s";
-		$count = $wpdb->get_var($wpdb->prepare($query, SwpmEventLogger::EVENT_TYPE_LOGIN_FAILED, $visitor_ip));
+		$count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}swpm_events_tbl WHERE event_type = %s AND ip_address = %s", SwpmEventLogger::EVENT_TYPE_LOGIN_FAILED, $visitor_ip));
 
 		return $count;
 	}
 
 	public function track_failed_login_event($username = '') {
-		SwpmEventLogger::insert_event_to_db(SwpmEventLogger::EVENT_TYPE_LOGIN_FAILED, null, $username, date('Y-m-d H:i:s'), SwpmUtils::get_user_ip_address());
+		SwpmEventLogger::insert_event_to_db(SwpmEventLogger::EVENT_TYPE_LOGIN_FAILED, null, $username, gmdate('Y-m-d H:i:s'), SwpmUtils::get_user_ip_address());
 	}
 
 	/**
@@ -213,12 +220,12 @@ class SwpmLimitFailedLoginAttempts {
 	public function get_last_attempt_time(){
 		global $wpdb;
 		$table = $wpdb->prefix . 'swpm_events_tbl';
-		$query = $wpdb->prepare(
-			"SELECT event_date_time FROM $table WHERE event_type = %s AND ip_address = %s ORDER BY event_id DESC LIMIT 1",
+		
+		$timestamp = $wpdb->get_var( $wpdb->prepare(
+			"SELECT event_date_time FROM {$wpdb->prefix}swpm_events_tbl WHERE event_type = %s AND ip_address = %s ORDER BY event_id DESC LIMIT 1",
 			SwpmEventLogger::EVENT_TYPE_LOGIN_FAILED,
 			SwpmUtils::get_user_ip_address()
-		);
-		$timestamp = $wpdb->get_var( $query );
+		) );
 
 		return $timestamp;
 	}
@@ -233,7 +240,7 @@ class SwpmLimitFailedLoginAttempts {
 
 		$table = $wpdb->prefix . 'swpm_events_tbl';
 
-		$delete = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $table . ' WHERE event_type = %s AND ip_address = %s', SwpmEventLogger::EVENT_TYPE_LOGIN_FAILED, $visitor_ip ) );
+		$delete = $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}swpm_events_tbl WHERE event_type = %s AND ip_address = %s", SwpmEventLogger::EVENT_TYPE_LOGIN_FAILED, $visitor_ip ) );
 		if ( $delete === false ) {
 			//A database error occurred while trying to delete the failed login attempt records.
 			SwpmLog::log_auth_debug( 'Failed login limit could not be reset for visitor IP address: ' . $visitor_ip . '. Database error occurred.', false );

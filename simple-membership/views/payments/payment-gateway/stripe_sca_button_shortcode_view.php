@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /* * ************************************************
  * Stripe Buy Now button shortcode handler
@@ -119,7 +123,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
                 submitBUtton?.setAttribute('disabled', true);
 
                 // The Stripe object may not exist if Stripe.js failed to load. It is only needed for the fallback redirect.
-                const stripe_js_obj = typeof <?php echo $stripe_js_obj;?> !== 'undefined' ? <?php echo $stripe_js_obj;?> : null;
+                const stripe_js_obj = window[<?php echo wp_json_encode( $stripe_js_obj ); ?>] || null;
                 const request_url = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
                 const payload = new URLSearchParams({
                     action: 'swpm_stripe_sca_create_checkout_session',
@@ -325,7 +329,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
                 submitBUtton?.setAttribute('disabled', true);
 
 	            // The Stripe object may not exist if Stripe.js failed to load. It is only needed for the fallback redirect.
-	            const stripe_js_obj = typeof <?php echo $stripe_js_obj;?> !== 'undefined' ? <?php echo $stripe_js_obj;?> : null;
+	            const stripe_js_obj = window[<?php echo wp_json_encode( $stripe_js_obj ); ?>] || null;
                 const request_url = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
                 const payload = new URLSearchParams({
                     action: 'swpm_stripe_sca_create_checkout_session',

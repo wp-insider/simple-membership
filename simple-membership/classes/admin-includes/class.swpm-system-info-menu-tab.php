@@ -22,20 +22,20 @@ class SWPM_System_Info_Menu_Tab {
 
         <div class="postbox">
             <h3 class="hndle">
-                <label for="title"><?php _e( 'WordPress Environment', 'simple-membership' ); ?></label>
+                <label for="title"><?php esc_attr_e( 'WordPress Environment', 'simple-membership' ); ?></label>
             </h3>
             <div class="inside">
                 <table class="widefat striped " cellspacing="0" id="status">
                     <tbody>
 					<?php foreach ( $this->get_wp_environment_data() as $info ) { ?>
                         <tr>
-                            <td><?php esc_attr_e( $info['title'] ) ?>:</td>
+                            <td><?php echo esc_attr( $info['title'] ) ?>:</td>
                             <td>
                                 <span
                                         class="dashicons dashicons-editor-help"
                                         tabindex="0"
-                                        aria-label="<?php esc_attr_e( $info['description'] ) ?>"
-                                        title="<?php esc_attr_e( $info['description'] ) ?>"
+                                        aria-label="<?php echo esc_attr( $info['description'] ) ?>"
+                                        title="<?php echo esc_attr( $info['description'] ) ?>"
                                 ></span>
                             </td>
                             <td><?php echo wp_kses_post( $info['value'] ) ?></td>
@@ -48,20 +48,20 @@ class SWPM_System_Info_Menu_Tab {
 
         <div class="postbox">
             <h3 class="hndle">
-                <label for="title"><?php _e( 'Server Environment', 'simple-membership' ); ?></label>
+                <label for="title"><?php esc_attr_e( 'Server Environment', 'simple-membership' ); ?></label>
             </h3>
             <div class="inside">
                 <table class="widefat striped " cellspacing="0" id="status">
                     <tbody>
 					<?php foreach ( $this->get_server_environment_data() as $info ) { ?>
                         <tr>
-                            <td><?php esc_attr_e( $info['title'] ) ?>:</td>
+                            <td><?php echo esc_attr( $info['title'] ) ?>:</td>
                             <td>
                                 <span
                                         class="dashicons dashicons-editor-help"
                                         tabindex="0"
-                                        aria-label="<?php esc_attr_e( $info['description'] ) ?>"
-                                        title="<?php esc_attr_e( $info['description'] ) ?>"
+                                        aria-label="<?php echo esc_attr( $info['description'] ) ?>"
+                                        title="<?php echo esc_attr( $info['description'] ) ?>"
                                 ></span>
                             </td>
                             <td><?php echo wp_kses_post( $info['value'] ) ?></td>
@@ -74,20 +74,20 @@ class SWPM_System_Info_Menu_Tab {
 
         <div class="postbox">
             <h3 class="hndle">
-                <label for="title"><?php _e( 'Simple Membership Page', 'simple-membership' ); ?></label>
+                <label for="title"><?php esc_attr_e( 'Simple Membership Page', 'simple-membership' ); ?></label>
             </h3>
             <div class="inside">
                 <table class="widefat striped " cellspacing="0" id="status">
                     <tbody>
 					<?php foreach ( $this->get_swpm_data() as $info ) { ?>
                         <tr>
-                            <td><?php esc_attr_e( $info['title'] ) ?>:</td>
+                            <td><?php echo esc_attr( $info['title'] ) ?>:</td>
                             <td>
                                 <span
                                         class="dashicons dashicons-editor-help"
                                         tabindex="0"
-                                        aria-label="<?php esc_attr_e( $info['description'] ) ?>"
-                                        title="<?php esc_attr_e( $info['description'] ) ?>"
+                                        aria-label="<?php echo esc_attr( $info['description'] ) ?>"
+                                        title="<?php echo esc_attr( $info['description'] ) ?>"
                                 ></span>
                             </td>
                             <td><?php echo wp_kses_post( $info['value'] ) ?></td>
@@ -100,15 +100,15 @@ class SWPM_System_Info_Menu_Tab {
 
         <div class="postbox">
             <h3 class="hndle">
-                <label for="title"><?php _e( 'Cron Jobs', 'simple-membership' ); ?></label>
+                <label for="title"><?php esc_attr_e( 'Cron Jobs', 'simple-membership' ); ?></label>
             </h3>
             <div class="inside">
                 <table class="widefat striped " cellspacing="0" id="status">
                     <tbody>
 					<?php foreach ( $this->get_cronjobs() as $info ) { ?>
                         <tr>
-                            <td><?php esc_attr_e( $info['title'] ) ?>:</td>
-                            <td><i><?php esc_attr_e( $info['cron'] ) ?></i></td>
+                            <td><?php echo esc_attr( $info['title'] ) ?>:</td>
+                            <td><i><?php echo esc_attr( $info['cron'] ) ?></i></td>
                             <td><?php echo wp_kses_post( $info['value'] ) ?></td>
                         </tr>
 					<?php } ?>
@@ -122,7 +122,7 @@ class SWPM_System_Info_Menu_Tab {
 
 		$output = apply_filters( 'swpm_system_info_menu_tab_content', $output );
 
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 	}
 
 	public function convert_bool_to_symbol( $bool ) {
@@ -383,7 +383,7 @@ class SWPM_System_Info_Menu_Tab {
 		$next_run = wp_next_scheduled( $name );
 
 		if ( $next_run ) {
-			return '<span style="color: green">' . $this->convert_bool_to_symbol( true ) . __( 'Next scheduled', 'simple-membership' ) . ': ' . date( 'Y-m-d H:i:s', $next_run ) . '<span>';
+			return '<span style="color: green">' . $this->convert_bool_to_symbol( true ) . __( 'Next scheduled', 'simple-membership' ) . ': ' . gmdate( 'Y-m-d H:i:s', $next_run ) . '<span>';
 		} else {
 			return '<span style="color: darkred">' . $this->convert_bool_to_symbol( false ) . __( 'Not scheduled!', 'simple-membership' ) . '<span>';
 		}

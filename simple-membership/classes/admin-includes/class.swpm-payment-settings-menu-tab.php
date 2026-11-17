@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SWPM_Payment_Settings_Menu_Tab {
 
@@ -19,12 +23,12 @@ class SWPM_Payment_Settings_Menu_Tab {
 
         //Tab overview message and documentation link.
         echo '<div class="swpm-grey-box">';
-        _e('You can create membership payment buttons from the ', 'simple-membership');
-        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" target="_blank">' . __('create new button tab', 'simple-membership') . '</a>';
-        _e(' of this plugin (useful if you want to offer paid memberships on the site).', 'simple-membership');
-        _e(' Read the ', 'simple-membership');
-        echo '<a href="https://simple-membership-plugin.com/simple-membership-documentation/#membership-payment-options" target="_blank">' . __('membership payment section', 'simple-membership') . '</a>';
-        _e(' of our documentation to learn more about creating membership payment buttons.', 'simple-membership');
+        esc_attr_e('You can create membership payment buttons from the ', 'simple-membership');
+        echo '<a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" target="_blank">' . esc_html__( 'create new button tab', 'simple-membership' ) . '</a>';
+        esc_attr_e(' of this plugin (useful if you want to offer paid memberships on the site).', 'simple-membership');
+        esc_attr_e(' Read the ', 'simple-membership');
+        echo '<a href="https://simple-membership-plugin.com/simple-membership-documentation/#membership-payment-options" target="_blank">' . esc_html__( 'membership payment section', 'simple-membership' ) . '</a>';
+        esc_attr_e(' of our documentation to learn more about creating membership payment buttons.', 'simple-membership');
         echo '</div>';
 
         //Sub nav tabs related code.
@@ -33,10 +37,10 @@ class SWPM_Payment_Settings_Menu_Tab {
         ?>
         <!-- start payment settings menu's sub nav tabs -->
         <h3 class="nav-tab-wrapper">
-            <a class="nav-tab <?php echo ($subtab == '' || $subtab == 'ps_general') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_general"><?php _e('General', 'simple-membership'); ?></a>
-            <a class="nav-tab <?php echo ($subtab == 'ps_pp_api') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api"><?php _e('PayPal API', 'simple-membership'); ?></a>
-            <a class="nav-tab <?php echo ($subtab == 'ps_pp_webhooks') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks"><?php _e('PayPal Webhooks', 'simple-membership'); ?></a>
-            <a class="nav-tab <?php echo ($subtab == 'ps_stripe') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe"><?php _e('Stripe Settings', 'simple-membership'); ?></a>
+            <a class="nav-tab <?php echo ($subtab == '' || $subtab == 'ps_general') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_general"><?php esc_attr_e('General', 'simple-membership'); ?></a>
+            <a class="nav-tab <?php echo ($subtab == 'ps_pp_api') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api"><?php esc_attr_e('PayPal API', 'simple-membership'); ?></a>
+            <a class="nav-tab <?php echo ($subtab == 'ps_pp_webhooks') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks"><?php esc_attr_e('PayPal Webhooks', 'simple-membership'); ?></a>
+            <a class="nav-tab <?php echo ($subtab == 'ps_stripe') ? 'nav-tab-active' : ''; ?>" href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe"><?php esc_attr_e('Stripe Settings', 'simple-membership'); ?></a>
             <!-- See example in the "class.swpm-payments-admin-menu.php" file -->
         </h3>
         <br />
@@ -55,7 +59,7 @@ class SWPM_Payment_Settings_Menu_Tab {
                 $pre_msg_html_markup .= '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
             }
             $live_wh_create_result_msg = isset($ret['msg']) ? sanitize_text_field($ret['msg']) : '';
-            echo '<div class="swpm-yellow-box"><p><strong>Create Live Webhook: </strong>' . $pre_msg_html_markup . esc_attr($live_wh_create_result_msg) . '</p></div>';
+            echo '<div class="swpm-yellow-box"><p><strong>Create Live Webhook: </strong>' . wp_kses_post( $pre_msg_html_markup ) . esc_attr($live_wh_create_result_msg) . '</p></div>';
         }
         if (isset($_GET['swpm_paypal_create_sandbox_webhook'])){
             check_admin_referer( 'swpm_paypal_create_sandbox_webhook' );
@@ -69,19 +73,19 @@ class SWPM_Payment_Settings_Menu_Tab {
                 $pre_msg_html_markup = '<span class="dashicons dashicons-yes" style="color:green;"></span>' . __(' Success! ', 'simple-membership');
             }
             $sandbox_wh_create_result_msg = isset($ret['msg']) ? sanitize_text_field($ret['msg']) : '';
-            echo '<div class="swpm-yellow-box"><p><strong>Create Sandbox Webhook: </strong>' . $pre_msg_html_markup . esc_attr($sandbox_wh_create_result_msg) . '</p></div>';
+            echo '<div class="swpm-yellow-box"><p><strong>Create Sandbox Webhook: </strong>' . wp_kses_post( $pre_msg_html_markup ) . esc_attr($sandbox_wh_create_result_msg) . '</p></div>';
         }
         if (isset($_GET['swpm_paypal_delete_webhook'])){
             check_admin_referer( 'swpm_paypal_delete_webhook' );
             $pp_webhook = new SWPM_PayPal_Webhook();
             $delete_action_result = $pp_webhook->check_and_delete_webhooks_for_both_modes();
-            echo '<div class="swpm-yellow-box"><p>' . $delete_action_result . '</p></div>';
+            echo '<div class="swpm-yellow-box"><p>' . wp_kses_post( $delete_action_result ) . '</p></div>';
         }
 
         if (isset($_GET['swpm_ppcp_after_onboarding'])){
             $environment_mode = isset($_GET['environment_mode']) ? sanitize_text_field($_GET['environment_mode']) : '';
             $onboarding_action_result = '<p>PayPal merchant account connection setup completed for environment mode: '. esc_attr($environment_mode) .'</p>';
-            echo '<div class="swpm-yellow-box"><p>' . $onboarding_action_result . '</p></div>';
+            echo '<div class="swpm-yellow-box"><p>' . wp_kses_post( $onboarding_action_result ) . '</p></div>';
         }
 
         if (isset($_GET['swpm_ppcp_disconnect_production'])){
@@ -90,7 +94,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 
             SWPM_PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('production');
             $disconnect_action_result = __('PayPal account disconnected.', 'simple-membership');
-            echo '<div class="swpm-yellow-box"><p>' . $disconnect_action_result . '</p></div>';
+            echo '<div class="swpm-yellow-box"><p>' . wp_kses_post( $disconnect_action_result ) . '</p></div>';
         }        
         if (isset($_GET['swpm_ppcp_disconnect_sandbox'])){
             //Verify nonce
@@ -98,7 +102,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 
             SWPM_PayPal_PPCP_Onboarding_Serverside::reset_seller_api_credentials('sandbox');
             $disconnect_action_result = __('PayPal sandbox account disconnected.', 'simple-membership');
-            echo '<div class="swpm-yellow-box"><p>' . $disconnect_action_result . '</p></div>';
+            echo '<div class="swpm-yellow-box"><p>' . wp_kses_post( $disconnect_action_result ) . '</p></div>';
         }
         
         // Check test-mode settings submit.
@@ -110,7 +114,7 @@ class SWPM_Payment_Settings_Menu_Tab {
             SWPM_PayPal_Bearer::delete_cached_token();
             SwpmLog::log_simple_debug('Live/Test mode settings updated. Deleted the PayPal access token cache so a new one is generated.', true);
 
-            echo '<div class="notice notice-success"><p>' . __('Test mode settings updated successfully.', 'simple-membership') . '</p></div>';
+            echo '<div class="notice notice-success"><p>' . esc_html__( 'Test mode settings updated successfully.', 'simple-membership' ) . '</p></div>';
         }
 
         // Check refund settings submit.
@@ -119,7 +123,7 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->set_value('disable-deactivation-on-subscription-refund' ,(( isset($_POST['disable-deactivation-on-subscription-refund']) && $_POST['disable-deactivation-on-subscription-refund'] == '1' ) ? "checked=\"checked\"" : ''));
             $settings->save();
 
-            echo '<div class="notice notice-success"><p>' . __('Refund settings updated successfully.', 'simple-membership') . '</p></div>';
+            echo '<div class="notice notice-success"><p>' . esc_html__( 'Refund settings updated successfully.', 'simple-membership' ) . '</p></div>';
         }
 
         // Check PayPal settings submit.
@@ -130,13 +134,13 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->set_value('paypal-sandbox-secret-key' ,( isset($_POST['paypal-sandbox-secret-key']) ? sanitize_text_field($_POST['paypal-sandbox-secret-key']) : ''));
 
             $settings->save();
-            echo '<div class="notice notice-success"><p>' . __('PayPal API settings updated successfully.', 'simple-membership') . '</p></div>';
+            echo '<div class="notice notice-success"><p>' . esc_html__( 'PayPal API settings updated successfully.', 'simple-membership' ) . '</p></div>';
         }
 
         if (isset($_GET['swpm_paypal_delete_cache'])){
             check_admin_referer( 'swpm_paypal_delete_cache' );
             SWPM_PayPal_Bearer::delete_cached_token();
-            echo '<div class="notice notice-success"><p>' . __('PayPal access token cache deleted successfully.', 'simple-membership') . '</p></div>';
+            echo '<div class="notice notice-success"><p>' . esc_html__( 'PayPal access token cache deleted successfully.', 'simple-membership' ) . '</p></div>';
         }
         
         // Check Stripe settings submit.
@@ -149,7 +153,7 @@ class SWPM_Payment_Settings_Menu_Tab {
             $settings->set_value('stripe-webhook-signing-secret' ,( isset($_POST['stripe-webhook-signing-secret']) ? sanitize_text_field($_POST['stripe-webhook-signing-secret']) : ''));
 
             $settings->save();
-            echo '<div class="notice notice-success"><p>' . __('Stripe settings updated successfully.', 'simple-membership') . '</p></div>';
+            echo '<div class="notice notice-success"><p>' . esc_html__( 'Stripe settings updated successfully.', 'simple-membership' ) . '</p></div>';
         }
 
         //Switch case for the various different sub-tabs.
@@ -187,37 +191,37 @@ class SWPM_Payment_Settings_Menu_Tab {
         $enable_sandbox_testing = $settings->get_value( 'enable-sandbox-testing' );
         ?>
         <div class="postbox">
-            <h2><?php _e("Sandbox or Test Mode Payment Settings", 'simple-membership'); ?></h2>
+            <h2><?php esc_attr_e("Sandbox or Test Mode Payment Settings", 'simple-membership'); ?></h2>
 
             <div class="inside">
                 <p>
-                    <?php _e( 'This section allows you to enable/disable sandbox or test mode for the payment buttons and transactions.', 'simple-membership' ); ?>
+                    <?php esc_attr_e( 'This section allows you to enable/disable sandbox or test mode for the payment buttons and transactions.', 'simple-membership' ); ?>
                 </p>
                 <form action="" method="POST">
                     <table class="form-table">
                         <tr valign="top">
                             <th scope="row">
                                 <label for="">
-                                <?php _e('Enable Sandbox or Test Mode', 'simple-membership');?>
+                                <?php esc_attr_e('Enable Sandbox or Test Mode', 'simple-membership');?>
                                 </label>
                             </th>
                             <td>
-                                <input type="checkbox" name="enable-sandbox-testing" value="1" <?php echo $enable_sandbox_testing;?> />
+                                <input type="checkbox" name="enable-sandbox-testing" value="1" <?php echo esc_attr( $enable_sandbox_testing );?> />
                                 <p class="description">
-                                <?php _e('Enable this option if you want to do sandbox payment testing. Keep it unchecked for live/production mode.', 'simple-membership');?>
+                                <?php esc_attr_e('Enable this option if you want to do sandbox payment testing. Keep it unchecked for live/production mode.', 'simple-membership');?>
                                 </p>
                             </td>
                         </tr>
                     </table>
-                    <input type="submit" name="swpm-enable-test-mode-submit" class="button-primary" value="<?php _e('Save Changes', 'simple-membership'); ?>" />
+                    <input type="submit" name="swpm-enable-test-mode-submit" class="button-primary" value="<?php esc_attr_e('Save Changes', 'simple-membership'); ?>" />
                     <?php wp_nonce_field('swpm-enable-test-mode-nonce');?>
                 </form>
                 <div class="swpm-blue-box">
                     <?php
-                    echo '<strong>' . __('Note for Subscription/Recurring Payment Testing: ','simple-membership') . '</strong>';
-                    _e('Subscription plan modes cannot be switched between test and live modes. For testing, create all subscription plans and buttons in test mode. ', 'simple-membership'); 
-                    _e('Once testing is complete, switch the plugin to live mode and recreate the plans and buttons for live use. Avoid reusing test mode plans/buttons in live mode to prevent errors from the payment gateway. ', 'simple-membership');
-                    echo '<a href="https://simple-membership-plugin.com/payment-testing-checklist-for-simple-membership/" target="_blank">' . __('Read this payment testing checklist.', 'simple-membership') . '</a>';
+                    echo '<strong>' . esc_html__( 'Note for Subscription/Recurring Payment Testing: ', 'simple-membership' ) . '</strong>';
+                    esc_attr_e('Subscription plan modes cannot be switched between test and live modes. For testing, create all subscription plans and buttons in test mode. ', 'simple-membership');
+                    esc_attr_e('Once testing is complete, switch the plugin to live mode and recreate the plans and buttons for live use. Avoid reusing test mode plans/buttons in live mode to prevent errors from the payment gateway. ', 'simple-membership');
+                    echo '<a href="https://simple-membership-plugin.com/payment-testing-checklist-for-simple-membership/" target="_blank">' . esc_html__( 'Read this payment testing checklist.', 'simple-membership' ) . '</a>';
                     ?>
                 </div>
             </div>
@@ -228,50 +232,50 @@ class SWPM_Payment_Settings_Menu_Tab {
         $disable_deactivation_on_subscription_refund = $settings->get_value( 'disable-deactivation-on-subscription-refund' );
         ?>
         <div class="postbox">
-            <h2><?php _e("Refund Settings", 'simple-membership'); ?></h2>
+            <h2><?php esc_attr_e("Refund Settings", 'simple-membership'); ?></h2>
 
             <div class="inside">
                 <p>
-                    <?php _e( 'This section allows you to control what happens to the member account when a payment is refunded. By default, the member account is deactivated when a one-time or subscription payment is refunded. The payment is always marked as refunded in the transactions list. These options apply to PayPal and Stripe payments. ', 'simple-membership' ); ?>
-                    <?php echo '<a href="https://simple-membership-plugin.com/what-happens-when-a-payment-is-refunded/" target="_blank">' . __('Read more about how refunds are handled.', 'simple-membership') . '</a>'; ?>
+                    <?php esc_attr_e( 'This section allows you to control what happens to the member account when a payment is refunded. By default, the member account is deactivated when a one-time or subscription payment is refunded. The payment is always marked as refunded in the transactions list. These options apply to PayPal and Stripe payments. ', 'simple-membership' ); ?>
+                    <?php echo '<a href="https://simple-membership-plugin.com/what-happens-when-a-payment-is-refunded/" target="_blank">' . esc_html__( 'Read more about how refunds are handled.', 'simple-membership' ) . '</a>'; ?>
                 </p>
                 <form action="" method="POST">
                     <table class="form-table">
                         <tr valign="top">
                             <th scope="row">
                                 <label for="">
-                                <?php _e('Do Not Deactivate Account on One-time Payment Refund', 'simple-membership');?>
+                                <?php esc_attr_e('Do Not Deactivate Account on One-time Payment Refund', 'simple-membership');?>
                                 </label>
                             </th>
                             <td>
-                                <input type="checkbox" name="disable-deactivation-on-one-time-refund" value="1" <?php echo $disable_deactivation_on_one_time_refund;?> />
+                                <input type="checkbox" name="disable-deactivation-on-one-time-refund" value="1" <?php echo esc_attr( $disable_deactivation_on_one_time_refund );?> />
                                 <p class="description">
-                                <?php _e('Enable this option to keep the member account active when a one-time payment is refunded. By default (unchecked), the member account is deactivated.', 'simple-membership');?>
+                                <?php esc_attr_e('Enable this option to keep the member account active when a one-time payment is refunded. By default (unchecked), the member account is deactivated.', 'simple-membership');?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label for="">
-                                <?php _e('Do Not Deactivate Account on Subscription Payment Refund', 'simple-membership');?>
+                                <?php esc_attr_e('Do Not Deactivate Account on Subscription Payment Refund', 'simple-membership');?>
                                 </label>
                             </th>
                             <td>
-                                <input type="checkbox" name="disable-deactivation-on-subscription-refund" value="1" <?php echo $disable_deactivation_on_subscription_refund;?> />
+                                <input type="checkbox" name="disable-deactivation-on-subscription-refund" value="1" <?php echo esc_attr( $disable_deactivation_on_subscription_refund );?> />
                                 <p class="description">
-                                <?php _e('Enable this option to keep the member account active when a subscription payment is refunded. By default (unchecked), the member account is deactivated.', 'simple-membership');?>
+                                <?php esc_attr_e('Enable this option to keep the member account active when a subscription payment is refunded. By default (unchecked), the member account is deactivated.', 'simple-membership');?>
                                 </p>
                             </td>
                         </tr>
                     </table>
-                    <input type="submit" name="swpm-refund-settings-submit" class="button-primary" value="<?php _e('Save Changes', 'simple-membership'); ?>" />
+                    <input type="submit" name="swpm-refund-settings-submit" class="button-primary" value="<?php esc_attr_e('Save Changes', 'simple-membership'); ?>" />
                     <?php wp_nonce_field('swpm-refund-settings-nonce');?>
                 </form>
                 <div class="swpm-blue-box">
                     <?php
-                    echo '<strong>' . __('Note: ','simple-membership') . '</strong>';
-                    _e('These options only apply to refunds. When a subscription is canceled or expires, the member account is updated according to the access duration settings of the membership level (for example, a "No Expiry" level account is deactivated immediately). ', 'simple-membership');
-                    echo '<a href="https://simple-membership-plugin.com/what-happens-when-paypal-subscription-cancelled/" target="_blank">' . __('Read what happens when a subscription is canceled.', 'simple-membership') . '</a>';
+                    echo '<strong>' . esc_html__( 'Note: ', 'simple-membership' ) . '</strong>';
+                    esc_attr_e('These options only apply to refunds. When a subscription is canceled or expires, the member account is updated according to the access duration settings of the membership level (for example, a "No Expiry" level account is deactivated immediately). ', 'simple-membership');
+                    echo '<a href="https://simple-membership-plugin.com/what-happens-when-paypal-subscription-cancelled/" target="_blank">' . esc_html__( 'Read what happens when a subscription is canceled.', 'simple-membership' ) . '</a>';
                     ?>
                 </div>
             </div>
@@ -295,7 +299,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 
         <!-- PayPal PPCP Connection postbox -->
         <!-- <div class="postbox">
-            <h2 id="paypal-ppcp-connection-section"><?php _e("PayPal Account Connection", 'simple-membership'); ?></h2>
+            <h2 id="paypal-ppcp-connection-section"><?php esc_attr_e("PayPal Account Connection", 'simple-membership'); ?></h2>
             <div class="inside">
                 <?php 
                 $this->paypal_ppcp_connection_settings();
@@ -305,12 +309,12 @@ class SWPM_Payment_Settings_Menu_Tab {
 
         <!-- Paypal Settings postbox -->
         <div class="postbox">
-            <h2><?php _e("PayPal API Credentials", 'simple-membership'); ?></h2>
+            <h2><?php esc_attr_e("PayPal API Credentials", 'simple-membership'); ?></h2>
             <div class="inside">
                 <p>
                     <?php 	
-                    _e( 'Configure the PayPal API credentials for the new PayPal checkout.', 'simple-membership' );
-                    echo '&nbsp;' . '<a href="https://simple-membership-plugin.com/getting-paypal-api-credentials" target="_blank">' . SwpmUtils::_( 'Read this documentation' ) . '</a> ' . SwpmUtils::_( 'to learn how to get your PayPal API credentials.' );
+                    esc_attr_e( 'Configure the PayPal API credentials for the new PayPal checkout.', 'simple-membership' );
+                    echo '&nbsp;' . '<a href="https://simple-membership-plugin.com/getting-paypal-api-credentials" target="_blank">' . esc_html__( 'Read this documentation', 'simple-membership' ) . '</a> ' . esc_html__( 'to learn how to get your PayPal API credentials.', 'simple-membership' );
                     ?>
                 </p>
                 <form action="" method="POST">
@@ -318,75 +322,75 @@ class SWPM_Payment_Settings_Menu_Tab {
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Live Client ID', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Live Client ID', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="text" name="paypal-live-client-id" size="100" value="<?php echo $paypal_live_client_id; ?>">
+                                <input type="text" name="paypal-live-client-id" size="100" value="<?php echo esc_attr( $paypal_live_client_id ); ?>">
                                 <p class="description">
-                                    <?php _e('Enter your PayPal Client ID for live mode.', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Enter your PayPal Client ID for live mode.', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Live Secret Key', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Live Secret Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="text" name="paypal-live-secret-key" size="100" value="<?php echo $paypal_live_secret_key; ?>">
+                                <input type="text" name="paypal-live-secret-key" size="100" value="<?php echo esc_attr( $paypal_live_secret_key ); ?>">
                                 <p class="description">
-                                    <?php _e('Enter your PayPal Secret Key for live mode.', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Enter your PayPal Secret Key for live mode.', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Sandbox Client ID', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Sandbox Client ID', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="text" name="paypal-sandbox-client-id" size="100" value="<?php echo $paypal_sandbox_client_id; ?>">
+                                <input type="text" name="paypal-sandbox-client-id" size="100" value="<?php echo esc_attr( $paypal_sandbox_client_id ); ?>">
                                 <p class="description">
-                                    <?php _e('Enter your PayPal Client ID for sandbox mode.', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Enter your PayPal Client ID for sandbox mode.', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Sandbox Secret Key', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Sandbox Secret Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="text" name="paypal-sandbox-secret-key" size="100" value="<?php echo $paypal_sandbox_secret_key; ?>">
+                                <input type="text" name="paypal-sandbox-secret-key" size="100" value="<?php echo esc_attr( $paypal_sandbox_secret_key ); ?>">
                                 <p class="description">
-                                    <?php _e('Enter your PayPal Secret Key for sandbox mode.', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Enter your PayPal Secret Key for sandbox mode.', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                     </table>
-                    <input type="submit" name="swpm-paypal-settings-submit" class="button-primary" value="<?php _e('Save Changes', 'simple-membership'); ?>" />
+                    <input type="submit" name="swpm-paypal-settings-submit" class="button-primary" value="<?php esc_attr_e('Save Changes', 'simple-membership'); ?>" />
                     <?php wp_nonce_field('swpm-paypal-settings-nonce');?>
                 </form>
             </div>
         </div>
 
         <div class="postbox">
-            <h2 id="paypal-delete-token-cache-section"><?php _e("Delete PayPal API Access Token Cache", 'simple-membership'); ?></h2>
+            <h2 id="paypal-delete-token-cache-section"><?php esc_attr_e("Delete PayPal API Access Token Cache", 'simple-membership'); ?></h2>
             <div class="inside">
             <table class="form-table" role="presentation">
                 <tbody>
                     <tr>
-                        <th scope="row"><?php _e('Delete PayPal Token Cache', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Delete PayPal Token Cache', 'simple-membership'); ?></th>
                         <td>
                             <?php
                             $delete_cache_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_api&swpm_paypal_delete_cache=1' );
                             $delete_cache_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_delete_cache' ), $delete_cache_url );
-                            echo '<p><a class="button swpm-paypal-delete-cache-btn" href="'.esc_url_raw($delete_cache_url_nonced).'">'.__('Delete Token Cache', 'simple-membership').'</a></p>';
-                            echo '<p class="description">' . __('This will delete the PayPal API access token cache. This is useful if you are having issues with the PayPal API after changing/updating the API credentials.', 'simple-membership') . '</p>';
+                            echo '<p><a class="button swpm-paypal-delete-cache-btn" href="'.esc_url_raw($delete_cache_url_nonced).'">'.esc_html__( 'Delete Token Cache', 'simple-membership' ).'</a></p>';
+                            echo '<p class="description">' . esc_html__( 'This will delete the PayPal API access token cache. This is useful if you are having issues with the PayPal API after changing/updating the API credentials.', 'simple-membership' ) . '</p>';
                             ?>
                         </td>
                     </tr>
@@ -412,80 +416,80 @@ class SWPM_Payment_Settings_Menu_Tab {
         ?>
         <!-- Paypal Webhooks postbox -->
         <div class="postbox">
-            <h2 id="paypal-subscription-webhooks"><?php _e("PayPal Webhooks", 'simple-membership'); ?></h2>
+            <h2 id="paypal-subscription-webhooks"><?php esc_attr_e("PayPal Webhooks", 'simple-membership'); ?></h2>
             <div class="inside">
-                <p><?php _e( 'The PayPal payment buttons that uses the new API require webhooks. The plugin will auto-create the required webhooks when you create a PayPal payment button.', 'simple-membership'); ?></p>
-                <p><?php _e( 'If you have issues with the webhooks, you can delete it and create again.', 'simple-membership'); ?></p>
+                <p><?php esc_attr_e( 'The PayPal payment buttons that uses the new API require webhooks. The plugin will auto-create the required webhooks when you create a PayPal payment button.', 'simple-membership'); ?></p>
+                <p><?php esc_attr_e( 'If you have issues with the webhooks, you can delete it and create again.', 'simple-membership'); ?></p>
                 <table class="form-table" role="presentation">
                     <tbody>
                         <tr>
-                            <th scope="row"><?php _e('Live Webhook Status', 'simple-membership'); ?></th>
+                            <th scope="row"><?php esc_attr_e('Live Webhook Status', 'simple-membership'); ?></th>
                             <td>
                                 <?php
                                 $production_webhook_id = get_option( 'swpm_paypal_webhook_id_production' );
                                 if( !empty($production_webhook_id)){
                                     //Production webhook exists
                                     echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-                                    _e( 'Live Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership' );
+                                    esc_attr_e( 'Live Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership' );
                                     echo '</span>';
                                 } else {
                                     //Production webhook does not exist
                                     if( empty( $settings->get_value('paypal-live-client-id')) || empty( $settings->get_value('paypal-live-secret-key')) ){
                                         echo '<p><span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-                                        _e( 'Live PayPal API credentials are not set. Please set the Live PayPal API credentials first.', 'simple-membership');
+                                        esc_attr_e( 'Live PayPal API credentials are not set. Please set the Live PayPal API credentials first.', 'simple-membership');
                                         echo '</span></p>';
                                     } else {
                                         echo '<span class="swpm-paypal-live-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-                                        _e( 'No webhook found. Use the following link to create a new webhook for live mode.', 'simple-membership' );
+                                        esc_attr_e( 'No webhook found. Use the following link to create a new webhook for live mode.', 'simple-membership' );
                                         echo '</span>';
                                         $create_live_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_create_live_webhook=1' );
                                         $create_live_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_live_webhook' ), $create_live_webhook_url );
-                                        echo '<p><a class="button swpm-paypal-create-live-webhook-btn" href="' . esc_url_raw( $create_live_webhook_url_nonced ) . '">'.SwpmUtils::_('Create Live Webhook').'</a></p>';
+                                        echo '<p><a class="button swpm-paypal-create-live-webhook-btn" href="' . esc_url_raw( $create_live_webhook_url_nonced ) . '">'.esc_html__( 'Create Live Webhook', 'simple-membership' ).'</a></p>';
                                     }
                                 }
                                 ?>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><?php _e('Test Webhook Status', 'simple-membership'); ?></th>
+                            <th scope="row"><?php esc_attr_e('Test Webhook Status', 'simple-membership'); ?></th>
                             <td>
                                 <?php
                                 $sandbox_webhook_id = get_option( 'swpm_paypal_webhook_id_sandbox' );
                                 if( !empty($sandbox_webhook_id)){
                                     //Sandbox webhook exists
                                     echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-                                    _e( 'Sandbox Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership');
+                                    esc_attr_e( 'Sandbox Webhook exists. If you still have issues with webhooks, you can delete it and create again.', 'simple-membership');
                                     echo '</span>';
                                 } else {
                                     //Sandbox webhook does not exist
                                     if( empty( $settings->get_value('paypal-sandbox-client-id')) || empty( $settings->get_value('paypal-sandbox-secret-key')) ){
                                         echo '<p><span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-                                        _e( 'Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal API credentials first.', 'simple-membership' );
+                                        esc_attr_e( 'Sanbbox PayPal API credentials are not set. Please set the Sandbox PayPal API credentials first.', 'simple-membership' );
                                         echo '</span></p>';
                                     } else {
                                         echo '<span class="swpm-paypal-sandbox-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-                                        _e( 'No webhook found. Use the following link to create a new webhook for test mode.', 'simple-membership' );
+                                        esc_attr_e( 'No webhook found. Use the following link to create a new webhook for test mode.', 'simple-membership' );
                                         echo '</span>';
                                         $create_sandbox_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_create_sandbox_webhook=1' );
                                         $create_sandbox_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_create_sandbox_webhook' ), $create_sandbox_webhook_url );
-                                        echo '<p><a class="button swpm-paypal-create-sandbox-webhook-btn" href="' . esc_url_raw( $create_sandbox_webhook_url_nonced ) . '">'.SwpmUtils::_('Create Sandbox Webhook').'</a></p>';
+                                        echo '<p><a class="button swpm-paypal-create-sandbox-webhook-btn" href="' . esc_url_raw( $create_sandbox_webhook_url_nonced ) . '">'.esc_html__( 'Create Sandbox Webhook', 'simple-membership' ).'</a></p>';
                                     }
                                 }
                                 ?>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><?php _e('Delete Webhooks', 'simple-membership'); ?></th>
+                            <th scope="row"><?php esc_attr_e('Delete Webhooks', 'simple-membership'); ?></th>
                             <td>
                                 <?php
                                     if( $all_api_creds_missing ){
                                         echo '<p><span class="swpm-paypal-delete-webhook-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp';
-                                        _e( 'PayPal API credentials are missing. Please set the PayPal API credentials.', 'simple-membership' ); 
+                                        esc_attr_e( 'PayPal API credentials are missing. Please set the PayPal API credentials.', 'simple-membership' );
                                         echo '</span></p>';
                                     } else {
                                         $delete_webhook_url = admin_url( 'admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_pp_webhooks&swpm_paypal_delete_webhook=1' );
                                         $delete_webhook_url_nonced = add_query_arg( '_wpnonce', wp_create_nonce( 'swpm_paypal_delete_webhook' ), $delete_webhook_url );
-                                        echo '<p><a class="button swpm-paypal-delete-webhook-btn" href="'.esc_url_raw($delete_webhook_url_nonced).'">'.__('Delete Webhooks', 'simple-membership').'</a></p>';					
+                                        echo '<p><a class="button swpm-paypal-delete-webhook-btn" href="'.esc_url_raw($delete_webhook_url_nonced).'">'.esc_html__( 'Delete Webhooks', 'simple-membership' ).'</a></p>';					
                                     }
                                 ?>
                             </td>
@@ -514,75 +518,75 @@ class SWPM_Payment_Settings_Menu_Tab {
         ?>
         <!-- Stripe Settings postbox -->
         <div class="postbox">
-            <h2><?php _e("Stripe Global Settings", 'simple-membership'); ?></h2>   
+            <h2><?php esc_attr_e("Stripe Global Settings", 'simple-membership'); ?></h2>
                 <div class="inside">
                 <p>
-                    <?php _e( 'This section allows you to configure Stripe payment related settings.', 'simple-membership' ); ?>
+                    <?php esc_attr_e( 'This section allows you to configure Stripe payment related settings.', 'simple-membership' ); ?>
                 </p>
                 <form action="" method="POST">
                     <table class="form-table">
                         <tr valign="top">
                             <th scope="row">
                                 <label for="">
-                                    <?php _e('Pre-fill Member Email Address', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Pre-fill Member Email Address', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="checkbox" name="stripe-prefill-member-email" value="1" <?php echo $stripe_prefill_member_email; ?>/>
+                                <input type="checkbox" name="stripe-prefill-member-email" value="1" <?php echo esc_attr( $stripe_prefill_member_email ); ?>/>
                                 <p class="description">
-                                    <?php _e('Pre-fills the email address of the logged-in member on the Stripe checkout form when possible', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Pre-fills the email address of the logged-in member on the Stripe checkout form when possible', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Test Publishable Key', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Test Publishable Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="text" name="stripe-test-public-key" size="100" value="<?php echo $stripe_test_public_key; ?>">
+                                <input type="text" name="stripe-test-public-key" size="100" value="<?php echo esc_attr( $stripe_test_public_key ); ?>">
                                 <p class="description">
-                                    <?php _e('Stripe API Test publishable key', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Stripe API Test publishable key', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Test Secret Key', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Test Secret Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="text" name="stripe-test-secret-key" size="100" value="<?php echo $stripe_test_secret_key; ?>">
+                                <input type="text" name="stripe-test-secret-key" size="100" value="<?php echo esc_attr( $stripe_test_secret_key ); ?>">
                                 <p class="description">
-                                    <?php _e('Stripe API Test secret key', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Stripe API Test secret key', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Live Publishable Key', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Live Publishable Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="text" name="stripe-live-public-key" size="100" value="<?php echo $stripe_live_public_key; ?>">
+                                <input type="text" name="stripe-live-public-key" size="100" value="<?php echo esc_attr( $stripe_live_public_key ); ?>">
                                 <p class="description">
-                                    <?php _e('Stripe API Live publishable key', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Stripe API Live publishable key', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Live Secret Key', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Live Secret Key', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="text" name="stripe-live-secret-key" size="100" value="<?php echo $stripe_live_secret_key; ?>">
+                                <input type="text" name="stripe-live-secret-key" size="100" value="<?php echo esc_attr( $stripe_live_secret_key ); ?>">
                                 <p class="description">
-                                    <?php _e('Stripe API Live secret key', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Stripe API Live secret key', 'simple-membership'); ?>
                                 </p>
                             </td>
                         </tr>
@@ -590,32 +594,32 @@ class SWPM_Payment_Settings_Menu_Tab {
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-                                    <?php _e('Webhook Endpoint URL', 'simple-membership'); ?>
+                                    <?php esc_attr_e('Webhook Endpoint URL', 'simple-membership'); ?>
                                 </label>
                             </th>
                             <td>
-                                <kbd><?php echo SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1&hook=1'; ?></kbd>
+                                <kbd><?php echo SIMPLE_WP_MEMBERSHIP_SITE_HOME_URL . '/?swpm_process_stripe_subscription=1&hook=1'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters. ?></kbd>
                                 <p class="description">
-                                    <?php _e('This is the webhook endpoint URL that you will need to configure in your Stripe account. You can get more info in the', 'simple-membership') ?> <a href="https://simple-membership-plugin.com/create-a-webhook-in-your-stripe-account/" target="_blank"><?php _e('documentation', 'simple-membership') ?></a>.
+                                    <?php esc_attr_e('This is the webhook endpoint URL that you will need to configure in your Stripe account. You can get more info in the', 'simple-membership') ?> <a href="https://simple-membership-plugin.com/create-a-webhook-in-your-stripe-account/" target="_blank"><?php esc_attr_e('documentation', 'simple-membership') ?></a>.
                                 </p>
                             </td>
                         </tr>                        
                         <tr valign="top">
                             <th scope="row">
                                 <label>
-				                    <?php _e('Webhook Signing Secret Key', 'simple-membership'); ?>
+				                    <?php esc_attr_e( 'Webhook Signing Secret Key', 'simple-membership' ); ?>
                                 </label>
                             </th>
                             <td>
-                                <input type="text" name="stripe-webhook-signing-secret" size="100" value="<?php echo $stripe_webhook_signing_secret_key; ?>">
+                                <input type="text" name="stripe-webhook-signing-secret" size="100" value="<?php echo esc_attr( $stripe_webhook_signing_secret_key ); ?>">
                                 <p class="description">
-				                    <?php _e('Enter the webhook signing secret from your Stripe dashboard here. ', 'simple-membership'); ?>
-                                    <?php _e('Read <a href="https://simple-membership-plugin.com/configuring-the-stripe-webhook-signing-secret/" target="_blank">this documentation</a> to learn more.', 'simple-membership'); ?>
+				                    <?php esc_attr_e( 'Enter the webhook signing secret from your Stripe dashboard here. ', 'simple-membership' ); ?>
+                                    <?php echo wp_kses_post( __( 'Read <a href="https://simple-membership-plugin.com/configuring-the-stripe-webhook-signing-secret/" target="_blank">this documentation</a> to learn more.', 'simple-membership' ) ); ?>
                                 </p>
                             </td>
                         </tr>
                     </table>
-                    <input type="submit" name="swpm-stripe-settings-submit" class="button-primary" value="<?php _e('Save Changes', 'simple-membership'); ?>" />
+                    <input type="submit" name="swpm-stripe-settings-submit" class="button-primary" value="<?php esc_attr_e('Save Changes', 'simple-membership'); ?>" />
                     <?php wp_nonce_field('swpm-stripe-settings-nonce');?>
                 </form>
             </div>
@@ -640,7 +644,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 		<table class="form-table" role="presentation">
 		<tbody>
 			<tr>
-				<th scope="row"><?php _e('Live Account Connnection Status', 'simple-membership'); ?></th>
+				<th scope="row"><?php esc_attr_e( 'Live Account Connnection Status', 'simple-membership' ); ?></th>
 				<td>
 					<?php
 					// Check if the live account is connected
@@ -653,14 +657,14 @@ class SWPM_Payment_Settings_Menu_Tab {
 					if( $live_account_connection_status == 'connected'){
 						//Production account connected
 						echo '<div class="swpm-paypal-live-account-connection-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						_e( 'Live account is connected. If you experience any issues, please disconnect and reconnect.', 'simple-membership' );
+						esc_attr_e( 'Live account is connected. If you experience any issues, please disconnect and reconnect.', 'simple-membership' );
 						echo '</div>';
 						// Show disconnect option for live account.
 						$ppcp_onboarding_instance->output_production_ac_disconnect_link();
 					} else {
 						//Production account is NOT connected.
 						echo '<div class="swpm-paypal-live-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-						_e( 'Live PayPal account is not connected.', 'simple-membership');
+						esc_attr_e( 'Live PayPal account is not connected.', 'simple-membership' );
 						echo '</div>';
 
 						// Show the onboarding link
@@ -670,7 +674,7 @@ class SWPM_Payment_Settings_Menu_Tab {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php _e('Sandbox Account Connnection Status', 'simple-membership'); ?></th>
+				<th scope="row"><?php esc_attr_e( 'Sandbox Account Connnection Status', 'simple-membership' ); ?></th>
 				<td>
 					<?php
 					//Check if the sandbox account is connected
@@ -683,14 +687,14 @@ class SWPM_Payment_Settings_Menu_Tab {
 					if( $sandbox_account_connection_status == 'connected'){
 						//Test account connected
 						echo '<div class="swpm-paypal-test-account-connection-status"><span class="dashicons dashicons-yes" style="color:green;"></span>&nbsp;';
-						_e( 'Sandbox account is connected. If you experience any issues, please disconnect and reconnect.', 'simple-membership' );
+						esc_attr_e( 'Sandbox account is connected. If you experience any issues, please disconnect and reconnect.', 'simple-membership' );
 						echo '</div>';
 						//Show disconnect option for sandbox account.
 						$ppcp_onboarding_instance->output_sandbox_ac_disconnect_link();
 					} else {
 						//Sandbox account is NOT connected.
 						echo '<div class="swpm-paypal-sandbox-account-status"><span class="dashicons dashicons-no" style="color: red;"></span>&nbsp;';
-						_e( 'Sandbox PayPal account is not connected.', 'simple-membership');
+						esc_attr_e( 'Sandbox PayPal account is not connected.', 'simple-membership' );
 						echo '</div>';
 
 						//Show the onboarding link for sandbox account.

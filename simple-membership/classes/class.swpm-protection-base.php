@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 abstract class SwpmProtectionBase {
 
@@ -22,9 +26,17 @@ abstract class SwpmProtectionBase {
     protected function init($level_id) {
         global $wpdb;
         $this->owning_level_id = $level_id;
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}swpm_membership_tbl WHERE "
-                . (is_numeric($level_id) ? 'id = %d' : 'md5(id) = %s' ), $level_id);
-        $result = $wpdb->get_row($query);
+        if ( is_numeric( $level_id ) ) {
+            $result = $wpdb->get_row( $wpdb->prepare(
+                "SELECT * FROM {$wpdb->prefix}swpm_membership_tbl WHERE id = %d",
+                $level_id
+            ) );
+        } else {
+            $result = $wpdb->get_row( $wpdb->prepare(
+                "SELECT * FROM {$wpdb->prefix}swpm_membership_tbl WHERE md5(id) = %s",
+                $level_id
+            ) );
+        }
 
         $this->bitmap = isset($result->permissions) ? $result->permissions : 0;
         $this->posts = isset($result->post_list) ? (array) unserialize($result->post_list) : array();

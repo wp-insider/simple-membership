@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /**
  * BCategoryList
@@ -106,7 +110,7 @@ class SwpmPostList extends WP_List_Table {
         $swpm_post_prot_update_nonce = filter_input(INPUT_POST, 'swpm_post_prot_update_nonce');
         if (!wp_verify_nonce($swpm_post_prot_update_nonce, 'swpm_post_prot_update_nonce_action')) {
             //Nonce check failed.
-            wp_die(SwpmUtils::_("Error! Nonce security verification failed for Post Protection Update action. Clear cache and try again."));
+            wp_die(esc_html__( "Error! Nonce security verification failed for Post Protection Update action. Clear cache and try again.", 'simple-membership' ));
         }
 
         $type = isset($_POST['list_type']) ? sanitize_text_field($_POST['list_type']) : '';
@@ -163,9 +167,7 @@ class SwpmPostList extends WP_List_Table {
                 }
                 break;
             case 'post':
-                $sql = "SELECT ID,post_date,post_title,post_author, post_type, post_status FROM $wpdb->posts ";
-                $sql .= " WHERE post_type = 'post' AND post_status = 'publish'";
-                $all_posts = $wpdb->get_results($sql);
+                $all_posts = $wpdb->get_results( "SELECT ID,post_date,post_title,post_author,post_type,post_status FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish'" );
                 $filtered_items = array();
                 foreach ($all_posts as $post) {
                     //if($post->post_type=='page')continue;
@@ -189,11 +191,13 @@ class SwpmPostList extends WP_List_Table {
                 $filtered_items = array();
                 $args = array('public' => true, '_builtin' => false);
                 $post_types = get_post_types($args);
-                $arg = "'" . implode('\',\'', $post_types) . "'";
-                if (!empty($arg)) {
-                    $sql = "SELECT ID,post_date,post_title,post_author, post_type, post_status FROM $wpdb->posts ";
-                    $sql .= " WHERE post_type IN (" . $arg . ") AND (post_status='inherit' OR post_status='publish')";
-                    $all_posts = $wpdb->get_results($sql);
+                $post_types = array_values( $post_types );
+                if ( ! empty( $post_types ) ) {
+                    $placeholders = implode( ',', array_fill( 0, count( $post_types ), '%s' ) );
+                    $all_posts = $wpdb->get_results( $wpdb->prepare(
+                        "SELECT ID,post_date,post_title,post_author,post_type,post_status FROM {$wpdb->posts} WHERE post_type IN ($placeholders) AND (post_status='inherit' OR post_status='publish')", // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Placeholders are generated from the post type count.
+                        $post_types
+                    ) );
                     foreach ($all_posts as $post) {
                         $post_summary = array();
                         $user_info = get_userdata($post->post_author);
@@ -238,7 +242,7 @@ class SwpmPostList extends WP_List_Table {
     }
 
     function no_items() {
-        _e('No items found.', 'simple-membership');
+        esc_attr_e('No items found.', 'simple-membership');
     }
 
 }

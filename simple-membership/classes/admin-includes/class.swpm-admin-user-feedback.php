@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /**
  * Asking users for their experience with the plugin.
@@ -101,7 +105,7 @@ class SWPM_Admin_User_Feedback {
 				<p><?php esc_html_e( 'That\'s great! Could you please do me a big favor and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?', 'simple-membership' ); ?></p>
 				<p><strong><?php esc_html_e( '~ Simple Membership Plugin Team', 'simple-membership' ) ?></strong></p>
 				<p>
-					<a href="https://wordpress.org/support/plugin/simple-membership/reviews/?filter=5#new-post" class="swpm-plugin-dismiss-review-notice swpm-plugin-review-out" target="_blank" rel="noopener noreferrer">
+					<a href="https://wordpress.org/support/plugin/simple-membership/reviews/#new-post" class="swpm-plugin-dismiss-review-notice swpm-plugin-review-out" target="_blank" rel="noopener noreferrer">
 						<?php esc_html_e( 'OK, you deserve it', 'simple-membership' ); ?>
 					</a><br>
 					<a href="#" class="swpm-plugin-dismiss-review-notice" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Nope, maybe later', 'simple-membership' ); ?></a><br>

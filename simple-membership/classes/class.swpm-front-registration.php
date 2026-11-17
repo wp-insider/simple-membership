@@ -61,7 +61,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			//Lets check if this is a registration for paid membership
 			$member = SwpmUtils::get_paid_member_info();
 			if ( empty( $member ) ) {
-				_e( 'Error! Invalid Request. Could not find a match for the given security code and the user ID.', 'simple-membership' );
+				esc_attr_e( 'Error! Invalid Request. Could not find a match for the given security code and the user ID.', 'simple-membership' );
 			} else {
 				$membership_level = $member->membership_level;
 			}
@@ -188,7 +188,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 			$msg  = '<p>Error! Security check failed for membership level validation.</p>';
 			$msg .= '<p>The submitted membership level data does not seem to be authentic.</p>';
 			$msg .= '<p>If you are using caching please empty the cache data and try again.</p>';
-			wp_die( $msg );
+			wp_die( wp_kses_post( $msg ));
 		}
 
 		$this->email_activation = get_option( 'swpm_email_activation_lvl_' . $level_value );
@@ -247,7 +247,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 					// Allow hooks to change the value of login_page_url
 					$login_page_url = apply_filters('swpm_register_front_end_login_page_url', $login_page_url);
 
-					$after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_( 'Registration Successful. ' ) . SwpmUtils::_( 'Please' ) . ' <a href="' . $login_page_url . '">' . SwpmUtils::_( 'Log In' ) . '</a></div>';
+					$after_rego_msg = '<div class="swpm-registration-success-msg">' . SwpmUtils::_( 'Registration Successful. ' ) . SwpmUtils::_( 'Please' ) . ' <a href="' . esc_url( $login_page_url ) . '">' . SwpmUtils::_( 'Log In' ) . '</a></div>';
 					$after_rego_msg = apply_filters( 'swpm_registration_success_msg', $after_rego_msg );
 					$message        = array(
 						'succeeded' => true,
@@ -311,8 +311,8 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		//Go ahead and create the SWPM user record.
 		$free_level = SwpmUtils::get_free_level();
 		$member_info['last_accessed_from_ip'] = SwpmUtils::get_user_ip_address();
-		$member_info['member_since'] = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
-		$member_info['subscription_starts'] = SwpmUtils::get_current_date_in_wp_zone(); //date( 'Y-m-d' );
+		$member_info['member_since'] = SwpmUtils::get_current_date_in_wp_zone(); //gmdate( 'Y-m-d' );
+		$member_info['subscription_starts'] = SwpmUtils::get_current_date_in_wp_zone(); //gmdate( 'Y-m-d' );
 
 		$membership_level_id = filter_input( INPUT_POST, 'swpm_membership_level', FILTER_SANITIZE_NUMBER_INT );
 		if ( $paid_member !== null ) {
@@ -422,15 +422,15 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$member_info = $this->member_info;
 
 		//Retrieve the user role assigned for this level
-		$query     = $wpdb->prepare( 'SELECT role FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id = %d', $member_info['membership_level'] );
-		$user_role = $wpdb->get_var( $query );
+		
+		$user_role = $wpdb->get_var( $wpdb->prepare( 'SELECT role FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id = %d', $member_info['membership_level'] ) );
 		//Check to make sure that the user role of this level is not admin.
 		if ( $user_role == 'administrator' ) {
 			//For security reasons we don't allow users with administrator role to be creted from the front-end. That can only be done from the admin dashboard side.
 			$error_msg  = '<p>Error! The user role for this membership level (level ID: ' . $member_info['membership_level'] . ') is set to "Administrator".</p>';
 			$error_msg .= '<p>For security reasons, member registration to this level is not permitted from the front end.</p>';
 			$error_msg .= '<p>An administrator of the site can manually create a member record with this access level from the admin dashboard side.</p>';
-			wp_die( $error_msg );
+			wp_die( wp_kses_post( $error_msg ));
 		}
 
 		$wp_user_info                    = array();
@@ -443,7 +443,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$wp_user_info['user_login']      = isset($member_info['user_name']) ? $member_info['user_name'] : '';
 		$wp_user_info['password']        = isset($member_info['plain_password']) ? $member_info['plain_password'] : '';
 		$wp_user_info['role']            = $user_role;
-		$wp_user_info['user_registered'] = date( 'Y-m-d H:i:s' );
+		$wp_user_info['user_registered'] = gmdate( 'Y-m-d H:i:s' );
 		SwpmUtils::create_wp_user( $wp_user_info );
 		return true;
 	}
@@ -459,7 +459,7 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		//Check nonce
 		if ( ! isset( $_POST['swpm_profile_edit_nonce_val'] ) || ! wp_verify_nonce( $_POST['swpm_profile_edit_nonce_val'], 'swpm_profile_edit_nonce_action' ) ) {
 			//Nonce check failed.
-			wp_die( __( 'Error! Nonce verification failed for front end profile edit.', 'simple-membership' ) );
+			wp_die( esc_html__( 'Error! Nonce verification failed for front end profile edit.', 'simple-membership' ) );
 		}
                 
         //Trigger action hook
@@ -632,11 +632,11 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		}
 
 		global $wpdb;
-		$query = 'SELECT member_id,user_name,first_name, last_name FROM ' .
-				$wpdb->prefix . 'swpm_members_tbl ' .
-				' WHERE email = %s';
+		
 
-		$user  = $wpdb->get_row( $wpdb->prepare( $query, $email ) );
+		$user  = $wpdb->get_row( $wpdb->prepare( 'SELECT member_id,user_name,first_name, last_name FROM ' .
+				$wpdb->prefix . 'swpm_members_tbl ' .
+				' WHERE email = %s', $email ) );
 		if ( empty( $user ) ) {
 			$message  = '<div class="swpm-reset-pw-error">' . SwpmUtils::_( 'No user found with that email address.' ) . '</div>';
 			$message .= '<div class="swpm-reset-pw-error-email">' . SwpmUtils::_( 'Email Address: ' ) . $email . '</div>';
@@ -744,11 +744,11 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$email = $user_data->user_email;
 		
 		global $wpdb;
-		$query = 'SELECT member_id,user_name,first_name, last_name FROM ' .
-				$wpdb->prefix . 'swpm_members_tbl ' .
-				' WHERE email = %s';
+		
 
-		$user  = $wpdb->get_row( $wpdb->prepare( $query, $email ) );
+		$user  = $wpdb->get_row( $wpdb->prepare( 'SELECT member_id,user_name,first_name, last_name FROM ' .
+				$wpdb->prefix . 'swpm_members_tbl ' .
+				' WHERE email = %s', $email ) );
 		if ( empty( $user ) ) {
 			$message  = '<div class="swpm-reset-pw-error">' . SwpmUtils::_( 'No user found with that email address.' ) . '</div>';
 			$message .= '<div class="swpm-reset-pw-error-email">' . SwpmUtils::_( 'Email Address: ' ) . $email . '</div>';
@@ -799,12 +799,12 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$member = SwpmMemberUtils::get_user_by_id( $member_id );
 		if ( empty( $member ) ) {
 			//can't find member
-			echo SwpmUtils::_( "Can't find member account." );
+			echo esc_html__( "Can't find member account.", 'simple-membership' );
 			wp_die();
 		}
 		if ( $member->account_state !== 'activation_required' ) {
 			//account already active
-			echo SwpmUtils::_( 'Account already active. ' ) . '<a href="' . $login_page_url . '">' . SwpmUtils::_( 'click here' ) . '</a>' . SwpmUtils::_( ' to log in.' );
+			echo esc_html__( 'Account already active. ', 'simple-membership' ) . '<a href="' . esc_url( $login_page_url ) . '">' . esc_html__( 'click here', 'simple-membership' ) . '</a>' . esc_html__( ' to log in.', 'simple-membership' );
 			wp_die();
 		}
 
@@ -812,11 +812,11 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$act_data = get_option( 'swpm_email_activation_data_usr_' . $member_id );
 		if ( empty( $code ) || ! SwpmEmailActivation::is_valid( $act_data ) || ! hash_equals( $act_data['act_code'], $code ) ) {
 			//code mismatch
-			wp_die( SwpmEmailActivation::invalid_link_message( $member_id ) );
+			wp_die( wp_kses_post( SwpmEmailActivation::invalid_link_message( $member_id ) ));
 		}
 		//activation code match
 		if ( ! SwpmEmailActivation::consume( $member_id, $act_data ) ) {
-			wp_die( SwpmEmailActivation::invalid_link_message( $member_id ) );
+			wp_die( wp_kses_post( SwpmEmailActivation::invalid_link_message( $member_id ) ));
 		}
 		//store rego form id in constant so FB addon could use it
 		if ( ! empty( $act_data['fb_form_id'] ) ) {

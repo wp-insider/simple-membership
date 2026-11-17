@@ -1,14 +1,18 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 //Check current_user_can() or die.
 SwpmMiscUtils::check_user_permission_and_is_admin('Main Addons Listing Menu');
 
 $output = '';
-echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL . '/css/swpm.addons.listing.css" />' . "\n";
+wp_enqueue_style( 'swpm-addons-listing', SIMPLE_WP_MEMBERSHIP_URL . '/css/swpm.addons.listing.css', array(), SIMPLE_WP_MEMBERSHIP_VER );
 ?>
 
 <div class="wrap">
-    <h1><?php _e('Add-ons / Extensions') ?></h1>
+    <h1><?php esc_attr_e('Add-ons / Extensions', 'simple-membership') ?></h1>
 
     <div id="poststuff"><div id="post-body">
 
@@ -288,7 +292,7 @@ echo '<link type="text/css" rel="stylesheet" href="' . SIMPLE_WP_MEMBERSHIP_URL 
                 $output .= '</div>'; //end canvas
             }
 
-            echo $output;
+            echo wp_kses_post($output);
             ?>
 
         </div></div><!-- end of poststuff and post-body -->

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -155,7 +159,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		// Detect when a bulk action is being triggered...
 		if ( 'delete' === $this->current_action() ) {
 			if ( empty( $_GET['transaction'] ) ) {
-				echo '<div id="message" class="notice notice-error"><p>'.__('Error! You need to select multiple records to perform a bulk action!', 'simple-membership').'</p></div>';
+				echo '<div id="message" class="notice notice-error"><p>'.esc_html__( 'Error! You need to select multiple records to perform a bulk action!', 'simple-membership' ).'</p></div>';
 				return;
 			}
 			$records_to_delete = array_map( 'sanitize_text_field', $_GET['transaction'] );
@@ -167,7 +171,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 				$this->delete_record($post_id);
 			}
 
-			echo '<div id="message" class="notice notice-success"><p>'.__('Selected records deleted successfully!', 'simple-membership').'</p></div>';
+			echo '<div id="message" class="notice notice-success"><p>'.esc_html__( 'Selected records deleted successfully!', 'simple-membership' ).'</p></div>';
 		}
 	}
 
@@ -180,7 +184,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 	 */
 	public function delete_record( $post_id ) {
 		if ( ! is_numeric( $post_id ) ) {
-			wp_die( __('Error! ID must be numeric.', 'simple-membership') );
+			wp_die( esc_html__( 'Error! ID must be numeric.', 'simple-membership' ) );
 		}
 		// Get the row ID of the old custom swpm_payments_tbl table first. Deleting the post (below) also deletes its post meta.
 		$db_row_id = get_post_meta($post_id, 'db_row_id', true);
@@ -313,8 +317,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 			// Load all data in an optimized way (so it is only loading data for the current page)
 
 			// Get the total transaction post counts.
-			$transactions_count_query = "SELECT COUNT(*) FROM {$wpdb->prefix}posts WHERE post_type='swpm_transactions'";
-			$total_items = $wpdb->get_var( $transactions_count_query );
+			$total_items = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type='swpm_transactions'" );
 
 			$offset = ( $current_page - 1 ) * $per_page;
 

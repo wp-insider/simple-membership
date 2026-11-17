@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmLevelForm {
 
@@ -61,7 +65,7 @@ class SwpmLevelForm {
 			}
 
 			$subscription_period = implode('-', array(
-				date('Y'),
+				gmdate('Y'),
 				SwpmUtils::pad_zero($subscription_period['m']),
 				SwpmUtils::pad_zero($subscription_period['d']),
 			));
@@ -69,7 +73,10 @@ class SwpmLevelForm {
 		    $dateinfo = date_parse($subscription_period);
 
 		    if ($dateinfo['warning_count']|| $dateinfo['error_count']){
-			    $this->errors['subscription_period'] = __("Date format is not valid. " . $subscription_period, "simple-membership");
+			    $this->errors['subscription_period'] = sprintf(
+                        /* translators: %s: invalid subscription expiry date. */
+                        __( 'Date format is not valid. %s', 'simple-membership' ), $subscription_period
+                    );
 			    return;
 		    }
 

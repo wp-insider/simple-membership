@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /**
  * This class will contain various utility functions for the membership access level.
@@ -27,8 +31,8 @@ class SwpmMembershipLevelUtils {
         
         global $wpdb;
         $levels_array = array();
-        $query = "SELECT alias, id FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id != 1";
-        $levels = $wpdb->get_results($query);
+        
+        $levels = $wpdb->get_results("SELECT alias, id FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id != 1");
         foreach ($levels as $level) {
             if(isset($level->id)){
                 $levels_array[$level->id] = $level->alias;
@@ -57,8 +61,8 @@ class SwpmMembershipLevelUtils {
      */
     public static function check_if_membership_level_exists($membership_lvl_id) {
         global $wpdb;
-        $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $membership_lvl_id);
-        $membership_lvl_resultset = $wpdb->get_row($query);
+        
+        $membership_lvl_resultset = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = %d", $membership_lvl_id));
 
         if ( $membership_lvl_resultset ) {
             //Membership level exists.

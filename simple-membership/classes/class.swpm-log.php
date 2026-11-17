@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 class SwpmLog {
 	private static $log_file;
@@ -7,6 +10,38 @@ class SwpmLog {
 	public function __construct() {
 		//Register the ajax action handler for resetting the log files.
 		add_action('wp_ajax_swpm_reset_log_action', array('SwpmLog', 'handle_reset_log_action'));
+	}
+
+	/** Local logs must remain available during frontend requests without FTP credentials. */
+	private static function filesystem() {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+		return new WP_Filesystem_Direct( null );
+	}
+
+	/** Append under a lock; WP_Filesystem has no append API. */
+	private static function append_log( $path, $text ) {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Local append avoids read/replace races and loading an entire log into memory.
+		$handle = fopen( $path, 'ab' );
+		if ( ! $handle ) {
+			return;
+		}
+		if ( flock( $handle, LOCK_EX ) ) {
+			$length = strlen( $text );
+			$offset = 0;
+			while ( $offset < $length ) {
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Write only the new entry while holding the append lock.
+				$written = fwrite( $handle, substr( $text, $offset ) );
+				if ( false === $written || 0 === $written ) {
+					break;
+				}
+				$offset += $written;
+			}
+			fflush( $handle );
+			flock( $handle, LOCK_UN );
+		}
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Close the local append stream.
+		fclose( $handle );
 	}
 
 	//The log files are saved in the 'logs' folder of the plugin (it has an .htaccess file to block direct access).
@@ -26,7 +61,7 @@ class SwpmLog {
 		);
 		foreach ( $protection_files as $name => $contents ) {
 			$path = $log_dir . $name;
-			if ( ! file_exists( $path ) && false === file_put_contents( $path, $contents ) ) {
+			if ( ! file_exists( $path ) && ! self::filesystem()->put_contents( $path, $contents, 0644 ) ) {
 				return false;
 			}
 		}
@@ -72,21 +107,20 @@ class SwpmLog {
 			//Log file still does not exist so we will show an error message.
 			$log_file_missing_msg = '<p>Could not find the log file. Reset the log file from the settings menu to regenerate it then try again. You can find the Reset Debug Log option in the Debug Settings section.</p>';
 			$log_file_missing_msg .= '<p>If it still fails to open the log file after that, check if the logs directory of the plugin (' . self::get_log_dir() . ') is writeable on your server.</p>';
-			wp_die( $log_file_missing_msg );
+			wp_die( wp_kses_post( $log_file_missing_msg ));
 		}
 
-        //Open the log file
-		$fp = fopen( $log_file_full_path, 'rb' );
-		if ( ! $fp ) {
-			wp_die( 'Can\'t open the log file.' );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- WP_Filesystem has no streaming API; avoid loading the entire log into memory.
+		$handle = fopen( $log_file_full_path, 'rb' );
+		if ( false === $handle ) {
+			wp_die( esc_html__( "Can't open the log file.", 'simple-membership' ) );
 		}
-		header( 'Content-Type: text/plain' );
-
-		if ( function_exists( 'fpassthru' ) ) {
-			fpassthru( $fp );
-		} else {
-			echo stream_get_contents( $fp );
-		}
+		header( 'Content-Type: text/plain; charset=UTF-8' );
+		header( 'X-Content-Type-Options: nosniff' );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fpassthru, WordPress.Security.EscapeOutput.OutputNotEscaped -- Stream the plain-text response with nosniff; escaping would corrupt diagnostic data.
+		fpassthru( $handle );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Close the local download stream.
+		fclose( $handle );
 
 		die;
 	}
@@ -112,11 +146,7 @@ class SwpmLog {
 			$text .= "\n------------------------------------------------------------------\n\n";
 		}
 		// Write to log
-		$fp = fopen( $debug_log_file_name, 'a' );
-		if ( $fp ) {//The log file may not be writeable. Skip this log entry in that case.
-			fwrite( $fp, $text );
-			fclose( $fp );  // close file
-		}
+		self::append_log( $debug_log_file_name, $text );
 	}
 
 	public static function log_array_data_to_debug( $array_to_write, $success, $end = false ) {
@@ -146,11 +176,7 @@ class SwpmLog {
 			$text .= "\n------------------------------------------------------------------\n\n";
 		}
 		// Write to log
-		$fp = fopen( $debug_log_file_name, 'a' );
-		if ( $fp ) {//The log file may not be writeable. Skip this log entry in that case.
-			fwrite( $fp, $text );
-			fclose( $fp );  // close file
-		}
+		self::append_log( $debug_log_file_name, $text );
 	}
 
 	public static function log_auth_debug( $message, $success, $end = false ) {
@@ -174,11 +200,7 @@ class SwpmLog {
 			$text .= "\n------------------------------------------------------------------\n\n";
 		}
 		// Write to log
-		$fp = fopen( $debug_log_file_name, 'a' );
-		if ( $fp ) {//The log file may not be writeable. Skip this log entry in that case.
-			fwrite( $fp, $text );
-			fclose( $fp );  // close file
-		}
+		self::append_log( $debug_log_file_name, $text );
 	}
 
 	public static function log_auth_debug_array_data( $array_to_write, $success, $end = false ) {
@@ -208,11 +230,7 @@ class SwpmLog {
 			$text .= "\n------------------------------------------------------------------\n\n";
 		}
 		// Write to log
-		$fp = fopen( $debug_log_file_name, 'a' );
-		if ( $fp ) {//The log file may not be writeable. Skip this log entry in that case.
-			fwrite( $fp, $text );
-			fclose( $fp );  // close file
-		}
+		self::append_log( $debug_log_file_name, $text );
 	}
 
 	public static function handle_reset_log_action(){
@@ -252,11 +270,7 @@ class SwpmLog {
 			$log_timestamp = SwpmUtils::get_current_timestamp_for_debug_log();
 			$text = '[' . $log_timestamp . '] - SUCCESS: Log file reset';
 			$text .= "\n------------------------------------------------------------------\n\n";
-			$fp = fopen( $logfile, 'w' );
-			if ( $fp != false ) {
-				@fwrite( $fp, $text );
-				@fclose( $fp );
-			} else {
+			if ( ! self::filesystem()->put_contents( $logfile, $text, 0644 ) ) {
 				$log_reset = false;
 			}
 		}

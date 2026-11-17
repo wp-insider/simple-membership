@@ -221,7 +221,7 @@ class SwpmSelfActionHandler {
                 }
 
                 SwpmLog::log_simple_debug( 'Registration blocked for user: '.$user_email.', as it did not match any whitelisting rule.', true );
-                wp_die($block_message_whitelist);  
+                wp_die( wp_kses_post( $block_message_whitelist ));  
             }
         }
 
@@ -235,7 +235,7 @@ class SwpmSelfActionHandler {
             if($emailaddress_blacklist) {
                 if(SwpmUtils::csv_equal_match($user_email,$emailaddress_blacklist)) {
                     SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' from the Blacklist Email Address List.', true );
-                    wp_die($block_message);                    
+                    wp_die( wp_kses_post( $block_message ));                    
                 }
             }
 
@@ -243,7 +243,7 @@ class SwpmSelfActionHandler {
             if($emailaddress_pattern_blacklist) {
                 if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_blacklist)) {
                     SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' from the Blacklist Email Address Pattern List.', true );
-                    wp_die($block_message);                    
+                    wp_die( wp_kses_post( $block_message ));                    
                 }
             }
         }
@@ -288,7 +288,7 @@ class SwpmSelfActionHandler {
                 }
 
                 SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.', as it did not match any whitelisting rule.', true );
-                wp_die($block_message_whitelist);  
+                wp_die( wp_kses_post( $block_message_whitelist ));  
             }
         }
 
@@ -302,7 +302,7 @@ class SwpmSelfActionHandler {
             if($emailaddress_blacklist) {
                 if(SwpmUtils::csv_equal_match($user_email,$emailaddress_blacklist)) {
                     SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' from the Blacklist Email Address List.', true );
-                    wp_die($block_message);                    
+                    wp_die( wp_kses_post( $block_message ));                    
                 }
             }
 
@@ -310,7 +310,7 @@ class SwpmSelfActionHandler {
             if($emailaddress_pattern_blacklist) {
                 if(SwpmUtils::csv_pattern_match($user_email,$emailaddress_pattern_blacklist)) {
                     SwpmLog::log_simple_debug( 'Login blocked for user: '.$user_email.' from the Blacklist Email Address Pattern List.', true );
-                    wp_die($block_message);                    
+                    wp_die( wp_kses_post( $block_message ));                    
                 }
             }
         }

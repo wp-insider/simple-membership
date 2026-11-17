@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SWPM_Members_Report_Menu_Tab {
 
@@ -24,13 +28,13 @@ class SWPM_Members_Report_Menu_Tab {
 
 		$output = apply_filters( 'swpm_members_report_menu_tab_content', $output );
 
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 	}
 
     public function render_registration_by_month() {
 	    global $wpdb;
 
-	    $last_one_year = date("Y-m-d", strtotime("-1 year"));
+	    $last_one_year = gmdate("Y-m-d", strtotime("-1 year"));
         list($start_date, $end_date, $date_range_from_html) = SwpmReportsAdminMenu::date_range_selector('reg_by_month', $last_one_year);
 
         $members_count = $wpdb->get_var( "SELECT COUNT(*) FROM ". $wpdb->prefix ."swpm_members_tbl" );
@@ -39,36 +43,36 @@ class SWPM_Members_Report_Menu_Tab {
 	    ?>
         <div class="postbox">
             <h3 class="hndle">
-                <label for="title"><?php _e('Member Registrations by Month', 'simple-membership') ?></label>
+                <label for="title"><?php esc_attr_e('Member Registrations by Month', 'simple-membership') ?></label>
             </h3>
             <div class="inside swpm-stats-container">
                 <div class="char-column" id="member-by-month"></div>
                 <div class="table-column">
                     <?php
                     if( empty($members_count) ) {
-                        echo __('No entries found.', 'simple-membership');
+                        echo esc_html__( 'No entries found.', 'simple-membership' );
                     } else {
-                        echo $date_range_from_html;
+                        echo $date_range_from_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 
-                        $query = $wpdb->prepare(
+                        
+
+                        $results = $wpdb->get_results( $wpdb->prepare(
                             'SELECT COUNT(member_id) AS count, MONTHNAME(member_since) AS month 
                             FROM ' . $wpdb->prefix . 'swpm_members_tbl 
                             WHERE member_since BETWEEN %s AND %s 
                             GROUP BY MONTH(member_since)',
                             $start_date,
                             $end_date
-                        );
-
-                        $results = $wpdb->get_results( $query );
+                        ) );
 
                         if (count($results) == 0){
-	                        echo __('No entries found.', 'simple-membership');
+	                        echo esc_html__( 'No entries found.', 'simple-membership' );
                         } else { ?>
                         <table class="widefat striped">
                             <thead>
                             <tr>
-                                <th><?php _e('Month', 'simple-membership') ?></th>
-                                <th><?php _e('Count', 'simple-membership') ?></th>
+                                <th><?php esc_attr_e('Month', 'simple-membership') ?></th>
+                                <th><?php esc_attr_e('Count', 'simple-membership') ?></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -79,10 +83,10 @@ class SWPM_Members_Report_Menu_Tab {
                                 ?>
                                 <tr>
                                     <td>
-                                        <?php echo ucfirst( $result->month ); ?>
+                                        <?php echo esc_attr( ucfirst( $result->month ) ); ?>
                                     </td>
                                     <td>
-                                        <?php echo $result->count; ?>
+                                        <?php echo esc_attr( $result->count ); ?>
                                         <?php
                                         $stats[] = array( ucfirst( $result->month ), intval( $result->count ) );
                                         $count   += $result->count;
@@ -93,7 +97,7 @@ class SWPM_Members_Report_Menu_Tab {
                         </table>
                         <div class="swpm_report_total_container">
                             <p class="description">
-                                <?php echo __('Total registrations: ', 'simple-membership') . $count; ?>
+                                <?php echo esc_html__( 'Total registrations: ', 'simple-membership' ) . esc_html( $count ); ?>
                             </p>
                         </div>
                         <?php } ?>
@@ -109,26 +113,26 @@ class SWPM_Members_Report_Menu_Tab {
     public function render_member_by_account_status() {
 	    global $wpdb;
 
-	    $query = 'SELECT COUNT(member_id) AS count, account_state FROM ' . $wpdb->prefix . 'swpm_members_tbl GROUP BY (account_state)';
-	    $results = $wpdb->get_results( $query );
+	    
+	    $results = $wpdb->get_results( 'SELECT COUNT(member_id) AS count, account_state FROM ' . $wpdb->prefix . 'swpm_members_tbl GROUP BY (account_state)' );
 
 	    ob_start();
         ?>
         <div class="postbox">
             <h3 class="hndle">
-                <label for="title"><?php _e('Members by Account Status', 'simple-membership'); ?></label>
+                <label for="title"><?php esc_attr_e('Members by Account Status', 'simple-membership'); ?></label>
             </h3>
             <div class="inside swpm-stats-container">
                 <div class="char-column" id="member-by-state"></div>
                 <div class="table-column">
                     <?php if(empty($results)) {
-                        echo __('No entries found.', 'simple-membership');
+                        echo esc_html__( 'No entries found.', 'simple-membership' );
                     } else { ?>
                     <table class="widefat striped">
                         <thead>
                         <tr>
-                            <th><?php _e('Account Status', 'simple-membership'); ?></th>
-                            <th><?php _e('Count', 'simple-membership'); ?></th>
+                            <th><?php esc_attr_e('Account Status', 'simple-membership'); ?></th>
+                            <th><?php esc_attr_e('Count', 'simple-membership'); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -138,10 +142,10 @@ class SWPM_Members_Report_Menu_Tab {
 					    foreach ( $results as $result ) { ?>
                             <tr>
                                 <td>
-								    <?php echo ucfirst( $result->account_state ); ?>
+								    <?php echo esc_attr( ucfirst( $result->account_state ) ); ?>
                                 </td>
                                 <td>
-								    <?php echo $result->count; ?>
+								    <?php echo esc_attr( $result->count ); ?>
 								    <?php
 								    $stats[] = array( ucfirst( $result->account_state ), intval( $result->count ) );
 								    $count += $result->count;
@@ -152,7 +156,7 @@ class SWPM_Members_Report_Menu_Tab {
                     </table>
                     <div class="swpm_report_total_container">
                         <p class="description">
-						    <?php echo __('Total members: ', 'simple-membership') . $count; ?>
+						    <?php echo esc_html__( 'Total members: ', 'simple-membership' ) . esc_html( $count ); ?>
                         </p>
                     </div>
                     <?php } ?>

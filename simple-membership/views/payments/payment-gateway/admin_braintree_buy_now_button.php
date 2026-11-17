@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /* * ***************************************************************
  * Render the new Braintree payment button creation interface
  * ************************************************************** */
@@ -18,7 +22,7 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
     </div>
 
     <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Braintree Buy Now Button Configuration'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php echo esc_html__( 'Braintree Buy Now Button Configuration', 'simple-membership' ); ?></label></h3>
         <div class="inside">
 
             <form id="braintree_button_config_form" method="post">
@@ -30,7 +34,7 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
                     <?php if ($is_edit_mode) { ?>
                         <tr valign="top">
-                            <th scope="row"><?php echo SwpmUtils::_('Button ID'); ?></th>
+                            <th scope="row"><?php echo esc_html__( 'Button ID', 'simple-membership' ); ?></th>
                             <td>
                                 <input type="text" size="10" name="button_id" value="<?php echo esc_attr($bt_opts['button_id']); ?>" readonly required />
                                 <p class="description">This is the ID of this payment button. It is automatically generated for you and it cannot be changed.</p>
@@ -38,7 +42,7 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
                         </tr>
                     <?php } ?>
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Button Title'); ?></th>
+                        <th scope="row"><?php echo esc_html__( 'Button Title', 'simple-membership' ); ?></th>
                         <td>
                             <input type="text" size="50" name="button_name" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['button_name']) : ''); ?>" required />
                             <p class="description">Give this membership payment button a name. Example: Gold membership payment</p>
@@ -46,17 +50,17 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Membership Level'); ?></th>
+                        <th scope="row"><?php echo esc_html__( 'Membership Level', 'simple-membership' ); ?></th>
                         <td>
                             <select id="membership_level_id" name="membership_level_id">
-                                <?php echo ($is_edit_mode ? SwpmUtils::membership_level_dropdown($bt_opts['membership_level_id']) : SwpmUtils::membership_level_dropdown()); ?>
+                                <?php echo ($is_edit_mode ? SwpmUtils::membership_level_dropdown($bt_opts['membership_level_id']) : SwpmUtils::membership_level_dropdown()); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Dropdown markup is built and escaped internally. ?>
                             </select>
                             <p class="description">Select the membership level this payment button is for.</p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Payment Amount'); ?></th>
+                        <th scope="row"><?php echo esc_html__( 'Payment Amount', 'simple-membership' ); ?></th>
                         <td>
                             <input type="text" size="6" name="payment_amount" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['payment_amount']) : ''); ?>" required />
                             <p class="description">Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).</p>
@@ -64,11 +68,11 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('Braintree API key and account details. You can get this from your Braintree account.'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo esc_html__( 'Braintree API key and account details. You can get this from your Braintree account.', 'simple-membership' ); ?></div></th>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Merchant ID'); ?></th>
+                        <th scope="row"><?php echo esc_html__( 'Merchant ID', 'simple-membership' ); ?></th>
                         <td>
                             <input type="text" size="50" name="braintree_merchant_acc_id" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['braintree_merchant_acc_id']) : ''); ?>" required/>
                             <p class="description">Enter you Braintree Merchant ID.</p>
@@ -76,14 +80,14 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Public Key'); ?></th>
+                        <th scope="row"><?php echo esc_html__( 'Public Key', 'simple-membership' ); ?></th>
                         <td>
                             <input type="text" size="50" name="braintree_public_key" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['braintree_public_key']) : ''); ?>" required />
                             <p class="description">Enter your Braintree public key.</p>
                         </td>
                     </tr>                    
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Private Key'); ?></th>
+                        <th scope="row"><?php echo esc_html__( 'Private Key', 'simple-membership' ); ?></th>
                         <td>
                             <input type="text" size="50" name="braintree_private_key" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['braintree_private_key']) : ''); ?>" required />
                             <p class="description">Enter your Braintree private key.</p>
@@ -91,7 +95,7 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Merchant Account ID'); ?></th>
+                        <th scope="row"><?php echo esc_html__( 'Merchant Account ID', 'simple-membership' ); ?></th>
                         <td>
                             <input type="text" size="50" name="braintree_merchant_acc_name" value="<?php echo ($is_edit_mode ? esc_attr($bt_opts['braintree_merchant_acc_name']) : ''); ?>" />
                             <p class="description">Enter your Braintree Merchant Account ID (This is different than the Merchant ID you specified above). Please note currency depends on the Merchant Account ID you specify. Leave empty to use the default one.
@@ -109,26 +113,26 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
                     </tr>
 
                     <tr valign="top">
-                        <th colspan="2"><div class="swpm-grey-box"><?php echo SwpmUtils::_('The following details are optional.'); ?></div></th>
+                        <th colspan="2"><div class="swpm-grey-box"><?php echo esc_html__( 'The following details are optional.', 'simple-membership' ); ?></div></th>
                     </tr>
 
                     <?php
                     $redirect_to_paid_reg_link_after_payment = !empty($bt_opts['redirect_to_paid_reg_link_after_payment']) ? true : false;
                     ?>
                     <tr valign="top">
-                        <th scope="row"><?php _e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
                         <td>
                             <input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" <?php echo ( $is_edit_mode && $redirect_to_paid_reg_link_after_payment ) ? ' checked' : ''; ?> />
                             <p class="description">
-				                <?php _e('Enable this option to automatically redirect the user to the unique paid registration link after a successful payment. ', 'simple-membership') ?>
-                                <a href="https://simple-membership-plugin.com/automatically-redirect-users-to-the-paid-registration-link-after-payment/" target="_blank"><?php _e('Read this documentation', 'simple-membership') ?></a>
-                                <?php _e(' to learn how it works.', 'simple-membership') ?>
+				                <?php esc_attr_e( 'Enable this option to automatically redirect the user to the unique paid registration link after a successful payment. ', 'simple-membership' ) ?>
+                                <a href="https://simple-membership-plugin.com/automatically-redirect-users-to-the-paid-registration-link-after-payment/" target="_blank"><?php esc_attr_e('Read this documentation', 'simple-membership') ?></a>
+                                <?php esc_attr_e(' to learn how it works.', 'simple-membership') ?>
                             </p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php echo SwpmUtils::_('Return URL'); ?></th>
+                        <th scope="row"><?php echo esc_html__( 'Return URL', 'simple-membership' ); ?></th>
                         <td>
                             <input type="text" size="100" name="return_url" value="<?php echo ($is_edit_mode ? esc_url_raw($bt_opts['return_url']) : ''); ?>" />
                             <p class="description">This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.</p>
@@ -145,7 +149,7 @@ function render_save_edit_braintree_button_interface($bt_opts, $is_edit_mode = f
 
                 <p class="submit">
                     <?php wp_nonce_field('swpm_admin_add_edit_braintree_buy_now_btn','swpm_admin_add_edit_braintree_buy_now_btn') ?>                           
-                    <input type="submit" name="swpm_braintree_buy_now_<?php echo ($is_edit_mode ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php echo SwpmUtils::_('Save Payment Data'); ?>" >
+                    <input type="submit" name="swpm_braintree_buy_now_<?php echo ($is_edit_mode ? 'edit' : 'save'); ?>_submit" class="button-primary" value="<?php echo esc_html__( 'Save Payment Data', 'simple-membership' ); ?>" >
                 </p>
 
             </form>

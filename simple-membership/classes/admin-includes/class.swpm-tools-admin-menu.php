@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmToolsAdminMenu {
 
@@ -18,16 +22,16 @@ class SwpmToolsAdminMenu {
 		?>
         <div class="wrap swpm-admin-menu-wrap"><!-- start wrap -->
 
-        <h1><?php _e( 'Tools' , 'simple-membership') ?></h1><!-- page title -->
+        <h1><?php esc_attr_e( 'Tools' , 'simple-membership') ?></h1><!-- page title -->
 
         <!-- start nav menu tabs -->
         <h2 class="nav-tab-wrapper">
             <a class="nav-tab <?php echo ( $tab == '' ) ? 'nav-tab-active' : ''; ?>"
-               href="admin.php?page=simple_wp_membership_tools"><?php _e( 'General Tools', 'simple-membership' ); ?></a>
+               href="admin.php?page=simple_wp_membership_tools"><?php esc_attr_e( 'General Tools', 'simple-membership' ); ?></a>
             <a class="nav-tab <?php echo ( $tab == 'systeminfo' ) ? 'nav-tab-active' : ''; ?>"
-               href="admin.php?page=simple_wp_membership_tools&tab=systeminfo"><?php _e( 'System Info', 'simple-membership' ); ?></a>
+               href="admin.php?page=simple_wp_membership_tools&tab=systeminfo"><?php esc_attr_e( 'System Info', 'simple-membership' ); ?></a>
             <a class="nav-tab <?php echo ( $tab == 'migration' ) ? 'nav-tab-active' : ''; ?>"
-               href="admin.php?page=simple_wp_membership_tools&tab=migration"><?php _e( 'Data Migration', 'simple-membership' ); ?></a>
+               href="admin.php?page=simple_wp_membership_tools&tab=migration"><?php esc_attr_e( 'Data Migration', 'simple-membership' ); ?></a>
 			<?php
 
 			//Trigger hooks that allows an extension to add extra nav tabs in the payments menu.
@@ -37,7 +41,7 @@ class SwpmToolsAdminMenu {
 			foreach ( $menu_tabs as $menu_action => $title ) {
 				?>
                 <a class="nav-tab <?php echo ( $selected == $menu_action ) ? 'nav-tab-active' : ''; ?>"
-                   href="admin.php?page=simple_wp_membership_payments&tab=<?php echo $menu_action; ?>"><?php _e( $title, 'simple-membership' ); ?></a>
+                   href="admin.php?page=simple_wp_membership_payments&tab=<?php echo esc_attr( $menu_action ); ?>"><?php echo esc_attr( $title ); ?></a>
 				<?php
 			}
 			?>
@@ -52,7 +56,7 @@ class SwpmToolsAdminMenu {
 		$output = apply_filters( 'swpm_tools_menu_body_override', '', $tab );
 		if ( ! empty( $output ) ) {
 			//An addon has overriden the body of this page for the given tab/action. So no need to do anything in core.
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 			echo '</div>';//<!-- end of wrap -->
 
 			return;

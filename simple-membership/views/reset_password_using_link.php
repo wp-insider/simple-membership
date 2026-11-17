@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 //This file is loaded when the user clicks on the password reset link in the email to arrive at the password reset page. 
 //The following query args are expected: key=XYZ&login=ABC
 
@@ -14,7 +18,7 @@ if ( is_wp_error( $is_valid_key ) ) {
     }
     $error_message = __("Error! The password reset key is either invalid or expired. Please generate a new password reset request.", "simple-membership");
     echo '<div class="swpm-pw-reset-key-invalid-error swpm-red-error-text">';
-    echo $error_message;
+    echo wp_kses_post( $error_message );
     echo '</div>';
     return;
 }
@@ -40,7 +44,7 @@ if ( !empty( $render_new_form_ui ) ){
 
     <div class="swpm-pw-reset-widget-error swpm-red-error-text">
         <!-- Display any error message from the password reset operation here -->
-        <?php echo get_transient("swpm-passsword-reset-error"); ?>
+        <?php echo wp_kses_post( get_transient("swpm-passsword-reset-error") ); ?>
         <?php delete_transient("swpm-passsword-reset-error"); ?>
     </div>
 
@@ -51,28 +55,28 @@ if ( !empty( $render_new_form_ui ) ){
             $force_strong_pass = $settings->get_value('force-strong-passwords');
             if( !empty($force_strong_pass) ) {
                 echo '<div class="swpm-pw-reset-strong-pass-message swpm-margin-top-10">';
-                _e('Password must be at least 8 characters long, contain at least 1 uppercase and 1 lowercase character, and at least 1 digit.', 'simple-membership');
+                esc_attr_e('Password must be at least 8 characters long, contain at least 1 uppercase and 1 lowercase character, and at least 1 digit.', 'simple-membership');
                 echo '</div>';
             }
             ?>
             <div class="swpm-pw-reset-email swpm-margin-top-10">
-                <label for="swpm_new_password" class="swpm_label swpm-pw-reset-email-label"><?php _e('New password', 'simple-membership') ?></label>
+                <label for="swpm_new_password" class="swpm_label swpm-pw-reset-email-label"><?php esc_attr_e('New password', 'simple-membership') ?></label>
             </div>
             <div class="swpm-pw-reset-email-input swpm-margin-top-10">
-                <input type="password" name="swpm_new_password" class="<?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); ?>" id="swpm_new_password" value="" size="60" />
+                <input type="password" name="swpm_new_password" class="<?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters. ?>" id="swpm_new_password" value="" size="60" />
             </div>
 
             <div class="swpm-pw-reset-email swpm-margin-top-10">
-                <label for="swpm_reenter_new_password" class="swpm_label swpm-pw-reset-email-label"><?php _e('Re-enter new password', 'simple-membership') ?></label>
+                <label for="swpm_reenter_new_password" class="swpm_label swpm-pw-reset-email-label"><?php esc_attr_e('Re-enter new password', 'simple-membership') ?></label>
             </div>
             <div class="swpm-pw-reset-email-input swpm-margin-top-10">
-                <input type="password" name="swpm_reenter_new_password" class="<?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); ?>" id="swpm_reenter_new_password" value="" size="60" />
+                <input type="password" name="swpm_reenter_new_password" class="<?php echo apply_filters('swpm_registration_input_pass_class', $pass_class); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters. ?>" id="swpm_reenter_new_password" value="" size="60" />
             </div>
 
             <input type="hidden" name="swpm_user_login" value="<?php echo esc_attr($user_login); ?>" />
-            <div class="swpm-before-login-submit-section swpm-margin-top-10"><?php echo apply_filters('swpm_before_pass_reset_form_submit_button', ''); ?></div>
+            <div class="swpm-before-login-submit-section swpm-margin-top-10"><?php echo apply_filters('swpm_before_pass_reset_form_submit_button', ''); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters. ?></div>
             <div class="swpm-pw-reset-submit-button">
-                <input type="submit" name="swpm-password-reset-using-link" class="<?php echo esc_attr($pass_reset_submit_class); ?>" value="<?php _e('Reset Password', 'simple-membership'); ?>" />
+                <input type="submit" name="swpm-password-reset-using-link" class="<?php echo esc_attr($pass_reset_submit_class); ?>" value="<?php esc_attr_e('Reset Password', 'simple-membership'); ?>" />
             </div>
         </div>
     </form>

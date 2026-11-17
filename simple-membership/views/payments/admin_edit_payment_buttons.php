@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 //Render the edit payment button tab
 
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_buy_now_new_button.php';//PayPal Buy Now button (New API)
@@ -13,7 +17,7 @@ do_action( 'swpm_edit_payment_button_process_submission' ); //Addons can use thi
 ?>
 
 <div class="swpm-grey-box">
-	<?php echo SwpmUtils::_( 'You can edit a payment button using this interface.' ); ?>
+	<?php echo esc_html__( 'You can edit a payment button using this interface.', 'simple-membership' ); ?>
 </div>
 
 <?php

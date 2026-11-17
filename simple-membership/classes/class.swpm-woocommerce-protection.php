@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmWooCommerceProtection {
 
@@ -45,7 +49,7 @@ class SwpmWooCommerceProtection {
 	//			ob_end_clean();
 	//			$protection_msg = $access_control->get_lastError();
 	//
-	//			echo wpautop( wp_kses_post( $protection_msg ) );
+	//			echo wp_kses_post( wpautop( $protection_msg ) );
 	//		}
 	//	}
 
@@ -123,7 +127,7 @@ class SwpmWooCommerceProtection {
 
 			echo '<div class="swpm-woocommerce-page-protection-msg">';
 			echo '<div class="wp-block-group has-global-padding">';
-			echo wpautop( wp_kses_post( $protection_msg ) );
+			echo wp_kses_post( wpautop( $protection_msg ) );
 			echo '</div>';
 			echo '</div>';
 		}

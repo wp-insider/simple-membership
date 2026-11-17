@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 $links = array();
 if(isset($_REQUEST['swpm_link_for'])){
     //Rego complete link feature
@@ -11,7 +15,7 @@ if(isset($_REQUEST['swpm_link_for'])){
 if(isset($_REQUEST['recreate-required-pages-submit'])){
     //Lets recreate the required pages
     SwpmMiscUtils::create_mandatory_wp_pages();
-    echo '<div class="swpm-green-box">' . SwpmUtils::_('The required pages have been re-created.') . '</div>';
+    echo '<div class="swpm-green-box">' . esc_html__( 'The required pages have been re-created.', 'simple-membership' ) . '</div>';
 }
 
 if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_activation_required_email_to'])){
@@ -63,27 +67,27 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
 ?>
 <!-- Note: This view file is included inside of post-stuff and post-body divs already -->
 <div class="swpm-grey-box">
-<?php _e("This interface contains useful tools for various admin operations.", "simple-membership") ?>
+<?php esc_attr_e("This interface contains useful tools for various admin operations.", "simple-membership") ?>
 </div>
 
 <div class="postbox">
-    <h3 class="hndle"><label for="title"><?php _e('Generate Registration Completion Link', 'simple-membership') ?></label></h3>
+    <h3 class="hndle"><label for="title"><?php esc_attr_e('Generate Registration Completion Link', 'simple-membership') ?></label></h3>
     <div class="inside">
 
         <p class="description">
-            <?php _e('You can manually generate a unique registration completion link here and share it with your customer if they missed the email that was automatically sent after payment.', 'simple-membership'); ?>
+            <?php esc_attr_e('You can manually generate a unique registration completion link here and share it with your customer if they missed the email that was automatically sent after payment.', 'simple-membership'); ?>
         </p>
         <form action="" method="post">
             <table class="form-table">
                 <tr>
                     <th>
-                        <?php echo SwpmUtils::_('Generate Registration Completion Link') ?>
+                        <?php echo esc_html__( 'Generate Registration Completion Link', 'simple-membership' ) ?>
                     </th>
                     <td>
-                        <input type="radio" value="one" name="swpm_link_for" /><?php _e('For a Particular Member ID', 'simple-membership'); ?>
+                        <input type="radio" value="one" name="swpm_link_for" /><?php esc_attr_e('For a Particular Member ID', 'simple-membership'); ?>
                         <input type="text" name="member_id" size="5" value="" />
-                        <div><?php echo SwpmUtils::_('OR') ?></div>
-                        <input type="radio" checked="checked" value="all" name="swpm_link_for" /> <?php echo SwpmUtils::_('For All Incomplete Registrations') ?>
+                        <div><?php echo esc_html__( 'OR', 'simple-membership' ) ?></div>
+                        <input type="radio" checked="checked" value="all" name="swpm_link_for" /> <?php echo esc_html__( 'For All Incomplete Registrations', 'simple-membership' ) ?>
                     </td>
                 </tr>
                 <tr>
@@ -91,29 +95,29 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
                     <td>
                         <input type="checkbox" value="checked" name="swpm_reminder_email">
                         <?php 
-                        echo ' ' . __('Send Registration Reminder Email Too', 'simple-membership') ;
+                        echo ' ' . esc_html__( 'Send Registration Reminder Email Too', 'simple-membership' ) ;
                         ?>
                     </td>
                 </tr>
             </table>
-            <input type="submit" name="submit" class="button-primary" value="<?php _e('Submit', 'simple-membership') ?>" />
+            <input type="submit" name="submit" class="button-primary" value="<?php esc_attr_e('Submit', 'simple-membership') ?>" />
 
             <div class="swpm-margin-top-10"></div>
             <?php
             if (!empty($links)) {
-                echo '<div class="swpm-green-box">' . SwpmUtils::_('Link(s) generated successfully. The following link(s) can be used to complete the registration.') . '</div>';
+                echo '<div class="swpm-green-box">' . esc_html__( 'Link(s) generated successfully. The following link(s) can be used to complete the registration.', 'simple-membership' ) . '</div>';
             } else {
-                echo '<div class="swpm-grey-box">' . SwpmUtils::_('The registration completion link(s) will be displayed below.') . '</div>';
+                echo '<div class="swpm-grey-box">' . esc_html__( 'The registration completion link(s) will be displayed below.', 'simple-membership' ) . '</div>';
             }
             ?>
             <div class="swpm-margin-top-10"></div>
             <?php foreach ($links as $key => $link) { ?>
-                <input type="text" size="120" readonly="readonly" name="link[<?php echo $key ?>]" value="<?php echo $link; ?>"/><br/>
+                <input type="text" size="120" readonly="readonly" name="link[<?php echo esc_attr( $key )?>]" value="<?php echo esc_attr( $link ); ?>"/><br/>
             <?php } ?>
 
             <?php
             if (isset($_REQUEST['swpm_reminder_email'])) {
-                echo '<div class="swpm-green-box">' . SwpmUtils::_('A prompt to complete registration email was also sent.') . '</div>';
+                echo '<div class="swpm-green-box">' . esc_html__( 'A prompt to complete registration email was also sent.', 'simple-membership' ) . '</div>';
             }
             ?>            
         </form>
@@ -122,17 +126,17 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
 </div>
 
 <div class="postbox">
-    <h3 class="hndle"><label for="title"><?php echo SwpmUtils::_('Re-create the Required Pages') ?></label></h3>
+    <h3 class="hndle"><label for="title"><?php echo esc_html__( 'Re-create the Required Pages', 'simple-membership' ) ?></label></h3>
     <div class="inside">
 
-        <p class="description"><?php echo SwpmUtils::_('If you have accidentally deleted the required pages that this plugin creates at install time, you can use this option to re-create them.') ?></p>
-        <p><a href="https://simple-membership-plugin.com/recreating-required-pages-simple-membership-plugin/" target="_blank"><?php echo SwpmUtils::_('This documentation'); ?></a><?php echo SwpmUtils::_(' has full explanation.'); ?></p>
+        <p class="description"><?php echo esc_html__( 'If you have accidentally deleted the required pages that this plugin creates at install time, you can use this option to re-create them.', 'simple-membership' ) ?></p>
+        <p><a href="https://simple-membership-plugin.com/recreating-required-pages-simple-membership-plugin/" target="_blank"><?php echo esc_html__( 'This documentation', 'simple-membership' ); ?></a><?php echo esc_html__( ' has full explanation.', 'simple-membership' ); ?></p>
         <form action="" method="post" onsubmit="return confirm('Do you really want to re-create the pages?');">
             <table>
                 <tr>
                     <td>
                         <div class="swpm-margin-top-10"></div>
-                        <input type="submit" name="recreate-required-pages-submit" class="button-primary" value="<?php echo SwpmUtils::_('Re-create the Required Pages') ?>" />
+                        <input type="submit" name="recreate-required-pages-submit" class="button-primary" value="<?php echo esc_html__( 'Re-create the Required Pages', 'simple-membership' ) ?>" />
                     </td>
                 </tr>
             </table>
@@ -148,9 +152,9 @@ if ( isset($_POST['resend_activation_email_submit']) && isset($_POST['resend_act
     <div class="inside">
         <p class="description">
             <?php 
-            _e( 'If you are using the ', 'simple-membership');
-            echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . __('Email Activation Feature', 'simple-membership') . '</a>';
-            _e( ', this tool allows the admin to manually resend the activation email to member(s). It can be useful if a member did not receive the original email or needs a new activation link.', 'simple-membership');
+            esc_attr_e( 'If you are using the ', 'simple-membership');
+            echo '<a href="https://simple-membership-plugin.com/email-activation-for-members/" target="_blank">' . esc_html__( 'Email Activation Feature', 'simple-membership' ) . '</a>';
+            esc_attr_e( ', this tool allows the admin to manually resend the activation email to member(s). It can be useful if a member did not receive the original email or needs a new activation link.', 'simple-membership');
             ?>
         </p>
 

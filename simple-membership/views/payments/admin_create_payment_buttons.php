@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 //Render the create new payment button tab
 
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_paypal_buy_now_new_button.php';//PayPal Buy Now button (New API)
@@ -13,7 +17,7 @@ do_action( 'swpm_create_new_button_process_submission' ); //Addons can use this 
 ?>
 
 <div class="swpm-grey-box">
-<?php echo SwpmUtils::_( 'You can create a new payment button for your memberships using this interface.' ); ?>
+<?php echo esc_html__( 'You can create a new payment button for your memberships using this interface.', 'simple-membership' ); ?>
 </div>
 
 <?php
@@ -21,45 +25,45 @@ if ( ! isset( $_REQUEST['swpm_button_type_selected'] ) ) {
 	//Button type hasn't been selected. Show the selection option.
 	?>
 	<div class="postbox">
-		<h3 class="hndle"><label for="title"><?php echo SwpmUtils::_( 'Select Payment Button Type' ); ?></label></h3>
+		<h3 class="hndle"><label for="title"><?php echo esc_html__( 'Select Payment Button Type', 'simple-membership' ); ?></label></h3>
 		<div class="inside">
 			<form action="" method="post">
 			<table class="form-table" role="presentation">
 			<tr>
 			<td>
 			<fieldset>
-				<label><input type="radio" name="button_type" value="pp_buy_now_new" checked /> <?php _e( 'PayPal Buy Now (New API)(Recommended)', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_buy_now_new" checked /> <?php esc_attr_e( 'PayPal Buy Now (New API)(Recommended)', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="pp_subscription_new" /> <?php _e( 'PayPal Subscription (New API)(Recommended)', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_subscription_new" /> <?php esc_attr_e( 'PayPal Subscription (New API)(Recommended)', 'simple-membership' ); ?></label>
 				<br />				
-				<label><input type="radio" name="button_type" value="pp_buy_now" /> <?php _e( 'PayPal Buy Now', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_buy_now" /> <?php esc_attr_e( 'PayPal Buy Now', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="pp_subscription" /> <?php _e( 'PayPal Subscription', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="pp_subscription" /> <?php esc_attr_e( 'PayPal Subscription', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="braintree_buy_now" /> <?php _e( 'Braintree Buy Now', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="braintree_buy_now" /> <?php esc_attr_e( 'Braintree Buy Now', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_sca_buy_now" /> <?php _e( 'Stripe Buy Now (Recommended)', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_sca_buy_now" /> <?php esc_attr_e( 'Stripe Buy Now (Recommended)', 'simple-membership' ); ?></label>
 				<br />
-				<label><input type="radio" name="button_type" value="stripe_sca_subscription" /> <?php _e( 'Stripe Subscription (Recommended)', 'simple-membership' ); ?></label>
+				<label><input type="radio" name="button_type" value="stripe_sca_subscription" /> <?php esc_attr_e( 'Stripe Subscription (Recommended)', 'simple-membership' ); ?></label>
 				<br />
 			</fieldset>
 			</td>
 			</tr>
 			</table>
 	<?php
-	echo apply_filters( 'swpm_new_button_select_button_type', '' );
+	echo apply_filters( 'swpm_new_button_select_button_type', '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 	wp_nonce_field( 'swpm_admin_create_btns', 'swpm_admin_create_btns' );
 	?>
 
 				<br />
-				<input type="submit" name="swpm_button_type_selected" class="button-primary" value="<?php echo SwpmUtils::_( 'Next' ); ?>" />
+				<input type="submit" name="swpm_button_type_selected" class="button-primary" value="<?php echo esc_html__( 'Next', 'simple-membership' ); ?>" />
 			</form>
 
 		</div>
 	</div><!-- end of .postbox -->
 
 	<div class="swpm-grey-box">
-	<?php echo SwpmUtils::_( 'You can also use payment buttons from the following plugins to accept payments for your memberships.' ); ?>
+	<?php echo esc_html__( 'You can also use payment buttons from the following plugins to accept payments for your memberships.', 'simple-membership' ); ?>
 	<p>
 		<a href="https://wordpress.org/plugins/wp-express-checkout/" target="_blank">WP Express Checkout</a>
 		&nbsp;|&nbsp;

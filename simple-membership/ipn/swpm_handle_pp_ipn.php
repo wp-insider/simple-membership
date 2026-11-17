@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class swpm_paypal_ipn_handler { // phpcs:ignore
 

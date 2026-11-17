@@ -120,7 +120,7 @@ class SwpmAuth {
 				$error_msg .= '<p>' . SwpmUtils::_( 'You are logged into the site as an ADMIN user in this browser. First, logout from WP Admin then you will be able to log in as a normal member.' ) . '</p>';
 				$error_msg .= '<p>' . SwpmUtils::_( 'Alternatively, you can use a different browser (where you are not logged-in as ADMIN) to test the membership login.' ) . '</p>';
 				$error_msg .= '<p>' . SwpmUtils::_( 'Your normal visitors or members will never see this message. This message is ONLY for ADMIN user.' ) . '</p>';
-				wp_die( $error_msg );
+				wp_die( wp_kses_post( $error_msg ));
 			}
 
 			//If captcha is present and validation failed, it returns an error string. If validation succeeds, it returns an empty string.
@@ -136,15 +136,15 @@ class SwpmAuth {
 					}
 				
 				} else {
-					$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . $error_msg . '</span>';
+					$this->lastStatusMsg = '<span class="swpm-login-error-msg swpm-red-error-text">' . wp_kses_post( $error_msg ) . '</span>';
 					return;
 				}
 			}
 
 			if ( is_email( $swpm_user_name ) ) {//User is trying to log-in using an email address
 				$email = sanitize_email( $swpm_user_name );
-				$query = $wpdb->prepare( 'SELECT user_name FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE email = %s', $email );
-				$username = $wpdb->get_var( $query );
+				
+				$username = $wpdb->get_var( $wpdb->prepare( 'SELECT user_name FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE email = %s', $email ) );
 				if ( $username ) {//Found a user record
 					$swpm_user_name = $username; //Grab the usrename value so it can be used in the authentication process.
 					SwpmLog::log_auth_debug( 'Authentication request using email address: ' . $email . ', Found a user record with username: ' . $swpm_user_name, true );
@@ -156,8 +156,8 @@ class SwpmAuth {
 			$pass = trim( $swpm_password );
 			SwpmLog::log_auth_debug( 'Authentication request - Username: ' . $swpm_user_name, true );
 
-			$query = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE user_name = %s';
-			$userData = $wpdb->get_row( $wpdb->prepare( $query, $user ) );
+			
+			$userData = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE user_name = %s', $user ) );
 			$this->userData = $userData;
 			if ( ! $userData ) {
 				$this->isLoggedIn    = false;
@@ -243,8 +243,8 @@ class SwpmAuth {
 		}
 
 		global $wpdb;
-		$query = ' SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE user_name = %s';
-		$user = $wpdb->get_row( $wpdb->prepare( $query, $username ) );
+		
+		$user = $wpdb->get_row( $wpdb->prepare( ' SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE user_name = %s', $username ) );
 		if ( empty( $user ) ) {
 			$this->lastStatusMsg = SwpmUtils::_( 'Invalid Username' );
 			return false;
@@ -287,9 +287,9 @@ class SwpmAuth {
 				$login_page_url = SwpmSettings::get_instance()->get_value('login-page-url');
 				$logged_out_msg = '<h2>' . __('Login Session Expired', 'simple-membership') . '</h2>';
 				$logged_out_msg .= __('You have been logged out because the maximum active login limit for this account has been reached. ', 'simple-membership');
-				$logged_out_msg .= __( ' If this was an error, you can ', 'simple-membership' ) . '<a href="'.$login_page_url.'">'.__('go to the login page', 'simple-membership') .'</a>'. __(' and try logging in again.', 'simple-membership' );
+				$logged_out_msg .= __( ' If this was an error, you can ', 'simple-membership' ) . '<a href="'.esc_url( $login_page_url ).'">'.__('go to the login page', 'simple-membership') .'</a>'. __(' and try logging in again.', 'simple-membership' );
 				$page_title = __( 'Login Session Expired', 'simple-membership' );
-				wp_die( $logged_out_msg, $page_title );
+				wp_die( wp_kses_post( $logged_out_msg ), esc_html( $page_title ));
 			}
 		}
 
@@ -353,7 +353,7 @@ class SwpmAuth {
 				get_home_url()
 			);
 			$msg = sprintf( SwpmUtils::_( 'You need to activate your account. If you didn\'t receive an email then %s to resend the activation email.' ), '<a href="' . $resend_email_url . '">' . SwpmUtils::_( 'click here' ) . '</a>' );
-			$this->lastStatusMsg = '<div class="swpm_login_error_activation_required">' . $msg . '</div>';
+			$this->lastStatusMsg = '<div class="swpm_login_error_activation_required">' . wp_kses_post( $msg ) . '</div>';
 			$can_login = false;
 		}
 
@@ -732,8 +732,8 @@ class SwpmAuth {
 		if( empty( $member_id ) ) {
 			return;
 		}
-		$query = 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id = %d';
-		$this->userData = $wpdb->get_row( $wpdb->prepare( $query, $member_id ) );
+		
+		$this->userData = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id = %d', $member_id ) );
 	}
 
 	public function is_expired_account() {

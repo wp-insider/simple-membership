@@ -1,9 +1,13 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 //Render the all payment buttons tab
 ?>
 
 <div class="swpm-grey-box">
-    <?php echo SwpmUtils::_('All the membership buttons that you created in the plugin are displayed here.'); ?>
+    <?php echo esc_html__( 'All the membership buttons that you created in the plugin are displayed here.', 'simple-membership' ); ?>
 </div>
 
 <?php
@@ -24,5 +28,5 @@ $payments_buttons_table->prepare_items();
 </form>
 
 <p>
-    <a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" class="button"><?php _e('Create New Button', 'simple-membership'); ?></a>
+    <a href="admin.php?page=simple_wp_membership_payments&tab=create_new_button" class="button"><?php esc_attr_e('Create New Button', 'simple-membership'); ?></a>
 </p>

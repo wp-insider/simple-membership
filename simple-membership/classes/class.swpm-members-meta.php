@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmMembersMeta {
 
@@ -52,16 +56,18 @@ class SwpmMembersMeta {
 	public static function get($member_id, $meta_key = '', $single = false) {
 		global $wpdb;
 
-		$query = $wpdb->prepare(
-			"SELECT meta_value FROM ".self::get_table_name()." WHERE member_id = %d",
-			$member_id
-		);
-
 		if (!empty($meta_key)) {
-			$query .= $wpdb->prepare(" AND meta_key = %s", $meta_key);
+			$results = $wpdb->get_results( $wpdb->prepare(
+				"SELECT meta_value FROM {$wpdb->prefix}swpm_members_meta_tbl WHERE member_id = %d AND meta_key = %s",
+				$member_id,
+				$meta_key
+			) );
+		} else {
+			$results = $wpdb->get_results( $wpdb->prepare(
+				"SELECT meta_value FROM {$wpdb->prefix}swpm_members_meta_tbl WHERE member_id = %d",
+				$member_id
+			) );
 		}
-
-		$results = $wpdb->get_results($query);
 
 		if (empty($results)) {
 			return false;

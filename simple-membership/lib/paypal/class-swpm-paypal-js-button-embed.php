@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SWPM_PayPal_JS_Button_Embed {
 	protected static $instance;
@@ -180,7 +184,7 @@ class SWPM_PayPal_JS_Button_Embed {
 		$sdk_args = $this->generate_paypal_js_sdk_args();
 		$script_url = add_query_arg( $sdk_args, 'https://www.paypal.com/sdk/js' );
 
-		$output = '<script src="' . esc_url_raw( $script_url ) . '" data-partner-attribution-id="TipsandTricks_SP_PPCP"></script>';
+		$output = '<script src="' . esc_url_raw( $script_url ) . '" data-partner-attribution-id="TipsandTricks_SP_PPCP"></script>'; // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent, PluginCheck.CodeAnalysis.Offloading.OffloadedContent, WordPress.WP.EnqueuedResources.NonEnqueuedScript, WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- Third-party PayPal/Braintree SDK resources must be loaded from the provider.
 		return $output;
 	}
 

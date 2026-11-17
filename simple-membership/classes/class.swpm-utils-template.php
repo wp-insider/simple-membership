@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmUtilsTemplate {
 
@@ -41,7 +45,7 @@ class SwpmUtilsTemplate {
                 require( $template_to_load );
             }
         } else {
-            wp_die(SwpmUtils::_('Error! Failed to find a template path for the specified template: ' . $template_name));
+            wp_die( wp_kses_post( SwpmUtils::_('Error! Failed to find a template path for the specified template: ' . $template_name) ));
         }
     }
 

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /**
  * BCategoryList
@@ -75,7 +79,7 @@ class SwpmCategoryList extends WP_List_Table {
         $swpm_category_prot_update_nonce = filter_input(INPUT_POST, 'swpm_category_prot_update_nonce');
         if (!wp_verify_nonce($swpm_category_prot_update_nonce, 'swpm_category_prot_update_nonce_action')) {
             //Nonce check failed.
-            wp_die(SwpmUtils::_("Error! Nonce security verification failed for Category Protection Update action. Clear cache and try again."));
+            wp_die(esc_html__( "Error! Nonce security verification failed for Category Protection Update action. Clear cache and try again.", 'simple-membership' ));
         }
 
         $selected = filter_input(INPUT_POST, 'membership_level_id', FILTER_SANITIZE_NUMBER_INT);
@@ -104,7 +108,7 @@ class SwpmCategoryList extends WP_List_Table {
         $all_categories = array();
         $taxonomies = get_taxonomies($args = array('public' => true,'_builtin'=>false));
         $taxonomies['category'] = 'category';
-        $all_terms = get_terms( $taxonomies, 'orderby=count&hide_empty=0&order=DESC');
+        $all_terms = get_terms( array( 'taxonomy' => array_values( $taxonomies ), 'orderby' => 'count', 'hide_empty' => false, 'order' => 'DESC' ) );
         $totalitems = count($all_terms);
         $perpage = 100;
         $paged = !empty($_GET["paged"]) ? sanitize_text_field($_GET["paged"]) : '';
@@ -134,7 +138,7 @@ class SwpmCategoryList extends WP_List_Table {
     }
 
     function no_items() {
-        _e('No category found.', 'simple-membership');
+        esc_attr_e('No category found.', 'simple-membership');
     }
 
 }

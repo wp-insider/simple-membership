@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /*
  * Contains functions that can be used to inject certain API requests using the SWPM_PayPal_Request_API class.
@@ -253,7 +257,7 @@ class SWPM_PayPal_Request_API_Injector {
 
             //If end_time is not provided, then use the current time.
             if( empty($end_time) ){
-                $end_time = date('c');//Current time in ISO 8601 format (Example: 2024-02-27T03:28:34+00:00)
+                $end_time = gmdate('c');//Current time in ISO 8601 format (Example: 2024-02-27T03:28:34+00:00)
             }
 
             $params = array(

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmForm {
 
@@ -53,8 +57,8 @@ class SwpmForm {
             return;
         }
         $saned = sanitize_text_field($user_name);
-        $query = "SELECT count(member_id) FROM {$wpdb->prefix}swpm_members_tbl WHERE user_name= %s";
-        $result = $wpdb->get_var($wpdb->prepare($query, strip_tags($saned)));
+        
+        $result = $wpdb->get_var($wpdb->prepare("SELECT count(member_id) FROM {$wpdb->prefix}swpm_members_tbl WHERE user_name= %s", wp_strip_all_tags($saned)));
         if ($result > 0) {
             if ($saned != $this->fields['user_name']) {
                 $this->errors['user_name'] = SwpmUtils::_('Username already exists.');
@@ -104,14 +108,12 @@ class SwpmForm {
             return;
         }
         $saned = sanitize_email($email);
-        $query = "SELECT count(member_id) FROM {$wpdb->prefix}swpm_members_tbl WHERE email= %s";
         $member_id = filter_input(INPUT_GET, 'member_id', FILTER_SANITIZE_NUMBER_INT);
         if (!empty($member_id)) {
-            $query .= ' AND member_id !=%d';
-            $result = $wpdb->get_var($wpdb->prepare($query, strip_tags($saned), $member_id));
+            $result = $wpdb->get_var($wpdb->prepare("SELECT count(member_id) FROM {$wpdb->prefix}swpm_members_tbl WHERE email = %s AND member_id != %d", wp_strip_all_tags($saned), $member_id));
         }
         else{
-            $result = $wpdb->get_var($wpdb->prepare($query, strip_tags($saned)));
+            $result = $wpdb->get_var($wpdb->prepare("SELECT count(member_id) FROM {$wpdb->prefix}swpm_members_tbl WHERE email = %s", wp_strip_all_tags($saned)));
         }
 
         if ($result > 0) {

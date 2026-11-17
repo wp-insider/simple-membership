@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /*******************************************************************
  * Render and process the interface for edit transaction.
@@ -7,12 +11,12 @@
 function swpm_handle_edit_txn()
 {
 	if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-		wp_die(__('Error! ID must be provided.', 'simple-membership'));
+		wp_die(esc_html__( 'Error! ID must be provided.', 'simple-membership' ));
 	}
 
 	$post = get_post(sanitize_text_field($_GET['id']));
 	if (empty($post)) {
-		wp_die(__('Error! Transaction record with the ID not found!.', 'simple-membership'));
+		wp_die(esc_html__( 'Error! Transaction record with the ID not found!.', 'simple-membership' ));
 	}
 
 	if (isset($_POST['swpm_txn_save_submit'])) {
@@ -55,8 +59,8 @@ function swpm_handle_edit_txn()
 		}
 
 		echo '<div class="notice notice-success"><p>';
-		_e('Transaction data updated successfully. ', 'simple-membership');
-		echo '<a href="admin.php?page=simple_wp_membership_payments">'. __('View all transactions', 'simple-membership') .'</a>';
+		esc_attr_e( 'Transaction data updated successfully. ', 'simple-membership' );
+		echo '<a href="admin.php?page=simple_wp_membership_payments">'. esc_html__( 'View all transactions', 'simple-membership' ) .'</a>';
 		echo '</p></div>';
 
 		SwpmLog::log_simple_debug("Transaction data updated successfully.", true);
@@ -73,7 +77,7 @@ function swpm_handle_edit_txn()
         $member_id  = isset($_POST['swpm_admin_cancel_subscr_member_id']) ? sanitize_text_field($_POST['swpm_admin_cancel_subscr_member_id']) : '';
 
         if (empty($subscr_id) || empty($gateway) || empty($member_id)){
-            wp_die( __('Some subscription cancel related required fields not found!', 'simple-membership') );
+            wp_die( esc_html__( 'Some subscription cancel related required fields not found!', 'simple-membership' ) );
         }
 
         $subscription_utils = new SWPM_Utils_Subscriptions( $member_id );
@@ -81,12 +85,12 @@ function swpm_handle_edit_txn()
         $subscriptions_data = $subscription_utils->get_subscription_data($subscr_id);
         if (empty($subscriptions_data)){
             // Subscription record not found.
-            wp_die( __('Subscription record not found.', 'simple-membership') );
+            wp_die( esc_html__( 'Subscription record not found.', 'simple-membership' ) );
         }
 
         $response = $subscription_utils->dispatch_subscription_cancel_request($subscr_id, $gateway);
         if ($response !== true){
-            wp_die($response);
+            wp_die( wp_kses_post( $response ));
         }
 
         // Subscription cancellation done, redirect to transactions list table page.
@@ -101,7 +105,7 @@ function swpm_handle_edit_txn()
 		$sub_cancel_msg .= '</p>';
         $sub_cancel_msg .= '</div>';
 
-        echo $sub_cancel_msg;
+        echo wp_kses_post( $sub_cancel_msg );
 		//Return from this function as we don't want to show the edit transaction form.
         return;
     }
@@ -264,34 +268,34 @@ function swpm_show_edit_txn_form($post)
 ?>
 
 	<div class="postbox">
-		<h2><?php _e('Edit Transaction', 'simple-membership'); ?></h2>
+		<h2><?php esc_attr_e( 'Edit Transaction', 'simple-membership' ); ?></h2>
 		<div class="inside">
 			<form id="swpm-edit-txn-form" method="post">
 				<table class="widefat" style="border: none;">
 					<tr>
-						<td><?php _e("Post ID", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Post ID", 'simple-membership' ); ?></td>
 						<td><?php echo esc_attr($post_id); ?></td>
 					</tr>
 					<tr>
-						<td><?php _e("Transaction ID", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Transaction ID", 'simple-membership' ); ?></td>
 						<td><?php echo esc_attr($txn_id); ?></td>
 					</tr>
 					<tr>
-						<td><?php _e("Transaction Date", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Transaction Date", 'simple-membership' ); ?></td>
 						<td><?php echo esc_attr(SwpmUtils::get_formatted_and_translated_date_according_to_wp_settings($txn_date)) ?></td>
 					</tr>
 					<tr>
-						<td><?php _e("Subscription ID", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Subscription ID", 'simple-membership' ); ?></td>
 						<td><?php echo esc_attr($subscr_id); ?></td>
 					</tr>
 					<tr>
-						<td><?php _e("Payment Gateway", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Payment Gateway", 'simple-membership' ); ?></td>
 						<td><?php echo esc_attr($gateway_formatted); ?></td>
 					</tr>
 					<?php if (!empty($txn_type_raw)) { ?>
 						<!-- Some older transactions may not have the txn_type. So only show the transaction type field if it is set. -->
 						<tr>
-							<td><?php _e("Transaction Type", "simple-membership"); ?></td>
+							<td><?php esc_attr_e( "Transaction Type", 'simple-membership' ); ?></td>
 							<td><?php echo esc_attr($txn_type_raw); ?></td>
 						</tr>
 					<?php } ?>
@@ -299,46 +303,46 @@ function swpm_show_edit_txn_form($post)
 						<!-- This block handles the PPCP and Stripe subscription agreement type txn. These type of txns can be queried via API -->
 						<!-- If this is a subscription agreement (sub-created) type txn and the status is not active, we show the status using the 'subscr_status' post meta. -->
 						<tr>
-							<td><?php _e("Subscription Payment Status", "simple-membership"); ?></td>
+							<td><?php esc_attr_e( "Subscription Payment Status", 'simple-membership' ); ?></td>
 							<td>
-								<span class="swpm_status_subscription_cancelled"><?php echo ucfirst(esc_attr($subscr_status)); ?></span>
+								<span class="swpm_status_subscription_cancelled"><?php echo esc_attr( ucfirst(esc_attr($subscr_status)) ); ?></span>
 							</td>
 						</tr>
 					<?php } else if ( $is_pp_std_subscr_status_canceled ){ ?>
 						<!-- This block handles the PayPal standard subscription agreement type txn (it cannot be queried via API) -->
 						<!-- If this is a PayPal standard subscription agreement (sub-created) type txn, and the subscr_status is canceled, we show the canceled status. -->
 						<tr>
-							<td><?php _e("Subscription Payment Status", "simple-membership"); ?></td>
+							<td><?php esc_attr_e( "Subscription Payment Status", 'simple-membership' ); ?></td>
 							<td>
-								<span class="swpm_status_subscription_cancelled"><?php echo ucfirst(esc_attr($subscr_status)); ?></span>
+								<span class="swpm_status_subscription_cancelled"><?php echo esc_attr( ucfirst(esc_attr($subscr_status)) ); ?></span>
 							</td>
 						</tr>
                     <?php } else { ?>
 						<!-- show the status field for all other types of transactions -->
 						<tr>
-							<td><?php _e("Status", "simple-membership"); ?></td>
-							<td><?php echo ucfirst(esc_attr($status)); ?></td>
+							<td><?php esc_attr_e( "Status", 'simple-membership' ); ?></td>
+							<td><?php echo esc_attr( ucfirst(esc_attr($status)) ); ?></td>
 						</tr>
 					<?php } ?>
 
 					<tr>
-						<td><?php _e("First Name", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "First Name", 'simple-membership' ); ?></td>
 						<td><input type="text" size="40" name="swpm_txn_first_name" value="<?php echo esc_attr($first_name); ?>" /></td>
 					</tr>
 					<tr>
-						<td><?php _e("Last Name", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Last Name", 'simple-membership' ); ?></td>
 						<td><input type="text" size="40" name="swpm_txn_last_name" value="<?php echo esc_attr($last_name); ?>" /></td>
 					</tr>
 					<tr>
-						<td><?php _e("Email Address", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Email Address", 'simple-membership' ); ?></td>
 						<td><input type="text" size="40" name="swpm_txn_email_address" value="<?php echo esc_attr($email); ?>" /></td>
 					</tr>
 					<tr>
-						<td><?php _e("IP Address", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "IP Address", 'simple-membership' ); ?></td>
 						<td><input type="text" size="40" name="swpm_txn_ipaddress" value="<?php echo esc_attr($ip_address); ?>" /></td>
 					</tr>
 					<tr>
-						<td><?php _e("Payment Amount", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Payment Amount", 'simple-membership' ); ?></td>
 						<td><input type="text" size="20" name="swpm_txn_payment_amount" value="<?php echo esc_attr($payment_amount); ?>" /></td>
 					</tr>
 					<?php 
@@ -346,12 +350,12 @@ function swpm_show_edit_txn_form($post)
 					if( !empty($discount_amount) && $discount_amount > 0 ) {
 					?>
 					<tr>
-						<td><?php _e("Discount Amount", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Discount Amount", 'simple-membership' ); ?></td>
 						<td><input type="text" size="20" name="swpm_txn_discount_amount" value="<?php echo esc_attr($discount_amount); ?>" /></td>
 					</tr>
 					<?php } ?>
 					<tr>
-						<td><?php _e("Note/Reference", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Note/Reference", 'simple-membership' ); ?></td>
 						<td><input type="text" size="20" name="swpm_txn_reference" value="<?php echo esc_attr($reference); ?>" /></td>
 					</tr>
 
@@ -362,32 +366,32 @@ function swpm_show_edit_txn_form($post)
 						</td>
 					</tr>
 					<tr>
-						<td><?php _e("Member ID", "simple-membership"); ?></td>
-						<td><?php echo esc_attr($member_id) . ' ' . $profile_link_output; ?></td>
+						<td><?php esc_attr_e( "Member ID", 'simple-membership' ); ?></td>
+						<td><?php echo esc_attr($member_id) . ' ' . wp_kses_post( $profile_link_output ); ?></td>
 					</tr>
 					<tr>
-						<td><?php _e("Membership Level", "simple-membership"); ?></td>
-						<td><?php echo esc_attr($membership_level_name) . ' ' . $membership_level_link_output; ?></td>
+						<td><?php esc_attr_e( "Membership Level", 'simple-membership' ); ?></td>
+						<td><?php echo esc_attr($membership_level_name) . ' ' . wp_kses_post( $membership_level_link_output ); ?></td>
 					</tr>					
 					<tr>
-						<td><?php _e("Payment Button ID", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Payment Button ID", 'simple-membership' ); ?></td>
 						<td>
-							<?php echo esc_attr($payment_button_id) . ' ' . $payment_button_link_output; ?>
+							<?php echo esc_attr($payment_button_id) . ' ' . wp_kses_post( $payment_button_link_output ); ?>
 						</td>
 					</tr>
 					<tr>
-						<td><?php _e("Live Mode Transaction?", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Live Mode Transaction?", 'simple-membership' ); ?></td>
 						<td><?php echo esc_attr($is_live); ?></td>
 					</tr>
 					<tr>
-						<td><?php _e("Custom (System Data)", "simple-membership"); ?></td>
+						<td><?php esc_attr_e( "Custom (System Data)", 'simple-membership' ); ?></td>
 						<td><?php echo esc_attr($custom); ?></td>
 					</tr>
                 </table>
 
 				<p class="submit">
 					<?php wp_nonce_field('swpm_admin_edit_txn_form_nonce_action', 'swpm_admin_edit_txn_form_nonce_field') ?>
-					<input type="submit" name="swpm_txn_save_submit" class="button-primary" value="<?php _e('Save Transaction Data', 'simple-membership'); ?>">
+					<input type="submit" name="swpm_txn_save_submit" class="button-primary" value="<?php esc_attr_e( 'Save Transaction Data', 'simple-membership' ); ?>">
 				</p>
 			</form>
 		</div>
@@ -404,7 +408,7 @@ function swpm_show_edit_txn_form($post)
     ?>
     <div class="postbox">
         <h2>
-            <?php _e('Cancel Subscription', 'simple-membership') ?>
+            <?php esc_attr_e('Cancel Subscription', 'simple-membership') ?>
         </h2>
         <div class="inside">
             <?php
@@ -413,12 +417,12 @@ function swpm_show_edit_txn_form($post)
              */
             if ( $is_active_subscr_status_retrieved_via_api_call ){
             ?>
-            <p><?php _e('You can use the button below to cancel the subscription. The subscription is canceled immediately once you confirm the cancellation.' , 'simple-membership'); ?> </p>
+            <p><?php esc_attr_e('You can use the button below to cancel the subscription. The subscription is canceled immediately once you confirm the cancellation.' , 'simple-membership'); ?> </p>
             <div class="swpm-yellow-box">
-                <b><?php _e('NOTE:', 'simple-membership') ?></b> <?php _e('Canceled subscriptions cannot be reactivated. The user can purchase a new subscription if needed.', 'simple-membership'); ?>
+                <b><?php esc_attr_e('NOTE:', 'simple-membership') ?></b> <?php esc_attr_e('Canceled subscriptions cannot be reactivated. The user can purchase a new subscription if needed.', 'simple-membership'); ?>
             </div>
             <form method="post" class="swpm-admin-cancel-subscription-form">
-                <?php echo wp_nonce_field( 'swpm_admin_cancel_sub_nonce_action' );?>
+                <?php wp_nonce_field( 'swpm_admin_cancel_sub_nonce_action' );?>
                 <input type="hidden" name="swpm_admin_cancel_subscr_id" value="<?php echo esc_attr($subscr_id);?>">
                 <input type="hidden" name="swpm_admin_cancel_subscr_gateway" value="<?php echo esc_attr($gateway_raw);?>">
                 <input type="hidden" name="swpm_admin_cancel_subscr_member_id" value="<?php echo esc_attr($member_id);?>">
@@ -426,14 +430,14 @@ function swpm_show_edit_txn_form($post)
                         type="submit"
                         class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active"
                         name="swpm_admin_cancel_subscr_submit"
-                        onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel this subscription?', 'simple-membership' )?> ')"
+                        onclick="return confirm(' <?php esc_attr_e( 'Are you sure that you want to cancel this subscription?', 'simple-membership' )?> ')"
                 >
-                    <?php _e('Cancel Subscription', 'simple-membership') ?>
+                    <?php esc_attr_e('Cancel Subscription', 'simple-membership') ?>
                 </button>
             </form>
             <?php } else { ?>
                 <div class="swpm-yellow-box">
-                    <?php _e('This subscription has been cancelled already.', 'simple-membership') ?>
+                    <?php esc_attr_e('This subscription has been cancelled already.', 'simple-membership') ?>
                 </div>
             <?php } ?>
         </div>

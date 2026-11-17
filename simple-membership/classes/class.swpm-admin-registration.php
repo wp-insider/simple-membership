@@ -22,7 +22,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		//Check nonce
 		if ( ! isset( $_POST['_wpnonce_create_swpmuser_admin_end'] ) || ! wp_verify_nonce( $_POST['_wpnonce_create_swpmuser_admin_end'], 'create_swpmuser_admin_end' ) ) {
 			//Nonce check failed.
-			wp_die( __( 'Error! Nonce verification failed for user registration from admin end.', 'simple-membership' ) );
+			wp_die( esc_html__( 'Error! Nonce verification failed for user registration from admin end.', 'simple-membership' ) );
 		}
 
 		global $wpdb;
@@ -43,7 +43,6 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			$wpdb->insert( $wpdb->prefix . 'swpm_members_tbl', $member_info );
 
 			//Register to WordPress
-			$query = $wpdb->prepare( 'SELECT role FROM ' . $wpdb->prefix . 'swpm_membership_tbl WHERE id = %d', $member_info['membership_level'] );
 			$wp_user_info = array();
 			$wp_user_info['user_nicename'] = implode( '-', explode( ' ', $member_info['user_name'] ) );
 			$wp_user_info['display_name']  = apply_filters( 'swpm_admin_end_registration_display_name', $member_info['user_name'] );
@@ -57,8 +56,8 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			}
 			$wp_user_info['user_login']      = $member_info['user_name'];
 			$wp_user_info['password']        = $plain_password;
-			$wp_user_info['role']            = $wpdb->get_var( $query );
-			$wp_user_info['user_registered'] = date( 'Y-m-d H:i:s' );
+			$wp_user_info['role']            = $wpdb->get_var( $wpdb->prepare( "SELECT role FROM {$wpdb->prefix}swpm_membership_tbl WHERE id = %d", $member_info['membership_level'] ) );
+			$wp_user_info['user_registered'] = gmdate( 'Y-m-d H:i:s' );
 			SwpmUtils::create_wp_user( $wp_user_info );
 			//End register to WordPress
 
@@ -104,13 +103,13 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		//Check nonce
 		if ( ! isset( $_POST['_wpnonce_edit_swpmuser_admin_end'] ) || ! wp_verify_nonce( $_POST['_wpnonce_edit_swpmuser_admin_end'], 'edit_swpmuser_admin_end' ) ) {
 			//Nonce check failed.
-			wp_die( __( 'Error! Nonce verification failed for user edit from admin end.', 'simple-membership' ) );
+			wp_die( esc_html__( 'Error! Nonce verification failed for user edit from admin end.', 'simple-membership' ) );
 		}
 
 		$id_of_profile_being_edited = intval( $id );
 		global $wpdb;
-		$query  = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id = %d', $id );
-		$member = $wpdb->get_row( $query, ARRAY_A );
+		
+		$member = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'swpm_members_tbl WHERE member_id = %d', $id ), ARRAY_A );
 		// let's get previous membership level
 		$prev_level = false;
 		$prev_account_status = false;
@@ -248,7 +247,7 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		//Check nonce
 		if ( ! isset( $_POST['swpm_admin_member_account_approve_nonce'] ) || ! wp_verify_nonce( $_POST['swpm_admin_member_account_approve_nonce'], 'swpm_admin_member_account_approve' ) ) {
 			//Nonce check failed.
-			wp_die( __( 'Error! Nonce verification failed for manual account approval.', 'simple-membership' ) );
+			wp_die( esc_html__( 'Error! Nonce verification failed for manual account approval.', 'simple-membership' ) );
 		}
 
 		SwpmLog::log_simple_debug('Handling manual account approval for member ID: ' . $member_id, true);

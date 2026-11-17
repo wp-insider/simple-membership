@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /* 
 * Note: We are passing the $ipn_data parameter by reference because we try to add the 'member_id' value to it (from our search or when we insert a new record).
 * This is helpful to save the member_id reference in save transaction function later. 
@@ -720,7 +724,7 @@ function swpm_send_subscription_cancel_notification_email($member_id, $subscript
 	$member = SwpmMemberUtils::get_user_by_id( $member_id );
 	if ( empty( $member ) ) {
 		//can't find recipient member
-		wp_die(__( "Can't find member account to send notification email." , 'simple-membership'));
+		wp_die(esc_html__( "Can't find member account to send notification email.", 'simple-membership' ));
 	}
 
 	//Additional arguments for dynamic tag replacement

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /*******************************************************************
  * Render and process the interface for add new transaction manually
@@ -6,7 +10,7 @@
 
 function swpm_handle_add_new_txn_manually(){
     echo '<div class="swpm-grey-box">';
-    _e( 'You can add a new transaction record manually using this interface. It can be useful if you manually accept cash payment for your memberships.', 'simple-membership' );
+    esc_attr_e( 'You can add a new transaction record manually using this interface. It can be useful if you manually accept cash payment for your memberships.', 'simple-membership' );
     echo '</div>';
 
     if( isset( $_POST['swpm_add_new_txn_save_submit'] ) ){
@@ -83,8 +87,8 @@ function swpm_handle_add_new_txn_manually(){
         SwpmLog::log_simple_debug("Manual transaction added successfully.", true);
 
         echo '<div class="swpm-orange-box">';
-        _e('Manual transaction added successfully. ', 'simple-membership');
-        echo '<a href="admin.php?page=simple_wp_membership_payments">'.__('View all transactions', 'wp-express-checkout').'</a>';
+        esc_attr_e('Manual transaction added successfully. ', 'simple-membership');
+        echo '<a href="admin.php?page=simple_wp_membership_payments">'.esc_html__( 'View all transactions', 'simple-membership' ).'</a>';
         echo '</div>';
 
     } else {
@@ -97,99 +101,99 @@ function swpm_handle_add_new_txn_manually(){
 function swpm_show_add_new_txn_form(){
     ?>
     <div class="postbox">
-        <h3 class="hndle"><label for="title"><?php _e('Add New Transaction', 'simple-membership'); ?></label></h3>
+        <h3 class="hndle"><label for="title"><?php esc_attr_e('Add New Transaction', 'simple-membership'); ?></label></h3>
         <div class="inside">
 
             <form id="pp_button_config_form" method="post">
                 <table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Email Address', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Email Address', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="70" name="email_address" value="" required />
-                            <p class="description"><?php _e('Email address of the customer.')?></p>
+                            <p class="description"><?php esc_attr_e('Email address of the customer.', 'simple-membership')?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('First Name', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('First Name', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="first_name" value="" required />
-                            <p class="description"><?php _e('First name of the customer.')?></p>
+                            <p class="description"><?php esc_attr_e('First name of the customer.', 'simple-membership')?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Last Name', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Last Name', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="last_name" value="" required />
-                            <p class="description"><?php _e('Last name of the customer.')?></p>
+                            <p class="description"><?php esc_attr_e('Last name of the customer.', 'simple-membership')?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Member ID', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Member ID', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="20" name="member_id" value="" />
-                            <p class="description"><?php _e('The Member ID number of the member\'s profile that corresponds to this transaction.')?></p>
+                            <p class="description"><?php esc_attr_e('The Member ID number of the member\'s profile that corresponds to this transaction.', 'simple-membership')?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Membership Level', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Membership Level', 'simple-membership'); ?></th>
                         <td>
                             <select id="membership_level_id" name="membership_level_id">
-                                <?php echo SwpmUtils::membership_level_dropdown(); ?>
+                                <?php echo wp_kses( SwpmUtils::membership_level_dropdown(), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
                             </select>
-                            <p class="description"><?php _e('Select the membership level this transaction is for.')?></p>
+                            <p class="description"><?php esc_attr_e('Select the membership level this transaction is for.', 'simple-membership')?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Amount', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Amount', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="10" name="payment_amount" value="" required />
-                            <p class="description"><?php _e('Enter the payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).')?></p>
+                            <p class="description"><?php esc_attr_e('Enter the payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership')?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Discount Amount', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Discount Amount', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="10" name="discount_amount" value=""/>
-                            <p class="description"><?php _e('Enter the discount amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).')?></p>
+                            <p class="description"><?php esc_attr_e('Enter the discount amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership')?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Date', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Date', 'simple-membership'); ?></th>
                         <td>
                             <input type="date" size="20" name="txn_date" value="" />
-                            <p class="description"><?php _e('The date for this transaction.')?></p>
+                            <p class="description"><?php esc_attr_e('The date for this transaction.', 'simple-membership')?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Transaction ID', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Transaction ID', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="txn_id" value="" />
-                            <p class="description"><?php _e('The unique transaction ID of this transaction so you can identify it easily.')?></p>
+                            <p class="description"><?php esc_attr_e('The unique transaction ID of this transaction so you can identify it easily.', 'simple-membership')?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Subscriber ID', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Subscriber ID', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="subscriber_id" value="" />
-                            <p class="description"><?php _e('The subscriber ID (if any) from the member\'s profile.')?></p>
+                            <p class="description"><?php esc_attr_e('The subscriber ID (if any) from the member\'s profile.', 'simple-membership')?></p>
                         </td>
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row"><?php _e('Status/Note', 'simple-membership'); ?></th>
+                        <th scope="row"><?php esc_attr_e('Status/Note', 'simple-membership'); ?></th>
                         <td>
                             <input type="text" size="50" name="txn_status" value="" />
-                            <p class="description"><?php _e('A status value for this transaction. This will go to the Status/Note column of the transaction record.')?></p>
+                            <p class="description"><?php esc_attr_e('A status value for this transaction. This will go to the Status/Note column of the transaction record.', 'simple-membership')?></p>
                         </td>
                     </tr>
 
@@ -197,7 +201,7 @@ function swpm_show_add_new_txn_form(){
 
                 <p class="submit">
                     <?php wp_nonce_field( 'swpm_admin_add_new_txn_form_action', 'swpm_admin_add_new_txn_form_field' ) ?>
-                    <input type="submit" name="swpm_add_new_txn_save_submit" class="button-primary" value="<?php _e('Save Transaction Data', 'simple-membership'); ?>" >
+                    <input type="submit" name="swpm_add_new_txn_save_submit" class="button-primary" value="<?php esc_attr_e('Save Transaction Data', 'simple-membership'); ?>" >
                 </p>
 
             </form>

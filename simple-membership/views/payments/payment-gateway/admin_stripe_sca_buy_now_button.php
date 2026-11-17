@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /* * ***************************************************************
  * Render the new Stripe Buy Now payment button creation interface
  * ************************************************************** */
@@ -19,12 +23,12 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 	?>
 
 <div class="swpm-orange-box">
-	<?php _e('View the ', 'simple-membership') ?> <a target="_blank" href="https://simple-membership-plugin.com/sca-compliant-stripe-buy-now-button/"><?php _e('documentation', 'simple-membership') ?></a>&nbsp;
-	<?php _e('to learn how to create a Stripe Buy Now payment button and use it.', 'simple-membership') ?>
+	<?php esc_attr_e( 'View the ', 'simple-membership' ) ?> <a target="_blank" href="https://simple-membership-plugin.com/sca-compliant-stripe-buy-now-button/"><?php esc_attr_e( 'documentation', 'simple-membership' ) ?></a>&nbsp;
+	<?php esc_attr_e( 'to learn how to create a Stripe Buy Now payment button and use it.', 'simple-membership' ) ?>
 </div>
 
 <div class="postbox">
-	<h3 class="hndle"><label for="title"><?php _e( 'Stripe SCA Buy Now Button Configuration', 'simple-membership' ); ?></label></h3>
+	<h3 class="hndle"><label for="title"><?php esc_attr_e( 'Stripe SCA Buy Now Button Configuration', 'simple-membership' ); ?></label></h3>
 	<div class="inside">
 
 		<form id="stripe_button_config_form" method="post">
@@ -34,33 +38,33 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 			<table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Button Title', 'simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Button Title', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="button_name" value="" required />
-						<p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Give this membership payment button a name. Example: Gold membership payment', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Membership Level', 'simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Membership Level', 'simple-membership' ); ?></th>
 					<td>
 						<select id="membership_level_id" name="membership_level_id">
-							<?php echo SwpmUtils::membership_level_dropdown(); ?>
+							<?php echo wp_kses( SwpmUtils::membership_level_dropdown(), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
 						</select>
-						<p class="description"><?php _e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Select the membership level this payment button is for.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Payment Amount' , 'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Payment Amount', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="6" name="payment_amount" value="" required />
-						<p class="description"><?php _e('Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Payment Currency', 'simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Payment Currency', 'simple-membership' ); ?></th>
 					<td>
 						<select id="payment_currency" name="payment_currency">
 							<option selected="selected" value="USD">US Dollars ($)</option>
@@ -95,119 +99,119 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 							<option value="TRY">Turkish Lira</option>
 							<option value="VND">Vietnamese Dong</option>
 						</select>
-						<p class="description"><?php _e('Select the currency for this payment button.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Select the currency for this payment button.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
 					<th colspan="2">
-						<div class="swpm-grey-box"><?php _e( 'Stripe API keys. You can get this from your Stripe account.', 'simple-membership' ); ?></div>
+						<div class="swpm-grey-box"><?php esc_attr_e( 'Stripe API keys. You can get this from your Stripe account.', 'simple-membership' ); ?></div>
 					</th>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Use Global API Keys Settings', 'simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Use Global API Keys Settings', 'simple-membership' ); ?></th>
 					<td>
 						<input type="checkbox" name="stripe_use_global_keys" value="1" checked/>
-						<p class="description"><?php _e( 'Use API keys from <a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe" target="_blank">Payment Settings</a> tab.', 'simple-membership' ); ?></p>
+						<p class="description"><?php echo wp_kses_post( __( 'Use API keys from <a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe" target="_blank">Payment Settings</a> tab.', 'simple-membership' ) ); ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Test Publishable Key' , 'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Test Publishable Key', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="stripe_test_publishable_key" value="" required />
-						<p class="description"><?php _e('Enter your Stripe test publishable key.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enter your Stripe test publishable key.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Test Secret Key', 'simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Test Secret Key', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="stripe_test_secret_key" value="" required />
-						<p class="description"><?php _e('Enter your Stripe test secret key.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enter your Stripe test secret key.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Live Publishable Key', 'simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Live Publishable Key', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="stripe_live_publishable_key" value="" required />
-						<p class="description"><?php _e('Enter your Stripe live publishable key.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enter your Stripe live publishable key.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Live Secret Key' , 'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Live Secret Key', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="stripe_live_secret_key" value="" required />
-						<p class="description"><?php _e('Enter your Stripe live secret key.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enter your Stripe live secret key.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
 					<th colspan="2">
-						<div class="swpm-grey-box"><?php _e( 'The following details are optional.' , 'simple-membership'); ?></div>
+						<div class="swpm-grey-box"><?php esc_attr_e( 'The following details are optional.', 'simple-membership' ); ?></div>
 					</th>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Collect Customer Address', 'simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Collect Customer Address', 'simple-membership' ); ?></th>
 					<td>
 						<input type="checkbox" name="collect_address" value="1" />
-						<p class="description"><?php _e('Enable this option if you want to collect customer address during Stripe checkout.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enable this option if you want to collect customer address during Stripe checkout.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Enable Automatic Tax', 'simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Enable Automatic Tax', 'simple-membership' ); ?></th>
 					<td>
 						<input type="checkbox" name="automatic_tax" value="1" />
-						<p class="description"><?php _e('Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Allow Promotion Codes', 'simple-membership' ); ?></th>
 					<td>
 						<input type="checkbox" name="allow_promotion_codes" value="1"/>
 						<p class="description">
-							<?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?>
-							<?php echo '<a href="https://simple-membership-plugin.com/applying-discount-coupon-or-promotion-codes-to-stripe-payment-buttons/" target="_blank">' . __('Learn more', 'simple-membership') . '</a>.'; ?>
+							<?php esc_attr_e( 'Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership' ) ?>
+							<?php echo '<a href="https://simple-membership-plugin.com/applying-discount-coupon-or-promotion-codes-to-stripe-payment-buttons/" target="_blank">' . esc_html__( 'Learn more', 'simple-membership' ) . '</a>.'; ?>
 						</p>
 					</td>
 				</tr>
 
                 <tr valign="top">
-                    <th scope="row"><?php _e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
+                    <th scope="row"><?php esc_attr_e( 'Redirect to Paid Registration Link', 'simple-membership' ); ?></th>
                     <td>
                         <input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" />
 						<p class="description">
-							<?php _e('Enable this option to automatically redirect the user to the unique paid registration link after a successful payment. ', 'simple-membership') ?>
-							<a href="https://simple-membership-plugin.com/automatically-redirect-users-to-the-paid-registration-link-after-payment/" target="_blank"><?php _e('Read this documentation', 'simple-membership') ?></a>
-							<?php _e(' to learn how it works.', 'simple-membership') ?>
+							<?php esc_attr_e( 'Enable this option to automatically redirect the user to the unique paid registration link after a successful payment. ', 'simple-membership' ) ?>
+							<a href="https://simple-membership-plugin.com/automatically-redirect-users-to-the-paid-registration-link-after-payment/" target="_blank"><?php esc_attr_e( 'Read this documentation', 'simple-membership' ) ?></a>
+							<?php esc_attr_e( ' to learn how it works.', 'simple-membership' ) ?>
 						</p>
                     </td>
                 </tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Return URL' , 'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Return URL', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="100" name="return_url" value="" />
-						<p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Cancel URL', 'simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Cancel URL', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="100" name="cancel_url" value="" />
-						<p class="description"><?php _e('This is the URL the user will be redirected to when a payment is canceled. Enter the URL of your preferred page here.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'This is the URL the user will be redirected to when a payment is canceled. Enter the URL of your preferred page here.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Button Image URL', 'simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Button Image URL', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="100" name="button_image_url" value="" />
-						<p class="description"><?php _e('If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
@@ -226,7 +230,7 @@ function swpm_create_new_stripe_sca_buy_now_button() {
 
 			<p class="submit">
 				<?php wp_nonce_field( 'swpm_admin_add_edit_stripe_sca_buy_now_btn', 'swpm_admin_create_stripe_sca_buy_now_btn' ); ?>
-				<input type="submit" name="swpm_stripe_sca_buy_now_save_submit" class="button-primary" value="<?php _e( 'Save Payment Data', 'simple-membership' ); ?>">
+				<input type="submit" name="swpm_stripe_sca_buy_now_save_submit" class="button-primary" value="<?php esc_attr_e( 'Save Payment Data', 'simple-membership' ); ?>">
 			</p>
 
 		</form>
@@ -362,7 +366,7 @@ function swpm_edit_stripe_sca_buy_now_button() {
 	$button_image_url = get_post_meta( $button_id, 'button_image_url', true );
 	?>
 <div class="postbox">
-	<h3 class="hndle"><label for="title"><?php _e( 'Stripe Buy Now Button Configuration','simple-membership' ); ?></label></h3>
+	<h3 class="hndle"><label for="title"><?php esc_attr_e( 'Stripe Buy Now Button Configuration', 'simple-membership' ); ?></label></h3>
 	<div class="inside">
 
 		<form id="stripe_button_config_form" method="post">
@@ -371,50 +375,50 @@ function swpm_edit_stripe_sca_buy_now_button() {
 			<table class="form-table" width="100%" border="0" cellspacing="0" cellpadding="6">
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Button ID','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Button ID', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="10" name="button_id" value="<?php echo esc_attr($button_id); ?>" readonly required />
-						<p class="description"><?php _e('This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'This is the ID of this payment button. It is automatically generated for you and it cannot be changed.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e('Button Shortcode', 'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Button Shortcode', 'simple-membership' ); ?></th>
 					<td>
 						<?php
 						$shortcode = SwpmUtils::get_shortcode_for_admin_ui_display($button_id, 50);
-						echo $shortcode;
+						echo wp_kses( $shortcode, SwpmKsesUtils::shortcode_display_tags() );
 						?>
 						<p class="description">
-							<?php _e('Use this shortcode to embed the payment button in your posts, pages, or on your ', 'simple-membership') ?>
-							<?php echo '<a href="https://simple-membership-plugin.com/membership-join-us-page/" target="_blank">' . __('join-us landing page', 'simple-membership') . '</a>.' ?>
+							<?php esc_attr_e( 'Use this shortcode to embed the payment button in your posts, pages, or on your ', 'simple-membership' ) ?>
+							<?php echo '<a href="https://simple-membership-plugin.com/membership-join-us-page/" target="_blank">' . esc_html__( 'join-us landing page', 'simple-membership' ) . '</a>.' ?>
 						</p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Button Title','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Button Title', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="button_name" value="<?php echo esc_attr($button->post_title); ?>" required />
-						<p class="description"><?php _e('Give this membership payment button a name. Example: Gold membership payment', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Give this membership payment button a name. Example: Gold membership payment', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Membership Level' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Membership Level', 'simple-membership' ); ?></th>
 					<td>
 						<select id="membership_level_id" name="membership_level_id">
-							<?php echo SwpmUtils::membership_level_dropdown( $membership_level_id ); ?>
+							<?php echo wp_kses( SwpmUtils::membership_level_dropdown( $membership_level_id ), SwpmKsesUtils::wp_kses_select_option_tags() ); ?>
 						</select>
-						<p class="description"><?php _e('Select the membership level this payment button is for.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Select the membership level this payment button is for.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Payment Amount','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Payment Amount', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="6" name="payment_amount" value="<?php echo esc_attr($payment_amount); ?>" required />
-						<p class="description"><?php _e('Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enter payment amount. Example values: 10.00 or 19.50 or 299.95 etc (do not put currency symbol).', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Payment Currency','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Payment Currency', 'simple-membership' ); ?></th>
 					<td>
 						<select id="payment_currency" name="payment_currency">
 							<option value="USD" <?php echo ( $payment_currency == 'USD' ) ? 'selected="selected"' : ''; ?>>US Dollars ($)</option>
@@ -449,103 +453,103 @@ function swpm_edit_stripe_sca_buy_now_button() {
 							<option value="TRY" <?php echo ( $payment_currency == 'TRY' ) ? 'selected="selected"' : ''; ?>>Turkish Lira</option>
 							<option value="VND" <?php echo ( $payment_currency == 'VND' ) ? 'selected="selected"' : ''; ?>>Vietnamese Dong</option>
 						</select>
-						<p class="description"><?php _e('Select the currency for this payment button.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Select the currency for this payment button.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
 					<th colspan="2">
-						<div class="swpm-grey-box"><?php _e( 'Stripe API keys. You can get this from your Stripe account.','simple-membership' ); ?></div>
+						<div class="swpm-grey-box"><?php esc_attr_e( 'Stripe API keys. You can get this from your Stripe account.', 'simple-membership' ); ?></div>
 					</th>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Use Global API Keys Settings' ,'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Use Global API Keys Settings', 'simple-membership' ); ?></th>
 					<td>
 						<input type="checkbox" name="stripe_use_global_keys" value="1" <?php echo esc_attr($use_global_keys) ? ' checked' : ''; ?> />
-						<p class="description"><?php _e( 'Use API keys from <a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe" target="_blank">Payment Settings</a> tab.','simple-membership' ); ?></p>
+						<p class="description"><?php echo wp_kses_post( __( 'Use API keys from <a href="admin.php?page=simple_wp_membership_payments&tab=payment_settings&subtab=ps_stripe" target="_blank">Payment Settings</a> tab.', 'simple-membership' ) ); ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Test Publishable Key' ,'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Test Publishable Key', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="stripe_test_publishable_key" value="<?php echo esc_attr($stripe_test_publishable_key); ?>" required />
-						<p class="description"><?php _e('Enter your Stripe test publishable key.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enter your Stripe test publishable key.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Test Secret Key','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Test Secret Key', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="stripe_test_secret_key" value="<?php echo esc_attr($stripe_test_secret_key); ?>" required />
-						<p class="description"><?php _e('Enter your Stripe test secret key.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enter your Stripe test secret key.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Live Publishable Key','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Live Publishable Key', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="stripe_live_publishable_key" value="<?php echo esc_attr($stripe_live_publishable_key); ?>" required />
-						<p class="description"><?php _e('Enter your Stripe live publishable key.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enter your Stripe live publishable key.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Live Secret Key','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Live Secret Key', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="50" name="stripe_live_secret_key" value="<?php echo esc_attr($stripe_live_secret_key); ?>" required />
-						<p class="description"><?php _e('Enter your Stripe live secret key.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enter your Stripe live secret key.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
 					<th colspan="2">
-						<div class="swpm-grey-box"><?php _e( 'The following details are optional.','simple-membership' ); ?></div>
+						<div class="swpm-grey-box"><?php esc_attr_e( 'The following details are optional.', 'simple-membership' ); ?></div>
 					</th>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Collect Customer Address','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Collect Customer Address', 'simple-membership' ); ?></th>
 					<td>
 						<input type="checkbox" name="collect_address" value="1" <?php echo esc_attr($collect_address); ?> />
-						<p class="description"><?php _e('Enable this option if you want to collect customer address during Stripe checkout.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enable this option if you want to collect customer address during Stripe checkout.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Enable Automatic Tax' ,'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Enable Automatic Tax', 'simple-membership' ); ?></th>
 					<td>
 					<input type="checkbox" name="automatic_tax" value="1" <?php echo esc_attr($automatic_tax); ?> />
-						<p class="description"><?php _e('Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'Enable this option if you want to enable automatic tax feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Allow Promotion Codes', 'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Allow Promotion Codes', 'simple-membership' ); ?></th>
 					<td>
 						<input type="checkbox" name="allow_promotion_codes" value="1" <?php echo esc_attr($allow_promotion_codes) ?> />
 						<p class="description">
-							<?php _e('Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership') ?>
-							<?php echo '<a href="https://simple-membership-plugin.com/applying-discount-coupon-or-promotion-codes-to-stripe-payment-buttons/" target="_blank">' . __('Learn more', 'simple-membership') . '</a>.'; ?>
+							<?php esc_attr_e( 'Enable this option if you want to use the promotion codes feature of Stripe. You will need to enable this feature in your Stripe account before using it.', 'simple-membership' ) ?>
+							<?php echo '<a href="https://simple-membership-plugin.com/applying-discount-coupon-or-promotion-codes-to-stripe-payment-buttons/" target="_blank">' . esc_html__( 'Learn more', 'simple-membership' ) . '</a>.'; ?>
 						</p>
 					</td>
 				</tr>
 
                 <tr valign="top">
-					<th scope="row"><?php _e( 'Redirect to Paid Registration Link', 'simple-membership'); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Redirect to Paid Registration Link', 'simple-membership' ); ?></th>
 					<td>
 						<input type="checkbox" name="redirect_to_paid_reg_link_after_payment" value="1" <?php echo esc_attr($redirect_to_paid_reg_link_after_payment) ?> />
 						<p class="description">
-							<?php _e('Enable this option to automatically redirect the user to the unique paid registration link after a successful payment. ', 'simple-membership') ?>
-							<a href="https://simple-membership-plugin.com/automatically-redirect-users-to-the-paid-registration-link-after-payment/" target="_blank"><?php _e('Read this documentation', 'simple-membership') ?></a>
-							<?php _e(' to learn how it works.', 'simple-membership') ?>
+							<?php esc_attr_e( 'Enable this option to automatically redirect the user to the unique paid registration link after a successful payment. ', 'simple-membership' ) ?>
+							<a href="https://simple-membership-plugin.com/automatically-redirect-users-to-the-paid-registration-link-after-payment/" target="_blank"><?php esc_attr_e( 'Read this documentation', 'simple-membership' ) ?></a>
+							<?php esc_attr_e( ' to learn how it works.', 'simple-membership' ) ?>
 						</p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Return URL','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Return URL', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="100" name="return_url" value="<?php echo esc_url_raw($return_url); ?>" />
-						<p class="description"><?php _e('This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'This is the URL the user will be redirected to after a successful payment. Enter the URL of your Thank You page here.', 'simple-membership' ) ?></p>
 
 						<?php if ($redirect_to_paid_reg_link_after_payment) { ?>
 							<p class="description">
@@ -556,18 +560,18 @@ function swpm_edit_stripe_sca_buy_now_button() {
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Cancel URL','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Cancel URL', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="100" name="cancel_url" value="<?php echo esc_url_raw($cancel_url); ?>" />
-						<p class="description"><?php _e('This is the URL the user will be redirected to when a payment is canceled. Enter the URL of your preferred page here.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'This is the URL the user will be redirected to when a payment is canceled. Enter the URL of your preferred page here.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php _e( 'Button Image URL','simple-membership' ); ?></th>
+					<th scope="row"><?php esc_attr_e( 'Button Image URL', 'simple-membership' ); ?></th>
 					<td>
 						<input type="text" size="100" name="button_image_url" value="<?php echo esc_url_raw($button_image_url); ?>" />
-						<p class="description"><?php _e('If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership') ?></p>
+						<p class="description"><?php esc_attr_e( 'If you want to customize the look of the button using an image then enter the URL of the image.', 'simple-membership' ) ?></p>
 					</td>
 				</tr>
 
@@ -586,7 +590,7 @@ function swpm_edit_stripe_sca_buy_now_button() {
 
 			<p class="submit">
 				<?php wp_nonce_field( 'swpm_admin_add_edit_stripe_sca_buy_now_btn', 'swpm_admin_edit_stripe_sca_buy_now_btn' ); ?>
-				<input type="submit" name="swpm_stripe_sca_buy_now_edit_submit" class="button-primary" value="<?php _e( 'Save Payment Data' ); ?>">
+				<input type="submit" name="swpm_stripe_sca_buy_now_edit_submit" class="button-primary" value="<?php esc_attr_e( 'Save Payment Data', 'simple-membership' ); ?>">
 			</p>
 
 		</form>
@@ -661,7 +665,7 @@ function swpm_edit_stripe_sca_buy_now_button_data() {
 		update_post_meta( $button_id, 'cancel_url', trim( sanitize_text_field( $_REQUEST['cancel_url'] ) ) );
 		update_post_meta( $button_id, 'button_image_url', esc_url( $_REQUEST['button_image_url'] ) );
 
-		echo '<div id="message" class="updated fade"><p>'.__('Payment button data successfully updated!', 'simple-membership').'</p></div>';
+		echo '<div id="message" class="updated fade"><p>'.esc_html__( 'Payment button data successfully updated!', 'simple-membership' ).'</p></div>';
 	}
 }
 

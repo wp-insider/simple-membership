@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /**************************************************
  * PayPal Subscription New button shortcode handler
@@ -149,10 +153,10 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
                     pp_sub_bn_data.button_id = '<?php echo esc_js($button_id); ?>';
                     pp_sub_bn_data.on_page_button_id = '<?php echo esc_js($on_page_embed_button_id); ?>';
                     pp_sub_bn_data.item_name = '<?php echo esc_js($item_name); ?>';
-                    let post_data = 'action=swpm_pp_create_subscription&data=' + JSON.stringify(pp_sub_bn_data) + '&_wpnonce=<?php echo $nonce; ?>';
+                    let post_data = 'action=swpm_pp_create_subscription&data=' + JSON.stringify(pp_sub_bn_data) + '&_wpnonce=<?php echo esc_attr( $nonce ); ?>';
                     try {
                         // Using fetch for AJAX request. This is supported in all modern browsers.
-                        const response = await fetch("<?php echo admin_url( 'admin-ajax.php' ); ?>", {
+                        const response = await fetch("<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>", {
                             method: "post",
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -207,11 +211,11 @@ function swpm_render_pp_subscription_new_button_sc_output($button_code, $args) {
                             action: 'swpm_onapprove_process_subscription',
                             data: JSON.stringify(data),
                             txn_data: JSON.stringify(txn_data),
-                            _wpnonce: '<?php echo $nonce; ?>',
+                            _wpnonce: '<?php echo esc_attr( $nonce ); ?>',
                         }).toString();
 
                         try {
-                            const requestUrl = "<?php echo admin_url( 'admin-ajax.php' ); ?>";
+                            const requestUrl = "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>";
                             const resp = await fetch( requestUrl, {
                                 method: "post",
                                 headers: {

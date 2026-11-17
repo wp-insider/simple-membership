@@ -1,26 +1,30 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 //Renders the all payment transactions
 ?>
 
 <div class="swpm-grey-box">
-    <?php echo SwpmUtils::_('All the payments/transactions of your members are recorded here.'); ?>
+    <?php echo esc_html__( 'All the payments/transactions of your members are recorded here.', 'simple-membership' ); ?>
 </div>
 
 <div class="postbox">
     <h3 class="hndle"><label for="title">Search Transaction</label></h3>
     <div class="inside">
-        <p><label><?php _e('Search for a transaction by using email, name, transaction ID or Subscr ID.', 'simple-membership'); ?></label></p>
+        <p><label><?php esc_attr_e('Search for a transaction by using email, name, transaction ID or Subscr ID.', 'simple-membership'); ?></label></p>
         <form method="post" action="">
             <input name="swpm_txn_search" type="text" size="40" value="<?php echo isset($_POST['swpm_txn_search']) ? esc_attr($_POST['swpm_txn_search']) : ''; ?>"/>
-            <input type="submit" name="swpm_txn_search_btn" class="button" value="<?php _e('Search', 'simple-membership'); ?>" />
+            <input type="submit" name="swpm_txn_search_btn" class="button" value="<?php esc_attr_e('Search', 'simple-membership'); ?>" />
         </form>
 
         <br />
 
-        <p><label><?php _e('Search for transactions by member ID or username.', 'simple-membership'); ?></label></p>
+        <p><label><?php esc_attr_e('Search for transactions by member ID or username.', 'simple-membership'); ?></label></p>
         <form method="post" action="">
             <input name="swpm_txn_search_by_member" type="text" size="40" value="<?php echo isset($_POST['swpm_txn_search_by_member']) ? esc_attr($_POST['swpm_txn_search_by_member']) : ''; ?>"/>
-            <input type="submit" name="swpm_txn_search_by_member_btn" class="button" value="<?php _e('Search', 'simple-membership'); ?>" />
+            <input type="submit" name="swpm_txn_search_by_member_btn" class="button" value="<?php esc_attr_e('Search', 'simple-membership'); ?>" />
         </form>
     </div>
 </div>
@@ -44,7 +48,7 @@ if (isset($_REQUEST['action'])) { //Do list table form row action tasks
                 $success_msg = '<div id="message" class="notice notice-success"><p>';
                 $success_msg .= __('The selected entry was deleted!', 'simple-membership');
                 $success_msg .= '</p></div>';
-                echo $success_msg;
+                echo wp_kses_post( $success_msg );
             }
             break;
         default:
@@ -63,5 +67,5 @@ $payments_list_table->prepare_items();
 </form>
 
 <p class="submit">
-    <a href="admin.php?page=simple_wp_membership_payments&tab=add_new_txn" class="button"><?php echo SwpmUtils::_('Add a Transaction Manually'); ?></a>
+    <a href="admin.php?page=simple_wp_membership_payments&tab=add_new_txn" class="button"><?php echo esc_html__( 'Add a Transaction Manually', 'simple-membership' ); ?></a>
 </p>

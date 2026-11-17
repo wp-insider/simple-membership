@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 class SwpmShortcodesHandler {
 
@@ -69,7 +73,9 @@ class SwpmShortcodesHandler {
 		if ( in_array( $button_type, array( 'stripe_buy_now', 'stripe_subscription' ), true ) ) {
 			if ( current_user_can( SWPM_MANAGEMENT_PERMISSION ) ) {
 				$error_msg  = '<p class="swpm-red-box">';
-				$error_msg .= sprintf( __( 'Note for the site admin: the Stripe Legacy payment button (ID: %s) used here has been removed from the plugin. Create a new Stripe Buy Now or Stripe Subscription button and use its shortcode instead. Only site admins can see this note.', 'simple-membership' ), esc_attr( $button_id ) );
+				$error_msg .= sprintf( 
+                /* translators: %s: payment button ID. */
+                __( 'Note for the site admin: the Stripe Legacy payment button (ID: %s) used here has been removed from the plugin. Create a new Stripe Buy Now or Stripe Subscription button and use its shortcode instead. Only site admins can see this note.', 'simple-membership' ), esc_attr( $button_id ) );
 				$error_msg .= '</p>';
 				return $error_msg;
 			}
@@ -522,7 +528,7 @@ class SwpmShortcodesHandler {
 				return $override_out;
 			}
 			ob_start();
-			echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
+			echo wp_kses_post( $any_notice_output );//Include any output from the execution (for showing output inside the shortcode)
 			//Load the edit profile template
 			// SwpmUtilsTemplate::swpm_load_template('edit.php', false);
 			$render_new_form_ui = SwpmSettings::get_instance()->get_value('use-new-form-ui');
@@ -568,14 +574,14 @@ class SwpmShortcodesHandler {
 
 		if( isset( $_GET["action"]) && $_GET["action"] == "swpm-reset-using-link" ) {
 			ob_start();
-			echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
+			echo wp_kses_post( $any_notice_output );//Include any output from the execution (for showing output inside the shortcode)
 			//Load the reset password template
 			SwpmUtilsTemplate::swpm_load_template('reset_password_using_link.php', false);
 			return ob_get_clean();
 		}
 		else {
 			ob_start();
-			echo $any_notice_output;//Include any output from the execution (for showing output inside the shortcode)
+			echo wp_kses_post( $any_notice_output );//Include any output from the execution (for showing output inside the shortcode)
 			//Load the forgot password template
 			SwpmUtilsTemplate::swpm_load_template('forgot_password.php', false);
 			return ob_get_clean();

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 /**
  * A Webhook class. Represents a webhook object with parameters in a given mode.
@@ -309,9 +313,13 @@ class SWPM_PayPal_Webhook {
 				//No webhook exists in PayPal. Delete the webhook ID (if any) from our DB to clean it up (so it can be created again).
 				delete_option( 'swpm_paypal_webhook_id_' . $this->mode );
 			} elseif ( $error_code === 'UNAUTHORIZED' ) {
-				$ret['msg'] = $response->get_error_message() . '. ' . sprintf( __( 'PayPal API Credential information is missing in settings. Please enter valid PayPal API Credentials in the General Settings tab for %s mode.', 'simple-membership' ), $this->mode );
+				$ret['msg'] = $response->get_error_message() . '. ' . sprintf( 
+                /* translators: %s: PayPal environment (sandbox or live). */
+                __( 'PayPal API Credential information is missing in settings. Please enter valid PayPal API Credentials in the General Settings tab for %s mode.', 'simple-membership' ), $this->mode );
 			} elseif ( $error_code === 'invalid_client' ) {
-				$ret['msg'] = sprintf( __( 'Invalid or Missing API Credentials! Check the plugin settings and enter valid API credentials in the PayPal Credentials section for %s mode.', 'simple-membership' ), $this->mode );
+				$ret['msg'] = sprintf( 
+                /* translators: %s: PayPal environment (sandbox or live). */
+                __( 'Invalid or Missing API Credentials! Check the plugin settings and enter valid API credentials in the PayPal Credentials section for %s mode.', 'simple-membership' ), $this->mode );
 			} else {
 				$ret['msg'] = $response->get_error_message();
 			}

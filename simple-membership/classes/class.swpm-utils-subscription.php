@@ -243,7 +243,8 @@ class SWPM_Utils_Subscriptions
                         $stripe_sub = \Stripe\Subscription::retrieve($sub_id);
                         $status = $stripe_sub['status'];
                     } catch ( \Stripe\Exception\ApiErrorException $e){
-                        $this->stripe_sca_api_key_error = __( 'Error: Subscription details for subscription id: '. $sub_id .' could not be retrieved from Stripe.', 'simple-membership' );
+                        /* translators: %s: payment provider subscription ID. */
+                        $this->stripe_sca_api_key_error = sprintf( __( 'Error: Subscription details for subscription id: %s could not be retrieved from Stripe.', 'simple-membership' ), $sub_id );
                     }
 
                 }else{
@@ -287,7 +288,8 @@ class SWPM_Utils_Subscriptions
                     if( !empty($sub_details) ){
                         $status = strtolower($sub_details->status);
                     } else {
-                        $this->paypal_ppcp_api_key_error = __( 'Error: Subscription details for subscription id: '. $sub_id .' could not be retrieved from PayPal.', 'simple-membership' );
+                        /* translators: %s: payment provider subscription ID. */
+                        $this->paypal_ppcp_api_key_error = sprintf( __( 'Error: Subscription details for subscription id: %s could not be retrieved from PayPal.', 'simple-membership' ), $sub_id );
                     }
                 }else{
                     $this->paypal_ppcp_api_key_error = __( 'Error: PayPal PPCP API credentials are not configured in the settings menu.', 'simple-membership' );
@@ -697,12 +699,12 @@ class SWPM_Utils_Subscriptions
 	 * @return void
 	 */
 	public static function cancel_msg( $msg, $is_error = true, $redirect_url = '' ) {
-        echo $msg;
+        echo wp_kses_post( $msg );
 		echo '<br><br>';
-		echo __( 'You will be redirected to the previous page in a few seconds. If not, please <a href="">click here</a>.', 'simple-membership' );
+		echo wp_kses_post( __( 'You will be redirected to the previous page in a few seconds. If not, please <a href="">click here</a>.', 'simple-membership' ) );
 		echo '<script>function toPrevPage(){window.location = '.(!empty($redirect_url) ? '"'.esc_url($redirect_url).'"' : 'window.location.href' ).';}setTimeout(toPrevPage,5000);</script>';
 		if ( ! $is_error ) {
-			wp_die( '', __( 'Success!', 'simple-membership' ), array( 'response' => 200 ) );
+			wp_die( '', esc_html__( 'Success!', 'simple-membership' ), array( 'response' => 200 ) );
 		}
 		wp_die();
 	}
@@ -724,11 +726,11 @@ class SWPM_Utils_Subscriptions
 			ob_start();
 			?>
 			<form method="post" class="swpm-cancel-subscription-form">
-				<?php echo wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, false );?>
+				<?php wp_nonce_field( $token, 'swpm_cancel_sub_nonce', false, true );?>
 				<input type="hidden" name="swpm_cancel_sub_token" value="<?php echo esc_attr($token) ?>">
 				<input type="hidden" name="swpm_cancel_sub_gateway" value="<?php echo esc_attr($subscription['gateway']) ?>">
-				<button type="submit" class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active" name="swpm_do_cancel_sub" onclick="return confirm(' <?php _e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
-					<?php _e('Cancel Subscription', 'simple-membership') ?>
+				<button type="submit" class="swpm-cancel-subscription-button swpm-cancel-subscription-button-active" name="swpm_do_cancel_sub" onclick="return confirm(' <?php esc_attr_e( 'Are you sure that you want to cancel the subscription?', 'simple-membership' )?> ')">
+					<?php esc_attr_e( 'Cancel Subscription', 'simple-membership' ) ?>
 				</button>
 
                 <?php if ( !empty($redirect_to_url) ){ ?>
@@ -745,7 +747,7 @@ class SWPM_Utils_Subscriptions
 		ob_start();
 		?>
 		<div class="swpm_subscription_inactive">
-			<?php _e('Subscription Inactive', 'simple-membership'); ?>
+			<?php esc_attr_e( 'Subscription Inactive', 'simple-membership' ); ?>
 		</div>
 		<?php
 		$inactive_output = ob_get_clean();

@@ -115,38 +115,28 @@ class SwpmInstallation {
 			campaign_name varchar(255) NOT NULL DEFAULT ''
           )" . $charset_collate . " AUTO_INCREMENT=1 ;";
         dbDelta($sql);
-        $sql = "SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = 1";
-        $results = $wpdb->get_row($sql);
+        
+        $results = $wpdb->get_row("SELECT * FROM " . $wpdb->prefix . "swpm_membership_tbl WHERE id = 1");
         if (is_null($results)) {
-            $sql = "INSERT INTO  " . $wpdb->prefix . "swpm_membership_tbl  (
-			id ,
-			alias ,
-			role ,
-			permissions ,
-			subscription_period ,
-			subscription_unit,
-			loginredirect_page,
-			category_list ,
-			page_list ,
-			post_list ,
-			comment_list,
-			disable_bookmark_list,
-			options,
-			campaign_name
-			)VALUES (1 , 'Content Protection', 'administrator', '15', '0',NULL,NULL, NULL , NULL , NULL , NULL,NULL,NULL,'');";
-            $wpdb->query($sql);
+            $wpdb->insert( $wpdb->prefix . 'swpm_membership_tbl', array(
+                'id' => 1, 'alias' => 'Content Protection', 'role' => 'administrator',
+                'permissions' => '15', 'subscription_period' => '0', 'subscription_unit' => null,
+                'loginredirect_page' => null, 'category_list' => null, 'page_list' => null,
+                'post_list' => null, 'comment_list' => null, 'disable_bookmark_list' => null,
+                'options' => null, 'campaign_name' => '',
+            ) );
         }
-        $sql = "UPDATE  " . $wpdb->prefix . "swpm_membership_tbl SET subscription_duration_type = 1 WHERE subscription_unit='days' AND subscription_duration_type = 0";
-        $wpdb->query($sql);
+        
+        $wpdb->query("UPDATE  " . $wpdb->prefix . "swpm_membership_tbl SET subscription_duration_type = 1 WHERE subscription_unit='days' AND subscription_duration_type = 0");
 
-        $sql = "UPDATE  " . $wpdb->prefix . "swpm_membership_tbl SET subscription_duration_type = 2 WHERE subscription_unit='weeks' AND subscription_duration_type = 0";
-        $wpdb->query($sql);
+        
+        $wpdb->query("UPDATE  " . $wpdb->prefix . "swpm_membership_tbl SET subscription_duration_type = 2 WHERE subscription_unit='weeks' AND subscription_duration_type = 0");
 
-        $sql = "UPDATE  " . $wpdb->prefix . "swpm_membership_tbl SET subscription_duration_type = 3 WHERE subscription_unit='months' AND subscription_duration_type = 0";
-        $wpdb->query($sql);
+        
+        $wpdb->query("UPDATE  " . $wpdb->prefix . "swpm_membership_tbl SET subscription_duration_type = 3 WHERE subscription_unit='months' AND subscription_duration_type = 0");
 
-        $sql = "UPDATE  " . $wpdb->prefix . "swpm_membership_tbl SET subscription_duration_type = 4 WHERE subscription_unit='years' AND subscription_duration_type = 0";
-        $wpdb->query($sql);
+        
+        $wpdb->query("UPDATE  " . $wpdb->prefix . "swpm_membership_tbl SET subscription_duration_type = 4 WHERE subscription_unit='years' AND subscription_duration_type = 0");
 
         //The membership level meta table
         $sql = "CREATE TABLE " . $wpdb->prefix . "swpm_membership_meta_tbl (

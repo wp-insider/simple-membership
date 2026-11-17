@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 
 if (!class_exists('WP_List_Table')){
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
@@ -127,9 +131,9 @@ class SwpmPaymentButtonsListTable extends WP_List_Table {
             check_admin_referer( 'swpm_delete_payment_btn_' . $record_id );
             wp_delete_post( $record_id );
             $success_msg = '<div id="message" class="updated"><p>';
-            $success_msg .= SwpmUtils::_('The selected entry was deleted!');
+            $success_msg .= esc_html__('The selected entry was deleted!', 'simple-membership');
             $success_msg .= '</p></div>';
-            echo $success_msg;
+            echo wp_kses_post( $success_msg );
         }
     }
 

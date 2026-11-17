@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /**
  * This class handles the webhook notifications from Stripe for all Stripe subscription payments.
  */

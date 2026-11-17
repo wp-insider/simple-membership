@@ -204,7 +204,7 @@ class SwpmMiscUtils {
 		if ( ! preg_match( '/http/', $url ) ) {//URL value is incorrect
 			echo '<p>Error! The URL value you entered in the plugin configuration is incorrect.</p>';
 			echo '<p>A URL must always have the "http" keyword in it.</p>';
-			echo '<p style="font-weight: bold;">The URL value you currently configured is: <br />' . $url . '</p>';
+			echo '<p style="font-weight: bold;">The URL value you currently configured is: <br />' . $url . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 			echo '<p>Here are some examples of correctly formatted URL values for your reference: <br />http://www.example.com<br/>http://example.com<br />https://www.example.com</p>';
 			echo '<p>Find the field where you entered this incorrect URL value and correct the mistake then try again.</p>';
 			exit;
@@ -212,20 +212,22 @@ class SwpmMiscUtils {
 		if ( ! headers_sent() ) {
 			header( 'Location: ' . $url );
 		} else {
-			echo '<meta http-equiv="refresh" content="0;url=' . $url . '" />';
+			echo '<meta http-equiv="refresh" content="0;url=' . $url . '" />'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is pre-escaped or trusted HTML built internally or by filters.
 		}
 		exit;
 	}
 
 	public static function show_temporary_message_then_redirect( $msg, $redirect_url, $timeout = 5 ) {
 		$timeout       = absint( $timeout );
-		$redirect_html = sprintf( '<meta http-equiv="refresh" content="%d; url=\'%s\'" />', $timeout, $redirect_url );
+		$redirect_content = sprintf( "%d; url='%s'", $timeout, esc_url_raw( $redirect_url ) );
+		$redirect_html = '<meta http-equiv="refresh" content="' . esc_attr( $redirect_content ) . '" />';
 		$redir_msg     = SwpmUtils::_( 'You will be automatically redirected in a few seconds. If not, please %s.' );
-		$redir_msg     = sprintf( $redir_msg, '<a href="' . $redirect_url . '">' . SwpmUtils::_( 'click here' ) . '</a>' );
+		$redir_msg     = sprintf( $redir_msg, '<a href="' . esc_url( $redirect_url ) . '">' . SwpmUtils::_( 'click here' ) . '</a>' );
 
-		$msg   = $msg . '<br/><br/>' . $redir_msg . $redirect_html;
+		// Sanitize the message before appending the separately escaped refresh tag, which KSES removes.
+		$msg   = wp_kses_post( $msg . '<br/><br/>' . $redir_msg ) . $redirect_html;
 		$title = SwpmUtils::_( 'Action Status' );
-		wp_die( $msg, $title );
+		wp_die( $msg, esc_html( $title ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Message is KSES-filtered above; the fixed refresh tag has an escaped content attribute.
 	}
 
 	public static function get_current_page_url() {
@@ -366,7 +368,7 @@ class SwpmMiscUtils {
 
 	public static function get_home_url_without_http_and_www() {
 		$site_url = get_site_url();
-		$parse    = parse_url( $site_url );
+		$parse    = wp_parse_url( $site_url );
 		$site_url = $parse['host'];
 		$site_url = str_replace( 'https://', '', $site_url );
 		$site_url = str_replace( 'http://', '', $site_url );
@@ -543,8 +545,8 @@ class SwpmMiscUtils {
 			return true;
 		}
 
-		$url1 = parse_url( $url1 );
-		$url2 = parse_url( $url2 );
+		$url1 = wp_parse_url( $url1 );
+		$url2 = wp_parse_url( $url2 );
 
 		$components = array( 'scheme', 'host', 'port', 'path' );
 
@@ -591,13 +593,13 @@ class SwpmMiscUtils {
 		//Check we are on the admin end
 		if ( ! is_admin() ) {
 			//Error! This is not on the admin end. This can only be done from the admin side
-			wp_die( SwpmUtils::_( 'Error! This action (' . $action_name . ') can only be done from admin end.' ) );
+			wp_die( wp_kses_post( SwpmUtils::_( 'Error! This action (' . $action_name . ') can only be done from admin end.' ) ));
 		}
 
 		//Check user has management permission
 		if ( ! current_user_can( SWPM_MANAGEMENT_PERMISSION ) ) {
 			//Error! Only management users can do this
-			wp_die( SwpmUtils::_( 'Error! This action (' . $action_name . ') can only be done by an user with management permission.' ) );
+			wp_die( wp_kses_post( SwpmUtils::_( 'Error! This action (' . $action_name . ') can only be done by an user with management permission.' ) ));
 		}
 	}
 
@@ -906,7 +908,7 @@ class SwpmMiscUtils {
 		}
 		foreach ( $countries as $country_name ) {
 			//The country name strings are already in the POT file from the swpm_dummy_country_names_for_translation() function.
-			$countries_dropdown .= "\r\n" . '<option value="' . esc_attr( $country_name ) . '"' . ( strtolower( $country_name ) == strtolower( $country ) ? ' selected' : '' ) . '>' . esc_html__( $country_name, 'simple-membership' ) . '</option>';
+			$countries_dropdown .= "\r\n" . '<option value="' . esc_attr( $country_name ) . '"' . ( strtolower( $country_name ) == strtolower( $country ) ? ' selected' : '' ) . '>' . esc_html( $country_name ) . '</option>';
 		}
 		return $countries_dropdown;
 	}
@@ -1246,13 +1248,17 @@ class SwpmMiscUtils {
 		if ( empty( $member ) ) {
 			//can't find member
 			SwpmLog::log_simple_debug( 'Account activation email for member ID: '.$member_id.' could not be sent. Member account does not exists.', false );
-			SwpmTransfer::get_instance()->set('resend_activation_email_error', sprintf(__('Cannot find member account of ID: %d.', 'simple-membership'), $member_id));
+			SwpmTransfer::get_instance()->set('resend_activation_email_error', sprintf(
+                /* translators: %d: member ID. */
+                __('Cannot find member account of ID: %d.', 'simple-membership'), $member_id));
 			return;
 		}
 		if ( isset($member->account_state) && $member->account_state !== 'activation_required' ) {
 			//account already active
 			SwpmLog::log_simple_debug( 'Account activation email for member ID: '.$member_id.' could not be sent. Account activation already done.', false );
-			SwpmTransfer::get_instance()->set('resend_activation_email_error', sprintf(__('Account activation for member ID: %d already done.', 'simple-membership'), $member_id));
+			SwpmTransfer::get_instance()->set('resend_activation_email_error', sprintf(
+                /* translators: %d: member ID. */
+                __('Account activation for member ID: %d already done.', 'simple-membership'), $member_id));
 			return;
 		}
 		if ( ! is_email( $member->email ) ) {
@@ -1306,7 +1312,7 @@ class SwpmMiscUtils {
 	}
 
 	public static function get_months_data( $year ) {
-		$year = !empty($year) ? $year : date('Y');
+		$year = !empty($year) ? $year : gmdate('Y');
 		$year = (int) $year;
 		$data = array();
 
@@ -1324,12 +1330,12 @@ class SwpmMiscUtils {
 	}
 
 	public static function month_day_selector($selected_date = '') {
-		$currentYear = (int) date('Y');
+		$currentYear = (int) gmdate('Y');
 
 		if (!empty($selected_date)){
 			$selected_date = strtotime($selected_date);
 		} else {
-			$selected_date = strtotime(date('Y-01-01'));
+			$selected_date = strtotime(gmdate('Y-01-01'));
 		}
 
 		$months = self::get_months_data($currentYear);
@@ -1338,16 +1344,16 @@ class SwpmMiscUtils {
 
 		?>
 		<span class="swpm-month-day-selector" data-day-month-options="<?php echo esc_attr(json_encode($months)) ?>">
-            <select class="swpm-month-selector" name="subscription_period_<?php echo SwpmMembershipLevel::ANNUAL_FIXED_DATE?>[m]">
+            <select class="swpm-month-selector" name="subscription_period_<?php echo esc_attr( SwpmMembershipLevel::ANNUAL_FIXED_DATE )?>[m]">
                 <?php foreach ($months as $month) { ?>
-                    <option value="<?php echo esc_attr($month['m']) ?>" <?php selected( intval(date('m', $selected_date)), $month['m'] ) ?>><?php echo esc_attr($month['name']) ?></option>
+                    <option value="<?php echo esc_attr($month['m']) ?>" <?php selected( intval(gmdate('m', $selected_date)), $month['m'] ) ?>><?php echo esc_attr($month['name']) ?></option>
                 <?php } ?>
             </select>
-            <select class="swpm-day-selector" name="subscription_period_<?php echo SwpmMembershipLevel::ANNUAL_FIXED_DATE?>[d]">
+            <select class="swpm-day-selector" name="subscription_period_<?php echo esc_attr( SwpmMembershipLevel::ANNUAL_FIXED_DATE )?>[d]">
                 <?php
-                $selected_month_data = $months[intval(date('m', $selected_date)) - 1];
+                $selected_month_data = $months[intval(gmdate('m', $selected_date)) - 1];
                 for ($i = 1; $i <= $selected_month_data['days']; $i++) { ?>
-                    <option value="<?php echo esc_attr($i) ?>" <?php selected( intval(date('d', $selected_date)), $i ) ?> ><?php echo esc_attr(SwpmUtils::pad_zero($i)) ?></option>
+                    <option value="<?php echo esc_attr($i) ?>" <?php selected( intval(gmdate('d', $selected_date)), $i ) ?> ><?php echo esc_attr(SwpmUtils::pad_zero($i)) ?></option>
                 <?php } ?>
             </select>
         </span>

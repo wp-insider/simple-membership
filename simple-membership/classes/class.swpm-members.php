@@ -650,6 +650,13 @@ class SwpmMembers extends WP_List_Table {
 					foreach ( $member_records as $row ) {
 						$member_id = $row->member_id;
 						SwpmMemberUtils::update_account_state( $member_id, $to_account_status );
+
+						//Handle the "WordPress Role After Expiry" option of the member's level, the same as the members list bulk action (does nothing for levels that don't use it).
+						if ( 'expired' === $to_account_status ) {
+							SwpmMemberUtils::apply_expiry_role( $member_id );
+						} elseif ( 'active' === $to_account_status && 'expired' === $row->account_state ) {
+							SwpmMemberUtils::restore_level_role( $member_id );
+						}
 					}
 				}
 			}

@@ -336,10 +336,14 @@ abstract class SwpmUtils {
 		if ( $wp_user ) {
 			$wp_user_info['ID'] = $wp_user->ID;
 			//The plugin saves this data in the member record itself. So don't sync it back from the WP user (see SimpleWpMembership::sync_with_wp_profile()).
+			//Restore the previous value even if the update throws an exception (or is nested in another update).
+			$was_updating_wp_user = self::$is_updating_wp_user;
 			self::$is_updating_wp_user = true;
-			$result = wp_update_user( $wp_user_info );
-			self::$is_updating_wp_user = false;
-			return $result;
+			try {
+				return wp_update_user( $wp_user_info );
+			} finally {
+				self::$is_updating_wp_user = $was_updating_wp_user;
+			}
 		}
 		return false;
 	}

@@ -585,8 +585,16 @@ class SimpleWpMembership {
         //Retrieve the SWPM user profile for the given WP user ID.
         global $wpdb;
         $wp_user_data = get_userdata($wp_user_id);
-        
-        $profile = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE " . ' user_name=%s', $wp_user_data->user_login), ARRAY_A);
+
+        //Read the values WordPress has saved directly from the database (WordPress saves the user row and the name meta before this hook).
+        //The hook's $userdata is the raw input (slashed, before WordPress's filters), and get_userdata() can return the old data on some sites (example: a persistent object cache).
+        $saved_user = $wpdb->get_row( $wpdb->prepare( "SELECT user_login, user_email, user_pass FROM {$wpdb->users} WHERE ID = %d", $wp_user_id ) );
+        $saved_meta = $wpdb->get_results( $wpdb->prepare( "SELECT meta_key, meta_value FROM {$wpdb->usermeta} WHERE user_id = %d AND meta_key IN ('first_name', 'last_name')", $wp_user_id ), OBJECT_K );
+        if ( empty( $saved_user ) || empty( $wp_user_data ) ) {
+            return;
+        }
+
+        $profile = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "swpm_members_tbl WHERE " . ' user_name=%s', $saved_user->user_login), ARRAY_A);
         $profile = (array) $profile;
         if ( empty($profile) ) {
             //No SWPM user found for this WP user. Nothing to do.
@@ -599,14 +607,13 @@ class SimpleWpMembership {
         //SwpmLog::log_array_data_to_debug($userdata, true);
 
         //Update the SWPM user profile with the latest WP user data that we received via the 'profile_update' action hook.
-        //Use the data being saved (the hook's $userdata) first: reading the WP user again can return the old data on some sites (example: a persistent object cache).
         //Only the synced columns are updated (not the whole row, so other columns changed in the meantime are not overwritten).
         $profile_data = array(
-            'user_name'  => $wp_user_data->user_login,
-            'email'      => isset( $userdata['user_email'] ) ? $userdata['user_email'] : $wp_user_data->user_email,
-            'first_name' => isset( $userdata['first_name'] ) ? $userdata['first_name'] : $wp_user_data->user_firstname,
-            'last_name'  => isset( $userdata['last_name'] ) ? $userdata['last_name'] : $wp_user_data->user_lastname,
-            'password'   => ! empty( $userdata['user_pass'] ) ? $userdata['user_pass'] : $wp_user_data->user_pass,
+            'user_name'  => $saved_user->user_login,
+            'email'      => $saved_user->user_email,
+            'first_name' => isset( $saved_meta['first_name'] ) ? $saved_meta['first_name']->meta_value : $wp_user_data->user_firstname,
+            'last_name'  => isset( $saved_meta['last_name'] ) ? $saved_meta['last_name']->meta_value : $wp_user_data->user_lastname,
+            'password'   => $saved_user->user_pass,
         );
         $wpdb->update($wpdb->prefix . "swpm_members_tbl", $profile_data, array('member_id' => $profile['member_id']));
 

@@ -15,3 +15,6 @@ node_modules
 /tmp
 /tests/vendor
 /tests/.phpunit.result.cache
+/tests/phpunit/vendor
+/tests/phpunit/composer.lock
+/tests/phpunit/.phpunit.result.cache

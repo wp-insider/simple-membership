@@ -90,11 +90,15 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		$status = ucfirst($item['status']);
 		$column_value = '';
 
+		//The subscription agreement record. Its status is saved translated for PayPal (PPCP and Standard) subscriptions, so the txn_type is checked too.
+		$sub_agreement_txn_types = array( 'stripe_subscription_new', 'pp_subscription_new', 'pp_std_subscription_new' );
+		$is_sub_agreement_record = strtolower($status) == 'subscription created' || ( isset( $item['txn_type'] ) && in_array( $item['txn_type'], $sub_agreement_txn_types, true ) );
+
 		if ( strtolower($status) == 'completed' ) {
 			$column_value = '<span class="swpm_status_completed">' . $status . '</span>';
 		} else if ( in_array( strtolower($status), array('refunded', 'partially refunded') ) ) {
 			$column_value = '<span class="swpm_status_refunded">' . $status . '</span>';
-		} else if ( strtolower($status) == 'subscription created' ) {
+		} else if ( $is_sub_agreement_record ) {
             if ( in_array(strtolower($item['subscr_status']), array('canceled', 'cancelled')) ){
                 $column_value = '<span class="swpm_status_subscription_cancelled">Subscription '. $item['subscr_status'] .'</span>';
             } else {

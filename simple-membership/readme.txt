@@ -204,6 +204,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - Removed the deprecated "Stripe Legacy Buy Now" and "Stripe Legacy Subscription" payment buttons (they used Stripe's old Checkout, which does not support SCA). Use the Stripe Buy Now and Stripe Subscription buttons instead. An existing Stripe Legacy button no longer shows on the page (site admins see a note to replace it). Existing Stripe Legacy subscriptions keep working: their renewals and cancellations are still handled by the Stripe webhook.
 - Fixed a PHP warning when a membership level setting is saved more than once in the same request (for example, by an addon).
 - Fixed an issue (since version 4.8.8) where the renewal payments of a Stripe Legacy subscription were not recorded. The check that ignores the renewals of another site's subscription now also recognizes Stripe Legacy subscriptions (they are linked to the member by the Stripe customer ID).
+- Fixed an issue where the payments list did not show a PayPal subscription's "subscription created" or "subscription canceled" status (and its color) on sites where that status is saved translated.
 - Plugin Check (PCP) reported issues fixed.
 
 = 4.8.8 =

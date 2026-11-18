@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.8.8
+Stable tag: 4.8.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -196,11 +196,11 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
+= 4.8.9 =
 - Fixed an issue where a password reset could be undone on some sites (for example, with a persistent object cache), so the member could not log in with the new password. The WP user profile sync no longer runs while the plugin is updating the WP user itself, it uses the data being saved, and it only updates the synced fields of the member record.
 - New optional "WordPress Role After Expiry" setting on each membership level. When a member of the level expires, their WordPress role is changed to the selected role. The level's Default WordPress Role is applied again when the member makes a new payment (renewal or subscription payment), or when an admin reactivates an expired account. Leaving it set to "No change" keeps the current behavior.
 - Added the swpm_account_status_updated_to_expired_at_login and swpm_bulk_account_status_updated action hooks.
-- Security fix: the paid registration link on the thank you page (and the redirect to it after the payment) is now only shown in the browser that made the payment, for all payment gateways (Stripe, PayPal, PayPal Standard and Braintree). It is no longer found using the visitor's IP address, which could be spoofed. In any other browser, the member uses the link sent by email. Thanks to Jonathan Schemoul (libertai Security) for reporting this.
+- The paid registration link on the thank you page (and the redirect to it after the payment) is now only shown in the browser that made the payment, for all payment gateways (Stripe, PayPal, PayPal Standard and Braintree). It is no longer found using the visitor's IP address, which could be spoofed. In any other browser, the member uses the link sent by email. Thanks to Jonathan Schemoul for reporting this.
 - Removed the deprecated "Stripe Legacy Buy Now" and "Stripe Legacy Subscription" payment buttons (they used Stripe's old Checkout, which does not support SCA). Use the Stripe Buy Now and Stripe Subscription buttons instead. An existing Stripe Legacy button no longer shows on the page (site admins see a note to replace it). Existing Stripe Legacy subscriptions keep working: their renewals and cancellations are still handled by the Stripe webhook.
 - Fixed a PHP warning when a membership level setting is saved more than once in the same request (for example, by an addon).
 - Fixed an issue (since version 4.8.8) where the renewal payments of a Stripe Legacy subscription were not recorded. The check that ignores the renewals of another site's subscription now also recognizes Stripe Legacy subscriptions (they are linked to the member by the Stripe customer ID).

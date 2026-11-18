@@ -25,13 +25,23 @@ if ( ! file_exists( "{$_tests_dir}/includes/functions.php" ) ) {
 //Gives access to tests_add_filter().
 require_once "{$_tests_dir}/includes/functions.php";
 
-//Load the plugin, then run what the plugin's activation does (create the tables, save the default settings and pages, schedule the cron events).
+//Load the plugin.
 tests_add_filter(
 	'muplugins_loaded',
 	function () {
 		require dirname( __DIR__, 2 ) . '/simple-membership/simple-wp-membership.php';
-		SimpleWpMembership::activate();
 	}
+);
+
+//Then run what the plugin's activation does (create the tables, save the default settings and pages, schedule the cron events).
+//It runs on 'init' (priority 1), like a real activation that happens after WordPress is loaded: creating the plugin's pages needs
+//the post types and the rewrite rules. Priority 1 is before the plugin's own 'init' code (priority 10), which uses the tables.
+tests_add_filter(
+	'init',
+	function () {
+		SimpleWpMembership::activate();
+	},
+	1
 );
 
 //Start the WordPress test environment.

@@ -38,19 +38,20 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - Rejected: another PayPal account (receiver email), an amount lower than the price, an IPN PayPal doesn't verify.
 
 **Stripe webhooks**
-- A renewal (`invoice.payment_succeeded`) of a subscription created on this site is recorded and linked to the member (HTTP 200).
+- A renewal (`invoice.payment_succeeded`) of a subscription created on this site is recorded, linked to the member and updates the member's access start date (HTTP 200).
 - A renewal of another site's subscription (same Stripe account) is ignored.
-- A renewal of a Stripe Legacy subscription (found by the customer ID) is recorded. *Linked to the member: fails until the step 4 Legacy fix.*
 - A webhook with a wrong signature is rejected (HTTP 400) and nothing is saved.
 - A cancellation (`customer.subscription.deleted`) deactivates the member of a no-expiry level and updates the agreement record's status.
 - A full refund (`charge.refunded`) of a one-time payment marks it Refunded and deactivates the member.
-- *Stripe Legacy cancellation (deactivates the member, updates the checkout record's status) and refund of a Legacy renewal (deactivates the member): fail until the step 4 Legacy fix.*
+- Stripe Legacy subscriptions (the member's subscr_id and the checkout record's txn_id are the customer ID), found by the customer ID:
+  a renewal is recorded, linked to the member and updates the access start date; a cancellation deactivates the member and updates the checkout record's status;
+  a refund of a renewal payment marks it Refunded and deactivates the member.
 
 **Email activation**
 - A wrong activation code doesn't activate the account and shows the "invalid or expired" message.
+- No member enumeration: a wrong code, a member ID that doesn't exist, an active member, no code and a used link all get the same response.
 - The correct code activates the account, and the code is deleted once it's used.
 - The resend activation email request shows the same message for a missing member and an active member.
-- *The same response for a wrong code, a missing member, an active member, no code and a used link (no member enumeration): fails until the step 4 email activation fix.*
 
 ## PHPUnit ([phpunit/tests/](phpunit/tests/))
 

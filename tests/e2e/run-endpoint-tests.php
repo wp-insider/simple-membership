@@ -235,6 +235,7 @@ $status = send_stripe_event( 'invoice.payment_succeeded', renewal_invoice( 'sub_
 check( 'A renewal webhook returns HTTP 200', 200 === $status );
 check( 'A renewal of a subscription created on this site is recorded', 1 === txn_count( 'ch_E2E_SITE_R1' ) );
 check( 'The renewal record is linked to the member', (string) $ids['site_member_id'] === (string) txn_meta( 'ch_E2E_SITE_R1', 'member_id' ) );
+check( "The renewal updates the member's access start date", '2020-01-01' !== member_value( $ids['site_member_id'], 'subscription_starts' ) );
 
 //8. A renewal of another site's subscription (same Stripe account).
 $status = send_stripe_event( 'invoice.payment_succeeded', renewal_invoice( 'sub_E2E_OTHER_SITE', 'cus_E2E_OTHER_SITE', 'ch_E2E_OTHER_R1' ) );
@@ -244,6 +245,7 @@ check( "A renewal of another site's subscription returns HTTP 200 and is ignored
 send_stripe_event( 'invoice.payment_succeeded', renewal_invoice( 'sub_E2E_LEGACY', 'cus_E2E_LEGACY', 'ch_E2E_LEGACY_R1' ) );
 check( 'A renewal of a Stripe Legacy subscription (found by the customer ID) is recorded', 1 === txn_count( 'ch_E2E_LEGACY_R1' ) );
 check( 'The Stripe Legacy renewal record is linked to the member', (string) $ids['legacy_member_id'] === (string) txn_meta( 'ch_E2E_LEGACY_R1', 'member_id' ) );
+check( "The Stripe Legacy renewal updates the member's access start date", '2020-01-01' !== member_value( $ids['legacy_member_id'], 'subscription_starts' ) );
 
 //10. A webhook with a wrong signature.
 $status = send_stripe_event( 'invoice.payment_succeeded', renewal_invoice( 'sub_E2E_SITE', 'cus_E2E_SITE', 'ch_E2E_BAD_SIGNATURE' ), null, 'whsec_wrong_secret' );

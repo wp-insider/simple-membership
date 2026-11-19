@@ -84,12 +84,13 @@ function swpm_e2e_txn( $data ) {
 $pending_member_id = swpm_e2e_member( array( 'email' => 'existing-pending@example.com', 'reg_code' => md5( 'e2e-existing-pending' ) ), $level_id );
 
 //Stripe: a subscription created on this site (member and agreement record).
-$site_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_site_sub', 'email' => 'site-sub@example.com', 'subscr_id' => 'sub_E2E_SITE' ), $level_id );
+//The renewal members have an old access start date, so the tests can check that a renewal updates it.
+$site_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_site_sub', 'email' => 'site-sub@example.com', 'subscr_id' => 'sub_E2E_SITE', 'subscription_starts' => '2020-01-01' ), $level_id );
 swpm_e2e_txn( array( 'txn_id' => 'cus_E2E_SITE', 'subscr_id' => 'sub_E2E_SITE' ) );
 
 //Stripe Legacy: the member's subscr_id and the checkout record's txn_id are the customer ID, and the record has no subscr_id (before 2023).
 //One member each for the renewal, the cancellation and the refund, so one test's result can't make another one pass.
-$legacy_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_legacy_sub', 'email' => 'legacy-sub@example.com', 'subscr_id' => 'cus_E2E_LEGACY' ), $level_id );
+$legacy_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_legacy_sub', 'email' => 'legacy-sub@example.com', 'subscr_id' => 'cus_E2E_LEGACY', 'subscription_starts' => '2020-01-01' ), $level_id );
 swpm_e2e_txn( array( 'txn_id' => 'cus_E2E_LEGACY', 'status' => 'completed', 'txn_type' => '', 'gateway' => 'stripe' ) );
 $legacy_cancel_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_legacy_cancel', 'email' => 'legacy-cancel@example.com', 'subscr_id' => 'cus_E2E_LEGACY_CANCEL' ), $level_id );
 swpm_e2e_txn( array( 'txn_id' => 'cus_E2E_LEGACY_CANCEL', 'status' => 'completed', 'txn_type' => '', 'gateway' => 'stripe' ) );

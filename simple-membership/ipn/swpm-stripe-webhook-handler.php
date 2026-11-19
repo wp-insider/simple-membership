@@ -130,6 +130,23 @@ class SwpmStripeWebhookHandler {
 
 			// Unresolved subscriptions fall back only to the original charge, never the shared customer ID.
 
+			// Stripe Legacy subscriptions: the member's subscr_id is the customer ID (cus_...), not the subscription ID.
+			// Use it to find the member, only when no member has the subscription ID and a member has exactly this customer ID.
+			$legacy_access_id = self::get_legacy_subscription_access_id( $subscr_id, $customer );
+			if ( $legacy_access_id ) {
+				SwpmLog::log_simple_debug( 'Stripe Legacy subscription ' . $subscr_id . ': using the member found by the customer ID ' . $legacy_access_id . '.', true );
+				$ipn_data['subscr_id'] = $legacy_access_id;
+
+				if ( ! $is_refunded ) {
+					// A cancellation: the Legacy checkout record has the customer ID as its txn_id (and no subscr_id before 2023).
+					$legacy_checkout_record = SwpmTransactions::get_transaction_row_by_txn_id( $legacy_access_id );
+					if ( $legacy_checkout_record ) {
+						SwpmLog::log_simple_debug( 'Updating the subscription status of the Stripe Legacy checkout record to canceled.', true );
+						update_post_meta( $legacy_checkout_record->ID, 'subscr_status', 'canceled' );
+					}
+				}
+			}
+
 			if ( $refund_data ) {
 				// For the swpm_deactivate_account_on_refund filter: full or partial, amounts.
 				$ipn_data['refund_data'] = $refund_data;
@@ -192,6 +209,13 @@ class SwpmStripeWebhookHandler {
 
 				//Retrieve the member record for this subscription
 				$member_record = SwpmMemberUtils::get_user_by_subsriber_id( $sub_id );
+
+				//Stripe Legacy subscriptions: the member's subscr_id is the customer ID (cus_...), not the subscription ID.
+				$legacy_access_id = self::get_legacy_subscription_access_id( $sub_id, isset( $event_json->data->object->customer ) ? $event_json->data->object->customer : '' );
+				if ( ! $member_record && $legacy_access_id ) {
+					SwpmLog::log_simple_debug( 'Stripe Legacy subscription ' . $sub_id . ': using the member found by the customer ID ' . $legacy_access_id . '.', true );
+					$member_record = self::get_member_by_access_id( $legacy_access_id );
+				}
 				if ( $member_record ) {
 					// Found a member record
 					$member_id           = $member_record->member_id;
@@ -250,7 +274,15 @@ class SwpmStripeWebhookHandler {
 
 				// Update the member's access start date if applicable.
 				// It will update the access start date based on the membership level of the member (if needed)
-				swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
+				if ( $legacy_access_id ) {
+					// The member is found by its subscr_id, which is the customer ID for Stripe Legacy subscriptions.
+					// The saved renewal record keeps the subscription ID.
+					$ipn_data['subscr_id'] = $legacy_access_id;
+					swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
+					$ipn_data['subscr_id'] = $sub_id;
+				} else {
+					swpm_update_member_subscription_start_date_if_applicable( $ipn_data );
+				}
 
 				// Save the transaction record
 				SwpmTransactions::save_txn_record( $ipn_data );
@@ -335,6 +367,34 @@ class SwpmStripeWebhookHandler {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Stripe Legacy subscriptions (the removed Stripe Legacy subscription button) saved the customer ID (cus_...) as the member's subscr_id,
+	 * not the subscription ID (sub_...). Returns the customer ID when it is the member's access ID for this subscription:
+	 * no member has the subscription ID, and a member has exactly this customer ID (or "customer ID|...").
+	 * Returns an empty string otherwise (newer subscriptions, one-time payments, unknown customers).
+	 */
+	public static function get_legacy_subscription_access_id( $sub_id, $customer_id ) {
+		if ( empty( $sub_id ) || ! is_string( $sub_id ) || strpos( $sub_id, 'sub_' ) !== 0 ) {
+			return '';
+		}
+		if ( empty( $customer_id ) || ! is_string( $customer_id ) || strpos( $customer_id, 'cus_' ) !== 0 ) {
+			return '';
+		}
+		if ( self::get_member_by_access_id( $sub_id ) ) {
+			//A member has the subscription ID (a newer subscription).
+			return '';
+		}
+		return self::get_member_by_access_id( $customer_id ) ? $customer_id : '';
+	}
+
+	/**
+	 * The member whose subscr_id is exactly this ID, or this ID followed by "|..." (the format some member profiles use).
+	 */
+	public static function get_member_by_access_id( $access_id ) {
+		global $wpdb;
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}swpm_members_tbl WHERE subscr_id = %s OR subscr_id LIKE %s LIMIT 1", $access_id, $wpdb->esc_like( $access_id ) . '|%' ) );
 	}
 
 	public static function get_charge_id_from_event_data( $event_json ) {

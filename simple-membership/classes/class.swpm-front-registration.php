@@ -804,22 +804,18 @@ class SwpmFrontRegistration extends SwpmRegistration {
 
 		$member_id = isset( $_GET['swpm_member_id'] ) ? filter_var( $_GET['swpm_member_id'], FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) : false;
 
-		$member = SwpmMemberUtils::get_user_by_id( $member_id );
-		if ( empty( $member ) ) {
-			//can't find member
-			echo esc_html__( "Can't find member account.", 'simple-membership' );
-			wp_die();
-		}
-		if ( $member->account_state !== 'activation_required' ) {
-			//account already active
-			echo esc_html__( 'Account already active. ', 'simple-membership' ) . '<a href="' . esc_url( $login_page_url ) . '">' . esc_html__( 'click here', 'simple-membership' ) . '</a>' . esc_html__( ' to log in.', 'simple-membership' );
-			wp_die();
+		//The activation code is checked first. A missing member, an active account, a wrong code and a used link all get the same
+		//"invalid or expired" response, so the link can't be used to find out which member IDs exist or are active (member enumeration).
+		$code = isset( $_GET['swpm_token'] ) && is_string( $_GET['swpm_token'] ) ? sanitize_text_field( wp_unslash( $_GET['swpm_token'] ) ) : '';
+		$act_data = $member_id ? get_option( 'swpm_email_activation_data_usr_' . $member_id ) : false;
+		if ( empty( $code ) || ! SwpmEmailActivation::is_valid( $act_data ) || ! hash_equals( $act_data['act_code'], $code ) ) {
+			//No valid activation code for this member ID.
+			wp_die( wp_kses_post( SwpmEmailActivation::invalid_link_message( $member_id ) ));
 		}
 
-		$code = isset( $_GET['swpm_token'] ) && is_string( $_GET['swpm_token'] ) ? sanitize_text_field( wp_unslash( $_GET['swpm_token'] ) ) : '';
-		$act_data = get_option( 'swpm_email_activation_data_usr_' . $member_id );
-		if ( empty( $code ) || ! SwpmEmailActivation::is_valid( $act_data ) || ! hash_equals( $act_data['act_code'], $code ) ) {
-			//code mismatch
+		$member = SwpmMemberUtils::get_user_by_id( $member_id );
+		if ( empty( $member ) || $member->account_state !== 'activation_required' ) {
+			//A valid code, but the member was deleted or the account was activated another way (example: by the admin).
 			wp_die( wp_kses_post( SwpmEmailActivation::invalid_link_message( $member_id ) ));
 		}
 		//activation code match

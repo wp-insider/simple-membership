@@ -88,8 +88,13 @@ $site_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_site_sub', 'email'
 swpm_e2e_txn( array( 'txn_id' => 'cus_E2E_SITE', 'subscr_id' => 'sub_E2E_SITE' ) );
 
 //Stripe Legacy: the member's subscr_id and the checkout record's txn_id are the customer ID, and the record has no subscr_id (before 2023).
-swpm_e2e_member( array( 'user_name' => 'e2e_legacy_sub', 'email' => 'legacy-sub@example.com', 'subscr_id' => 'cus_E2E_LEGACY' ), $level_id );
+//One member each for the renewal, the cancellation and the refund, so one test's result can't make another one pass.
+$legacy_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_legacy_sub', 'email' => 'legacy-sub@example.com', 'subscr_id' => 'cus_E2E_LEGACY' ), $level_id );
 swpm_e2e_txn( array( 'txn_id' => 'cus_E2E_LEGACY', 'status' => 'completed', 'txn_type' => '', 'gateway' => 'stripe' ) );
+$legacy_cancel_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_legacy_cancel', 'email' => 'legacy-cancel@example.com', 'subscr_id' => 'cus_E2E_LEGACY_CANCEL' ), $level_id );
+swpm_e2e_txn( array( 'txn_id' => 'cus_E2E_LEGACY_CANCEL', 'status' => 'completed', 'txn_type' => '', 'gateway' => 'stripe' ) );
+$legacy_refund_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_legacy_refund', 'email' => 'legacy-refund@example.com', 'subscr_id' => 'cus_E2E_LEGACY_REFUND' ), $level_id );
+swpm_e2e_txn( array( 'txn_id' => 'cus_E2E_LEGACY_REFUND', 'status' => 'completed', 'txn_type' => '', 'gateway' => 'stripe' ) );
 
 //Stripe: a subscription that will be cancelled.
 $cancel_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_cancel_sub', 'email' => 'cancel-sub@example.com', 'subscr_id' => 'sub_E2E_CANCEL' ), $level_id );
@@ -99,13 +104,30 @@ swpm_e2e_txn( array( 'txn_id' => 'cus_E2E_CANCEL', 'subscr_id' => 'sub_E2E_CANCE
 $refund_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_refund', 'email' => 'refund@example.com', 'subscr_id' => 'ch_E2E_ONE_TIME' ), $level_id );
 swpm_e2e_txn( array( 'txn_id' => 'ch_E2E_ONE_TIME', 'subscr_id' => 'ch_E2E_ONE_TIME', 'status' => 'Completed', 'txn_type' => '', 'gateway' => 'stripe-sca', 'mc_gross' => '10.00' ) );
 
+//Email activation: a member who needs to activate the account (with a valid activation code), and an active member.
+$activation_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_activation', 'email' => 'activation@example.com', 'account_state' => 'activation_required' ), $level_id );
+update_option(
+	'swpm_email_activation_data_usr_' . $activation_member_id,
+	array(
+		'act_code'  => 'e2eActivationCode0123456789abcdef',
+		'timestamp' => time() - 60,
+	),
+	false
+);
+$active_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_active', 'email' => 'active@example.com' ), $level_id );
+
 echo "\n" . wp_json_encode(
 	array(
-		'level_id'          => $level_id,
-		'button_id'         => (int) $button_id,
-		'pending_member_id' => $pending_member_id,
-		'site_member_id'    => $site_member_id,
-		'cancel_member_id'  => $cancel_member_id,
-		'refund_member_id'  => $refund_member_id,
+		'level_id'                => $level_id,
+		'button_id'               => (int) $button_id,
+		'pending_member_id'       => $pending_member_id,
+		'site_member_id'          => $site_member_id,
+		'legacy_member_id'        => $legacy_member_id,
+		'legacy_cancel_member_id' => $legacy_cancel_member_id,
+		'legacy_refund_member_id' => $legacy_refund_member_id,
+		'cancel_member_id'        => $cancel_member_id,
+		'refund_member_id'        => $refund_member_id,
+		'activation_member_id'    => $activation_member_id,
+		'active_member_id'        => $active_member_id,
 	)
 ) . "\n";

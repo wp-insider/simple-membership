@@ -1,7 +1,7 @@
 <?php
 /**
  * Endpoint tests: sends real PayPal Standard IPN and Stripe webhook requests to a running test site, then checks the database.
- * Run by the GitHub Actions "Tests" workflow (the "Endpoint tests" job sets up the site). Environment variables:
+ * Run by the GitHub Actions "Plugin Tests" workflow (the "Endpoint tests" job sets up the site). Environment variables:
  * E2E_URL (example: http://127.0.0.1:8080), E2E_WP_PATH (the site's folder), E2E_DB_HOST, E2E_DB_NAME, E2E_DB_USER, E2E_DB_PASS,
  * E2E_STRIPE_SECRET (the Stripe webhook signing secret saved on the site by setup-site.php).
  */
@@ -49,6 +49,48 @@ function http_post( $endpoint, $body, $headers ) {
 	);
 	curl_exec( $curl );
 	return (int) curl_getinfo( $curl, CURLINFO_HTTP_CODE );
+}
+
+/** Sends a GET request (redirects are not followed). Returns the HTTP status code and the body. */
+function http_get( $endpoint ) {
+	global $url;
+	$curl = curl_init( $url . $endpoint );
+	curl_setopt_array(
+		$curl,
+		array(
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FOLLOWLOCATION => false,
+			CURLOPT_TIMEOUT        => 30,
+		)
+	);
+	$body = (string) curl_exec( $curl );
+	return array(
+		'status' => (int) curl_getinfo( $curl, CURLINFO_HTTP_CODE ),
+		'body'   => $body,
+	);
+}
+
+/** An email activation link request. The member ID is replaced, so the responses for different members can be compared. */
+function activation_response( $member_id, $token ) {
+	$response = http_get( '/?swpm_email_activation=1&swpm_member_id=' . rawurlencode( $member_id ) . '&swpm_token=' . rawurlencode( $token ) );
+	$response['body'] = preg_replace( '/swpm_member_id(=|&#0?61;|%3D)\d+/', 'swpm_member_id=ID', $response['body'] );
+	return $response;
+}
+
+/** The response text without the HTML, shortened (printed when a comparison fails). */
+function response_text( $response ) {
+	$text = trim( preg_replace( '/\s+/', ' ', strip_tags( preg_replace( '#<(style|script)\b.*?</\1>#s', '', $response['body'] ) ) ) );
+	return 'HTTP ' . $response['status'] . ': ' . substr( $text, 0, 300 );
+}
+
+/** Checks that two responses are the same (status code and body), and shows both when they differ. */
+function check_same_response( $label, $expected, $actual ) {
+	$same = $expected['status'] === $actual['status'] && $expected['body'] === $actual['body'];
+	check( $label, $same );
+	if ( ! $same ) {
+		echo '    Expected: ' . response_text( $expected ) . "\n";
+		echo '    Actual:   ' . response_text( $actual ) . "\n";
+	}
 }
 
 function db_value( $sql, $types = '', $params = array() ) {
@@ -201,6 +243,7 @@ check( "A renewal of another site's subscription returns HTTP 200 and is ignored
 //9. A renewal of a Stripe Legacy subscription (found by the customer ID).
 send_stripe_event( 'invoice.payment_succeeded', renewal_invoice( 'sub_E2E_LEGACY', 'cus_E2E_LEGACY', 'ch_E2E_LEGACY_R1' ) );
 check( 'A renewal of a Stripe Legacy subscription (found by the customer ID) is recorded', 1 === txn_count( 'ch_E2E_LEGACY_R1' ) );
+check( 'The Stripe Legacy renewal record is linked to the member', (string) $ids['legacy_member_id'] === (string) txn_meta( 'ch_E2E_LEGACY_R1', 'member_id' ) );
 
 //10. A webhook with a wrong signature.
 $status = send_stripe_event( 'invoice.payment_succeeded', renewal_invoice( 'sub_E2E_SITE', 'cus_E2E_SITE', 'ch_E2E_BAD_SIGNATURE' ), null, 'whsec_wrong_secret' );
@@ -220,6 +263,44 @@ send_stripe_event(
 );
 check( 'A full refund marks the payment record as Refunded', 'Refunded' === txn_meta( 'ch_E2E_ONE_TIME', 'status' ) );
 check( 'A refund deactivates the member (default refund setting)', 'inactive' === member_value( $ids['refund_member_id'], 'account_state' ) );
+
+//13. A Stripe Legacy subscription cancellation (the member and the checkout record have the customer ID, not the subscription ID).
+send_stripe_event( 'customer.subscription.deleted', array( 'id' => 'sub_E2E_LEGACY_CANCEL', 'object' => 'subscription', 'customer' => 'cus_E2E_LEGACY_CANCEL', 'status' => 'canceled' ) );
+check( 'A cancelled Stripe Legacy subscription (found by the customer ID) deactivates the member of a no-expiry level', 'inactive' === member_value( $ids['legacy_cancel_member_id'], 'account_state' ) );
+check( "The Stripe Legacy cancellation updates the checkout record's subscription status", in_array( txn_meta( 'cus_E2E_LEGACY_CANCEL', 'subscr_status' ), array( 'canceled', 'cancelled' ), true ) );
+
+//14. A full refund of a Stripe Legacy subscription's renewal payment.
+send_stripe_event( 'invoice.payment_succeeded', renewal_invoice( 'sub_E2E_LEGACY_REFUND', 'cus_E2E_LEGACY_REFUND', 'ch_E2E_LEGACY_REFUND_R1' ) );
+send_stripe_event(
+	'charge.refunded',
+	array( 'id' => 'ch_E2E_LEGACY_REFUND_R1', 'object' => 'charge', 'customer' => 'cus_E2E_LEGACY_REFUND', 'amount' => 1995, 'amount_refunded' => 1995, 'refunded' => true, 'currency' => 'usd' ),
+	array( 'amount_refunded' => 0 )
+);
+check( 'A full refund of a Stripe Legacy renewal payment marks the payment record as Refunded', 'Refunded' === txn_meta( 'ch_E2E_LEGACY_REFUND_R1', 'status' ) );
+check( 'A refund of a Stripe Legacy renewal payment (found by the customer ID) deactivates the member', 'inactive' === member_value( $ids['legacy_refund_member_id'], 'account_state' ) );
+
+echo "--- Email activation ---\n";
+
+//15. A wrong activation code must not show whether the member exists or is already active (member enumeration).
+$wrong_code = 'wrongActivationCode0000000000000';
+$pending_wrong_code = activation_response( $ids['activation_member_id'], $wrong_code );
+check( 'A wrong activation code does not activate the account', 'activation_required' === member_value( $ids['activation_member_id'], 'account_state' ) );
+check( 'A wrong activation code shows the invalid link message', false !== strpos( $pending_wrong_code['body'], 'This activation link is invalid or has expired' ) );
+check_same_response( 'A wrong activation code for a member ID that does not exist gets the same response as for a member who needs activation', $pending_wrong_code, activation_response( 999999, $wrong_code ) );
+check_same_response( 'A wrong activation code for an active member gets the same response as for a member who needs activation', $pending_wrong_code, activation_response( $ids['active_member_id'], $wrong_code ) );
+check_same_response( 'An activation link without a code gets the same response as a wrong code', $pending_wrong_code, activation_response( $ids['active_member_id'], '' ) );
+
+//16. The correct activation code, then the same link again.
+activation_response( $ids['activation_member_id'], 'e2eActivationCode0123456789abcdef' );
+check( 'The correct activation code activates the account', 'active' === member_value( $ids['activation_member_id'], 'account_state' ) );
+check( 'The activation code is deleted once it is used', null === db_value( "SELECT option_value FROM {$prefix}options WHERE option_name = ?", 's', array( 'swpm_email_activation_data_usr_' . $ids['activation_member_id'] ) ) );
+check_same_response( 'A used activation link gets the same response as a wrong code', $pending_wrong_code, activation_response( $ids['activation_member_id'], 'e2eActivationCode0123456789abcdef' ) );
+
+//17. The resend activation email request shows the same message for every account (already protected, this keeps it that way).
+$resend_missing = http_get( '/?swpm_resend_activation_email=1&swpm_member_id=999998' );
+$resend_active  = http_get( '/?swpm_resend_activation_email=1&swpm_member_id=' . $ids['active_member_id'] );
+check( 'The resend activation email request shows the general message', false !== strpos( $resend_missing['body'], 'If this account needs activation' ) );
+check_same_response( 'The resend activation email request gets the same response for a missing member and an active member', $resend_missing, $resend_active );
 
 echo "\n" . ( 0 === $failures ? 'All endpoint tests passed.' : "{$failures} endpoint test(s) failed." ) . "\n";
 exit( 0 === $failures ? 0 : 1 );

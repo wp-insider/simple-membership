@@ -1,4 +1,4 @@
-name: Plugin Tests
+name: Plugin Tests (Main)
 
 # Runs only when started by hand: Actions tab > "Plugin Tests" > Run workflow (choose the branch to test and the test groups to run).
 on:

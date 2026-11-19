@@ -13,12 +13,17 @@ class Test_Paid_Registration_Link extends WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();
 		$this->level_id = SWPM_Test_Factory::create_level();
-		$_COOKIE        = array();
+		$this->remove_payment_cookies();
 	}
 
 	public function tear_down() {
-		$_COOKIE = array();
+		$this->remove_payment_cookies();
 		parent::tear_down();
+	}
+
+	//Only remove the payment proof cookies. Other cookies (example: the plugin's 'swpm_session', set at init) must stay.
+	private function remove_payment_cookies() {
+		unset( $_COOKIE['swpm_paid_reg_code'], $_COOKIE['swpm_pp_checkout_tokens'] );
 	}
 
 	private function checkout( $args = array(), $swpm_id = '' ) {

@@ -62,7 +62,8 @@ class Test_Plugin_Smoke extends WP_UnitTestCase {
 		);
 		$_SERVER['REMOTE_ADDR']          = $buyer_ip;
 		$_SERVER['HTTP_X_FORWARDED_FOR'] = $buyer_ip;
-		$_COOKIE                         = array();
+		//No payment proof cookies (other cookies, like the plugin's 'swpm_session', stay).
+		unset( $_COOKIE['swpm_paid_reg_code'], $_COOKIE['swpm_pp_checkout_tokens'] );
 
 		$output = do_shortcode( '[swpm_thank_you_page_registration]' );
 

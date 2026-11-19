@@ -31,7 +31,7 @@ jobs:
               echo "$out"
               failed=1
             fi
-          done < <(find simple-membership tests/security tests/phpunit tests/bin -name '*.php' \
+          done < <(find simple-membership tests/security tests/phpunit tests/bin tests/e2e -name '*.php' \
             -not -path 'simple-membership/lib/stripe-gateway/*' \
             -not -path 'simple-membership/lib/braintree/*' \
             -not -path 'tests/phpunit/vendor/*' -print0)
@@ -111,3 +111,74 @@ jobs:
       - name: Run the PHPUnit tests
         working-directory: tests/phpunit
         run: vendor/bin/phpunit --testdox -c phpunit.xml.dist
+
+  endpoint-tests:
+    # Sends real PayPal Standard IPN and Stripe webhook requests to a real WordPress test site, then checks the database.
+    name: Endpoint tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.4']
+
+    services:
+      mysql:
+        image: mariadb:10.6
+        env:
+          MARIADB_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      E2E_URL: http://127.0.0.1:8080
+      E2E_WP_PATH: /tmp/e2e-site
+      E2E_DB_HOST: 127.0.0.1
+      E2E_DB_NAME: wordpress_e2e
+      E2E_DB_USER: root
+      E2E_DB_PASS: root
+      # A test-only signing secret for the signed Stripe webhook events (not a real Stripe secret).
+      E2E_STRIPE_SECRET: whsec_e2e_test_signing_secret
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli, curl
+          tools: wp-cli
+          coverage: none
+
+      - name: Install a WordPress test site with the plugin
+        run: |
+          wp core download --path="$E2E_WP_PATH" --version=latest
+          wp config create --path="$E2E_WP_PATH" --dbname="$E2E_DB_NAME" --dbuser="$E2E_DB_USER" --dbpass="$E2E_DB_PASS" --dbhost="$E2E_DB_HOST:3306"
+          wp config set DISABLE_WP_CRON true --raw --path="$E2E_WP_PATH"
+          wp db create --path="$E2E_WP_PATH"
+          wp core install --path="$E2E_WP_PATH" --url="$E2E_URL" --title="SWPM Endpoint Tests" --admin_user=admin --admin_password=admin --admin_email=admin@example.com --skip-email
+          cp -r simple-membership "$E2E_WP_PATH/wp-content/plugins/simple-membership"
+          mkdir -p "$E2E_WP_PATH/wp-content/mu-plugins"
+          cp tests/e2e/mu-plugin-fake-paypal-verification.php "$E2E_WP_PATH/wp-content/mu-plugins/"
+          wp plugin activate simple-membership --path="$E2E_WP_PATH"
+
+      - name: Start the web server
+        run: |
+          php -S 127.0.0.1:8080 -t "$E2E_WP_PATH" > /tmp/php-server.log 2>&1 &
+          sleep 2
+          curl --silent --fail --output /dev/null "$E2E_URL/" && echo "The test site is running."
+
+      - name: Run the endpoint tests
+        run: php tests/e2e/run-endpoint-tests.php
+
+      - name: Show the plugin's debug log and the web server log (only when a test failed)
+        if: failure()
+        run: |
+          cat "$E2E_WP_PATH"/wp-content/plugins/simple-membership/logs/*.txt || true
+          cat /tmp/php-server.log || true

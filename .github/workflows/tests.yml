@@ -1,11 +1,29 @@
-name: Tests
+name: Plugin Tests
 
-# Runs only when started by hand: Actions tab > "Tests" > Run workflow (choose the branch to test).
+# Runs only when started by hand: Actions tab > "Plugin Tests" > Run workflow (choose the branch to test and the test groups to run).
 on:
   workflow_dispatch:
+    inputs:
+      run_lint:
+        description: Lint (PHP syntax check on the oldest and newest PHP)
+        type: boolean
+        default: true
+      run_security_scripts:
+        description: Security scripts (tests/security)
+        type: boolean
+        default: true
+      run_phpunit:
+        description: PHPUnit tests (tests/phpunit)
+        type: boolean
+        default: true
+      run_endpoint_tests:
+        description: Endpoint tests (PayPal Standard IPN and Stripe webhook requests to a test site)
+        type: boolean
+        default: true
 
 jobs:
   lint:
+    if: ${{ inputs.run_lint }}
     name: Lint (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:
@@ -42,6 +60,7 @@ jobs:
           echo "No syntax errors."
 
   security-scripts:
+    if: ${{ inputs.run_security_scripts }}
     name: Security tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:
@@ -62,6 +81,7 @@ jobs:
         run: php tests/bin/run-security-tests.php
 
   phpunit:
+    if: ${{ inputs.run_phpunit }}
     name: PHPUnit (PHP ${{ matrix.php }}, WordPress latest)
     runs-on: ubuntu-latest
     strategy:
@@ -114,6 +134,7 @@ jobs:
 
   endpoint-tests:
     # Sends real PayPal Standard IPN and Stripe webhook requests to a real WordPress test site, then checks the database.
+    if: ${{ inputs.run_endpoint_tests }}
     name: Endpoint tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:

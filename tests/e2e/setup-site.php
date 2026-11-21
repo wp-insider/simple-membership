@@ -117,6 +117,39 @@ update_option(
 );
 $active_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_active', 'email' => 'active@example.com' ), $level_id );
 
+//Registration forms: a level-specific form for a free (Subscriber) level, and levels with higher roles that a visitor must not be able to join.
+function swpm_e2e_level( $alias, $role ) {
+	global $wpdb;
+	$wpdb->insert(
+		$wpdb->prefix . 'swpm_membership_tbl',
+		array(
+			'alias'                      => $alias,
+			'role'                       => $role,
+			'subscription_period'        => '0',
+			'subscription_duration_type' => 0,
+		)
+	);
+	return (int) $wpdb->insert_id;
+}
+function swpm_e2e_registration_page( $title, $level_id ) {
+	return (int) wp_insert_post(
+		array(
+			'post_type'    => 'page',
+			'post_status'  => 'publish',
+			'post_title'   => $title,
+			'post_content' => '[swpm_registration_form level=' . $level_id . ']',
+		)
+	);
+}
+$reg_free_level_id   = swpm_e2e_level( 'E2E Free Registration', 'subscriber' );
+$reg_editor_level_id = swpm_e2e_level( 'E2E Editor Level', 'editor' );
+$reg_admin_level_id  = swpm_e2e_level( 'E2E Administrator Level', 'administrator' );
+$reg_free_page_id    = swpm_e2e_registration_page( 'E2E Free Registration', $reg_free_level_id );
+$reg_admin_page_id   = swpm_e2e_registration_page( 'E2E Administrator Registration', $reg_admin_level_id );
+
+//A paid Editor level member who still needs to complete the registration (the link sent after the payment).
+$reg_paid_member_id = swpm_e2e_member( array( 'email' => 'paid-complete@example.com', 'reg_code' => md5( 'e2e-paid-complete' ) ), $reg_editor_level_id );
+
 echo "\n" . wp_json_encode(
 	array(
 		'level_id'                => $level_id,
@@ -130,5 +163,12 @@ echo "\n" . wp_json_encode(
 		'refund_member_id'        => $refund_member_id,
 		'activation_member_id'    => $activation_member_id,
 		'active_member_id'        => $active_member_id,
+		'reg_free_level_id'       => $reg_free_level_id,
+		'reg_editor_level_id'     => $reg_editor_level_id,
+		'reg_admin_level_id'      => $reg_admin_level_id,
+		'reg_free_page_id'        => $reg_free_page_id,
+		'reg_admin_page_id'       => $reg_admin_page_id,
+		'reg_paid_member_id'      => $reg_paid_member_id,
+		'reg_paid_code'           => md5( 'e2e-paid-complete' ),
 	)
 ) . "\n";

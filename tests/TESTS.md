@@ -53,6 +53,14 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - The correct code activates the account, and the code is deleted once it's used.
 - The resend activation email request shows the same message for a missing member and an active member.
 
+**Registration form** (level-specific forms, `[swpm_registration_form level=N]`, submitted the way a browser does)
+- The form has the level fields; a normal registration creates a member of the form's level, and the WP user gets the level's role.
+- A changed level (the Editor level, with the free level's hash) is rejected: no member, no WP user.
+- With two different level values (`membership_level` and `swpm_membership_level`), the member doesn't get the Editor level or role.
+- A level with the Administrator role never creates an administrator.
+- Completing a paid registration (the link sent after the payment) saves the username, keeps the paid level and gives the level's role.
+- *A level hash made with the old method (MD5 of swpm_private_key_one and the level, from the 4.8.9 security report) is rejected: fails until the level key fix.*
+
 ## PHPUnit ([phpunit/tests/](phpunit/tests/))
 
 **Plugin smoke test** (test-plugin-smoke.php)
@@ -80,6 +88,10 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 **Profile sync** (test-profile-sync.php)
 - Names with apostrophes are saved without backslashes; email and password changes are synced.
 - The sync doesn't run while the plugin updates the WP user; other member fields aren't changed.
+
+**Registration level key** (test-registration-level-key.php)
+- A strong key is kept (forms already shown to visitors keep working).
+- *Activation creates a strong random key; an old uniqid() key is replaced when a registration form is shown; the form's level hash isn't an MD5 of the key and the level: fail until the level key fix.*
 
 **Role After Expiry** (test-role-after-expiry.php)
 - The expiry role is applied and the level role restored; nothing changes for a level without the option.
@@ -111,7 +123,8 @@ Payments
 - The checkout's swpm_id custom value comes from the browser (step 4d).
 
 Members and access
-- Free registration over the form (with and without email activation), and the emails it sends.
+- Registration with the default registration page and the "Enable Free Membership" setting; registration with email activation, and the emails it sends.
+- Form Builder add-on registration forms (the add-on is in another repository, without these tests).
 - Login and logout, the login lockout, the IP address detection (step 4c).
 - Password reset (link and generated password, the {password} merge tag).
 - Content protection: posts, pages, categories, comments, the more tag, partial protection.

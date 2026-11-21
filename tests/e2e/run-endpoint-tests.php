@@ -93,6 +93,76 @@ function check_same_response( $label, $expected, $actual ) {
 	}
 }
 
+/** The value of a hidden form field in the page (the attributes can be in any order). */
+function form_field_value( $html, $name ) {
+	preg_match_all( '/<input\b[^>]*>/i', $html, $inputs );
+	foreach ( $inputs[0] as $input ) {
+		if ( preg_match( '/\bname=["\']' . preg_quote( $name, '/' ) . '["\']/', $input ) && preg_match( '/\bvalue=["\']([^"\']*)["\']/', $input, $value ) ) {
+			return html_entity_decode( $value[1], ENT_QUOTES );
+		}
+	}
+	return null;
+}
+
+/** The level fields of the registration form on this page (what the visitor's browser would send). */
+function registration_form_fields( $page_query ) {
+	$page = http_get( '/?' . $page_query );
+	return array(
+		'swpm_membership_level' => form_field_value( $page['body'], 'swpm_membership_level' ),
+		'swpm_level_hash'       => form_field_value( $page['body'], 'swpm_level_hash' ),
+		'level_identifier'      => form_field_value( $page['body'], 'level_identifier' ),
+	);
+}
+
+/** Submits the registration form. $level_fields are the level fields (changed by some tests). Returns the response. */
+function submit_registration( $page_query, $user_name, $level_fields ) {
+	global $url;
+	$fields = array_merge(
+		array(
+			'swpm_registration_submit' => 'Register',
+			'user_name'                => $user_name,
+			'email'                    => $user_name . '@example.com',
+			'password'                 => 'E2e-Test-Password-123!',
+			'password_re'              => 'E2e-Test-Password-123!',
+			'first_name'               => 'E2E',
+			'last_name'                => 'Registration',
+		),
+		$level_fields
+	);
+	$curl = curl_init( $url . '/?' . $page_query );
+	curl_setopt_array(
+		$curl,
+		array(
+			CURLOPT_POST           => true,
+			CURLOPT_POSTFIELDS     => http_build_query( $fields ),
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FOLLOWLOCATION => false,
+			CURLOPT_TIMEOUT        => 30,
+		)
+	);
+	$body = (string) curl_exec( $curl );
+	return array(
+		'status' => (int) curl_getinfo( $curl, CURLINFO_HTTP_CODE ),
+		'body'   => $body,
+	);
+}
+
+/** The roles of the WP user with this username (the serialized capabilities value), or null when there is no WP user. */
+function wp_user_roles( $user_name ) {
+	global $prefix;
+	return db_value( "SELECT um.meta_value FROM {$prefix}users u JOIN {$prefix}usermeta um ON um.user_id = u.ID AND um.meta_key = '{$prefix}capabilities' WHERE u.user_login = ?", 's', array( $user_name ) );
+}
+
+function wp_user_has_role( $user_name, $role ) {
+	$roles = wp_user_roles( $user_name );
+	return null !== $roles && false !== strpos( $roles, '"' . $role . '"' );
+}
+
+function member_level_by_user_name( $user_name ) {
+	global $prefix;
+	return db_value( "SELECT membership_level FROM {$prefix}swpm_members_tbl WHERE user_name = ?", 's', array( $user_name ) );
+}
+
 function db_value( $sql, $types = '', $params = array() ) {
 	global $db;
 	$statement = $db->prepare( $sql );
@@ -303,6 +373,50 @@ $resend_missing = http_get( '/?swpm_resend_activation_email=1&swpm_member_id=999
 $resend_active  = http_get( '/?swpm_resend_activation_email=1&swpm_member_id=' . $ids['active_member_id'] );
 check( 'The resend activation email request shows the general message', false !== strpos( $resend_missing['body'], 'If this account needs activation' ) );
 check_same_response( 'The resend activation email request gets the same response for a missing member and an active member', $resend_missing, $resend_active );
+
+echo "--- Registration form ---\n";
+
+$free_page   = 'page_id=' . $ids['reg_free_page_id'];
+$free_level  = (string) $ids['reg_free_level_id'];
+$editor      = (string) $ids['reg_editor_level_id'];
+$free_fields = registration_form_fields( $free_page );
+check( 'The level-specific registration form has the level fields', $free_level === $free_fields['swpm_membership_level'] && ! empty( $free_fields['swpm_level_hash'] ) && ! empty( $free_fields['level_identifier'] ) );
+
+//18. A normal registration with the level-specific form.
+submit_registration( $free_page, 'e2e_reg_free', $free_fields );
+check( "A registration with the level-specific form creates a member of the form's level", $free_level === (string) member_level_by_user_name( 'e2e_reg_free' ) );
+check( "The new member's WP user gets the level's role (Subscriber)", wp_user_has_role( 'e2e_reg_free', 'subscriber' ) );
+
+//19. The form's level changed to the Editor level (the level hash of the free level is kept).
+$response = submit_registration( $free_page, 'e2e_reg_tampered', array_merge( $free_fields, array( 'swpm_membership_level' => $editor, 'level_identifier' => md5( $editor ) ) ) );
+check( 'A registration with a changed level is rejected', false !== strpos( $response['body'], 'Security check failed for membership level validation' ) );
+check( 'A registration with a changed level creates no member and no WP user', null === member_level_by_user_name( 'e2e_reg_tampered' ) && null === wp_user_roles( 'e2e_reg_tampered' ) );
+
+//20. The level hash made with the old method (MD5 of the site's swpm_private_key_one and the level), as in the security report.
+//The test reads the key from the database. In the report, the attacker recovers it by brute force, because uniqid() makes it predictable.
+$old_key  = trim( wp_cli( 'option get swpm_private_key_one' ) );
+$response = submit_registration( $free_page, 'e2e_reg_forged', array( 'swpm_membership_level' => $editor, 'swpm_level_hash' => md5( $old_key . '|' . $editor ), 'level_identifier' => md5( $editor ) ) );
+check( 'A level hash made with the old method (MD5 of the key and the level) is rejected', false !== strpos( $response['body'], 'Security check failed for membership level validation' ) );
+check( 'A forged level hash creates no member and no Editor WP user', null === member_level_by_user_name( 'e2e_reg_forged' ) && ! wp_user_has_role( 'e2e_reg_forged', 'editor' ) );
+
+//21. Two different level values: the signed one ("membership_level", the free level) and "swpm_membership_level" (the Editor level).
+submit_registration( $free_page, 'e2e_reg_two_levels', array_merge( $free_fields, array( 'membership_level' => $free_level, 'swpm_membership_level' => $editor ) ) );
+check( 'With two different level values, the member is not added to the Editor level', $editor !== (string) member_level_by_user_name( 'e2e_reg_two_levels' ) );
+check( 'With two different level values, the WP user does not get the Editor role', ! wp_user_has_role( 'e2e_reg_two_levels', 'editor' ) );
+
+//22. A level-specific form for a level with the Administrator role.
+$admin_page   = 'page_id=' . $ids['reg_admin_page_id'];
+$admin_fields = registration_form_fields( $admin_page );
+submit_registration( $admin_page, 'e2e_reg_admin', $admin_fields );
+check( 'A registration for a level with the Administrator role does not create an administrator', ! wp_user_has_role( 'e2e_reg_admin', 'administrator' ) );
+
+//23. Completing a paid registration (the link sent after the payment) for the Editor level.
+$paid_page   = $free_page . '&member_id=' . $ids['reg_paid_member_id'] . '&code=' . $ids['reg_paid_code'];
+$paid_fields = registration_form_fields( $paid_page );
+check( "The paid registration form shows the paid member's level", $editor === $paid_fields['swpm_membership_level'] );
+submit_registration( $paid_page, 'e2e_reg_paid', $paid_fields );
+check( 'Completing a paid registration saves the username on the paid member record', 'e2e_reg_paid' === member_value( $ids['reg_paid_member_id'], 'user_name' ) );
+check( "Completing a paid registration keeps the paid level and gives the level's role (Editor)", $editor === (string) member_value( $ids['reg_paid_member_id'], 'membership_level' ) && wp_user_has_role( 'e2e_reg_paid', 'editor' ) );
 
 echo "\n" . ( 0 === $failures ? 'All endpoint tests passed.' : "{$failures} endpoint test(s) failed." ) . "\n";
 exit( 0 === $failures ? 0 : 1 );

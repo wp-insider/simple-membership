@@ -53,13 +53,8 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
                     echo esc_attr( $membership_level_alias ); //Show the level name in the form.
                     //Add the input fields for the level data.
                     echo '<input type="hidden" value="' . esc_attr( $membership_level ) . '" size="50" name="swpm_membership_level" id="membership_level" />';
-                    //Add the level input verification data.
-                    $swpm_p_key = get_option('swpm_private_key_one');
-                    if (empty($swpm_p_key)) {
-                        $swpm_p_key = uniqid('', true);
-                        update_option('swpm_private_key_one', $swpm_p_key);
-                    }
-                    $swpm_level_hash = md5($swpm_p_key . '|' . $membership_level); //level hash
+                    //Add the level input verification data (the level signed with the site's secret key).
+                    $swpm_level_hash = SwpmUtils::get_registration_level_hash( $membership_level );
                     echo '<input type="hidden" name="swpm_level_hash" value="' . esc_attr( $swpm_level_hash ) . '" />';
                     ?>
                 </td>

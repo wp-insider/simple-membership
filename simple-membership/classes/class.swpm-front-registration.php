@@ -180,11 +180,9 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		}
 
 		//Validate swpm level hash data.
-		$hash_val_posted = sanitize_text_field( $_POST['swpm_level_hash'] );
+		$hash_val_posted = isset( $_POST['swpm_level_hash'] ) && is_string( $_POST['swpm_level_hash'] ) ? sanitize_text_field( wp_unslash( $_POST['swpm_level_hash'] ) ) : '';
 		$level_value     = SwpmForm::get_membership_level_from_request();
-		$swpm_p_key      = get_option( 'swpm_private_key_one' );
-		$hash_val        = md5( $swpm_p_key . '|' . $level_value );
-		if ( $hash_val != $hash_val_posted ) {//Level hash validation failed.
+		if ( ! SwpmUtils::is_valid_registration_level_hash( $level_value, $hash_val_posted ) ) {//Level hash validation failed.
 			$msg  = '<p>Error! Security check failed for membership level validation.</p>';
 			$msg .= '<p>The submitted membership level data does not seem to be authentic.</p>';
 			$msg .= '<p>If you are using caching please empty the cache data and try again.</p>';
@@ -314,11 +312,14 @@ class SwpmFrontRegistration extends SwpmRegistration {
 		$member_info['member_since'] = SwpmUtils::get_current_date_in_wp_zone(); //gmdate( 'Y-m-d' );
 		$member_info['subscription_starts'] = SwpmUtils::get_current_date_in_wp_zone(); //gmdate( 'Y-m-d' );
 
-		$membership_level_id = filter_input( INPUT_POST, 'swpm_membership_level', FILTER_SANITIZE_NUMBER_INT );
+		//The level of the new member: the paid member's level, or the verified free level. The account status and email activation settings
+		//are read from this level (not from the swpm_membership_level form field, which can differ from the signed level value).
 		if ( $paid_member !== null ) {
 			$membership_level_id = $paid_member->membership_level;
-			$this->email_activation = get_option( 'swpm_email_activation_lvl_' . $membership_level_id );
+		} else {
+			$membership_level_id = $free_level;
 		}
+		$this->email_activation = get_option( 'swpm_email_activation_lvl_' . $membership_level_id );
 
 		/**
 		 * Determine the account status for the new member record.

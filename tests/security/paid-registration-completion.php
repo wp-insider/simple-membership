@@ -14,6 +14,9 @@ class SwpmUtils {
     public static function get_current_date_in_wp_zone() { return '2026-09-11'; }
     public static function _($text) { return $text; }
     public static function create_wp_user($data) { self::$users[] = $data; }
+    //The same level signature method as the plugin (HMAC-SHA256), with a test key.
+    public static function get_registration_level_hash($level_id) { return hash_hmac('sha256', (string) $level_id, 'test-key'); }
+    public static function is_valid_registration_level_hash($level_id, $hash) { return is_string($hash) && $hash !== '' && hash_equals(self::get_registration_level_hash($level_id), $hash); }
 }
 class SwpmForm {
     public static function get_membership_level_from_request() { return $_POST['swpm_membership_level']; }
@@ -57,6 +60,8 @@ class CompletionDatabase {
 function do_action($hook, ...$args) {}
 function apply_filters($hook, $value) { return $value; }
 function sanitize_text_field($value) { return $value; }
+function wp_unslash($value) { return is_string($value) ? stripslashes($value) : $value; }
+function wp_kses_post($value) { return $value; }
 function esc_url($value) { return htmlspecialchars($value, ENT_QUOTES); }
 function get_option($key) { return $key === 'swpm_private_key_one' ? 'test-key' : false; }
 function wp_die($message) { throw new RuntimeException($message); }
@@ -83,7 +88,7 @@ foreach (array(
     SwpmUtils::$users = array();
     $wpdb = new CompletionDatabase();
     $wpdb->result = $result;
-    $_POST = array('swpm_membership_level' => $level, 'swpm_level_hash' => md5('test-key|' . $level));
+    $_POST = array('swpm_membership_level' => $level, 'swpm_level_hash' => SwpmUtils::get_registration_level_hash($level));
     (new CompletionRegistration())->register_front_end();
     verify_completion(count(SwpmUtils::$users) === ($success ? 1 : 0), $name . ': unexpected WordPress account creation');
     if ($success && SwpmUtils::$paid) {
@@ -97,3 +102,17 @@ foreach (array(
     }
     echo 'PASS: ' . $name . "\n";
 }
+
+//A level hash made with the old method (MD5 of the key and the level) is rejected before anything is saved.
+SwpmUtils::$paid = false;
+SwpmUtils::$users = array();
+$wpdb = new CompletionDatabase();
+$_POST = array('swpm_membership_level' => 9, 'swpm_level_hash' => md5('test-key|9'));
+$rejected = false;
+try {
+    (new CompletionRegistration())->register_front_end();
+} catch (RuntimeException $e) {
+    $rejected = false !== strpos($e->getMessage(), 'Security check failed for membership level validation');
+}
+verify_completion($rejected && SwpmUtils::$users === array() && $wpdb->inserts === array(), 'An old MD5 level hash must be rejected before anything is saved.');
+echo "PASS: old MD5 level hash rejected\n";

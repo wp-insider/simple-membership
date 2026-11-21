@@ -10,6 +10,60 @@ abstract class SwpmUtils {
 		return defined( 'DOING_AJAX' ) && DOING_AJAX;
 	}
 
+	/**
+	 * The secret key that signs the membership level of the registration forms (the swpm_level_hash form field).
+	 * It is a random 64 character hex string (32 bytes from a secure random generator).
+	 * A missing or weak key (older versions made it with uniqid(), which is based on the time and can be found by brute force)
+	 * is replaced the first time it is used, because the installer only runs from the admin area.
+	 */
+	public static function get_registration_level_key() {
+		$option_name = 'swpm_private_key_one';
+		$key         = get_option( $option_name );
+		if ( is_string( $key ) && preg_match( '/^[a-f0-9]{64}$/', $key ) ) {
+			return $key;
+		}
+
+		try {
+			$new_key = bin2hex( random_bytes( 32 ) );
+		} catch ( Exception $e ) {
+			$new_key = hash( 'sha256', wp_generate_password( 64, true, true ) );
+		}
+
+		//Only replace the value that was read, so two requests at the same time end up with the same key.
+		global $wpdb;
+		if ( false === $key ) {
+			add_option( $option_name, $new_key );
+		} else {
+			$wpdb->update( $wpdb->options, array( 'option_value' => $new_key ), array( 'option_name' => $option_name, 'option_value' => maybe_serialize( $key ) ) );
+		}
+		wp_cache_delete( $option_name, 'options' );
+		wp_cache_delete( 'alloptions', 'options' );
+		wp_cache_delete( 'notoptions', 'options' );
+
+		$saved_key = get_option( $option_name );
+		if ( is_string( $saved_key ) && preg_match( '/^[a-f0-9]{64}$/', $saved_key ) ) {
+			return $saved_key;
+		}
+		update_option( $option_name, $new_key );
+		return $new_key;
+	}
+
+	/**
+	 * The signature of a membership level for the registration form (the swpm_level_hash form field): HMAC-SHA256 with the secret key.
+	 * The form submission is accepted only for the level it was signed for (see is_valid_registration_level_hash()).
+	 */
+	public static function get_registration_level_hash( $level_id ) {
+		return hash_hmac( 'sha256', (string) $level_id, self::get_registration_level_key() );
+	}
+
+	/** Checks the swpm_level_hash value of a registration form submission against the submitted level (constant-time comparison). */
+	public static function is_valid_registration_level_hash( $level_id, $hash ) {
+		if ( ! is_string( $hash ) || '' === $hash ) {
+			return false;
+		}
+		return hash_equals( self::get_registration_level_hash( $level_id ), $hash );
+	}
+
 	/*
 	 * This function handles various initial setup tasks that need to be executed very early on (before other functions of the plugin is called).
 	 */

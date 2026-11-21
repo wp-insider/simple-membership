@@ -59,7 +59,7 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - With two different level values (`membership_level` and `swpm_membership_level`), the member doesn't get the Editor level or role.
 - A level with the Administrator role never creates an administrator.
 - Completing a paid registration (the link sent after the payment) saves the username, keeps the paid level and gives the level's role.
-- *A level hash made with the old method (MD5 of swpm_private_key_one and the level, from the 4.8.9 security report) is rejected: fails until the level key fix.*
+- A level hash made with the old method (MD5 of swpm_private_key_one and the level, from the 4.8.9 security report) is rejected.
 
 ## PHPUnit ([phpunit/tests/](phpunit/tests/))
 
@@ -90,8 +90,8 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - The sync doesn't run while the plugin updates the WP user; other member fields aren't changed.
 
 **Registration level key** (test-registration-level-key.php)
-- A strong key is kept (forms already shown to visitors keep working).
-- *Activation creates a strong random key; an old uniqid() key is replaced when a registration form is shown; the form's level hash isn't an MD5 of the key and the level: fail until the level key fix.*
+- Activation creates a strong random key; an old uniqid() key is replaced when a registration form is shown.
+- The form's level hash isn't an MD5 of the key and the level; a strong key is kept (forms already shown to visitors keep working).
 
 **Role After Expiry** (test-role-after-expiry.php)
 - The expiry role is applied and the level role restored; nothing changes for a level without the option.
@@ -105,7 +105,7 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 | auto-login-after-registration.php | Auto-login after registration authenticates on the server; no password in the redirect URL; email recovery instructions stay visible |
 | email-activation.php | The activation and resend emails: token storage, no password emailed, the recipient, no early admin notification |
 | forced-wp-login-sync.php | The login/logout sync between the member and the WP user session |
-| paid-registration-completion.php | Completing a paid registration keeps the validated role and level and uses up the registration code |
+| paid-registration-completion.php | Completing a paid registration keeps the validated role and level and uses up the registration code; an old MD5 level hash is rejected before anything is saved |
 | paid-registration-link-browser.php | The paid registration link shows only in the browser that paid (cookie or PayPal token), never by IP address |
 | plugin-check-database-queries.php | Database queries use placeholders (member filters, meta keys, protection lookups, events, the expiry batch update) |
 | recurring-payment-email.php | The recurring payment email: headers, the custom message filter, the merge tags |

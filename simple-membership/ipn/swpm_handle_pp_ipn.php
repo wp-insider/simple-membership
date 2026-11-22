@@ -45,7 +45,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			// A reversal (chargeback) takes back the whole payment. Otherwise, the total refunded is compared with the amount paid.
 			'is_full_refund' => ( 'Reversed' === $payment_status ) ? true : null,
 			'subscr_id'      => isset( $this->ipn_data['subscr_id'] ) ? sanitize_text_field( $this->ipn_data['subscr_id'] ) : '',
-			'member_id'      => isset( $customvariables['swpm_id'] ) ? sanitize_text_field( $customvariables['swpm_id'] ) : '',
+			'member_id'      => isset( $customvariables['swpm_id'] ) ? SwpmMemberUtils::get_valid_member_id( $customvariables['swpm_id'] ) : '',
 		) );
 	}
 
@@ -134,7 +134,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 
 			if ( ! empty( $subsc_ref ) ) {
 				$this->debug_log( 'Found a membership level ID. Creating member account...', true );
-				$swpm_id = isset($customvariables['swpm_id']) ? sanitize_text_field($customvariables['swpm_id']) : '';
+				$swpm_id = isset($customvariables['swpm_id']) ? SwpmMemberUtils::get_valid_member_id($customvariables['swpm_id']) : '';
 				swpm_handle_subsc_signup_stand_alone( $this->ipn_data, $subsc_ref, $this->ipn_data['subscr_id'], $swpm_id );
 				// For a new member: save the checkout token of the buyer's browser, so the paid registration link is only shown in it.
 				// Only for a member created by this checkout (never for an existing member found by the swpm_id or email).
@@ -275,7 +275,7 @@ class swpm_paypal_ipn_handler { // phpcs:ignore
 			if ( ! empty( $subsc_ref ) ) {
 				$swpm_id = '';
 				if ( isset( $customvariables['swpm_id'] ) ) {
-					$swpm_id = $customvariables['swpm_id'];
+					$swpm_id = SwpmMemberUtils::get_valid_member_id( $customvariables['swpm_id'] );
 				}
 				if ( $transaction_type == 'web_accept' ) {
 					$this->debug_log( 'Transaction type: web_accept. Creating member account...', true );

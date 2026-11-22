@@ -55,7 +55,8 @@ class SWPMPaymentsListTable extends WP_List_Table {
 
 	function column_member_profile( $item ) {
 		global $wpdb;
-		$member_id = $item['member_id'];
+		//Records saved by older versions can have an invalid member ID (from the custom field). It is ignored.
+		$member_id = SwpmMemberUtils::get_valid_member_id( $item['member_id'] );
 		$subscr_id = $item['subscr_id'];
         $txn_id = $item['txn_id'];
 		$column_value = '';
@@ -78,8 +79,15 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		}
 
 		if ( ! empty( $member_id ) ) {
-			$profile_page = 'admin.php?page=simple_wp_membership&member_action=edit&member_id=' . $member_id;
-			$column_value = '<a href="' . $profile_page . '">' . SwpmUtils::_( 'View Profile' ) . '</a>';
+			$profile_page = add_query_arg(
+				array(
+					'page'          => 'simple_wp_membership',
+					'member_action' => 'edit',
+					'member_id'     => absint( $member_id ),
+				),
+				'admin.php'
+			);
+			$column_value = '<a href="' . esc_url( $profile_page ) . '">' . esc_html( SwpmUtils::_( 'View Profile' ) ) . '</a>';
 		} else {
 			$column_value = '';
 		}
@@ -88,6 +96,7 @@ class SWPMPaymentsListTable extends WP_List_Table {
 
 	function column_status( $item ) {
 		$status = ucfirst($item['status']);
+		$status_html = esc_html( $status );
 		$column_value = '';
 
 		//The subscription agreement record. Its status is saved translated for PayPal (PPCP and Standard) subscriptions, so the txn_type is checked too.
@@ -95,21 +104,21 @@ class SWPMPaymentsListTable extends WP_List_Table {
 		$is_sub_agreement_record = strtolower($status) == 'subscription created' || ( isset( $item['txn_type'] ) && in_array( $item['txn_type'], $sub_agreement_txn_types, true ) );
 
 		if ( strtolower($status) == 'completed' ) {
-			$column_value = '<span class="swpm_status_completed">' . $status . '</span>';
+			$column_value = '<span class="swpm_status_completed">' . $status_html . '</span>';
 		} else if ( in_array( strtolower($status), array('refunded', 'partially refunded') ) ) {
-			$column_value = '<span class="swpm_status_refunded">' . $status . '</span>';
+			$column_value = '<span class="swpm_status_refunded">' . $status_html . '</span>';
 		} else if ( $is_sub_agreement_record ) {
             if ( in_array(strtolower($item['subscr_status']), array('canceled', 'cancelled')) ){
-                $column_value = '<span class="swpm_status_subscription_cancelled">Subscription '. $item['subscr_status'] .'</span>';
+                $column_value = '<span class="swpm_status_subscription_cancelled">Subscription '. esc_html( $item['subscr_status'] ) .'</span>';
             } else {
-			    $column_value = '<span class="swpm_status_subscription_created">' . $status . '</span>';
+			    $column_value = '<span class="swpm_status_subscription_created">' . $status_html . '</span>';
             }
 		} else if ( strtolower($status) == 'stripe subscription created' ) {
-			$column_value = '<span class="swpm_status_subscription_created">' . $status . '</span>';
+			$column_value = '<span class="swpm_status_subscription_created">' . $status_html . '</span>';
 		} else if ( strtolower($status) == 'subscription' ) {
-			$column_value = '<span class="swpm_status_subscription">' . $status . '</span>';
+			$column_value = '<span class="swpm_status_subscription">' . $status_html . '</span>';
 		} else {
-			$column_value = '<span class="swpm_status_general">' . $status . '</span>';
+			$column_value = '<span class="swpm_status_general">' . $status_html . '</span>';
 		}
 		return $column_value;
 	}

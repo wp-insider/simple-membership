@@ -22,6 +22,13 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 	swpm_debug_log_subsc( 'swpm_handle_subsc_signup_stand_alone(). Custom value: ' . $ipn_data['custom'] . ', Unique reference: ' . $unique_ref, true );
 	parse_str( $ipn_data['custom'], $custom_vars );
 
+	//Only a valid member ID is used (it can come from the custom field, which the buyer's browser sends). An invalid value is ignored.
+	$given_swpm_id = $swpm_id;
+	$swpm_id       = SwpmMemberUtils::get_valid_member_id( $swpm_id );
+	if ( empty( $swpm_id ) && ! empty( $given_swpm_id ) ) {
+		swpm_debug_log_subsc( 'The member ID in the payment data is not valid. It is ignored, the member account is looked up by the email or the reference.', false );
+	}
+
 	if ( empty( $swpm_id ) ) {
 		// Lets try to find an existing user profile for this payment.
 		$email = $ipn_data['payer_email'];
@@ -589,7 +596,8 @@ function swpm_handle_subsc_cancel_stand_alone( $ipn_data, $refund = false ) {
 	$swpm_id = '';
 	if ( isset( $ipn_data['custom'] ) && !empty( $ipn_data['custom'] ) ){
 		$customvariables = SwpmTransactions::parse_custom_var( $ipn_data['custom'] );
-		$swpm_id = isset( $customvariables['swpm_id'] ) ? $customvariables['swpm_id'] : '';
+		//Only a valid member ID is used (the custom field comes from the buyer's browser). An invalid value is ignored.
+		$swpm_id = isset( $customvariables['swpm_id'] ) ? SwpmMemberUtils::get_valid_member_id( $customvariables['swpm_id'] ) : '';
 	}
 
     $subscr_id = isset( $ipn_data['subscr_id'] ) && ! empty( $ipn_data['subscr_id'] ) ? $ipn_data['subscr_id'] : '';

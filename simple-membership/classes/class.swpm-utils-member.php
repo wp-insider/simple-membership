@@ -99,6 +99,22 @@ class SwpmMemberUtils {
 		return $expiry_timestamp;
 	}
 
+	/**
+	 * Returns the member ID if the value is a valid member ID (a positive whole number), otherwise an empty string.
+	 * Use it for a member ID from payment data (example: the swpm_id of the custom field, which the buyer's browser sends).
+	 * An invalid value is treated as no member ID, so the normal lookup (email, subscription ID) is used.
+	 */
+	public static function get_valid_member_id( $value ) {
+		if ( ! is_scalar( $value ) ) {
+			return '';
+		}
+		$value = trim( (string) $value );
+		if ( ! preg_match( '/^\d+$/', $value ) || (int) $value <= 0 ) {
+			return '';
+		}
+		return (string) (int) $value;
+	}
+
 	public static function member_record_exists( $swpm_id ) {
 		// Checks if the SWPM user record exists for the given member ID.
 		global $wpdb;

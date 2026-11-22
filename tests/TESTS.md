@@ -66,8 +66,6 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - A logged-in member's ID: Buy Now renews that member; a subscription's first payment and signup are recorded with that member ID and renew the member; no other member is created for the PayPal email.
 - A subscription refund marks the payment Refunded, deactivates the member and passes the member ID to `swpm_payment_refunded`; a cancellation updates the agreement record's status.
 - An invalid member ID is ignored, never saved: Buy Now and a subscription signup give the buyer a member account and the record has its ID; a subscription payment is recorded with the subscription's member; a refund and a cancellation still find and deactivate the subscription's member.
-- *Fails until the XSS fix:* the invalid member ID checks (the value is saved on the record, and no member is found or created).
-
 ## PHPUnit ([phpunit/tests/](phpunit/tests/))
 
 **Plugin smoke test** (test-plugin-smoke.php)
@@ -91,8 +89,6 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - The payments list's member profile link: a bad member ID is never printed; a member's link has their ID, also for a member found by the subscription ID.
 - The payments list's status is escaped (also on an agreement record).
 - `save_txn_record()`: a bad member ID from the custom field isn't saved (the record gets the subscription's member instead); a valid member ID is kept.
-- *Fails until the XSS fix:* the bad member ID link, the status escaping and the two bad member ID `save_txn_record()` tests.
-
 **Paid registration link** (test-paid-registration-link.php)
 - A member created by the checkout is flagged; an existing member found by email or given by the swpm_id isn't.
 - The registration code cookie finds its pending member; no cookie with a spoofed IP header finds nothing.
@@ -133,7 +129,7 @@ Payments
 - PayPal PPCP: the checkout (onApprove), the webhooks, refunds (with faked PayPal API answers).
 - Stripe: the checkout session and the return to the site after the first payment; partial refunds over the webhook.
 - Braintree.
-- The checkout's swpm_id custom value comes from the browser (step 4d).
+- The checkout's swpm_id custom value comes from the browser (step 4d). An invalid value is now ignored (covered); a valid ID of another member is still accepted.
 
 Members and access
 - Registration with the default registration page and the "Enable Free Membership" setting; registration with email activation, and the emails it sends.

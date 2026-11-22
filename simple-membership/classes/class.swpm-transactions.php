@@ -33,9 +33,10 @@ class SwpmTransactions {
 		$txn_data['ip_address']       = $ip_address;
 
 		//Get the member ID. First, get from the custom field (highest priority). If not found, try to get from $ipn_data['member_id'] (When handling IPN we try to set it if we find a reference for it).
-		$txn_data['member_id'] = isset ( $custom_var['swpm_id'] ) ? $custom_var['swpm_id'] : '';
+		//Only a valid member ID is used (the custom field comes from the buyer's browser). An invalid value is ignored.
+		$txn_data['member_id'] = isset ( $custom_var['swpm_id'] ) ? SwpmMemberUtils::get_valid_member_id( $custom_var['swpm_id'] ) : '';
 		if( empty( $txn_data['member_id'] ) ){
-			$txn_data['member_id'] = isset ( $ipn_data['member_id'] ) ? $ipn_data['member_id'] : '';
+			$txn_data['member_id'] = isset ( $ipn_data['member_id'] ) ? SwpmMemberUtils::get_valid_member_id( $ipn_data['member_id'] ) : '';
 		}
 		//If the member ID is still empty, try to find the member using the subscription ID (example: a recurring payment of a subscription).
 		if( empty( $txn_data['member_id'] ) && ! empty( $subscr_id ) ){

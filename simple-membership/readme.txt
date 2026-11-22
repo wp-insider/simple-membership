@@ -200,6 +200,7 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 - The membership level of the registration forms is now signed with HMAC-SHA256 and a strong random secret key, and checked with a constant-time comparison.
 - Email activation link: the activation code is now checked first. A wrong or used link, a missing member and an already active account all show the same "invalid or expired" message, so the link can no longer be used to find out which member accounts exist or are active. Thanks to Florian Schmidt for reporting this.
 - Stripe Legacy subscriptions (created with the removed Stripe Legacy subscription button): renewals are now linked to the member and extend their access, and cancellations and refunds now update the member account. The member is found by the Stripe customer ID saved by the Legacy button.
+- The member ID sent with a payment (from the checkout page) is now only used when it is a valid member ID, for all payment gateways. An invalid value is no longer saved on the payment record.
 
 = 4.8.9 =
 - Fixed an issue where a password reset could be undone on some sites (for example, with a persistent object cache), so the member could not log in with the new password. The WP user profile sync no longer runs while the plugin is updating the WP user itself, it uses the data being saved, and it only updates the synced fields of the member record.

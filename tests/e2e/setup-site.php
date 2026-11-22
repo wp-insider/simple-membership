@@ -150,6 +150,32 @@ $reg_admin_page_id   = swpm_e2e_registration_page( 'E2E Administrator Registrati
 //A paid Editor level member who still needs to complete the registration (the link sent after the payment).
 $reg_paid_member_id = swpm_e2e_member( array( 'email' => 'paid-complete@example.com', 'reg_code' => md5( 'e2e-paid-complete' ) ), $reg_editor_level_id );
 
+//A PayPal Standard subscription button (19.95 a month, 2 payments, no trial), like the one used for the subscription fixtures.
+$sub_button_id = wp_insert_post(
+	array(
+		'post_type'   => 'swpm_payment_button',
+		'post_status' => 'publish',
+		'post_title'  => 'E2E PayPal Subscription',
+	)
+);
+update_post_meta( $sub_button_id, 'button_type', 'pp_subscription' );
+update_post_meta( $sub_button_id, 'membership_level_id', $level_id );
+update_post_meta( $sub_button_id, 'payment_currency', 'USD' );
+update_post_meta( $sub_button_id, 'paypal_email', 'seller@example.com' );
+update_post_meta( $sub_button_id, 'billing_amount', '19.95' );
+update_post_meta( $sub_button_id, 'billing_cycle', '1' );
+update_post_meta( $sub_button_id, 'billing_cycle_term', 'M' );
+update_post_meta( $sub_button_id, 'billing_cycle_count', '2' );
+update_post_meta( $sub_button_id, 'trial_billing_cycle', '' );
+
+//PayPal Standard, member ID (swpm_id) in the custom field. Logged-in members who pay (their real member ID is in the custom field).
+//The PayPal email is different from the member's email, so the member can only be found by the swpm_id.
+$pp_buynow_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_pp_buynow', 'email' => 'pp-buynow-member@example.com', 'account_state' => 'expired' ), $level_id );
+$pp_sub_member_id    = swpm_e2e_member( array( 'user_name' => 'e2e_pp_sub', 'email' => 'pp-sub-member@example.com', 'account_state' => 'expired' ), $level_id );
+//Members of existing subscriptions, for a refund and a cancellation with an invalid swpm_id (they can be found by the subscription ID).
+$pp_bad_id_refund_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_pp_bad_refund', 'email' => 'pp-bad-refund@example.com', 'subscr_id' => 'I-E2E-BAD-REFUND' ), $level_id );
+$pp_bad_id_cancel_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_pp_bad_cancel', 'email' => 'pp-bad-cancel@example.com', 'subscr_id' => 'I-E2E-BAD-CANCEL' ), $level_id );
+
 echo "\n" . wp_json_encode(
 	array(
 		'level_id'                => $level_id,
@@ -170,5 +196,10 @@ echo "\n" . wp_json_encode(
 		'reg_admin_page_id'       => $reg_admin_page_id,
 		'reg_paid_member_id'      => $reg_paid_member_id,
 		'reg_paid_code'           => md5( 'e2e-paid-complete' ),
+		'sub_button_id'           => (int) $sub_button_id,
+		'pp_buynow_member_id'     => $pp_buynow_member_id,
+		'pp_sub_member_id'        => $pp_sub_member_id,
+		'pp_bad_id_refund_member_id' => $pp_bad_id_refund_member_id,
+		'pp_bad_id_cancel_member_id' => $pp_bad_id_cancel_member_id,
 	)
 ) . "\n";

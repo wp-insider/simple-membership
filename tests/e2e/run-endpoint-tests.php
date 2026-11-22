@@ -201,18 +201,38 @@ function token_hash_saved( $member_id, $token ) {
 	return (int) db_value( "SELECT COUNT(*) FROM {$prefix}swpm_members_meta_tbl WHERE member_id = ? AND meta_key = 'paid_reg_browser_token_hash' AND meta_value = ?", 'is', array( $member_id, hash( 'sha256', $token ) ) ) > 0;
 }
 
-/** Sends a PayPal Standard IPN made from the anonymized fixture, with the given values. */
-function send_ipn( $values ) {
-	$fixture = trim( file_get_contents( dirname( __DIR__ ) . '/fixtures/paypal-ipn/web-accept-sandbox.txt' ) );
-	$values  = array_merge(
+/**
+ * Sends a PayPal Standard IPN made from an anonymized fixture (tests/fixtures/paypal-ipn/), with the given values.
+ * The Buy Now fixtures were bought logged out (no swpm_id in the custom field). When a test gives a '{SWPM_ID}', it is added
+ * to the custom field at the same place as in the subscription fixtures (bought logged in).
+ */
+function send_ipn( $values, $fixture_file = 'web-accept-sandbox.txt' ) {
+	$fixture = trim( file_get_contents( dirname( __DIR__ ) . '/fixtures/paypal-ipn/' . $fixture_file ) );
+	if ( isset( $values['{SWPM_ID}'] ) && false === strpos( $fixture, '{SWPM_ID}' ) ) {
+		$fixture = str_replace( '%2526swpm_pp_ct%253D', '%2526swpm_id%253D{SWPM_ID}%2526swpm_pp_ct%253D', $fixture );
+	}
+	$values = array_merge(
 		array(
 			'{RECEIVER_EMAIL}' => rawurlencode( 'seller@example.com' ),
 			'{AMOUNT}'         => '19.95',
+			'{REFUND_AMOUNT}'  => '-19.95',
 			'{CURRENCY}'       => 'USD',
+			'{SWPM_ID}'        => '',
+			'{TOKEN}'          => str_repeat( 'e5', 12 ),
 		),
 		$values
 	);
 	return http_post( '/?swpm_process_ipn=1', strtr( $fixture, $values ), array( 'Content-Type: application/x-www-form-urlencoded' ) );
+}
+
+/** A value for a placeholder inside the custom field ({SWPM_ID}): the custom field is URL-encoded twice in the IPN. */
+function custom_field_value( $value ) {
+	return rawurlencode( rawurlencode( $value ) );
+}
+
+function member_id_by_email( $email ) {
+	global $prefix;
+	return db_value( "SELECT member_id FROM {$prefix}swpm_members_tbl WHERE email = ?", 's', array( $email ) );
 }
 
 /** Sends a Stripe webhook event, signed with the site's signing secret (or a wrong one). */
@@ -417,6 +437,67 @@ check( "The paid registration form shows the paid member's level", $editor === $
 submit_registration( $paid_page, 'e2e_reg_paid', $paid_fields );
 check( 'Completing a paid registration saves the username on the paid member record', 'e2e_reg_paid' === member_value( $ids['reg_paid_member_id'], 'user_name' ) );
 check( "Completing a paid registration keeps the paid level and gives the level's role (Editor)", $editor === (string) member_value( $ids['reg_paid_member_id'], 'membership_level' ) && wp_user_has_role( 'e2e_reg_paid', 'editor' ) );
+
+echo "--- PayPal Standard: member ID (swpm_id) in the custom field ---\n";
+
+//The custom field is sent by the buyer's browser, so its swpm_id can be changed. This value is from the security report (stored XSS in the payments list).
+$bad_member_id = custom_field_value( '0"><svg/onload=confirm(4893)>' );
+$sub_button    = (string) $ids['sub_button_id'];
+$buynow_member = (string) $ids['pp_buynow_member_id'];
+$sub_member    = (string) $ids['pp_sub_member_id'];
+$bad_refund    = (string) $ids['pp_bad_id_refund_member_id'];
+$bad_cancel    = (string) $ids['pp_bad_id_cancel_member_id'];
+
+//24. Buy Now by a logged-in member (their member ID is in the custom field, the PayPal email is different).
+send_ipn( array( '{PAYER_EMAIL}' => rawurlencode( 'pp-payer-buynow@example.com' ), '{BUTTON_ID}' => $button_id, '{LEVEL_ID}' => $level_id, '{TXN_ID}' => 'E2E-MEMBER-BUYNOW-1', '{SWPM_ID}' => $buynow_member ) );
+check( 'Buy Now with the member ID of a logged-in member: the member is renewed (active)', 'active' === member_value( $buynow_member, 'account_state' ) );
+check( 'Buy Now with the member ID of a logged-in member: the payment record has that member ID, and no other member is created', $buynow_member === (string) txn_meta( 'E2E-MEMBER-BUYNOW-1', 'member_id' ) && 0 === member_count_by_email( 'pp-payer-buynow@example.com' ) );
+
+//25. Buy Now with an invalid member ID (from the security report).
+send_ipn( array( '{PAYER_EMAIL}' => rawurlencode( 'bad-id-buynow@example.com' ), '{BUTTON_ID}' => $button_id, '{LEVEL_ID}' => $level_id, '{TXN_ID}' => 'E2E-BAD-ID-BUYNOW-1', '{SWPM_ID}' => $bad_member_id ) );
+$bad_buynow_member = (string) member_id_by_email( 'bad-id-buynow@example.com' );
+check( 'Buy Now with an invalid member ID: the payment is recorded', 1 === txn_count( 'E2E-BAD-ID-BUYNOW-1' ) );
+check( 'Buy Now with an invalid member ID: the invalid ID is ignored and the buyer gets a member account', '' !== $bad_buynow_member );
+check( 'Buy Now with an invalid member ID: the payment record has the member ID of that account (not the invalid value)', '' !== $bad_buynow_member && $bad_buynow_member === (string) txn_meta( 'E2E-BAD-ID-BUYNOW-1', 'member_id' ) );
+
+//26. A subscription by a logged-in member, in the order PayPal sent it in the fixtures: the first payment, then the signup.
+$sub_values = array( '{PAYER_EMAIL}' => rawurlencode( 'pp-payer-sub@example.com' ), '{BUTTON_ID}' => $sub_button, '{LEVEL_ID}' => $level_id, '{SUBSCR_ID}' => 'I-E2E-MEMBER', '{SWPM_ID}' => $sub_member );
+send_ipn( array_merge( $sub_values, array( '{TXN_ID}' => 'E2E-MEMBER-SUBPAY-1' ) ), 'subscr-payment-live.txt' );
+check( "A subscription's first payment with the member ID of a logged-in member is recorded with that member ID", $sub_member === (string) txn_meta( 'E2E-MEMBER-SUBPAY-1', 'member_id' ) );
+send_ipn( $sub_values, 'subscr-signup-live.txt' );
+check( 'A subscription signup with the member ID of a logged-in member renews that member (active, with the subscription ID)', 'active' === member_value( $sub_member, 'account_state' ) && 'I-E2E-MEMBER' === member_value( $sub_member, 'subscr_id' ) );
+check( 'The subscription agreement record has that member ID, and no other member is created', $sub_member === (string) txn_meta( 'ppstd-sub-I-E2E-MEMBER', 'member_id' ) && 0 === member_count_by_email( 'pp-payer-sub@example.com' ) );
+
+//27. A full refund of that first payment, then the cancellation of the subscription.
+wp_cli( 'option update swpm_e2e_last_refund_member_id none' );
+send_ipn( array_merge( $sub_values, array( '{TXN_ID}' => 'E2E-MEMBER-SUBREFUND-1', '{PARENT_TXN_ID}' => 'E2E-MEMBER-SUBPAY-1' ) ), 'subscr-refund-live.txt' );
+check( 'A refund of a subscription payment marks the payment record as Refunded', 'Refunded' === txn_meta( 'E2E-MEMBER-SUBPAY-1', 'status' ) );
+check( 'A refund of a subscription payment deactivates the member (default refund setting)', 'inactive' === member_value( $sub_member, 'account_state' ) );
+check( 'The refund passes the member ID to the swpm_payment_refunded action', $sub_member === trim( wp_cli( 'option get swpm_e2e_last_refund_member_id' ) ) );
+send_ipn( $sub_values, 'subscr-cancel-live.txt' );
+check( "A subscription cancellation updates the agreement record's status", in_array( txn_meta( 'ppstd-sub-I-E2E-MEMBER', 'subscr_status' ), array( 'canceled', 'cancelled' ), true ) );
+
+//28. A subscription signup with an invalid member ID, from a new buyer.
+send_ipn( array( '{PAYER_EMAIL}' => rawurlencode( 'bad-id-sub@example.com' ), '{BUTTON_ID}' => $sub_button, '{LEVEL_ID}' => $level_id, '{SUBSCR_ID}' => 'I-E2E-BAD-SIGNUP', '{SWPM_ID}' => $bad_member_id ), 'subscr-signup-live.txt' );
+$bad_sub_member = (string) member_id_by_email( 'bad-id-sub@example.com' );
+check( 'A subscription signup with an invalid member ID: the invalid ID is ignored and the buyer gets a member account', '' !== $bad_sub_member );
+check( 'A subscription signup with an invalid member ID: the agreement record has the member ID of that account (not the invalid value)', '' !== $bad_sub_member && $bad_sub_member === (string) txn_meta( 'ppstd-sub-I-E2E-BAD-SIGNUP', 'member_id' ) );
+
+//29. A subscription payment with an invalid member ID, for an existing subscription (the member has the subscription ID).
+$bad_refund_values = array( '{PAYER_EMAIL}' => rawurlencode( 'pp-bad-refund@example.com' ), '{BUTTON_ID}' => $sub_button, '{LEVEL_ID}' => $level_id, '{SUBSCR_ID}' => 'I-E2E-BAD-REFUND', '{SWPM_ID}' => $bad_member_id );
+send_ipn( array_merge( $bad_refund_values, array( '{TXN_ID}' => 'E2E-BAD-ID-SUBPAY-1' ) ), 'subscr-payment-live.txt' );
+check( 'A subscription payment with an invalid member ID is recorded with the member ID of the subscription (not the invalid value)', $bad_refund === (string) txn_meta( 'E2E-BAD-ID-SUBPAY-1', 'member_id' ) );
+
+//30. A refund of that payment, with the invalid member ID.
+wp_cli( 'option update swpm_e2e_last_refund_member_id none' );
+send_ipn( array_merge( $bad_refund_values, array( '{TXN_ID}' => 'E2E-BAD-ID-SUBREFUND-1', '{PARENT_TXN_ID}' => 'E2E-BAD-ID-SUBPAY-1' ) ), 'subscr-refund-live.txt' );
+check( 'A refund with an invalid member ID marks the payment record as Refunded', 'Refunded' === txn_meta( 'E2E-BAD-ID-SUBPAY-1', 'status' ) );
+check( 'A refund with an invalid member ID still deactivates the member of the subscription', 'inactive' === member_value( $bad_refund, 'account_state' ) );
+check( 'A refund with an invalid member ID passes the member ID of the subscription to the swpm_payment_refunded action', $bad_refund === trim( wp_cli( 'option get swpm_e2e_last_refund_member_id' ) ) );
+
+//31. A cancellation with an invalid member ID (no-expiry level: the member is deactivated).
+send_ipn( array( '{PAYER_EMAIL}' => rawurlencode( 'pp-bad-cancel@example.com' ), '{BUTTON_ID}' => $sub_button, '{LEVEL_ID}' => $level_id, '{SUBSCR_ID}' => 'I-E2E-BAD-CANCEL', '{SWPM_ID}' => $bad_member_id ), 'subscr-cancel-live.txt' );
+check( 'A cancellation with an invalid member ID still deactivates the member of the subscription (no-expiry level)', 'inactive' === member_value( $bad_cancel, 'account_state' ) );
 
 echo "\n" . ( 0 === $failures ? 'All endpoint tests passed.' : "{$failures} endpoint test(s) failed." ) . "\n";
 exit( 0 === $failures ? 0 : 1 );

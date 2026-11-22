@@ -28,7 +28,8 @@ The older Docker setup in this folder ([readme.md](readme.md), [composer.json](c
 
 The site is set up with WP-CLI. [e2e/setup-site.php](e2e/setup-site.php) creates the level, the button and the members.
 [e2e/mu-plugin-fake-paypal-verification.php](e2e/mu-plugin-fake-paypal-verification.php) answers PayPal's IPN verification request (VERIFIED, or INVALID for the rejection test).
-The Stripe events are signed with a test signing secret. IPNs are made from the anonymized fixture in [fixtures/paypal-ipn/](fixtures/paypal-ipn/).
+It also saves the member ID of the last `swpm_payment_refunded` action, for the refund checks.
+The Stripe events are signed with a test signing secret. IPNs are made from the anonymized fixtures in [fixtures/paypal-ipn/](fixtures/paypal-ipn/).
 
 **PayPal Standard IPN (Buy Now)**
 - A verified IPN creates the transaction record.
@@ -61,6 +62,12 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - Completing a paid registration (the link sent after the payment) saves the username, keeps the paid level and gives the level's role.
 - A level hash made with the old method (MD5 of swpm_private_key_one and the level, from the 4.8.9 security report) is rejected.
 
+**PayPal Standard: member ID (swpm_id) in the custom field** (Buy Now and subscription fixtures; the bad value is from the Patchstack stored XSS report)
+- A logged-in member's ID: Buy Now renews that member; a subscription's first payment and signup are recorded with that member ID and renew the member; no other member is created for the PayPal email.
+- A subscription refund marks the payment Refunded, deactivates the member and passes the member ID to `swpm_payment_refunded`; a cancellation updates the agreement record's status.
+- An invalid member ID is ignored, never saved: Buy Now and a subscription signup give the buyer a member account and the record has its ID; a subscription payment is recorded with the subscription's member; a refund and a cancellation still find and deactivate the subscription's member.
+- *Fails until the XSS fix:* the invalid member ID checks (the value is saved on the record, and no member is found or created).
+
 ## PHPUnit ([phpunit/tests/](phpunit/tests/))
 
 **Plugin smoke test** (test-plugin-smoke.php)
@@ -79,6 +86,12 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - PayPal Standard: the first payment isn't a recurring payment when the agreement status is translated; a later payment is.
 - The payments list shows a translated agreement status with its color, and the other statuses.
 - Deleting a payment record also deletes its payments table row.
+
+**Payment member ID** (test-payment-member-id.php)
+- The payments list's member profile link: a bad member ID is never printed; a member's link has their ID, also for a member found by the subscription ID.
+- The payments list's status is escaped (also on an agreement record).
+- `save_txn_record()`: a bad member ID from the custom field isn't saved (the record gets the subscription's member instead); a valid member ID is kept.
+- *Fails until the XSS fix:* the bad member ID link, the status escaping and the two bad member ID `save_txn_record()` tests.
 
 **Paid registration link** (test-paid-registration-link.php)
 - A member created by the checkout is flagged; an existing member found by email or given by the swpm_id isn't.
@@ -116,7 +129,7 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 ## Not covered yet (ideas for new tests)
 
 Payments
-- PayPal Standard subscriptions: subscr_signup, subscr_payment (first, renewal, translated paid trial), refund, cancel, eot. Needs captured sandbox IPNs, anonymized into [fixtures/paypal-ipn/](fixtures/paypal-ipn/).
+- PayPal Standard subscriptions: a new buyer's signup and the paid registration link, renewal payments, a paid trial (also with a translated agreement status), partial refunds, eot. The signup, first payment, refund and cancel fixtures are in [fixtures/paypal-ipn/](fixtures/paypal-ipn/); the others need captured IPNs.
 - PayPal PPCP: the checkout (onApprove), the webhooks, refunds (with faked PayPal API answers).
 - Stripe: the checkout session and the return to the site after the first payment; partial refunds over the webhook.
 - Braintree.

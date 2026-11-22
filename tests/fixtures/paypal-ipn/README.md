@@ -29,5 +29,6 @@ Anonymized copies of real PayPal Standard IPN messages (the "Post string" line o
 | `{SUBSCR_ID}` | Subscription fixtures only. The PayPal subscription ID (example: `I-TEST0000000001`). Use the same value in the signup and its payments. The amount in the signup (`amount3`, `mc_amount3`) is `{AMOUNT}` too, and the test button needs a 1-month billing cycle with 2 payments to match `period3` and `recur_times`. |
 
 Notes:
+- The Buy Now fixtures have no `swpm_id` (bought logged out). When a test gives `{SWPM_ID}`, the endpoint tests add it to their `custom` value at the same place as in the subscription fixtures.
 - The `custom` value is URL-encoded twice, exactly as PayPal sends it. After PHP decodes the request, the handler decodes it once more.
 - Never add real emails, names, payer IDs, IP addresses or `verify_sign` values here. This repository is public.

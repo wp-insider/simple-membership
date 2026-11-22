@@ -6,6 +6,10 @@ Anonymized copies of real PayPal Standard IPN messages (the "Post string" line o
 |---|---|---|
 | `web-accept-live.txt` | Live PayPal, 2026-11-18 | Buy Now (`txn_type=web_accept`) |
 | `web-accept-sandbox.txt` | PayPal sandbox, 2026-11-17 | Buy Now (`txn_type=web_accept`, `test_ipn=1`) |
+| `subscr-signup-live.txt` | Live PayPal, 2026-11-22 | Subscription signup (`txn_type=subscr_signup`), 1.00 a month, 2 payments, no trial. Bought while logged in, so `custom` has `swpm_id`. |
+| `subscr-payment-live.txt` | Live PayPal, 2026-11-22 | First payment of that subscription (`txn_type=subscr_payment`). PayPal sent it about 8 seconds before the signup. |
+| `subscr-refund-live.txt` | Live PayPal, 2026-11-22 | Full refund of that first payment (`payment_status=Refunded`, `reason_code=refund`, no `txn_type`). The handler marked the payment as refunded and set the member to inactive. |
+| `subscr-cancel-live.txt` | Live PayPal, 2026-11-22 | Cancellation of that subscription (`txn_type=subscr_cancel`), sent after the refund. The member was kept (duration level), and the agreement record's `subscr_status` was set to `canceled`. |
 
 ## Placeholders
 
@@ -19,6 +23,10 @@ Anonymized copies of real PayPal Standard IPN messages (the "Post string" line o
 | `{AMOUNT}` | The amount paid (example: `19.95`). Lower than the button price to test the price check. |
 | `{CURRENCY}` | The currency code (example: `USD`). |
 | `{TOKEN}` | The checkout token: 24 lowercase hex characters, the same value as in the test browser's `swpm_pp_checkout_tokens` cookie. |
+| `{SWPM_ID}` | Subscription fixtures only. The logged-in member's ID (example: `35`). It sits inside the twice-encoded `custom` value, so URL-encode a test value twice before filling it in. |
+| `{PARENT_TXN_ID}` | Refund fixture only. The `txn_id` of the payment being refunded. `{TXN_ID}` is the refund's own new transaction ID. |
+| `{REFUND_AMOUNT}` | Refund fixture only. The refunded amount, negative (example: `-1.00`). Use the full payment amount for a full refund. |
+| `{SUBSCR_ID}` | Subscription fixtures only. The PayPal subscription ID (example: `I-TEST0000000001`). Use the same value in the signup and its payments. The amount in the signup (`amount3`, `mc_amount3`) is `{AMOUNT}` too, and the test button needs a 1-month billing cycle with 2 payments to match `period3` and `recur_times`. |
 
 Notes:
 - The `custom` value is URL-encoded twice, exactly as PayPal sends it. After PHP decodes the request, the handler decodes it once more.

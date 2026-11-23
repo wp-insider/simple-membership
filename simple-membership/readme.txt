@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.8.9
+Stable tag: 4.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -196,9 +196,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
+= 4.9.0 =
 - The membership level of the registration forms is now signed with HMAC-SHA256 and a strong random secret key, and checked with a constant-time comparison.
-- Email activation link: the activation code is now checked first. A wrong or used link, a missing member and an already active account all show the same "invalid or expired" message, so the link can no longer be used to find out which member accounts exist or are active. Thanks to Florian Schmidt for reporting this.
+- Email activation link: the activation code is now checked first. A wrong or used link, a missing member and an already active account all show the same "invalid or expired" message, so the link can no longer be used to find out which member accounts exist or are active.
 - Stripe Legacy subscriptions (created with the removed Stripe Legacy subscription button): renewals are now linked to the member and extend their access, and cancellations and refunds now update the member account. The member is found by the Stripe customer ID saved by the Legacy button.
 - The member ID sent with a payment (from the checkout page) is now only used when it is a valid member ID, for all payment gateways. An invalid value is no longer saved on the payment record.
 

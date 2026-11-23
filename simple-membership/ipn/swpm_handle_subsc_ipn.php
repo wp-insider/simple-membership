@@ -23,6 +23,10 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 	parse_str( $ipn_data['custom'], $custom_vars );
 
 	//Only a valid member ID is used (it can come from the custom field, which the buyer's browser sends). An invalid value is ignored.
+	//Known behavior (by design): the member ID is not tied to the logged-in member on the server. A buyer who changes it to another
+	//member's ID applies their own payment to that member's account (renewal or level change). The buyer gains nothing from it, and
+	//the payment record shows which member it was applied to. If the ID is valid but the member account was deleted, the payment is
+	//recorded but no member account is updated (no fallback to the email lookup).
 	$given_swpm_id = $swpm_id;
 	$swpm_id       = SwpmMemberUtils::get_valid_member_id( $swpm_id );
 	if ( empty( $swpm_id ) && ! empty( $given_swpm_id ) ) {

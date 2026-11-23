@@ -129,7 +129,7 @@ Payments
 - PayPal PPCP: the checkout (onApprove), the webhooks, refunds (with faked PayPal API answers).
 - Stripe: the checkout session and the return to the site after the first payment; partial refunds over the webhook.
 - Braintree.
-- The checkout's swpm_id custom value comes from the browser (step 4d). An invalid value is now ignored (covered); a valid ID of another member is still accepted.
+- The checkout's swpm_id custom value comes from the browser. An invalid value is ignored (covered). A valid ID of another member is accepted, by design (see [known-issues/checkout-member-id.md](../known-issues/checkout-member-id.md)), so it has no test.
 
 Members and access
 - Registration with the default registration page and the "Enable Free Membership" setting; registration with email activation, and the emails it sends.

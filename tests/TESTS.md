@@ -70,8 +70,6 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - A Contributor with the plugin's dashboard can't: create a level with the administrator role (or a role with `promote_users`); move a member, their own record included, to a level with the administrator role; bulk move members to level 1 or to such a level; create a payment button for level 1 or such a level. Their WP user never becomes an administrator.
 - They can still create a level with a normal role, move a member or bulk move members to a normal level, and create a payment button for a normal level.
 - The site owner (administrator) can still create a level with the administrator role and move a member to it. Nobody can bulk move members to level 1.
-- *Fails until the admin role fix:* the 9 "cannot" checks (the site owner's level 1 check included).
-
 ## PHPUnit ([phpunit/tests/](phpunit/tests/))
 
 **Plugin smoke test** (test-plugin-smoke.php)

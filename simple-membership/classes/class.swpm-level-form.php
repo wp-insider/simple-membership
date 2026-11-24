@@ -31,8 +31,13 @@ class SwpmLevelForm {
     }
 
     protected function role() {
-        $role = filter_input(INPUT_POST, 'role');
-        $this->sanitized['role'] = sanitize_text_field($role);
+        $role = sanitize_text_field( (string) filter_input(INPUT_POST, 'role') );
+        //Only a site administrator can give a level a role with admin powers (the plugin's dashboard can be opened to other users).
+        if ( ! SwpmMemberUtils::current_user_can_use_role( $role ) ) {
+            $this->errors['role'] = __( 'Only a site administrator can give a membership level a WordPress role with administrator permissions.', 'simple-membership' );
+            return;
+        }
+        $this->sanitized['role'] = $role;
     }
 
     protected function permissions() {

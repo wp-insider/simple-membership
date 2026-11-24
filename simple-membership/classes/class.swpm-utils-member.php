@@ -656,6 +656,69 @@ class SwpmMemberUtils {
 	}
 
 	/**
+	 * True if the WordPress role has admin powers: the administrator role, or a role that can manage the site's
+	 * options (manage_options) or change user roles (promote_users).
+	 *
+	 * @param string $role The role key.
+	 * @return bool
+	 */
+	public static function is_admin_capable_role( $role ) {
+		$role = is_string( $role ) ? trim( $role ) : '';
+		if ( '' === $role ) {
+			return false;
+		}
+		if ( 'administrator' === $role ) {
+			return true;
+		}
+		$role_object = get_role( $role );
+		return $role_object && ( $role_object->has_cap( 'manage_options' ) || $role_object->has_cap( 'promote_users' ) );
+	}
+
+	/**
+	 * True if the current user can give a membership level this WordPress role.
+	 * A role with admin powers can only be used by a site administrator (manage_options). The "Admin Dashboard Access
+	 * Permission" setting can open the plugin's dashboard to other users (example: Editors), who must not be able to
+	 * give anyone (themselves included) admin powers.
+	 *
+	 * @param string $role The role key.
+	 * @return bool
+	 */
+	public static function current_user_can_use_role( $role ) {
+		return current_user_can( 'manage_options' ) || ! self::is_admin_capable_role( $role );
+	}
+
+	/**
+	 * True if the current user can put members in this membership level (or sell it with a payment button), from the
+	 * admin dashboard. Only a site administrator (manage_options) can use a level whose WordPress role has admin powers
+	 * (level 1, and levels the site owner gave such a role). A level that doesn't exist is not checked here.
+	 * Payments for a level are not checked: the site owner set up the level and its payment button.
+	 *
+	 * @param int|string $level_id The membership level ID.
+	 * @return bool
+	 */
+	public static function current_user_can_use_level( $level_id ) {
+		if ( current_user_can( 'manage_options' ) ) {
+			return true;
+		}
+		$level = SwpmUtils::get_membership_level_row_by_id( absint( $level_id ) );
+		if ( ! $level ) {
+			return true;
+		}
+		return ! self::is_admin_capable_role( $level->role );
+	}
+
+	/**
+	 * Stops the request if the current user can't use the membership level (see current_user_can_use_level()).
+	 *
+	 * @param int|string $level_id The membership level ID.
+	 */
+	public static function check_and_die_if_level_not_allowed_for_current_user( $level_id ) {
+		if ( ! self::current_user_can_use_level( $level_id ) ) {
+			wp_die( esc_html__( 'Error! Only a site administrator can use a membership level whose WordPress role has administrator permissions.', 'simple-membership' ) );
+		}
+	}
+
+	/**
 	 * Returns the "WordPress Role After Expiry" value of a membership level.
 	 * An empty value means the feature is not used for that level (no role change on expiry or payment).
 	 *

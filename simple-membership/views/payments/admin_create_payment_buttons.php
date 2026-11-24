@@ -13,6 +13,10 @@ require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_s
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_stripe_sca_subscription_button.php';
 require_once SIMPLE_WP_MEMBERSHIP_PATH . 'views/payments/payment-gateway/admin_braintree_buy_now_button.php';
 
+//A payment for a level gives the level's role: only a site administrator can save a button for a level whose role has admin powers (all button types).
+if ( isset( $_REQUEST['membership_level_id'] ) ) {
+	SwpmMemberUtils::check_and_die_if_level_not_allowed_for_current_user( sanitize_text_field( $_REQUEST['membership_level_id'] ) );
+}
 do_action( 'swpm_create_new_button_process_submission' ); //Addons can use this hook to save the data after the form submit then redirect to the "edit" interface of that newly created button.
 ?>
 

@@ -196,6 +196,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Security: when the "Admin Dashboard Access Permission" setting opens the plugin's dashboard to other users (for example, Editors), only a site administrator can now use a WordPress role with administrator permissions. Other users can no longer give a membership level such a role, move a member (themselves included) to a level that has it, or create a payment button for such a level. The bulk level change no longer accepts the built-in level 1 or a level that doesn't exist. Site administrators can still create levels with the administrator role.
+
 = 4.9.0 =
 - The membership level of the registration forms is now signed with HMAC-SHA256 and a strong random secret key, and checked with a constant-time comparison.
 - Email activation link: the activation code is now checked first. A wrong or used link, a missing member and an already active account all show the same "invalid or expired" message, so the link can no longer be used to find out which member accounts exist or are active.

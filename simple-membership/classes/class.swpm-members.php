@@ -565,6 +565,12 @@ class SwpmMembers extends WP_List_Table {
 
 			if ( $from_level_id == 'please_select' || $to_level_id == 'please_select' ) {
 				$error_msg = SwpmUtils::_( 'Error! Please select a membership level first.' );
+			} elseif ( 1 === absint( $to_level_id ) || ! SwpmUtils::get_membership_level_row_by_id( absint( $to_level_id ) ) ) {
+				//Members are never put in level 1 (the built-in level used for content protection), or in a level that doesn't exist.
+				$error_msg = __( 'Error! The selected membership level is not valid.', 'simple-membership' );
+			} elseif ( ! SwpmMemberUtils::current_user_can_use_level( $to_level_id ) ) {
+				//Only a site administrator can move members to a level whose role has admin powers.
+				$error_msg = __( 'Error! Only a site administrator can move members to a membership level whose WordPress role has administrator permissions.', 'simple-membership' );
 			}
 
 			if ( empty( $error_msg ) ) {//No validation errors so go ahead

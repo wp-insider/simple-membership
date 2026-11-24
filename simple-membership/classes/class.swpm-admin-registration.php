@@ -31,6 +31,12 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		if ( $form->is_valid() ) {
 			$member_info = $form->get_sanitized_member_form_data();
 
+			//Only a site administrator can put a member in a level whose role has admin powers.
+			if ( isset( $member_info['membership_level'] ) && ! SwpmMemberUtils::current_user_can_use_level( $member_info['membership_level'] ) ) {
+				SwpmTransfer::get_instance()->set( 'status', self::level_not_allowed_message() );
+				return;
+			}
+
                         //First, check if email or username belongs to an existing admin user. Bail if it does.
                         SwpmMemberUtils::check_and_die_if_email_belongs_to_admin_user($member_info['email']);
                         SwpmMemberUtils::check_and_die_if_username_belongs_to_admin_user($member_info['user_name']);
@@ -124,6 +130,11 @@ class SwpmAdminRegistration extends SwpmRegistration {
 		$form = new SwpmForm( $member );
 		if ( $form->is_valid() ) {
 			$member         = $form->get_sanitized_member_form_data();
+			//Only a site administrator can move a member to a level whose role has admin powers (checked when the level changes).
+			if ( isset( $member['membership_level'] ) && $member['membership_level'] != $prev_level && ! SwpmMemberUtils::current_user_can_use_level( $member['membership_level'] ) ) {
+				SwpmTransfer::get_instance()->set( 'status', self::level_not_allowed_message() );
+				return;
+			}
 			$plain_password = isset( $member['plain_password'] ) ? $member['plain_password'] : '';
 
             // Important: Get the currently logged in member's ID before calling the update_wp_user() function (since this function can invalidate the auth cookie if password is updated).
@@ -238,6 +249,15 @@ class SwpmAdminRegistration extends SwpmRegistration {
 			'extra'     => $form->get_errors(),
 		);
 		SwpmTransfer::get_instance()->set( 'status', $message );
+	}
+
+	/** The error message when the current user can't use the selected membership level (see SwpmMemberUtils::current_user_can_use_level()). */
+	private static function level_not_allowed_message() {
+		return array(
+			'succeeded' => false,
+			'message'   => __( 'Please correct the following:', 'simple-membership' ),
+			'extra'     => array( 'membership_level' => __( 'Only a site administrator can put a member in a membership level whose WordPress role has administrator permissions.', 'simple-membership' ) ),
+		);
 	}
 
 	public function handle_manual_approval( $member_id ) {

@@ -176,6 +176,49 @@ $pp_sub_member_id    = swpm_e2e_member( array( 'user_name' => 'e2e_pp_sub', 'ema
 $pp_bad_id_refund_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_pp_bad_refund', 'email' => 'pp-bad-refund@example.com', 'subscr_id' => 'I-E2E-BAD-REFUND' ), $level_id );
 $pp_bad_id_cancel_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_pp_bad_cancel', 'email' => 'pp-bad-cancel@example.com', 'subscr_id' => 'I-E2E-BAD-CANCEL' ), $level_id );
 
+//Admin roles: the plugin's dashboard is opened to Contributors (the "Admin Dashboard Access Permission" setting), like in the security reports.
+//The delegated managers (Contributors) must not be able to give anyone a WordPress role with admin powers.
+$settings->set_value( 'admin-dashboard-access-permission', 'edit_posts' );
+$settings->save();
+//A custom role with an admin power (promote_users): treated like the administrator role.
+add_role( 'e2e_user_manager', 'E2E User Manager', array( 'read' => true, 'list_users' => true, 'promote_users' => true ) );
+//A level with the administrator role, made by the site owner (allowed).
+$owner_admin_level_id = swpm_e2e_level( 'E2E Owner Administrator Level', 'administrator' );
+//Normal levels: the managers' own levels (one each, because a bulk change moves every member of a level) and a target level.
+//The target level keeps the Contributor role, so a manager moved to it can still open the dashboard.
+$mgr_target_level_id      = swpm_e2e_level( 'E2E Manager Target Level', 'contributor' );
+$mgr_edit_level_id        = swpm_e2e_level( 'E2E Manager Edit Level', 'subscriber' );
+$mgr_bulk_one_level_id    = swpm_e2e_level( 'E2E Manager Bulk Level 1', 'subscriber' );
+$mgr_bulk_owner_level_id  = swpm_e2e_level( 'E2E Manager Bulk Owner Level', 'subscriber' );
+$mgr_bulk_normal_level_id = swpm_e2e_level( 'E2E Manager Bulk Normal Level', 'subscriber' );
+$admin_bulk_one_level_id  = swpm_e2e_level( 'E2E Admin Bulk Level 1', 'subscriber' );
+$admin_edit_level_id      = swpm_e2e_level( 'E2E Admin Edit Level', 'subscriber' );
+
+//A WP user and its member record (same username and email), for a user who logs in to the dashboard.
+function swpm_e2e_wp_member( $user_name, $wp_role, $level_id ) {
+	wp_insert_user(
+		array(
+			'user_login' => $user_name,
+			'user_email' => $user_name . '@example.com',
+			'user_pass'  => 'E2e-Manager-Password-123!',
+			'role'       => $wp_role,
+		)
+	);
+	return swpm_e2e_member( array( 'user_name' => $user_name, 'email' => $user_name . '@example.com', 'password' => SwpmUtils::encrypt_password( 'E2e-Manager-Password-123!' ) ), $level_id );
+}
+//The delegated managers (Contributors with a member record), one per test, so one test's result can't change another one.
+swpm_e2e_wp_member( 'e2e_mgr_level', 'contributor', $mgr_target_level_id );
+$mgr_edit_member_id       = swpm_e2e_wp_member( 'e2e_mgr_edit', 'contributor', $mgr_edit_level_id );
+$mgr_bulk_one_member_id   = swpm_e2e_wp_member( 'e2e_mgr_bulk_one', 'contributor', $mgr_bulk_one_level_id );
+$mgr_bulk_owner_member_id = swpm_e2e_wp_member( 'e2e_mgr_bulk_owner', 'contributor', $mgr_bulk_owner_level_id );
+swpm_e2e_wp_member( 'e2e_mgr_button', 'contributor', $mgr_target_level_id );
+//A member moved by a manager's normal bulk change (no WP user).
+$mgr_bulk_normal_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_bulk_normal', 'email' => 'bulk-normal@example.com' ), $mgr_bulk_normal_level_id );
+//The site owner (administrator), and members the owner moves (no WP user, so nobody becomes an administrator).
+wp_insert_user( array( 'user_login' => 'e2e_owner', 'user_email' => 'e2e_owner@example.com', 'user_pass' => 'E2e-Manager-Password-123!', 'role' => 'administrator' ) );
+$admin_bulk_one_member_id = swpm_e2e_member( array( 'user_name' => 'e2e_admin_bulk_one', 'email' => 'admin-bulk-one@example.com' ), $admin_bulk_one_level_id );
+$admin_edit_member_id     = swpm_e2e_member( array( 'user_name' => 'e2e_admin_edit', 'email' => 'admin-edit@example.com', 'password' => SwpmUtils::encrypt_password( 'E2e-Manager-Password-123!' ) ), $admin_edit_level_id );
+
 echo "\n" . wp_json_encode(
 	array(
 		'level_id'                => $level_id,
@@ -201,5 +244,18 @@ echo "\n" . wp_json_encode(
 		'pp_sub_member_id'        => $pp_sub_member_id,
 		'pp_bad_id_refund_member_id' => $pp_bad_id_refund_member_id,
 		'pp_bad_id_cancel_member_id' => $pp_bad_id_cancel_member_id,
+		'owner_admin_level_id'       => $owner_admin_level_id,
+		'mgr_target_level_id'        => $mgr_target_level_id,
+		'mgr_edit_level_id'          => $mgr_edit_level_id,
+		'mgr_edit_member_id'         => $mgr_edit_member_id,
+		'mgr_bulk_one_level_id'      => $mgr_bulk_one_level_id,
+		'mgr_bulk_one_member_id'     => $mgr_bulk_one_member_id,
+		'mgr_bulk_owner_level_id'    => $mgr_bulk_owner_level_id,
+		'mgr_bulk_owner_member_id'   => $mgr_bulk_owner_member_id,
+		'mgr_bulk_normal_level_id'   => $mgr_bulk_normal_level_id,
+		'mgr_bulk_normal_member_id'  => $mgr_bulk_normal_member_id,
+		'admin_bulk_one_level_id'    => $admin_bulk_one_level_id,
+		'admin_bulk_one_member_id'   => $admin_bulk_one_member_id,
+		'admin_edit_member_id'       => $admin_edit_member_id,
 	)
 ) . "\n";

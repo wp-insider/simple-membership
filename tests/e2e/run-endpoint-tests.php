@@ -230,6 +230,149 @@ function custom_field_value( $value ) {
 	return rawurlencode( rawurlencode( $value ) );
 }
 
+/** Logs a WP user in (wp-login.php) and returns the cookie file of the session (the dashboard tests' users share one password). */
+function wp_login_session( $user_name ) {
+	global $url;
+	$cookie_file = tempnam( sys_get_temp_dir(), 'swpm-e2e-' );
+	$curl        = curl_init( $url . '/wp-login.php' );
+	curl_setopt_array(
+		$curl,
+		array(
+			CURLOPT_POST           => true,
+			CURLOPT_POSTFIELDS     => http_build_query( array( 'log' => $user_name, 'pwd' => 'E2e-Manager-Password-123!', 'wp-submit' => 'Log In', 'testcookie' => '1', 'redirect_to' => $url . '/wp-admin/' ) ),
+			CURLOPT_COOKIE         => 'wordpress_test_cookie=WP%20Cookie%20check',
+			CURLOPT_COOKIEJAR      => $cookie_file,
+			CURLOPT_COOKIEFILE     => $cookie_file,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FOLLOWLOCATION => false,
+			CURLOPT_TIMEOUT        => 30,
+		)
+	);
+	curl_exec( $curl );
+	curl_close( $curl );
+	unset( $curl ); //The cookie file is written when the handle is destroyed (PHP 8).
+	return $cookie_file;
+}
+
+/** A dashboard request with a logged-in session: a GET, or a POST when $fields is given. Redirects are not followed. */
+function admin_request( $cookie_file, $endpoint, $fields = null ) {
+	global $url;
+	$curl    = curl_init( $url . $endpoint );
+	$options = array(
+		CURLOPT_COOKIEFILE     => $cookie_file,
+		CURLOPT_COOKIEJAR      => $cookie_file,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_FOLLOWLOCATION => false,
+		CURLOPT_TIMEOUT        => 30,
+	);
+	if ( null !== $fields ) {
+		$options[ CURLOPT_POST ]       = true;
+		$options[ CURLOPT_POSTFIELDS ] = http_build_query( $fields );
+	}
+	curl_setopt_array( $curl, $options );
+	$body   = (string) curl_exec( $curl );
+	$status = (int) curl_getinfo( $curl, CURLINFO_HTTP_CODE );
+	curl_close( $curl );
+	unset( $curl );
+	return array(
+		'status' => $status,
+		'body'   => $body,
+	);
+}
+
+/** Submits the Add Membership Level form (the way the dashboard does). */
+function create_level_in_dashboard( $session, $alias, $role ) {
+	$page = '/wp-admin/admin.php?page=simple_wp_membership_levels&level_action=add';
+	$form = admin_request( $session, $page );
+	return admin_request(
+		$session,
+		$page,
+		array(
+			'createswpmlevel'                     => '1',
+			'alias'                               => $alias,
+			'role'                                => $role,
+			'subscription_duration_type'          => '0',
+			'_wpnonce_create_swpmlevel_admin_end' => (string) form_field_value( $form['body'], '_wpnonce_create_swpmlevel_admin_end' ),
+		)
+	);
+}
+
+/** Submits the Edit Member form with a new membership level. */
+function edit_member_level_in_dashboard( $session, $member_id, $email, $level_id ) {
+	$page = '/wp-admin/admin.php?page=simple_wp_membership&member_action=edit&member_id=' . $member_id;
+	$form = admin_request( $session, $page );
+	return admin_request(
+		$session,
+		$page,
+		array(
+			'editswpmuser'                     => 'Save Data',
+			'email'                            => $email,
+			'membership_level'                 => (string) $level_id,
+			'account_state'                    => 'active',
+			'_wpnonce_edit_swpmuser_admin_end' => (string) form_field_value( $form['body'], '_wpnonce_edit_swpmuser_admin_end' ),
+		)
+	);
+}
+
+/** Submits the Bulk Operation > Bulk Change Membership Level form (moves every member of the "from" level). */
+function bulk_change_level_in_dashboard( $session, $from_level_id, $to_level_id ) {
+	$page = '/wp-admin/admin.php?page=simple_wp_membership&member_action=bulk';
+	$form = admin_request( $session, $page );
+	return admin_request(
+		$session,
+		$page,
+		array(
+			'swpm_bulk_change_level_process' => 'Bulk Change Membership Level',
+			'swpm_bulk_change_level_nonce'   => (string) form_field_value( $form['body'], 'swpm_bulk_change_level_nonce' ),
+			'swpm_bulk_change_level_from'    => (string) $from_level_id,
+			'swpm_bulk_change_level_to'      => (string) $to_level_id,
+		)
+	);
+}
+
+/** Creates a PayPal Buy Now payment button in the dashboard (select the button type, then save the button form). */
+function create_payment_button_in_dashboard( $session, $button_name, $level_id ) {
+	$page   = '/wp-admin/admin.php?page=simple_wp_membership_payments&tab=create_new_button';
+	$step_1 = admin_request( $session, $page );
+	$step_2 = admin_request(
+		$session,
+		$page,
+		array(
+			'button_type'               => 'pp_buy_now',
+			'swpm_button_type_selected' => 'Next',
+			'swpm_admin_create_btns'    => (string) form_field_value( $step_1['body'], 'swpm_admin_create_btns' ),
+		)
+	);
+	return admin_request(
+		$session,
+		$page,
+		array(
+			'swpm_pp_buy_now_save_submit'      => 'Save Payment Data',
+			'swpm_admin_create_pp_buy_now_btn' => (string) form_field_value( $step_2['body'], 'swpm_admin_create_pp_buy_now_btn' ),
+			'button_name'                      => $button_name,
+			'button_type'                      => 'pp_buy_now',
+			'membership_level_id'              => (string) $level_id,
+			'payment_amount'                   => '10.00',
+			'payment_currency'                 => 'USD',
+			'return_url'                       => '',
+			'paypal_email'                     => 'seller@example.com',
+			'button_image_url'                 => '',
+			'checkout_logo_image_url'          => '',
+		)
+	);
+}
+
+function level_role_by_alias( $alias ) {
+	global $prefix;
+	return db_value( "SELECT role FROM {$prefix}swpm_membership_tbl WHERE alias = ?", 's', array( $alias ) );
+}
+
+/** The number of payment buttons with this name and membership level. */
+function payment_button_count( $button_name, $level_id ) {
+	global $prefix;
+	return (int) db_value( "SELECT COUNT(*) FROM {$prefix}posts p JOIN {$prefix}postmeta m ON m.post_id = p.ID AND m.meta_key = 'membership_level_id' WHERE p.post_type = 'swpm_payment_button' AND p.post_title = ? AND m.meta_value = ?", 'ss', array( $button_name, (string) $level_id ) );
+}
+
 function member_id_by_email( $email ) {
 	global $prefix;
 	return db_value( "SELECT member_id FROM {$prefix}swpm_members_tbl WHERE email = ?", 's', array( $email ) );
@@ -498,6 +641,61 @@ check( 'A refund with an invalid member ID passes the member ID of the subscript
 //31. A cancellation with an invalid member ID (no-expiry level: the member is deactivated).
 send_ipn( array( '{PAYER_EMAIL}' => rawurlencode( 'pp-bad-cancel@example.com' ), '{BUTTON_ID}' => $sub_button, '{LEVEL_ID}' => $level_id, '{SUBSCR_ID}' => 'I-E2E-BAD-CANCEL', '{SWPM_ID}' => $bad_member_id ), 'subscr-cancel-live.txt' );
 check( 'A cancellation with an invalid member ID still deactivates the member of the subscription (no-expiry level)', 'inactive' === member_value( $bad_cancel, 'account_state' ) );
+
+echo "--- Admin roles: delegated managers (the plugin's dashboard opened to Contributors) ---\n";
+
+//The site's "Admin Dashboard Access Permission" is lowered to Contributors (setup-site.php), like in the two security reports.
+//A delegated manager must not be able to give anyone (themselves included) a WordPress role with admin powers.
+$owner_admin_level = (string) $ids['owner_admin_level_id'];
+$mgr_target_level  = (string) $ids['mgr_target_level_id'];
+
+//32. Creating membership levels (report 1, step 1: a level with the administrator role).
+$session = wp_login_session( 'e2e_mgr_level' );
+$form    = admin_request( $session, '/wp-admin/admin.php?page=simple_wp_membership_levels&level_action=add' );
+check( 'A delegated manager (Contributor) can log in and open the Add Membership Level form', null !== form_field_value( $form['body'], '_wpnonce_create_swpmlevel_admin_end' ) );
+create_level_in_dashboard( $session, 'E2E Manager Admin Role Level', 'administrator' );
+check( 'A delegated manager cannot create a level with the administrator role', null === level_role_by_alias( 'E2E Manager Admin Role Level' ) );
+create_level_in_dashboard( $session, 'E2E Manager Custom Admin Role Level', 'e2e_user_manager' );
+check( 'A delegated manager cannot create a level with a role that has an admin power (promote_users)', null === level_role_by_alias( 'E2E Manager Custom Admin Role Level' ) );
+create_level_in_dashboard( $session, 'E2E Manager Editor Level', 'editor' );
+check( 'A delegated manager can still create a level with a normal role (Editor)', 'editor' === level_role_by_alias( 'E2E Manager Editor Level' ) );
+
+//33. Editing a member's level (report 1, step 2: the manager edits their own member record).
+$session  = wp_login_session( 'e2e_mgr_edit' );
+$mgr_edit = $ids['mgr_edit_member_id'];
+edit_member_level_in_dashboard( $session, $mgr_edit, 'e2e_mgr_edit@example.com', $mgr_target_level );
+check( 'A delegated manager can still move a member to a normal level', $mgr_target_level === (string) member_value( $mgr_edit, 'membership_level' ) );
+edit_member_level_in_dashboard( $session, $mgr_edit, 'e2e_mgr_edit@example.com', $owner_admin_level );
+check( 'A delegated manager cannot move a member to a level with the administrator role', $mgr_target_level === (string) member_value( $mgr_edit, 'membership_level' ) );
+check( "The delegated manager's WP user does not become an administrator (member edit)", ! wp_user_has_role( 'e2e_mgr_edit', 'administrator' ) );
+
+//34. The bulk level change (report 2: to level 1, the built-in level with the administrator role).
+$session = wp_login_session( 'e2e_mgr_bulk_one' );
+bulk_change_level_in_dashboard( $session, $ids['mgr_bulk_one_level_id'], 1 );
+check( 'A delegated manager cannot bulk move members to level 1 (administrator role)', (string) $ids['mgr_bulk_one_level_id'] === (string) member_value( $ids['mgr_bulk_one_member_id'], 'membership_level' ) && ! wp_user_has_role( 'e2e_mgr_bulk_one', 'administrator' ) );
+$session = wp_login_session( 'e2e_mgr_bulk_owner' );
+bulk_change_level_in_dashboard( $session, $ids['mgr_bulk_owner_level_id'], $owner_admin_level );
+check( "A delegated manager cannot bulk move members to the site owner's level with the administrator role", (string) $ids['mgr_bulk_owner_level_id'] === (string) member_value( $ids['mgr_bulk_owner_member_id'], 'membership_level' ) && ! wp_user_has_role( 'e2e_mgr_bulk_owner', 'administrator' ) );
+bulk_change_level_in_dashboard( $session, $ids['mgr_bulk_normal_level_id'], $mgr_target_level );
+check( 'A delegated manager can still bulk move members to a normal level', $mgr_target_level === (string) member_value( $ids['mgr_bulk_normal_member_id'], 'membership_level' ) );
+
+//35. Payment buttons: a payment for a level gives the level's role, so a manager must not sell (or buy) a level with an admin role.
+$session = wp_login_session( 'e2e_mgr_button' );
+create_payment_button_in_dashboard( $session, 'E2E Manager Owner Level Button', $owner_admin_level );
+check( 'A delegated manager cannot create a payment button for a level with the administrator role', 0 === payment_button_count( 'E2E Manager Owner Level Button', $owner_admin_level ) );
+create_payment_button_in_dashboard( $session, 'E2E Manager Level 1 Button', 1 );
+check( 'A delegated manager cannot create a payment button for level 1 (administrator role)', 0 === payment_button_count( 'E2E Manager Level 1 Button', 1 ) );
+create_payment_button_in_dashboard( $session, 'E2E Manager Normal Button', $mgr_target_level );
+check( 'A delegated manager can still create a payment button for a normal level', 1 === payment_button_count( 'E2E Manager Normal Button', $mgr_target_level ) );
+
+//36. The site owner (administrator) keeps full control: a level with the administrator role is the owner's choice.
+$session = wp_login_session( 'e2e_owner' );
+create_level_in_dashboard( $session, 'E2E Owner New Admin Level', 'administrator' );
+check( 'The site owner can still create a level with the administrator role', 'administrator' === level_role_by_alias( 'E2E Owner New Admin Level' ) );
+edit_member_level_in_dashboard( $session, $ids['admin_edit_member_id'], 'admin-edit@example.com', $owner_admin_level );
+check( 'The site owner can still move a member to a level with the administrator role', $owner_admin_level === (string) member_value( $ids['admin_edit_member_id'], 'membership_level' ) );
+bulk_change_level_in_dashboard( $session, $ids['admin_bulk_one_level_id'], 1 );
+check( 'Nobody can bulk move members to level 1, not even the site owner (the plugin never puts members in level 1)', (string) $ids['admin_bulk_one_level_id'] === (string) member_value( $ids['admin_bulk_one_member_id'], 'membership_level' ) );
 
 echo "\n" . ( 0 === $failures ? 'All endpoint tests passed.' : "{$failures} endpoint test(s) failed." ) . "\n";
 exit( 0 === $failures ? 0 : 1 );

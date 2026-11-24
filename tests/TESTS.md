@@ -66,6 +66,12 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - A logged-in member's ID: Buy Now renews that member; a subscription's first payment and signup are recorded with that member ID and renew the member; no other member is created for the PayPal email.
 - A subscription refund marks the payment Refunded, deactivates the member and passes the member ID to `swpm_payment_refunded`; a cancellation updates the agreement record's status.
 - An invalid member ID is ignored, never saved: Buy Now and a subscription signup give the buyer a member account and the record has its ID; a subscription payment is recorded with the subscription's member; a refund and a cancellation still find and deactivate the subscription's member.
+**Admin roles: delegated managers** (the "Admin Dashboard Access Permission" setting is lowered to Contributors, like in the two Wordfence privilege escalation reports; the tests log in and submit the dashboard forms)
+- A Contributor with the plugin's dashboard can't: create a level with the administrator role (or a role with `promote_users`); move a member, their own record included, to a level with the administrator role; bulk move members to level 1 or to such a level; create a payment button for level 1 or such a level. Their WP user never becomes an administrator.
+- They can still create a level with a normal role, move a member or bulk move members to a normal level, and create a payment button for a normal level.
+- The site owner (administrator) can still create a level with the administrator role and move a member to it. Nobody can bulk move members to level 1.
+- *Fails until the admin role fix:* the 9 "cannot" checks (the site owner's level 1 check included).
+
 ## PHPUnit ([phpunit/tests/](phpunit/tests/))
 
 **Plugin smoke test** (test-plugin-smoke.php)

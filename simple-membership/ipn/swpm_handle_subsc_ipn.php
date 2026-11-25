@@ -239,7 +239,7 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 		$reg_url = add_query_arg(
 			array(
 				'member_id' => $member_id,
-				'code' => $md5_code,
+				'code' => $data['reg_code'],
 			),
 			$rego_page_url
 		);		

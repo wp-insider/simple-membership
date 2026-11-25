@@ -213,9 +213,9 @@ function swpm_handle_subsc_signup_stand_alone( &$ipn_data, $subsc_ref, $unique_r
 		$data['country']               = isset( $ipn_data['address_country'] ) ? $ipn_data['address_country'] : '';
 		$data['member_since']          = $data['subscription_starts'] = $data['last_accessed'] = SwpmUtils::get_current_date_in_wp_zone();
 		$data['account_state']         = $default_account_status;
-		$reg_code                      = uniqid();
-		$md5_code                      = md5( $reg_code );
-		$data['reg_code']              = $md5_code;
+		//The registration code of the paid registration link: random (not based on the time, so it can't be guessed).
+		//Same format as before (32 lowercase hexadecimal characters).
+		$data['reg_code']              = bin2hex( random_bytes( 16 ) );
 		$data['referrer']              = $data['txn_id'] = '';
 		$data['last_accessed_from_ip'] = isset( $custom_vars['user_ip'] ) ? $custom_vars['user_ip'] : ''; // Save the users IP address.
 

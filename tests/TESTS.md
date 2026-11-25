@@ -96,8 +96,6 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 **Paid registration code** (test-paid-registration-code.php)
 - A new paid member's registration code (the `code` of the paid registration link) can't be found from the payment time: the test tries md5(uniqid()) for every microsecond around the checkout, as in the 4.9.0 security report.
 - The code is 32 lowercase hexadecimal characters (same format as before, so links and cookies keep working), and each new member gets a different one.
-- *Fails until the registration code fix:* the payment time test.
-
 **Paid registration link** (test-paid-registration-link.php)
 - A member created by the checkout is flagged; an existing member found by email or given by the swpm_id isn't.
 - The registration code cookie finds its pending member; no cookie with a spoofed IP header finds nothing.

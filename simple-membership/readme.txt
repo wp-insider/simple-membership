@@ -5,7 +5,7 @@ Tags: member, members, members only, membership, memberships, register, WordPres
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.9.0
+Stable tag: 4.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -196,9 +196,9 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
-= WIP =
-- Security: when the "Admin Dashboard Access Permission" setting opens the plugin's dashboard to other users (for example, Editors), only a site administrator can now use a WordPress role with administrator permissions. Other users can no longer give a membership level such a role, move a member (themselves included) to a level that has it, or create a payment button for such a level. The bulk level change no longer accepts the built-in level 1 or a level that doesn't exist. Site administrators can still create levels with the administrator role.
-- Security: the registration code of the paid registration link (sent after a payment) is now random. Before, it was based on the time of the payment. Registration links already sent keep working.
+= 4.9.1 =
+- When the "Admin Dashboard Access Permission" setting opens the plugin's dashboard to other users (for example, Editors), only a site administrator can now use a WordPress role with administrator permissions.
+- The registration code of the paid registration link (sent after a payment) is now random. Before, it was based on the time of the payment. Registration links already sent keep working.
 
 = 4.9.0 =
 - The membership level of the registration forms is now signed with HMAC-SHA256 and a strong random secret key, and checked with a constant-time comparison.

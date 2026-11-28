@@ -77,6 +77,11 @@ The Stripe events are signed with a test signing secret. IPNs are made from the 
 - The main shortcodes are registered, the login form renders for a visitor, the registration form shortcode runs.
 - The thank you page doesn't show a paid registration link based on the IP address.
 
+**Protected comments and excerpts** (test-protected-comments-excerpts.php, from the 4.9.x information disclosure reports)
+- A visitor doesn't see the comment text of a protected post through `get_comment_text()`, the comments feed (`comment_text_rss()`) or the comment excerpt (Latest Comments block).
+- A visitor doesn't see the manual excerpt of a protected post through `get_the_excerpt()` or the REST API (`excerpt.rendered`).
+- Comments and manual excerpts of unprotected posts are still shown; the auto excerpt of a protected post stays the protection message.
+
 **Refunds** (test-refunds.php)
 - A full refund marks the transaction Refunded; partial refunds add up to a full refund.
 - A repeated notification isn't counted twice; a late partial notification doesn't undo a full refund.
@@ -143,7 +148,8 @@ Members and access
 - Form Builder add-on registration forms (the add-on is in another repository, without these tests).
 - Login and logout, the login lockout, the IP address detection (step 4c).
 - Password reset (link and generated password, the {password} merge tag).
-- Content protection: posts, pages, categories, comments, the more tag, partial protection.
+- Content protection: posts, pages, categories, comments (only the visitor checks for comments and excerpts are covered), the more tag, partial protection.
+- A logged-in member with the right level sees the comments and manual excerpts of a protected post.
 - Membership expiry (the daily cron) and account renewal.
 
 Admin

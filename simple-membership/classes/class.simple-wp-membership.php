@@ -75,6 +75,9 @@ class SimpleWpMembership {
         add_filter('widget_text', 'do_shortcode');
         add_filter('show_admin_bar', array(&$this, 'hide_adminbar'));
         add_filter('comment_text', array(&$this, 'filter_comment'), 10, 2);
+        add_filter('get_comment_text', array(&$this, 'filter_comment'), 10, 2);//Also covers the comments feed (comment_text_rss) and other callers of get_comment_text().
+        add_filter('get_comment_excerpt', array(&$this, 'filter_comment_excerpt'), 10, 3);//Used by the Latest Comments block and comment_excerpt().
+        add_filter('get_the_excerpt', array(&$this, 'filter_excerpt'), 20, 2);//Manual excerpts (REST API, feeds, Post Excerpt block). Runs after wp_trim_excerpt (priority 10).
         add_filter('comment_form_defaults', array('SwpmCommentFormRelated', 'customize_comment_fields'));
         add_filter('wp_get_attachment_url', array(&$this, 'filter_attachment_url'), 10, 2);
         add_filter('wp_get_attachment_metadata', array(&$this, 'filter_attachment'), 10, 2);
@@ -898,6 +901,29 @@ class SimpleWpMembership {
 
         $acl = SwpmAccessControl::get_instance();
         return $acl->filter_comment($the_comment, $content);
+    }
+
+    public function filter_comment_excerpt($excerpt, $comment_id = 0, $comment = null) {
+        if (!is_a($comment, 'WP_Comment')) {
+            $comment = get_comment($comment_id);
+        }
+        return $this->filter_comment($excerpt, $comment);
+    }
+
+    public function filter_excerpt($excerpt, $post = null) {
+        $post = get_post($post);
+        if (!is_a($post, 'WP_Post') || empty($post->post_excerpt)) {
+            //No manual excerpt. The auto excerpt is built from the_content, which is already filtered.
+            return $excerpt;
+        }
+        if (is_preview() || is_admin()) {
+            //Same as filter_content: no filtering for admin users on the admin side or in preview.
+            if ( current_user_can('administrator') ){
+                return $excerpt;
+            }
+        }
+        $acl = SwpmAccessControl::get_instance();
+        return $acl->filter_post($post, $excerpt);
     }
 
     public function filter_content($content) {

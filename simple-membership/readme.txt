@@ -196,6 +196,10 @@ You can find the full documentation for this plugin on the [Simple Membership pl
 
 == Changelog ==
 
+= WIP =
+- Comments on protected posts are now also hidden in the comments feed and in the comment excerpt (for example, the Latest Comments block).
+- The manual excerpt of a protected post is now hidden from users without access (REST API, RSS/Atom feeds, the Post Excerpt block). Excerpts made automatically from the post content were already protected.
+
 = 4.9.1 =
 - When the "Admin Dashboard Access Permission" setting opens the plugin's dashboard to other users (for example, Editors), only a site administrator can now use a WordPress role with administrator permissions.
 - The registration code of the paid registration link (sent after a payment) is now random. Before, it was based on the time of the payment. Registration links already sent keep working.
